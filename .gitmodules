@@ -1,0 +1,3 @@
+[submodule "xilinx_chisel_processors"]
+	path = xilinx_chisel_processors
+	url = git@gitlab-ext.galois.com:ssith/xilinx_chisel_processors.git
