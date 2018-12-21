@@ -97,10 +97,6 @@ if { $::argc > 0 } {
   }
 }
 
-puts "normalized origin_dir below"
-puts [file normalize $origin_dir]
-exit
-
 # Create project
 create_project ${project_name} ./${project_name} -part xcvu9p-flga2104-2L-e
 
