@@ -1,0 +1,2 @@
+write_bd_tcl -force ../gfe-xilinx-subsystem/gfe_sub_bd.tcl
+ipx::package_project -root_dir ../gfe-xilinx-subsystem/xilinx_ip -vendor user.org -library user -taxonomy /UserIP -module gfe_subsystem -import_files -force

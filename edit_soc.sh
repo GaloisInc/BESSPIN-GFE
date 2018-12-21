@@ -12,3 +12,4 @@ cd $BASE_DIR/vivado
 # Run vivado to build a top level project
 vivado -mode batch -source $BASE_DIR/tcl/p1_chisel_soc.tcl -tclargs --origin_dir $BASE_DIR/tcl
 # TODO: Consider updating the vivado scripting to use non-project mode
+start_gui

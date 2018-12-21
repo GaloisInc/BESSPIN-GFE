@@ -9,6 +9,8 @@ BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 mkdir -p $BASE_DIR/vivado
 cd $BASE_DIR/vivado
+
 # Run vivado to build a top level project
-vivado -mode batch -source $BASE_DIR/tcl/p1_chisel_soc.tcl -tclargs --origin_dir $BASE_DIR/tcl
-# TODO: Consider updating the vivado scripting to use non-project mode
+vivado -mode batch -source $BASE_DIR/gfe-xilinx-subsystem/open_gfe_subsystem_project.tcl \
+	-tclargs --origin_dir $BASE_DIR/gfe-xilinx-subsystem/
+start_gui
