@@ -128,7 +128,8 @@ if {[string equal [get_filesets -quiet sources_1] ""]} {
 # Set IP repository paths
 set obj [get_filesets sources_1]
 set_property "ip_repo_paths" [list \
- "[file normalize "$origin_dir/../xilinx_chisel_processors/P1/xilinx_ip_wrapper/p1_normal_jtag_1.0"]" \
+ "[file normalize "$origin_dir/../xilinx_chisel_processors/P1/xilinx_ip/p1_normal_jtag_1.0"]" \
+ "[file normalize "$origin_dir/../gfe-xilinx-subsystem/xilinx_ip"]" \
  ] $obj
 
 # Generate block diagram
