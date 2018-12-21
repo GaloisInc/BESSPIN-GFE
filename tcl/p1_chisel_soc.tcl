@@ -151,7 +151,10 @@ if {[string equal [get_filesets -quiet constrs_1] ""]} {
 set obj [get_filesets constrs_1]
 
 # Add/Import constrs file and set constrs file properties
-set file "[file normalize "$origin_dir/../xdc/vcu118_p1_chisel_soc.xdc"]"
+set files [list \
+  [file "[file normalize "$origin_dir/../xdc/vcu118_p1_chisel_soc.xdc"]" ] \
+  [file "[file normalize "$origin_dir/../xdc/ddr_clocks_reset.xdc"]" ] \
+  ]
 set file_added [add_files -norecurse -fileset $obj $file]
 set file "vcu118_p1_chisel_soc.xdc"
 set file_obj [get_files -of_objects [get_filesets constrs_1] [list "*$file"]]
