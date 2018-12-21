@@ -1,1 +1,4 @@
+# generated output folders
 vivado
+# filesystem artifacts
+._*
