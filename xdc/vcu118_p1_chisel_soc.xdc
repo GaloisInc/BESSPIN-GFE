@@ -1,3 +1,11 @@
+# ----- UART Pins ------
+set_property DIRECTION IN [get_ports rs232_uart_rxd]
+set_property IOSTANDARD LVCMOS18 [get_ports rs232_uart_rxd]
+set_property DIRECTION OUT [get_ports rs232_uart_txd]
+set_property IOSTANDARD LVCMOS18 [get_ports rs232_uart_txd]
+set_property DRIVE 12 [get_ports rs232_uart_txd]
+set_property SLEW SLOW [get_ports rs232_uart_txd]
+
 # ----- PMOD0 Pins (J52 on VCU118) ------
 
 # External JTAG
