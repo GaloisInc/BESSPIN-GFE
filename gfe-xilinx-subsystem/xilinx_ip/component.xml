@@ -285,6 +285,10 @@
           </spirit:logicalPort>
           <spirit:physicalPort>
             <spirit:name>S00_AXI_awid</spirit:name>
+            <spirit:vector>
+              <spirit:left spirit:format="long">3</spirit:left>
+              <spirit:right spirit:format="long">0</spirit:right>
+            </spirit:vector>
           </spirit:physicalPort>
         </spirit:portMap>
         <spirit:portMap>
@@ -449,6 +453,10 @@
           </spirit:logicalPort>
           <spirit:physicalPort>
             <spirit:name>S00_AXI_bid</spirit:name>
+            <spirit:vector>
+              <spirit:left spirit:format="long">3</spirit:left>
+              <spirit:right spirit:format="long">0</spirit:right>
+            </spirit:vector>
           </spirit:physicalPort>
         </spirit:portMap>
         <spirit:portMap>
@@ -485,6 +493,10 @@
           </spirit:logicalPort>
           <spirit:physicalPort>
             <spirit:name>S00_AXI_arid</spirit:name>
+            <spirit:vector>
+              <spirit:left spirit:format="long">3</spirit:left>
+              <spirit:right spirit:format="long">0</spirit:right>
+            </spirit:vector>
           </spirit:physicalPort>
         </spirit:portMap>
         <spirit:portMap>
@@ -601,6 +613,10 @@
           </spirit:logicalPort>
           <spirit:physicalPort>
             <spirit:name>S00_AXI_rid</spirit:name>
+            <spirit:vector>
+              <spirit:left spirit:format="long">3</spirit:left>
+              <spirit:right spirit:format="long">0</spirit:right>
+            </spirit:vector>
           </spirit:physicalPort>
         </spirit:portMap>
         <spirit:portMap>
@@ -649,6 +665,30 @@
           </spirit:logicalPort>
           <spirit:physicalPort>
             <spirit:name>S00_AXI_rready</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>ARREGION</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>S00_AXI_arregion</spirit:name>
+            <spirit:vector>
+              <spirit:left spirit:format="long">3</spirit:left>
+              <spirit:right spirit:format="long">0</spirit:right>
+            </spirit:vector>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>AWREGION</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>S00_AXI_awregion</spirit:name>
+            <spirit:vector>
+              <spirit:left spirit:format="long">3</spirit:left>
+              <spirit:right spirit:format="long">0</spirit:right>
+            </spirit:vector>
           </spirit:physicalPort>
         </spirit:portMap>
       </spirit:portMaps>
@@ -777,6 +817,10 @@
           </spirit:logicalPort>
           <spirit:physicalPort>
             <spirit:name>S01_AXI_awid</spirit:name>
+            <spirit:vector>
+              <spirit:left spirit:format="long">3</spirit:left>
+              <spirit:right spirit:format="long">0</spirit:right>
+            </spirit:vector>
           </spirit:physicalPort>
         </spirit:portMap>
         <spirit:portMap>
@@ -941,6 +985,10 @@
           </spirit:logicalPort>
           <spirit:physicalPort>
             <spirit:name>S01_AXI_bid</spirit:name>
+            <spirit:vector>
+              <spirit:left spirit:format="long">3</spirit:left>
+              <spirit:right spirit:format="long">0</spirit:right>
+            </spirit:vector>
           </spirit:physicalPort>
         </spirit:portMap>
         <spirit:portMap>
@@ -977,6 +1025,10 @@
           </spirit:logicalPort>
           <spirit:physicalPort>
             <spirit:name>S01_AXI_arid</spirit:name>
+            <spirit:vector>
+              <spirit:left spirit:format="long">3</spirit:left>
+              <spirit:right spirit:format="long">0</spirit:right>
+            </spirit:vector>
           </spirit:physicalPort>
         </spirit:portMap>
         <spirit:portMap>
@@ -1093,6 +1145,10 @@
           </spirit:logicalPort>
           <spirit:physicalPort>
             <spirit:name>S01_AXI_rid</spirit:name>
+            <spirit:vector>
+              <spirit:left spirit:format="long">3</spirit:left>
+              <spirit:right spirit:format="long">0</spirit:right>
+            </spirit:vector>
           </spirit:physicalPort>
         </spirit:portMap>
         <spirit:portMap>
@@ -1141,6 +1197,30 @@
           </spirit:logicalPort>
           <spirit:physicalPort>
             <spirit:name>S01_AXI_rready</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>ARREGION</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>S01_AXI_arregion</spirit:name>
+            <spirit:vector>
+              <spirit:left spirit:format="long">3</spirit:left>
+              <spirit:right spirit:format="long">0</spirit:right>
+            </spirit:vector>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>AWREGION</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>S01_AXI_awregion</spirit:name>
+            <spirit:vector>
+              <spirit:left spirit:format="long">3</spirit:left>
+              <spirit:right spirit:format="long">0</spirit:right>
+            </spirit:vector>
           </spirit:physicalPort>
         </spirit:portMap>
       </spirit:portMaps>
@@ -1497,12 +1577,21 @@
           <spirit:localName>xilinx_anylanguagesynthesis_xilinx_com_ip_axi_crossbar_2_1__ref_view_fileset</spirit:localName>
         </spirit:fileSetRef>
         <spirit:fileSetRef>
+          <spirit:localName>xilinx_anylanguagesynthesis_xilinx_com_ip_axi_dwidth_converter_2_1__ref_view_fileset</spirit:localName>
+        </spirit:fileSetRef>
+        <spirit:fileSetRef>
+          <spirit:localName>xilinx_anylanguagesynthesis_xilinx_com_ip_axi_protocol_converter_2_1__ref_view_fileset</spirit:localName>
+        </spirit:fileSetRef>
+        <spirit:fileSetRef>
+          <spirit:localName>xilinx_anylanguagesynthesis_xilinx_com_ip_axi_clock_converter_2_1__ref_view_fileset</spirit:localName>
+        </spirit:fileSetRef>
+        <spirit:fileSetRef>
           <spirit:localName>xilinx_anylanguagesynthesis_view_fileset</spirit:localName>
         </spirit:fileSetRef>
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>7e975795</spirit:value>
+            <spirit:value>162942d3</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1525,12 +1614,21 @@
           <spirit:localName>xilinx_anylanguagebehavioralsimulation_xilinx_com_ip_axi_crossbar_2_1__ref_view_fileset</spirit:localName>
         </spirit:fileSetRef>
         <spirit:fileSetRef>
+          <spirit:localName>xilinx_anylanguagebehavioralsimulation_xilinx_com_ip_axi_dwidth_converter_2_1__ref_view_fileset</spirit:localName>
+        </spirit:fileSetRef>
+        <spirit:fileSetRef>
+          <spirit:localName>xilinx_anylanguagebehavioralsimulation_xilinx_com_ip_axi_protocol_converter_2_1__ref_view_fileset</spirit:localName>
+        </spirit:fileSetRef>
+        <spirit:fileSetRef>
+          <spirit:localName>xilinx_anylanguagebehavioralsimulation_xilinx_com_ip_axi_clock_converter_2_1__ref_view_fileset</spirit:localName>
+        </spirit:fileSetRef>
+        <spirit:fileSetRef>
           <spirit:localName>xilinx_anylanguagebehavioralsimulation_view_fileset</spirit:localName>
         </spirit:fileSetRef>
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>16c85ac3</spirit:value>
+            <spirit:value>e4c6f189</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1632,7 +1730,7 @@
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long">0</spirit:left>
+            <spirit:left spirit:format="long">3</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -1718,6 +1816,23 @@
           <spirit:direction>out</spirit:direction>
           <spirit:vector>
             <spirit:left spirit:format="long">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_anylanguagesynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_anylanguagebehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>S00_AXI_arregion</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">3</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -1819,7 +1934,7 @@
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long">0</spirit:left>
+            <spirit:left spirit:format="long">3</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -1917,6 +2032,23 @@
         </spirit:wire>
       </spirit:port>
       <spirit:port>
+        <spirit:name>S00_AXI_awregion</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">3</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_anylanguagesynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_anylanguagebehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
         <spirit:name>S00_AXI_awsize</spirit:name>
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
@@ -1955,7 +2087,7 @@
         <spirit:wire>
           <spirit:direction>out</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long">0</spirit:left>
+            <spirit:left spirit:format="long">3</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -2040,7 +2172,7 @@
         <spirit:wire>
           <spirit:direction>out</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long">0</spirit:left>
+            <spirit:left spirit:format="long">3</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -2287,7 +2419,7 @@
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long">0</spirit:left>
+            <spirit:left spirit:format="long">3</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -2373,6 +2505,23 @@
           <spirit:direction>out</spirit:direction>
           <spirit:vector>
             <spirit:left spirit:format="long">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_anylanguagesynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_anylanguagebehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>S01_AXI_arregion</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">3</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -2474,7 +2623,7 @@
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long">0</spirit:left>
+            <spirit:left spirit:format="long">3</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -2572,6 +2721,23 @@
         </spirit:wire>
       </spirit:port>
       <spirit:port>
+        <spirit:name>S01_AXI_awregion</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">3</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_anylanguagesynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_anylanguagebehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
         <spirit:name>S01_AXI_awsize</spirit:name>
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
@@ -2610,7 +2776,7 @@
         <spirit:wire>
           <spirit:direction>out</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long">0</spirit:left>
+            <spirit:left spirit:format="long">3</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -2695,7 +2861,7 @@
         <spirit:wire>
           <spirit:direction>out</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long">0</spirit:left>
+            <spirit:left spirit:format="long">3</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -3220,6 +3386,48 @@
         </spirit:define>
       </spirit:file>
       <spirit:file>
+        <spirit:name>src/gfe_subsystem_auto_ds_0/gfe_subsystem_auto_ds_0.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:userFileType>CELL_NAME_gfe_subsystem/axi_interconnect_0/m01_couplers/auto_ds</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>src/gfe_subsystem_auto_pc_0/gfe_subsystem_auto_pc_0.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:userFileType>CELL_NAME_gfe_subsystem/axi_interconnect_0/m01_couplers/auto_pc</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>src/gfe_subsystem_auto_cc_0/gfe_subsystem_auto_cc_0.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:userFileType>CELL_NAME_gfe_subsystem/axi_interconnect_0/m00_couplers/auto_cc</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>src/gfe_subsystem_auto_us_1/gfe_subsystem_auto_us_1.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:userFileType>CELL_NAME_gfe_subsystem/axi_interconnect_0/s01_couplers/auto_us</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>src/gfe_subsystem_auto_cc_2/gfe_subsystem_auto_cc_2.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:userFileType>CELL_NAME_gfe_subsystem/axi_interconnect_0/s01_couplers/auto_cc</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>src/gfe_subsystem_auto_us_0/gfe_subsystem_auto_us_0.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:userFileType>CELL_NAME_gfe_subsystem/axi_interconnect_0/s00_couplers/auto_us</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>src/gfe_subsystem_auto_cc_1/gfe_subsystem_auto_cc_1.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:userFileType>CELL_NAME_gfe_subsystem/axi_interconnect_0/s00_couplers/auto_cc</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>src/gfe_subsystem_ooc.xdc</spirit:name>
         <spirit:userFileType>xdc</spirit:userFileType>
         <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
@@ -3237,7 +3445,7 @@
       <spirit:file>
         <spirit:name>src/gfe_subsystem.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_884607b4</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_4979d370</spirit:userFileType>
         <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
@@ -3276,6 +3484,36 @@
       <spirit:vendorExtensions>
         <xilinx:subCoreRef>
           <xilinx:componentRef xilinx:vendor="xilinx.com" xilinx:library="ip" xilinx:name="axi_crossbar" xilinx:version="2.1">
+            <xilinx:mode xilinx:name="create_mode"/>
+          </xilinx:componentRef>
+        </xilinx:subCoreRef>
+      </spirit:vendorExtensions>
+    </spirit:fileSet>
+    <spirit:fileSet>
+      <spirit:name>xilinx_anylanguagesynthesis_xilinx_com_ip_axi_dwidth_converter_2_1__ref_view_fileset</spirit:name>
+      <spirit:vendorExtensions>
+        <xilinx:subCoreRef>
+          <xilinx:componentRef xilinx:vendor="xilinx.com" xilinx:library="ip" xilinx:name="axi_dwidth_converter" xilinx:version="2.1">
+            <xilinx:mode xilinx:name="create_mode"/>
+          </xilinx:componentRef>
+        </xilinx:subCoreRef>
+      </spirit:vendorExtensions>
+    </spirit:fileSet>
+    <spirit:fileSet>
+      <spirit:name>xilinx_anylanguagesynthesis_xilinx_com_ip_axi_protocol_converter_2_1__ref_view_fileset</spirit:name>
+      <spirit:vendorExtensions>
+        <xilinx:subCoreRef>
+          <xilinx:componentRef xilinx:vendor="xilinx.com" xilinx:library="ip" xilinx:name="axi_protocol_converter" xilinx:version="2.1">
+            <xilinx:mode xilinx:name="create_mode"/>
+          </xilinx:componentRef>
+        </xilinx:subCoreRef>
+      </spirit:vendorExtensions>
+    </spirit:fileSet>
+    <spirit:fileSet>
+      <spirit:name>xilinx_anylanguagesynthesis_xilinx_com_ip_axi_clock_converter_2_1__ref_view_fileset</spirit:name>
+      <spirit:vendorExtensions>
+        <xilinx:subCoreRef>
+          <xilinx:componentRef xilinx:vendor="xilinx.com" xilinx:library="ip" xilinx:name="axi_clock_converter" xilinx:version="2.1">
             <xilinx:mode xilinx:name="create_mode"/>
           </xilinx:componentRef>
         </xilinx:subCoreRef>
@@ -3322,6 +3560,48 @@
           <spirit:name>processing_order</spirit:name>
           <spirit:value>early</spirit:value>
         </spirit:define>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>src/gfe_subsystem_auto_ds_0/gfe_subsystem_auto_ds_0.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:userFileType>CELL_NAME_gfe_subsystem/axi_interconnect_0/m01_couplers/auto_ds</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>src/gfe_subsystem_auto_pc_0/gfe_subsystem_auto_pc_0.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:userFileType>CELL_NAME_gfe_subsystem/axi_interconnect_0/m01_couplers/auto_pc</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>src/gfe_subsystem_auto_cc_0/gfe_subsystem_auto_cc_0.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:userFileType>CELL_NAME_gfe_subsystem/axi_interconnect_0/m00_couplers/auto_cc</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>src/gfe_subsystem_auto_us_1/gfe_subsystem_auto_us_1.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:userFileType>CELL_NAME_gfe_subsystem/axi_interconnect_0/s01_couplers/auto_us</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>src/gfe_subsystem_auto_cc_2/gfe_subsystem_auto_cc_2.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:userFileType>CELL_NAME_gfe_subsystem/axi_interconnect_0/s01_couplers/auto_cc</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>src/gfe_subsystem_auto_us_0/gfe_subsystem_auto_us_0.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:userFileType>CELL_NAME_gfe_subsystem/axi_interconnect_0/s00_couplers/auto_us</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>src/gfe_subsystem_auto_cc_1/gfe_subsystem_auto_cc_1.xci</spirit:name>
+        <spirit:userFileType>xci</spirit:userFileType>
+        <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
+        <spirit:userFileType>CELL_NAME_gfe_subsystem/axi_interconnect_0/s00_couplers/auto_cc</spirit:userFileType>
       </spirit:file>
       <spirit:file>
         <spirit:name>src/gfe_subsystem.hwdef</spirit:name>
@@ -3375,6 +3655,36 @@
       </spirit:vendorExtensions>
     </spirit:fileSet>
     <spirit:fileSet>
+      <spirit:name>xilinx_anylanguagebehavioralsimulation_xilinx_com_ip_axi_dwidth_converter_2_1__ref_view_fileset</spirit:name>
+      <spirit:vendorExtensions>
+        <xilinx:subCoreRef>
+          <xilinx:componentRef xilinx:vendor="xilinx.com" xilinx:library="ip" xilinx:name="axi_dwidth_converter" xilinx:version="2.1">
+            <xilinx:mode xilinx:name="create_mode"/>
+          </xilinx:componentRef>
+        </xilinx:subCoreRef>
+      </spirit:vendorExtensions>
+    </spirit:fileSet>
+    <spirit:fileSet>
+      <spirit:name>xilinx_anylanguagebehavioralsimulation_xilinx_com_ip_axi_protocol_converter_2_1__ref_view_fileset</spirit:name>
+      <spirit:vendorExtensions>
+        <xilinx:subCoreRef>
+          <xilinx:componentRef xilinx:vendor="xilinx.com" xilinx:library="ip" xilinx:name="axi_protocol_converter" xilinx:version="2.1">
+            <xilinx:mode xilinx:name="create_mode"/>
+          </xilinx:componentRef>
+        </xilinx:subCoreRef>
+      </spirit:vendorExtensions>
+    </spirit:fileSet>
+    <spirit:fileSet>
+      <spirit:name>xilinx_anylanguagebehavioralsimulation_xilinx_com_ip_axi_clock_converter_2_1__ref_view_fileset</spirit:name>
+      <spirit:vendorExtensions>
+        <xilinx:subCoreRef>
+          <xilinx:componentRef xilinx:vendor="xilinx.com" xilinx:library="ip" xilinx:name="axi_clock_converter" xilinx:version="2.1">
+            <xilinx:mode xilinx:name="create_mode"/>
+          </xilinx:componentRef>
+        </xilinx:subCoreRef>
+      </spirit:vendorExtensions>
+    </spirit:fileSet>
+    <spirit:fileSet>
       <spirit:name>xilinx_xpgui_view_fileset</spirit:name>
       <spirit:file>
         <spirit:name>xgui/gfe_subsystem_v1_0.tcl</spirit:name>
@@ -3402,9 +3712,9 @@
       <xilinx:displayName>gfe_subsystem_v1_0</xilinx:displayName>
       <xilinx:definitionSource>IPI</xilinx:definitionSource>
       <xilinx:coreRevision>2</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2018-12-21T18:27:32Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2018-12-21T19:37:08Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
-        <xilinx:tag xilinx:name="user.org:user:gfe_subsystem:1.0_ARCHIVE_LOCATION">/home/mwaugaman/git-wd/gfe/gfe-xilinx-subsystem/xilinx_ip_wrapper</xilinx:tag>
+        <xilinx:tag xilinx:name="user.org:user:gfe_subsystem:1.0_ARCHIVE_LOCATION">/home/mwaugaman/git-wd/gfe/gfe-xilinx-subsystem/xilinx_ip</xilinx:tag>
       </xilinx:tags>
       <xilinx:configElementInfos>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.CLK.GFE_AXI_ACLK.FREQ_HZ" xilinx:valueSource="user" xilinx:valuePermission="bd_and_user"/>
@@ -3413,19 +3723,19 @@
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.CLK.S00_ACLK.PHASE" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.CLK.S01_ACLK.FREQ_HZ" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.CLK.S01_ACLK.PHASE" xilinx:valueSource="user"/>
-        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.AXI_ARBITRATION_SCHEME" xilinx:valuePermission="bd"/>
-        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.BURST_LENGTH" xilinx:valuePermission="bd"/>
-        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.CAS_LATENCY" xilinx:valuePermission="bd"/>
-        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.CAS_WRITE_LATENCY" xilinx:valuePermission="bd"/>
-        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.CS_ENABLED" xilinx:valuePermission="bd"/>
-        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.CUSTOM_PARTS" xilinx:valuePermission="bd"/>
-        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.DATA_MASK_ENABLED" xilinx:valuePermission="bd"/>
-        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.DATA_WIDTH" xilinx:valuePermission="bd"/>
-        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.MEMORY_PART" xilinx:valuePermission="bd"/>
-        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.MEMORY_TYPE" xilinx:valuePermission="bd"/>
-        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.MEM_ADDR_MAP" xilinx:valuePermission="bd"/>
-        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.SLOT" xilinx:valuePermission="bd"/>
-        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.TIMEPERIOD_PS" xilinx:valuePermission="bd"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.AXI_ARBITRATION_SCHEME" xilinx:valueSource="user_prop" xilinx:valuePermission="bd"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.BURST_LENGTH" xilinx:valueSource="user_prop" xilinx:valuePermission="bd"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.CAS_LATENCY" xilinx:valueSource="user_prop" xilinx:valuePermission="bd"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.CAS_WRITE_LATENCY" xilinx:valueSource="user_prop" xilinx:valuePermission="bd"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.CS_ENABLED" xilinx:valueSource="user_prop" xilinx:valuePermission="bd"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.CUSTOM_PARTS" xilinx:valueSource="user_prop" xilinx:valuePermission="bd"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.DATA_MASK_ENABLED" xilinx:valueSource="user_prop" xilinx:valuePermission="bd"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.DATA_WIDTH" xilinx:valueSource="user_prop" xilinx:valuePermission="bd"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.MEMORY_PART" xilinx:valueSource="user_prop" xilinx:valuePermission="bd"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.MEMORY_TYPE" xilinx:valueSource="user_prop" xilinx:valuePermission="bd"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.MEM_ADDR_MAP" xilinx:valueSource="user_prop" xilinx:valuePermission="bd"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.SLOT" xilinx:valueSource="user_prop" xilinx:valuePermission="bd"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DDR4_SDRAM_C1.TIMEPERIOD_PS" xilinx:valueSource="user_prop" xilinx:valuePermission="bd"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.DEFAULT_250MHZ_CLK1.FREQ_HZ" xilinx:valueSource="user" xilinx:valuePermission="bd_and_user"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.INTR.IP2INTC_IRPT_0.SENSITIVITY" xilinx:valueSource="constant_prop" xilinx:valuePermission="bd"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.RST.GFE_RESET.POLARITY" xilinx:valueSource="user"/>
@@ -3487,10 +3797,10 @@
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2017.4</xilinx:xilinxVersion>
-      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="6f1d215b"/>
+      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="20e24e2e"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="097942b0"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="24f919dd"/>
-      <xilinx:checksum xilinx:scope="ports" xilinx:value="135f1a96"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="a3890d05"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="6a0623c0"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="52e712d6"/>
     </xilinx:packagingInfo>
   </spirit:vendorExtensions>
