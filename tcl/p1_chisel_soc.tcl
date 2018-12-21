@@ -97,7 +97,8 @@ if { $::argc > 0 } {
   }
 }
 
-puts "origin_dir = $origin_dir"
+puts "normalized origin_dir below"
+puts [file normalize $origin_dir]
 exit
 
 # Create project
