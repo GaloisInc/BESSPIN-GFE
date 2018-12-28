@@ -125,10 +125,8 @@ set bCheckIPs 1
 if { $bCheckIPs == 1 } {
    set list_check_ips "\ 
 user.org:user:gfe_subsystem:1.0\
-xilinx.com:ip:clk_wiz:5.4\
-xilinx.com:ip:proc_sys_reset:5.0\
-user.org:user:p1_normal_jtag:1.0\
 xilinx.com:ip:util_vector_logic:2.0\
+user.org:user:p1_normal_jtag:1.0\
 xilinx.com:ip:xlconcat:2.1\
 xilinx.com:ip:xlconstant:1.1\
 "
@@ -253,93 +251,6 @@ proc create_hier_cell_p1_chisel { parentCell nameHier } {
   current_bd_instance $oldCurInst
 }
 
-# Hierarchical cell: clocking_and_reset
-proc create_hier_cell_clocking_and_reset { parentCell nameHier } {
-
-  variable script_folder
-
-  if { $parentCell eq "" || $nameHier eq "" } {
-     catch {common::send_msg_id "BD_TCL-102" "ERROR" "create_hier_cell_clocking_and_reset() - Empty argument(s)!"}
-     return
-  }
-
-  # Get object for parentCell
-  set parentObj [get_bd_cells $parentCell]
-  if { $parentObj == "" } {
-     catch {common::send_msg_id "BD_TCL-100" "ERROR" "Unable to find parent cell <$parentCell>!"}
-     return
-  }
-
-  # Make sure parentObj is hier blk
-  set parentType [get_property TYPE $parentObj]
-  if { $parentType ne "hier" } {
-     catch {common::send_msg_id "BD_TCL-101" "ERROR" "Parent <$parentObj> has TYPE = <$parentType>. Expected to be <hier>."}
-     return
-  }
-
-  # Save current instance; Restore later
-  set oldCurInst [current_bd_instance .]
-
-  # Set parent object as current
-  current_bd_instance $parentObj
-
-  # Create cell and set as current instance
-  set hier_obj [create_bd_cell -type hier $nameHier]
-  current_bd_instance $hier_obj
-
-  # Create interface pins
-  create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 CLK_IN1_D_0
-
-  # Create pins
-  create_bd_pin -dir O -type clk clk_out1
-  create_bd_pin -dir O -from 0 -to 0 -type rst interconnect_aresetn
-  create_bd_pin -dir O -type rst mb_reset
-  create_bd_pin -dir O -from 0 -to 0 -type rst peripheral_reset
-  create_bd_pin -dir I -type rst reset
-  create_bd_pin -dir I -type clk slowest_sync_clk
-
-  # Create instance: clk_wiz_0, and set properties
-  set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.4 clk_wiz_0 ]
-  set_property -dict [ list \
-   CONFIG.CLKIN1_JITTER_PS {33.330000000000005} \
-   CONFIG.CLKIN2_JITTER_PS {100.0} \
-   CONFIG.CLKOUT1_JITTER {241.628} \
-   CONFIG.CLKOUT1_PHASE_ERROR {226.541} \
-   CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {25} \
-   CONFIG.CLK_IN1_BOARD_INTERFACE {default_sysclk1_300} \
-   CONFIG.CLK_IN2_BOARD_INTERFACE {Custom} \
-   CONFIG.FEEDBACK_SOURCE {FDBK_AUTO} \
-   CONFIG.MMCM_CLKFBOUT_MULT_F {44.375} \
-   CONFIG.MMCM_CLKIN1_PERIOD {3.333} \
-   CONFIG.MMCM_CLKIN2_PERIOD {10.0} \
-   CONFIG.MMCM_CLKOUT0_DIVIDE_F {44.375} \
-   CONFIG.MMCM_DIVCLK_DIVIDE {12} \
-   CONFIG.PRIM_SOURCE {Differential_clock_capable_pin} \
-   CONFIG.RESET_BOARD_INTERFACE {reset} \
-   CONFIG.SECONDARY_SOURCE {Single_ended_clock_capable_pin} \
-   CONFIG.USE_BOARD_FLOW {true} \
-   CONFIG.USE_INCLK_SWITCHOVER {false} \
- ] $clk_wiz_0
-
-  # Create instance: proc_sys_reset_0, and set properties
-  set proc_sys_reset_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_0 ]
-
-  # Create interface connections
-  connect_bd_intf_net -intf_net Conn1 [get_bd_intf_pins CLK_IN1_D_0] [get_bd_intf_pins clk_wiz_0/CLK_IN1_D]
-
-  # Create port connections
-  connect_bd_net -net Net [get_bd_pins interconnect_aresetn] [get_bd_pins proc_sys_reset_0/interconnect_aresetn]
-  connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins clk_out1] [get_bd_pins clk_wiz_0/clk_out1]
-  connect_bd_net -net clk_wiz_0_locked [get_bd_pins clk_wiz_0/locked] [get_bd_pins proc_sys_reset_0/dcm_locked]
-  connect_bd_net -net gfe_subsystem_0_gfe_axi_aclk [get_bd_pins slowest_sync_clk] [get_bd_pins proc_sys_reset_0/slowest_sync_clk]
-  connect_bd_net -net proc_sys_reset_0_mb_reset [get_bd_pins mb_reset] [get_bd_pins proc_sys_reset_0/mb_reset]
-  connect_bd_net -net proc_sys_reset_0_peripheral_reset [get_bd_pins peripheral_reset] [get_bd_pins proc_sys_reset_0/peripheral_reset]
-  connect_bd_net -net reset_1 [get_bd_pins reset] [get_bd_pins clk_wiz_0/reset] [get_bd_pins proc_sys_reset_0/ext_reset_in]
-
-  # Restore current instance
-  current_bd_instance $oldCurInst
-}
-
 
 # Procedure to create entire design; Provide argument to make
 # procedure reusable. If parentCell is "", will use root.
@@ -379,10 +290,6 @@ proc create_root_design { parentCell } {
   set_property -dict [ list \
    CONFIG.FREQ_HZ {250000000} \
    ] $default_250mhz_clk1
-  set default_sysclk1_300 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 default_sysclk1_300 ]
-  set_property -dict [ list \
-   CONFIG.FREQ_HZ {250000000} \
-   ] $default_sysclk1_300
   set rs232_uart [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 rs232_uart ]
 
   # Create ports
@@ -395,17 +302,21 @@ proc create_root_design { parentCell } {
    CONFIG.POLARITY {ACTIVE_HIGH} \
  ] $reset
 
-  # Create instance: clocking_and_reset
-  create_hier_cell_clocking_and_reset [current_bd_instance .] clocking_and_reset
-
   # Create instance: gfe_subsystem_0, and set properties
   set gfe_subsystem_0 [ create_bd_cell -type ip -vlnv user.org:user:gfe_subsystem:1.0 gfe_subsystem_0 ]
 
   # Create instance: p1_chisel
   create_hier_cell_p1_chisel [current_bd_instance .] p1_chisel
 
+  # Create instance: util_vector_logic_0, and set properties
+  set util_vector_logic_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 util_vector_logic_0 ]
+  set_property -dict [ list \
+   CONFIG.C_OPERATION {not} \
+   CONFIG.C_SIZE {1} \
+   CONFIG.LOGO_FILE {data/sym_notgate.png} \
+ ] $util_vector_logic_0
+
   # Create interface connections
-  connect_bd_intf_net -intf_net CLK_IN1_D_0_1 [get_bd_intf_ports default_sysclk1_300] [get_bd_intf_pins clocking_and_reset/CLK_IN1_D_0]
   connect_bd_intf_net -intf_net default_250mhz_clk1_0_1 [get_bd_intf_ports default_250mhz_clk1] [get_bd_intf_pins gfe_subsystem_0/default_250mhz_clk1]
   connect_bd_intf_net -intf_net gfe_subsystem_0_ddr4_sdram_c1 [get_bd_intf_ports ddr4_sdram_c1] [get_bd_intf_pins gfe_subsystem_0/ddr4_sdram_c1]
   connect_bd_intf_net -intf_net gfe_subsystem_0_rs232_uart [get_bd_intf_ports rs232_uart] [get_bd_intf_pins gfe_subsystem_0/rs232_uart]
@@ -413,17 +324,15 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net p1_normal_jtag_0_MMIO_AXI [get_bd_intf_pins gfe_subsystem_0/S01_AXI] [get_bd_intf_pins p1_chisel/MMIO_AXI]
 
   # Create port connections
-  connect_bd_net -net Net [get_bd_pins clocking_and_reset/interconnect_aresetn] [get_bd_pins gfe_subsystem_0/S00_ARESETN] [get_bd_pins gfe_subsystem_0/S01_ARESETN]
-  connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins clocking_and_reset/clk_out1] [get_bd_pins gfe_subsystem_0/S00_ACLK] [get_bd_pins gfe_subsystem_0/S01_ACLK] [get_bd_pins p1_chisel/clock]
-  connect_bd_net -net gfe_subsystem_0_gfe_axi_aclk [get_bd_pins clocking_and_reset/slowest_sync_clk] [get_bd_pins gfe_subsystem_0/gfe_axi_aclk]
+  connect_bd_net -net gfe_subsystem_0_gfe_axi_aclk [get_bd_pins gfe_subsystem_0/S00_ACLK] [get_bd_pins gfe_subsystem_0/S01_ACLK] [get_bd_pins gfe_subsystem_0/gfe_axi_aclk] [get_bd_pins p1_chisel/clock]
+  connect_bd_net -net gfe_subsystem_0_gfe_sync_resetn [get_bd_pins gfe_subsystem_0/S00_ARESETN] [get_bd_pins gfe_subsystem_0/S01_ARESETN] [get_bd_pins gfe_subsystem_0/gfe_sync_resetn] [get_bd_pins util_vector_logic_0/Op1]
   connect_bd_net -net gfe_subsystem_0_ip2intc_irpt_0 [get_bd_pins gfe_subsystem_0/ip2intc_irpt_0] [get_bd_pins p1_chisel/interrupt]
   connect_bd_net -net jtag_TCK_1 [get_bd_ports jtag_TCK] [get_bd_pins p1_chisel/jtag_TCK]
   connect_bd_net -net jtag_TDI_1 [get_bd_ports jtag_TDI] [get_bd_pins p1_chisel/jtag_TDI]
   connect_bd_net -net jtag_TMS_1 [get_bd_ports jtag_TMS] [get_bd_pins p1_chisel/jtag_TMS]
   connect_bd_net -net p1_normal_jtag_0_debug_systemjtag_jtag_TDO_data [get_bd_ports jtag_TDO] [get_bd_pins p1_chisel/jtag_TDO]
-  connect_bd_net -net proc_sys_reset_0_mb_reset [get_bd_pins clocking_and_reset/mb_reset] [get_bd_pins p1_chisel/reset]
-  connect_bd_net -net proc_sys_reset_0_peripheral_reset [get_bd_pins clocking_and_reset/peripheral_reset] [get_bd_pins gfe_subsystem_0/gfe_reset]
-  connect_bd_net -net reset_1 [get_bd_ports reset] [get_bd_pins clocking_and_reset/reset]
+  connect_bd_net -net reset_1 [get_bd_ports reset] [get_bd_pins gfe_subsystem_0/gfe_reset]
+  connect_bd_net -net util_vector_logic_0_Res [get_bd_pins p1_chisel/reset] [get_bd_pins util_vector_logic_0/Res]
 
   # Create address segments
   create_bd_addr_seg -range 0x80000000 -offset 0x80000000 [get_bd_addr_spaces p1_chisel/p1_normal_jtag_0/MMIO_AXI] [get_bd_addr_segs gfe_subsystem_0/S01_AXI/Mem0] SEG_gfe_subsystem_0_Mem0
@@ -444,4 +353,6 @@ proc create_root_design { parentCell } {
 
 create_root_design ""
 
+
+common::send_msg_id "BD_TCL-1000" "WARNING" "This Tcl script was generated from a block design that has not been validated. It is possible that design <$design_name> may result in errors during validation."
 
