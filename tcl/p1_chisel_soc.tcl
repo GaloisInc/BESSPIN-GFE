@@ -133,7 +133,7 @@ set_property "ip_repo_paths" [list \
  ] $obj
 
 # Generate block diagram
-source $origin_dir/p1_chisel_soc_bd.tcl
+source $origin_dir/p1_chisel_soc_flat_bd.tcl
 
 # Rebuild user ip_repo's index before adding any source files
 update_ip_catalog -rebuild
@@ -151,7 +151,8 @@ if {[string equal [get_filesets -quiet constrs_1] ""]} {
 set obj [get_filesets constrs_1]
 
 # Add/Import constrs file and set constrs file properties
-add_files -fileset constrs_1 [ glob $origin_dir/../xdc/*.xdc ]
+# add_files -fileset constrs_1 [ glob $origin_dir/../xdc/*.xdc ]
+add_files -fileset constrs_1 [ glob $origin_dir/../xdc/vcu118*.xdc ]
 
 # Set 'constrs_1' fileset properties
 set obj [get_filesets constrs_1]
