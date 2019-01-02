@@ -28,7 +28,4 @@ set_property IOSTANDARD LVCMOS18 [get_ports jtag_TCK]
 
 # Timing constraints
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets jtag_TCK]
-# set_clock_groups -asynchronous \
-# -group {clk_out1_design_1_clk_wiz_0_0} \
-# -group {mmcm_clkout1} \
-# -group {mmcm_clkout0}
+
