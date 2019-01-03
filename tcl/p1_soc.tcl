@@ -25,7 +25,6 @@ if { [info exists ::origin_dir_loc] } {
 }
 
 # Set the project name
-
 set project_name "p1_chisel_soc"
 set p1_path "../xilinx_chisel_processors/P1/xilinx_ip/p1_normal_jtag_1.0"
 

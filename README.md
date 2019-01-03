@@ -11,7 +11,7 @@ versions of P1, P2, and P3 connected by an AXI interconnect to variety of
 peripherals. The AXI interconnect and corresponding peripherals are part of the
 gfe subsystem, which is wrapped into a single hierarchy shown in the top level block diagram. This is designed to limit coupling
 between the processors and surrounding SoC. TA1 performers can
-modify or replace the reference processors with their own secure versions.
+modify or replace the reference processors with their own secure versions. They can also modify the gfe subsystem, but may not be supported if those modifications break the reference system or software.
 
 ## How to Build the SoC ##
 
