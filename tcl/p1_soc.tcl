@@ -35,7 +35,7 @@ if { [info exists ::user_project_name] } {
 }
 
 variable script_file
-set script_file "p1_chisel_soc.tcl"
+set script_file "p1_soc.tcl"
 
 # Help information for this script
 proc help {} {
