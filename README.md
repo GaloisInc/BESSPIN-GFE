@@ -22,6 +22,7 @@ Prebuilt images are available in the bitstreams folder.
 To build your own bitstream, run the following to open up the reference
 project in Vivado.
 
+`git submodule update --init xilinx_chisel_processors`
 `./edit_soc.sh`
 
 Then follow the usual Vivado gui build steps to generate a bitstream.
