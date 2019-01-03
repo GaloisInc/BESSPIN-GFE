@@ -18,10 +18,14 @@ modify or replace the reference processors with their own secure versions. They 
 Prebuilt images are available in the bitstreams folder.
 
 To build your own bitstream, run the following to open up the reference
-project in Vivado.
+project in Vivado 2017.4.
 
 ```bash
+# Update the required submodules
 git submodule update --init xilinx_chisel_processors
+# Load up the correct version of vivado
+source /opt/Xilinx/Vivado/2017.4/settings64.sh
+# Open up the project in Vivado
 ./edit_soc.sh
 ```
 
