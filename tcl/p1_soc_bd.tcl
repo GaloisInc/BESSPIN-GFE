@@ -307,7 +307,7 @@ proc create_hier_cell_P1_chisel { parentCell nameHier } {
   set p1_normal_jtag_0 [ create_bd_cell -type ip -vlnv user.org:user:p1_normal_jtag:1.0 p1_normal_jtag_0 ]
   set_property -dict [ list \
    CONFIG.C_MEM_AXI_ID_WIDTH {4} \
-   CONFIG.C_MEM_AXI_TARGET_SLAVE_BASE_ADDR {0x40000000} \
+   CONFIG.C_MEM_AXI_TARGET_SLAVE_BASE_ADDR {0x80000000} \
    CONFIG.C_MMIO_AXI_ID_WIDTH {4} \
    CONFIG.C_MMIO_AXI_TARGET_SLAVE_BASE_ADDR {0x60000000} \
  ] $p1_normal_jtag_0

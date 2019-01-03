@@ -42,7 +42,9 @@ if { [info exists ::origin_dir_loc] } {
 }
 
 # Set the project name
+
 set project_name "p1_chisel_soc"
+set p1_path "../xilinx_chisel_processors/P1/xilinx_ip/p1_normal_jtag_1.0"
 
 # Use project name variable, if specified in the tcl shell
 if { [info exists ::user_project_name] } {
@@ -64,6 +66,7 @@ proc help {} {
   puts "$script_file"
   puts "$script_file -tclargs \[--origin_dir <path>\]"
   puts "$script_file -tclargs \[--project_name <name>\]"
+  puts "$script_file -tclargs \[--p1_path <path>\]"
   puts "$script_file -tclargs \[--help\]\n"
   puts "Usage:"
   puts "Name                   Description"
@@ -75,6 +78,9 @@ proc help {} {
   puts "\[--project_name <name>\] Create project with the specified name. Default"
   puts "                       name is the name of the project from where this"
   puts "                       script was generated.\n"
+  puts "\[--p1_path <path>\] Path to the IP directory containing the p1 processor."
+  puts "                   This path is relative to origin_dir, and the directory."
+  puts "                   should contain the component.xml.\n"
   puts "\[--help\]               Print help information for this script"
   puts "-------------------------------------------------------------------------\n"
   exit 0
@@ -86,6 +92,7 @@ if { $::argc > 0 } {
     switch -regexp -- $option {
       "--origin_dir"   { incr i; set origin_dir [lindex $::argv $i] }
       "--project_name" { incr i; set project_name [lindex $::argv $i] }
+      "--p1_path" { incr i; set p1_path [lindex $::argv $i] }
       "--help"         { help }
       default {
         if { [regexp {^-} $option] } {
@@ -128,12 +135,11 @@ if {[string equal [get_filesets -quiet sources_1] ""]} {
 # Set IP repository paths
 set obj [get_filesets sources_1]
 set_property "ip_repo_paths" [list \
- "[file normalize "$origin_dir/../xilinx_chisel_processors/P1/xilinx_ip/p1_normal_jtag_1.0"]" \
- "[file normalize "$origin_dir/../gfe-xilinx-subsystem/xilinx_ip"]" \
+ "[file normalize "$p1_path"]" \
  ] $obj
 
 # Generate block diagram
-source $origin_dir/p1_chisel_soc_flat_bd.tcl
+source $origin_dir/p1_soc_bd.tcl
 
 # Rebuild user ip_repo's index before adding any source files
 update_ip_catalog -rebuild
