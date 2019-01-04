@@ -1,15 +1,15 @@
 bootrom_img = bootrom.img
-bootrom_coe = bootrom.coe
+bootrom_mem = bootrom.mem
 
 GCC=riscv32-unknown-elf-gcc
 OBJCOPY=riscv32-unknown-elf-objcopy
 OBJDUMP=riscv32-unknown-elf-objdump
 
-all: $(bootrom_img) $(bootrom_coe)
+all: $(bootrom_img) $(bootrom_mem)
 
-%.coe: %.bin
+%.mem: %.bin
 	hexdump -e '16/4 "%02x " "\n"' $*.bin > $*.hex
-	python genCoe.py > $@
+	python genMem.py > $@
 
 %.img: %.bin
 	dd if=$< of=$@ bs=128 count=1
