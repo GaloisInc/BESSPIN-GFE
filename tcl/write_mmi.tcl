@@ -8,7 +8,7 @@ proc write_mmi {cell_name} {
 	set proj [current_project]
 	set filename "${cell_name}.mmi"
 	set fileout [open $filename "w"]
-	set brams [split [get_cells -hierarchical -filter { PRIMITIVE_TYPE =~ BMEM.bram.* }] " "]
+	set brams [split [get_cells -hierarchical -filter { PRIMITIVE_TYPE =~ BLOCKRAM.bram.* }] " "]
 	#isolate all BRAMs identified by cell_name
 	set cell_name_bram ""
 	for {set i 0} {$i < [llength $brams]} {incr i} {
@@ -17,7 +17,8 @@ proc write_mmi {cell_name} {
 		}
 	}
 	set proc_found 0	
-	set inst_path [split [get_cells -hierarchical -filter { NAME =~  "*microblaze*" } ] " "]
+	# set inst_path [split [get_cells -hierarchical -filter { NAME =~  "*microblaze*" } ] " "]
+	set inst_path ""
 	if {$inst_path == ""} {
 		puts "Warning: No Processor found"
 		set inst_path "dummy"
@@ -35,9 +36,10 @@ proc write_mmi {cell_name} {
 	set new_inst [string range $inst 0 $new_inst-1]
 	puts $fileout "  <Processor Endianness=\"Little\" InstPath=\"$inst_path\">"
 	set bram_range 0
+	puts "cell_name_bram $cell_name_bram"
 	for {set i 0} {$i < [llength $cell_name_bram]} {incr i} {
 		set bram_type [get_property REF_NAME [get_cells [lindex $cell_name_bram $i]]]
-		if {$bram_type == "RAMB36E1"} {
+		if {$bram_type == "RAMB36E2"} {
 			set bram_range [expr {$bram_range + 4096}]	
 		}
 	}
