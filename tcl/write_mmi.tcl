@@ -89,7 +89,7 @@ proc write_mmi {cell_name} {
 						set placed [lindex $placed_list 1]
 					}
 					set bram_type [get_property REF_NAME [get_cells [lindex $cell_name_bram $j]]]			
-					if {$bram_type == "RAMB36E1"} {
+					if {$bram_type == "RAMB36E2"} {
 						set bram_type "RAMB32"
 					}
 															
