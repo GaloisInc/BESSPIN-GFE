@@ -4,5 +4,6 @@ vivado
 bootrom/bootrom.bin
 bootrom/bootrom.img
 bootrom/bootrom.hex
+bootrom/bootrom.mem
 # filesystem artifacts
 ._*
