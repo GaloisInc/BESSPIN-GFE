@@ -447,8 +447,8 @@ proc create_root_design { parentCell } {
   connect_bd_net -net reset_1 [get_bd_ports reset] [get_bd_pins gfe_subsystem/reset]
 
   # Create address segments
-  create_bd_addr_seg -range 0x00001000 -offset 0xC0000000 [get_bd_addr_spaces P1_processor/p1_normal_jtag_0/MMIO_AXI] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
-  create_bd_addr_seg -range 0x00001000 -offset 0x60000000 [get_bd_addr_spaces P1_processor/p1_normal_jtag_0/MMIO_AXI] [get_bd_addr_segs gfe_subsystem/axi_uartlite_0/S_AXI/Reg] SEG_axi_uartlite_0_Reg
+  create_bd_addr_seg -range 0x00001000 -offset 0x70000000 [get_bd_addr_spaces P1_processor/p1_normal_jtag_0/MMIO_AXI] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
+  create_bd_addr_seg -range 0x00001000 -offset 0x62300000 [get_bd_addr_spaces P1_processor/p1_normal_jtag_0/MMIO_AXI] [get_bd_addr_segs gfe_subsystem/axi_uartlite_0/S_AXI/Reg] SEG_axi_uartlite_0_Reg
   create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces P1_processor/p1_normal_jtag_0/MMIO_AXI] [get_bd_addr_segs gfe_subsystem/ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_0_C0_DDR4_ADDRESS_BLOCK
 
 
