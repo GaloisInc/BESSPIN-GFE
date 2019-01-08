@@ -13,7 +13,11 @@ with open(fin, "r") as f:
     for line in f:
         hex_values = line.split()
         for value in hex_values:
-            mem_string += value + "\n"
+            # Flip the byte order for the .mem format
+            n = 2
+            byte_chars = [value[i:i+2] for i in range(0, len(value), n)]
+            byte_chars = byte_chars[::-1]
+            mem_string += "".join(byte_chars) + "\n"
 
 # mem_string = mem_string[:-2] + ";"
 
