@@ -128,7 +128,9 @@ user.org:user:p1_normal_jtag:1.0\
 xilinx.com:ip:util_vector_logic:2.0\
 xilinx.com:ip:xlconcat:2.1\
 xilinx.com:ip:xlconstant:1.1\
+xilinx.com:ip:axi_bram_ctrl:4.0\
 xilinx.com:ip:axi_uartlite:2.0\
+xilinx.com:ip:blk_mem_gen:8.4\
 xilinx.com:ip:ddr4:2.2\
 "
 
@@ -207,15 +209,35 @@ proc create_hier_cell_gfe_subsystem { parentCell nameHier } {
   create_bd_pin -dir O -type intr interrupt
   create_bd_pin -dir I -type rst reset
 
+  # Create instance: axi_bram_ctrl_0, and set properties
+  set axi_bram_ctrl_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_bram_ctrl:4.0 axi_bram_ctrl_0 ]
+  set_property -dict [ list \
+   CONFIG.SINGLE_PORT_BRAM {1} \
+ ] $axi_bram_ctrl_0
+
   # Create instance: axi_interconnect_0, and set properties
   set axi_interconnect_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_interconnect_0 ]
   set_property -dict [ list \
-   CONFIG.NUM_MI {2} \
+   CONFIG.ENABLE_ADVANCED_OPTIONS {1} \
+   CONFIG.M00_HAS_REGSLICE {4} \
+   CONFIG.M01_HAS_REGSLICE {4} \
+   CONFIG.M02_HAS_REGSLICE {4} \
+   CONFIG.NUM_MI {3} \
    CONFIG.NUM_SI {2} \
+   CONFIG.S00_HAS_REGSLICE {4} \
+   CONFIG.S01_HAS_REGSLICE {4} \
  ] $axi_interconnect_0
 
   # Create instance: axi_uartlite_0, and set properties
   set axi_uartlite_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_uartlite:2.0 axi_uartlite_0 ]
+
+  # Create instance: blk_mem_gen_0, and set properties
+  set blk_mem_gen_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.4 blk_mem_gen_0 ]
+  set_property -dict [ list \
+   CONFIG.Memory_Type {Single_Port_ROM} \
+   CONFIG.Port_A_Write_Rate {0} \
+   CONFIG.Use_Byte_Write_Enable {false} \
+ ] $blk_mem_gen_0
 
   # Create instance: ddr4_0, and set properties
   set ddr4_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:ddr4:2.2 ddr4_0 ]
@@ -235,8 +257,10 @@ proc create_hier_cell_gfe_subsystem { parentCell nameHier } {
  ] $util_vector_logic_0
 
   # Create interface connections
+  connect_bd_intf_net -intf_net axi_bram_ctrl_0_BRAM_PORTA [get_bd_intf_pins axi_bram_ctrl_0/BRAM_PORTA] [get_bd_intf_pins blk_mem_gen_0/BRAM_PORTA]
   connect_bd_intf_net -intf_net axi_interconnect_0_M00_AXI [get_bd_intf_pins axi_interconnect_0/M00_AXI] [get_bd_intf_pins ddr4_0/C0_DDR4_S_AXI]
   connect_bd_intf_net -intf_net axi_interconnect_0_M01_AXI [get_bd_intf_pins axi_interconnect_0/M01_AXI] [get_bd_intf_pins axi_uartlite_0/S_AXI]
+  connect_bd_intf_net -intf_net axi_interconnect_0_M02_AXI [get_bd_intf_pins axi_bram_ctrl_0/S_AXI] [get_bd_intf_pins axi_interconnect_0/M02_AXI]
   connect_bd_intf_net -intf_net axi_uartlite_0_UART [get_bd_intf_pins rs232_uart] [get_bd_intf_pins axi_uartlite_0/UART]
   connect_bd_intf_net -intf_net ddr4_0_C0_DDR4 [get_bd_intf_pins ddr4_sdram_c1] [get_bd_intf_pins ddr4_0/C0_DDR4]
   connect_bd_intf_net -intf_net default_250mhz_clk1_1 [get_bd_intf_pins default_250mhz_clk1] [get_bd_intf_pins ddr4_0/C0_SYS_CLK]
@@ -244,10 +268,10 @@ proc create_hier_cell_gfe_subsystem { parentCell nameHier } {
   connect_bd_intf_net -intf_net p1_normal_jtag_0_MMIO_AXI [get_bd_intf_pins S01_AXI] [get_bd_intf_pins axi_interconnect_0/S01_AXI]
 
   # Create port connections
-  connect_bd_net -net ARESETN_1 [get_bd_pins ARESETN] [get_bd_pins axi_interconnect_0/ARESETN] [get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/M01_ARESETN] [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins axi_interconnect_0/S01_ARESETN] [get_bd_pins axi_uartlite_0/s_axi_aresetn] [get_bd_pins ddr4_0/c0_ddr4_aresetn] [get_bd_pins util_vector_logic_0/Res]
+  connect_bd_net -net ARESETN_1 [get_bd_pins ARESETN] [get_bd_pins axi_bram_ctrl_0/s_axi_aresetn] [get_bd_pins axi_interconnect_0/ARESETN] [get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/M01_ARESETN] [get_bd_pins axi_interconnect_0/M02_ARESETN] [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins axi_interconnect_0/S01_ARESETN] [get_bd_pins axi_uartlite_0/s_axi_aresetn] [get_bd_pins ddr4_0/c0_ddr4_aresetn] [get_bd_pins util_vector_logic_0/Res]
   connect_bd_net -net S00_ACLK_1 [get_bd_pins axi_interconnect_0/M00_ACLK] [get_bd_pins ddr4_0/c0_ddr4_ui_clk]
   connect_bd_net -net axi_uartlite_0_interrupt [get_bd_pins interrupt] [get_bd_pins axi_uartlite_0/interrupt]
-  connect_bd_net -net ddr4_0_addn_ui_clkout1 [get_bd_pins ACLK] [get_bd_pins axi_interconnect_0/ACLK] [get_bd_pins axi_interconnect_0/M01_ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK] [get_bd_pins axi_interconnect_0/S01_ACLK] [get_bd_pins axi_uartlite_0/s_axi_aclk] [get_bd_pins ddr4_0/addn_ui_clkout1]
+  connect_bd_net -net ddr4_0_addn_ui_clkout1 [get_bd_pins ACLK] [get_bd_pins axi_bram_ctrl_0/s_axi_aclk] [get_bd_pins axi_interconnect_0/ACLK] [get_bd_pins axi_interconnect_0/M01_ACLK] [get_bd_pins axi_interconnect_0/M02_ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK] [get_bd_pins axi_interconnect_0/S01_ACLK] [get_bd_pins axi_uartlite_0/s_axi_aclk] [get_bd_pins ddr4_0/addn_ui_clkout1]
   connect_bd_net -net ddr4_0_c0_ddr4_ui_clk_sync_rst [get_bd_pins c0_ddr4_ui_clk_sync_rst] [get_bd_pins ddr4_0/c0_ddr4_ui_clk_sync_rst] [get_bd_pins util_vector_logic_0/Op1]
   connect_bd_net -net reset_1 [get_bd_pins reset] [get_bd_pins ddr4_0/sys_rst]
 
@@ -423,8 +447,9 @@ proc create_root_design { parentCell } {
   connect_bd_net -net reset_1 [get_bd_ports reset] [get_bd_pins gfe_subsystem/reset]
 
   # Create address segments
-  create_bd_addr_seg -range 0x00001000 -offset 0x60000000 [get_bd_addr_spaces P1_processor/p1_normal_jtag_0/MMIO_AXI] [get_bd_addr_segs gfe_subsystem/axi_uartlite_0/S_AXI/Reg] SEG_axi_uartlite_0_Reg
-  create_bd_addr_seg -range 0x80000000 -offset 0x80000000 [get_bd_addr_spaces P1_processor/p1_normal_jtag_0/MMIO_AXI] [get_bd_addr_segs gfe_subsystem/ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_0_C0_DDR4_ADDRESS_BLOCK
+  create_bd_addr_seg -range 0x00001000 -offset 0x70000000 [get_bd_addr_spaces P1_processor/p1_normal_jtag_0/MMIO_AXI] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
+  create_bd_addr_seg -range 0x00001000 -offset 0x62300000 [get_bd_addr_spaces P1_processor/p1_normal_jtag_0/MMIO_AXI] [get_bd_addr_segs gfe_subsystem/axi_uartlite_0/S_AXI/Reg] SEG_axi_uartlite_0_Reg
+  create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces P1_processor/p1_normal_jtag_0/MMIO_AXI] [get_bd_addr_segs gfe_subsystem/ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_0_C0_DDR4_ADDRESS_BLOCK
 
 
   # Restore current instance

@@ -1,4 +1,10 @@
 # generated output folders
 vivado
+# compiled files
+bootrom/bootrom.bin
+bootrom/bootrom.img
+bootrom/bootrom.hex
+bootrom/bootrom.mem
+bootrom/bootrom.dump
 # filesystem artifacts
 ._*
