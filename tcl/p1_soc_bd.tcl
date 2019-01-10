@@ -245,6 +245,8 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   # Create instance: blk_mem_gen_0, and set properties
   set blk_mem_gen_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.4 blk_mem_gen_0 ]
   set_property -dict [ list \
+   CONFIG.Coe_File {../../../../../../../../bootrom/bootrom.coe} \
+   CONFIG.Load_Init_File {true} \
    CONFIG.Memory_Type {Single_Port_ROM} \
    CONFIG.Port_A_Write_Rate {0} \
    CONFIG.Use_Byte_Write_Enable {false} \
