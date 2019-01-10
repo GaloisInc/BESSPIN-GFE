@@ -14,9 +14,10 @@ with open(fin, "r") as f:
     for line in f:
         hex_values = line.split()
         for value in hex_values:
-            # Flip the byte order for the .mem format
+            # Flip the byte order for the .coe format
             n = 2
             byte_chars = [ value[i:i+2] for i in range(0, len(value), n) ]
+            byte_chars = byte_chars[::-1]
             for c in byte_chars:
                 mem_string += c + ",\n"
 
