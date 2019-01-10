@@ -19,13 +19,16 @@ class gfetester(object):
         self.openocd_command = openocd_command
         self.openocd_cfg_path = openocd_cfg_path
         self.gdb_path = gdb_path
+        self.gdb_session = None
+        self.openocd_session = None
 
     def startGdb(
         self,
-        port=gfeparameters.gdb_port,
+        port=None,
         server_cmd=gfeparameters.openocd_command,
         config=gfeparameters.openocd_cfg_path,
-        riscv_gdb_cmd=gfeparameters.gdb_path
+        riscv_gdb_cmd=gfeparameters.gdb_path,
+        verbose=False
     ):
         """Start a gdb session with the riscv core on the GFE
 
@@ -39,17 +42,11 @@ class gfetester(object):
         self.openocd_session = testlib.Openocd(
             server_cmd=server_cmd,
             config=config,
-            port=port,
-            debug=True,
-            verbose=True)
+            debug=True)
         self.gdb_session = testlib.Gdb(
             cmd=riscv_gdb_cmd,
-            verbose=True)
-        print("Connecting to the riscv core")
-        print(
-            self.gdb_session.command(
-                "target remote localhost:{}".format(
-                    port)))
+            ports=self.openocd_session.gdb_ports)
+        self.gdb_session.connect()
 
     def riscvRead32(self, address):
         """Read 32 bits from memory using the riscv core

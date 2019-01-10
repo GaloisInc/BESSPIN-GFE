@@ -13,7 +13,7 @@ import pipes
 
 import pexpect
 
-print_log_names = False
+print_log_names = True
 real_stdout = sys.stdout
 
 # Note that gdb comes with its own testsuite. I was unable to figure out how to
@@ -385,6 +385,7 @@ class Gdb(object):
 
     def connect(self):
         for port, child in zip(self.ports, self.children):
+            print("Connecting on %s".format(port))
             self.select_child(child)
             self.wait()
             self.command("set confirm off")
@@ -516,6 +517,7 @@ class Gdb(object):
 
     def x(self, address, size='w'):
         output = self.command("x/%s %s" % (size, address))
+        print(output)
         value = int(output.split(':')[1].strip(), 0)
         return value
 

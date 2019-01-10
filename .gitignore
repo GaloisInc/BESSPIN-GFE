@@ -6,5 +6,6 @@ bootrom/bootrom.img
 bootrom/bootrom.hex
 bootrom/bootrom.mem
 bootrom/bootrom.dump
+*.pyc
 # filesystem artifacts
 ._*
