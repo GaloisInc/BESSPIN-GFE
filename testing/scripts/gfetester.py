@@ -25,6 +25,7 @@ class gfetester(object):
     def startGdb(
         self,
         port=None,
+        binary=None,
         server_cmd=gfeparameters.openocd_command,
         config=gfeparameters.openocd_cfg_path,
         riscv_gdb_cmd=gfeparameters.gdb_path,
@@ -45,7 +46,8 @@ class gfetester(object):
             debug=True)
         self.gdb_session = testlib.Gdb(
             cmd=riscv_gdb_cmd,
-            ports=self.openocd_session.gdb_ports)
+            ports=self.openocd_session.gdb_ports,
+            binary=binary)
         self.gdb_session.connect()
 
     def riscvRead32(self, address):
