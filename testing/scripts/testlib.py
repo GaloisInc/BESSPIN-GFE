@@ -517,7 +517,6 @@ class Gdb(object):
 
     def x(self, address, size='w'):
         output = self.command("x/%s %s" % (size, address))
-        print(output)
         value = int(output.split(':')[1].strip(), 0)
         return value
 
