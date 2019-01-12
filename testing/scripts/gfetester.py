@@ -24,6 +24,8 @@ class gfetester(object):
         self.gdb_session = None
         self.openocd_session = None
 
+    # ------------------ GDB/JTAG Functions ------------------
+
     def startGdb(
         self,
         port=None,
@@ -55,6 +57,28 @@ class gfetester(object):
     def runElfTest(
         self, binary, gdb_log=False, openocd_log=False, runtime=0.5,
         tohost=0x80001000):
+        """Run a binary test on the GFE using GDB.
+        
+        Args:
+            binary (string): path to riscv elf file 
+            gdb_log (bool, optional): Print the gdb log
+                if the gdb commands raise an exception
+            openocd_log (bool, optional): Print openocd log
+                if the openocd command raise an exception
+            runtime (float, optional): Time (seconds) to wait while
+                the test to run
+            tohost (int, optional): Memory address to check for
+                the passing condition at the end of the test.
+                A "0x1" written to this address indicates the test passed
+        
+        Returns:
+            (passed, msg) (bool, string): passed is true if the test passed 
+                msg that can be printed to further describe the passing or 
+                failure condition
+        
+        Raises:
+            e: Exception from gdb or openocd if an error occurs (i.e. no riscv detected)
+        """
         if not self.gdb_session:
             self.startGdb()
         gdblog = open(self.gdb_session.logfiles[0].name, 'r')
@@ -142,3 +166,18 @@ class gfetester(object):
 
     def riscvWrite32(self, address, value):
         self.riscvWrite(address, value, 32)
+
+
+    # ------------------ UART Functions ------------------
+    def setupUartLite(
+        clock_period_ns=gfeparameters.default_axi_clock_ns,
+        baudrate=gfeparameters.default_uart_baud):
+        """Setup the UART registers to enable transmit and receive on the GFE
+        """
+        return
+
+    def sendUartChar():
+        return
+
+    def recvUartChar():
+        return
