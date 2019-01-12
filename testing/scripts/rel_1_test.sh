@@ -9,5 +9,6 @@ cd $BASE_DIR
 python gdbserver.py ../targets/p1.py ExamineTarget
 
 # Run the UART, BOOTROM, and DDR smoke tests
+python run_gfe_test.py ./run_gfe_test.py ../baremetal/asm/rv32ui-p-uart
 
 # Optionally, boot FreeRTOS

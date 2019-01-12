@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Script to run a compiled test on the GFE
+"""Script to run a compiled elf on the GFE
 """
 
 import argparse
@@ -44,7 +44,9 @@ try:
     gfe.gdb_session.c(wait=False)
     time.sleep(args.runtime)
     gfe.gdb_session.interrupt()
-    tohost_val = gfe.riscvRead32(args.tohost)   
+    tohost_val = gfe.riscvRead32(args.tohost)
+    print("tohost_val {}".format(tohost_val))
+    print(gfe.gdb_session.command("info registers"))
 except Exception as e:
     print("------- GDB Log -------")
     print(gdblog.read())
@@ -53,5 +55,13 @@ except Exception as e:
     raise e
 
 # Check if the test passed
-if tohost_val > 0:
-    print("Test passed")
+# A one in the LSB of tohost indicates a passing test
+if tohost_val == 1:
+    msg = "passed"
+elif tohost_val == 0:
+    msg = "Did not complete. tohost value = 0"
+else:
+    msg = "failed"
+print(
+    "Test {} {} after running for {} seconds".format(
+        args.binary, msg, args.runtime))
