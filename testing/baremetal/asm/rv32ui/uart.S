@@ -21,7 +21,8 @@ RVTEST_CODE_BEGIN
   # Check that uart registers can be accessed
   li t0, UART_BASE
   li t1, ULITE_STATUS
-  lw t2, 0(t1)
+  add t2, t1, t0
+  lw t2, 0(t2)
   TEST_CASE(1, t2, 0x4, )
 
   # TODO: Flesh this out. ADD TX and RX commands
