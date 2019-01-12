@@ -39,49 +39,8 @@ if not os.path.exists(args.binary):
 
 # Gdb into the GFE
 gfe = gfetester.gfetester()
-gfe.startGdb(binary=args.binary)
-gdblog = open(gfe.gdb_session.logfiles[0].name, 'r')
-openocdlog = open(gfe.openocd_session.logfile.name, 'r')
-
-# Load the program, run it, then check for the passing condition
-tohost_val = None
-try:
-    gfe.gdb_session.load()
-    gfe.gdb_session.c(wait=False)
-    time.sleep(args.runtime)
-    gfe.gdb_session.interrupt()
-    tohost_val = gfe.riscvRead32(args.tohost)
-except Exception as e:
-    if args.gdblog:
-        print("------- GDB Log -------")
-        print(gdblog.read())
-    if args.openocdlog:
-        print("------- OpenOCD Log -------")
-        print(openocdlog.read())
-    openocdlog.close()
-    gdblog.close()
-    raise e
-
-# Print logs
-if args.gdblog:
-    print("------- GDB Log -------")
-    print(gdblog.read())
-    gdblog.close()
-if args.openocdlog:
-    print("------- OpenOCD Log -------")
-    print(openocdlog.read())
-    openocdlog.close()
-
-# Check if the test passed
-if tohost_val == 1:
-    msg = "passed"
-    passed = True
-elif tohost_val == 0:
-    msg = "did not complete. tohost value = 0"
-    passed = False
-else:
-    msg = "failed"
-    passed = False
+(passed, msg) = gfe.runElfTest(binary=args.binary, runtime=args.runtime,
+    tohost=args.tohost)
 
 # Print the result
 print(

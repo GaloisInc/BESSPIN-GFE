@@ -1,6 +1,8 @@
 import testlib
 import re
 import gfeparameters
+import os
+import time
 
 
 class gfetester(object):
@@ -49,6 +51,47 @@ class gfetester(object):
             ports=self.openocd_session.gdb_ports,
             binary=binary)
         self.gdb_session.connect()
+
+    def runElfTest(
+        self, binary, gdb_log=False, openocd_log=False, runtime=0.5,
+        tohost=0x80001000):
+        if not self.gdb_session:
+            self.startGdb()
+        gdblog = open(self.gdb_session.logfiles[0].name, 'r')
+        openocdlog = open(self.openocd_session.logfile.name, 'r')
+        binary = os.path.abspath(binary)
+        tohost_val = 0
+        msg = ""
+        try:
+            self.gdb_session.command("file {}".format(binary))
+            self.gdb_session.load()
+            self.gdb_session.c(wait=False)
+            time.sleep(runtime)
+            self.gdb_session.interrupt()
+            tohost_val = self.riscvRead32(tohost)
+        except Exception as e:
+            if gdb_log:
+                print("------- GDB Log -------")
+                print(gdblog.read())
+            if openocd_log:
+                print("------- OpenOCD Log -------")
+                print(openocdlog.read())
+            openocdlog.close()
+            gdblog.close()
+            raise e
+
+        # Check if the test passed
+        if tohost_val == 1:
+            msg = "passed"
+            passed = True
+        elif tohost_val == 0:
+            msg = "did not complete. tohost value = 0"
+            passed = False
+        else:
+            msg = "failed"
+            passed = False
+
+        return (passed, msg)
 
     def riscvRead32(self, address):
         """Read 32 bits from memory using the riscv core

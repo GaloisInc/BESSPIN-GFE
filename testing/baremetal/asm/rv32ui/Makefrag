@@ -3,8 +3,9 @@
 #-----------------------------------------------------------------------
 
 rv32ui_sc_tests = \
-	uart \
+	add \
 	ddr \
+	uart \
 	bootrom \
 
 rv32ui_p_tests = $(addprefix rv32ui-p-, $(rv32ui_sc_tests))
