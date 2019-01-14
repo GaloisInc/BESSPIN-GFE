@@ -1,0 +1,37 @@
+// See LICENSE for license details.
+
+#ifndef __GFE_MACROS
+#define __GFE_MACROS
+
+// UART
+#define UART_BASE 0x62300000
+
+#define ULITE_RX    0x00
+#define ULITE_TX    0x04
+#define ULITE_STATUS    0x08
+#define ULITE_CONTROL   0x0c
+
+#define ULITE_REGION    16
+
+#define ULITE_STATUS_RXVALID  0x01
+#define ULITE_STATUS_RXFULL 0x02
+#define ULITE_STATUS_TXEMPTY  0x04
+#define ULITE_STATUS_TXFULL 0x08
+#define ULITE_STATUS_IE   0x10
+#define ULITE_STATUS_OVERRUN  0x20
+#define ULITE_STATUS_FRAME  0x40
+#define ULITE_STATUS_PARITY 0x80
+
+#define ULITE_CONTROL_RST_TX  0x01
+#define ULITE_CONTROL_RST_RX  0x02
+#define ULITE_CONTROL_IE  0x10
+#define UART_AUTOSUSPEND_TIMEOUT  3000
+
+// DDR
+#define DDR_BASE 0x80000000
+#define DDR_TOP  0x90000000
+
+// BOOTROM
+#define BOOTROM_BASE 0x70000000
+
+#endif

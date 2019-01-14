@@ -1,10 +1,13 @@
 # generated output folders
 vivado
+testing/scripts/logs
 # compiled files
 bootrom/bootrom.bin
 bootrom/bootrom.img
 bootrom/bootrom.hex
 bootrom/bootrom.mem
 bootrom/bootrom.dump
+testing/baremetal/build
+*.pyc
 # filesystem artifacts
 ._*
