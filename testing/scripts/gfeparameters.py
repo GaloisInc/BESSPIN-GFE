@@ -22,32 +22,3 @@ openocd_command = os.path.join(riscv_home, "bin", "openocd")
 openocd_cfg_path = os.path.join(
     os.path.dirname(script_dir), "targets", "p1_external_hs2.cfg")
 
-
-# ------------------ UART Parameters ------------------
-
-default_axi_clock_ns = 40
-default_uart_baud = 9600
-
-UART_BASE = 0x62300000
-
-ULITE_RX = 0x00
-ULITE_TX = 0x04
-ULITE_STATUS = 0x08
-ULITE_CONTROL = 0x0c
-
-ULITE_REGION = 16
-
-ULITE_STATUS_RXVALID = 0x01
-ULITE_STATUS_RXFUL L 0x02
-ULITE_STATUS_TXEMPTY = 0x04
-ULITE_STATUS_TXFUL L 0x08
-ULITE_STATUS_IE = 0x10
-ULITE_STATUS_OVERRUN = 0x20
-ULITE_STATUS_FRAME = 0x40
-ULITE_STATUS_PARIT Y 0x80
-
-ULITE_CONTROL_RST_TX = 0x01
-ULITE_CONTROL_RST_RX = 0x02
-ULITE_CONTROL_IE = 0x10
-UART_AUTOSUSPEND_TIMEOUT = 3000
-

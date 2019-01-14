@@ -167,17 +167,3 @@ class gfetester(object):
     def riscvWrite32(self, address, value):
         self.riscvWrite(address, value, 32)
 
-
-    # ------------------ UART Functions ------------------
-    def setupUartLite(
-        clock_period_ns=gfeparameters.default_axi_clock_ns,
-        baudrate=gfeparameters.default_uart_baud):
-        """Setup the UART registers to enable transmit and receive on the GFE
-        """
-        return
-
-    def sendUartChar():
-        return
-
-    def recvUartChar():
-        return
