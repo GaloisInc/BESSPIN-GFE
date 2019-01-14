@@ -1,6 +1,8 @@
 import testlib
 import re
 import gfeparameters
+import os
+import time
 
 
 class gfetester(object):
@@ -21,6 +23,8 @@ class gfetester(object):
         self.gdb_path = gdb_path
         self.gdb_session = None
         self.openocd_session = None
+
+    # ------------------ GDB/JTAG Functions ------------------
 
     def startGdb(
         self,
@@ -49,6 +53,77 @@ class gfetester(object):
             ports=self.openocd_session.gdb_ports,
             binary=binary)
         self.gdb_session.connect()
+
+    def runElfTest(
+        self, binary, gdb_log=False, openocd_log=False, runtime=0.5,
+        tohost=0x80001000):
+        """Run a binary test on the GFE using GDB.
+        
+        Args:
+            binary (string): path to riscv elf file 
+            gdb_log (bool, optional): Print the gdb log
+                if the gdb commands raise an exception
+            openocd_log (bool, optional): Print openocd log
+                if the openocd command raise an exception
+            runtime (float, optional): Time (seconds) to wait while
+                the test to run
+            tohost (int, optional): Memory address to check for
+                the passing condition at the end of the test.
+                A "0x1" written to this address indicates the test passed
+        
+        Returns:
+            (passed, msg) (bool, string): passed is true if the test passed 
+                msg that can be printed to further describe the passing or 
+                failure condition
+        
+        Raises:
+            e: Exception from gdb or openocd if an error occurs (i.e. no riscv detected)
+        """
+        if not self.gdb_session:
+            self.startGdb()
+        gdblog = open(self.gdb_session.logfiles[0].name, 'r')
+        openocdlog = open(self.openocd_session.logfile.name, 'r')
+        binary = os.path.abspath(binary)
+        tohost_val = 0
+        msg = ""
+        try:
+            self.gdb_session.command("file {}".format(binary))
+            self.gdb_session.load()
+            self.gdb_session.c(wait=False)
+            time.sleep(runtime)
+            self.gdb_session.interrupt()
+            tohost_val = self.riscvRead32(tohost)
+        except Exception as e:
+            if gdb_log:
+                print("------- GDB Log -------")
+                print(gdblog.read())
+            if openocd_log:
+                print("------- OpenOCD Log -------")
+                print(openocdlog.read())
+            openocdlog.close()
+            gdblog.close()
+            raise e
+
+        # Check if the test passed
+        if tohost_val == 1:
+            msg = "passed"
+            passed = True
+        elif tohost_val == 0:
+            msg = "did not complete. tohost value = 0"
+            passed = False
+        else:
+            msg = "failed"
+            passed = False
+
+        return (passed, msg)
+
+    def getGdbLog(self):
+        if self.gdb_session:
+            with open(self.gdb_session.logfiles[0].name, 'r') as gdblog:
+                data = gdblog.read()
+            return data
+        else:
+            return "Empty"
 
     def riscvRead32(self, address):
         """Read 32 bits from memory using the riscv core
@@ -99,3 +174,4 @@ class gfetester(object):
 
     def riscvWrite32(self, address, value):
         self.riscvWrite(address, value, 32)
+
