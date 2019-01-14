@@ -13,6 +13,6 @@ cd ../baremetal/asm
 make
 
 cd $BASE_DIR
-python run_gfe_test.py ../baremetal/asm/rv32ui-p-uart
+python test_gfe_unittest.py
 
 # Optionally, boot FreeRTOS

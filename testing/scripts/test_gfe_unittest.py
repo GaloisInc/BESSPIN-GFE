@@ -46,7 +46,6 @@ class TestGfe(unittest.TestCase):
             val = self.gfe.riscvRead32(
                 ddr_base + i * addr_incr)
             self.assertEqual(i, val)
-        print(self.gfe.getGdbLog())
         return
 
     def test_bootrom(self):
