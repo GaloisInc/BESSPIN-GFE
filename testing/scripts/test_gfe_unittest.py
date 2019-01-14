@@ -5,11 +5,12 @@
 import unittest
 import argparse
 import gfetester
+import gfeparameters
 import os
 import time
 
 
-class TestAdd(unittest.TestCase):
+class TestGfe(unittest.TestCase):
 
     def setUp(self):
         self.gfe = gfetester.gfetester()
@@ -31,21 +32,46 @@ class TestAdd(unittest.TestCase):
 
     def test_ddr(self):
         # Read the base address of ddr
+        ddr_base = gfeparameters.DDR_BASE
+        base_val = self.gfe.riscvRead32(ddr_base)
         # Perform enough writes to force a writeback to ddr
-        # Perform enough reads to force a read from ddr
-        # Repeat this for several addresses. Test high addresses of ddr
+        addr_incr = 0x100000
+        write_n = 10
+        for i in range(write_n):
+            self.gfe.riscvWrite32(
+                ddr_base + i * addr_incr,
+                i)
+        # Perform enough reads to force a fetch from ddr
+        for i in range(write_n):
+            val = self.gfe.riscvRead32(
+                ddr_base + i * addr_incr)
+            self.assertEqual(i, val)
+        print(self.gfe.getGdbLog())
         return
 
     def test_bootrom(self):
         """Read some values bootrom and perform some basic checks"""
 
         # Read the first value from the bootrom
+        bootrom_base = gfeparameters.BOOTROM_BASE
+        bootrom_size = gfeparameters.BOOTROM_SIZE
+        base_val = self.gfe.riscvRead32(bootrom_base)
+
         # Check that it isn't zeros or ones
+        self.assertNotEqual(base_val, 0)
+        self.assertNotEqual(base_val, 0xFFFFFFFF)
 
-        # Read some values higher up in the address space
+        # Read a value higher up in the address space
+        self.assertGreater(bootrom_size, 0xf0)
+        self.gfe.riscvRead32(
+            bootrom_base + bootrom_size - 0xf0)
 
-        # Make sure the reads complete by checking the first value
-        # again
+        # Make sure the read operations complete by checking
+        # the first value again
+        self.assertEqual(
+            base_val,
+            self.gfe.riscvRead32(bootrom_base)
+            )
         return
 
 if __name__ == '__main__':

@@ -117,6 +117,14 @@ class gfetester(object):
 
         return (passed, msg)
 
+    def getGdbLog(self):
+        if self.gdb_session:
+            with open(self.gdb_session.logfiles[0].name, 'r') as gdblog:
+                data = gdblog.read()
+            return data
+        else:
+            return "Empty"
+
     def riscvRead32(self, address):
         """Read 32 bits from memory using the riscv core
 
