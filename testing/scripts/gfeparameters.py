@@ -16,8 +16,7 @@ if 'RISCV' not in os.environ:
 
 gdb_port = 3333
 
-# riscv_home = os.environ['RISCV']
-riscv_home = "/besspin/riscv-tools"
+riscv_home = os.environ['RISCV']
 gdb_path = os.path.join(riscv_home, "bin", "riscv32-unknown-elf-gdb")
 openocd_command = os.path.join(riscv_home, "bin", "openocd")
 openocd_cfg_path = os.path.join(
