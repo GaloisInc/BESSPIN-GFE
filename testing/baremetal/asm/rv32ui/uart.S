@@ -62,10 +62,10 @@ RVTEST_CODE_BEGIN
   # LOOP BACK UART VALUES
   #-------------------------------------------------------------
 
-  # Return characters sent over UART
+  # t3 = LSR register address
   addi t3, t0, UART_LSR
 
-  # Transmit characters until a response is received
+  # Loop forever, writing all received characters to UART
 check_for_data:
 
   # Check if data was received
@@ -73,7 +73,7 @@ check_for_data:
   andi t1, t1, UART_LSR_DR
   beq t1, x0, check_for_data
 
-  # Transmit the received single character
+  # Transmit the received character
   fence
   addi t4, t0, UART_BUFFER
   lw t2, 0(t4)
