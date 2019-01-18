@@ -70,8 +70,6 @@
 #define UART_LSR_THRE   0x20    /* Transmit-hold-register empty     */
 #define UART_LSR_TEMT   0x40    /* Transmitter empty            */
 
-#define UART_DLL    0x0B    /* value for low byte of divisor latch  */
-
 /*===========================
 =            DDR            =
 ===========================*/
