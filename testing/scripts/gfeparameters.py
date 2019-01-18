@@ -9,10 +9,10 @@ These parameters are used as default values for testing functions and classes.
 script_dir = os.path.dirname(
     os.path.abspath(
         inspect.getfile(inspect.currentframe())))
-# if 'RISCV' not in os.environ:
-#     raise Exception(
-#         "RISCV environment variable needs to be set " +
-#         "to the riscv-tools path")
+if 'RISCV' not in os.environ:
+    raise Exception(
+        "RISCV environment variable needs to be set " +
+        "to the riscv-tools path")
 
 gdb_port = 3333
 
