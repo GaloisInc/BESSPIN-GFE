@@ -26,6 +26,6 @@ git submodule update --init xilinx_chisel_processors
 ```
 
 Then follow the usual Vivado gui build steps to generate a bitstream.
-To save changes to the block diagram in git, please run `write_bd_tcl -force ../tcl/X_bd.tcl`
+To save changes to the block diagram in git, please open the block diagram in Vivado and run `write_bd_tcl -force ../tcl/X_bd.tcl`
 where `X` is the current SoC you are developing. Additionally, update `tcl/X_soc.tcl` to add any new IP repositories or project settings. `setup_soc_project.sh` should be run once. The Vivado project will be generated in the vivado folder of the repository and can be re-opened there.
 

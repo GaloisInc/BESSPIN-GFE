@@ -15,6 +15,8 @@ class TestGfe(unittest.TestCase):
     def setUp(self):
         self.gfe = gfetester.gfetester()
         self.gfe.startGdb()
+        self.path_to_asm = os.path.join(
+                os.path.dirname(os.getcwd()), 'baremetal', 'asm')
 
     def tearDown(self):
         if not self.gfe.gdb_session:
@@ -27,8 +29,27 @@ class TestGfe(unittest.TestCase):
         del self.gfe
 
     def test_uart(self):
+        # Load up the UART test program
+        uart_elf = os.path.abspath(
+            os.path.join(self.path_to_asm, 'rv32ui-p-uart'))
+        self.gfe.setupUart(
+            timeout = 1,
+            baud=9600,
+            parity="NONE",
+            stopbits=2,
+            bytesize=8)
+        self.gfe.launchElf(uart_elf)
+
+        for test_char in [b'a', b'z', b'd']:
+            print("sent {}".format(test_char))
+            self.gfe.uart_session.write(test_char)
+            b = self.gfe.uart_session.read()
+            print("received {}".format(b))
+            self.assertEqual(
+                b, test_char,
+                "Character received %x does not match test test_char %x".format(
+                    b, test_char) )
         return
-        # self.assertEqual(sum([1, 2, 3]), 6, "Should be 6")
 
     def test_ddr(self):
         # Read the base address of ddr

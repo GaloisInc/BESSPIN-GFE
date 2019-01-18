@@ -3,6 +3,7 @@ import re
 import gfeparameters
 import os
 import time
+import serial
 
 
 class gfetester(object):
@@ -23,6 +24,7 @@ class gfetester(object):
         self.gdb_path = gdb_path
         self.gdb_session = None
         self.openocd_session = None
+        self.uart_session = None
 
     # ------------------ GDB/JTAG Functions ------------------
 
@@ -54,6 +56,38 @@ class gfetester(object):
             binary=binary)
         self.gdb_session.connect()
 
+    def launchElf(self, binary, gdb_log=False, openocd_log=False):
+        """Launch a binary on the GFE using GDB
+        
+        Args:
+            binary (string): path to riscv elf file 
+            gdb_log (bool, optional): Print the gdb log
+                if the gdb commands raise an exception
+            openocd_log (bool, optional): Print openocd log
+                if the openocd command raise an exception
+        """
+
+        if not self.gdb_session:
+            self.startGdb()
+        gdblog = open(self.gdb_session.logfiles[0].name, 'r')
+        openocdlog = open(self.openocd_session.logfile.name, 'r')
+        binary = os.path.abspath(binary)
+        try:
+            self.gdb_session.command("file {}".format(binary))
+            self.gdb_session.load()
+            self.gdb_session.c(wait=False)
+        except Exception as e:
+            if gdb_log:
+                print("------- GDB Log -------")
+                print(gdblog.read())
+            if openocd_log:
+                print("------- OpenOCD Log -------")
+                print(openocdlog.read())
+            openocdlog.close()
+            gdblog.close()
+            raise e
+
+
     def runElfTest(
         self, binary, gdb_log=False, openocd_log=False, runtime=0.5,
         tohost=0x80001000):
@@ -79,30 +113,12 @@ class gfetester(object):
         Raises:
             e: Exception from gdb or openocd if an error occurs (i.e. no riscv detected)
         """
-        if not self.gdb_session:
-            self.startGdb()
-        gdblog = open(self.gdb_session.logfiles[0].name, 'r')
-        openocdlog = open(self.openocd_session.logfile.name, 'r')
-        binary = os.path.abspath(binary)
-        tohost_val = 0
+        
+        self.launchElf(binary=binary, gdb_log=gdb_log, openocd_log=openocd_log)
+        time.sleep(runtime)
+        self.gdb_session.interrupt()
+        tohost_val = self.riscvRead32(tohost)
         msg = ""
-        try:
-            self.gdb_session.command("file {}".format(binary))
-            self.gdb_session.load()
-            self.gdb_session.c(wait=False)
-            time.sleep(runtime)
-            self.gdb_session.interrupt()
-            tohost_val = self.riscvRead32(tohost)
-        except Exception as e:
-            if gdb_log:
-                print("------- GDB Log -------")
-                print(gdblog.read())
-            if openocd_log:
-                print("------- OpenOCD Log -------")
-                print(openocdlog.read())
-            openocdlog.close()
-            gdblog.close()
-            raise e
 
         # Check if the test passed
         if tohost_val == 1:
@@ -174,4 +190,58 @@ class gfetester(object):
 
     def riscvWrite32(self, address, value):
         self.riscvWrite(address, value, 32)
+
+    # ------------------ UART Functions ------------------
+    def setupUart(
+        self,
+        timeout=None, # wait forever on read data
+        port=gfeparameters.uart_serial_dev, 
+        baud=9600,
+        parity="ODD",
+        stopbits=2,
+        bytesize=8):
+
+        # Translate inputs into serial settings
+        if parity.lower() == "odd":
+            parity = serial.PARITY_ODD
+        elif parity.lower() == "even":
+            parity = serial.PARITY_EVEN
+        elif parity.lower() == "none" or parity == None:
+            parity = serial.PARITY_NONE
+        else:
+            raise Exception(
+                "Parity {} must be even or odd".format(parity))
+
+        if stopbits == 1:
+            stopbits = serial.STOPBITS_ONE
+        elif stopbits ==2:
+            stopbits = serial.STOPBITS_TWO
+        else:
+            raise Exception(
+                "Stop bits {} must be 1 or 2".format(stopbits))
+
+        if bytesize == 5:
+            bytesize = serial.FIVEBITS
+        elif bytesize == 6:
+            bytesize = serial.SIXBITS
+        elif bytesize == 7:
+            bytesize = serial.SEVENBITS
+        elif bytesize == 8:
+            bytesize = serial.EIGHTBITS
+        else:
+            raise Exception(
+                "bytesize {} must be 5,6,7 or 8".format(bytesize))           
+
+        # configure the serial connections 
+        self.uart_session = serial.Serial(
+            port=port,
+            baudrate=baud,
+            parity=parity,
+            stopbits=stopbits,
+            timeout=timeout,
+            bytesize=bytesize
+        )
+
+        if not self.uart_session.is_open:
+            self.uart_session.open()
 
