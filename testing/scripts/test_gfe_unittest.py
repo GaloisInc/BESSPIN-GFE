@@ -51,6 +51,30 @@ class TestGfe(unittest.TestCase):
                     b, test_char) )
         return
 
+    def test_uart_driver(self):
+        uart_base = gfeparameters.UART_BASE;
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( os.path.dirname(
+           os.getcwd()), 'riscv-p1-vcu118.elf'))
+        # Setup pi serial UART
+        self.gfe.setupUart(
+            timeout = 1,
+            baud=9600,
+            parity="NONE",
+            stopbits=2,
+            bytesize=8)
+        # Run elf in gdb
+        self.gfe.launchElf(freertos_elf)
+        # Examine LSR (line status register)
+        print("Line status register: ")
+        #self.gfe.r.command("x/1w 0x62300014", ops=4)
+        self.gfe.riscvRead32( uart_base + 14)
+        # Examine LCR (line control register)
+        print("Line control register: ")
+        #self.gfe.r.command("x/1w 0x6230000c", ops=4)
+        return
+
     def test_ddr(self):
         # Read the base address of ddr
         ddr_base = gfeparameters.DDR_BASE
