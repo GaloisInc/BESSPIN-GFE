@@ -54,6 +54,7 @@ class TestGfe(unittest.TestCase):
     def test_uart_driver(self):
         uart_base = gfeparameters.UART_BASE;
         # Load FreeRTOS binary
+        print( "beginning")
         freertos_elf = os.path.abspath(
            os.path.join( os.path.dirname(
            os.getcwd()), 'riscv-p1-vcu118.elf'))
@@ -64,15 +65,30 @@ class TestGfe(unittest.TestCase):
             parity="NONE",
             stopbits=2,
             bytesize=8)
+        print( "setup UART")
         # Run elf in gdb
         self.gfe.launchElf(freertos_elf)
+        print( "launched freertos")
         # Examine LSR (line status register)
-        print("Line status register: ")
+        #print("Line status register: ")
         #self.gfe.r.command("x/1w 0x62300014", ops=4)
-        self.gfe.riscvRead32( uart_base + 14)
+        #self.gfe.riscvRead32( uart_base + 20 )
+        #self.gfe.gdb_session.interrupt()
+        #self.gfe.gdb_session.command("x/1w 0x62300014")
         # Examine LCR (line control register)
-        print("Line control register: ")
+        #print("Line control register: ")
         #self.gfe.r.command("x/1w 0x6230000c", ops=4)
+        
+        
+        rx = self.gfe.uart_session.read()
+        print("received 1 {}".format(rx))
+
+        self.gfe.uart_session.write( b'a' )
+        print( "Sent 'a'")
+        
+        rx = self.gfe.uart_session.read()
+        print("received 2 {}".format(rx))
+
         return
 
     def test_ddr(self):
