@@ -58,7 +58,7 @@ class TestGfe(unittest.TestCase):
         freertos_elf = os.path.abspath(
            os.path.join( os.path.dirname(
            os.getcwd()), 'riscv-p1-vcu118.elf'))
-        # Setup pi serial UART
+        # Setup pySerial UART
         self.gfe.setupUart(
             timeout = 1,
             baud=9600,
@@ -69,27 +69,28 @@ class TestGfe(unittest.TestCase):
         # Run elf in gdb
         self.gfe.launchElf(freertos_elf)
         print( "launched freertos")
-        # Examine LSR (line status register)
-        #print("Line status register: ")
-        #self.gfe.r.command("x/1w 0x62300014", ops=4)
-        #self.gfe.riscvRead32( uart_base + 20 )
-        #self.gfe.gdb_session.interrupt()
-        #self.gfe.gdb_session.command("x/1w 0x62300014")
-        # Examine LCR (line control register)
-        #print("Line control register: ")
-        #self.gfe.r.command("x/1w 0x6230000c", ops=4)
         
-        
-        rx = self.gfe.uart_session.read()
-        print("received 1 {}".format(rx))
+        # Loopback test of chars 
+        for test_char in [b'a', b'z', b'd']:
+            self.gfe.uart_session.write(test_char)
+            print("sent {}".format(test_char))
+            rx = self.gfe.uart_session.read()
+            print("received {}".format(rx))
+            self.assertEqual(
+                rx, test_char,
+                "Character received %x does not match test test_char %x".format(
+                    rx, test_char) )
+        # Loopback test of strings
+        for test_char in [b'H', b'e', b'l', b'l', b'o', b'!']:
+            self.gfe.uart_session.write(test_char)
+            print("sent {}".format(test_char))
+            time.sleep(1)
+        num_to_rx =  self.gfe.uart_session.in_waiting
+        rx = self.gfe.uart_session.read( num_to_rx ) 
+        print("received {}".format(rx))
+        self.assertEqual(rx, 'Hello!')
+        return   
 
-        self.gfe.uart_session.write( b'a' )
-        print( "Sent 'a'")
-        
-        rx = self.gfe.uart_session.read()
-        print("received 2 {}".format(rx))
-
-        return
 
     def test_ddr(self):
         # Read the base address of ddr
