@@ -21,7 +21,7 @@ To build your own bitstream, make sure Vivado 2017.4 is on your path and run the
 project in Vivado 2017.4. This will open up the Vivado GUI after generating the project, so enable X11 forwarding (or an equivalent solution) to view the project after it is generated.
 
 ```bash
-git submodule update --init xilinx_chisel_processors
+git submodule update --init chisel_processors
 ./setup_soc_project.sh
 ```
 

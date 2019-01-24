@@ -31,7 +31,7 @@ set project_name "p1_soc"
 set p1_name "bluespec"
 set p1_path "../bluespec-processors/P1/Piccolo/src_SSITH_P1/xilinx_ip"
 #set p1_name "chisel"
-#set p1_path "../xilinx_chisel_processors/P1/xilinx_ip/p1_normal_jtag_1.0"
+#set p1_path "../chisel_processors/P1/xilinx_ip/p1_normal_jtag_1.0"
 
 # Use project name variable, if specified in the tcl shell
 if { [info exists ::user_project_name] } {
