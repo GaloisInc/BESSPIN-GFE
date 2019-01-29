@@ -8,3 +8,6 @@
 	path = riscv-tools
 	url = git@gitlab-ext.galois.com:ssith/riscv-tools.git
 	branch = ssith-p1-tools
+[submodule "FreeRTOS-RISCV"]
+	path = FreeRTOS-RISCV
+	url = https://github.com/GaloisInc/FreeRTOS-RISCV
