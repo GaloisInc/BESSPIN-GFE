@@ -73,7 +73,7 @@ proc help {} {
 }
 
 if { $::argc > 0 } {
-  for {set i 0} {$i < [llength $::argc]} {incr i} {
+  for {set i 0} {$i < [llength $::argv]} {incr i} {
     set option [string trim [lindex $::argv $i]]
     switch -regexp -- $option {
       "--origin_dir"   { incr i; set origin_dir [lindex $::argv $i] }
@@ -91,6 +91,8 @@ if { $::argc > 0 } {
   }
 }
 
+puts "p1_name: $p1_name, p1_path: $p1_path"
+
 # Set p1_name if not specified
 # default to bluespec
 if { [string equal $p1_name ""] } {
@@ -98,16 +100,18 @@ if { [string equal $p1_name ""] } {
 }
 
 # Set the p1_path if not specified
-if { [string equal $p1_path == ""] } {
+if { [string equal $p1_path ""] } {
   if { [string equal $p1_name "bluespec"] } {
     set p1_path "../bluespec-processors/P1/Piccolo/src_SSITH_P1/xilinx_ip"
-  } else if { [string equal $p1_name "chisel"] } {
+  } elseif { [string equal $p1_name "chisel"] } {
     set p1_path "../chisel_processors/P1/xilinx_ip"
   } else {
     puts "Please define p1_path if not using p1_name = chisel or bluespec"
     exit 1
   }
 }
+
+puts "p1_name: $p1_name, p1_path: $p1_path"
 
 # Create project
 create_project ${project_name} ./${project_name} -part xcvu9p-flga2104-2L-e
