@@ -4,3 +4,7 @@
 [submodule "bluespec-processors/P1/Piccolo"]
 	path = bluespec-processors/P1/Piccolo
 	url = https://github.com/bluespec/Piccolo.git
+[submodule "riscv-tools"]
+	path = riscv-tools
+	url = git@gitlab-ext.galois.com:ssith/riscv-tools.git
+	branch = ssith-p1-tools
