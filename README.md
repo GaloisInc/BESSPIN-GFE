@@ -25,18 +25,36 @@ Please perform a clean install of Debian Buster on the development and testing h
 
 Download and install Vivado 2017.4. 
 
-To build your own bitstream, make sure Vivado 2017.4 is on your path (`$ which vivado`) and run the following commands to set up the IP integrator
-project in Vivado 2017.4. This will open up the Vivado GUI after generating the project, so enable X11 forwarding (or an equivalent solution) to view the project after it is generated.
+To build your own bitstream, make sure Vivado 2017.4 is on your path (`$ which vivado`) and run the following commands
 
 ```bash
-./setup_soc_project.sh
+cd $GFE_REPO
+# Generates Vivado project file vivado/p1_chisel_soc/p1_chisel_soc.xpr
+./setup_soc_project.sh chisel
+# Builds bitstreams/p1_chisel_soc.bit
+./build.sh chisel
 ```
 
-Then follow the usual Vivado gui build steps to generate a bitstream.
+where GFE_REPO is the top level directory for the gfe repo. To view the project in the Vivado gui, run the following:
+
+```bash
+cd $GFE_REPO/vivado
+vivado
+```
+
 To save changes to the block diagram in git, please open the block diagram in Vivado and run `write_bd_tcl -force ../tcl/X_bd.tcl`
 where `X` is the current SoC you are developing. Additionally, update `tcl/X_soc.tcl` to add any new IP repositories or project settings. `setup_soc_project.sh` should be run once. The Vivado project will be generated in the vivado folder of the repository and can be re-opened there.
 
 ### Testing ###
+
+Physical setup:
+
+1. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
+2. Make sure the VCU118 is powered on (fan should be running) 
+3. Program the FPGA with the bit file using the Vivado hardware manager.
+4. Run `./rel_1_test.sh` from the top level of the gfe repo
+
+A passing test will not display any error messages. All failing tests will report errors. Some of the GFE tests use the python unittesting framework which
 
 ### Simulation ###
 
