@@ -11,5 +11,3 @@ make
 
 cd $BASE_DIR/testing/scripts
 python test_gfe_unittest.py
-
-# Optionally, boot FreeRTOS
