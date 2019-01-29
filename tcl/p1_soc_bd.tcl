@@ -258,7 +258,7 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   # Create instance: ddr4_0, and set properties
   set ddr4_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:ddr4:2.2 ddr4_0 ]
   set_property -dict [ list \
-   CONFIG.ADDN_UI_CLKOUT1_FREQ_HZ {25} \
+   CONFIG.ADDN_UI_CLKOUT1_FREQ_HZ {150} \
    CONFIG.C0_CLOCK_BOARD_INTERFACE {default_250mhz_clk1} \
    CONFIG.C0_DDR4_BOARD_INTERFACE {ddr4_sdram_c1} \
    CONFIG.RESET_BOARD_INTERFACE {reset} \
