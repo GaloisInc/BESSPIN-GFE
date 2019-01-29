@@ -26,12 +26,8 @@ if { [info exists ::origin_dir_loc] } {
 
 # Set the project name
 set project_name "p1_soc"
-
-# Set the choice of P1 core
-set p1_name "bluespec"
-set p1_path "../bluespec-processors/P1/Piccolo/src_SSITH_P1/xilinx_ip"
-#set p1_name "chisel"
-#set p1_path "../chisel_processors/P1/xilinx_ip/p1_normal_jtag_1.0"
+set p1_name ""
+set p1_path ""
 
 # Use project name variable, if specified in the tcl shell
 if { [info exists ::user_project_name] } {
@@ -95,6 +91,24 @@ if { $::argc > 0 } {
   }
 }
 
+# Set p1_name if not specified
+# default to bluespec
+if { [string equal $p1_name ""] } {
+  set p1_name "bluespec"
+}
+
+# Set the p1_path if not specified
+if { [string equal $p1_path == ""] } {
+  if { [string equal $p1_name "bluespec"] } {
+    set p1_path "../bluespec-processors/P1/Piccolo/src_SSITH_P1/xilinx_ip"
+  } else if { [string equal $p1_name "chisel"] } {
+    set p1_path "../chisel_processors/P1/xilinx_ip"
+  } else {
+    puts "Please define p1_path if not using p1_name = chisel or bluespec"
+    exit 1
+  }
+}
+
 # Create project
 create_project ${project_name} ./${project_name} -part xcvu9p-flga2104-2L-e
 
@@ -149,9 +163,7 @@ if {[string equal [get_filesets -quiet constrs_1] ""]} {
 set obj [get_filesets constrs_1]
 
 # Add/Import constrs file and set constrs file properties
-# add_files -fileset constrs_1 [ glob $origin_dir/../xdc/*.xdc ]
 add_files -fileset constrs_1 [ glob $origin_dir/../xdc/vcu118_p1_soc.xdc ]
-add_files -fileset constrs_1 [ glob $origin_dir/../xdc/vcu118_p1_soc_${p1_name}.xdc ]
 
 # Set 'constrs_1' fileset properties
 set obj [get_filesets constrs_1]
