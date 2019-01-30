@@ -51,6 +51,77 @@ class TestGfe(unittest.TestCase):
                     b, test_char) )
         return
 
+    def test_uart_driver(self):
+        # Run with FreeRTOS elf built with
+        # 'make MAIN_FILE=test_uart.c'
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( os.path.dirname(
+           os.getcwd()), 'riscv-p1-vcu118.elf'))
+        # Setup pySerial UART
+        self.gfe.setupUart(
+            timeout = 1,
+            baud=9600,
+            parity="NONE",
+            stopbits=2,
+            bytesize=8)
+        print( "Setup UART")
+        # Run elf in gdb
+        self.gfe.launchElf(freertos_elf)
+        print( "Launched FreeRTOS")
+        
+        # Loopback test of chars 
+        for test_char in [b'a', b'z', b'd']:
+            self.gfe.uart_session.write(test_char)
+            print("sent {}".format(test_char))
+            rx = self.gfe.uart_session.read()
+            print("received {}".format(rx))
+            self.assertEqual(
+                rx, test_char,
+                "Character received %x does not match test test_char %x".format(
+                    rx, test_char) )
+        # Loopback test of strings
+        for test_char in [b'H', b'e', b'l', b'l', b'o', b'!']:
+            self.gfe.uart_session.write(test_char)
+            print("sent {}".format(test_char))
+            time.sleep(1)
+        num_rxed =  self.gfe.uart_session.in_waiting
+        rx = self.gfe.uart_session.read( num_rxed ) 
+        print("received {}".format(rx))
+        self.assertEqual(rx, 'Hello!')
+        return   
+
+    def test_freertos(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( os.path.dirname(
+           os.getcwd()), 'riscv-p1-vcu118.elf'))
+        # Setup pySerial UART
+        self.gfe.setupUart(
+            timeout = 1,
+            baud=9600,
+            parity="NONE",
+            stopbits=2,
+            bytesize=8)
+        print( "Setup UART")
+        # Run elf in gdb
+        self.gfe.launchElf(freertos_elf)
+        print( "Launched FreeRTOS")
+
+        # Wait for FreeRTOS tasks to start and run
+        # Making this sleep time longer will allow the timer callback
+        # function in FreeRTOS main.c to check the demo tasks more times
+        time.sleep(20)
+
+        # Receive print statements
+        num_rxed =  self.gfe.uart_session.in_waiting
+        rx = self.gfe.uart_session.read( num_rxed ) 
+        print("received {}".format(rx))
+
+        # No auto-checking
+        return
+
+
     def test_ddr(self):
         # Read the base address of ddr
         ddr_base = gfeparameters.DDR_BASE
