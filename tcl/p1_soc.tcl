@@ -100,13 +100,16 @@ if { [string equal $p1_name ""] } {
 }
 
 # Set the p1_path if not specified
+source $origin_dir/p1_mapping.tcl
+
 if { [string equal $p1_path ""] } {
-  if { [string equal $p1_name "bluespec"] } {
-    set p1_path "../bluespec-processors/P1/Piccolo/src_SSITH_P1/xilinx_ip"
-  } elseif { [string equal $p1_name "chisel"] } {
-    set p1_path "../chisel_processors/P1/xilinx_ip"
+  if {[dict exits $p1_name $p1_mapping]} {
+    set p1_path [dict get $p1_name]
   } else {
-    puts "Please define p1_path if not using p1_name = chisel or bluespec"
+    puts "Please define p1_path if not using one of the following values for p1_name:"
+    dict for {saved_path} $p1_mapping {
+      puts "$saved_path"
+    }
     exit 1
   }
 }
@@ -213,5 +216,3 @@ set_property -name "steps.write_bitstream.args.verbose" -value "0" -objects $obj
 current_run -implementation [get_runs impl_1]
 
 puts "INFO: Project created:$project_name"
-
-start_gui

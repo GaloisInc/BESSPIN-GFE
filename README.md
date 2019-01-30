@@ -40,7 +40,7 @@ cd $GFE_REPO/vivado
 vivado p1_bluespec_soc/p1_bluespec_soc.xpr
 ```
 
-`setup_soc_project.sh` should be run once. The Vivado project will be generated in the vivado folder of the repository and can be re-opened there. Note that all the same commands can be run with the argument `chisel` to generate the chisel P1 bitstream and corresponding Vivado project (i.e. `./setup_soc_project.sh chisel`).
+`setup_soc_project.sh` should be run once. The Vivado project will be generated in the `$GFE_REPO/vivado` folder of the repository and can be re-opened there. Note that all the same commands can be run with the argument `chisel` to generate the chisel P1 bitstream and corresponding Vivado project (i.e. `./setup_soc_project.sh chisel`).
 
 ### Testing ###
 
@@ -61,7 +61,7 @@ Click `Run Simulation` in Vivado.
 
 ### Adding in your processor ###
 
-To swap your P1 processor into the GFE, we recommend using the Vivado IP integrator flow already used by the GFE. This involves wrapping your processor in a Xilinx IP block and adding that repository to the p1_soc.tcl vivado project script. 
+To swap your P1 processor into the GFE, we recommend using the Vivado IP integrator flow already used by the GFE. This involves wrapping your processor in a Xilinx IP block and adding that repository to the p1_soc.tcl Vivado project script. 
 
 Fortunately, we have provided two examples of wrapped processors, one for the chisel P1 processor and another for the bluespec processor, and we have provided a common top level Verilog file for P1 processors to limit user effort in wrapping their processor.
 

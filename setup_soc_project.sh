@@ -13,10 +13,8 @@ p1_path=""
 # Parse the processor selection
 if [ "$1" == "bluespec" ]; then
 	p1_name="bluespec"
-	p1_path=$BASE_DIR/bluespec-processors/P1/Piccolo/src_SSITH_P1/xilinx_ip
 elif [ "$1" == "chisel" ]; then
 	p1_name="chisel"
-    p1_path="$BASE_DIR/chisel_processors/P1/xilinx_ip"
 fi 
 
 mkdir -p $BASE_DIR/vivado
@@ -26,5 +24,4 @@ cd $BASE_DIR/vivado
 # See p1_soc.tcl for detailed options
 vivado -mode batch -source $BASE_DIR/tcl/p1_soc.tcl \
 -tclargs --origin_dir $BASE_DIR/tcl \
---p1_name $p1_name \
---p1_path $p1_path
+--p1_name $p1_name
