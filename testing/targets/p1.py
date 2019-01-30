@@ -9,5 +9,6 @@ class P1Hart(targets.Hart):
     link_script_path = "p1.lds"
 
 class P1(targets.Target):
-    openocd_config_path = "p1_external_hs2.cfg"
+    # openocd_config_path = "p1_external_hs2.cfg"
+    openocd_config_path = "p1_hs2.cfg"
     harts = [P1Hart()]

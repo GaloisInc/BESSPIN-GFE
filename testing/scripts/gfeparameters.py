@@ -20,7 +20,7 @@ riscv_home = os.environ['RISCV']
 gdb_path = os.path.join(riscv_home, "bin", "riscv32-unknown-elf-gdb")
 openocd_command = os.path.join(riscv_home, "bin", "openocd")
 openocd_cfg_path = os.path.join(
-    os.path.dirname(script_dir), "targets", "p1_external_hs2.cfg")
+    os.path.dirname(script_dir), "targets", "p1_hs2.cfg")
 uart_serial_dev = '/dev/ttyUSB1'
 
 ########### DDR ############
