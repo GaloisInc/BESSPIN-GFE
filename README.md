@@ -1,6 +1,6 @@
 # Government Furnished Equipment (GFE) #
 
-Source files and build scripts for generating the GFE for SSITH.
+Source files and build scripts for generating and testing the GFE for SSITH.
 
 
 ## Overview ##
@@ -19,7 +19,7 @@ Prebuilt images are available in the bitstreams folder. Use these, if you want t
 
 ### Setup OS (Debian Buster) ###
 
-Please perform a clean install of Debian Buster on the development and testing hosts. This is the supported OS for building and testing the GFE. At the time of release 1 (Feb 1), Debian Buster Alpha 4 is the latest version, but we expect to upgrade Buster versions it becomes stable (sometime soon). Please install the latest version of Debian Buster.
+Please perform a clean install of Debian Buster on the development and testing hosts. This is the supported OS for building and testing the GFE. At the time of release 1 (Feb 1), Debian Buster Alpha 4 is the latest version, but we expect to upgrade Buster versions as it becomes stable (sometime soon). Please install the latest version of Debian Buster (Debian 10.X).
 
 ### Building the Bitstream ###
 
@@ -29,21 +29,18 @@ To build your own bitstream, make sure Vivado 2017.4 is on your path (`$ which v
 
 ```bash
 cd $GFE_REPO
-# Generates Vivado project file vivado/p1_chisel_soc/p1_chisel_soc.xpr
-./setup_soc_project.sh chisel
-# Builds bitstreams/p1_chisel_soc.bit
-./build.sh chisel
+./setup_soc_project.sh bluespec # generate vivado/p1_bluespec_soc/p1_bluespec_soc.xpr
+./build.sh bluespec # generate bitstreams/p1_bluespec_soc.bit
 ```
 
 where GFE_REPO is the top level directory for the gfe repo. To view the project in the Vivado gui, run the following:
 
 ```bash
 cd $GFE_REPO/vivado
-vivado
+vivado p1_bluespec_soc/p1_bluespec_soc.xpr
 ```
 
-To save changes to the block diagram in git, please open the block diagram in Vivado and run `write_bd_tcl -force ../tcl/X_bd.tcl`
-where `X` is the current SoC you are developing. Additionally, update `tcl/X_soc.tcl` to add any new IP repositories or project settings. `setup_soc_project.sh` should be run once. The Vivado project will be generated in the vivado folder of the repository and can be re-opened there.
+`setup_soc_project.sh` should be run once. The Vivado project will be generated in the vivado folder of the repository and can be re-opened there. Note that all the same commands can be run with the argument `chisel` to generate the chisel P1 bitstream and corresponding Vivado project (i.e. `./setup_soc_project.sh chisel`).
 
 ### Testing ###
 
@@ -56,5 +53,27 @@ Physical setup:
 
 A passing test will not display any error messages. All failing tests will report errors. Some of the GFE tests use the python unittesting framework which
 
+TODO: Insert example of passing test
+
 ### Simulation ###
+
+Click `Run Simulation` in Vivado.
+
+### Adding in your processor ###
+
+To swap your P1 processor into the GFE, we recommend using the Vivado IP integrator flow already used by the GFE. This involves wrapping your processor in a Xilinx IP block and adding that repository to the p1_soc.tcl vivado project script. 
+
+Fortunately, we have provided two examples of wrapped processors, one for the chisel P1 processor and another for the bluespec processor, and we have provided a common top level Verilog file for P1 processors to limit user effort in wrapping their processor.
+
+All that is required (and therefore tracked by git) to create a Xilinx IP block is a component.xml file. This file points to top level verilog module and all the source required to simulate and synthesize the IP block.
+
+The steps to add in your own processor are as follows:
+
+1. Create your top level verilog to match mkCore_P1.v
+2. 
+
+### Modifying the GFE ###
+
+To save changes to the block diagram in git (everything outside the P1 IP block), please open the block diagram in Vivado and run `write_bd_tcl -force ../tcl/X_bd.tcl`
+where `X` is the current SoC you are developing. Additionally, update `tcl/X_soc.tcl` to add any new IP repositories or project settings.
 
