@@ -100,9 +100,9 @@ puts "$p1_mapping"
 
 if { [string equal $p1_path ""] } {
   if {[dict exists $p1_mapping $p1_name]} {
-    set p1_path [dict get $p1_name]
+    set p1_path [dict get $p1_mapping $p1_name]
   } else {
-    puts "Please define p1_path if not using one of the following values for p1_name:"
+    puts "Please define p1_path mapping for $p1_name current mapping is:"
     dict for {name saved_path} $p1_mapping {
       puts "$name -> $saved_path"
     }
