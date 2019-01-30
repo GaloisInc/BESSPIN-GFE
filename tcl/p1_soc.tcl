@@ -25,14 +25,9 @@ if { [info exists ::origin_dir_loc] } {
 }
 
 # Set the project name
-set project_name "p1_soc"
+set project_name ""
 set p1_name ""
 set p1_path ""
-
-# Use project name variable, if specified in the tcl shell
-if { [info exists ::user_project_name] } {
-  set project_name $::user_project_name
-}
 
 variable script_file
 set script_file "p1_soc.tcl"
@@ -103,18 +98,23 @@ if { [string equal $p1_name ""] } {
 source $origin_dir/p1_mapping.tcl
 
 if { [string equal $p1_path ""] } {
-  if {[dict exits $p1_name $p1_mapping]} {
+  if {[dict exists $p1_name $p1_mapping]} {
     set p1_path [dict get $p1_name]
   } else {
     puts "Please define p1_path if not using one of the following values for p1_name:"
-    dict for {saved_path} $p1_mapping {
-      puts "$saved_path"
+    dict for {name saved_path} $p1_mapping {
+      puts "$name -> $saved_path"
     }
     exit 1
   }
 }
 
-puts "p1_name: $p1_name, p1_path: $p1_path"
+# Set the project name if not specified
+if { [string equal $project_name ""] } {
+  set project_name "p1_soc_$p1_name"
+}
+
+puts "p1_name: $p1_name, p1_path: $p1_path, project_name: $project_name"
 
 # Create project
 create_project ${project_name} ./${project_name} -part xcvu9p-flga2104-2L-e
