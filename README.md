@@ -7,8 +7,7 @@ Source files and build scripts for generating and testing the GFE for SSITH.
 
 This repository contains source code and build scripts for generating SoC bitstreams
 for the Xilinx VCU118. The resulting systems contain either Chisel or Bluespec 
-versions of P1, P2, and P3 connected by an AXI interconnect to variety of
-peripherals.
+versions of P1 connected by an AXI interconnect to UART, DDR, and Bootrom. For more details on the contents of the GFE, see TODO: ADD REFERENCE TO SYSTEM DOCUMENTATION
 
 ## Getting Started ##
 
@@ -17,6 +16,12 @@ Prebuilt images are available in the bitstreams folder. Use these, if you want t
 ### Setup OS (Debian Buster) ###
 
 Please perform a clean install of Debian Buster on the development and testing hosts. This is the supported OS for building and testing the GFE. At the time of release 1 (Feb 1), Debian Buster Alpha 4 is the latest version, but we expect to upgrade Buster versions as it becomes stable (sometime soon). Please install the latest version of Debian Buster (Debian 10.X).
+
+### Install RISCV Tools ###
+
+This GFE has been tested with a particular fork of riscv-tools that includes an upstream change to riscv-openocd that allows for JTAG debugging over the  same Xilinx JTAG connection used to program the VCU118. Please use the version of riscv-tools submoduled in this repo under `$GFE_TOP/riscv-tools.`
+
+Install RISCV tools using the directions in `$GFE_TOP/riscv-tools/README.md`
 
 ### Building the Bitstream ###
 
@@ -54,9 +59,9 @@ TODO: Insert example of passing test
 
 ### Simulation ###
 
-Click `Run Simulation` in Vivado.
+Click `Run Simulation` in the Vivado GUI and refer to the Vivado documentation for using XSIM in a project flow. If necessary, create a testbench around the top level project to generate stimulus for components outside the GFE (i.e. DDR memories, UART, JTAG).
 
-### Adding in your processor ###
+### Adding in Your Processor ###
 
 We recommend using the Vivado IP integrator flow to add a new processor into the GFE. This should require minimal effort to integrate the processor and is the supported flow already demonstrated for the Chisel and Bluespec P1 processors. Using the integrator flow requires wrapping the processor in a Xilinx User IP block and updating the necessary IP search paths to find the new IP. The Chisel and Bluespec Vivado projects are created by sourcing the same tcl for the block diagram (`p1_soc_bd.tcl`). The only difference is the location from which it pulls in the mkP1_Core_v1_0 IP block.
 
@@ -106,4 +111,12 @@ All that is required (and therefore tracked by git) to create a Xilinx User IP b
 ### Modifying the GFE ###
 
 To save changes to the block diagram in git (everything outside the P1 IP block), please open the block diagram in Vivado and run `write_bd_tcl -force ../tcl/p1_soc_bd.tcl`. Additionally, update `tcl/p1_soc.tcl` to add any project settings.
+
+### Rebuilding the Chisel and Bluespec Processors ###
+
+The compiled verilog from the latest Chisel and Bluespec build is stored in git to enable building the FPGA bit file right away. To rebuild the bluespec processor, follow the directions in `bluespec-processors/P1/Piccolo/README.md`. To rebuild the Chisel processor for the GFE, run the following commands
+```bash
+cd chisel_processors/P1
+./build.sh
+```
 
