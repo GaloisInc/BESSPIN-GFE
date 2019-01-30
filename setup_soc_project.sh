@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-echo "Please run with Vivado 2017.4"
-# i.e.
-# source /Xilinx/Vivado/2017.4/settings64.sh
-
 # Get the path to the root folder of the git repository
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 source $BASE_DIR/setup_env.sh
@@ -26,6 +22,9 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+echo "Please run with Vivado 2017.4"
+# i.e.
+# source /Xilinx/Vivado/2017.4/settings64.sh
 mkdir -p $BASE_DIR/vivado
 cd $BASE_DIR/vivado
 
