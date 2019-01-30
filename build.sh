@@ -14,6 +14,7 @@ elif [ "$1" == "chisel" ]; then
 	p1_name="chisel"
 fi 
 
+# Check that the vivado project exits
 vivado_project=$BASE_DIR/vivado/p1_soc_$p1_name/p1_soc_$p1_name.xpr
 if [ ! -f $vivado_project ]; then
 	echo "$vivado_project does not exist. Cannot build project. Please specify a valid p1_name"
@@ -21,12 +22,11 @@ if [ ! -f $vivado_project ]; then
 	exit 1
 fi
 
-cd $BASE_DIR/vivado
-
 # Run vivado to build a top level project
+cd $BASE_DIR/vivado
 vivado -mode batch $vivado_project -source $BASE_DIR/tcl/build.tcl
 
-# Copy bitstream to the desired location
+# Copy bitstream to the bitstreams folder
 bitstream=$BASE_DIR/vivado/$vivado_project/$vivado_project.runs/impl_1/design_1.bit 
 output_bitstream=$BASE_DIR/bitstreams/$vivado_project.bit
 if [ ! -f $bitstream ]; then
