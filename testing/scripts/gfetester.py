@@ -4,6 +4,7 @@ import gfeparameters
 import os
 import time
 import serial
+import serial.tools.list_ports
 
 
 class gfetester(object):
@@ -192,6 +193,26 @@ class gfetester(object):
         self.riscvWrite(address, value, 32)
 
     # ------------------ UART Functions ------------------
+    def findUartPort(
+        self,
+        search_vid=0x10C4,
+        search_pid=0xEA70,
+        port_num=1):
+
+        # Get a list of all serial ports with the desired VID/PID
+        ports = [port for port in serial.tools.list_ports.comports() if port.vid == search_vid and port.pid == search_pid]
+
+        for port in ports:
+            #print "Checking port: %s" % port.hwid
+            # Silabs chip on VCU118 has two ports. Locate port 1 from the hardware description
+            m = re.search('LOCATION=.*:1.(\d)', port.hwid)
+            if m:
+                if m.group(1) == '1':
+                    print "Located UART device at %s with serial number %s" % (port.device, port.serial_number)
+                    return port.device
+        raise Exception(
+                "Could not find a UART port with expected VID:PID = %X:%X" % (search_vid, search_pid))
+
     def setupUart(
         self,
         timeout=None, # wait forever on read data
@@ -200,6 +221,10 @@ class gfetester(object):
         parity="ODD",
         stopbits=2,
         bytesize=8):
+
+        # Get the UART port
+        if port == "auto":
+            port = self.findUartPort()
 
         # Translate inputs into serial settings
         if parity.lower() == "odd":
@@ -244,4 +269,5 @@ class gfetester(object):
 
         if not self.uart_session.is_open:
             self.uart_session.open()
+
 
