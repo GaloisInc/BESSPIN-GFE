@@ -46,16 +46,19 @@ vivado p1_soc_bluespec/p1_soc_bluespec.xpr
 
 ### Testing ###
 
-Physical setup:
-
-1. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
+1. Install the following python packages: `pexpect, pyserial`. 
+These are required for running python unittests on the GFE.
+2. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
 2. Make sure the VCU118 is powered on (fan should be running) 
-3. Program the FPGA with the bit file using the Vivado hardware manager.
+3. Program the FPGA with the bit file (i.e. [bitstreams/p1_soc_chisel.bit](bitstreams/p1_soc_chisel.bit)) using the Vivado hardware manager.
 4. Run `./rel_1_test.sh` from the top level of the gfe repo
 
-A passing test will not display any error messages. All failing tests will report errors.
+A passing test will not display any error messages. All failing tests will report errors such as .
 
-TODO: Insert example of passing test
+TODO: Insert example of failing tests and passing tests.
+
+The python unit testing infrastructure reuses scripts from riscv-tests to help automate gdb and open ocd scripting. The primary python unittests are stored in [test_gfe_unittest.py](testing/scripts/test_gfe_unittest.py). These unit tests rely on a convenience class for interacting with the gfe defined in [gfetester.py](testing/scripts/gfetester.py)
+
 
 ### Simulation ###
 
