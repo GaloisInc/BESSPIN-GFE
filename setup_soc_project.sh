@@ -6,6 +6,7 @@ echo "Please run with Vivado 2017.4"
 
 # Get the path to the root folder of the git repository
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+source $BASE_DIR/setup_env.sh
 
 p1_name=""
 p1_path=""

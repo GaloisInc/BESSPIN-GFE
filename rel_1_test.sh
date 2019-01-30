@@ -2,8 +2,7 @@
 
 # Get the path to the script folder of the git repository
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-export RISCV=$BASE_DIR/riscv-tools
-
+source $BASE_DIR/setup_env.sh
 cd $BASE_DIR/testing/scripts
 
 # Compile a set of assembly tests for the GFE
