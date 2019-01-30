@@ -102,6 +102,7 @@ cd $GFE_REPO
 ./setup_soc_project.sh new_processor
 ```
 new_processor is the name specified in the `$GFE_REPO/tcl/p1_mapping.tcl` file.
+
 5. Synthesize and build the design using the normal flow. Note that users will have to update the User IP as prompted in the gui after each modification to the component.xml file or reference Verilog files.
 
 Fortunately, we have provided two examples of wrapped processors, one for the Chisel P1 processor and another for the Bluespec processor, and we have provided a common top level Verilog file for P1 processors to limit user effort in wrapping their processor.
