@@ -25,6 +25,10 @@ fi
 # Run vivado to build a top level project
 cd $BASE_DIR/vivado
 vivado -mode batch $vivado_project -source $BASE_DIR/tcl/build.tcl
+if [ $? -ne 0 ]; then
+	echo "Vivado build failed"
+	exit 1
+fi
 
 # Copy bitstream to the bitstreams folder
 bitstream=$BASE_DIR/vivado/$vivado_project/$vivado_project.runs/impl_1/design_1.bit 

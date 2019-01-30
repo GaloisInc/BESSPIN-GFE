@@ -17,11 +17,25 @@ elif [ "$1" == "chisel" ]; then
 	p1_name="chisel"
 fi 
 
+# Compile the bootrom
+cd $BASE_DIR/bootrom
+make
+if [ $? -ne 0 ]; then
+	echo "Making the bootrom failed"
+	exit 1
+fi
+
 mkdir -p $BASE_DIR/vivado
 cd $BASE_DIR/vivado
 
-# Run vivado to build a top level project
+# Run vivado to create a top level project
 # See p1_soc.tcl for detailed options
 vivado -mode batch -source $BASE_DIR/tcl/p1_soc.tcl \
 -tclargs --origin_dir $BASE_DIR/tcl \
 --p1_name $p1_name
+if [ $? -ne 0 ]; then
+	echo "Creating the vivado project failed"
+	exit 1
+fi
+
+
