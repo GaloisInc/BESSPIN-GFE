@@ -29,15 +29,15 @@ To build your own bitstream, make sure Vivado 2017.4 is on your path (`$ which v
 
 ```bash
 cd $GFE_REPO
-./setup_soc_project.sh bluespec # generate vivado/p1_bluespec_soc/p1_bluespec_soc.xpr
-./build.sh bluespec # generate bitstreams/p1_bluespec_soc.bit
+./setup_soc_project.sh bluespec # generate vivado/p1_soc_bluespec/p1_soc_bluespec.xpr
+./build.sh bluespec # generate bitstreams/p1_soc_bluespec.bit
 ```
 
 where GFE_REPO is the top level directory for the gfe repo. To view the project in the Vivado gui, run the following:
 
 ```bash
 cd $GFE_REPO/vivado
-vivado p1_bluespec_soc/p1_bluespec_soc.xpr
+vivado p1_soc_bluespec/p1_soc_bluespec.xpr
 ```
 
 `setup_soc_project.sh` should be run once. The Vivado project will be generated in the `$GFE_REPO/vivado` folder of the repository and can be re-opened there. Note that all the same commands can be run with the argument `chisel` to generate the chisel P1 bitstream and corresponding Vivado project (i.e. `./setup_soc_project.sh chisel`).

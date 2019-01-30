@@ -96,9 +96,10 @@ if { [string equal $p1_name ""] } {
 
 # Set the p1_path if not specified
 source $origin_dir/p1_mapping.tcl
+puts "$p1_mapping"
 
 if { [string equal $p1_path ""] } {
-  if {[dict exists $p1_name $p1_mapping]} {
+  if {[dict exists $p1_mapping $p1_name]} {
     set p1_path [dict get $p1_name]
   } else {
     puts "Please define p1_path if not using one of the following values for p1_name:"
