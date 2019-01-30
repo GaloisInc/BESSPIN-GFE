@@ -23,9 +23,13 @@ This GFE has been tested with a particular fork of riscv-tools that includes an 
 
 Install RISCV tools using the directions in `$GFE_TOP/riscv-tools/README.md`
 
-### Building the Bitstream ###
+### Install Vivado ###
 
-Download and install Vivado 2017.4. 
+Download and install Vivado 2017.4. A license key for the tool is included on a piece of paper in the box containing the VCU118. See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug973-vivado-release-notes-install-license.pdf) for download and installation instructions. We only need the Vivado tool, not the SDK, so download the `Vivado Design Suite - HLx Editions: Update 1 - 2017.4 ` from the [Vivado Download Page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2017-4.html). One must make an account with Vivado in order to register the tool and install the license.
+
+If using separate development and testing machines, only the development machine needs a license. We recommend installing Vivado Lab on the testing machine, because it does not require a license and can be used to program the FPGA.
+
+### Building the Bitstream ###
 
 To build your own bitstream, make sure Vivado 2017.4 is on your path (`$ which vivado`) and run the following commands
 
@@ -42,7 +46,7 @@ cd $GFE_REPO/vivado
 vivado p1_soc_bluespec/p1_soc_bluespec.xpr
 ```
 
-`setup_soc_project.sh` should be run once. The Vivado project will be generated in the `$GFE_REPO/vivado` folder of the repository and can be re-opened there. Note that all the same commands can be run with the argument `chisel` to generate the chisel P1 bitstream and corresponding Vivado project (i.e. `./setup_soc_project.sh chisel`).
+`setup_soc_project.sh` should be run once. The Vivado project will be generated in the `$GFE_REPO/vivado` folder of the repository and can be re-opened there. Note that all the same commands can be run with the argument `chisel` to generate the chisel P1 bitstream and corresponding Vivado project (i.e. `./setup_soc_project.sh chisel`). We recommend running `build.sh` once then performing future builds using the Vivado GUI to take advantage or convenient error reporting and visibility into the build process.
 
 ### Testing ###
 
@@ -57,7 +61,7 @@ A passing test will not display any error messages. All failing tests will repor
 
 TODO: Insert example of failing tests and passing tests.
 
-The python unit testing infrastructure reuses scripts from riscv-tests to help automate gdb and open ocd scripting. The primary python unittests are stored in [test_gfe_unittest.py](testing/scripts/test_gfe_unittest.py). These unit tests rely on a convenience class for interacting with the gfe defined in [gfetester.py](testing/scripts/gfetester.py)
+The python unit testing infrastructure reuses scripts from riscv-tests to help automate GDB and OpenOCD scripting. The primary python unittests are stored in [test_gfe_unittest.py](testing/scripts/test_gfe_unittest.py). These unit tests rely on a convenience class for interacting with the gfe defined in [gfetester.py](testing/scripts/gfetester.py)
 
 
 ### Simulation ###
@@ -118,7 +122,7 @@ To save changes to the block diagram in git (everything outside the P1 IP block)
 
 ### Rebuilding the Chisel and Bluespec Processors ###
 
-The compiled verilog from the latest Chisel and Bluespec build is stored in git to enable building the FPGA bit file right away. To rebuild the bluespec processor, follow the directions in `bluespec-processors/P1/Piccolo/README.md`. To rebuild the Chisel processor for the GFE, run the following commands
+The compiled verilog from the latest Chisel and Bluespec build is stored in git to enable building the FPGA bitstream right away. To rebuild the bluespec processor, follow the directions in `bluespec-processors/P1/Piccolo/README.md`. To rebuild the Chisel processor for the GFE, run the following commands
 ```bash
 cd chisel_processors/P1
 ./build.sh
