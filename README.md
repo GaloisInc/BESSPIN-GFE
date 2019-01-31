@@ -67,9 +67,11 @@ The python unit testing infrastructure reuses scripts from riscv-tests to help a
 
 To run FreeRTOS on the GFE, you'll need to run OpenOCD, connect to gdb, and view the UART output in minicom.
 
+The processor must be reset by pressing the CPU_RESET button on the VCU118 before running FreeRTOS.
+
 To run OpenOCD, run `openocd -f gfe/testing/targets/p1_hs2.cfg`.
 
-Then run gdb with `./riscv32-unknown-elf-gdb riscv-p1-vcu118.elf`.
+Then run gdb with `./riscv32-unknown-elf-gdb executable.elf`, where executable should be either `main` or `uart_test`.
 Once gdb is open, type `target remote localhost:3333` to connect to OpenOCD. OpenOCD should give a message that it has accepted a gdb connection.
 Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `continue`.
 
