@@ -4,7 +4,7 @@
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 cd $BASE_DIR
 source $BASE_DIR/setup_env.sh
-source $BASE_DIR/init_submodules.sh
+#source $BASE_DIR/init_submodules.sh
 
 p1_name=""
 p1_path=""
@@ -19,10 +19,8 @@ fi
 # Compile the bootrom
 cd $BASE_DIR/bootrom
 make
-if [ $? -ne 0 ]; then
-	echo "Making the bootrom failed"
-	exit 1
-fi
+
+err_msg $? "Making the bootrom failed"
 
 echo "Please run with Vivado 2017.4"
 # i.e.
@@ -35,9 +33,7 @@ cd $BASE_DIR/vivado
 vivado -mode batch -source $BASE_DIR/tcl/p1_soc.tcl \
 -tclargs --origin_dir $BASE_DIR/tcl \
 --p1_name $p1_name
-if [ $? -ne 0 ]; then
-	echo "Creating the vivado project failed"
-	exit 1
-fi
+
+err_msg $? "Creating the vivado project failed"
 
 
