@@ -26,7 +26,7 @@ function check_file {
 
 function p1_usage {
         echo "Usage: $0 [chisel|bluespec]"
-        echo "Please pick specify bluespec or chisel!"
+        echo "Please specify bluespec or chisel!"
 }
 
 function p1_picker {
