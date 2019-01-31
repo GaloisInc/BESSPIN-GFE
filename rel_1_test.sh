@@ -17,7 +17,7 @@ fi
 # Run some unittests including UART, DDR, and Bootrom
 # The final unittest tests booting freeRTOS
 cd $BASE_DIR/testing/scripts
-# python test_gfe_unittest.py TestGfe
+python test_gfe_unittest.py TestGfe
 
 if [ $? -ne 0 ]; then
 	echo "GFE unittests failed. Run python test_gfe_unittest.py"
