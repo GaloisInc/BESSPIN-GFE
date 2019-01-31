@@ -16,6 +16,12 @@ fi
 
 # Build FreeRTOS
 cd $BASE_DIR/FreeRTOS-RISCV/Demo/p1-besspin
+make
+if [ $? -ne 0 ]; then
+	echo "Building FreeRTOS-RISCV failed"
+	exit 1
+fi
+
 
 # Run some unittests including UART, DDR, and Bootrom
 # The final unittest tests booting freeRTOS
