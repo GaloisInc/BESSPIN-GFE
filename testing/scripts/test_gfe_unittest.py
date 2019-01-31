@@ -159,7 +159,7 @@ class TestFreeRTOS(unittest.TestCase):
     def test_freertos(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
-           os.path.join( self.path_to_freertos, 'riscv-p1-vcu118.elf'))
+           os.path.join( self.path_to_freertos, 'main.elf'))
         print(freertos_elf)
         # Setup pySerial UART
         self.gfe.setupUart(
