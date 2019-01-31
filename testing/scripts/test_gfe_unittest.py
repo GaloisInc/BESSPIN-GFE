@@ -97,11 +97,24 @@ class TestGfe(unittest.TestCase):
         return
 
 
-class TestFreeRTOS(object):
-    """docstring for TestFreeRTOS"""
-    def __init__(self, arg):
-        super(TestFreeRTOS, self).__init__()
-        self.arg = arg
+class TestFreeRTOS(unittest.TestCase):
+
+    def setUp(self):
+        self.gfe = gfetester.gfetester()
+        self.gfe.startGdb()
+        self.path_to_freertos = os.path.join(
+                os.path.dirname(os.path.dirname(os.getcwd())),
+                'FreeRTOS-RISCV', 'Demo', 'p1-besspin')       
+
+    def tearDown(self):
+        if not self.gfe.gdb_session:
+            return
+        self.gfe.gdb_session.interrupt()
+        self.gfe.gdb_session.command("disassemble", ops=20)
+        self.gfe.gdb_session.command("info registers all", ops=100)
+        self.gfe.gdb_session.command("flush regs")
+        self.gfe.gdb_session.command("info threads", ops=100)
+        del self.gfe
         
     def test_uart_driver(self):
         # Run with FreeRTOS elf built with
@@ -109,6 +122,7 @@ class TestFreeRTOS(object):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
            os.path.join( self.path_to_freertos, 'uart_test.elf'))
+        print(freertos_elf)
         # Setup pySerial UART
         self.gfe.setupUart(
             timeout = 1,
@@ -146,6 +160,7 @@ class TestFreeRTOS(object):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
            os.path.join( self.path_to_freertos, 'riscv-p1-vcu118.elf'))
+        print(freertos_elf)
         # Setup pySerial UART
         self.gfe.setupUart(
             timeout = 1,
