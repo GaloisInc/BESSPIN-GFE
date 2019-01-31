@@ -23,3 +23,14 @@ if [ $? -ne 0 ]; then
 	echo "GFE unittests failed. Run python test_gfe_unittest.py"
 	exit 1
 fi
+
+# compile, run riscv-tests
+cd $BASE_DIR/riscv-tools/riscv-tests
+CC=riscv32-unknown-elf-gcc ./configure --with-xlen=32 --target=riscv32-unknown-elf
+make
+
+cd $BASE_DIR
+./testing/scripts/gen-test-all rv32imacu > test.gdb
+riscv32-unknown-elf-gdb --batch -x test.gdb
+echo "riscv-tests summary:"
+grep -E "(PASS|FAIL)" gdb-client.log | uniq -c
