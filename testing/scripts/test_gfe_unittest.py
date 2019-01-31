@@ -42,6 +42,9 @@ class TestGfe(unittest.TestCase):
             bytesize=8)
         self.gfe.launchElf(uart_elf)
 
+        # Allow the riscv program to get started and configure UART
+        time.sleep(0.1)
+
         for test_char in [b'a', b'z', b'd']:
             print("sent {}".format(test_char))
             self.gfe.uart_session.write(test_char)
@@ -134,6 +137,9 @@ class TestFreeRTOS(unittest.TestCase):
         # Run elf in gdb
         self.gfe.launchElf(freertos_elf)
         print( "Launched FreeRTOS")
+
+        # Allow FreeRTOS to boot up
+        time.sleep(0.5)
         
         # Loopback test of chars 
         for test_char in [b'a', b'z', b'd']:

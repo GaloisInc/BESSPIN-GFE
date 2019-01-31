@@ -21,7 +21,7 @@ Please perform a clean install of Debian Buster on the development and testing h
 
 This GFE has been tested with a particular fork of riscv-tools that includes an upstream change to riscv-openocd that allows for JTAG debugging over the  same Xilinx JTAG connection used to program the VCU118. Please use the version of riscv-tools submoduled in this repo under `$GFE_TOP/riscv-tools.`
 
-Install RISCV tools using the directions in `$GFE_TOP/riscv-tools/README.md`
+To install, first set the RISCV path with `export RISCV=$GFE_TOP/riscv-tools`. This will place the riscv binaries in the proper location for the testing scripts. Next, install RISCV tools using the directions in `$GFE_TOP/riscv-tools/README.md`
 
 ### Install Vivado ###
 
@@ -76,15 +76,16 @@ make
 source $GFE_REPO/setup_env.sh
 ```
 
-To run OpenOCD, run `openocd -f $GFE_REPO/testing/targets/p1_hs2.cfg`.
+Follow these steps to run freeRTOS with an interactive GDB session:
 
-In a new terminal, run gdb with `riscv32-unknown-elf-gdb $GFE_REPO/FreeRTOS-RISCV/Demo/p1-besspin/main.elf`.
-Once gdb is open, type `target remote localhost:3333` to connect to OpenOCD. OpenOCD should give a message that it has accepted a gdb connection.
-Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `continue`.
-
-Run minicom with `minicom -D /dev/ttyUSB1 -b 9600`. `ttyUSB1` should be replaced with whichever USB port is connected to the VCU118's USB-to-UART bridge.
+1. Reset the SoC by pressing the CPU_RESET button (SW5) on the VCU118 before running FreeRTOS.
+2. Run OpenOCD to connect to the riscv core `openocd -f $GFE_REPO/testing/targets/p1_hs2.cfg`.
+3. In a new terminal, run minicom with `minicom -D /dev/ttyUSB1 -b 9600`. `ttyUSB1` should be replaced with whichever USB port is connected to the VCU118's USB-to-UART bridge.
 Settings can be configured by running `minicom -s` and selecting `Serial Port Setup` and then `Bps/Par/Bits`. 
 The UART is configured to have 8 data bits, 2 stop bits, no parity bits, and a baud rate of 9600.
+4. In a new terminal, run gdb with `riscv32-unknown-elf-gdb $GFE_REPO/FreeRTOS-RISCV/Demo/p1-besspin/main.elf`.
+5. Once gdb is open, type `target remote localhost:3333` to connect to OpenOCD. OpenOCD should give a message that it has accepted a gdb connection.
+Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `continue`.
 
 ### Simulation ###
 
