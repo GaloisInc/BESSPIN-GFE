@@ -4,7 +4,7 @@
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 cd $BASE_DIR
 source $BASE_DIR/setup_env.sh
-#source $BASE_DIR/init_submodules.sh
+source $BASE_DIR/init_submodules.sh
 
 p1_name=""
 p1_path=""
