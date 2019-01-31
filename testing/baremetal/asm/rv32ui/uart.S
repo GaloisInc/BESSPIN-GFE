@@ -39,7 +39,7 @@ RVTEST_CODE_BEGIN
   li t1, 0x80
   addi t3, t0, UART_LCR
   sw t1, 0(t3)
-  # Expect the processor to be running at 150MHz
+  # Expect the processor to be running at 83MHz
   # divisor = 83MHz/(16 * 9600 baud) = 0x21D
   # UART_DLL = 0x1D
   # Write to the Divisor Latch least significant byte and write

@@ -7,5 +7,8 @@ _start:
   csrr a0, mhartid
   csrwi mie, 0
 1:
+  li t0, DRAM_BASE
+  li t1, 0xdeadbeef
+  sw t1, 0(t0)
   j 1b
 

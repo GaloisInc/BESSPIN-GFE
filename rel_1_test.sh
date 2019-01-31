@@ -9,22 +9,17 @@ cd $BASE_DIR/testing/scripts
 cd $BASE_DIR/testing/baremetal/asm
 make
 
-if [ $? -ne 0 ]; then
-	echo "Making the assembly tests failed"
-	exit 1
-fi
-
-# Build FreeRTOS
-cd $BASE_DIR/FreeRTOS-RISCV/Demo/p1-besspin
+# if [ $? -ne 0 ]; then
+# 	echo "Making the assembly tests failed"
+# 	exit 1
+# fi
 
 # Run some unittests including UART, DDR, and Bootrom
 # The final unittest tests booting freeRTOS
 cd $BASE_DIR/testing/scripts
-python test_gfe_unittest.py
+python test_gfe_unittest.py TestGfe
 
 if [ $? -ne 0 ]; then
 	echo "GFE unittests failed. Run python test_gfe_unittest.py"
 	exit 1
 fi
-
-
