@@ -63,6 +63,21 @@ TODO: Insert example of failing tests and passing tests.
 
 The python unit testing infrastructure reuses scripts from riscv-tests to help automate GDB and OpenOCD scripting. The primary python unittests are stored in [test_gfe_unittest.py](testing/scripts/test_gfe_unittest.py). These unit tests rely on a convenience class for interacting with the gfe defined in [gfetester.py](testing/scripts/gfetester.py)
 
+#### Running FreeRTOS ####
+
+To run FreeRTOS on the GFE, you'll need to run OpenOCD, connect to gdb, and view the UART output in minicom.
+
+To run OpenOCD, run `openocd -f gfe/testing/targets/p1_hs2.cfg`.
+
+Then run gdb with `./riscv32-unknown-elf-gdb riscv-p1-vcu118.elf`.
+Once gdb is open, type `target remote localhost:3333` to connect to OpenOCD. OpenOCD should give a message that it has accepted a gdb connection.
+Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `continue`.
+
+Run minicom with `minicom -D /dev/ttyUSB1 -b 9600`. `ttyUSB1` should be replaced with whichever USB port that is connected to the VCU118's USB-to-UART bridge. 
+Settings can be configured by running `minicom -s` and selecting `Serial Port Setup` and then `Bps/Par/Bits`. 
+The UART is configured to have 8 data bits, 2 stop bits, no parity bits, and a baud rate of 9600.
+
+OpenOCD, gdb, and minicom can all be installed using `apt-get install`.
 
 ### Simulation ###
 
