@@ -6,35 +6,22 @@ echo "Please run with Vivado 2017.4"
 
 # Get the path to the root folder of the git repository
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+source $BASE_DIR/setup_env.sh
 
-# Parse the processor selection
-if [ "$1" == "bluespec" ]; then
-	p1_name="bluespec"
-elif [ "$1" == "chisel" ]; then
-	p1_name="chisel"
-fi 
+p1_picker $1
 
 # Check that the vivado project exits
 vivado_project=$BASE_DIR/vivado/p1_soc_$p1_name/p1_soc_$p1_name.xpr
-if [ ! -f $vivado_project ]; then
-	echo "$vivado_project does not exist. Cannot build project. Please specify a valid p1_name"
-	echo "For example, run ./build.sh chisel"
-	exit 1
-fi
+check_file $vivado_project "$vivado_project does not exist. Cannot build project.
+Please specify a valid p1_name For example, run ./build.sh chisel"
 
 # Run vivado to build a top level project
 cd $BASE_DIR/vivado
 vivado -mode batch $vivado_project -source $BASE_DIR/tcl/build.tcl
-if [ $? -ne 0 ]; then
-	echo "Vivado build failed"
-	exit 1
-fi
+err_msg $? "Vivado build failed"
 
 # Copy bitstream to the bitstreams folder
 bitstream=$BASE_DIR/vivado/$vivado_project/$vivado_project.runs/impl_1/design_1.bit 
 output_bitstream=$BASE_DIR/bitstreams/$vivado_project.bit
-if [ ! -f $bitstream ]; then
-	echo "Bitstream $bitstream not generated. Check Vivado logs"
-	exit 1
-fi
+check_file $bitstream "Bitstream $bitstream not generated. Check Vivado logs"
 cp $bitstream $output_bitstream

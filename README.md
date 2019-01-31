@@ -21,7 +21,7 @@ Please perform a clean install of Debian Buster on the development and testing h
 
 This GFE has been tested with a particular fork of riscv-tools that includes an upstream change to riscv-openocd that allows for JTAG debugging over the  same Xilinx JTAG connection used to program the VCU118. Please use the version of riscv-tools submoduled in this repo under `$GFE_TOP/riscv-tools.`
 
-Install RISCV tools using the directions in `$GFE_TOP/riscv-tools/README.md`
+To install, first set the RISCV path with `export RISCV=$GFE_TOP/riscv-tools`. This will place the riscv binaries in the proper location for the testing scripts. Next, install RISCV tools using the directions in `$GFE_TOP/riscv-tools/README.md`
 
 ### Install Vivado ###
 
@@ -46,7 +46,7 @@ cd $GFE_REPO/vivado
 vivado p1_soc_bluespec/p1_soc_bluespec.xpr
 ```
 
-`setup_soc_project.sh` should be run once. The Vivado project will be generated in the `$GFE_REPO/vivado` folder of the repository and can be re-opened there. Note that all the same commands can be run with the argument `chisel` to generate the chisel P1 bitstream and corresponding Vivado project (i.e. `./setup_soc_project.sh chisel`). We recommend running `build.sh` once then performing future builds using the Vivado GUI to take advantage or convenient error reporting and visibility into the build process.
+`setup_soc_project.sh` should only be run once. We also recommend running `build.sh` for the initial build then performing future builds using the Vivado GUI to take advantage of convenient error reporting and visibility into the build process. The Vivado project will be generated in the `$GFE_REPO/vivado/p1_soc_$p1_name` folder of the repository and can be re-opened there. Note that all the same commands can be run with the argument `chisel` to generate the chisel P1 bitstream and corresponding Vivado project (i.e. `./setup_soc_project.sh chisel`).
 
 ### Testing ###
 
@@ -65,23 +65,31 @@ The python unit testing infrastructure reuses scripts from riscv-tests to help a
 
 #### Running FreeRTOS ####
 
-To run FreeRTOS on the GFE, you'll need to run OpenOCD, connect to gdb, and view the UART output in minicom.
+To run FreeRTOS on the GFE, you'll need to run OpenOCD, connect to gdb, and view the UART output in minicom. First, install minicom and build the FreeRTOS demo. Also, source `setup_env.sh` to make sure the proper OpenOCD and GDB versions are on your path.
 
-To run OpenOCD, run `openocd -f gfe/testing/targets/p1_hs2.cfg`.
+```bash
+sudo apt-get install minicom
 
-Then run gdb with `./riscv32-unknown-elf-gdb riscv-p1-vcu118.elf`.
-Once gdb is open, type `target remote localhost:3333` to connect to OpenOCD. OpenOCD should give a message that it has accepted a gdb connection.
-Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `continue`.
+cd $GFE_REPO/FreeRTOS-RISCV/Demo/p1-besspin/
+make
 
-Run minicom with `minicom -D /dev/ttyUSB1 -b 9600`. `ttyUSB1` should be replaced with whichever USB port that is connected to the VCU118's USB-to-UART bridge. 
+source $GFE_REPO/setup_env.sh
+```
+
+Follow these steps to run freeRTOS with an interactive GDB session:
+
+1. Reset the SoC by pressing the CPU_RESET button (SW5) on the VCU118 before running FreeRTOS.
+2. Run OpenOCD to connect to the riscv core `openocd -f $GFE_REPO/testing/targets/p1_hs2.cfg`.
+3. In a new terminal, run minicom with `minicom -D /dev/ttyUSB1 -b 9600`. `ttyUSB1` should be replaced with whichever USB port is connected to the VCU118's USB-to-UART bridge.
 Settings can be configured by running `minicom -s` and selecting `Serial Port Setup` and then `Bps/Par/Bits`. 
 The UART is configured to have 8 data bits, 2 stop bits, no parity bits, and a baud rate of 9600.
-
-OpenOCD, gdb, and minicom can all be installed using `apt-get install`.
+4. In a new terminal, run gdb with `riscv32-unknown-elf-gdb $GFE_REPO/FreeRTOS-RISCV/Demo/p1-besspin/main.elf`.
+5. Once gdb is open, type `target remote localhost:3333` to connect to OpenOCD. OpenOCD should give a message that it has accepted a gdb connection.
+Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `continue`.
 
 ### Simulation ###
 
-Click `Run Simulation` in the Vivado GUI and refer to the Vivado documentation for using XSIM in a project flow. If necessary, create a testbench around the top level project to generate stimulus for components outside the GFE (i.e. DDR memories, UART, JTAG).
+Click `Run Simulation` in the Vivado GUI and refer to the Vivado documentation for using XSIM in a project flow, such as [UG937](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug937-vivado-design-suite-simulation-tutorial.pdf). If necessary, create a testbench around the top level project to generate stimulus for components outside the GFE (i.e. DDR memories, UART, JTAG).
 
 ### Adding in Your Processor ###
 
