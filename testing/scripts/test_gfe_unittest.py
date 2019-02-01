@@ -83,10 +83,6 @@ class TestGfe(unittest.TestCase):
     def test_ddr(self):
         # Read the base address of ddr
         ddr_base = gfeparameters.DDR_BASE
-
-    def test_ddr(self):
-        # Read the base address of ddr
-        ddr_base = gfeparameters.DDR_BASE
         base_val = self.gfe.riscvRead32(ddr_base)
         # Perform enough writes to force a writeback to ddr
         addr_incr = 0x100000
