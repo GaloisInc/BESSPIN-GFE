@@ -15,3 +15,15 @@ err_msg $? "Making the assembly tests failed"
 cd $BASE_DIR/testing/scripts
 python test_gfe_unittest.py TestGfe
 err_msg $? "GFE unittests failed. Run python test_gfe_unittest.py"
+
+# compile, run riscv-tests
+cd $BASE_DIR/riscv-tools/riscv-tests
+CC=riscv32-unknown-elf-gcc ./configure --with-xlen=32 --target=riscv32-unknown-elf
+make
+err_msg $? "Failed to make isa tests"
+
+cd $BASE_DIR
+./testing/scripts/gen-test-all rv32imacu > test.gdb
+riscv32-unknown-elf-gdb --batch -x test.gdb
+echo "riscv-tests summary:"
+grep -E "(PASS|FAIL)" gdb-client.log | uniq -c
