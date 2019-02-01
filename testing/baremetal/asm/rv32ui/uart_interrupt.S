@@ -15,23 +15,13 @@ RVTEST_RV64U
 RVTEST_CODE_BEGIN
 
   #-------------------------------------------------------------
-  # UART SCRATCH TEST
+  # SETUP RISCV Interrupt 
   #-------------------------------------------------------------
-
-  # Test that the UART scratch register can be written/read
-  li t0, UART_BASE
-  li t1, 0xBE
-  li t2, 0x0
-  addi t3, t0, UART_SCR
-  sw t1, 0(t3)
-  fence
-  lw t2, 0(t3)
-  TEST_CASE(1, t2, 0xBE, )
-
 
   #-------------------------------------------------------------
   # SETUP UART 
   #-------------------------------------------------------------
+  li t0, UART_BASE
 
   # UART_LCR = 0x80
   # This configures the DLAB bit, which allows writing into the Divisor Latch 
@@ -47,6 +37,15 @@ RVTEST_CODE_BEGIN
   li t1, UART_DLM_VAL
   addi t3, t0, UART_DLM
   sw t1, 0(t3)
+  # Enable transmit holding register empty interrupt
+  # UART_IER = 0x2
+  li t1, 0x2
+  addi t3, t0, UART_IER
+  sw t1, 0(t3)
+  
+  TEST_CASE(1, t2, 0xBE, )
+
+
   # UART_LCR = 0x1F
   # This configures word length to 8 bits,
   # number of stop bits to 2, parity is enabled and set to even parity and the 

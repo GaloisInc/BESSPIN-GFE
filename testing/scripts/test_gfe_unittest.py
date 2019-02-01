@@ -149,7 +149,7 @@ class TestFreeRTOS(unittest.TestCase):
             print("received {}".format(rx))
             self.assertEqual(
                 rx, test_char,
-                "Character received %x does not match test test_char %x".format(
+                "Character received {x} does not match test test_char {x}".format(
                     rx, test_char) )
         # Loopback test of strings
         for test_char in [b'H', b'e', b'l', b'l', b'o', b'!']:
