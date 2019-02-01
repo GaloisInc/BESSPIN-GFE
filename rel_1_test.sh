@@ -23,7 +23,8 @@ make
 err_msg $? "Failed to make isa tests"
 
 cd $BASE_DIR
-./testing/scripts/gen-test-all rv32imacu > test.gdb
-riscv32-unknown-elf-gdb --batch -x test.gdb
+# Skip generating a new test file
+#./testing/scripts/gen-test-all rv32imacu > test.gdb
+riscv32-unknown-elf-gdb --batch -x $BASE_DIR/testing/scripts/rel_1_isa_tests.gdb
 echo "riscv-tests summary:"
 grep -E "(PASS|FAIL)" gdb-client.log | uniq -c
