@@ -8,7 +8,6 @@ import gfetester
 import gfeparameters
 import os
 import time
-import struct
 
 
 class TestGfe(unittest.TestCase):
