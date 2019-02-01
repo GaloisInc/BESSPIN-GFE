@@ -10,17 +10,20 @@ cd $BASE_DIR/testing/baremetal/asm
 make
 err_msg $? "Making the assembly tests failed"
 
+# compile riscv-tests
+cd $BASE_DIR/riscv-tools/riscv-tests
+CC=riscv32-unknown-elf-gcc ./configure --with-xlen=32 --target=riscv32-unknown-elf
+make
+err_msg $? "Failed to make isa tests"
+
+echo "Please manually reset the VCU118 by pressing the CPU Reset button (SW5) before running this test suite."
+read -p "After resetting the CPU, press enter to continue... "
+
 # Run some unittests including UART, DDR, and Bootrom
 # The final unittest tests booting freeRTOS
 cd $BASE_DIR/testing/scripts
 python test_gfe_unittest.py TestGfe
 err_msg $? "GFE unittests failed. Run python test_gfe_unittest.py"
-
-# compile, run riscv-tests
-cd $BASE_DIR/riscv-tools/riscv-tests
-CC=riscv32-unknown-elf-gcc ./configure --with-xlen=32 --target=riscv32-unknown-elf
-make
-err_msg $? "Failed to make isa tests"
 
 cd $BASE_DIR
 # Skip generating a new test file
