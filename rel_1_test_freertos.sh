@@ -29,4 +29,7 @@ read -p "After resetting the CPU, press enter to continue... "
 python test_gfe_unittest.py TestFreeRTOS.test_uart_driver
 err_msg $? "UART driver test failed"
 
+echo "Please manually reset the VCU118 by pressing the CPU Reset button (SW5) before running anymore tests."
+read -p "After resetting the CPU, press enter to continue... "
+
 
