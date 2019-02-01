@@ -19,9 +19,9 @@ Please perform a clean install of Debian Buster on the development and testing h
 
 ### Install RISCV Tools ###
 
-This GFE has been tested with a particular fork of riscv-tools that includes an upstream change to riscv-openocd that allows for JTAG debugging over the  same Xilinx JTAG connection used to program the VCU118. Please use the version of riscv-tools submoduled in this repo under `$GFE_TOP/riscv-tools.`
+This GFE has been tested with a particular fork of riscv-tools that includes an upstream change to riscv-openocd that allows for JTAG debugging over the  same Xilinx JTAG connection used to program the VCU118. Please use the version of riscv-tools submoduled in this repo under `$GFE_REPO/riscv-tools.`
 
-To install, first set the RISCV path with `export RISCV=$GFE_TOP/riscv-tools`. This will place the riscv binaries in the proper location for the testing scripts. Next, install RISCV tools using the directions in `$GFE_TOP/riscv-tools/README.md`
+To install, first set the RISCV path with `export RISCV=$GFE_REPO/riscv-tools`. This will place the riscv binaries in the proper location for the testing scripts. Next, install RISCV tools using the directions in `$GFE_REPO/riscv-tools/README.md`
 
 ### Install Vivado ###
 
@@ -93,7 +93,7 @@ Click `Run Simulation` in the Vivado GUI and refer to the Vivado documentation f
 
 ### Adding in Your Processor ###
 
-We recommend using the Vivado IP integrator flow to add a new processor into the GFE. This should require minimal effort to integrate the processor and is flow already demonstrated for the Chisel and Bluespec P1 processors. Using the integrator flow requires wrapping the processor in a Xilinx User IP block and updating the necessary IP search paths to find the new IP. The Chisel and Bluespec Vivado projects are created by sourcing the same tcl for the block diagram (`p1_soc_bd.tcl`). The only difference is the location from which it pulls in the mkP1_Core_v1_0 IP block.
+We recommend using the Vivado IP integrator flow to add a new processor into the GFE. This should require minimal effort to integrate the processor and this flow is already demonstrated for the Chisel and Bluespec P1 processors. Using the integrator flow requires wrapping the processor in a Xilinx User IP block and updating the necessary IP search paths to find the new IP. The Chisel and Bluespec Vivado projects are created by sourcing the same tcl for the block diagram (`p1_soc_bd.tcl`). The only difference is the location from which it pulls in the mkP1_Core_v1_0 IP block.
 
 The steps to add in a new processor are as follows:
 
