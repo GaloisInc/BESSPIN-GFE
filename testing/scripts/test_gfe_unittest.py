@@ -8,6 +8,7 @@ import gfetester
 import gfeparameters
 import os
 import time
+import struct
 
 
 class TestGfe(unittest.TestCase):
@@ -55,6 +56,34 @@ class TestGfe(unittest.TestCase):
                 "Character received %x does not match test test_char %x".format(
                     b, test_char) )
         return
+
+    def test_interrupt(self):
+        # Load the UART Interrupt test program
+        interrupt_elf = os.path.abspath(
+            os.path.join(self.path_to_asm, 'rv32ui-p-uart_interrupt'))
+        self.gfe.setupUart(
+            timeout = 1,
+            baud=9600,
+            parity="NONE",
+            stopbits=2,
+            bytesize=8)
+        self.gfe.launchElf(interrupt_elf)
+
+        # Allow the riscv program to get started and configure UART
+        time.sleep(0.1)
+
+        # Run test 10 times
+        for test_run in range(0,10):
+            print("Generating interrupt #{}".format(test_run))
+            self.gfe.uart_session.write("0")
+            res = self.gfe.uart_session.read()
+            self.assertEqual(res, str(test_run))
+            print("\tReceived interrupt #{}".format(test_run))
+        return
+
+    def test_ddr(self):
+        # Read the base address of ddr
+        ddr_base = gfeparameters.DDR_BASE
 
     def test_ddr(self):
         # Read the base address of ddr

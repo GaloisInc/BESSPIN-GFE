@@ -37,11 +37,6 @@ RVTEST_CODE_BEGIN
   li t1, UART_DLM_VAL
   addi t3, t0, UART_DLM
   sw t1, 0(t3)
-  # Enable receive data available interrupt
-  # UART_IER = 0x1
-  li t1, 0x1
-  addi t3, t0, UART_IER
-  sw t1, 0(t3)
   
   # UART_LCR = 0x1F
   # This configures word length to 8 bits,
@@ -56,7 +51,12 @@ RVTEST_CODE_BEGIN
   # Interrupt Test
   #-------------------------------------------------------------
 
-  li t1, 0xAA
+  # Enable receive data available interrupt
+  li t1, UART_IER_ERBFI
+  addi t3, t0, UART_IER
+  sw t1, 0(t3)
+
+  li t1, 0x30
   addi t2, t0, UART_BUFFER
 
   # Enable MEI interrupt
@@ -77,6 +77,12 @@ wait_for_interrupt:
   # Transmit the success code back to the tester
   sw t1, 0(t2)
   fence
+  addi t1, t1, 1
+
+wait_for_clear:
+  csrr t4, mip
+  and t4, t4, t3
+  bne t4, x0, wait_for_clear
   j wait_for_interrupt
 
   TEST_PASSFAIL
