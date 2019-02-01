@@ -86,6 +86,7 @@ The UART is configured to have 8 data bits, 2 stop bits, no parity bits, and a b
 4. In a new terminal, run gdb with `riscv32-unknown-elf-gdb $GFE_REPO/FreeRTOS-RISCV/Demo/p1-besspin/main.elf`.
 5. Once gdb is open, type `target remote localhost:3333` to connect to OpenOCD. OpenOCD should give a message that it has accepted a gdb connection.
 Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `continue`.
+6. When you've finished running FreeRTOS, make sure to reset the SoC before running other tests or programs.
 
 ### Simulation ###
 
