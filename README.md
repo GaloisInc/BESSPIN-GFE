@@ -21,7 +21,7 @@ Please perform a clean install of Debian Buster on the development and testing h
 
 This GFE has been tested with a particular fork of riscv-tools that includes an upstream change to riscv-openocd that allows for JTAG debugging over the  same Xilinx JTAG connection used to program the VCU118. Please use the version of riscv-tools submoduled in this repo under `$GFE_REPO/riscv-tools.`
 
-To install, first set the RISCV path with `export RISCV=$GFE_REPO/riscv-tools`. This will place the riscv binaries in the proper location for the testing scripts. Next, install RISCV tools using the directions in `$GFE_REPO/riscv-tools/README.md`
+To install, first set the RISCV path with `export RISCV=$GFE_REPO/riscv-tools` and initialize the riscv-tools submodule with `git submodule update --init --recursive riscv-tools`. This will place the riscv binaries in the proper location for the testing scripts. Next, install RISCV tools using the directions in `$GFE_REPO/riscv-tools/README.md`
 
 ### Install Vivado ###
 
