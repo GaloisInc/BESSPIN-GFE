@@ -27,8 +27,8 @@
 
 // Expect the processor to be running at 83MHz
 // divisor = 83MHz/(16 * 9600 baud) = 0x21D
-#define UART_DLL_VAL = 0x1D
-#define UART_DLM_VAL = 0x2
+#define UART_DLL_VAL 0x1D
+#define UART_DLM_VAL 0x2
 
 
 /* Definition of individual bits in control and status registers    */

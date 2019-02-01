@@ -37,15 +37,12 @@ RVTEST_CODE_BEGIN
   li t1, UART_DLM_VAL
   addi t3, t0, UART_DLM
   sw t1, 0(t3)
-  # Enable transmit holding register empty interrupt
-  # UART_IER = 0x2
-  li t1, 0x2
+  # Enable receive data available interrupt
+  # UART_IER = 0x1
+  li t1, 0x1
   addi t3, t0, UART_IER
   sw t1, 0(t3)
   
-  TEST_CASE(1, t2, 0xBE, )
-
-
   # UART_LCR = 0x1F
   # This configures word length to 8 bits,
   # number of stop bits to 2, parity is enabled and set to even parity and the 
@@ -56,28 +53,31 @@ RVTEST_CODE_BEGIN
   sw t1, 0(t3)
 
   #-------------------------------------------------------------
-  # LOOP BACK UART VALUES
+  # Interrupt Test
   #-------------------------------------------------------------
 
-  # t3 = LSR register address
-  addi t3, t0, UART_LSR
+  li t1, 0xAA
+  addi t2, t0, UART_BUFFER
 
-  # Loop forever, writing all received characters to UART
-check_for_data:
+  # Enable MEI interrupt
+  li t3, 0x800
+  csrw mie, t3
 
-  # Check if data was received
-  lw t1, 0(t3)
-  andi t1, t1, UART_LSR_DR
-  beq t1, x0, check_for_data
+  # Loop forever, waiting for interrupt and sending back 0xAA
+wait_for_interrupt:
 
-  # Transmit the received character
+  # Check if interrupt is set
+  csrr t4, mip
+  and t4, t4, t3 # t4 & 0x800
+  beq t4, x0, wait_for_interrupt
+
+  # Read from the buffer to clear the interrupt
+  lw t4, 0(t2)
   fence
-  addi t4, t0, UART_BUFFER
-  lw t2, 0(t4)
+  # Transmit the success code back to the tester
+  sw t1, 0(t2)
   fence
-  sw t2, 0(t4)
-  fence
-  j check_for_data
+  j wait_for_interrupt
 
   TEST_PASSFAIL
 

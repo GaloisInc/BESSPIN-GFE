@@ -4,6 +4,7 @@
 
 rv32ui_sc_tests = \
 	uart \
+        uart_interrupt \
 	add \
 
 rv32ui_p_tests = $(addprefix rv32ui-p-, $(rv32ui_sc_tests))
