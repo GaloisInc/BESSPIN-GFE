@@ -19,10 +19,8 @@ fi
 # Compile the bootrom
 cd $BASE_DIR/bootrom
 make
-if [ $? -ne 0 ]; then
-	echo "Making the bootrom failed"
-	exit 1
-fi
+
+err_msg $? "Making the bootrom failed"
 
 echo "Please run with Vivado 2017.4"
 # i.e.
@@ -35,9 +33,7 @@ cd $BASE_DIR/vivado
 vivado -mode batch -source $BASE_DIR/tcl/p1_soc.tcl \
 -tclargs --origin_dir $BASE_DIR/tcl \
 --p1_name $p1_name
-if [ $? -ne 0 ]; then
-	echo "Creating the vivado project failed"
-	exit 1
-fi
+
+err_msg $? "Creating the vivado project failed"
 
 
