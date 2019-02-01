@@ -105,37 +105,36 @@ The steps to add in a new processor are as follows:
 2. Copy the component.xml file from one of the two processors and modify it to include all the paths to the RTL files for your design. See `$GFE_REPO/bluespec-processors/P1/Piccolo/src_SSITH_P1/xilinx_ip/component.xml` and `$GFE_REPO/chisel_processors/xilinx_ip/component.xml`. This is the most clunky part of the process, but is relatively straight forward.
     *  Copy a reference component.xml file to a new folder (i.e. `cp $GFE_REPO/chisel_processors/xilinx_ip/component.xml new_processor/`)
     *  Replace references to old verilog files within component.xml. Replace `spirit:file` entries such as 
-```xml
-<spirit:file>
-    <spirit:name>hdl/galois.system.P1FPGAConfig.behav_srams.v</spirit:name>
-    <spirit:fileType>verilogSource</spirit:fileType>
-</spirit:file>
-```
-    with paths to the hdl for the new processor such as: 
-```xml
-<spirit:file>
-    <spirit:name>hdl/new_processor.v</spirit:name>
-    <spirit:fileType>verilogSource</spirit:fileType>
-</spirit:file>
-```
-. The paths in component.xml are relative to its parent directory (i.e. `$GFE_REPO/chisel_processors/xilinx_ip/`).
-    *  Note that the component.xml file contains a set of files used for simulation (xilinx_anylanguagebehavioralsimulation_view_fileset) and another set used for synthesis. Make sure to replace or remove file entries as necessary in each of these sections.
-
-    *  Vivado discovers user IP by searching all it's IP repository paths looking for component.xml files. This is the reason for the specific name. This file fully describes the new processor's IP block and can be modified through a gui if desired using the IP packager flow. It is easier to start with an example component.xml file to ensure the port naming and external interfaces match those used by the block diagram.
+    ```xml
+    <spirit:file>
+        <spirit:name>hdl/galois.system.P1FPGAConfig.behav_srams.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+    </spirit:file>
+    ```
+   with paths to the hdl for the new processor such as: 
+    ```xml
+    <spirit:file>
+        <spirit:name>hdl/new_processor.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+    </spirit:file>
+    ```
+    The paths in component.xml are relative to its parent directory (i.e. `$GFE_REPO/chisel_processors/xilinx_ip/`).
+    * Note that the component.xml file contains a set of files used for simulation (xilinx_anylanguagebehavioralsimulation_view_fileset) and another set used for synthesis. Make sure to replace or remove file entries as necessary in each of these sections.
+    * Vivado discovers user IP by searching all it's IP repository paths looking for component.xml files. This is the reason for the specific name. This file fully describes the new processor's IP block and can be modified through a gui if desired using the IP packager flow. It is easier to start with an example component.xml file to ensure the port naming and external interfaces match those used by the block diagram.
 
 3. Add your processor to `$GFE_REPO/tcl/p1_mapping.tcl`. Add a line here to include the mapping between your processor name and directory containing the component.xml file. This mapping is used by the `p1_soc.tcl` build script.
-```bash
-vim tcl/p1_mapping.tcl
-# Add line if component.xml lives at ../new_processor/component.xml
-+ dict set p1_mapping new_processor "../new_processor"
-```
-The mapping path is relative to the `$GFE_REPO/tcl` path
+    ```bash
+    vim tcl/p1_mapping.tcl
+    # Add line if component.xml lives at ../new_processor/component.xml
+    + dict set p1_mapping new_processor "../new_processor"
+    ```
+   The mapping path is relative to the `$GFE_REPO/tcl` path
 4. Create a new Vivado project with your new processor by running the following:
-```bash
-cd $GFE_REPO
-./setup_soc_project.sh new_processor
-```
-new_processor is the name specified in the `$GFE_REPO/tcl/p1_mapping.tcl` file.
+    ```bash
+    cd $GFE_REPO
+    ./setup_soc_project.sh new_processor
+    ```
+   new_processor is the name specified in the `$GFE_REPO/tcl/p1_mapping.tcl` file.
 
 5. Synthesize and build the design using the normal flow. Note that users will have to update the User IP as prompted in the gui after each modification to the component.xml file or reference Verilog files.
 
