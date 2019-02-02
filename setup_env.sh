@@ -33,6 +33,8 @@ function p1_picker {
 	# Parse the processor selection
 	if [ "$1" == "bluespec" ]; then
 	        p1_name="bluespec"
+	        echo "bluespec build not passing in this release. Modify setup_env.sh if you want to continue anyway"
+	        exit 1
 	elif [ "$1" == "chisel" ]; then
 	        p1_name="chisel"
 	else
