@@ -7,7 +7,7 @@ Source files and build scripts for generating and testing the GFE for SSITH.
 
 This repository contains source code and build scripts for generating SoC bitstreams
 for the Xilinx VCU118. The resulting systems contain either Chisel or Bluespec 
-versions of P1 connected by an AXI interconnect to UART, DDR, and Bootrom. For more details on the contents of the GFE, see TODO: ADD REFERENCE TO SYSTEM DOCUMENTATION
+versions of P1 connected by an AXI interconnect to UART, DDR, and Bootrom. 
 
 ## Getting Started ##
 
