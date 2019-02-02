@@ -17,18 +17,28 @@ Prebuilt images are available in the bitstreams folder. Use these, if you want t
 
 Please perform a clean install of Debian Buster on the development and testing hosts. This is the supported OS for building and testing the GFE. At the time of release 1 (Feb 1), Debian Buster Alpha 4 is the latest version, but we expect to upgrade Buster versions as it becomes stable (sometime soon). Please install the latest version of Debian Buster (Debian 10.X).
 
+### Clone this REPO ###
+
+Once the OS is installed, you will need to add your ssh key to Gitlab in order to clone this repo. Checkout these [instructions] (https://docs.gitlab.com/ee/ssh/#adding-an-ssh-key-to-your-gitlab-account) for more details.
+
+After setting up an ssh key, clone this repo by running
+
+```bash
+git clone git@gitlab-ext.galois.com:ssith/gfe.git
+```
+
 ### Install RISCV Tools ###
 
 This GFE has been tested with a particular fork of riscv-tools that includes an upstream change to riscv-openocd that allows for JTAG debugging over the  same Xilinx JTAG connection used to program the VCU118.
 Please use the version of riscv-tools submoduled in this repo under `$GFE_REPO/riscv-tools.`
 
 To install, first set the RISCV path with `export RISCV=$GFE_REPO/riscv-tools` and initialize the riscv-tools and other submodules with `cd $GFE_REPO && ./init_submodules.sh`.
-This will place the riscv binaries in the proper location for the testing scripts.
-Next, install the 32-bit RISCV toolchain using the directions in `$GFE_REPO/riscv-tools/README.md`
+This will place the riscv binaries in `$GFE_REPO/riscv-tools/bin`, where the testing scripts expect them.
+Next, install the 32-bit RISCV toolchain using the directions in `$GFE_REPO/riscv-tools/README.md`. Please make sure to build the 32 bit version using `build-rv32ima.sh`.
 
 ### Install Vivado ###
 
-Download and install Vivado 2017.4. A license key for the tool is included on a piece of paper in the box containing the VCU118. See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug973-vivado-release-notes-install-license.pdf) for download and installation instructions. We only need the Vivado tool, not the SDK, so download the `Vivado Design Suite - HLx 2017.4 ` from the [Vivado Download Page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2017-4.html). One must make an account with Vivado in order to register the tool and install the license.
+Download and install Vivado 2017.4. A license key for the tool is included on a piece of paper in the box containing the VCU118. See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug973-vivado-release-notes-install-license.pdf) for download and installation instructions. We only need the Vivado tool, not the SDK, so download the `Vivado Design Suite - HLx 2017.4 ` from the [Vivado Download Page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2017-4.html). One must make an account with Vivado in order to register the tool and install the license. After installing Vivado, you must also install libtinfo5 for Debian to run the tool. Install this dependency by running `sudo apt-get install libtinfo5`.
 
 If using separate development and testing machines, only the development machine needs a license. We recommend installing Vivado Lab on the testing machine, because it does not require a license and can be used to program the FPGA.
 
@@ -38,31 +48,34 @@ To build your own bitstream, make sure Vivado 2017.4 is on your path (`$ which v
 
 ```bash
 cd $GFE_REPO
-./setup_soc_project.sh bluespec # generate vivado/p1_soc_bluespec/p1_soc_bluespec.xpr
-./build.sh bluespec # generate bitstreams/p1_soc_bluespec.bit
+./setup_soc_project.sh chisel # generate vivado/p1_soc_chisel/p1_soc_chisel.xpr
+./build.sh chisel # generate bitstreams/p1_soc_chisel.bit
 ```
 
 where GFE_REPO is the top level directory for the gfe repo. To view the project in the Vivado gui, run the following:
 
 ```bash
 cd $GFE_REPO/vivado
-vivado p1_soc_bluespec/p1_soc_bluespec.xpr
+vivado p1_soc_chisel/p1_soc_bluespec.xpr
 ```
 
-`setup_soc_project.sh` should only be run once. We also recommend running `build.sh` for the initial build then performing future builds using the Vivado GUI to take advantage of convenient error reporting and visibility into the build process. The Vivado project will be generated in the `$GFE_REPO/vivado/p1_soc_$p1_name` folder of the repository and can be re-opened there. Note that all the same commands can be run with the argument `chisel` to generate the chisel P1 bitstream and corresponding Vivado project (i.e. `./setup_soc_project.sh chisel`).
+`setup_soc_project.sh` should only be run once. We also recommend running `build.sh` for the initial build then performing future builds using the Vivado GUI to take advantage of convenient error reporting and visibility into the build process. The Vivado project will be generated in the `$GFE_REPO/vivado/p1_soc_$p1_name` folder of the repository and can be re-opened there. Note that all the same commands can be run with the argument `bluespec` to generate the bluespec P1 bitstream and corresponding Vivado project (i.e. `./setup_soc_project.sh bluespec`).
 
 ### Testing ###
 
 1. Install the following python packages: `pexpect, pyserial`. 
 These are required for running python unittests on the GFE.
-2. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
-2. Make sure the VCU118 is powered on (fan should be running) 
-3. Program the FPGA with the bit file (i.e. [bitstreams/p1_soc_chisel.bit](bitstreams/p1_soc_chisel.bit)) using the Vivado hardware manager.
-4. Run `./rel_1_test.sh` from the top level of the gfe repo
+2. Give the current user access to the serial devices.
+```bash
+sudo usermod -aG dialout $USER
+sudo reboot
+```
+3. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
+4. Make sure the VCU118 is powered on (fan should be running) 
+5. Program the FPGA with the bit file (i.e. [bitstreams/p1_soc_chisel.bit](bitstreams/p1_soc_chisel.bit)) using the Vivado hardware manager.
+6. Run `./rel_1_test.sh` from the top level of the gfe repo
 
-A passing test will not display any error messages. All failing tests will report errors such as .
-
-TODO: Insert example of failing tests and passing tests.
+A passing test will not display any error messages. All failing tests will report errors and stop early.
 
 The python unit testing infrastructure reuses scripts from riscv-tests to help automate GDB and OpenOCD scripting. The primary python unittests are stored in [test_gfe_unittest.py](testing/scripts/test_gfe_unittest.py). These unit tests rely on a convenience class for interacting with the gfe defined in [gfetester.py](testing/scripts/gfetester.py)
 
