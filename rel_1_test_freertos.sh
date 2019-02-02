@@ -6,13 +6,12 @@ source $BASE_DIR/setup_env.sh
 cd $BASE_DIR/testing/scripts
 
 # Build FreeRTOS
-cd $BASE_DIR/FreeRTOS-RISCV/Demo/p1-besspin
-make MAIN_FILE=uart_test.c 
+freertos_folder=$BASE_DIR/FreeRTOS-RISCV/Demo/p1-besspin/
+cd $freertos_folder
+make PROG=uart_test 
 err_msg $? "Building FreeRTOS-RISCV uart_driver test failed"
 
-freertos_folder=$BASE_DIR/FreeRTOS-RISCV/Demo/p1-besspin/
-cp $freertos_folder/riscv-p1-vcu118.elf $freertos_folder/uart_test.elf
-make clean && make
+make PROG=main
 err_msg $? "Building FreeRTOS-RISCV demo failed"
 
 echo "Please manually reset the VCU118 by pressing the CPU Reset button (SW5) before running a FreeRTOS tests."
