@@ -19,7 +19,7 @@ Please perform a clean install of Debian Buster on the development and testing h
 
 ### Clone this REPO ###
 
-Once the OS is installed, you will need to add your ssh key to Gitlab in order to clone this repo. Checkout these [instructions] (https://docs.gitlab.com/ee/ssh/#adding-an-ssh-key-to-your-gitlab-account) for more details.
+Once the OS is installed, you will need to add your ssh key to Gitlab in order to clone this repo. Checkout these [instructions](https://docs.gitlab.com/ee/ssh/#adding-an-ssh-key-to-your-gitlab-account) for more details.
 
 After setting up an ssh key, clone this repo by running
 
@@ -73,7 +73,8 @@ sudo reboot
 3. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
 4. Make sure the VCU118 is powered on (fan should be running) 
 5. Program the FPGA with the bit file (i.e. [bitstreams/p1_soc_chisel.bit](bitstreams/p1_soc_chisel.bit)) using the Vivado hardware manager.
-6. Run `./rel_1_test.sh` from the top level of the gfe repo
+6. Run `./rel_1_test.sh` from the top level of the gfe repo.
+7. Run `./rel_1_test_freertos.sh` to run freeRTOS tests.
 
 A passing test will not display any error messages. All failing tests will report errors and stop early.
 
