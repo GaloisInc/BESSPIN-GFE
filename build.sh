@@ -11,17 +11,18 @@ source $BASE_DIR/setup_env.sh
 p1_picker $1
 
 # Check that the vivado project exits
-vivado_project=$BASE_DIR/vivado/p1_soc_$p1_name/p1_soc_$p1_name.xpr
+project_name=p1_soc_${p1_name}
+vivado_project=$BASE_DIR/vivado/${project_name}/${project_name}.xpr
 check_file $vivado_project "$vivado_project does not exist. Cannot build project.
 Please specify a valid p1_name For example, run ./build.sh chisel"
 
 # Run vivado to build a top level project
 cd $BASE_DIR/vivado
-vivado -mode batch $vivado_project -source $BASE_DIR/tcl/build.tcl
+#vivado -mode batch $vivado_project -source $BASE_DIR/tcl/build.tcl
 err_msg $? "Vivado build failed"
 
 # Copy bitstream to the bitstreams folder
-bitstream=$BASE_DIR/vivado/$vivado_project/$vivado_project.runs/impl_1/design_1.bit 
-output_bitstream=$BASE_DIR/bitstreams/$vivado_project.bit
+bitstream=$BASE_DIR/vivado/${project_name}/${project_name}.runs/impl_1/design_1.bit 
+output_bitstream=$BASE_DIR/bitstreams/${project_name}.bit
 check_file $bitstream "Bitstream $bitstream not generated. Check Vivado logs"
 cp $bitstream $output_bitstream
