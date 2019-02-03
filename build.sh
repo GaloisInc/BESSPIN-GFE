@@ -18,7 +18,7 @@ Please specify a valid p1_name For example, run ./build.sh chisel"
 
 # Run vivado to build a top level project
 cd $BASE_DIR/vivado
-#vivado -mode batch $vivado_project -source $BASE_DIR/tcl/build.tcl
+vivado -mode batch $vivado_project -source $BASE_DIR/tcl/build.tcl
 err_msg $? "Vivado build failed"
 
 # Copy bitstream to the bitstreams folder
