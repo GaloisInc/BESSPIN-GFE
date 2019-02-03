@@ -11,7 +11,7 @@
 #include "test_macros.h"
 #include "gfe_macros.h"
 
-RVTEST_RV64U
+RVTEST_RV32M
 RVTEST_CODE_BEGIN
 
   #-------------------------------------------------------------
