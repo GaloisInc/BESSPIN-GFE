@@ -1,0 +1,55 @@
+#-----------------------------------------------------------
+# Vivado v2017.4 (64-bit)
+# SW Build 2086221 on Fri Dec 15 20:54:30 MST 2017
+# IP Build 2085800 on Fri Dec 15 22:25:07 MST 2017
+# Start of session at: Wed Feb  6 12:05:32 2019
+# Process ID: 13645
+# Current directory: /home/cgoins/gfe/added_ip
+# Command line: vivado
+# Log file: /home/cgoins/gfe/added_ip/vivado.log
+# Journal file: /home/cgoins/gfe/added_ip/vivado.jou
+#-----------------------------------------------------------
+start_gui
+create_project managed_ip_project /home/cgoins/gfe/added_ip/iobuf/managed_ip_project -part xcvu9p-flga2104-2L-e -ip
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/opt/Xilinx/Vivado/2017.4/data/ip'.
+create_project: Time (s): cpu = 00:00:19 ; elapsed = 00:00:34 . Memory (MB): peak = 6278.676 ; gain = 187.793 ; free physical = 43446 ; free virtual = 65734
+set_property board_part xilinx.com:vcu118:part0:2.0 [current_project]
+set_property target_simulator XSim [current_project]
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+WARNING: [IP_Flow 19-3899] Cannot get the environment domain name variable for the component vendor name. Setting the vendor name to 'user.org'.
+set_property  ip_repo_paths  /home/cgoins/gfe/added_ip/iobuf/iobuf.srcs [current_project]
+update_ip_catalog
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/home/cgoins/gfe/added_ip/iobuf/iobuf.srcs'.
+WARNING: [IP_Flow 19-3899] Cannot get the environment domain name variable for the component vendor name. Setting the vendor name to 'user.org'.
+WARNING: [IP_Flow 19-3899] Cannot get the environment domain name variable for the component vendor name. Setting the vendor name to 'user.org'.
+create_ip -name iobuf -vendor user.org -library user -version 1.0 -module_name iobuf_0 -dir /home/cgoins/gfe/added_ip/iobuf
+generate_target {instantiation_template} [get_files /home/cgoins/gfe/added_ip/iobuf/iobuf_0/iobuf_0.xci]
+INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'iobuf_0'...
+generate_target all [get_files  /home/cgoins/gfe/added_ip/iobuf/iobuf_0/iobuf_0.xci]
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'iobuf_0'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'iobuf_0'...
+catch { config_ip_cache -export [get_ips -all iobuf_0] }
+export_ip_user_files -of_objects [get_files /home/cgoins/gfe/added_ip/iobuf/iobuf_0/iobuf_0.xci] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] /home/cgoins/gfe/added_ip/iobuf/iobuf_0/iobuf_0.xci]
+launch_runs -jobs 2 iobuf_0_synth_1
+[Wed Feb  6 12:08:21 2019] Launched iobuf_0_synth_1...
+Run output will be captured here: /home/cgoins/gfe/added_ip/iobuf/managed_ip_project/managed_ip_project.runs/iobuf_0_synth_1/runme.log
+export_simulation -of_objects [get_files /home/cgoins/gfe/added_ip/iobuf/iobuf_0/iobuf_0.xci] -directory /home/cgoins/gfe/added_ip/iobuf/ip_user_files/sim_scripts -ip_user_files_dir /home/cgoins/gfe/added_ip/iobuf/ip_user_files -ipstatic_source_dir /home/cgoins/gfe/added_ip/iobuf/ip_user_files/ipstatic -lib_map_path [list {modelsim=/home/cgoins/gfe/added_ip/iobuf/managed_ip_project/managed_ip_project.cache/compile_simlib/modelsim} {questa=/home/cgoins/gfe/added_ip/iobuf/managed_ip_project/managed_ip_project.cache/compile_simlib/questa} {ies=/home/cgoins/gfe/added_ip/iobuf/managed_ip_project/managed_ip_project.cache/compile_simlib/ies} {vcs=/home/cgoins/gfe/added_ip/iobuf/managed_ip_project/managed_ip_project.cache/compile_simlib/vcs} {riviera=/home/cgoins/gfe/added_ip/iobuf/managed_ip_project/managed_ip_project.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+create_ip -name iobuf -vendor user.org -library user -version 1.0 -module_name iobuf_1 -dir /home/cgoins/gfe/added_ip/iobuf
+generate_target {instantiation_template} [get_files /home/cgoins/gfe/added_ip/iobuf/iobuf_1/iobuf_1.xci]
+INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'iobuf_1'...
+generate_target all [get_files  /home/cgoins/gfe/added_ip/iobuf/iobuf_1/iobuf_1.xci]
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'iobuf_1'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'iobuf_1'...
+catch { config_ip_cache -export [get_ips -all iobuf_1] }
+export_ip_user_files -of_objects [get_files /home/cgoins/gfe/added_ip/iobuf/iobuf_1/iobuf_1.xci] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] /home/cgoins/gfe/added_ip/iobuf/iobuf_1/iobuf_1.xci]
+launch_runs  iobuf_1_synth_1
+[Wed Feb  6 12:09:33 2019] Launched iobuf_1_synth_1...
+Run output will be captured here: /home/cgoins/gfe/added_ip/iobuf/managed_ip_project/managed_ip_project.runs/iobuf_1_synth_1/runme.log
+export_simulation -of_objects [get_files /home/cgoins/gfe/added_ip/iobuf/iobuf_1/iobuf_1.xci] -directory /home/cgoins/gfe/added_ip/iobuf/ip_user_files/sim_scripts -ip_user_files_dir /home/cgoins/gfe/added_ip/iobuf/ip_user_files -ipstatic_source_dir /home/cgoins/gfe/added_ip/iobuf/ip_user_files/ipstatic -lib_map_path [list {modelsim=/home/cgoins/gfe/added_ip/iobuf/managed_ip_project/managed_ip_project.cache/compile_simlib/modelsim} {questa=/home/cgoins/gfe/added_ip/iobuf/managed_ip_project/managed_ip_project.cache/compile_simlib/questa} {ies=/home/cgoins/gfe/added_ip/iobuf/managed_ip_project/managed_ip_project.cache/compile_simlib/ies} {vcs=/home/cgoins/gfe/added_ip/iobuf/managed_ip_project/managed_ip_project.cache/compile_simlib/vcs} {riviera=/home/cgoins/gfe/added_ip/iobuf/managed_ip_project/managed_ip_project.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+exit
+INFO: [Common 17-206] Exiting Vivado at Wed Feb  6 12:11:21 2019...
