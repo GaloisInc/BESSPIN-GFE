@@ -165,6 +165,9 @@ class TestFreeRTOS(unittest.TestCase):
         self.gfe.gdb_session.command("file {}".format(freertos_elf))
         self.gfe.gdb_session.load()
         initial_timeout = self.gfe.gdb_session.timeout
+        # Set a timeout for the freeRTOS test
+        # continue command "c" will timeout after timeout * 10 seconds
+        # see testlib.py for more info
         self.gfe.gdb_session.timeout = 1
         self.gfe.gdb_session.c(wait=True)
         self.gfe.gdb_session.timeout = initial_timeout
