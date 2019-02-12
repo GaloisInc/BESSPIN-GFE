@@ -164,9 +164,17 @@ class TestFreeRTOS(unittest.TestCase):
         self.gfe.gdb_session.interrupt()
         self.gfe.gdb_session.command("file {}".format(freertos_elf))
         self.gfe.gdb_session.load()
+        initial_timeout = self.gfe.gdb_session.timeout
+        self.gfe.gdb_session.timeout = 1
         self.gfe.gdb_session.c(wait=True)
-        print( "Launched FreeRTOS")
+        self.gfe.gdb_session.timeout = initial_timeout
 
+        # Receive print statements
+        num_rxed =  self.gfe.uart_session.in_waiting
+        rx = self.gfe.uart_session.read( num_rxed ) 
+        print("received {}".format(rx))
+
+        self.gfe.gdb_session.interrupt()
         regval = self.gfe.gdb_session.p("$t6")
         print("t6: {}".format(hex(regval)))
         self.assertEqual(0xdeadbeef, regval)
