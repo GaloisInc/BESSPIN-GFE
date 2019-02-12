@@ -12,4 +12,4 @@
 [submodule "FreeRTOS-RISCV"]
 	path = FreeRTOS-RISCV
 	url = https://github.com/GaloisInc/FreeRTOS-RISCV
-	branch = vcu118
+	branch = test-peripherals 
