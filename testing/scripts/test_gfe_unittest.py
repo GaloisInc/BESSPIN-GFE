@@ -134,7 +134,15 @@ class TestFreeRTOS(unittest.TestCase):
         self.path_to_freertos = os.path.join(
                 os.path.dirname(os.path.dirname(os.getcwd())),
                 'FreeRTOS-mirror', 'FreeRTOS', 'Demo',
-                'RISC-V_Bluespec_Picollo')       
+                'RISC-V_Bluespec_Picollo')
+        # Setup pySerial UART
+        self.gfe.setupUart(
+            timeout = 1,
+            baud=9600,
+            parity="NONE",
+            stopbits=2,
+            bytesize=8)
+        print("Setup pySerial UART")     
 
     def tearDown(self):
         if not self.gfe.gdb_session:
@@ -145,27 +153,37 @@ class TestFreeRTOS(unittest.TestCase):
         self.gfe.gdb_session.command("flush regs")
         self.gfe.gdb_session.command("info threads", ops=100)
         del self.gfe
+
+    def test_full(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main.elf'))
+        print(freertos_elf)
+        
+        # Run elf in gdb
+        self.gfe.gdb_session.interrupt()
+        self.gfe.gdb_session.command("file {}".format(freertos_elf))
+        self.gfe.gdb_session.load()
+        self.gfe.gdb_session.c(wait=True)
+        print( "Launched FreeRTOS")
+
+        regval = self.gfe.gdb_session.p("$t6")
+        print("t6: {}".format(hex(regval)))
+        self.assertEqual(0xdeadbeef, regval)
         
     def test_blink(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
            os.path.join( self.path_to_freertos, 'main.elf'))
         print(freertos_elf)
-        # Setup pySerial UART
-        self.gfe.setupUart(
-            timeout = 1,
-            baud=9600,
-            parity="NONE",
-            stopbits=2,
-            bytesize=8)
-        print( "Setup UART")
+        
         # Run elf in gdb
         self.gfe.launchElf(freertos_elf)
         print( "Launched FreeRTOS")
 
         # Wait for FreeRTOS tasks to start and run
         # Making this sleep time longer will allow the timer callback
-        # function in FreeRTOS main.c to check the demo tasks more times
+        # function in FreeRTOS main.c to run the demo tasks more times
         time.sleep(3)
 
         # Receive print statements
@@ -173,13 +191,12 @@ class TestFreeRTOS(unittest.TestCase):
         rx = self.gfe.uart_session.read( num_rxed ) 
         print("received {}".format(rx))
 
+        # Check that important print statements were received
         self.assertIn("Blink", rx)
         self.assertIn("RX: received value", rx)
         self.assertIn("TX: sent", rx)
         self.assertIn("Hello from RX", rx)
         self.assertIn("Hello from TX", rx)
-
-        self.gfe.gdb_session.interrupt()
 
         # No auto-checking
         return
