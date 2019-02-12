@@ -127,11 +127,13 @@ class TestGfe(unittest.TestCase):
 class TestFreeRTOS(unittest.TestCase):
 
     def setUp(self):
+        print("Please manually reset the VCU118 by pressing the CPU Reset button (SW5) before running a FreeRTOS tests.")
+        raw_input("After resetting the CPU, press enter to continue...")
         self.gfe = gfetester.gfetester()
         self.gfe.startGdb()
         self.path_to_freertos = os.path.join(
                 os.path.dirname(os.path.dirname(os.getcwd())),
-                'FreeRTOS-mirror', 'Demo',
+                'FreeRTOS-mirror', 'FreeRTOS', 'Demo',
                 'RISC-V_Bluespec_Picollo')       
 
     def tearDown(self):
@@ -144,7 +146,7 @@ class TestFreeRTOS(unittest.TestCase):
         self.gfe.gdb_session.command("info threads", ops=100)
         del self.gfe
         
-    def test_freertos(self):
+    def test_blink(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
            os.path.join( self.path_to_freertos, 'main.elf'))
@@ -164,12 +166,20 @@ class TestFreeRTOS(unittest.TestCase):
         # Wait for FreeRTOS tasks to start and run
         # Making this sleep time longer will allow the timer callback
         # function in FreeRTOS main.c to check the demo tasks more times
-        time.sleep(10)
+        time.sleep(3)
 
         # Receive print statements
         num_rxed =  self.gfe.uart_session.in_waiting
         rx = self.gfe.uart_session.read( num_rxed ) 
         print("received {}".format(rx))
+
+        self.assertIn("Blink", rx)
+        self.assertIn("RX: received value", rx)
+        self.assertIn("TX: sent", rx)
+        self.assertIn("Hello from RX", rx)
+        self.assertIn("Hello from TX", rx)
+
+        self.gfe.gdb_session.interrupt()
 
         # No auto-checking
         return
