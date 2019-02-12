@@ -21,7 +21,6 @@ function freertos_test {
 }
 
 freertos_test 1 test_blink
-# freertos_test 3 test_full # WIP
 
 echo "Please manually reset the VCU118 by pressing the CPU Reset button (SW5) before running anymore tests."
 read -p "After resetting the CPU, press enter to continue... "
