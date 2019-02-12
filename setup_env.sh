@@ -33,7 +33,6 @@ function p1_picker {
 	# Parse the processor selection
 	if [ "$1" == "bluespec" ]; then
 	        p1_name="bluespec"
-	        echo "WARNING: bluespec build in alpha state"
 	elif [ "$1" == "chisel" ]; then
 	        p1_name="chisel"
 	else
