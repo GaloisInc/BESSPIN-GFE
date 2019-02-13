@@ -127,11 +127,22 @@ class TestGfe(unittest.TestCase):
 class TestFreeRTOS(unittest.TestCase):
 
     def setUp(self):
+        print("Please manually reset the VCU118 by pressing the CPU Reset button (SW5) before running a FreeRTOS tests.")
+        raw_input("After resetting the CPU, press enter to continue...")
         self.gfe = gfetester.gfetester()
         self.gfe.startGdb()
         self.path_to_freertos = os.path.join(
                 os.path.dirname(os.path.dirname(os.getcwd())),
-                'FreeRTOS-RISCV', 'Demo', 'p1-besspin')       
+                'FreeRTOS-mirror', 'FreeRTOS', 'Demo',
+                'RISC-V_Bluespec_Picollo')
+        # Setup pySerial UART
+        self.gfe.setupUart(
+            timeout = 1,
+            baud=9600,
+            parity="NONE",
+            stopbits=2,
+            bytesize=8)
+        print("Setup pySerial UART")     
 
     def tearDown(self):
         if not self.gfe.gdb_session:
@@ -142,76 +153,61 @@ class TestFreeRTOS(unittest.TestCase):
         self.gfe.gdb_session.command("flush regs")
         self.gfe.gdb_session.command("info threads", ops=100)
         del self.gfe
-        
-    def test_uart_driver(self):
-        # Run with FreeRTOS elf built with
-        # 'make MAIN_FILE=test_uart.c'
-        # Load FreeRTOS binary
-        freertos_elf = os.path.abspath(
-           os.path.join( self.path_to_freertos, 'uart_test.elf'))
-        print(freertos_elf)
-        # Setup pySerial UART
-        self.gfe.setupUart(
-            timeout = 1,
-            baud=9600,
-            parity="NONE",
-            stopbits=2,
-            bytesize=8)
-        print( "Setup UART")
-        # Run elf in gdb
-        self.gfe.launchElf(freertos_elf)
-        print( "Launched FreeRTOS")
 
-        # Allow FreeRTOS to boot up
-        time.sleep(0.5)
-        
-        # Loopback test of chars 
-        for test_char in [b'a', b'z', b'd']:
-            self.gfe.uart_session.write(test_char)
-            print("sent {}".format(test_char))
-            rx = self.gfe.uart_session.read()
-            print("received {}".format(rx))
-            self.assertEqual(
-                rx, test_char,
-                "Character received {} does not match test test_char {}".format(
-                    rx, test_char) )
-        # Loopback test of strings
-        for test_char in [b'H', b'e', b'l', b'l', b'o', b'!']:
-            self.gfe.uart_session.write(test_char)
-            print("sent {}".format(test_char))
-            time.sleep(1)
-        num_rxed =  self.gfe.uart_session.in_waiting
-        rx = self.gfe.uart_session.read( num_rxed ) 
-        print("received {}".format(rx))
-        self.assertEqual(rx, 'Hello!')
-        return   
-
-    def test_freertos(self):
+    def test_full(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
            os.path.join( self.path_to_freertos, 'main.elf'))
         print(freertos_elf)
-        # Setup pySerial UART
-        self.gfe.setupUart(
-            timeout = 1,
-            baud=9600,
-            parity="NONE",
-            stopbits=2,
-            bytesize=8)
-        print( "Setup UART")
+        
+        # Run elf in gdb
+        self.gfe.gdb_session.interrupt()
+        self.gfe.gdb_session.command("file {}".format(freertos_elf))
+        self.gfe.gdb_session.load()
+        initial_timeout = self.gfe.gdb_session.timeout
+        # Set a timeout for the freeRTOS test
+        # continue command "c" will timeout after timeout * 10 seconds
+        # see testlib.py for more info
+        self.gfe.gdb_session.timeout = 1
+        self.gfe.gdb_session.c(wait=True)
+        self.gfe.gdb_session.timeout = initial_timeout
+
+        # Receive print statements
+        num_rxed =  self.gfe.uart_session.in_waiting
+        rx = self.gfe.uart_session.read( num_rxed ) 
+        print("received {}".format(rx))
+
+        self.gfe.gdb_session.interrupt()
+        regval = self.gfe.gdb_session.p("$t6")
+        print("t6: {}".format(hex(regval)))
+        self.assertEqual(0xdeadbeef, regval)
+        
+    def test_blink(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main.elf'))
+        print(freertos_elf)
+        
         # Run elf in gdb
         self.gfe.launchElf(freertos_elf)
         print( "Launched FreeRTOS")
 
         # Wait for FreeRTOS tasks to start and run
         # Making this sleep time longer will allow the timer callback
-        # function in FreeRTOS main.c to check the demo tasks more times
-        time.sleep(20)
+        # function in FreeRTOS main.c to run the demo tasks more times
+        time.sleep(3)
 
         # Receive print statements
         num_rxed =  self.gfe.uart_session.in_waiting
         rx = self.gfe.uart_session.read( num_rxed ) 
         print("received {}".format(rx))
+
+        # Check that important print statements were received
+        self.assertIn("Blink", rx)
+        self.assertIn("RX: received value", rx)
+        self.assertIn("TX: sent", rx)
+        self.assertIn("Hello from RX", rx)
+        self.assertIn("Hello from TX", rx)
 
         # No auto-checking
         return
