@@ -76,7 +76,6 @@ sudo reboot
 6. Close the Vivado hardware manager (or just close Vivado).
 This prevents USB permissions errors (i.e. LIBUSB_ERROR_BUSY) 
 7. Run `./rel_1_test.sh` from the top level of the gfe repo.
-8. Run `./rel_1_test_freertos.sh` to run freeRTOS tests.
 
 A passing test will not display any error messages. All failing tests will report errors and stop early.
 
@@ -89,8 +88,13 @@ To run FreeRTOS on the GFE, you'll need to run OpenOCD, connect to gdb, and view
 ```bash
 sudo apt-get install minicom
 
-cd $GFE_REPO/FreeRTOS-RISCV/Demo/p1-besspin/
-make
+cd $GFE_REPO/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1
+
+# for simple blinky demo
+make clean; DEMO_TYPE=1 make
+
+# for full demo
+make clean; DEMO_TYPE=2 make
 
 source $GFE_REPO/setup_env.sh
 ```
@@ -102,10 +106,40 @@ Follow these steps to run freeRTOS with an interactive GDB session:
 3. In a new terminal, run minicom with `minicom -D /dev/ttyUSB1 -b 9600`. `ttyUSB1` should be replaced with whichever USB port is connected to the VCU118's USB-to-UART bridge.
 Settings can be configured by running `minicom -s` and selecting `Serial Port Setup` and then `Bps/Par/Bits`. 
 The UART is configured to have 8 data bits, 2 stop bits, no parity bits, and a baud rate of 9600.
-4. In a new terminal, run gdb with `riscv32-unknown-elf-gdb $GFE_REPO/FreeRTOS-RISCV/Demo/p1-besspin/main.elf`.
+4. In a new terminal, run gdb with `riscv32-unknown-elf-gdb $GFE_REPO/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1/main.elf`.
 5. Once gdb is open, type `target remote localhost:3333` to connect to OpenOCD. OpenOCD should give a message that it has accepted a gdb connection.
 Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `continue`.
 6. When you've finished running FreeRTOS, make sure to reset the SoC before running other tests or programs.
+
+The expected output from simple blinky test is:
+```
+[0]: Hello from RX
+[0]: Hello from TX
+[1] TX: awoken
+[1] RX: received value
+Blink !!!
+[1]: Hello from RX
+[1] TX: sent
+[1]: Hello from TX
+[2] TX: awoken
+[2] RX: received value
+Blink !!!
+[2]: Hello from RX
+[2] TX: sent
+[2]: Hello from TX
+[3] TX: awoken
+[3] RX: received value
+Blink !!!
+...
+```
+
+The expected output from full test is:
+```
+Starting main_full
+Pass....
+```
+
+If you see error messages, then something went wrong.
 
 ### Simulation ###
 
