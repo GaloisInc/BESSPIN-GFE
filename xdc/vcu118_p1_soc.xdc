@@ -14,15 +14,15 @@ set_property SLEW SLOW [get_ports rs232_uart_rts]
 
 # ----- PMOD0 Pins (J52 on VCU118) -----
 # ----- UART1 -----
-set_property IOSTANDARD LVCMOS18 [get_ports uart1_tx]
+set_property IOSTANDARD LVCMOS12 [get_ports uart1_tx]
 set_property PACKAGE_PIN AV16 [get_ports uart1_tx]; # PMOD_0_4
-set_property IOSTANDARD LVCMOS18 [get_ports uart1_rx]
+set_property IOSTANDARD LVCMOS12 [get_ports uart1_rx]
 set_property PACKAGE_PIN AU16 [get_ports uart1_rx]; # PMOD_0_5
 
 # ----- GPIO (output for motors) -----
-set_property IOSTANDARD LVCMOS18 [get_ports gpio_out[0]]
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[0]]
 set_property PACKAGE_PIN AY14 [get_ports gpio_out[0]]; # PMOD_0_0
-set_property IOSTANDARD LVCMOS18 [get_ports gpio_out[1]]
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[1]]
 set_property PACKAGE_PIN AY15 [get_ports gpio_out[1]]; # PMOD_0_1
 
 # ----- PMOD1 Pins (J53 on VCU118) -----
