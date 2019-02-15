@@ -21,9 +21,9 @@ cd $BASE_DIR/vivado
 vivado -mode batch -nojournal -nolog -notrace -source ../tcl/update_bootrom.tcl $PRJFILE
 err_msg $? "Error! Extracting memory information failed!"
 
-echo "Updating memory with data from $BASE_DIR/bootrom/bootrom.mem"
+echo "Updating memory with data from $BASE_DIR/bootrom/bootrom.bytereversed.mem"
 updatemem -force --meminfo $BASE_DIR/vivado/blk_mem_gen_0.mmi \
---data $BASE_DIR/bootrom/bootrom.mem \
+--data $BASE_DIR/bootrom/bootrom.bytereversed.mem \
 --bit $BITFILE --proc dummy -debug \
 -out $BASE_DIR/bitstreams/design_1_bootrom.bit
 err_msg $? "Error! Updating memory failed!"
