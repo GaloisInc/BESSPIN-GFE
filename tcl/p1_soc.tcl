@@ -171,7 +171,10 @@ if {[string equal [get_filesets -quiet constrs_1] ""]} {
 set obj [get_filesets constrs_1]
 
 # Add/Import constrs file and set constrs file properties
+# Add shared constraint files
 add_files -fileset constrs_1 [ glob $origin_dir/../xdc/vcu118_p1_soc.xdc ]
+# Add any processor specific constraint files
+add_files -fileset constrs_1 [ glob $origin_dir/../xdc/vcu118_p1_soc_${p1_name}.xdc ]
 
 # Set 'constrs_1' fileset properties
 set obj [get_filesets constrs_1]
