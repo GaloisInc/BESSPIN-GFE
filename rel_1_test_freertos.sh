@@ -5,7 +5,7 @@ BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 source $BASE_DIR/setup_env.sh
 cd $BASE_DIR/testing/scripts
 
-freertos_folder=$BASE_DIR/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Bluespec_Picollo/
+freertos_folder=$BASE_DIR/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1/
 python_unittest_script=test_gfe_unittest.py
 
 # $1: DEMO_TYPE

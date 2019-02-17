@@ -134,7 +134,7 @@ class TestFreeRTOS(unittest.TestCase):
         self.path_to_freertos = os.path.join(
                 os.path.dirname(os.path.dirname(os.getcwd())),
                 'FreeRTOS-mirror', 'FreeRTOS', 'Demo',
-                'RISC-V_Bluespec_Picollo')
+                'RISC-V_Galois_P1')
         # Setup pySerial UART
         self.gfe.setupUart(
             timeout = 1,
