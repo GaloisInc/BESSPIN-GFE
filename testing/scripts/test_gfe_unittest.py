@@ -157,7 +157,7 @@ class TestFreeRTOS(unittest.TestCase):
     def test_full(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
-           os.path.join( self.path_to_freertos, 'main.elf'))
+           os.path.join( self.path_to_freertos, 'main_full.elf'))
         print(freertos_elf)
         
         # Run elf in gdb
@@ -178,7 +178,7 @@ class TestFreeRTOS(unittest.TestCase):
     def test_blink(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
-           os.path.join( self.path_to_freertos, 'main.elf'))
+           os.path.join( self.path_to_freertos, 'main_blinky.elf'))
         print(freertos_elf)
         
         # Run elf in gdb

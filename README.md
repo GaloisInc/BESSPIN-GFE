@@ -76,6 +76,7 @@ sudo reboot
 6. Close the Vivado hardware manager (or just close Vivado).
 This prevents USB permissions errors (i.e. LIBUSB_ERROR_BUSY) 
 7. Run `./rel_1_test.sh` from the top level of the gfe repo.
+8. Run `./rel_1_test_freertos.sh` to run FreeRTOS tests.
 
 A passing test will not display any error messages. All failing tests will report errors and stop early.
 
@@ -91,13 +92,15 @@ sudo apt-get install minicom
 cd $GFE_REPO/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1
 
 # for simple blinky demo
-make clean; DEMO_TYPE=1 make
+make clean; PROG=main_blinky make
 
 # for full demo
-make clean; DEMO_TYPE=2 make
+make clean; PROG=main_full make
 
 source $GFE_REPO/setup_env.sh
 ```
+
+We expect to see warnings about memory alignment and timer demo functions when compiling.
 
 Follow these steps to run freeRTOS with an interactive GDB session:
 
@@ -106,7 +109,7 @@ Follow these steps to run freeRTOS with an interactive GDB session:
 3. In a new terminal, run minicom with `minicom -D /dev/ttyUSB1 -b 9600`. `ttyUSB1` should be replaced with whichever USB port is connected to the VCU118's USB-to-UART bridge.
 Settings can be configured by running `minicom -s` and selecting `Serial Port Setup` and then `Bps/Par/Bits`. 
 The UART is configured to have 8 data bits, 2 stop bits, no parity bits, and a baud rate of 9600.
-4. In a new terminal, run gdb with `riscv32-unknown-elf-gdb $GFE_REPO/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1/main.elf`.
+4. In a new terminal, run gdb with `riscv32-unknown-elf-gdb $GFE_REPO/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1/main_blinky.elf`, where `main_blinky` should be the name of the demo you have compiled and want to run.
 5. Once gdb is open, type `target remote localhost:3333` to connect to OpenOCD. OpenOCD should give a message that it has accepted a gdb connection.
 Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `continue`.
 6. When you've finished running FreeRTOS, make sure to reset the SoC before running other tests or programs.
