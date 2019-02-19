@@ -48,18 +48,18 @@ To build your own bitstream, make sure Vivado 2017.4 is on your path (`$ which v
 
 ```bash
 cd $GFE_REPO
-./setup_soc_project.sh chisel # generate vivado/p1_soc_chisel/p1_soc_chisel.xpr
-./build.sh chisel # generate bitstreams/p1_soc_chisel.bit
+./setup_soc_project.sh chisel_p1 # generate vivado/soc_chisel_p1/soc_chisel_p1.xpr
+./build.sh chisel_p1 # generate bitstreams/soc_chisel_p1.bit
 ```
 
 where GFE_REPO is the top level directory for the gfe repo. To view the project in the Vivado gui, run the following:
 
 ```bash
 cd $GFE_REPO/vivado
-vivado p1_soc_chisel/p1_soc_bluespec.xpr
+vivado soc_chisel_p1/soc_chisel_p1.xpr
 ```
 
-`setup_soc_project.sh` should only be run once. We also recommend running `build.sh` for the initial build then performing future builds using the Vivado GUI to take advantage of convenient error reporting and visibility into the build process. The Vivado project will be generated in the `$GFE_REPO/vivado/p1_soc_$p1_name` folder of the repository and can be re-opened there. Note that all the same commands can be run with the argument `bluespec` to generate the bluespec P1 bitstream and corresponding Vivado project (i.e. `./setup_soc_project.sh bluespec`).
+`setup_soc_project.sh` should only be run once. We also recommend running `build.sh` for the initial build then performing future builds using the Vivado GUI to take advantage of convenient error reporting and visibility into the build process. The Vivado project will be generated in the `$GFE_REPO/vivado/soc_$proc_name` folder of the repository and can be re-opened there. Note that all the same commands can be run with the argument `bluespec_p1` to generate the bluespec P1 bitstream and corresponding Vivado project (i.e. `./setup_soc_project.sh bluespec`).
 
 ### Testing ###
 
@@ -72,7 +72,7 @@ sudo reboot
 ```
 3. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
 4. Make sure the VCU118 is powered on (fan should be running) 
-5. Program the FPGA with the bit file (i.e. [bitstreams/p1_soc_chisel.bit](bitstreams/p1_soc_chisel.bit)) using the Vivado hardware manager.
+5. Program the FPGA with the bit file (i.e. [bitstreams/soc_chisel_p1.bit](bitstreams/soc_chisel_p1.bit)) using the Vivado hardware manager.
 6. Close the Vivado hardware manager (or just close Vivado).
 This prevents USB permissions errors (i.e. LIBUSB_ERROR_BUSY) 
 7. Run `./rel_1_test.sh` from the top level of the gfe repo.
@@ -150,7 +150,7 @@ Click `Run Simulation` in the Vivado GUI and refer to the Vivado documentation f
 
 ### Adding in Your Processor ###
 
-We recommend using the Vivado IP integrator flow to add a new processor into the GFE. This should require minimal effort to integrate the processor and this flow is already demonstrated for the Chisel and Bluespec P1 processors. Using the integrator flow requires wrapping the processor in a Xilinx User IP block and updating the necessary IP search paths to find the new IP. The Chisel and Bluespec Vivado projects are created by sourcing the same tcl for the block diagram (`p1_soc_bd.tcl`). The only difference is the location from which it pulls in the mkP1_Core_v1_0 IP block.
+We recommend using the Vivado IP integrator flow to add a new processor into the GFE. This should require minimal effort to integrate the processor and this flow is already demonstrated for the Chisel and Bluespec P1 processors. Using the integrator flow requires wrapping the processor in a Xilinx User IP block and updating the necessary IP search paths to find the new IP. The Chisel and Bluespec Vivado projects are created by sourcing the same tcl for the block diagram (`soc_bd.tcl`). The only difference is the location from which it pulls in the ssith_processor IP block.
 
 The steps to add in a new processor are as follows:
 
@@ -175,11 +175,11 @@ The steps to add in a new processor are as follows:
     * Note that the component.xml file contains a set of files used for simulation (xilinx_anylanguagebehavioralsimulation_view_fileset) and another set used for synthesis. Make sure to replace or remove file entries as necessary in each of these sections.
     * Vivado discovers user IP by searching all it's IP repository paths looking for component.xml files. This is the reason for the specific name. This file fully describes the new processor's IP block and can be modified through a gui if desired using the IP packager flow. It is easier to start with an example component.xml file to ensure the port naming and external interfaces match those used by the block diagram.
 
-3. Add your processor to `$GFE_REPO/tcl/p1_mapping.tcl`. Add a line here to include the mapping between your processor name and directory containing the component.xml file. This mapping is used by the `p1_soc.tcl` build script.
+3. Add your processor to `$GFE_REPO/tcl/proc_mapping.tcl`. Add a line here to include the mapping between your processor name and directory containing the component.xml file. This mapping is used by the `soc.tcl` build script.
     ```bash
-    vim tcl/p1_mapping.tcl
+    vim tcl/proc_mapping.tcl
     # Add line if component.xml lives at ../new_processor/component.xml
-    + dict set p1_mapping new_processor "../new_processor"
+    + dict set proc_mapping new_processor "../new_processor"
     ```
    The mapping path is relative to the `$GFE_REPO/tcl` path
 4. Create a new Vivado project with your new processor by running the following:
@@ -187,7 +187,7 @@ The steps to add in a new processor are as follows:
     cd $GFE_REPO
     ./setup_soc_project.sh new_processor
     ```
-   new_processor is the name specified in the `$GFE_REPO/tcl/p1_mapping.tcl` file.
+   new_processor is the name specified in the `$GFE_REPO/tcl/proc_mapping.tcl` file.
 
 5. Synthesize and build the design using the normal flow. Note that users will have to update the User IP as prompted in the gui after each modification to the component.xml file or reference Verilog files.
 
@@ -197,7 +197,7 @@ All that is required (and therefore tracked by git) to create a Xilinx User IP b
 
 ### Modifying the GFE ###
 
-To save changes to the block diagram in git (everything outside the P1 IP block), please open the block diagram in Vivado and run `write_bd_tcl -force ../tcl/p1_soc_bd.tcl`. Additionally, update `tcl/p1_soc.tcl` to add any project settings.
+To save changes to the block diagram in git (everything outside the P1 IP block), please open the block diagram in Vivado and run `write_bd_tcl -force ../tcl/soc_bd.tcl`. Additionally, update `tcl/soc.tcl` to add any project settings.
 
 ### Rebuilding the Chisel and Bluespec Processors ###
 

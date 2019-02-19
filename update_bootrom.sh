@@ -4,9 +4,9 @@
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 source $BASE_DIR/setup_env.sh
 
-p1_picker $1
+proc_picker $1
 
-PRJNAME=p1_soc_${p1_name}
+PRJNAME=soc_${proc_name}
 BITFILE=$BASE_DIR/vivado/${PRJNAME}/${PRJNAME}.runs/impl_1/design_1.bit
 LTXFILE=$BASE_DIR/vivado/${PRJNAME}/${PRJNAME}.runs/impl_1/design_1.ltx
 PRJFILE=${PRJNAME}/${PRJNAME}.xpr

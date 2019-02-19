@@ -11,10 +11,10 @@
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 source $BASE_DIR/setup_env.sh
 
-p1_picker $1
+proc_picker $1
 
-bitfile=./bitstreams/p1_soc_${p1_name}.bit
-probfile=./bitstreams/p1_soc_${p1_name}.ltx
+bitfile=./bitstreams/soc_${proc_name}.bit
+probfile=./bitstreams/soc_${proc_name}.ltx
 
 if [ "a$2" != "a" ]
 then
