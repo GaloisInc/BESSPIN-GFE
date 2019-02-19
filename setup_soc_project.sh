@@ -6,14 +6,16 @@ cd $BASE_DIR
 source $BASE_DIR/setup_env.sh
 source $BASE_DIR/init_submodules.sh
 
-p1_name=""
-p1_path=""
+proc_name=""
+proc_path=""
 
 # Parse the processor selection
-if [ "$1" == "bluespec" ]; then
-	p1_name="bluespec"
-elif [ "$1" == "chisel" ]; then
-	p1_name="chisel"
+if [ "$1" == "bluespec_p1" ]; then
+	proc_name="bluespec_p1"
+elif [ "$1" == "bluespec_p2" ]; then
+	proc_name="bluespec_p2"
+elif [ "$1" == "chisel_p1" ]; then
+	proc_name="chisel_p1"
 fi 
 
 # Compile the bootrom
@@ -29,10 +31,10 @@ mkdir -p $BASE_DIR/vivado
 cd $BASE_DIR/vivado
 
 # Run vivado to create a top level project
-# See p1_soc.tcl for detailed options
-vivado -mode batch -source $BASE_DIR/tcl/p1_soc.tcl \
+# See soc.tcl for detailed options
+vivado -mode batch -source $BASE_DIR/tcl/soc.tcl \
 -tclargs --origin_dir $BASE_DIR/tcl \
---p1_name $p1_name
+--proc_name $proc_name
 
 err_msg $? "Creating the vivado project failed"
 

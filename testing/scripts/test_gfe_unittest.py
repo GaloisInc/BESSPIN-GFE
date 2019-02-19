@@ -134,7 +134,7 @@ class TestFreeRTOS(unittest.TestCase):
         self.path_to_freertos = os.path.join(
                 os.path.dirname(os.path.dirname(os.getcwd())),
                 'FreeRTOS-mirror', 'FreeRTOS', 'Demo',
-                'RISC-V_Bluespec_Picollo')
+                'RISC-V_Galois_P1')
         # Setup pySerial UART
         self.gfe.setupUart(
             timeout = 1,
@@ -157,35 +157,28 @@ class TestFreeRTOS(unittest.TestCase):
     def test_full(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
-           os.path.join( self.path_to_freertos, 'main.elf'))
+           os.path.join( self.path_to_freertos, 'main_full.elf'))
         print(freertos_elf)
         
         # Run elf in gdb
-        self.gfe.gdb_session.interrupt()
-        self.gfe.gdb_session.command("file {}".format(freertos_elf))
-        self.gfe.gdb_session.load()
-        initial_timeout = self.gfe.gdb_session.timeout
-        # Set a timeout for the freeRTOS test
-        # continue command "c" will timeout after timeout * 10 seconds
-        # see testlib.py for more info
-        self.gfe.gdb_session.timeout = 1
-        self.gfe.gdb_session.c(wait=True)
-        self.gfe.gdb_session.timeout = initial_timeout
+	self.gfe.launchElf(freertos_elf)
+
+	time.sleep(3)
 
         # Receive print statements
         num_rxed =  self.gfe.uart_session.in_waiting
         rx = self.gfe.uart_session.read( num_rxed ) 
         print("received {}".format(rx))
 
-        self.gfe.gdb_session.interrupt()
-        regval = self.gfe.gdb_session.p("$t6")
-        print("t6: {}".format(hex(regval)))
-        self.assertEqual(0xdeadbeef, regval)
+        self.assertIn("main_full", rx)
+        self.assertIn("Pass", rx)
+
+        return
         
     def test_blink(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
-           os.path.join( self.path_to_freertos, 'main.elf'))
+           os.path.join( self.path_to_freertos, 'main_blinky.elf'))
         print(freertos_elf)
         
         # Run elf in gdb
