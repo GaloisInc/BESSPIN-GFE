@@ -1,0 +1,108 @@
+import "PeripheralCommands.cry";
+
+let alloc_init ty v = do {
+    p <- crucible_alloc ty;
+    crucible_points_to p v;
+    return p;
+};
+
+let ptr_to_fresh n ty = do {
+    x <- crucible_fresh_var n ty;
+    p <- alloc_init ty (crucible_term x);
+    return (x, p);
+};
+
+let main = do {
+   m <- llvm_load_module "../bootrom.bc";
+   print m;
+   // assume_unsat is used to setup givens. These proofs are not actually true.
+    cmd_fence_equiv <- crucible_llvm_verify m "secure_boot_cmd_fence" [] false (do {
+        world0 <- crucible_fresh_var "world0" (llvm_int 32);
+        crucible_execute_func [crucible_term world0];
+        crucible_return (crucible_term {{ cmd_fence world0 }});
+    }) assume_unsat;
+    cmd_write32_equiv <- crucible_llvm_verify m "secure_boot_cmd_write32" [] false (do {
+        addr <- crucible_fresh_var "addr" (llvm_type "i32*");
+        mask <- crucible_fresh_var "mask" (llvm_int 32);
+        value <- crucible_fresh_var "value" (llvm_int 32);
+        world <- crucible_fresh_var "world" (llvm_int 32);
+        crucible_execute_func [
+            crucible_term addr,
+            crucible_term mask,
+            crucible_term value,
+            crucible_term world
+        ];
+        crucible_return (crucible_term {{ cmd_write32 addr mask value world }});
+    }) assume_unsat;
+    cmd_read32_equiv <- crucible_llvm_verify m "secure_boot_cmd_read32" [] false (do {
+        addr <- crucible_fresh_var "addr" (llvm_type "i32*");
+        mask <- crucible_fresh_var "mask" (llvm_int 32);
+        value <- crucible_fresh_var "value" (llvm_int 32);
+        world <- crucible_fresh_var "world" (llvm_int 32);
+        (no_failures, no_failuresp) <- ptr_to_fresh "no_failures" (llvm_int 8);
+        crucible_execute_func [
+            crucible_term addr,
+            crucible_term mask,
+            crucible_term value,
+            crucible_term world,
+            no_failuresp
+        ];
+        crucible_return (crucible_term {{ (cmd_read32 addr mask value world).world }});
+        crucible_points_to no_failuresp (crucible_term {{ if (cmd_read32 addr mask value world).no_failures then no_failures else 0 }});
+    }) assume_unsat;
+    cmd_copy_equiv <- crucible_llvm_verify m "secure_boot_cmd_copy" [] false (do {
+        dst <- crucible_fresh_var "dst" (llvm_type "i8*");
+        src <- crucible_fresh_var "src" (llvm_type "i8*");
+        size <- crucible_fresh_var "size" (llvm_int 32);
+        world <- crucible_fresh_var "world" (llvm_int 32);
+        crucible_execute_func [
+            crucible_term dst,
+            crucible_term src,
+            crucible_term size,
+            crucible_term world
+        ];
+        crucible_return (crucible_term {{ cmd_copy dst src size world }});
+    }) assume_unsat;
+    cmd_sha256_equiv <- crucible_llvm_verify m "secure_boot_cmd_sha256" [] false (do {
+        addr <- crucible_fresh_var "addr" (llvm_type "i8*");
+        size <- crucible_fresh_var "size" (llvm_int 32);
+        (expected, expectedp) <- ptr_to_fresh "expected" (llvm_struct "struct.sha256_bytes");
+        world <- crucible_fresh_var "world" (llvm_int 32);
+        (no_failures, no_failuresp) <- ptr_to_fresh "no_failures" (llvm_int 8);
+        crucible_execute_func [
+            crucible_term addr,
+            crucible_term size,
+            expectedp,
+            crucible_term world,
+            no_failuresp
+        ];
+        crucible_return (crucible_term {{ (cmd_sha256 addr size expected world).world }});
+        crucible_points_to no_failuresp (crucible_term {{ if (cmd_sha256 addr size expected world).no_failures then no_failures else 0 }});
+    }) assume_unsat;
+    let unints = [
+        "cmd_fence",
+        "cmd_write32",
+        "cmd_read32",
+        "cmd_copy",
+        "cmd_sha256"
+    ];
+    //let proof_strategy = offline_unint_smtlib2 unints "native";
+    let proof_strategy = unint_yices unints;
+    crucible_llvm_verify m "secure_boot_measure_peripherals_internal" [
+        cmd_fence_equiv,
+        cmd_write32_equiv,
+        cmd_read32_equiv,
+        cmd_copy_equiv,
+        cmd_sha256_equiv
+    ] false (do {
+        (no_failures, no_failuresp) <- ptr_to_fresh "no_failures" (llvm_int 8);
+        world0 <- crucible_fresh_var "world0" (llvm_int 32);
+        crucible_precond {{ no_failures == 1 }};
+        crucible_execute_func [crucible_term world0, no_failuresp];
+        crucible_return (crucible_term {{ (result world0).world }});
+        crucible_points_to no_failuresp (crucible_term {{ (if (result world0).no_failures then 1 else 0) : [8] }});
+    }) proof_strategy;
+    print "Done.";
+};
+
+main;

@@ -1,0 +1,40 @@
+import "SHA256.cry";
+
+let BIT_WIDTH_STRING = get_opt 3;
+let BIT_WIDTH_32 = eval_bool {{BIT_WIDTH_STRING == "32"}};
+
+let to_size_t n = if BIT_WIDTH_32 then {{`(n):[32]}} else {{`(n):[64]}};
+
+let alloc_init ty v = do {
+     p <- crucible_alloc ty;
+     crucible_points_to p v;
+     return p;
+};
+
+let ptr_to_fresh n ty = do {
+    x <- crucible_fresh_var n ty;
+    p <- alloc_init ty (crucible_term x);
+    return (x, p);
+};
+
+let lshaspec n = do {
+   (d, dp) <- ptr_to_fresh "d" (llvm_array n (llvm_int 8));
+   (md, mdp) <- ptr_to_fresh "md" (llvm_array 32 (llvm_int 8));
+   crucible_execute_func [dp, crucible_term (to_size_t n), mdp];
+   crucible_points_to mdp (crucible_term {{ split (SHA256`{n} d) : [32][8] }});
+};
+
+let main = do {
+   m <- llvm_load_module "../bootrom.bc";
+   print m;
+   time (
+    crucible_llvm_verify m "SHA256"
+      []
+      true
+      (lshaspec 127) // arbitrary 127-byte message  (WHY 127??)
+      yices);
+   print "Done.";
+};
+
+main;
+

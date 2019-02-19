@@ -1,0 +1,10 @@
+*.o
+*.dump
+*.elf
+*.d
+*.bcd
+bootrom.bytereversed.mem
+devicetree.dtb
+*.pyc
+*.bc
+

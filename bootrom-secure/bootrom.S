@@ -1,21 +1,24 @@
-#define FLASH_BASE 0x40000000
-
-	.text
-	.globl _start
+    .section .text_start, "ax", @progbits
+    .globl _start
 _start:
-	// Rocket apparently needs this, but it will likely trap on Piccolo and Flute
-	csrwi 0x7c1, 0 // disable chicken bits
-
 	csrr a0, mhartid
 	la a1, _dtb
 
-	//li t0, FLASH_BASE
-	//jr t0
+    // Now we need to setup the stack so that we can enter the C code
+    // We intentionally have the end of the stack be the beginning of DRAM. This
+    // way, (assuming nothing is mapped immediately before DRAM) stack overflows
+    // will trigger a trap.
+    li sp, 0x80400000
+    // The call operation doesn't misalign the stack, because it doesn't even
+    // touch the stack. It just writes the return address to a register, which
+    // ought to be caller-saved.
+    call bootrom_main
+    // If the call returns, we loop forever. It shouldn't return, though.
 1:
-	j 1b
+    j 1b
 
-	.data
-	.globl _dtb
-	.align 5, 0
+    .section .rodata, "a", @progbits
+    .globl _dtb
+    .align 5, 0
 _dtb:
-	.incbin "devicetree.dtb"
+    .incbin "devicetree.dtb"
