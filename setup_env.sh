@@ -25,7 +25,7 @@ function check_file {
 }
 
 function proc_usage {
-        echo "Usage: $0 [chisel_p1|bluespec_p1|bluespec_p2]"
+        echo "Usage: $0 [chisel_p1|chisel_p2|bluespec_p1|bluespec_p2]"
         echo "Please specify a bluespec or chisel processor!"
 }
 
@@ -37,6 +37,8 @@ function proc_picker {
 	        proc_name="bluespec_p2"
 	elif [ "$1" == "chisel_p1" ]; then
 	        proc_name="chisel_p1"
+	elif [ "$1" == "chisel_p2" ]; then
+	        proc_name="chisel_p2"
 	else
 	        proc_usage
 	        exit -1
