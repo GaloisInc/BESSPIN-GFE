@@ -10,13 +10,7 @@ proc_name=""
 proc_path=""
 
 # Parse the processor selection
-if [ "$1" == "bluespec_p1" ]; then
-	proc_name="bluespec_p1"
-elif [ "$1" == "bluespec_p2" ]; then
-	proc_name="bluespec_p2"
-elif [ "$1" == "chisel_p1" ]; then
-	proc_name="chisel_p1"
-fi 
+proc_picker $1 
 
 # Compile the bootrom
 cd $BASE_DIR/bootrom
