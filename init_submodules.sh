@@ -9,6 +9,6 @@ FreeRTOS-mirror bluespec-processors/P1/Piccolo
 git submodule update --init chisel_processors
 
 cd chisel_processors
-git submodule update --init P1/rocket-chip
-cd P1/rocket-chip
+git submodule update --init rocket-chip
+cd rocket-chip
 git submodule update --init firrtl chisel3 hardfloat
