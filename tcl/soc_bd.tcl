@@ -89,7 +89,7 @@ if { ${design_name} eq "" } {
    set errMsg "Design <$design_name> already exists in your project, please set the variable <design_name> to another value."
    set nRet 1
 } elseif { [get_files -quiet ${design_name}.bd] ne "" } {
-   # USE CASES: 
+   # USE CASES:
    #    6) Current opened design, has components, but diff names, design_name exists in project.
    #    7) No opened design, design_name exists in project.
 
@@ -123,8 +123,9 @@ set bCheckIPsPassed 1
 ##################################################################
 set bCheckIPs 1
 if { $bCheckIPs == 1 } {
-   set list_check_ips "\ 
+   set list_check_ips "\
 Galois:user:iobuf:1.0\
+bluespec:user:mkSVF_Bridge:1.0\
 ssith:user:ssith_processor:1.0\
 ssith:user:xilinx_jtag:1.0\
 xilinx.com:ip:axi_bram_ctrl:4.0\
@@ -330,7 +331,7 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   # Create instance: ddr4_0, and set properties
   set ddr4_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:ddr4:2.2 ddr4_0 ]
   set_property -dict [ list \
-   CONFIG.ADDN_UI_CLKOUT1_FREQ_HZ {83} \
+   CONFIG.ADDN_UI_CLKOUT1_FREQ_HZ {25} \
    CONFIG.C0_CLOCK_BOARD_INTERFACE {default_250mhz_clk1} \
    CONFIG.C0_DDR4_BOARD_INTERFACE {ddr4_sdram_c1} \
    CONFIG.RESET_BOARD_INTERFACE {reset} \
@@ -501,6 +502,9 @@ proc create_root_design { parentCell } {
   # Create instance: iobuf_0, and set properties
   set iobuf_0 [ create_bd_cell -type ip -vlnv Galois:user:iobuf:1.0 iobuf_0 ]
 
+  # Create instance: mkSVF_Bridge_0, and set properties
+  set mkSVF_Bridge_0 [ create_bd_cell -type ip -vlnv bluespec:user:mkSVF_Bridge:1.0 mkSVF_Bridge_0 ]
+
   # Create instance: ssith_processor_0, and set properties
   set ssith_processor_0 [ create_bd_cell -type ip -vlnv ssith:user:ssith_processor:1.0 ssith_processor_0 ]
 
@@ -528,6 +532,7 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net default_250mhz_clk1_1 [get_bd_intf_ports default_250mhz_clk1] [get_bd_intf_pins gfe_subsystem/default_250mhz_clk1]
   connect_bd_intf_net -intf_net gfe_subsystem_sgmii_lvds [get_bd_intf_ports sgmii_lvds] [get_bd_intf_pins gfe_subsystem/sgmii_lvds]
   connect_bd_intf_net -intf_net sgmii_phyclk_1 [get_bd_intf_ports sgmii_phyclk] [get_bd_intf_pins gfe_subsystem/sgmii_phyclk]
+  connect_bd_intf_net -intf_net ssith_processor_0_tv_verifier_info_tx [get_bd_intf_pins mkSVF_Bridge_0/axi_in] [get_bd_intf_pins ssith_processor_0/tv_verifier_info_tx]
 
   # Create port connections
   connect_bd_net -net Net [get_bd_ports mdio_io] [get_bd_pins iobuf_0/io]
@@ -536,6 +541,7 @@ proc create_root_design { parentCell } {
   connect_bd_net -net gfe_subsystem_eth_mdio_mdc [get_bd_ports mdio_mdc] [get_bd_pins gfe_subsystem/eth_mdio_mdc]
   connect_bd_net -net gfe_subsystem_eth_mdio_mdio_o [get_bd_pins gfe_subsystem/eth_mdio_mdio_o] [get_bd_pins iobuf_0/data_i]
   connect_bd_net -net gfe_subsystem_eth_mdio_mdio_t [get_bd_pins gfe_subsystem/eth_mdio_mdio_t] [get_bd_pins iobuf_0/data_t]
+  connect_bd_net -net ddr4_0_addn_ui_clkout1 [get_bd_pins gfe_subsystem/ACLK] [get_bd_pins mkSVF_Bridge_0/CLK] [get_bd_pins ssith_processor_0/CLK] [get_bd_pins xilinx_jtag_0/clk]
   connect_bd_net -net gfe_subsystem_interrupt [get_bd_pins gfe_subsystem/interrupt] [get_bd_pins ssith_processor_0/cpu_external_interrupt_req]
   connect_bd_net -net gfe_subsystem_phy_reset_out [get_bd_ports phy_reset_out] [get_bd_pins gfe_subsystem/phy_reset_out]
   connect_bd_net -net gfe_subsystem_rs232_uart_rts [get_bd_ports rs232_uart_rts] [get_bd_pins gfe_subsystem/rs232_uart_rts]
@@ -544,7 +550,7 @@ proc create_root_design { parentCell } {
   connect_bd_net -net rs232_uart_cts_1 [get_bd_ports rs232_uart_cts] [get_bd_pins gfe_subsystem/rs232_uart_cts]
   connect_bd_net -net rs232_uart_rxd_1 [get_bd_ports rs232_uart_rxd] [get_bd_pins gfe_subsystem/rs232_uart_rxd]
   connect_bd_net -net ssith_processor_0_jtag_tdo [get_bd_pins ssith_processor_0/jtag_tdo] [get_bd_pins xilinx_jtag_0/tdo]
-  connect_bd_net -net util_vector_logic_0_Res [get_bd_pins gfe_subsystem/ARESETN] [get_bd_pins ssith_processor_0/RST_N] [get_bd_pins xilinx_jtag_0/rst_n]
+  connect_bd_net -net util_vector_logic_0_Res [get_bd_pins gfe_subsystem/ARESETN] [get_bd_pins mkSVF_Bridge_0/RST_N] [get_bd_pins ssith_processor_0/RST_N] [get_bd_pins xilinx_jtag_0/rst_n]
   connect_bd_net -net xilinx_jtag_0_tck [get_bd_pins ssith_processor_0/jtag_tclk] [get_bd_pins xilinx_jtag_0/tck]
   connect_bd_net -net xilinx_jtag_0_tdi [get_bd_pins ssith_processor_0/jtag_tdi] [get_bd_pins xilinx_jtag_0/tdi]
   connect_bd_net -net xilinx_jtag_0_tms [get_bd_pins ssith_processor_0/jtag_tms] [get_bd_pins xilinx_jtag_0/tms]
@@ -638,5 +644,3 @@ proc create_root_design { parentCell } {
 ##################################################################
 
 create_root_design ""
-
-
