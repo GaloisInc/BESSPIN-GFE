@@ -22,7 +22,11 @@ class TestGfe(unittest.TestCase):
     def setUp(self):
         requestReset()
         self.gfe = gfetester.gfetester()
-        self.gfe.startGdb()
+        if '32' in getArch():
+            gdb_path = gfeparameters.gdb_path32
+        else:
+            gdb_path = gfeparameters.gdb_path64
+        self.gfe.startGdb(gdb_path=gdb_path)
         self.path_to_asm = os.path.join(
                 os.path.dirname(os.getcwd()), 'baremetal', 'asm')
         self.path_to_freertos = os.path.join(

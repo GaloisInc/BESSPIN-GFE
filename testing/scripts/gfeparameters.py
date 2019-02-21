@@ -18,6 +18,8 @@ gdb_port = 3333
 
 riscv_home = os.environ['RISCV']
 gdb_path = os.path.join(riscv_home, "bin", "riscv32-unknown-elf-gdb")
+gdb_path32 = os.path.join(riscv_home, "bin", "riscv32-unknown-elf-gdb")
+gdb_path64 = os.path.join(riscv_home, "bin", "riscv64-unknown-elf-gdb")
 openocd_command = os.path.join(riscv_home, "bin", "openocd")
 openocd_cfg_path = os.path.join(
     os.path.dirname(script_dir), "targets", "p1_hs2.cfg")
