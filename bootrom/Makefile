@@ -13,8 +13,7 @@ DTC=dtc
 all: $(bootrom_img) $(bootrom_mem) $(bootrom_coe) $(bootrom_rev_mem)
 
 %.mem: %.bin
-	hexdump -e '16/4 "%02x " "\n"' $*.bin > $*.hex
-	python hexToMem.py > $@
+	(echo @00000000; od -tx4 -An -w4 -v $<) > $@
 
 %.bytereversed.mem: %.mem
 	cat $< | python byteReverseMem.py > $@
