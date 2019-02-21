@@ -8,11 +8,19 @@ import gfetester
 import gfeparameters
 import os
 import time
+import struct
+
+def requestReset():
+    print("Please manually reset the VCU118 by pressing the CPU Reset button (SW5) before running a FreeRTOS tests.")
+    raw_input("After resetting the CPU, press enter to continue...")
 
 
 class TestGfe(unittest.TestCase):
+    def getArch(self):
+        return 'rv32ui'
 
     def setUp(self):
+        requestReset()
         self.gfe = gfetester.gfetester()
         self.gfe.startGdb()
         self.path_to_asm = os.path.join(
@@ -32,33 +40,47 @@ class TestGfe(unittest.TestCase):
 
     def test_uart(self):
         # Load up the UART test program
-        uart_elf = os.path.abspath(
-            os.path.join(self.path_to_asm, 'rv32ui-p-uart'))
+        print("arch = " + self.getArch())
+        if '64' in self.getArch():
+            uart_elf = 'rv64ui-p-uart'
+        else:
+            uart_elf = 'rv32ui-p-uart'
+
+        uart_elf_path = os.path.abspath(
+            os.path.join(self.path_to_asm, uart_elf))
+        print("Using: " + uart_elf_path)
         self.gfe.setupUart(
             timeout = 1,
             baud=9600,
             parity="NONE",
             stopbits=2,
             bytesize=8)
-        self.gfe.launchElf(uart_elf)
+
+        self.gfe.launchElf(uart_elf_path)
 
         # Allow the riscv program to get started and configure UART
-        time.sleep(0.1)
+        time.sleep(0.2)
 
         for test_char in [b'a', b'z', b'd']:
-            print("sent {}".format(test_char))
+
             self.gfe.uart_session.write(test_char)
+            print("host sent ", test_char)
             b = self.gfe.uart_session.read()
-            print("received {}".format(b))
+            print("riscv received ", b)
             self.assertEqual(
                 b, test_char,
-                "Character received %x does not match test test_char %x".format(
+                "Character received {} does not match test test_char {}".format(
                     b, test_char) )
         return
 
     def test_interrupt(self):
+        if '64' in self.getArch():
+            interrupt_elf = 'rv64ui-p-uart_interrupt'
+        else:
+            interrupt_elf = 'rv32ui-p-uart_interrupt'
+
         # Load the UART Interrupt test program
-        interrupt_elf = os.path.abspath(
+        interrupt_elf_path = os.path.abspath(
             os.path.join(self.path_to_asm, 'rv32ui-p-uart_interrupt'))
         self.gfe.setupUart(
             timeout = 1,
@@ -66,7 +88,7 @@ class TestGfe(unittest.TestCase):
             parity="NONE",
             stopbits=2,
             bytesize=8)
-        self.gfe.launchElf(interrupt_elf)
+        self.gfe.launchElf(interrupt_elf_path)
 
         # Allow the riscv program to get started and configure UART
         time.sleep(0.1)
@@ -123,12 +145,20 @@ class TestGfe(unittest.TestCase):
             )
         return
 
+class TestGfe32(TestGfe):
+
+    def getArch(self):
+        return 'rv32ui'
+
+class TestGfe64(TestGfe):
+
+    def getArch(self):
+        return 'rv64ui'
 
 class TestFreeRTOS(unittest.TestCase):
 
     def setUp(self):
-        print("Please manually reset the VCU118 by pressing the CPU Reset button (SW5) before running a FreeRTOS tests.")
-        raw_input("After resetting the CPU, press enter to continue...")
+        requestReset()
         self.gfe = gfetester.gfetester()
         self.gfe.startGdb()
         self.path_to_freertos = os.path.join(

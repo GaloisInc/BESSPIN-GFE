@@ -140,7 +140,7 @@ class gfetester(object):
                 data = gdblog.read()
             return data
         else:
-            return "Empty"
+            return "No gdb_session open."
 
     def riscvRead32(self, address):
         """Read 32 bits from memory using the riscv core
