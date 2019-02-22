@@ -47,6 +47,9 @@ set_property DRIVE 8 [get_ports spi_miso]
 set_property IOSTANDARD LVCMOS12 [get_ports spi_sck]
 set_property PACKAGE_PIN R29 [get_ports spi_sck]; # PMOD_1_7
 set_property DRIVE 8 [get_ports spi_sck]
+set_property IOSTANDARD LVCMOS12 [get_ports debug_sck_o]
+set_property PACKAGE_PIN N30 [get_ports debug_sck_o]; # PMOD_1_2
+set_property DRIVE 8 [get_ports debug_sck_o]
 
 # ----- User GPIO LEDs -----
 set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[7]]

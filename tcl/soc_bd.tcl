@@ -207,6 +207,7 @@ proc create_hier_cell_spi { parentCell nameHier } {
   # Create pins
   create_bd_pin -dir I -type clk ACLK
   create_bd_pin -dir I -type rst ARESETN
+  create_bd_pin -dir O debug_sck_o
   create_bd_pin -dir O -type intr ip2intc_irpt
   create_bd_pin -dir IO spi_miso
   create_bd_pin -dir IO spi_mosi
@@ -215,6 +216,9 @@ proc create_hier_cell_spi { parentCell nameHier } {
 
   # Create instance: axi_quad_spi_0, and set properties
   set axi_quad_spi_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_quad_spi_0 ]
+  set_property -dict [ list \
+   CONFIG.Multiples16 {52} \
+ ] $axi_quad_spi_0
 
   # Create instance: iobuf_2, and set properties
   set iobuf_2 [ create_bd_cell -type ip -vlnv user.org:user:iobuf:1.0 iobuf_2 ]
@@ -242,7 +246,7 @@ proc create_hier_cell_spi { parentCell nameHier } {
   connect_bd_net -net axi_quad_spi_0_io1_o [get_bd_pins axi_quad_spi_0/io1_o] [get_bd_pins iobuf_3/I]
   connect_bd_net -net axi_quad_spi_0_io1_t [get_bd_pins axi_quad_spi_0/io1_t] [get_bd_pins iobuf_3/T]
   connect_bd_net -net axi_quad_spi_0_ip2intc_irpt [get_bd_pins ip2intc_irpt] [get_bd_pins axi_quad_spi_0/ip2intc_irpt]
-  connect_bd_net -net axi_quad_spi_0_sck_o [get_bd_pins axi_quad_spi_0/sck_o] [get_bd_pins iobuf_4/I]
+  connect_bd_net -net axi_quad_spi_0_sck_o [get_bd_pins debug_sck_o] [get_bd_pins axi_quad_spi_0/sck_o] [get_bd_pins iobuf_4/I]
   connect_bd_net -net axi_quad_spi_0_sck_t [get_bd_pins axi_quad_spi_0/sck_t] [get_bd_pins iobuf_4/T]
   connect_bd_net -net axi_quad_spi_0_ss_o [get_bd_pins axi_quad_spi_0/ss_o] [get_bd_pins iobuf_5/I]
   connect_bd_net -net axi_quad_spi_0_ss_t [get_bd_pins axi_quad_spi_0/ss_t] [get_bd_pins iobuf_5/T]
@@ -438,6 +442,7 @@ proc create_hier_cell_gfe_subsystem { parentCell nameHier } {
   create_bd_pin -dir O -type clk ACLK
   create_bd_pin -dir O -from 0 -to 0 -type rst ARESETN
   create_bd_pin -dir O -type rst c0_ddr4_ui_clk_sync_rst
+  create_bd_pin -dir O debug_sck_o
   create_bd_pin -dir O -from 7 -to 0 gpio_led
   create_bd_pin -dir O -from 1 -to 0 gpio_out
   create_bd_pin -dir IO iic_scl
@@ -595,6 +600,7 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   connect_bd_net -net reset_1 [get_bd_pins reset] [get_bd_pins ddr4_0/sys_rst] [get_bd_pins reset_system/reset]
   connect_bd_net -net rs232_uart_cts_1 [get_bd_pins rs232_uart_cts] [get_bd_pins axi_uart16550_0/ctsn]
   connect_bd_net -net rs232_uart_rxd_1 [get_bd_pins rs232_uart_rxd] [get_bd_pins axi_uart16550_0/sin]
+  connect_bd_net -net spi_debug_sck_o [get_bd_pins debug_sck_o] [get_bd_pins spi/debug_sck_o]
   connect_bd_net -net uart1_rx_1 [get_bd_pins uart1_rx] [get_bd_pins axi_uart16550_1/sin]
   connect_bd_net -net xlconcat_0_dout [get_bd_pins interrupts] [get_bd_pins xlconcat_0/dout]
   connect_bd_net -net xlconstant_0_dout [get_bd_pins axi_uart16550_0/freeze] [get_bd_pins reset_system/mb_debug_sys_rst] [get_bd_pins xlconstant_0/dout]
@@ -646,6 +652,7 @@ proc create_root_design { parentCell } {
    ] $default_250mhz_clk1
 
   # Create ports
+  set debug_sck_o [ create_bd_port -dir O debug_sck_o ]
   set gpio_led [ create_bd_port -dir O -from 7 -to 0 gpio_led ]
   set gpio_out [ create_bd_port -dir O -from 1 -to 0 gpio_out ]
   set iic_scl [ create_bd_port -dir IO iic_scl ]
@@ -688,6 +695,7 @@ proc create_root_design { parentCell } {
   connect_bd_net -net Net4 [get_bd_ports spi_sck] [get_bd_pins gfe_subsystem/spi_sck]
   connect_bd_net -net Net5 [get_bd_ports spi_ss] [get_bd_pins gfe_subsystem/spi_ss]
   connect_bd_net -net ddr4_0_addn_ui_clkout1 [get_bd_pins gfe_subsystem/ACLK] [get_bd_pins ssith_processor_0/CLK] [get_bd_pins xilinx_jtag_0/clk]
+  connect_bd_net -net gfe_subsystem_debug_sck_o [get_bd_ports debug_sck_o] [get_bd_pins gfe_subsystem/debug_sck_o]
   connect_bd_net -net gfe_subsystem_dout [get_bd_pins gfe_subsystem/interrupts] [get_bd_pins ssith_processor_0/cpu_external_interrupt_req]
   connect_bd_net -net gfe_subsystem_gpio_led [get_bd_ports gpio_led] [get_bd_pins gfe_subsystem/gpio_led]
   connect_bd_net -net gfe_subsystem_gpio_out [get_bd_ports gpio_out] [get_bd_pins gfe_subsystem/gpio_out]
