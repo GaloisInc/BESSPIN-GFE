@@ -22,7 +22,7 @@ gdb_path32 = os.path.join(riscv_home, "bin", "riscv32-unknown-elf-gdb")
 gdb_path64 = os.path.join(riscv_home, "bin", "riscv64-unknown-elf-gdb")
 openocd_command = os.path.join(riscv_home, "bin", "openocd")
 openocd_cfg_path = os.path.join(
-    os.path.dirname(script_dir), "targets", "p1_hs2.cfg")
+    os.path.dirname(script_dir), "targets", "ssith_gfe.cfg")
 # Can use 'auto' to search for correct UART port or override directly
 uart_serial_dev = 'auto'
 
