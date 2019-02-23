@@ -10,9 +10,9 @@ import os
 import time
 import struct
 
-def requestReset():
-    print("Please manually reset the VCU118 by pressing the CPU Reset button (SW5) before running a FreeRTOS tests.")
-    raw_input("After resetting the CPU, press enter to continue...")
+# def requestReset():
+#     print("Please manually reset the VCU118 by pressing the CPU Reset button (SW5) before running a FreeRTOS tests.")
+#     raw_input("After resetting the CPU, press enter to continue...")
 
 
 class TestGfe(unittest.TestCase):
@@ -20,13 +20,14 @@ class TestGfe(unittest.TestCase):
         return 'rv32ui'
 
     def setUp(self):
-        requestReset()
+        # Reset the GFE
         self.gfe = gfetester.gfetester()
         if '32' in getArch():
             gdb_path = gfeparameters.gdb_path32
         else:
             gdb_path = gfeparameters.gdb_path64
         self.gfe.startGdb(gdb_path=gdb_path)
+        self.gfe.softReset()
         self.path_to_asm = os.path.join(
                 os.path.dirname(os.getcwd()), 'baremetal', 'asm')
         self.path_to_freertos = os.path.join(
@@ -162,9 +163,10 @@ class TestGfe64(TestGfe):
 class TestFreeRTOS(unittest.TestCase):
 
     def setUp(self):
-        requestReset()
+        # Reset the GFE
         self.gfe = gfetester.gfetester()
         self.gfe.startGdb()
+        self.gfe.softReset()
         self.path_to_freertos = os.path.join(
                 os.path.dirname(os.path.dirname(os.getcwd())),
                 'FreeRTOS-mirror', 'FreeRTOS', 'Demo',
@@ -216,7 +218,7 @@ class TestFreeRTOS(unittest.TestCase):
         print(freertos_elf)
         
         # Run elf in gdb
-        self.gfe.launchElf(freertos_elf)
+        self.gfe.launchElf(freertos_elf, True, False)
         print( "Launched FreeRTOS")
 
         # Wait for FreeRTOS tasks to start and run

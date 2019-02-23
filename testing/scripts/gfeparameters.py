@@ -35,3 +35,7 @@ BOOTROM_SIZE = 0x1000
 
 ########### UART ############
 UART_BASE = 0x62300000
+
+########### RESET ###########
+RESET_BASE = 0x6FFF0000
+RESET_VAL  = 0x1

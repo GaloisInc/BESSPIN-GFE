@@ -18,9 +18,6 @@ CC=riscv${XLEN}-unknown-elf-gcc ./configure --with-xlen=${XLEN} --target=riscv${
 make XLEN=${XLEN}
 err_msg $? "Failed to make isa tests"
 
-echo "Please manually reset the VCU118 by pressing the CPU Reset button (SW5) before running this test suite."
-read -p "After resetting the CPU, press enter to continue... "
-
 # Run some unittests including UART, DDR, and Bootrom
 # The final unittest tests booting freeRTOS
 cd $BASE_DIR/testing/scripts

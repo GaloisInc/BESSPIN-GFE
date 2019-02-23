@@ -192,6 +192,16 @@ class gfetester(object):
     def riscvWrite32(self, address, value):
         self.riscvWrite(address, value, 32)
 
+    def softReset(self):
+        print("Performing a soft reset of the GFE...")
+        self.riscvWrite32(gfeparameters.RESET_BASE, gfeparameters.RESET_VAL)
+        # Note: There is a bug that prevents loading an elf later in the test script
+        # without first continuing and interrupting. This is fine for now, but may
+        # not be compatible with future tests that require a completely clean start point
+        self.gdb_session.c(wait=False)
+        self.gdb_session.interrupt()
+
+
     # ------------------ UART Functions ------------------
     def findUartPort(
         self,

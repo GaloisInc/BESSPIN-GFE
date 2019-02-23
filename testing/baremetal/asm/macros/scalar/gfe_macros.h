@@ -89,4 +89,16 @@
 
 #define BOOTROM_BASE 0x70000000
 
+/*=============================
+=            RESET            =
+=============================*/
+
+#define RESET_LOCATION  0x6FFF0000
+#define RESET_VAL       0x1
+
+#define GFE_SOFT_RESET \
+    li t0, RESET_LOCATION; \
+    li t1, RESET_VAL; \
+    sw t1, (t0);
+
 #endif
