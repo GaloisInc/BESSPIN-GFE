@@ -19,14 +19,15 @@ class TestGfe(unittest.TestCase):
     def getArch(self):
         return 'rv32ui'
 
+    def getGdbPath(self):
+        if '32' in self.getArch():
+            return gfeparameters.gdb_path32
+        return gfeparameters.gdb_path64        
+
     def setUp(self):
         # Reset the GFE
-        self.gfe = gfetester.gfetester()
-        if '32' in getArch():
-            gdb_path = gfeparameters.gdb_path32
-        else:
-            gdb_path = gfeparameters.gdb_path64
-        self.gfe.startGdb(gdb_path=gdb_path)
+        self.gfe = gfetester.gfetester(gdb_path=self.getGdbPath())
+        self.gfe.startGdb()
         self.gfe.softReset()
         self.path_to_asm = os.path.join(
                 os.path.dirname(os.getcwd()), 'baremetal', 'asm')
@@ -42,6 +43,31 @@ class TestGfe(unittest.TestCase):
         self.gfe.gdb_session.command("flush regs")
         self.gfe.gdb_session.command("info threads", ops=100)
         del self.gfe
+
+    def test_soft_reset(self):
+        """Write to the UART scratch register, then reset and check the value
+        has been reset"""
+        UART_SCRATCH_ADDR = gfeparameters.UART_BASE + gfeparameters.UART_SCR
+        test_value = 0xef
+
+        # Check the initial reset value
+        scr_value = self.gfe.riscvRead32(UART_SCRATCH_ADDR)
+        self.assertEqual(scr_value, 0x0)
+
+        # Write to the UART register and check the write succeeded
+        self.gfe.riscvWrite32(UART_SCRATCH_ADDR, test_value)
+        scr_value = self.gfe.riscvRead32(UART_SCRATCH_ADDR)
+        err_msg = "Value read from UART scratch register {} "
+        err_msg += "does not match {} written to it."
+        err_msg = err_msg.format(hex(scr_value), hex(test_value))
+        self.assertEqual(test_value, scr_value, err_msg)
+
+        # Reset the SoC
+        self.gfe.softReset()
+
+        # Check that the value was reset
+        scr_value = self.gfe.riscvRead32(UART_SCRATCH_ADDR)
+        self.assertEqual(scr_value, 0x0)       
 
     def test_uart(self):
         # Load up the UART test program
@@ -160,11 +186,11 @@ class TestGfe64(TestGfe):
     def getArch(self):
         return 'rv64ui'
 
-class TestFreeRTOS(unittest.TestCase):
+class TestFreeRTOS(TestGfe):
 
     def setUp(self):
         # Reset the GFE
-        self.gfe = gfetester.gfetester()
+        self.gfe = gfetester.gfetester(gdb_path=self.getGdbPath())
         self.gfe.startGdb()
         self.gfe.softReset()
         self.path_to_freertos = os.path.join(
@@ -240,6 +266,16 @@ class TestFreeRTOS(unittest.TestCase):
 
         # No auto-checking
         return
+
+class TestFreeRTOS32(TestGfe):
+
+    def getArch(self):
+        return 'rv32ui'
+
+class TestFreeRTOS64(TestGfe):
+
+    def getArch(self):
+        return 'rv64ui'
 
 if __name__ == '__main__':
     unittest.main()
