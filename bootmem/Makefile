@@ -44,13 +44,4 @@ build-bbl/bbl: build-linux/vmlinux
 	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-linux/vmlinux
 	$(MAKE) -C $(@D)
 
-bbl.bin: build-bbl/bbl
-	$(OBJCOPY) -O binary $< $@
-
-bbl.elf: bbl.bin
-	$(OBJCOPY) -I binary -O elf64-littleriscv -B riscv $< $@
-
-clean:
-	$(RM) vmlinux.elf.elf bbl.bin bbl.elf
-
-.PHONY: default clean
+.PHONY: default
