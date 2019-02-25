@@ -5,29 +5,35 @@ BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 source $BASE_DIR/setup_env.sh
 cd $BASE_DIR/testing/scripts
 
+xlen_picker $1
+
 # Compile a set of assembly tests for the GFE
 cd $BASE_DIR/testing/baremetal/asm
-make
+make XLEN=${XLEN}
 err_msg $? "Making the assembly tests failed"
 
 # compile riscv-tests
 cd $BASE_DIR/riscv-tools/riscv-tests
-CC=riscv32-unknown-elf-gcc ./configure --with-xlen=32 --target=riscv32-unknown-elf
+CC=riscv${XLEN}-unknown-elf-gcc ./configure --with-xlen=${XLEN} --target=riscv${XLEN}-unknown-elf
 make
 err_msg $? "Failed to make isa tests"
-
-echo "Please manually reset the VCU118 by pressing the CPU Reset button (SW5) before running this test suite."
-read -p "After resetting the CPU, press enter to continue... "
 
 # Run some unittests including UART, DDR, and Bootrom
 # The final unittest tests booting freeRTOS
 cd $BASE_DIR/testing/scripts
-python test_gfe_unittest.py TestGfe
+python test_gfe_unittest.py TestGfe${XLEN}
 err_msg $? "GFE unittests failed. Run python test_gfe_unittest.py"
 
 cd $BASE_DIR
-# Skip generating a new test file
-#./testing/scripts/gen-test-all rv32imacu > test.gdb
-riscv32-unknown-elf-gdb --batch -x $BASE_DIR/testing/scripts/rel_1_isa_tests.gdb
+# Generate gdb isa test script
+if [ ${XLEN} == 64 ]
+then
+  ./testing/scripts/gen-test-all rv${XLEN}imacu > test_${XLEN}.gdb
+else
+  ./testing/scripts/gen-test-all rv${XLEN}imafcu > test_${XLEN}.gdb
+fi
+riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/test_${XLEN}.gdb
+# riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/testing/scripts/test
+# riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/testing/scripts/rel_1_isa_tests.gdb
 echo "riscv-tests summary:"
 grep -E "(PASS|FAIL)" gdb-client.log | uniq -c

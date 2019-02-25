@@ -33,7 +33,14 @@ set logging file gdb-client.log
 set logging on
 set pagination off
 
-target remote | openocd --debug --log_output openocd.log --command "gdb_port pipe" --file `dirname $0`/../targets/p1_hs2.cfg
+target remote | openocd --debug --log_output openocd.log --command "gdb_port pipe" --file `dirname $0`/../targets/ssith_gfe.cfg
+
+define softreset
+  set *((int *) 0x6FFF0000) = 1
+  interrupt
+  continue&
+  interrupt
+end
 
 define run_prog
   dont-repeat
@@ -64,6 +71,8 @@ define run_test_p
   file \$arg0
   load
 
+  softreset
+
   break write_tohost
   commands
     if \$gp == 1
@@ -86,6 +95,8 @@ define run_test_v
   printf "Loading \$arg0\\n"
   file \$arg0
   load
+
+  softreset
 
   break terminate
   commands

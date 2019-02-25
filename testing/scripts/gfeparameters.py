@@ -18,9 +18,11 @@ gdb_port = 3333
 
 riscv_home = os.environ['RISCV']
 gdb_path = os.path.join(riscv_home, "bin", "riscv32-unknown-elf-gdb")
+gdb_path32 = os.path.join(riscv_home, "bin", "riscv32-unknown-elf-gdb")
+gdb_path64 = os.path.join(riscv_home, "bin", "riscv64-unknown-elf-gdb")
 openocd_command = os.path.join(riscv_home, "bin", "openocd")
 openocd_cfg_path = os.path.join(
-    os.path.dirname(script_dir), "targets", "p1_hs2.cfg")
+    os.path.dirname(script_dir), "targets", "ssith_gfe.cfg")
 # Can use 'auto' to search for correct UART port or override directly
 uart_serial_dev = 'auto'
 
@@ -33,3 +35,8 @@ BOOTROM_SIZE = 0x1000
 
 ########### UART ############
 UART_BASE = 0x62300000
+UART_SCR = 0x1C # offset of UART scratch register
+
+########### RESET ###########
+RESET_BASE = 0x6FFF0000
+RESET_VAL  = 0x1
