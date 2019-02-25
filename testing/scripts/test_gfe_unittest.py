@@ -104,34 +104,35 @@ class TestGfe(unittest.TestCase):
                     b, test_char) )
         return
 
-    def test_interrupt(self):
-        if '64' in self.getArch():
-            interrupt_elf = 'rv64ui-p-uart_interrupt'
-        else:
-            interrupt_elf = 'rv32ui-p-uart_interrupt'
+    # TODO: Update the interrupt test to use the PLIC
+    # def test_interrupt(self):
+    #     if '64' in self.getArch():
+    #         interrupt_elf = 'rv64ui-p-uart_interrupt'
+    #     else:
+    #         interrupt_elf = 'rv32ui-p-uart_interrupt'
 
-        # Load the UART Interrupt test program
-        interrupt_elf_path = os.path.abspath(
-            os.path.join(self.path_to_asm, 'rv32ui-p-uart_interrupt'))
-        self.gfe.setupUart(
-            timeout = 1,
-            baud=9600,
-            parity="NONE",
-            stopbits=2,
-            bytesize=8)
-        self.gfe.launchElf(interrupt_elf_path)
+    #     # Load the UART Interrupt test program
+    #     interrupt_elf_path = os.path.abspath(
+    #         os.path.join(self.path_to_asm, 'rv32ui-p-uart_interrupt'))
+    #     self.gfe.setupUart(
+    #         timeout = 1,
+    #         baud=9600,
+    #         parity="NONE",
+    #         stopbits=2,
+    #         bytesize=8)
+    #     self.gfe.launchElf(interrupt_elf_path)
 
-        # Allow the riscv program to get started and configure UART
-        time.sleep(0.1)
+    #     # Allow the riscv program to get started and configure UART
+    #     time.sleep(0.1)
 
-        # Run test 10 times
-        for test_run in range(0,10):
-            print("Generating interrupt #{}".format(test_run))
-            self.gfe.uart_session.write("0")
-            res = self.gfe.uart_session.read()
-            self.assertEqual(res, str(test_run))
-            print("\tReceived interrupt #{}".format(test_run))
-        return
+    #     # Run test 10 times
+    #     for test_run in range(0,10):
+    #         print("Generating interrupt #{}".format(test_run))
+    #         self.gfe.uart_session.write("0")
+    #         res = self.gfe.uart_session.read()
+    #         self.assertEqual(res, str(test_run))
+    #         print("\tReceived interrupt #{}".format(test_run))
+    #     return
 
     def test_ddr(self):
         # Read the base address of ddr

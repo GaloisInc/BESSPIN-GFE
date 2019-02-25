@@ -15,7 +15,7 @@ err_msg $? "Making the assembly tests failed"
 # compile riscv-tests
 cd $BASE_DIR/riscv-tools/riscv-tests
 CC=riscv${XLEN}-unknown-elf-gcc ./configure --with-xlen=${XLEN} --target=riscv${XLEN}-unknown-elf
-make XLEN=${XLEN}
+make
 err_msg $? "Failed to make isa tests"
 
 # Run some unittests including UART, DDR, and Bootrom
@@ -25,8 +25,15 @@ python test_gfe_unittest.py TestGfe${XLEN}
 err_msg $? "GFE unittests failed. Run python test_gfe_unittest.py"
 
 cd $BASE_DIR
-# Skip generating a new test file
-#./testing/scripts/gen-test-all rv32imacu > test.gdb
-riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/testing/scripts/rel_1_isa_tests.gdb
+# Generate gdb isa test script
+if [ ${XLEN} == 64 ]
+then
+  ./testing/scripts/gen-test-all rv${XLEN}imacu > test_${XLEN}.gdb
+else
+  ./testing/scripts/gen-test-all rv${XLEN}imafcu > test_${XLEN}.gdb
+fi
+riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/test_${XLEN}.gdb
+# riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/testing/scripts/test
+# riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/testing/scripts/rel_1_isa_tests.gdb
 echo "riscv-tests summary:"
 grep -E "(PASS|FAIL)" gdb-client.log | uniq -c
