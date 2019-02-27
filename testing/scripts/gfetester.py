@@ -33,9 +33,9 @@ class gfetester(object):
         self,
         port=None,
         binary=None,
-        server_cmd=gfeparameters.openocd_command,
-        config=gfeparameters.openocd_cfg_path,
-        riscv_gdb_cmd=gfeparameters.gdb_path,
+        server_cmd=None,
+        config=None,
+        riscv_gdb_cmd=None,
         verbose=False
     ):
         """Start a gdb session with the riscv core on the GFE
@@ -47,6 +47,12 @@ class gfetester(object):
             configuration riscv_gdb_cmd (string, optional): Base gdb
             command for the riscv gdb program
         """
+        if not server_cmd:
+            server_cmd = self.openocd_command
+        if not config:
+            config = self.openocd_cfg_path
+        if not riscv_gdb_cmd:
+            riscv_gdb_cmd = self.gdb_path
         self.openocd_session = testlib.Openocd(
             server_cmd=server_cmd,
             config=config,
@@ -56,6 +62,10 @@ class gfetester(object):
             ports=self.openocd_session.gdb_ports,
             binary=binary)
         self.gdb_session.connect()
+
+    def endGdb(self):
+        del self.openocd_session
+        del self.gdb_session
 
     def launchElf(self, binary, gdb_log=False, openocd_log=False):
         """Launch a binary on the GFE using GDB
@@ -197,18 +207,19 @@ class gfetester(object):
         if m:
             raise testlib.CannotAccess(address)
 
-    def riscvWrite32(self, address, value, debug=False, dbg_txt=""):
-        self.riscvWrite(address, value, 32, debug=debug, dbg_txt=dbg_txt)
+    def riscvWrite32(self, address, value, verbose=False, dbg_txt=""):
+        self.riscvWrite(address, value, 32, verbose=verbose, dbg_txt=dbg_txt)
 
     def softReset(self):
         print("Performing a soft reset of the GFE...")
         self.riscvWrite32(gfeparameters.RESET_BASE, gfeparameters.RESET_VAL)
+        self.endGdb()
+        self.startGdb()
         # Note: There is a bug that prevents loading an elf later in the test script
         # without first continuing and interrupting. This is fine for now, but may
         # not be compatible with future tests that require a completely clean start point
         self.gdb_session.c(wait=False)
         self.gdb_session.interrupt()
-
 
     # ------------------ UART Functions ------------------
     def findUartPort(

@@ -14,25 +14,24 @@ import struct
 #     print("Please manually reset the VCU118 by pressing the CPU Reset button (SW5) before running a FreeRTOS tests.")
 #     raw_input("After resetting the CPU, press enter to continue...")
 
-
-class TestGfe(unittest.TestCase):
+class BaseGfeTest(unittest.TestCase):
     def getArch(self):
         return 'rv32ui'
 
     def getGdbPath(self):
         if '32' in self.getArch():
             return gfeparameters.gdb_path32
-        return gfeparameters.gdb_path64        
+        return gfeparameters.gdb_path64   
 
     def setUp(self):
         # Reset the GFE
         self.gfe = gfetester.gfetester(gdb_path=self.getGdbPath())
         self.gfe.startGdb()
-        self.gfe.softReset()
         self.path_to_asm = os.path.join(
                 os.path.dirname(os.getcwd()), 'baremetal', 'asm')
         self.path_to_freertos = os.path.join(
                 os.path.dirname(os.getcwd()), 'FreeRTOS-RISCV', 'Demo', 'p1-besspin')       
+        self.gfe.softReset()
 
     def tearDown(self):
         if not self.gfe.gdb_session:
@@ -42,7 +41,9 @@ class TestGfe(unittest.TestCase):
         self.gfe.gdb_session.command("info registers all", ops=100)
         self.gfe.gdb_session.command("flush regs")
         self.gfe.gdb_session.command("info threads", ops=100)
-        del self.gfe
+        del self.gfe  
+
+class TestGfe(BaseGfeTest):
 
     def test_soft_reset(self):
         """Write to the UART scratch register, then reset and check the value
@@ -222,7 +223,7 @@ class TestGfe64(TestGfe):
     def getArch(self):
         return 'rv64ui'
 
-class TestFreeRTOS(TestGfe):
+class TestFreeRTOS(BaseGfeTest):
 
     def setUp(self):
         # Reset the GFE
@@ -242,16 +243,6 @@ class TestFreeRTOS(TestGfe):
             bytesize=8)
         print("Setup pySerial UART")     
 
-    def tearDown(self):
-        if not self.gfe.gdb_session:
-            return
-        self.gfe.gdb_session.interrupt()
-        self.gfe.gdb_session.command("disassemble", ops=20)
-        self.gfe.gdb_session.command("info registers all", ops=100)
-        self.gfe.gdb_session.command("flush regs")
-        self.gfe.gdb_session.command("info threads", ops=100)
-        del self.gfe
-
     def test_full(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
@@ -259,9 +250,9 @@ class TestFreeRTOS(TestGfe):
         print(freertos_elf)
         
         # Run elf in gdb
-	self.gfe.launchElf(freertos_elf)
+        self.gfe.launchElf(freertos_elf)
 
-	time.sleep(3)
+        time.sleep(3)
 
         # Receive print statements
         num_rxed =  self.gfe.uart_session.in_waiting
