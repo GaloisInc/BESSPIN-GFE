@@ -75,8 +75,8 @@ sudo reboot
 5. Program the FPGA with the bit file (i.e. [bitstreams/soc_chisel_p1.bit](bitstreams/soc_chisel_p1.bit)) using the Vivado hardware manager.
 6. Close the Vivado hardware manager (or just close Vivado).
 This prevents USB permissions errors (i.e. LIBUSB_ERROR_BUSY) 
-7. Run `./rel_1_test.sh` from the top level of the gfe repo.
-8. Run `./rel_1_test_freertos.sh` to run FreeRTOS tests.
+7. Run `./test.sh 32` from the top level of the gfe repo. Run `./test.sh 64` if you are testing P2 bitfiles.
+8. Run `./test_freertos.sh 32` to run FreeRTOS tests.
 
 A passing test will not display any error messages. All failing tests will report errors and stop early.
 

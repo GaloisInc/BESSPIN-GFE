@@ -167,7 +167,7 @@ class gfetester(object):
         value = self.gdb_session.x(address=address, size="1w")
 
         if verbose:
-            print("{} Write: {} to {}".format(dbg_txt, hex(value), hex(address)))
+            print("{} Read: {} from {}".format(dbg_txt, hex(value), hex(address)))
 
         return value
 

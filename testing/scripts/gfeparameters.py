@@ -36,6 +36,8 @@ BOOTROM_SIZE = 0x1000
 ########### UART ############
 UART_BASE = 0x62300000
 UART_SCR = 0x1C # offset of UART scratch register
+UART_LSR = 0x14
+UART_IIR = 0x8
 
 ########### RESET ###########
 RESET_BASE = 0x6FFF0000

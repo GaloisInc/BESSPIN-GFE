@@ -36,11 +36,13 @@ plic_setup:
   li t3, 0x1
   sw t3, 0(t2) 
   sw t3, 4(t2) 
+  sw t3, 8(t2) 
+  sw t3, 0xc(t2) 
 
   # Enable the first global (uart 0)
   li t1, PLIC_ENABLE_OFFSET
   add t2, t0, t1
-  li t3, 0x3
+  li t3, 0xfff
   sw t3, 0(t2) 
 
   #-------------------------------------------------------------

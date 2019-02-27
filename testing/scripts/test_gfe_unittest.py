@@ -9,17 +9,15 @@ import gfeparameters
 import os
 import time
 import struct
-
-# def requestReset():
-#     print("Please manually reset the VCU118 by pressing the CPU Reset button (SW5) before running a FreeRTOS tests.")
-#     raw_input("After resetting the CPU, press enter to continue...")
+from parameterized import parameterized
 
 class BaseGfeTest(unittest.TestCase):
-    def getArch(self):
-        return 'rv32ui'
+    """GFE base testing class. All GFE Python unittests inherit from this class"""
+    def getXlen(self):
+        return '32'
 
     def getGdbPath(self):
-        if '32' in self.getArch():
+        if '32' in self.getXlen():
             return gfeparameters.gdb_path32
         return gfeparameters.gdb_path64   
 
@@ -44,6 +42,9 @@ class BaseGfeTest(unittest.TestCase):
         del self.gfe  
 
 class TestGfe(BaseGfeTest):
+    """Collection of smoke tests to exercise the GFE peripherals.
+    This class is inherited by TestGfe32 and TestGfe64 for testing P1
+    and P2/3 processors respectively."""
 
     def test_soft_reset(self):
         """Write to the UART scratch register, then reset and check the value
@@ -72,8 +73,8 @@ class TestGfe(BaseGfeTest):
 
     def test_uart(self):
         # Load up the UART test program
-        print("arch = " + self.getArch())
-        if '64' in self.getArch():
+        print("xlen = " + self.getXlen())
+        if '64' in self.getXlen():
             uart_elf = 'rv64ui-p-uart'
         else:
             uart_elf = 'rv32ui-p-uart'
@@ -105,74 +106,80 @@ class TestGfe(BaseGfeTest):
                     b, test_char) )
         return
 
-    def test_interrupt(self):
-        if '64' in self.getArch():
-            interrupt_elf = 'rv64ui-p-uart_interrupt'
-        else:
-            interrupt_elf = 'rv32ui-p-uart_interrupt'
+    # def test_interrupt(self):
+    #     if '64' in self.getXlen():
+    #         interrupt_elf = 'rv64ui-p-uart_interrupt'
+    #     else:
+    #         interrupt_elf = 'rv32ui-p-uart_interrupt'
 
-        # Load the UART Interrupt test program
-        interrupt_elf_path = os.path.abspath(
-            os.path.join(self.path_to_asm, interrupt_elf))
-        self.gfe.setupUart(
-            timeout = 1,
-            baud=9600,
-            parity="EVEN",
-            stopbits=2,
-            bytesize=8)
-        self.gfe.launchElf(interrupt_elf_path)
+    #     # Load the UART Interrupt test program
+    #     interrupt_elf_path = os.path.abspath(
+    #         os.path.join(self.path_to_asm, interrupt_elf))
+    #     self.gfe.setupUart(
+    #         timeout = 1,
+    #         baud=9600,
+    #         parity="EVEN",
+    #         stopbits=2,
+    #         bytesize=8)
+    #     self.gfe.launchElf(interrupt_elf_path)
 
-        # Allow the riscv program to get started and configure UART
-        time.sleep(0.1)
+    #     # Allow the riscv program to get started and configure UART
+    #     time.sleep(0.1)
 
-        # Run test 10 times
-        for test_run in range(0,10):
+    #     # Run test 10 times
+    #     for test_run in range(0,10):
 
-            # DEBUG
-            self.gfe.gdb_session.interrupt()
-            self.gfe.gdb_session.command("x/10i $pc")
-            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_ENABLE_OFFSET,
-                dbg_txt="INTERRUPT_ENABLE", verbose=True)
-            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PRIORITY_OFFSET,
-                dbg_txt="PRIORITY 0", verbose=True)
-            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PRIORITY_OFFSET + 1,
-                dbg_txt="PRIORITY 1", verbose=True)           
-            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PENDING_OFFSET,
-                dbg_txt="INTERRUPT PENDING", verbose=True)
-            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_CLAIM_OFFSET,
-                dbg_txt="CLAIM REG", verbose=True)
-            self.gfe.riscvRead32(gfeparameters.UART_BASE + gfeparameters.UART_LSR,
-                dbg_txt="UART_LSR", verbose=True)
-            # print(self.gfe.getGdbLog())
-            self.gfe.gdb_session.c(wait=False)
-            # END DEBUG
+    #         # DEBUG
+    #         self.gfe.gdb_session.interrupt()
+    #         self.gfe.gdb_session.command("x/10i $pc")
+    #         self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_ENABLE_OFFSET,
+    #             dbg_txt="INTERRUPT_ENABLE", verbose=True)
+    #         self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PRIORITY_OFFSET,
+    #             dbg_txt="PRIORITY 0", verbose=True)
+    #         self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PRIORITY_OFFSET + 4,
+    #             dbg_txt="PRIORITY 1", verbose=True)
+    #         self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PRIORITY_OFFSET + 8,
+    #             dbg_txt="PRIORITY 2", verbose=True)
+    #         self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PRIORITY_OFFSET + 12,
+    #             dbg_txt="PRIORITY 3", verbose=True)
+    #         self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PENDING_OFFSET,
+    #             dbg_txt="INTERRUPT PENDING", verbose=True)
+    #         self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_CLAIM_OFFSET,
+    #             dbg_txt="CLAIM REG", verbose=True)
+    #         self.gfe.riscvRead32(gfeparameters.UART_BASE + gfeparameters.UART_LSR,
+    #             dbg_txt="UART_LSR", verbose=True)
+    #         self.gfe.riscvRead32(gfeparameters.UART_BASE + gfeparameters.UART_IIR,
+    #             dbg_txt="UART_IIR", verbose=True)
+    #         self.gfe.gdb_session.c(wait=False)
+    #         # END DEBUG
 
-            print("Generating interrupt #{}".format(test_run))
-            self.gfe.uart_session.write("0")
+    #         print("Generating interrupt #{}".format(test_run))
+    #         self.gfe.uart_session.write("0")
 
-            # DEBUG
-            self.gfe.gdb_session.interrupt()
-            self.gfe.gdb_session.command("x/10i $pc")
-            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_ENABLE_OFFSET,
-                dbg_txt="INTERRUPT_ENABLE", verbose=True)
-            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PRIORITY_OFFSET,
-                dbg_txt="PRIORITY 0", verbose=True)
-            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PRIORITY_OFFSET + 1,
-                dbg_txt="PRIORITY 1", verbose=True)           
-            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PENDING_OFFSET,
-                dbg_txt="INTERRUPT PENDING", verbose=True)
-            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_CLAIM_OFFSET,
-                dbg_txt="CLAIM REG", verbose=True)
-            self.gfe.riscvRead32(gfeparameters.UART_BASE + gfeparameters.UART_LSR,
-                dbg_txt="UART_LSR", verbose=True)
-            # print(self.gfe.getGdbLog())
-            self.gfe.gdb_session.c(wait=False)
-            # END DEBUG
+    #         # DEBUG
+    #         self.gfe.gdb_session.interrupt()
+    #         self.gfe.gdb_session.command("x/10i $pc")
+    #         self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_ENABLE_OFFSET,
+    #             dbg_txt="INTERRUPT_ENABLE", verbose=True)
+    #         self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PRIORITY_OFFSET,
+    #             dbg_txt="PRIORITY 0", verbose=True)
+    #         self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PRIORITY_OFFSET + 4,
+    #             dbg_txt="PRIORITY 1", verbose=True)           
+    #         self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PENDING_OFFSET,
+    #             dbg_txt="INTERRUPT PENDING", verbose=True)
+    #         self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_CLAIM_OFFSET,
+    #             dbg_txt="CLAIM REG", verbose=True)
+    #         self.gfe.riscvRead32(gfeparameters.UART_BASE + gfeparameters.UART_LSR,
+    #             dbg_txt="UART_LSR", verbose=True)
+    #         self.gfe.riscvRead32(gfeparameters.UART_BASE + gfeparameters.UART_IIR,
+    #             dbg_txt="UART_IIR", verbose=True)
+    #         self.gfe.gdb_session.c(wait=False)
+    #         # END DEBUG
 
-            res = self.gfe.uart_session.read()
-            self.assertEqual(res, str(test_run))
-            print("\tReceived interrupt #{}".format(test_run))
-        return
+    #         res = self.gfe.uart_session.read()
+    #         self.assertEqual(res, str(test_run))
+    #         print("\tReceived interrupt #{}".format(test_run))
+    #     return
 
     def test_ddr(self):
         # Read the base address of ddr
@@ -217,15 +224,83 @@ class TestGfe(BaseGfeTest):
             )
         return
 
+# Create test classes for 64 and 32 bit processors
 class TestGfe32(TestGfe):
 
-    def getArch(self):
-        return 'rv32ui'
+    def getXlen(self):
+        return '32'
 
 class TestGfe64(TestGfe):
 
-    def getArch(self):
-        return 'rv64ui'
+    def getXlen(self):
+        return '64'
+
+# Create ISA unittest base class for P1 and P2 processors
+class TestIsaGfe(BaseGfeTest):
+
+    def run_isa_test(self, test_path):
+        test_name = os.path.basename(test_path)
+        if '32' in test_name:
+            xlen = '32'
+        if '64' in test_name:
+            xlen = '64'
+        if 'p' in test_name:
+            return self.run_isa_p_test(xlen, test_path)
+        if 'v' in test_name:
+            return self.run_isa_v_test(xlen, test_path)           
+
+    def run_isa_p_test(self, xlen, test_path):
+        test_name = os.path.basename(test_path)
+        print("Running test {}".format(test_path))
+        self.gfe.gdb_session.command("file {}".format(test_path))
+        self.gfe.gdb_session.load()
+        self.gfe.gdb_session.b("write_tohost")
+        self.gfe.gdb_session.c()
+        gp = self.gfe.gdb_session.p("$gp")
+        self.assertEqual(gp, 1)
+        return
+
+    def run_isa_v_test(self, xlen, test_path):
+        test_name = os.path.basename(test_path)
+        print("Running test {}".format(test_path))
+        self.gfe.gdb_session.command("file {}".format(test_path))
+        self.gfe.gdb_session.load()
+        self.gfe.gdb_session.b("terminate")
+        self.gfe.gdb_session.c()
+        a0 = self.gfe.gdb_session.p("$a0")
+        self.assertEqual(a0, 1)
+        return
+
+riscv_isa_tests_path = os.path.join(
+    os.path.dirname(os.path.dirname(os.getcwd())),
+    'riscv-tools',
+    'riscv-tests',
+    'isa')
+p2_isa_list = [
+    [os.path.join(riscv_isa_tests_path, "rv64mi-p-access")],
+    [os.path.join(riscv_isa_tests_path, "rv64mi-p-breakpoint")]   ]
+p1_isa_list = [[os.path.join(riscv_isa_tests_path, "rv32ui-p-add")]]
+
+# Create ISA unittests for P2
+class TestP2IsaGfe(TestIsaGfe):
+
+    def getXlen(self):
+        return '64'
+
+    @parameterized.expand(p2_isa_list)
+    def test_isa(self, test_path):
+        self.run_isa_test(test_path)
+
+# Create ISA unittests for P1
+class TestP1IsaGfe(TestIsaGfe):
+
+    def getXlen(self):
+        return '32'
+
+    @parameterized.expand(p1_isa_list)
+    def test_isa(self, name, test_path):
+        self.run_isa_test(test_path)
+
 
 class TestFreeRTOS(BaseGfeTest):
 
@@ -300,13 +375,13 @@ class TestFreeRTOS(BaseGfeTest):
 
 class TestFreeRTOS32(TestGfe):
 
-    def getArch(self):
-        return 'rv32ui'
+    def getXlen(self):
+        return '32'
 
 class TestFreeRTOS64(TestGfe):
 
-    def getArch(self):
-        return 'rv64ui'
+    def getXlen(self):
+        return '64'
 
 if __name__ == '__main__':
     unittest.main()
