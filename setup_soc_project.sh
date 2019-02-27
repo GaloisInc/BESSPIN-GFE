@@ -14,7 +14,17 @@ proc_picker $1
 
 # Compile the bootrom
 cd $BASE_DIR/bootrom
-make
+case "$proc_name" in
+    *p1)
+	make
+	;;
+    *p2)
+	make CROSS_COMPILE=riscv64-unknown-elf-
+	;;
+    *)
+	echo "WARNING: don't know how to make a boot ROM for processor $proc_name"
+	;;
+esac
 
 err_msg $? "Making the bootrom failed"
 
