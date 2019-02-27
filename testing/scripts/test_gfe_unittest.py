@@ -82,9 +82,9 @@ class TestGfe(BaseGfeTest):
             os.path.join(self.path_to_asm, uart_elf))
         print("Using: " + uart_elf_path)
         self.gfe.setupUart(
-            timeout = 1,
+            timeout=1,
             baud=9600,
-            parity="NONE",
+            parity="EVEN",
             stopbits=2,
             bytesize=8)
 
@@ -117,7 +117,7 @@ class TestGfe(BaseGfeTest):
         self.gfe.setupUart(
             timeout = 1,
             baud=9600,
-            parity="NONE",
+            parity="EVEN",
             stopbits=2,
             bytesize=8)
         self.gfe.launchElf(interrupt_elf_path)
@@ -141,6 +141,8 @@ class TestGfe(BaseGfeTest):
                 dbg_txt="INTERRUPT PENDING", verbose=True)
             self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_CLAIM_OFFSET,
                 dbg_txt="CLAIM REG", verbose=True)
+            self.gfe.riscvRead32(gfeparameters.UART_BASE + gfeparameters.UART_LSR,
+                dbg_txt="UART_LSR", verbose=True)
             # print(self.gfe.getGdbLog())
             self.gfe.gdb_session.c(wait=False)
             # END DEBUG
@@ -161,6 +163,8 @@ class TestGfe(BaseGfeTest):
                 dbg_txt="INTERRUPT PENDING", verbose=True)
             self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_CLAIM_OFFSET,
                 dbg_txt="CLAIM REG", verbose=True)
+            self.gfe.riscvRead32(gfeparameters.UART_BASE + gfeparameters.UART_LSR,
+                dbg_txt="UART_LSR", verbose=True)
             # print(self.gfe.getGdbLog())
             self.gfe.gdb_session.c(wait=False)
             # END DEBUG
