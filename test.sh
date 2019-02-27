@@ -28,9 +28,9 @@ cd $BASE_DIR
 # Generate gdb isa test script
 if [ ${XLEN} == 64 ]
 then
-  ./testing/scripts/gen-test-all rv${XLEN}imacu > test_${XLEN}.gdb
+  ./testing/scripts/gen-test-all rv${XLEN}gcsu > test_${XLEN}.gdb
 else
-  ./testing/scripts/gen-test-all rv${XLEN}imafcu > test_${XLEN}.gdb
+  ./testing/scripts/gen-test-all rv${XLEN}imacu > test_${XLEN}.gdb
 fi
 riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/test_${XLEN}.gdb
 # riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/testing/scripts/test
