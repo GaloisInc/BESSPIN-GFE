@@ -142,7 +142,7 @@ class gfetester(object):
         else:
             return "No gdb_session open."
 
-    def riscvRead32(self, address):
+    def riscvRead32(self, address, verbose=False, dbg_txt=""):
         """Read 32 bits from memory using the riscv core
 
         Args:
@@ -154,9 +154,14 @@ class gfetester(object):
         if not self.gdb_session:
             self.startGdb()
 
-        return self.gdb_session.x(address=address, size="1w")
+        value = self.gdb_session.x(address=address, size="1w")
 
-    def riscvWrite(self, address, value, size):
+        if verbose:
+            print("{} Write: {} to {}".format(dbg_txt, hex(value), hex(address)))
+
+        return value
+
+    def riscvWrite(self, address, value, size, verbose=False, dbg_txt=""):
         """Use GDB to perform a write with the synchronous riscv core
 
         Args:
@@ -184,13 +189,16 @@ class gfetester(object):
             "set *(({} *) 0x{:x}) = 0x{:x}".format(
                 size_options[size], address, value))
 
+        if verbose:
+            print("{} Write: {} to {}".format(dbg_txt, hex(value), hex(address)))
+
         # Check for an error message from gdb
         m = re.search("Cannot access memory", output)
         if m:
             raise testlib.CannotAccess(address)
 
-    def riscvWrite32(self, address, value):
-        self.riscvWrite(address, value, 32)
+    def riscvWrite32(self, address, value, debug=False, dbg_txt=""):
+        self.riscvWrite(address, value, 32, debug=debug, dbg_txt=dbg_txt)
 
     def softReset(self):
         print("Performing a soft reset of the GFE...")

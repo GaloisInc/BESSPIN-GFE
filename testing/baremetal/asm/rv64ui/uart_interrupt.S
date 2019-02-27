@@ -19,8 +19,35 @@ RVTEST_CODE_BEGIN
   #-------------------------------------------------------------
 
   #-------------------------------------------------------------
+  # SETUP PLIC 
+  #-------------------------------------------------------------
+
+plic_setup:
+  # Disable lowest interrupts
+  li t0, PLIC_BASE
+  li t1, PLIC_ENABLE_OFFSET
+  add t2, t0, t1
+  li t3, 0x0
+  sw t3, 0(t2)
+
+  # Set the priority bits
+  li t1, PLIC_PRIORITY_OFFSET
+  add t2, t0, t1
+  li t3, 0x1
+  sw t3, 0(t2) 
+  sw t3, 4(t2) 
+
+  # Enable the first global (uart 0)
+  li t1, PLIC_ENABLE_OFFSET
+  add t2, t0, t1
+  li t3, 0x3
+  sw t3, 0(t2) 
+
+  #-------------------------------------------------------------
   # SETUP UART 
   #-------------------------------------------------------------
+
+uart_setup:
   li t0, UART_BASE
 
   # UART_LCR = 0x80
@@ -71,9 +98,18 @@ wait_for_interrupt:
   and t4, t4, t3 # t4 & 0x800
   beq t4, x0, wait_for_interrupt
 
-  # Read from the buffer to clear the interrupt
+handle_interrupt:
+  # Claim the interrupt in the plic by reading from the claim register
+  li t0, PLIC_BASE
+  li t1, PLIC_CLAIM_OFFSET
+  add t2, t0, t1
+  lw t3, 0(t2)
+  beq t3, x0, fail
+
+  # Read from the uart buffer to clear the interrupt
   lw t4, 0(t2)
   fence
+
   # Transmit the success code back to the tester
   sw t1, 0(t2)
   fence

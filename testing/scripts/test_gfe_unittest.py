@@ -67,7 +67,7 @@ class TestGfe(unittest.TestCase):
 
         # Check that the value was reset
         scr_value = self.gfe.riscvRead32(UART_SCRATCH_ADDR)
-        self.assertEqual(scr_value, 0x0)       
+        self.assertEqual(scr_value, 0x0)
 
     def test_uart(self):
         # Load up the UART test program
@@ -104,35 +104,70 @@ class TestGfe(unittest.TestCase):
                     b, test_char) )
         return
 
-    # TODO: Update the interrupt test to use the PLIC
-    # def test_interrupt(self):
-    #     if '64' in self.getArch():
-    #         interrupt_elf = 'rv64ui-p-uart_interrupt'
-    #     else:
-    #         interrupt_elf = 'rv32ui-p-uart_interrupt'
+    def test_interrupt(self):
+        if '64' in self.getArch():
+            interrupt_elf = 'rv64ui-p-uart_interrupt'
+        else:
+            interrupt_elf = 'rv32ui-p-uart_interrupt'
 
-    #     # Load the UART Interrupt test program
-    #     interrupt_elf_path = os.path.abspath(
-    #         os.path.join(self.path_to_asm, 'rv32ui-p-uart_interrupt'))
-    #     self.gfe.setupUart(
-    #         timeout = 1,
-    #         baud=9600,
-    #         parity="NONE",
-    #         stopbits=2,
-    #         bytesize=8)
-    #     self.gfe.launchElf(interrupt_elf_path)
+        # Load the UART Interrupt test program
+        interrupt_elf_path = os.path.abspath(
+            os.path.join(self.path_to_asm, interrupt_elf))
+        self.gfe.setupUart(
+            timeout = 1,
+            baud=9600,
+            parity="NONE",
+            stopbits=2,
+            bytesize=8)
+        self.gfe.launchElf(interrupt_elf_path)
 
-    #     # Allow the riscv program to get started and configure UART
-    #     time.sleep(0.1)
+        # Allow the riscv program to get started and configure UART
+        time.sleep(0.1)
 
-    #     # Run test 10 times
-    #     for test_run in range(0,10):
-    #         print("Generating interrupt #{}".format(test_run))
-    #         self.gfe.uart_session.write("0")
-    #         res = self.gfe.uart_session.read()
-    #         self.assertEqual(res, str(test_run))
-    #         print("\tReceived interrupt #{}".format(test_run))
-    #     return
+        # Run test 10 times
+        for test_run in range(0,10):
+
+            # DEBUG
+            self.gfe.gdb_session.interrupt()
+            self.gfe.gdb_session.command("x/10i $pc")
+            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_ENABLE_OFFSET,
+                dbg_txt="INTERRUPT_ENABLE", verbose=True)
+            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PRIORITY_OFFSET,
+                dbg_txt="PRIORITY 0", verbose=True)
+            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PRIORITY_OFFSET + 1,
+                dbg_txt="PRIORITY 1", verbose=True)           
+            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PENDING_OFFSET,
+                dbg_txt="INTERRUPT PENDING", verbose=True)
+            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_CLAIM_OFFSET,
+                dbg_txt="CLAIM REG", verbose=True)
+            # print(self.gfe.getGdbLog())
+            self.gfe.gdb_session.c(wait=False)
+            # END DEBUG
+
+            print("Generating interrupt #{}".format(test_run))
+            self.gfe.uart_session.write("0")
+
+            # DEBUG
+            self.gfe.gdb_session.interrupt()
+            self.gfe.gdb_session.command("x/10i $pc")
+            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_ENABLE_OFFSET,
+                dbg_txt="INTERRUPT_ENABLE", verbose=True)
+            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PRIORITY_OFFSET,
+                dbg_txt="PRIORITY 0", verbose=True)
+            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PRIORITY_OFFSET + 1,
+                dbg_txt="PRIORITY 1", verbose=True)           
+            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_PENDING_OFFSET,
+                dbg_txt="INTERRUPT PENDING", verbose=True)
+            self.gfe.riscvRead32(gfeparameters.PLIC_BASE + gfeparameters.PLIC_CLAIM_OFFSET,
+                dbg_txt="CLAIM REG", verbose=True)
+            # print(self.gfe.getGdbLog())
+            self.gfe.gdb_session.c(wait=False)
+            # END DEBUG
+
+            res = self.gfe.uart_session.read()
+            self.assertEqual(res, str(test_run))
+            print("\tReceived interrupt #{}".format(test_run))
+        return
 
     def test_ddr(self):
         # Read the base address of ddr

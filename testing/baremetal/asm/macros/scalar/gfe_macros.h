@@ -101,4 +101,28 @@
     li t1, RESET_VAL; \
     sw t1, (t0);
 
+/*============================
+=            PLIC            =
+============================*/
+
+#define PLIC_BASE 0xc000000
+// 32 bits per source
+#define PLIC_PRIORITY_OFFSET            0x0000
+// 1 bit per source (1 address)
+#define PLIC_PENDING_OFFSET             0x1000
+
+//0x80 per target
+#define PLIC_ENABLE_OFFSET              0x2000
+
+#define PLIC_THRESHOLD_OFFSET           0x200000
+#define PLIC_CLAIM_OFFSET               0x200004
+
+#define PLIC_MAX_SOURCE                 1023
+#define PLIC_SOURCE_MASK                0x3FF
+
+#define PLIC_MAX_TARGET                 15871
+#define PLIC_TARGET_MASK                0x3FFF
+
+#define PLIC_NUM_INTERRUPTS 16
+
 #endif

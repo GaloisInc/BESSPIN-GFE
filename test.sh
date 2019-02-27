@@ -12,7 +12,7 @@ cd $BASE_DIR/testing/baremetal/asm
 make XLEN=${XLEN}
 err_msg $? "Making the assembly tests failed"
 
-# compile riscv-tests
+# Compile riscv-tests
 cd $BASE_DIR/riscv-tools/riscv-tests
 CC=riscv${XLEN}-unknown-elf-gcc ./configure --with-xlen=${XLEN} --target=riscv${XLEN}-unknown-elf
 make
