@@ -26,13 +26,21 @@ set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[1]]
 set_property PACKAGE_PIN AY15 [get_ports gpio_out[1]]; # PMOD_0_1
 
 # ----- PMOD1 Pins (J53 on VCU118) -----
-# ----- IIC -----
-set_property IOSTANDARD LVCMOS12 [get_ports iic_sda]
-set_property PACKAGE_PIN N28 [get_ports iic_sda]; # PMOD_1_0
-set_property DRIVE 8 [get_ports iic_sda]
-set_property IOSTANDARD LVCMOS12 [get_ports iic_scl]
-set_property PACKAGE_PIN M30 [get_ports iic_scl]; #PMOD_1_1
-set_property DRIVE 8 [get_ports iic_scl]
+# ----- IIC0 -----
+set_property IOSTANDARD LVCMOS12 [get_ports iic0_sda]
+set_property PACKAGE_PIN N28 [get_ports iic0_sda]; # PMOD_1_0
+set_property DRIVE 8 [get_ports iic0_sda]
+set_property IOSTANDARD LVCMOS12 [get_ports iic0_scl]
+set_property PACKAGE_PIN M30 [get_ports iic0_scl]; #PMOD_1_1
+set_property DRIVE 8 [get_ports iic0_scl]
+
+# ----- IIC1 -----
+set_property IOSTANDARD LVCMOS12 [get_ports iic1_sda]
+set_property PACKAGE_PIN N30 [get_ports iic1_sda]; # PMOD_1_2
+set_property DRIVE 8 [get_ports iic1_sda]
+set_property IOSTANDARD LVCMOS12 [get_ports iic1_scl]
+set_property PACKAGE_PIN P30 [get_ports iic1_scl]; #PMOD_1_3
+set_property DRIVE 8 [get_ports iic1_scl]
 
 # ----- SPI -----
 set_property IOSTANDARD LVCMOS12 [get_ports spi_ss]
@@ -47,9 +55,6 @@ set_property DRIVE 8 [get_ports spi_miso]
 set_property IOSTANDARD LVCMOS12 [get_ports spi_sck]
 set_property PACKAGE_PIN R29 [get_ports spi_sck]; # PMOD_1_7
 set_property DRIVE 8 [get_ports spi_sck]
-set_property IOSTANDARD LVCMOS12 [get_ports debug_sck_o]
-set_property PACKAGE_PIN N30 [get_ports debug_sck_o]; # PMOD_1_2
-set_property DRIVE 8 [get_ports debug_sck_o]
 
 # ----- User GPIO LEDs -----
 set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[7]]

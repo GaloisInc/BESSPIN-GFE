@@ -16,3 +16,9 @@
 [submodule "bluespec-processors/P2/Flute"]
 	path = bluespec-processors/P2/Flute
 	url = https://github.com/bluespec/Flute.git
+[submodule "riscv-linux"]
+	path = riscv-linux
+	url = ../riscv-linux.git
+[submodule "busybox"]
+	path = busybox
+	url = https://git.busybox.net/busybox

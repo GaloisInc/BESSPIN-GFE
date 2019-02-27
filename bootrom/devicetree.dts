@@ -1,0 +1,96 @@
+/dts-v1/;
+
+/ {
+	#address-cells = <2>;
+	#size-cells = <2>;
+	compatible = "unknown,unknown";
+	model = "unknown,unknown";
+	chosen {
+		bootargs = "earlyprintk loglevel=8";
+	};
+	cpus {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		timebase-frequency = <83333000>;
+		CPU0: cpu@0 {
+			device_type = "cpu";
+			reg = <0>;
+			status = "okay";
+			compatible = "riscv";
+#if __riscv_xlen == 32
+			riscv,isa = "rv32imac";
+#else
+			riscv,isa = "rv64imafdc";
+			mmu-type = "riscv,sv39";
+#endif
+			clock-frequency = <83333000>;
+			CPU0_intc: interrupt-controller {
+				#interrupt-cells = <1>;
+				interrupt-controller;
+				compatible = "riscv,cpu-intc";
+			};
+		};
+	};
+	memory@80000000 {
+		device_type = "memory";
+		reg = <0x0 0x80000000 0x0 0x40000000>;
+	};
+	soc {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		compatible = "simple-bus";
+		ranges;
+		clint@10000000 {
+			compatible = "riscv,clint0";
+			interrupts-extended = <&CPU0_intc 3 &CPU0_intc 7>;
+			reg = <0x0 0x10000000 0x0 0x10000>;
+		};
+		plic: interrupt-controller@11000000 {
+			#interrupt-cells = <1>;
+			compatible = "riscv,plic0";
+			interrupt-controller;
+			interrupts-extended = <&CPU0_intc 11 &CPU0_intc 9>;
+			//reg = <0x0 0x11000000 0x0 0x400000>;
+			reg = <0x0 0xc000000 0x0 0x400000>;
+			reg-names = "control";
+			riscv,max-priority = <7>;
+			riscv,ndev = <16>;
+		};
+		axi_ethernet_eth: ethernet@62100000 {
+			compatible = "xlnx,axi-ethernet-7.01.a", "xlnx,axi-ethernet-1.00.a";
+			device_type = "network";
+			interrupts-extended = <&plic 1>;
+			axistream-connected = <&axi_dma>;
+			axistream-connected-control = <&axi_dma>;
+			phy-mode = "sgmii";
+			reg = <0x0 0x62100000 0x0 0x40000>;
+			xlnx,rxcsum = <0x2>;
+			xlnx,rxmem = <0x1000>;
+			xlnx,txcsum = <0x2>;
+			phy-handle = <&phy0>;
+			local-mac-address = [12 34 56 78 90 ab];
+			axi_ethernet_mdio: mdio {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				phy0: phy@0 {
+				      device_type = "ethernet-phy";
+				      reg = <1>;
+				};
+			};
+		};
+		axi_dma: dma@62200000 {
+			compatible = "xlnx,axi-dma-7.01.a", "xlnx,axi-dma-1.00.a";
+			reg = <0x0 0x62200000 0x0 0x10000>;
+			interrupts-extended = <&plic 2 &plic 3>;
+			axistream-connected = <&axi_ethernet_eth>;
+			axistream-connected-control = <&axi_ethernet_eth>;
+		};
+		ns16550: uart@62300000 {
+			compatible = "ns16550a";
+			interrupts-extended = <&plic 0>;
+			reg = <0x0 0x62300000 0x0 0x1000>;
+			clock-frequency = <83333000>;
+			reg-shift = <2>;
+		};
+	};
+};
