@@ -9,6 +9,7 @@ import gfeparameters
 import os
 import time
 import struct
+import glob
 from parameterized import parameterized
 
 class BaseGfeTest(unittest.TestCase):
@@ -251,7 +252,7 @@ class TestIsaGfe(BaseGfeTest):
 
     def run_isa_p_test(self, xlen, test_path):
         test_name = os.path.basename(test_path)
-        print("Running test {}".format(test_path))
+        print("Running {}".format(test_path))
         self.gfe.gdb_session.command("file {}".format(test_path))
         self.gfe.gdb_session.load()
         self.gfe.gdb_session.b("write_tohost")
@@ -262,7 +263,7 @@ class TestIsaGfe(BaseGfeTest):
 
     def run_isa_v_test(self, xlen, test_path):
         test_name = os.path.basename(test_path)
-        print("Running test {}".format(test_path))
+        print("Running {}".format(test_path))
         self.gfe.gdb_session.command("file {}".format(test_path))
         self.gfe.gdb_session.load()
         self.gfe.gdb_session.b("terminate")
@@ -276,9 +277,8 @@ riscv_isa_tests_path = os.path.join(
     'riscv-tools',
     'riscv-tests',
     'isa')
-p2_isa_list = [
-    [os.path.join(riscv_isa_tests_path, "rv64mi-p-access")],
-    [os.path.join(riscv_isa_tests_path, "rv64mi-p-breakpoint")]   ]
+p2_isa_list = glob.glob(os.path.join(riscv_isa_tests_path, 'rv64*-*-*'))
+p2_isa_list = [k for k in p2_isa_list if '.' not in k]
 p1_isa_list = [[os.path.join(riscv_isa_tests_path, "rv32ui-p-add")]]
 
 # Create ISA unittests for P2
@@ -287,9 +287,9 @@ class TestP2IsaGfe(TestIsaGfe):
     def getXlen(self):
         return '64'
 
-    @parameterized.expand(p2_isa_list)
-    def test_isa(self, test_path):
-        self.run_isa_test(test_path)
+    def test_isa(self):
+        for test_path in p2_isa_list:
+            self.run_isa_test(test_path)
 
 # Create ISA unittests for P1
 class TestP1IsaGfe(TestIsaGfe):
@@ -297,9 +297,9 @@ class TestP1IsaGfe(TestIsaGfe):
     def getXlen(self):
         return '32'
 
-    @parameterized.expand(p1_isa_list)
-    def test_isa(self, name, test_path):
-        self.run_isa_test(test_path)
+    def test_isa(self):
+        for test_path in p1_isa_list:
+            self.run_isa_test(test_path)
 
 
 class TestFreeRTOS(BaseGfeTest):
