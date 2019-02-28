@@ -36,7 +36,9 @@ else
   ./testing/scripts/gen-test-all rv32imacu > test_32.gdb
 fi
 riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/test_${XLEN}.gdb
-# riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/testing/scripts/test
-# riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/testing/scripts/rel_1_isa_tests.gdb
 echo "riscv-tests summary:"
-grep -E "(PASS|FAIL)" gdb-client.log | uniq -c
+grep -E "(PASS|FAIL)" gdb-client.log | uniq -c 
+# Return a non-zero exit code on failure
+if grep -q "FAIL" gdb-client.log; then
+	err_msg 1 "ISA tests failed"
+fi

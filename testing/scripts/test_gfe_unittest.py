@@ -10,7 +10,6 @@ import os
 import time
 import struct
 import glob
-from parameterized import parameterized
 
 class BaseGfeTest(unittest.TestCase):
     """GFE base testing class. All GFE Python unittests inherit from this class"""
@@ -73,7 +72,8 @@ class TestGfe(BaseGfeTest):
         self.assertEqual(scr_value, 0x0)
 
     def test_uart(self):
-        # Load up the UART test program
+        """Run a test UART program. Send the RISCV core characters using pyserial
+        and receive them back"""
         print("xlen = " + self.getXlen())
         if '64' in self.getXlen():
             uart_elf = 'rv64ui-p-uart'
@@ -183,6 +183,8 @@ class TestGfe(BaseGfeTest):
     #     return
 
     def test_ddr(self):
+        """Write data to ddr and read it back"""
+
         # Read the base address of ddr
         ddr_base = gfeparameters.DDR_BASE
         base_val = self.gfe.riscvRead32(ddr_base)
@@ -201,7 +203,7 @@ class TestGfe(BaseGfeTest):
         return
 
     def test_bootrom(self):
-        """Read some values bootrom and perform some basic checks"""
+        """Read some values bootrom and make sure they aren't all zero"""
 
         # Read the first value from the bootrom
         bootrom_base = gfeparameters.BOOTROM_BASE
@@ -235,78 +237,6 @@ class TestGfe64(TestGfe):
 
     def getXlen(self):
         return '64'
-
-# Create ISA unittest base class for P1 and P2 processors
-class TestIsaGfe(BaseGfeTest):
-
-    def run_isa_test(self, test_path):
-        test_name = os.path.basename(test_path)
-        if '32' in test_name:
-            xlen = '32'
-        if '64' in test_name:
-            xlen = '64'
-        if 'p' in test_name:
-            return self.run_isa_p_test(xlen, test_path)
-        if 'v' in test_name:
-            return self.run_isa_v_test(xlen, test_path)           
-
-    def run_isa_p_test(self, xlen, test_path):
-        test_name = os.path.basename(test_path)
-        print("Running {}".format(test_path))
-        self.gfe.gdb_session.command("file {}".format(test_path))
-        self.gfe.gdb_session.load()
-        self.gfe.gdb_session.b("write_tohost")
-        self.gfe.gdb_session.c()
-        gp = self.gfe.gdb_session.p("$gp")
-        self.assertEqual(gp, 1)
-        return
-
-    def run_isa_v_test(self, xlen, test_path):
-        test_name = os.path.basename(test_path)
-        print("Running {}".format(test_path))
-        self.gfe.gdb_session.command("file {}".format(test_path))
-        self.gfe.gdb_session.load()
-        self.gfe.gdb_session.b("terminate")
-        self.gfe.gdb_session.c()
-        a0 = self.gfe.gdb_session.p("$a0")
-        self.assertEqual(a0, 1)
-        return
-
-riscv_isa_tests_path = os.path.join(
-    os.path.dirname(os.path.dirname(os.getcwd())),
-    'riscv-tools',
-    'riscv-tests',
-    'isa')
-p2_isa_list = glob.glob(os.path.join(riscv_isa_tests_path, 'rv64*-*-*'))
-p2_isa_names = [os.path.basename(k) for k in p2_isa_list]
-p2_isa_names = [k for k in p2_isa_names if '.' not in k] # Remove all .dump files etc
-p2_isa_list = [os.path.join(riscv_isa_tests_path, k) for k in p2_isa_names]
-
-p1_isa_list = glob.glob(os.path.join(riscv_isa_tests_path, 'rv32*-p-*'))
-p1_isa_names = [os.path.basename(k) for k in p1_isa_list]
-p1_isa_names = [k for k in p1_isa_names if '.' not in k] # Remove all .dump files etc
-p1_isa_list = [os.path.join(riscv_isa_tests_path, k) for k in p1_isa_names]
-
-# Create ISA unittests for P2
-class TestP2IsaGfe(TestIsaGfe):
-
-    def getXlen(self):
-        return '64'
-
-    def test_isa(self):
-        for test_path in p2_isa_list:
-            self.run_isa_test(test_path)
-
-# Create ISA unittests for P1
-class TestP1IsaGfe(TestIsaGfe):
-
-    def getXlen(self):
-        return '32'
-
-    def test_isa(self):
-        for test_path in p1_isa_list:
-            self.run_isa_test(test_path)
-
 
 class TestFreeRTOS(BaseGfeTest):
 
@@ -388,6 +318,83 @@ class TestFreeRTOS64(TestGfe):
 
     def getXlen(self):
         return '64'
+
+class BaseTestIsaGfe(BaseGfeTest):
+    """ISA unittest base class for P1 and P2 processors.
+
+    Note that this testing flow is slower than using GDB scripting,
+    so we continue to use separate gdb scripts for running automated
+    ISA tests on the GFE. The python framework can be useful for more
+    complex debugging."""
+
+    def run_isa_test(self, test_path):
+        test_name = os.path.basename(test_path)
+        if '32' in test_name:
+            xlen = '32'
+        if '64' in test_name:
+            xlen = '64'
+        if 'p' in test_name:
+            return self.run_isa_p_test(xlen, test_path)
+        if 'v' in test_name:
+            return self.run_isa_v_test(xlen, test_path)           
+
+    def run_isa_p_test(self, xlen, test_path):
+        test_name = os.path.basename(test_path)
+        print("Running {}".format(test_path))
+        self.gfe.gdb_session.command("file {}".format(test_path))
+        self.gfe.gdb_session.load()
+        self.gfe.gdb_session.b("write_tohost")
+        self.gfe.gdb_session.c()
+        gp = self.gfe.gdb_session.p("$gp")
+        self.assertEqual(gp, 1)
+        return
+
+    def run_isa_v_test(self, xlen, test_path):
+        test_name = os.path.basename(test_path)
+        print("Running {}".format(test_path))
+        self.gfe.gdb_session.command("file {}".format(test_path))
+        self.gfe.gdb_session.load()
+        self.gfe.gdb_session.b("terminate")
+        self.gfe.gdb_session.c()
+        a0 = self.gfe.gdb_session.p("$a0")
+        self.assertEqual(a0, 1)
+        return
+
+# Extract lists of isa tests from riscv-tests directory
+riscv_isa_tests_path = os.path.join(
+    os.path.dirname(os.path.dirname(os.getcwd())),
+    'riscv-tools',
+    'riscv-tests',
+    'isa')
+p2_isa_list = glob.glob(os.path.join(riscv_isa_tests_path, 'rv64*-*-*'))
+p2_isa_names = [os.path.basename(k) for k in p2_isa_list]
+p2_isa_names = [k for k in p2_isa_names if '.' not in k] # Remove all .dump files etc
+p2_isa_list = [os.path.join(riscv_isa_tests_path, k) for k in p2_isa_names]
+
+p1_isa_list = glob.glob(os.path.join(riscv_isa_tests_path, 'rv32*-p-*'))
+p1_isa_names = [os.path.basename(k) for k in p1_isa_list]
+p1_isa_names = [k for k in p1_isa_names if '.' not in k] # Remove all .dump files etc
+p1_isa_list = [os.path.join(riscv_isa_tests_path, k) for k in p1_isa_names]
+
+class TestP2IsaGfe(BaseTestIsaGfe):
+    """ISA unitttests for P2 processor"""
+
+    def getXlen(self):
+        return '64'
+
+    def test_isa(self):
+        for test_path in p2_isa_list:
+            self.run_isa_test(test_path)
+
+class TestP1IsaGfe(BaseTestIsaGfe):
+    """ISA unitttests for P1 processor"""
+
+    def getXlen(self):
+        return '32'
+
+    def test_isa(self):
+        for test_path in p1_isa_list:
+            self.run_isa_test(test_path)
 
 if __name__ == '__main__':
     unittest.main()
