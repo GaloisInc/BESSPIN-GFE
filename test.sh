@@ -25,7 +25,6 @@ python test_gfe_unittest.py TestGfe${XLEN}
 err_msg $? "GFE unittests failed. Run python test_gfe_unittest.py"
 
 # Generate gdb isa test script
-# Reset the gfe
 cd $BASE_DIR/testing/scripts
 python softReset.py
 cd $BASE_DIR
@@ -35,6 +34,8 @@ then
 else
   ./testing/scripts/gen-test-all rv32imacu > test_32.gdb
 fi
+
+# Run the isa tests
 riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/test_${XLEN}.gdb
 echo "riscv-tests summary:"
 grep -E "(PASS|FAIL)" gdb-client.log | uniq -c 
