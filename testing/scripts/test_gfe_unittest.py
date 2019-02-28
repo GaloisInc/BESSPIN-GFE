@@ -278,8 +278,14 @@ riscv_isa_tests_path = os.path.join(
     'riscv-tests',
     'isa')
 p2_isa_list = glob.glob(os.path.join(riscv_isa_tests_path, 'rv64*-*-*'))
-p2_isa_list = [k for k in p2_isa_list if '.' not in k]
-p1_isa_list = [[os.path.join(riscv_isa_tests_path, "rv32ui-p-add")]]
+p2_isa_names = [os.path.basename(k) for k in p2_isa_list]
+p2_isa_names = [k for k in p2_isa_names if '.' not in k] # Remove all .dump files etc
+p2_isa_list = [os.path.join(riscv_isa_tests_path, k) for k in p2_isa_names]
+
+p1_isa_list = glob.glob(os.path.join(riscv_isa_tests_path, 'rv32*-p-*'))
+p1_isa_names = [os.path.basename(k) for k in p1_isa_list]
+p1_isa_names = [k for k in p1_isa_names if '.' not in k] # Remove all .dump files etc
+p1_isa_list = [os.path.join(riscv_isa_tests_path, k) for k in p1_isa_names]
 
 # Create ISA unittests for P2
 class TestP2IsaGfe(TestIsaGfe):

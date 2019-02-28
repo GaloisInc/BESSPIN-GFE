@@ -24,13 +24,16 @@ cd $BASE_DIR/testing/scripts
 python test_gfe_unittest.py TestGfe${XLEN}
 err_msg $? "GFE unittests failed. Run python test_gfe_unittest.py"
 
-cd $BASE_DIR
 # Generate gdb isa test script
+# Reset the gfe
+cd $BASE_DIR/testing/scripts
+python softReset.py
+cd $BASE_DIR
 if [ ${XLEN} == 64 ]
 then
-  ./testing/scripts/gen-test-all rv${XLEN}imacu > test_${XLEN}.gdb
+  ./testing/scripts/gen-test-all rv64gcsu > test_64.gdb
 else
-  ./testing/scripts/gen-test-all rv${XLEN}imafcu > test_${XLEN}.gdb
+  ./testing/scripts/gen-test-all rv32imacu > test_32.gdb
 fi
 riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/test_${XLEN}.gdb
 # riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/testing/scripts/test
