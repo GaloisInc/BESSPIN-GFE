@@ -69,19 +69,21 @@
 			xlnx,txcsum = <0x2>;
 			phy-handle = <&phy0>;
 			local-mac-address = [12 34 56 78 90 ab];
+			clock-frequency = <83333000>;
 			axi_ethernet_mdio: mdio {
 				#address-cells = <1>;
 				#size-cells = <0>;
 				phy0: phy@0 {
 				      device_type = "ethernet-phy";
-				      reg = <1>;
+				      ti,fifo-depth = <1>;
+				      reg = <3>;
 				};
 			};
 		};
 		axi_dma: dma@62200000 {
 			compatible = "xlnx,axi-dma-7.01.a", "xlnx,axi-dma-1.00.a";
 			reg = <0x0 0x62200000 0x0 0x10000>;
-			interrupts-extended = <&plic 2 &plic 3>;
+			interrupts-extended = <&plic 3 &plic 2>;
 			axistream-connected = <&axi_ethernet_eth>;
 			axistream-connected-control = <&axi_ethernet_eth>;
 		};
