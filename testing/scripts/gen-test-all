@@ -37,8 +37,6 @@ target remote | openocd --debug --log_output openocd.log --command "gdb_port pip
 
 define soft_reset
   set *((int *) 0x6FFF0000) = 1
-  interrupt
-  continue
 end
 
 define run_prog
@@ -125,6 +123,7 @@ for e in $env; do
     done
 
     echo
+    echo soft_reset
 done
 
 cat <<EOF
