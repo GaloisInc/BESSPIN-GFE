@@ -6,14 +6,150 @@
 //
 // Ports:
 // Name                         I/O  size props
-// axi_in_tready                  O     1 const
-// CLK                            I     1 unused
-// RST_N                          I     1 unused
-// axi_in_tvalid                  I     1 unused
-// axi_in_tdata                   I   608 unused
-// axi_in_tstrb                   I    76 unused
-// axi_in_tkeep                   I    76 unused
-// axi_in_tlast                   I     1 unused
+// axi_in_tready                  O     1 reg
+// m_axis_cc_tvalid               O     1 reg
+// m_axis_cc_tdata                O    64
+// m_axis_cc_tkeep                O     2
+// m_axis_cc_tlast                O     1
+// m_axis_cc_tuser                O    33 const
+// m_axis_rq_tvalid               O     1 reg
+// m_axis_rq_tdata                O    64
+// m_axis_rq_tkeep                O     2
+// m_axis_rq_tlast                O     1
+// m_axis_rq_tuser                O    62
+// s_axis_cq_tready               O     1
+// s_axis_rc_tready               O     1
+// pcie4_cfg_mgmt_addr            O    10 const
+// pcie4_cfg_mgmt_byte_enable     O     4 const
+// pcie4_cfg_mgmt_debug_access    O     1 const
+// pcie4_cfg_mgmt_function_number  O     8 const
+// pcie4_cfg_mgmt_read            O     1 const
+// pcie4_cfg_mgmt_write_data      O    32 const
+// pcie4_cfg_mgmt_write           O     1 const
+// pcie4_cfg_pm_aspm_l1_entry_reject  O     1 const
+// pcie4_cfg_pm_aspm_tx_10s_entry_disable  O     1 const
+// pcie4_cfg_external_msix_msix_address  O    64 const
+// pcie4_cfg_external_msix_msix_data  O    32 const
+// pcie4_cfg_external_msix_msix_intrpt  O     1 const
+// pcie4_cfg_external_msix_msix_vec_pending  O     2 const
+// pcie4_cfg_external_msix_msi_function_number  O     8 const
+// pcie4_cfg_interrupt_intrpt     O     4 const
+// pcie4_cfg_interrupt_pending    O     4 const
+// pcie4_cfg_control_config_space_enable  O     1 const
+// pcie4_cfg_control_ds_bus_number  O     8 const
+// pcie4_cfg_control_ds_device_number  O     5 const
+// pcie4_cfg_control_ds_port_number  O     8 const
+// pcie4_cfg_control_dsn          O    64 const
+// pcie4_cfg_control_err_cor_in   O     1 const
+// pcie4_cfg_control_err_uncor_in  O     1 const
+// pcie4_cfg_control_flr_done     O     4 const
+// pcie4_cfg_control_hot_reset_in  O     1 const
+// pcie4_cfg_control_link_training_enable  O     1 const
+// pcie4_cfg_control_power_state_change_ack  O     1 const
+// pcie4_cfg_control_req_pm_transition_l23_ready  O     1 const
+// pcie4_cfg_control_vf_flr_done  O     1 const
+// pcie4_cfg_control_vf_flr_func_num  O     8 const
+// pcie4_cfg_fc_sel               O     3 const
+// pcie4_cfg_mesg_tx_transmit     O     1 const
+// pcie4_cfg_mesg_tx_transmit_data  O    32 const
+// pcie4_cfg_mesg_tx_transmit_type  O     3 const
+// pcie4_cfg_status_pcie_cq_np_req  O     2 const
+// CLK_sys_clk                    O     1 clock
+// CLK_GATE_sys_clk               O     1 const
+// CLK_sys_clk_gt                 O     1 clock
+// CLK_GATE_sys_clk_gt            O     1 const
+// CLK_axi_clk                    O     1 clock
+// CLK_GATE_axi_clk               O     1 const
+// RST_N_axi_rstn                 O     1 reset
+// CLK_ref_clk_p                  I     1 unused
+// CLK_ref_clk_n                  I     1 unused
+// CLK_user_clk                   I     1 clock
+// RST_N_user_reset               I     1 reset
+// CLK_user_clk_half              I     1 clock
+// CLK_aclk                       I     1 clock
+// RST_N_aresetn                  I     1 unused
+// axi_in_tvalid                  I     1
+// axi_in_tdata                   I   608 reg
+// axi_in_tstrb                   I    76 reg
+// axi_in_tkeep                   I    76 reg
+// axi_in_tlast                   I     1 reg
+// m_axis_cc_tready               I     1
+// m_axis_rq_tready               I     1
+// s_axis_cq_tvalid               I     1
+// s_axis_cq_tdata                I    64
+// s_axis_cq_tkeep                I     2
+// s_axis_cq_tlast                I     1
+// s_axis_cq_tuser                I    88
+// s_axis_rc_tvalid               I     1
+// s_axis_rc_tdata                I    64
+// s_axis_rc_tkeep                I     2
+// s_axis_rc_tlast                I     1
+// s_axis_rc_tuser                I    75
+// pcie4_cfg_mgmt_read_data       I    32 unused
+// pcie4_cfg_mgmt_read_write_done  I     1 unused
+// pcie4_cfg_external_msix_msix_msix_enable  I     4
+// pcie4_cfg_external_msix_msix_msix_mask  I     4
+// pcie4_cfg_external_msix_msix_vec_pending_status  I     1 unused
+// pcie4_cfg_external_msix_msix_vf_enable  I   252 unused
+// pcie4_cfg_external_msix_msix_vf_mask  I   252 unused
+// pcie4_cfg_external_msix_msi_fail  I     1 unused
+// pcie4_cfg_external_msix_msi_sent  I     1 unused
+// pcie4_cfg_interrupt_sent       I     1 unused
+// pcie4_cfg_control_bus_number   I     8 unused
+// pcie4_cfg_control_flr_in_process  I     1 unused
+// pcie4_cfg_control_hot_reset_out  I     1 unused
+// pcie4_cfg_control_power_state_change_interrupt  I     1 unused
+// pcie4_cfg_control_vf_flr_in_process  I   252 unused
+// pcie4_cfg_fc_cpld              I    12 unused
+// pcie4_cfg_fc_cplh              I     8 unused
+// pcie4_cfg_fc_npd               I    12 unused
+// pcie4_cfg_fc_nph               I     8 unused
+// pcie4_cfg_fc_pd                I    12 unused
+// pcie4_cfg_fc_ph                I     8 unused
+// pcie4_cfg_mesg_tx_transmit_done  I     1 unused
+// pcie4_cfg_mesg_rcvd_received   I     1 unused
+// pcie4_cfg_mesg_rcvd_received_data  I     8 unused
+// pcie4_cfg_mesg_rcvd_received_type  I     5 unused
+// pcie4_cfg_status_pcie_cq_np_req_count  I     6 unused
+// pcie4_cfg_status_current_speed  I     2 unused
+// pcie4_cfg_status_err_cor_out   I     1 unused
+// pcie4_cfg_status_err_fatal_out  I     1 unused
+// pcie4_cfg_status_err_nonfatal_out  I     1 unused
+// pcie4_cfg_status_funstion_power_state  I    12 unused
+// pcie4_cfg_status_function_status  I    16
+// pcie4_cfg_status_link_power_state  I     2 unused
+// pcie4_cfg_status_local_error_out  I     5 unused
+// pcie4_cfg_status_local_error_valid  I     1 unused
+// pcie4_cfg_status_ltssm_state   I     6 unused
+// pcie4_cfg_status_max_payload   I     2
+// pcie4_cfg_status_max_read_req  I     3
+// pcie4_cfg_status_negotiated_width  I     3 unused
+// pcie4_cfg_status_obff_enable   I     2 unused
+// pcie4_cfg_status_phy_link_down  I     1 unused
+// pcie4_cfg_status_phy_link_status  I     2 unused
+// pcie4_cfg_status_pl_status_change  I     1 unused
+// pcie4_cfg_status_rcb_status    I     4
+// pcie4_cfg_status_rq_seq_num0   I     6 unused
+// pcie4_cfg_status_rq_seq_num1   I     6 unused
+// pcie4_cfg_status_rq_seq_num_vld0  I     1 unused
+// pcie4_cfg_status_rq_seq_num_vld1  I     1 unused
+// pcie4_cfg_status_rq_tag0       I     8 unused
+// pcie4_cfg_status_rq_tag1       I     8 unused
+// pcie4_cfg_status_rq_tag_av     I     4 unused
+// pcie4_cfg_status_rq_tag_vld0   I     1 unused
+// pcie4_cfg_status_rq_tag_vld1   I     1 unused
+// pcie4_cfg_status_rx_pm_state   I     2 unused
+// pcie4_cfg_status_tfc_npd_av    I     4 unused
+// pcie4_cfg_status_tfc_nph_av    I     4 unused
+// pcie4_cfg_status_tph_requester_enable  I     4 unused
+// pcie4_cfg_status_tph_st_mode   I    12 unused
+// pcie4_cfg_status_tx_pm_state   I     2 unused
+// pcie4_cfg_status_vf_power_state  I   756 unused
+// pcie4_cfg_status_vf_status     I   504 unused
+// pcie4_cfg_status_vf_tph_requester_enable  I   252 unused
+// pcie4_cfg_status_vf_tph_st_mode  I   756 unused
+// pcie4_user_link_up             I     1
+// pcie4_phy_rdy_out              I     1 unused
 //
 // No combinational paths from inputs to outputs
 //
@@ -32,8 +168,13 @@
   `define BSV_RESET_EDGE negedge
 `endif
 
-module mkSVF_Bridge(CLK,
-		    RST_N,
+module mkSVF_Bridge(CLK_ref_clk_p,
+		    CLK_ref_clk_n,
+		    CLK_user_clk,
+		    RST_N_user_reset,
+		    CLK_user_clk_half,
+		    CLK_aclk,
+		    RST_N_aresetn,
 
 		    axi_in_tvalid,
 		    axi_in_tdata,
@@ -41,9 +182,265 @@ module mkSVF_Bridge(CLK,
 		    axi_in_tkeep,
 		    axi_in_tlast,
 
-		    axi_in_tready);
-  input  CLK;
-  input  RST_N;
+		    axi_in_tready,
+
+		    m_axis_cc_tvalid,
+
+		    m_axis_cc_tdata,
+
+		    m_axis_cc_tkeep,
+
+		    m_axis_cc_tlast,
+
+		    m_axis_cc_tuser,
+
+		    m_axis_cc_tready,
+
+		    m_axis_rq_tvalid,
+
+		    m_axis_rq_tdata,
+
+		    m_axis_rq_tkeep,
+
+		    m_axis_rq_tlast,
+
+		    m_axis_rq_tuser,
+
+		    m_axis_rq_tready,
+
+		    s_axis_cq_tvalid,
+		    s_axis_cq_tdata,
+		    s_axis_cq_tkeep,
+		    s_axis_cq_tlast,
+		    s_axis_cq_tuser,
+
+		    s_axis_cq_tready,
+
+		    s_axis_rc_tvalid,
+		    s_axis_rc_tdata,
+		    s_axis_rc_tkeep,
+		    s_axis_rc_tlast,
+		    s_axis_rc_tuser,
+
+		    s_axis_rc_tready,
+
+		    pcie4_cfg_mgmt_addr,
+
+		    pcie4_cfg_mgmt_byte_enable,
+
+		    pcie4_cfg_mgmt_debug_access,
+
+		    pcie4_cfg_mgmt_function_number,
+
+		    pcie4_cfg_mgmt_read_data,
+
+		    pcie4_cfg_mgmt_read,
+
+		    pcie4_cfg_mgmt_read_write_done,
+
+		    pcie4_cfg_mgmt_write_data,
+
+		    pcie4_cfg_mgmt_write,
+
+		    pcie4_cfg_pm_aspm_l1_entry_reject,
+
+		    pcie4_cfg_pm_aspm_tx_10s_entry_disable,
+
+		    pcie4_cfg_external_msix_msix_address,
+
+		    pcie4_cfg_external_msix_msix_data,
+
+		    pcie4_cfg_external_msix_msix_msix_enable,
+
+		    pcie4_cfg_external_msix_msix_intrpt,
+
+		    pcie4_cfg_external_msix_msix_msix_mask,
+
+		    pcie4_cfg_external_msix_msix_vec_pending,
+
+		    pcie4_cfg_external_msix_msix_vec_pending_status,
+
+		    pcie4_cfg_external_msix_msix_vf_enable,
+
+		    pcie4_cfg_external_msix_msix_vf_mask,
+
+		    pcie4_cfg_external_msix_msi_fail,
+
+		    pcie4_cfg_external_msix_msi_function_number,
+
+		    pcie4_cfg_external_msix_msi_sent,
+
+		    pcie4_cfg_interrupt_intrpt,
+
+		    pcie4_cfg_interrupt_pending,
+
+		    pcie4_cfg_interrupt_sent,
+
+		    pcie4_cfg_control_bus_number,
+
+		    pcie4_cfg_control_config_space_enable,
+
+		    pcie4_cfg_control_ds_bus_number,
+
+		    pcie4_cfg_control_ds_device_number,
+
+		    pcie4_cfg_control_ds_port_number,
+
+		    pcie4_cfg_control_dsn,
+
+		    pcie4_cfg_control_err_cor_in,
+
+		    pcie4_cfg_control_err_uncor_in,
+
+		    pcie4_cfg_control_flr_done,
+
+		    pcie4_cfg_control_flr_in_process,
+
+		    pcie4_cfg_control_hot_reset_in,
+
+		    pcie4_cfg_control_hot_reset_out,
+
+		    pcie4_cfg_control_link_training_enable,
+
+		    pcie4_cfg_control_power_state_change_ack,
+
+		    pcie4_cfg_control_power_state_change_interrupt,
+
+		    pcie4_cfg_control_req_pm_transition_l23_ready,
+
+		    pcie4_cfg_control_vf_flr_done,
+
+		    pcie4_cfg_control_vf_flr_func_num,
+
+		    pcie4_cfg_control_vf_flr_in_process,
+
+		    pcie4_cfg_fc_cpld,
+
+		    pcie4_cfg_fc_cplh,
+
+		    pcie4_cfg_fc_npd,
+
+		    pcie4_cfg_fc_nph,
+
+		    pcie4_cfg_fc_pd,
+
+		    pcie4_cfg_fc_ph,
+
+		    pcie4_cfg_fc_sel,
+
+		    pcie4_cfg_mesg_tx_transmit,
+
+		    pcie4_cfg_mesg_tx_transmit_data,
+
+		    pcie4_cfg_mesg_tx_transmit_done,
+
+		    pcie4_cfg_mesg_tx_transmit_type,
+
+		    pcie4_cfg_mesg_rcvd_received,
+
+		    pcie4_cfg_mesg_rcvd_received_data,
+
+		    pcie4_cfg_mesg_rcvd_received_type,
+
+		    pcie4_cfg_status_pcie_cq_np_req,
+
+		    pcie4_cfg_status_pcie_cq_np_req_count,
+
+		    pcie4_cfg_status_current_speed,
+
+		    pcie4_cfg_status_err_cor_out,
+
+		    pcie4_cfg_status_err_fatal_out,
+
+		    pcie4_cfg_status_err_nonfatal_out,
+
+		    pcie4_cfg_status_funstion_power_state,
+
+		    pcie4_cfg_status_function_status,
+
+		    pcie4_cfg_status_link_power_state,
+
+		    pcie4_cfg_status_local_error_out,
+
+		    pcie4_cfg_status_local_error_valid,
+
+		    pcie4_cfg_status_ltssm_state,
+
+		    pcie4_cfg_status_max_payload,
+
+		    pcie4_cfg_status_max_read_req,
+
+		    pcie4_cfg_status_negotiated_width,
+
+		    pcie4_cfg_status_obff_enable,
+
+		    pcie4_cfg_status_phy_link_down,
+
+		    pcie4_cfg_status_phy_link_status,
+
+		    pcie4_cfg_status_pl_status_change,
+
+		    pcie4_cfg_status_rcb_status,
+
+		    pcie4_cfg_status_rq_seq_num0,
+
+		    pcie4_cfg_status_rq_seq_num1,
+
+		    pcie4_cfg_status_rq_seq_num_vld0,
+
+		    pcie4_cfg_status_rq_seq_num_vld1,
+
+		    pcie4_cfg_status_rq_tag0,
+
+		    pcie4_cfg_status_rq_tag1,
+
+		    pcie4_cfg_status_rq_tag_av,
+
+		    pcie4_cfg_status_rq_tag_vld0,
+
+		    pcie4_cfg_status_rq_tag_vld1,
+
+		    pcie4_cfg_status_rx_pm_state,
+
+		    pcie4_cfg_status_tfc_npd_av,
+
+		    pcie4_cfg_status_tfc_nph_av,
+
+		    pcie4_cfg_status_tph_requester_enable,
+
+		    pcie4_cfg_status_tph_st_mode,
+
+		    pcie4_cfg_status_tx_pm_state,
+
+		    pcie4_cfg_status_vf_power_state,
+
+		    pcie4_cfg_status_vf_status,
+
+		    pcie4_cfg_status_vf_tph_requester_enable,
+
+		    pcie4_cfg_status_vf_tph_st_mode,
+
+		    pcie4_user_link_up,
+
+		    pcie4_phy_rdy_out,
+
+		    CLK_sys_clk,
+		    CLK_GATE_sys_clk,
+
+		    CLK_sys_clk_gt,
+		    CLK_GATE_sys_clk_gt,
+
+		    CLK_axi_clk,
+		    CLK_GATE_axi_clk,
+
+		    RST_N_axi_rstn);
+  input  CLK_ref_clk_p;
+  input  CLK_ref_clk_n;
+  input  CLK_user_clk;
+  input  RST_N_user_reset;
+  input  CLK_user_clk_half;
+  input  CLK_aclk;
+  input  RST_N_aresetn;
 
   // action method axi_in_m_tvalid
   input  axi_in_tvalid;
@@ -55,17 +452,11659 @@ module mkSVF_Bridge(CLK,
   // value method axi_in_m_tready
   output axi_in_tready;
 
+  // value method pcie_in_m_axis_cc_m_tvalid
+  output m_axis_cc_tvalid;
+
+  // value method pcie_in_m_axis_cc_m_tdata
+  output [63 : 0] m_axis_cc_tdata;
+
+  // value method pcie_in_m_axis_cc_m_tkeep
+  output [1 : 0] m_axis_cc_tkeep;
+
+  // value method pcie_in_m_axis_cc_m_tlast
+  output m_axis_cc_tlast;
+
+  // value method pcie_in_m_axis_cc_m_tuser
+  output [32 : 0] m_axis_cc_tuser;
+
+  // action method pcie_in_m_axis_cc_m_tready
+  input  m_axis_cc_tready;
+
+  // value method pcie_in_m_axis_rq_m_tvalid
+  output m_axis_rq_tvalid;
+
+  // value method pcie_in_m_axis_rq_m_tdata
+  output [63 : 0] m_axis_rq_tdata;
+
+  // value method pcie_in_m_axis_rq_m_tkeep
+  output [1 : 0] m_axis_rq_tkeep;
+
+  // value method pcie_in_m_axis_rq_m_tlast
+  output m_axis_rq_tlast;
+
+  // value method pcie_in_m_axis_rq_m_tuser
+  output [61 : 0] m_axis_rq_tuser;
+
+  // action method pcie_in_m_axis_rq_m_tready
+  input  m_axis_rq_tready;
+
+  // action method pcie_in_s_axis_cq_m_tvalid
+  input  s_axis_cq_tvalid;
+  input  [63 : 0] s_axis_cq_tdata;
+  input  [1 : 0] s_axis_cq_tkeep;
+  input  s_axis_cq_tlast;
+  input  [87 : 0] s_axis_cq_tuser;
+
+  // value method pcie_in_s_axis_cq_m_tready
+  output s_axis_cq_tready;
+
+  // action method pcie_in_s_axis_rc_m_tvalid
+  input  s_axis_rc_tvalid;
+  input  [63 : 0] s_axis_rc_tdata;
+  input  [1 : 0] s_axis_rc_tkeep;
+  input  s_axis_rc_tlast;
+  input  [74 : 0] s_axis_rc_tuser;
+
+  // value method pcie_in_s_axis_rc_m_tready
+  output s_axis_rc_tready;
+
+  // value method pcie_in_pcie4_cfg_mgmt_addr
+  output [9 : 0] pcie4_cfg_mgmt_addr;
+
+  // value method pcie_in_pcie4_cfg_mgmt_byte_enable
+  output [3 : 0] pcie4_cfg_mgmt_byte_enable;
+
+  // value method pcie_in_pcie4_cfg_mgmt_debug_access
+  output pcie4_cfg_mgmt_debug_access;
+
+  // value method pcie_in_pcie4_cfg_mgmt_function_number
+  output [7 : 0] pcie4_cfg_mgmt_function_number;
+
+  // action method pcie_in_pcie4_cfg_mgmt_read_data
+  input  [31 : 0] pcie4_cfg_mgmt_read_data;
+
+  // value method pcie_in_pcie4_cfg_mgmt_read
+  output pcie4_cfg_mgmt_read;
+
+  // action method pcie_in_pcie4_cfg_mgmt_read_write_done
+  input  pcie4_cfg_mgmt_read_write_done;
+
+  // value method pcie_in_pcie4_cfg_mgmt_write_data
+  output [31 : 0] pcie4_cfg_mgmt_write_data;
+
+  // value method pcie_in_pcie4_cfg_mgmt_write
+  output pcie4_cfg_mgmt_write;
+
+  // value method pcie_in_pcie4_cfg_pm_aspm_l1_entry_reject
+  output pcie4_cfg_pm_aspm_l1_entry_reject;
+
+  // value method pcie_in_pcie4_cfg_pm_aspm_tx_10s_entry_disable
+  output pcie4_cfg_pm_aspm_tx_10s_entry_disable;
+
+  // value method pcie_in_pcie4_cfg_external_msix_msix_address
+  output [63 : 0] pcie4_cfg_external_msix_msix_address;
+
+  // value method pcie_in_pcie4_cfg_external_msix_msix_data
+  output [31 : 0] pcie4_cfg_external_msix_msix_data;
+
+  // action method pcie_in_pcie4_cfg_external_msix_msix_msix_enable
+  input  [3 : 0] pcie4_cfg_external_msix_msix_msix_enable;
+
+  // value method pcie_in_pcie4_cfg_external_msix_msix_intrpt
+  output pcie4_cfg_external_msix_msix_intrpt;
+
+  // action method pcie_in_pcie4_cfg_external_msix_msix_msix_mask
+  input  [3 : 0] pcie4_cfg_external_msix_msix_msix_mask;
+
+  // value method pcie_in_pcie4_cfg_external_msix_msix_vec_pending
+  output [1 : 0] pcie4_cfg_external_msix_msix_vec_pending;
+
+  // action method pcie_in_pcie4_cfg_external_msix_msix_vec_pending_status
+  input  pcie4_cfg_external_msix_msix_vec_pending_status;
+
+  // action method pcie_in_pcie4_cfg_external_msix_msix_vf_enable
+  input  [251 : 0] pcie4_cfg_external_msix_msix_vf_enable;
+
+  // action method pcie_in_pcie4_cfg_external_msix_msix_vf_mask
+  input  [251 : 0] pcie4_cfg_external_msix_msix_vf_mask;
+
+  // action method pcie_in_pcie4_cfg_external_msix_msi_fail
+  input  pcie4_cfg_external_msix_msi_fail;
+
+  // value method pcie_in_pcie4_cfg_external_msix_msi_function_number
+  output [7 : 0] pcie4_cfg_external_msix_msi_function_number;
+
+  // action method pcie_in_pcie4_cfg_external_msix_msi_sent
+  input  pcie4_cfg_external_msix_msi_sent;
+
+  // value method pcie_in_pcie4_cfg_interrupt_intrpt
+  output [3 : 0] pcie4_cfg_interrupt_intrpt;
+
+  // value method pcie_in_pcie4_cfg_interrupt_pending
+  output [3 : 0] pcie4_cfg_interrupt_pending;
+
+  // action method pcie_in_pcie4_cfg_interrupt_sent
+  input  pcie4_cfg_interrupt_sent;
+
+  // action method pcie_in_pcie4_cfg_control_bus_number
+  input  [7 : 0] pcie4_cfg_control_bus_number;
+
+  // value method pcie_in_pcie4_cfg_control_config_space_enable
+  output pcie4_cfg_control_config_space_enable;
+
+  // value method pcie_in_pcie4_cfg_control_ds_bus_number
+  output [7 : 0] pcie4_cfg_control_ds_bus_number;
+
+  // value method pcie_in_pcie4_cfg_control_ds_device_number
+  output [4 : 0] pcie4_cfg_control_ds_device_number;
+
+  // value method pcie_in_pcie4_cfg_control_ds_port_number
+  output [7 : 0] pcie4_cfg_control_ds_port_number;
+
+  // value method pcie_in_pcie4_cfg_control_dsn
+  output [63 : 0] pcie4_cfg_control_dsn;
+
+  // value method pcie_in_pcie4_cfg_control_err_cor_in
+  output pcie4_cfg_control_err_cor_in;
+
+  // value method pcie_in_pcie4_cfg_control_err_uncor_in
+  output pcie4_cfg_control_err_uncor_in;
+
+  // value method pcie_in_pcie4_cfg_control_flr_done
+  output [3 : 0] pcie4_cfg_control_flr_done;
+
+  // action method pcie_in_pcie4_cfg_control_flr_in_process
+  input  pcie4_cfg_control_flr_in_process;
+
+  // value method pcie_in_pcie4_cfg_control_hot_reset_in
+  output pcie4_cfg_control_hot_reset_in;
+
+  // action method pcie_in_pcie4_cfg_control_hot_reset_out
+  input  pcie4_cfg_control_hot_reset_out;
+
+  // value method pcie_in_pcie4_cfg_control_link_training_enable
+  output pcie4_cfg_control_link_training_enable;
+
+  // value method pcie_in_pcie4_cfg_control_power_state_change_ack
+  output pcie4_cfg_control_power_state_change_ack;
+
+  // action method pcie_in_pcie4_cfg_control_power_state_change_interrupt
+  input  pcie4_cfg_control_power_state_change_interrupt;
+
+  // value method pcie_in_pcie4_cfg_control_req_pm_transition_l23_ready
+  output pcie4_cfg_control_req_pm_transition_l23_ready;
+
+  // value method pcie_in_pcie4_cfg_control_vf_flr_done
+  output pcie4_cfg_control_vf_flr_done;
+
+  // value method pcie_in_pcie4_cfg_control_vf_flr_func_num
+  output [7 : 0] pcie4_cfg_control_vf_flr_func_num;
+
+  // action method pcie_in_pcie4_cfg_control_vf_flr_in_process
+  input  [251 : 0] pcie4_cfg_control_vf_flr_in_process;
+
+  // action method pcie_in_pcie4_cfg_fc_cpld
+  input  [11 : 0] pcie4_cfg_fc_cpld;
+
+  // action method pcie_in_pcie4_cfg_fc_cplh
+  input  [7 : 0] pcie4_cfg_fc_cplh;
+
+  // action method pcie_in_pcie4_cfg_fc_npd
+  input  [11 : 0] pcie4_cfg_fc_npd;
+
+  // action method pcie_in_pcie4_cfg_fc_nph
+  input  [7 : 0] pcie4_cfg_fc_nph;
+
+  // action method pcie_in_pcie4_cfg_fc_pd
+  input  [11 : 0] pcie4_cfg_fc_pd;
+
+  // action method pcie_in_pcie4_cfg_fc_ph
+  input  [7 : 0] pcie4_cfg_fc_ph;
+
+  // value method pcie_in_pcie4_cfg_fc_sel
+  output [2 : 0] pcie4_cfg_fc_sel;
+
+  // value method pcie_in_pcie4_cfg_mesg_tx_transmit
+  output pcie4_cfg_mesg_tx_transmit;
+
+  // value method pcie_in_pcie4_cfg_mesg_tx_transmit_data
+  output [31 : 0] pcie4_cfg_mesg_tx_transmit_data;
+
+  // action method pcie_in_pcie4_cfg_mesg_tx_transmit_done
+  input  pcie4_cfg_mesg_tx_transmit_done;
+
+  // value method pcie_in_pcie4_cfg_mesg_tx_transmit_type
+  output [2 : 0] pcie4_cfg_mesg_tx_transmit_type;
+
+  // action method pcie_in_pcie4_cfg_mesg_rcvd_received
+  input  pcie4_cfg_mesg_rcvd_received;
+
+  // action method pcie_in_pcie4_cfg_mesg_rcvd_received_data
+  input  [7 : 0] pcie4_cfg_mesg_rcvd_received_data;
+
+  // action method pcie_in_pcie4_cfg_mesg_rcvd_received_type
+  input  [4 : 0] pcie4_cfg_mesg_rcvd_received_type;
+
+  // value method pcie_in_pcie4_cfg_status_pcie_cq_np_req
+  output [1 : 0] pcie4_cfg_status_pcie_cq_np_req;
+
+  // action method pcie_in_pcie4_cfg_status_pcie_cq_np_req_count
+  input  [5 : 0] pcie4_cfg_status_pcie_cq_np_req_count;
+
+  // action method pcie_in_pcie4_cfg_status_current_speed
+  input  [1 : 0] pcie4_cfg_status_current_speed;
+
+  // action method pcie_in_pcie4_cfg_status_err_cor_out
+  input  pcie4_cfg_status_err_cor_out;
+
+  // action method pcie_in_pcie4_cfg_status_err_fatal_out
+  input  pcie4_cfg_status_err_fatal_out;
+
+  // action method pcie_in_pcie4_cfg_status_err_nonfatal_out
+  input  pcie4_cfg_status_err_nonfatal_out;
+
+  // action method pcie_in_pcie4_cfg_status_funstion_power_state
+  input  [11 : 0] pcie4_cfg_status_funstion_power_state;
+
+  // action method pcie_in_pcie4_cfg_status_function_status
+  input  [15 : 0] pcie4_cfg_status_function_status;
+
+  // action method pcie_in_pcie4_cfg_status_link_power_state
+  input  [1 : 0] pcie4_cfg_status_link_power_state;
+
+  // action method pcie_in_pcie4_cfg_status_local_error_out
+  input  [4 : 0] pcie4_cfg_status_local_error_out;
+
+  // action method pcie_in_pcie4_cfg_status_local_error_valid
+  input  pcie4_cfg_status_local_error_valid;
+
+  // action method pcie_in_pcie4_cfg_status_ltssm_state
+  input  [5 : 0] pcie4_cfg_status_ltssm_state;
+
+  // action method pcie_in_pcie4_cfg_status_max_payload
+  input  [1 : 0] pcie4_cfg_status_max_payload;
+
+  // action method pcie_in_pcie4_cfg_status_max_read_req
+  input  [2 : 0] pcie4_cfg_status_max_read_req;
+
+  // action method pcie_in_pcie4_cfg_status_negotiated_width
+  input  [2 : 0] pcie4_cfg_status_negotiated_width;
+
+  // action method pcie_in_pcie4_cfg_status_obff_enable
+  input  [1 : 0] pcie4_cfg_status_obff_enable;
+
+  // action method pcie_in_pcie4_cfg_status_phy_link_down
+  input  pcie4_cfg_status_phy_link_down;
+
+  // action method pcie_in_pcie4_cfg_status_phy_link_status
+  input  [1 : 0] pcie4_cfg_status_phy_link_status;
+
+  // action method pcie_in_pcie4_cfg_status_pl_status_change
+  input  pcie4_cfg_status_pl_status_change;
+
+  // action method pcie_in_pcie4_cfg_status_rcb_status
+  input  [3 : 0] pcie4_cfg_status_rcb_status;
+
+  // action method pcie_in_pcie4_cfg_status_rq_seq_num0
+  input  [5 : 0] pcie4_cfg_status_rq_seq_num0;
+
+  // action method pcie_in_pcie4_cfg_status_rq_seq_num1
+  input  [5 : 0] pcie4_cfg_status_rq_seq_num1;
+
+  // action method pcie_in_pcie4_cfg_status_rq_seq_num_vld0
+  input  pcie4_cfg_status_rq_seq_num_vld0;
+
+  // action method pcie_in_pcie4_cfg_status_rq_seq_num_vld1
+  input  pcie4_cfg_status_rq_seq_num_vld1;
+
+  // action method pcie_in_pcie4_cfg_status_rq_tag0
+  input  [7 : 0] pcie4_cfg_status_rq_tag0;
+
+  // action method pcie_in_pcie4_cfg_status_rq_tag1
+  input  [7 : 0] pcie4_cfg_status_rq_tag1;
+
+  // action method pcie_in_pcie4_cfg_status_rq_tag_av
+  input  [3 : 0] pcie4_cfg_status_rq_tag_av;
+
+  // action method pcie_in_pcie4_cfg_status_rq_tag_vld0
+  input  pcie4_cfg_status_rq_tag_vld0;
+
+  // action method pcie_in_pcie4_cfg_status_rq_tag_vld1
+  input  pcie4_cfg_status_rq_tag_vld1;
+
+  // action method pcie_in_pcie4_cfg_status_rx_pm_state
+  input  [1 : 0] pcie4_cfg_status_rx_pm_state;
+
+  // action method pcie_in_pcie4_cfg_status_tfc_npd_av
+  input  [3 : 0] pcie4_cfg_status_tfc_npd_av;
+
+  // action method pcie_in_pcie4_cfg_status_tfc_nph_av
+  input  [3 : 0] pcie4_cfg_status_tfc_nph_av;
+
+  // action method pcie_in_pcie4_cfg_status_tph_requester_enable
+  input  [3 : 0] pcie4_cfg_status_tph_requester_enable;
+
+  // action method pcie_in_pcie4_cfg_status_tph_st_mode
+  input  [11 : 0] pcie4_cfg_status_tph_st_mode;
+
+  // action method pcie_in_pcie4_cfg_status_tx_pm_state
+  input  [1 : 0] pcie4_cfg_status_tx_pm_state;
+
+  // action method pcie_in_pcie4_cfg_status_vf_power_state
+  input  [755 : 0] pcie4_cfg_status_vf_power_state;
+
+  // action method pcie_in_pcie4_cfg_status_vf_status
+  input  [503 : 0] pcie4_cfg_status_vf_status;
+
+  // action method pcie_in_pcie4_cfg_status_vf_tph_requester_enable
+  input  [251 : 0] pcie4_cfg_status_vf_tph_requester_enable;
+
+  // action method pcie_in_pcie4_cfg_status_vf_tph_st_mode
+  input  [755 : 0] pcie4_cfg_status_vf_tph_st_mode;
+
+  // action method pcie_in_pcie4_user_link_up
+  input  pcie4_user_link_up;
+
+  // action method pcie_in_pcie4_phy_rdy_out
+  input  pcie4_phy_rdy_out;
+
+  // oscillator and gates for output clock CLK_sys_clk
+  output CLK_sys_clk;
+  output CLK_GATE_sys_clk;
+
+  // oscillator and gates for output clock CLK_sys_clk_gt
+  output CLK_sys_clk_gt;
+  output CLK_GATE_sys_clk_gt;
+
+  // oscillator and gates for output clock CLK_axi_clk
+  output CLK_axi_clk;
+  output CLK_GATE_axi_clk;
+
+  // output resets
+  output RST_N_axi_rstn;
+
   // signals for module outputs
-  wire axi_in_tready;
+  wire [63 : 0] m_axis_cc_tdata,
+		m_axis_rq_tdata,
+		pcie4_cfg_control_dsn,
+		pcie4_cfg_external_msix_msix_address;
+  wire [61 : 0] m_axis_rq_tuser;
+  wire [32 : 0] m_axis_cc_tuser;
+  wire [31 : 0] pcie4_cfg_external_msix_msix_data,
+		pcie4_cfg_mesg_tx_transmit_data,
+		pcie4_cfg_mgmt_write_data;
+  wire [9 : 0] pcie4_cfg_mgmt_addr;
+  wire [7 : 0] pcie4_cfg_control_ds_bus_number,
+	       pcie4_cfg_control_ds_port_number,
+	       pcie4_cfg_control_vf_flr_func_num,
+	       pcie4_cfg_external_msix_msi_function_number,
+	       pcie4_cfg_mgmt_function_number;
+  wire [4 : 0] pcie4_cfg_control_ds_device_number;
+  wire [3 : 0] pcie4_cfg_control_flr_done,
+	       pcie4_cfg_interrupt_intrpt,
+	       pcie4_cfg_interrupt_pending,
+	       pcie4_cfg_mgmt_byte_enable;
+  wire [2 : 0] pcie4_cfg_fc_sel, pcie4_cfg_mesg_tx_transmit_type;
+  wire [1 : 0] m_axis_cc_tkeep,
+	       m_axis_rq_tkeep,
+	       pcie4_cfg_external_msix_msix_vec_pending,
+	       pcie4_cfg_status_pcie_cq_np_req;
+  wire CLK_GATE_axi_clk,
+       CLK_GATE_sys_clk,
+       CLK_GATE_sys_clk_gt,
+       CLK_axi_clk,
+       CLK_sys_clk,
+       CLK_sys_clk_gt,
+       RST_N_axi_rstn,
+       axi_in_tready,
+       m_axis_cc_tlast,
+       m_axis_cc_tvalid,
+       m_axis_rq_tlast,
+       m_axis_rq_tvalid,
+       pcie4_cfg_control_config_space_enable,
+       pcie4_cfg_control_err_cor_in,
+       pcie4_cfg_control_err_uncor_in,
+       pcie4_cfg_control_hot_reset_in,
+       pcie4_cfg_control_link_training_enable,
+       pcie4_cfg_control_power_state_change_ack,
+       pcie4_cfg_control_req_pm_transition_l23_ready,
+       pcie4_cfg_control_vf_flr_done,
+       pcie4_cfg_external_msix_msix_intrpt,
+       pcie4_cfg_mesg_tx_transmit,
+       pcie4_cfg_mgmt_debug_access,
+       pcie4_cfg_mgmt_read,
+       pcie4_cfg_mgmt_write,
+       pcie4_cfg_pm_aspm_l1_entry_reject,
+       pcie4_cfg_pm_aspm_tx_10s_entry_disable,
+       s_axis_cq_tready,
+       s_axis_rc_tready;
+
+  // probes
+  wire dut_prb_control_data_out_okToSend$PROBE,
+       dut_prb_control_data_out_okToSend$PROBE_VALID,
+       dut_prb_control_dutclkctrl_allowNeg$PROBE,
+       dut_prb_control_dutclkctrl_allowNeg$PROBE_VALID,
+       dut_prb_control_dutclkctrl_allowPos$PROBE,
+       dut_prb_control_dutclkctrl_allowPos$PROBE_VALID;
+
+  // inlined wires
+  reg [127 : 0] fS1MsgOut_ifc_rwEnqData$wget,
+		fS1MsgOut_ifc_rwEnqMask$wget,
+		fS2MsgOut_ifc_rwEnqData$wget;
+  reg [5 : 0] fS1MsgOut_ifc_rwEnqCount$wget;
+  wire [671 : 0] xcomms_tx_outpipe_add_to_output_buffer$wget;
+  wire [153 : 0] cc_f_tlps_rv$port1__read,
+		 cc_f_tlps_rv$port1__write_1,
+		 cc_f_tlps_rv$port2__read,
+		 rq_f_tlps_rv$port1__read,
+		 rq_f_tlps_rv$port1__write_1,
+		 rq_f_tlps_rv$port2__read;
+  wire [152 : 0] cq_f_cq_rv$port1__read,
+		 cq_f_cq_rv$port1__write_1,
+		 cq_f_cq_rv$port2__read;
+  wire [139 : 0] fS1OutPortAcks_ifc_rwEnqData$wget,
+		 fS1OutPortAcks_ifc_rwEnqMask$wget;
+  wire [127 : 0] fFromBridgeBeat_ifc_rwEnqData$wget,
+		 fS2MsgOut_ifc_rwEnqMask$wget,
+		 fToContinueBeat_ifc_rwEnqData$wget;
+  wire [35 : 0] xcomms_tx_outpipe_updates_from_ifc$wget;
+  wire [33 : 0] xcomms_rx_inpipe_updates_from_ifc$wget;
+  wire [18 : 0] xcomms_rx_inpipe_updates_from_msg$wget,
+		xcomms_tx_outpipe_updates_from_msg$wget;
+  wire [17 : 0] dut_prb_control_control_in_dataF_rv$port0__write_1,
+		dut_prb_control_control_in_dataF_rv$port1__read,
+		dut_prb_control_control_in_dataF_rv$port2__read,
+		xcomms_tx_outpipe_creditMsg$wget;
+  wire [5 : 0] fS2MsgOut_ifc_rwEnqCount$wget;
+  wire [4 : 0] fS1OutPortAcks_ifc_rwEnqCount$wget;
+  wire [3 : 0] xcomms_rx_inpipe_mimo_rwEnqCount$wget;
+  wire [1 : 0] xcomms_tx_outpipe_indata_mimo_rwEnqCount$wget;
+  wire cc_f_tlps_rv$EN_port0__write,
+       cq_f_cq_rv$EN_port0__write,
+       dut_prb_control_control_in_got_beat_pw$whas,
+       dut_prb_control_control_in_requestF_rv$port1__read,
+       dut_prb_control_data_out_decr$whas,
+       fFromBridgeBeat_ifc_rwDeqCount$whas,
+       fS1MsgOut_ifc_rwEnqCount$whas,
+       fS1MsgOut_ifc_rwEnqData$whas,
+       fS1OutPortAcks_ifc_rwEnqCount$whas,
+       fS2MsgOut_ifc_rwEnqCount$whas,
+       fS2MsgOut_ifc_rwEnqData$whas,
+       fToContinueBeat_ifc_rwEnqCount$whas,
+       rc_gearbox_pwDequeue$whas,
+       rc_gearbox_pwEnqueue$whas,
+       rq_f_tlps_rv$EN_port0__write,
+       xcomms_tx_outpipe_add_to_output_buffer$whas,
+       xcomms_tx_outpipe_data_beat_taken$whas,
+       xcomms_tx_outpipe_flush_done$whas,
+       xcomms_tx_outpipe_indata_mimo_rwEnqCount$whas;
+
+  // register cc_f_tlps_rv
+  reg [153 : 0] cc_f_tlps_rv;
+  wire [153 : 0] cc_f_tlps_rv$D_IN;
+  wire cc_f_tlps_rv$EN;
+
+  // register cc_gearbox_block0
+  reg [133 : 0] cc_gearbox_block0;
+  wire [133 : 0] cc_gearbox_block0$D_IN;
+  wire cc_gearbox_block0$EN;
+
+  // register cc_gearbox_block0_status
+  reg cc_gearbox_block0_status;
+  wire cc_gearbox_block0_status$D_IN, cc_gearbox_block0_status$EN;
+
+  // register cc_gearbox_block1
+  reg [133 : 0] cc_gearbox_block1;
+  wire [133 : 0] cc_gearbox_block1$D_IN;
+  wire cc_gearbox_block1$EN;
+
+  // register cc_gearbox_block1_status
+  reg cc_gearbox_block1_status;
+  wire cc_gearbox_block1_status$D_IN, cc_gearbox_block1_status$EN;
+
+  // register cc_gearbox_dInReset_pre_isInReset
+  reg cc_gearbox_dInReset_pre_isInReset;
+  wire cc_gearbox_dInReset_pre_isInReset$D_IN,
+       cc_gearbox_dInReset_pre_isInReset$EN;
+
+  // register cc_gearbox_elem0_status_0
+  reg cc_gearbox_elem0_status_0;
+  wire cc_gearbox_elem0_status_0$D_IN, cc_gearbox_elem0_status_0$EN;
+
+  // register cc_gearbox_elem0_status_1
+  reg cc_gearbox_elem0_status_1;
+  wire cc_gearbox_elem0_status_1$D_IN, cc_gearbox_elem0_status_1$EN;
+
+  // register cc_gearbox_elem1_status_0
+  reg cc_gearbox_elem1_status_0;
+  wire cc_gearbox_elem1_status_0$D_IN, cc_gearbox_elem1_status_0$EN;
+
+  // register cc_gearbox_elem1_status_1
+  reg cc_gearbox_elem1_status_1;
+  wire cc_gearbox_elem1_status_1$D_IN, cc_gearbox_elem1_status_1$EN;
+
+  // register cc_gearbox_read_block
+  reg cc_gearbox_read_block;
+  wire cc_gearbox_read_block$D_IN, cc_gearbox_read_block$EN;
+
+  // register cc_gearbox_sInReset_pre_isInReset
+  reg cc_gearbox_sInReset_pre_isInReset;
+  wire cc_gearbox_sInReset_pre_isInReset$D_IN,
+       cc_gearbox_sInReset_pre_isInReset$EN;
+
+  // register cc_gearbox_write_block
+  reg cc_gearbox_write_block;
+  wire cc_gearbox_write_block$D_IN, cc_gearbox_write_block$EN;
+
+  // register cc_rg_dwcount
+  reg [10 : 0] cc_rg_dwcount;
+  wire [10 : 0] cc_rg_dwcount$D_IN;
+  wire cc_rg_dwcount$EN;
+
+  // register clockGenerators_free_stamp
+  reg clockGenerators_free_stamp;
+  wire clockGenerators_free_stamp$D_IN, clockGenerators_free_stamp$EN;
+
+  // register clockGenerators_one_to_one_cclock_count
+  reg [31 : 0] clockGenerators_one_to_one_cclock_count;
+  wire [31 : 0] clockGenerators_one_to_one_cclock_count$D_IN;
+  wire clockGenerators_one_to_one_cclock_count$EN;
+
+  // register cq_f_cq_rv
+  reg [152 : 0] cq_f_cq_rv;
+  wire [152 : 0] cq_f_cq_rv$D_IN;
+  wire cq_f_cq_rv$EN;
+
+  // register cq_gearbox_block0_status
+  reg cq_gearbox_block0_status;
+  wire cq_gearbox_block0_status$D_IN, cq_gearbox_block0_status$EN;
+
+  // register cq_gearbox_block1_status
+  reg cq_gearbox_block1_status;
+  wire cq_gearbox_block1_status$D_IN, cq_gearbox_block1_status$EN;
+
+  // register cq_gearbox_dInReset_pre_isInReset
+  reg cq_gearbox_dInReset_pre_isInReset;
+  wire cq_gearbox_dInReset_pre_isInReset$D_IN,
+       cq_gearbox_dInReset_pre_isInReset$EN;
+
+  // register cq_gearbox_elem0_status_0
+  reg cq_gearbox_elem0_status_0;
+  wire cq_gearbox_elem0_status_0$D_IN, cq_gearbox_elem0_status_0$EN;
+
+  // register cq_gearbox_elem0_status_1
+  reg cq_gearbox_elem0_status_1;
+  wire cq_gearbox_elem0_status_1$D_IN, cq_gearbox_elem0_status_1$EN;
+
+  // register cq_gearbox_elem1_status_0
+  reg cq_gearbox_elem1_status_0;
+  wire cq_gearbox_elem1_status_0$D_IN, cq_gearbox_elem1_status_0$EN;
+
+  // register cq_gearbox_elem1_status_1
+  reg cq_gearbox_elem1_status_1;
+  wire cq_gearbox_elem1_status_1$D_IN, cq_gearbox_elem1_status_1$EN;
+
+  // register cq_gearbox_elem_0
+  reg [75 : 0] cq_gearbox_elem_0;
+  wire [75 : 0] cq_gearbox_elem_0$D_IN;
+  wire cq_gearbox_elem_0$EN;
+
+  // register cq_gearbox_elem_1
+  reg [75 : 0] cq_gearbox_elem_1;
+  wire [75 : 0] cq_gearbox_elem_1$D_IN;
+  wire cq_gearbox_elem_1$EN;
+
+  // register cq_gearbox_elem_2
+  reg [75 : 0] cq_gearbox_elem_2;
+  wire [75 : 0] cq_gearbox_elem_2$D_IN;
+  wire cq_gearbox_elem_2$EN;
+
+  // register cq_gearbox_elem_3
+  reg [75 : 0] cq_gearbox_elem_3;
+  wire [75 : 0] cq_gearbox_elem_3$D_IN;
+  wire cq_gearbox_elem_3$EN;
+
+  // register cq_gearbox_read_block
+  reg cq_gearbox_read_block;
+  wire cq_gearbox_read_block$D_IN, cq_gearbox_read_block$EN;
+
+  // register cq_gearbox_sInReset_pre_isInReset
+  reg cq_gearbox_sInReset_pre_isInReset;
+  wire cq_gearbox_sInReset_pre_isInReset$D_IN,
+       cq_gearbox_sInReset_pre_isInReset$EN;
+
+  // register cq_gearbox_write_block
+  reg cq_gearbox_write_block;
+  wire cq_gearbox_write_block$D_IN, cq_gearbox_write_block$EN;
+
+  // register cq_rg_dwcount
+  reg [10 : 0] cq_rg_dwcount;
+  reg [10 : 0] cq_rg_dwcount$D_IN;
+  wire cq_rg_dwcount$EN;
+
+  // register cq_rg_even_enq
+  reg cq_rg_even_enq;
+  wire cq_rg_even_enq$D_IN, cq_rg_even_enq$EN;
+
+  // register cq_rg_pad_odd_tail
+  reg cq_rg_pad_odd_tail;
+  wire cq_rg_pad_odd_tail$D_IN, cq_rg_pad_odd_tail$EN;
+
+  // register dut_prb_control_control_in_dataF_rv
+  reg [17 : 0] dut_prb_control_control_in_dataF_rv;
+  wire [17 : 0] dut_prb_control_control_in_dataF_rv$D_IN;
+  wire dut_prb_control_control_in_dataF_rv$EN;
+
+  // register dut_prb_control_control_in_in_reset_noc
+  reg dut_prb_control_control_in_in_reset_noc;
+  wire dut_prb_control_control_in_in_reset_noc$D_IN,
+       dut_prb_control_control_in_in_reset_noc$EN;
+
+  // register dut_prb_control_control_in_in_reset_uclk
+  reg dut_prb_control_control_in_in_reset_uclk;
+  wire dut_prb_control_control_in_in_reset_uclk$D_IN,
+       dut_prb_control_control_in_in_reset_uclk$EN;
+
+  // register dut_prb_control_control_in_prev_reset_uclk
+  reg dut_prb_control_control_in_prev_reset_uclk;
+  wire dut_prb_control_control_in_prev_reset_uclk$D_IN,
+       dut_prb_control_control_in_prev_reset_uclk$EN;
+
+  // register dut_prb_control_control_in_remaining
+  reg dut_prb_control_control_in_remaining;
+  wire dut_prb_control_control_in_remaining$D_IN,
+       dut_prb_control_control_in_remaining$EN;
+
+  // register dut_prb_control_control_in_requestF_rv
+  reg dut_prb_control_control_in_requestF_rv;
+  wire dut_prb_control_control_in_requestF_rv$D_IN,
+       dut_prb_control_control_in_requestF_rv$EN;
+
+  // register dut_prb_control_control_in_scemiInportBeats
+  reg [31 : 0] dut_prb_control_control_in_scemiInportBeats;
+  wire [31 : 0] dut_prb_control_control_in_scemiInportBeats$D_IN;
+  wire dut_prb_control_control_in_scemiInportBeats$EN;
+
+  // register dut_prb_control_control_in_status
+  reg [1 : 0] dut_prb_control_control_in_status;
+  reg [1 : 0] dut_prb_control_control_in_status$D_IN;
+  wire dut_prb_control_control_in_status$EN;
+
+  // register dut_prb_control_count
+  reg [15 : 0] dut_prb_control_count;
+  wire [15 : 0] dut_prb_control_count$D_IN;
+  wire dut_prb_control_count$EN;
+
+  // register dut_prb_control_data_out_beats
+  reg [31 : 0] dut_prb_control_data_out_beats;
+  reg [31 : 0] dut_prb_control_data_out_beats$D_IN;
+  wire dut_prb_control_data_out_beats$EN;
+
+  // register dut_prb_control_data_out_count
+  reg dut_prb_control_data_out_count;
+  wire dut_prb_control_data_out_count$D_IN, dut_prb_control_data_out_count$EN;
+
+  // register dut_prb_control_data_out_in_reset_noc
+  reg dut_prb_control_data_out_in_reset_noc;
+  wire dut_prb_control_data_out_in_reset_noc$D_IN,
+       dut_prb_control_data_out_in_reset_noc$EN;
+
+  // register dut_prb_control_data_out_in_reset_uclk
+  reg dut_prb_control_data_out_in_reset_uclk;
+  wire dut_prb_control_data_out_in_reset_uclk$D_IN,
+       dut_prb_control_data_out_in_reset_uclk$EN;
+
+  // register dut_prb_control_data_out_ok
+  reg dut_prb_control_data_out_ok;
+  wire dut_prb_control_data_out_ok$D_IN, dut_prb_control_data_out_ok$EN;
+
+  // register dut_prb_control_data_out_prev_reset_uclk
+  reg dut_prb_control_data_out_prev_reset_uclk;
+  wire dut_prb_control_data_out_prev_reset_uclk$D_IN,
+       dut_prb_control_data_out_prev_reset_uclk$EN;
+
+  // register dut_prb_control_flag
+  reg dut_prb_control_flag;
+  wire dut_prb_control_flag$D_IN, dut_prb_control_flag$EN;
+
+  // register dut_prb_control_nextSample
+  reg [63 : 0] dut_prb_control_nextSample;
+  reg [63 : 0] dut_prb_control_nextSample$D_IN;
+  wire dut_prb_control_nextSample$EN;
+
+  // register dut_prb_control_pinged
+  reg dut_prb_control_pinged;
+  reg dut_prb_control_pinged$D_IN;
+  wire dut_prb_control_pinged$EN;
+
+  // register dut_prb_control_sampleIntervalV
+  reg [7 : 0] dut_prb_control_sampleIntervalV;
+  wire [7 : 0] dut_prb_control_sampleIntervalV$D_IN;
+  wire dut_prb_control_sampleIntervalV$EN;
+
+  // register dut_prb_control_sampleIntervalV_1
+  reg [7 : 0] dut_prb_control_sampleIntervalV_1;
+  wire [7 : 0] dut_prb_control_sampleIntervalV_1$D_IN;
+  wire dut_prb_control_sampleIntervalV_1$EN;
+
+  // register dut_prb_control_sampleIntervalV_2
+  reg [7 : 0] dut_prb_control_sampleIntervalV_2;
+  wire [7 : 0] dut_prb_control_sampleIntervalV_2$D_IN;
+  wire dut_prb_control_sampleIntervalV_2$EN;
+
+  // register dut_prb_control_sampleIntervalV_3
+  reg [7 : 0] dut_prb_control_sampleIntervalV_3;
+  wire [7 : 0] dut_prb_control_sampleIntervalV_3$D_IN;
+  wire dut_prb_control_sampleIntervalV_3$EN;
+
+  // register fFromBridgeBeat_ifc_rDataAvail
+  reg [5 : 0] fFromBridgeBeat_ifc_rDataAvail;
+  wire [5 : 0] fFromBridgeBeat_ifc_rDataAvail$D_IN;
+  wire fFromBridgeBeat_ifc_rDataAvail$EN;
+
+  // register fFromBridgeBeat_ifc_rDataCount
+  reg [5 : 0] fFromBridgeBeat_ifc_rDataCount;
+  wire [5 : 0] fFromBridgeBeat_ifc_rDataCount$D_IN;
+  wire fFromBridgeBeat_ifc_rDataCount$EN;
+
+  // register fFromBridgeBeat_ifc_rStorage
+  reg [255 : 0] fFromBridgeBeat_ifc_rStorage;
+  wire [255 : 0] fFromBridgeBeat_ifc_rStorage$D_IN;
+  wire fFromBridgeBeat_ifc_rStorage$EN;
+
+  // register fFromBridgeBeat_ifc_rStorageMask
+  reg [255 : 0] fFromBridgeBeat_ifc_rStorageMask;
+  wire [255 : 0] fFromBridgeBeat_ifc_rStorageMask$D_IN;
+  wire fFromBridgeBeat_ifc_rStorageMask$EN;
+
+  // register fFromContinueBeat_ifc_rDataAvail
+  reg [5 : 0] fFromContinueBeat_ifc_rDataAvail;
+  wire [5 : 0] fFromContinueBeat_ifc_rDataAvail$D_IN;
+  wire fFromContinueBeat_ifc_rDataAvail$EN;
+
+  // register fFromContinueBeat_ifc_rDataCount
+  reg [5 : 0] fFromContinueBeat_ifc_rDataCount;
+  wire [5 : 0] fFromContinueBeat_ifc_rDataCount$D_IN;
+  wire fFromContinueBeat_ifc_rDataCount$EN;
+
+  // register fFromContinueBeat_ifc_rStorage
+  reg [255 : 0] fFromContinueBeat_ifc_rStorage;
+  wire [255 : 0] fFromContinueBeat_ifc_rStorage$D_IN;
+  wire fFromContinueBeat_ifc_rStorage$EN;
+
+  // register fFromContinueBeat_ifc_rStorageMask
+  reg [255 : 0] fFromContinueBeat_ifc_rStorageMask;
+  wire [255 : 0] fFromContinueBeat_ifc_rStorageMask$D_IN;
+  wire fFromContinueBeat_ifc_rStorageMask$EN;
+
+  // register fS1MsgOut_ifc_rDataAvail
+  reg [5 : 0] fS1MsgOut_ifc_rDataAvail;
+  wire [5 : 0] fS1MsgOut_ifc_rDataAvail$D_IN;
+  wire fS1MsgOut_ifc_rDataAvail$EN;
+
+  // register fS1MsgOut_ifc_rDataCount
+  reg [5 : 0] fS1MsgOut_ifc_rDataCount;
+  wire [5 : 0] fS1MsgOut_ifc_rDataCount$D_IN;
+  wire fS1MsgOut_ifc_rDataCount$EN;
+
+  // register fS1MsgOut_ifc_rStorage
+  reg [255 : 0] fS1MsgOut_ifc_rStorage;
+  wire [255 : 0] fS1MsgOut_ifc_rStorage$D_IN;
+  wire fS1MsgOut_ifc_rStorage$EN;
+
+  // register fS1MsgOut_ifc_rStorageMask
+  reg [255 : 0] fS1MsgOut_ifc_rStorageMask;
+  wire [255 : 0] fS1MsgOut_ifc_rStorageMask$D_IN;
+  wire fS1MsgOut_ifc_rStorageMask$EN;
+
+  // register fS1OutPortAcks_ifc_rDataAvail
+  reg [4 : 0] fS1OutPortAcks_ifc_rDataAvail;
+  wire [4 : 0] fS1OutPortAcks_ifc_rDataAvail$D_IN;
+  wire fS1OutPortAcks_ifc_rDataAvail$EN;
+
+  // register fS1OutPortAcks_ifc_rDataCount
+  reg [4 : 0] fS1OutPortAcks_ifc_rDataCount;
+  wire [4 : 0] fS1OutPortAcks_ifc_rDataCount$D_IN;
+  wire fS1OutPortAcks_ifc_rDataCount$EN;
+
+  // register fS1OutPortAcks_ifc_rStorage
+  reg [159 : 0] fS1OutPortAcks_ifc_rStorage;
+  wire [159 : 0] fS1OutPortAcks_ifc_rStorage$D_IN;
+  wire fS1OutPortAcks_ifc_rStorage$EN;
+
+  // register fS1OutPortAcks_ifc_rStorageMask
+  reg [159 : 0] fS1OutPortAcks_ifc_rStorageMask;
+  wire [159 : 0] fS1OutPortAcks_ifc_rStorageMask$D_IN;
+  wire fS1OutPortAcks_ifc_rStorageMask$EN;
+
+  // register fS2MsgOut_ifc_rDataAvail
+  reg [5 : 0] fS2MsgOut_ifc_rDataAvail;
+  wire [5 : 0] fS2MsgOut_ifc_rDataAvail$D_IN;
+  wire fS2MsgOut_ifc_rDataAvail$EN;
+
+  // register fS2MsgOut_ifc_rDataCount
+  reg [5 : 0] fS2MsgOut_ifc_rDataCount;
+  wire [5 : 0] fS2MsgOut_ifc_rDataCount$D_IN;
+  wire fS2MsgOut_ifc_rDataCount$EN;
+
+  // register fS2MsgOut_ifc_rStorage
+  reg [255 : 0] fS2MsgOut_ifc_rStorage;
+  wire [255 : 0] fS2MsgOut_ifc_rStorage$D_IN;
+  wire fS2MsgOut_ifc_rStorage$EN;
+
+  // register fS2MsgOut_ifc_rStorageMask
+  reg [255 : 0] fS2MsgOut_ifc_rStorageMask;
+  wire [255 : 0] fS2MsgOut_ifc_rStorageMask$D_IN;
+  wire fS2MsgOut_ifc_rStorageMask$EN;
+
+  // register fToContinueBeat_ifc_rDataAvail
+  reg [5 : 0] fToContinueBeat_ifc_rDataAvail;
+  wire [5 : 0] fToContinueBeat_ifc_rDataAvail$D_IN;
+  wire fToContinueBeat_ifc_rDataAvail$EN;
+
+  // register fToContinueBeat_ifc_rDataCount
+  reg [5 : 0] fToContinueBeat_ifc_rDataCount;
+  wire [5 : 0] fToContinueBeat_ifc_rDataCount$D_IN;
+  wire fToContinueBeat_ifc_rDataCount$EN;
+
+  // register fToContinueBeat_ifc_rStorage
+  reg [255 : 0] fToContinueBeat_ifc_rStorage;
+  wire [255 : 0] fToContinueBeat_ifc_rStorage$D_IN;
+  wire fToContinueBeat_ifc_rStorage$EN;
+
+  // register fToContinueBeat_ifc_rStorageMask
+  reg [255 : 0] fToContinueBeat_ifc_rStorageMask;
+  wire [255 : 0] fToContinueBeat_ifc_rStorageMask$D_IN;
+  wire fToContinueBeat_ifc_rStorageMask$EN;
+
+  // register init_state_any_in_reset_uclk
+  reg init_state_any_in_reset_uclk;
+  wire init_state_any_in_reset_uclk$D_IN, init_state_any_in_reset_uclk$EN;
+
+  // register init_state_cycle_stamp
+  reg [63 : 0] init_state_cycle_stamp;
+  wire [63 : 0] init_state_cycle_stamp$D_IN;
+  wire init_state_cycle_stamp$EN;
+
+  // register init_state_out_port
+  reg [9 : 0] init_state_out_port;
+  wire [9 : 0] init_state_out_port$D_IN;
+  wire init_state_out_port$EN;
+
+  // register intr_on
+  reg intr_on;
+  wire intr_on$D_IN, intr_on$EN;
+
+  // register lnk_up_cr
+  reg lnk_up_cr;
+  wire lnk_up_cr$D_IN, lnk_up_cr$EN;
+
+  // register lrS1ActiveRequests
+  reg lrS1ActiveRequests;
+  wire lrS1ActiveRequests$D_IN, lrS1ActiveRequests$EN;
+
+  // register lrS1PendingRequests
+  reg lrS1PendingRequests;
+  reg lrS1PendingRequests$D_IN;
+  wire lrS1PendingRequests$EN;
+
+  // register max_payload_bytes
+  reg [12 : 0] max_payload_bytes;
+  wire [12 : 0] max_payload_bytes$D_IN;
+  wire max_payload_bytes$EN;
+
+  // register max_payload_cr
+  reg [12 : 0] max_payload_cr;
+  wire [12 : 0] max_payload_cr$D_IN;
+  wire max_payload_cr$EN;
+
+  // register max_rd_req_cr
+  reg [12 : 0] max_rd_req_cr;
+  wire [12 : 0] max_rd_req_cr$D_IN;
+  wire max_rd_req_cr$EN;
+
+  // register max_read_req_bytes
+  reg [12 : 0] max_read_req_bytes;
+  wire [12 : 0] max_read_req_bytes$D_IN;
+  wire max_read_req_bytes$EN;
+
+  // register msix_enable
+  reg msix_enable;
+  wire msix_enable$D_IN, msix_enable$EN;
+
+  // register msix_enable_cr
+  reg msix_enable_cr;
+  wire msix_enable_cr$D_IN, msix_enable_cr$EN;
+
+  // register msix_masked
+  reg msix_masked;
+  wire msix_masked$D_IN, msix_masked$EN;
+
+  // register msix_masked_cr
+  reg msix_masked_cr;
+  wire msix_masked_cr$D_IN, msix_masked_cr$EN;
+
+  // register rDecodeSceMi
+  reg rDecodeSceMi;
+  wire rDecodeSceMi$D_IN, rDecodeSceMi$EN;
+
+  // register rInMsgBytes
+  reg [7 : 0] rInMsgBytes;
+  reg [7 : 0] rInMsgBytes$D_IN;
+  wire rInMsgBytes$EN;
+
+  // register rOtherMsgIn
+  reg rOtherMsgIn;
+  reg rOtherMsgIn$D_IN;
+  wire rOtherMsgIn$EN;
+
+  // register rOtherMsgOut
+  reg rOtherMsgOut;
+  reg rOtherMsgOut$D_IN;
+  wire rOtherMsgOut$EN;
+
+  // register rOutMsgBytes
+  reg [7 : 0] rOutMsgBytes;
+  reg [7 : 0] rOutMsgBytes$D_IN;
+  wire rOutMsgBytes$EN;
+
+  // register rS1BitsRem
+  reg [18 : 0] rS1BitsRem;
+  wire [18 : 0] rS1BitsRem$D_IN;
+  wire rS1BitsRem$EN;
+
+  // register rS1CycleStamp
+  reg [63 : 0] rS1CycleStamp;
+  wire [63 : 0] rS1CycleStamp$D_IN;
+  wire rS1CycleStamp$EN;
+
+  // register rS1InPortNum
+  reg [9 : 0] rS1InPortNum;
+  wire [9 : 0] rS1InPortNum$D_IN;
+  wire rS1InPortNum$EN;
+
+  // register rS1MsgInIsAck
+  reg rS1MsgInIsAck;
+  wire rS1MsgInIsAck$D_IN, rS1MsgInIsAck$EN;
+
+  // register rS1MsgInIsData
+  reg rS1MsgInIsData;
+  wire rS1MsgInIsData$D_IN, rS1MsgInIsData$EN;
+
+  // register rS1MsgOutDataReq
+  reg rS1MsgOutDataReq;
+  wire rS1MsgOutDataReq$D_IN, rS1MsgOutDataReq$EN;
+
+  // register rS1MsgOutReqGrant
+  reg rS1MsgOutReqGrant;
+  reg rS1MsgOutReqGrant$D_IN;
+  wire rS1MsgOutReqGrant$EN;
+
+  // register rS1MsgOutReqReq
+  reg rS1MsgOutReqReq;
+  wire rS1MsgOutReqReq$D_IN, rS1MsgOutReqReq$EN;
+
+  // register rS1OutDataHeader
+  reg rS1OutDataHeader;
+  wire rS1OutDataHeader$D_IN, rS1OutDataHeader$EN;
+
+  // register rS1OutMsgIsCont
+  reg rS1OutMsgIsCont;
+  wire rS1OutMsgIsCont$D_IN, rS1OutMsgIsCont$EN;
+
+  // register rS1OutMsgSize
+  reg [7 : 0] rS1OutMsgSize;
+  reg [7 : 0] rS1OutMsgSize$D_IN;
+  wire rS1OutMsgSize$EN;
+
+  // register rS1OutPort
+  reg [9 : 0] rS1OutPort;
+  wire [9 : 0] rS1OutPort$D_IN;
+  wire rS1OutPort$EN;
+
+  // register rS1RequestedPort
+  reg [9 : 0] rS1RequestedPort;
+  wire [9 : 0] rS1RequestedPort$D_IN;
+  wire rS1RequestedPort$EN;
+
+  // register rS2InCreditIndex
+  reg [11 : 0] rS2InCreditIndex;
+  wire [11 : 0] rS2InCreditIndex$D_IN;
+  wire rS2InCreditIndex$EN;
+
+  // register rS2InPipeNum
+  reg [11 : 0] rS2InPipeNum;
+  wire [11 : 0] rS2InPipeNum$D_IN;
+  wire rS2InPipeNum$EN;
+
+  // register rS2MsgInIsCred
+  reg rS2MsgInIsCred;
+  wire rS2MsgInIsCred$D_IN, rS2MsgInIsCred$EN;
+
+  // register rS2MsgInIsData
+  reg rS2MsgInIsData;
+  wire rS2MsgInIsData$D_IN, rS2MsgInIsData$EN;
+
+  // register rS2MsgOutCredGrant
+  reg rS2MsgOutCredGrant;
+  wire rS2MsgOutCredGrant$D_IN, rS2MsgOutCredGrant$EN;
+
+  // register rS2MsgOutDataReq
+  reg rS2MsgOutDataReq;
+  wire rS2MsgOutDataReq$D_IN, rS2MsgOutDataReq$EN;
+
+  // register rS2NumSaved
+  reg [2 : 0] rS2NumSaved;
+  wire [2 : 0] rS2NumSaved$D_IN;
+  wire rS2NumSaved$EN;
+
+  // register rS2OutBytes
+  reg [31 : 0] rS2OutBytes;
+  reg [31 : 0] rS2OutBytes$D_IN;
+  wire rS2OutBytes$EN;
+
+  // register rS2OutDataEOM
+  reg rS2OutDataEOM;
+  wire rS2OutDataEOM$D_IN, rS2OutDataEOM$EN;
+
+  // register rS2OutDataFlush
+  reg rS2OutDataFlush;
+  wire rS2OutDataFlush$D_IN, rS2OutDataFlush$EN;
+
+  // register rS2OutDataIndex
+  reg [11 : 0] rS2OutDataIndex;
+  reg [11 : 0] rS2OutDataIndex$D_IN;
+  wire rS2OutDataIndex$EN;
+
+  // register rS2OutDataOverflow
+  reg rS2OutDataOverflow;
+  wire rS2OutDataOverflow$D_IN, rS2OutDataOverflow$EN;
+
+  // register rS2OutMsgBytes
+  reg [7 : 0] rS2OutMsgBytes;
+  reg [7 : 0] rS2OutMsgBytes$D_IN;
+  wire rS2OutMsgBytes$EN;
+
+  // register rS2SavedBytes
+  reg [31 : 0] rS2SavedBytes;
+  wire [31 : 0] rS2SavedBytes$D_IN;
+  wire rS2SavedBytes$EN;
+
+  // register rS2SendOutDataHdr
+  reg rS2SendOutDataHdr;
+  reg rS2SendOutDataHdr$D_IN;
+  wire rS2SendOutDataHdr$EN;
+
+  // register rS2SendOutDataMsg
+  reg rS2SendOutDataMsg;
+  wire rS2SendOutDataMsg$D_IN, rS2SendOutDataMsg$EN;
+
+  // register rSceMi1MsgIn
+  reg rSceMi1MsgIn;
+  reg rSceMi1MsgIn$D_IN;
+  wire rSceMi1MsgIn$EN;
+
+  // register rSceMi1MsgOut
+  reg rSceMi1MsgOut;
+  reg rSceMi1MsgOut$D_IN;
+  wire rSceMi1MsgOut$EN;
+
+  // register rSceMi2MsgIn
+  reg rSceMi2MsgIn;
+  reg rSceMi2MsgIn$D_IN;
+  wire rSceMi2MsgIn$EN;
+
+  // register rSceMi2MsgOut
+  reg rSceMi2MsgOut;
+  reg rSceMi2MsgOut$D_IN;
+  wire rSceMi2MsgOut$EN;
+
+  // register rc_gearbox_block0_status
+  reg rc_gearbox_block0_status;
+  wire rc_gearbox_block0_status$D_IN, rc_gearbox_block0_status$EN;
+
+  // register rc_gearbox_block1_status
+  reg rc_gearbox_block1_status;
+  wire rc_gearbox_block1_status$D_IN, rc_gearbox_block1_status$EN;
+
+  // register rc_gearbox_dInReset_pre_isInReset
+  reg rc_gearbox_dInReset_pre_isInReset;
+  wire rc_gearbox_dInReset_pre_isInReset$D_IN,
+       rc_gearbox_dInReset_pre_isInReset$EN;
+
+  // register rc_gearbox_elem0_status_0
+  reg rc_gearbox_elem0_status_0;
+  wire rc_gearbox_elem0_status_0$D_IN, rc_gearbox_elem0_status_0$EN;
+
+  // register rc_gearbox_elem0_status_1
+  reg rc_gearbox_elem0_status_1;
+  wire rc_gearbox_elem0_status_1$D_IN, rc_gearbox_elem0_status_1$EN;
+
+  // register rc_gearbox_elem1_status_0
+  reg rc_gearbox_elem1_status_0;
+  wire rc_gearbox_elem1_status_0$D_IN, rc_gearbox_elem1_status_0$EN;
+
+  // register rc_gearbox_elem1_status_1
+  reg rc_gearbox_elem1_status_1;
+  wire rc_gearbox_elem1_status_1$D_IN, rc_gearbox_elem1_status_1$EN;
+
+  // register rc_gearbox_elem_0
+  reg [75 : 0] rc_gearbox_elem_0;
+  wire [75 : 0] rc_gearbox_elem_0$D_IN;
+  wire rc_gearbox_elem_0$EN;
+
+  // register rc_gearbox_elem_1
+  reg [75 : 0] rc_gearbox_elem_1;
+  wire [75 : 0] rc_gearbox_elem_1$D_IN;
+  wire rc_gearbox_elem_1$EN;
+
+  // register rc_gearbox_elem_2
+  reg [75 : 0] rc_gearbox_elem_2;
+  wire [75 : 0] rc_gearbox_elem_2$D_IN;
+  wire rc_gearbox_elem_2$EN;
+
+  // register rc_gearbox_elem_3
+  reg [75 : 0] rc_gearbox_elem_3;
+  wire [75 : 0] rc_gearbox_elem_3$D_IN;
+  wire rc_gearbox_elem_3$EN;
+
+  // register rc_gearbox_read_block
+  reg rc_gearbox_read_block;
+  wire rc_gearbox_read_block$D_IN, rc_gearbox_read_block$EN;
+
+  // register rc_gearbox_sInReset_pre_isInReset
+  reg rc_gearbox_sInReset_pre_isInReset;
+  wire rc_gearbox_sInReset_pre_isInReset$D_IN,
+       rc_gearbox_sInReset_pre_isInReset$EN;
+
+  // register rc_gearbox_write_block
+  reg rc_gearbox_write_block;
+  wire rc_gearbox_write_block$D_IN, rc_gearbox_write_block$EN;
+
+  // register rc_rg_dwcount
+  reg [10 : 0] rc_rg_dwcount;
+  wire [10 : 0] rc_rg_dwcount$D_IN;
+  wire rc_rg_dwcount$EN;
+
+  // register rc_rg_even_enq
+  reg rc_rg_even_enq;
+  wire rc_rg_even_enq$D_IN, rc_rg_even_enq$EN;
+
+  // register rc_rg_in_packet
+  reg rc_rg_in_packet;
+  wire rc_rg_in_packet$D_IN, rc_rg_in_packet$EN;
+
+  // register rc_rg_pad_odd_tail
+  reg rc_rg_pad_odd_tail;
+  wire rc_rg_pad_odd_tail$D_IN, rc_rg_pad_odd_tail$EN;
+
+  // register rcb_cr
+  reg [7 : 0] rcb_cr;
+  wire [7 : 0] rcb_cr$D_IN;
+  wire rcb_cr$EN;
+
+  // register rcb_mask
+  reg [6 : 0] rcb_mask;
+  wire [6 : 0] rcb_mask$D_IN;
+  wire rcb_mask$EN;
+
+  // register rq_f_tlps_rv
+  reg [153 : 0] rq_f_tlps_rv;
+  wire [153 : 0] rq_f_tlps_rv$D_IN;
+  wire rq_f_tlps_rv$EN;
+
+  // register rq_gearbox_block0
+  reg [149 : 0] rq_gearbox_block0;
+  reg [149 : 0] rq_gearbox_block0$D_IN;
+  wire rq_gearbox_block0$EN;
+
+  // register rq_gearbox_block0_status
+  reg rq_gearbox_block0_status;
+  wire rq_gearbox_block0_status$D_IN, rq_gearbox_block0_status$EN;
+
+  // register rq_gearbox_block1
+  reg [149 : 0] rq_gearbox_block1;
+  reg [149 : 0] rq_gearbox_block1$D_IN;
+  wire rq_gearbox_block1$EN;
+
+  // register rq_gearbox_block1_status
+  reg rq_gearbox_block1_status;
+  wire rq_gearbox_block1_status$D_IN, rq_gearbox_block1_status$EN;
+
+  // register rq_gearbox_dInReset_pre_isInReset
+  reg rq_gearbox_dInReset_pre_isInReset;
+  wire rq_gearbox_dInReset_pre_isInReset$D_IN,
+       rq_gearbox_dInReset_pre_isInReset$EN;
+
+  // register rq_gearbox_elem0_status_0
+  reg rq_gearbox_elem0_status_0;
+  wire rq_gearbox_elem0_status_0$D_IN, rq_gearbox_elem0_status_0$EN;
+
+  // register rq_gearbox_elem0_status_1
+  reg rq_gearbox_elem0_status_1;
+  wire rq_gearbox_elem0_status_1$D_IN, rq_gearbox_elem0_status_1$EN;
+
+  // register rq_gearbox_elem1_status_0
+  reg rq_gearbox_elem1_status_0;
+  wire rq_gearbox_elem1_status_0$D_IN, rq_gearbox_elem1_status_0$EN;
+
+  // register rq_gearbox_elem1_status_1
+  reg rq_gearbox_elem1_status_1;
+  wire rq_gearbox_elem1_status_1$D_IN, rq_gearbox_elem1_status_1$EN;
+
+  // register rq_gearbox_read_block
+  reg rq_gearbox_read_block;
+  wire rq_gearbox_read_block$D_IN, rq_gearbox_read_block$EN;
+
+  // register rq_gearbox_sInReset_pre_isInReset
+  reg rq_gearbox_sInReset_pre_isInReset;
+  wire rq_gearbox_sInReset_pre_isInReset$D_IN,
+       rq_gearbox_sInReset_pre_isInReset$EN;
+
+  // register rq_gearbox_write_block
+  reg rq_gearbox_write_block;
+  wire rq_gearbox_write_block$D_IN, rq_gearbox_write_block$EN;
+
+  // register rq_rg_dwcount
+  reg [10 : 0] rq_rg_dwcount;
+  reg [10 : 0] rq_rg_dwcount$D_IN;
+  wire rq_rg_dwcount$EN;
+
+  // register rq_rg_first_be
+  reg [3 : 0] rq_rg_first_be;
+  wire [3 : 0] rq_rg_first_be$D_IN;
+  wire rq_rg_first_be$EN;
+
+  // register rq_rg_last_be
+  reg [3 : 0] rq_rg_last_be;
+  wire [3 : 0] rq_rg_last_be$D_IN;
+  wire rq_rg_last_be$EN;
+
+  // register rq_rg_mdw
+  reg [32 : 0] rq_rg_mdw;
+  reg [32 : 0] rq_rg_mdw$D_IN;
+  wire rq_rg_mdw$EN;
+
+  // register rstgen_init
+  reg rstgen_init;
+  wire rstgen_init$D_IN, rstgen_init$EN;
+
+  // register rvPrevMsgGrant
+  reg [2 : 0] rvPrevMsgGrant;
+  wire [2 : 0] rvPrevMsgGrant$D_IN;
+  wire rvPrevMsgGrant$EN;
+
+  // register rvPrevPrevMsgGrant
+  reg [2 : 0] rvPrevPrevMsgGrant;
+  wire [2 : 0] rvPrevPrevMsgGrant$D_IN;
+  wire rvPrevPrevMsgGrant$EN;
+
+  // register xcomms_rx_inpipe_active
+  reg xcomms_rx_inpipe_active;
+  wire xcomms_rx_inpipe_active$D_IN, xcomms_rx_inpipe_active$EN;
+
+  // register xcomms_rx_inpipe_ecount
+  reg [15 : 0] xcomms_rx_inpipe_ecount;
+  wire [15 : 0] xcomms_rx_inpipe_ecount$D_IN;
+  wire xcomms_rx_inpipe_ecount$EN;
+
+  // register xcomms_rx_inpipe_elem_count
+  reg [15 : 0] xcomms_rx_inpipe_elem_count;
+  wire [15 : 0] xcomms_rx_inpipe_elem_count$D_IN;
+  wire xcomms_rx_inpipe_elem_count$EN;
+
+  // register xcomms_rx_inpipe_elems
+  reg [56 : 0] xcomms_rx_inpipe_elems;
+  reg [56 : 0] xcomms_rx_inpipe_elems$D_IN;
+  wire xcomms_rx_inpipe_elems$EN;
+
+  // register xcomms_rx_inpipe_elems_recvd
+  reg [15 : 0] xcomms_rx_inpipe_elems_recvd;
+  wire [15 : 0] xcomms_rx_inpipe_elems_recvd$D_IN;
+  wire xcomms_rx_inpipe_elems_recvd$EN;
+
+  // register xcomms_rx_inpipe_eom_in
+  reg xcomms_rx_inpipe_eom_in;
+  wire xcomms_rx_inpipe_eom_in$D_IN, xcomms_rx_inpipe_eom_in$EN;
+
+  // register xcomms_rx_inpipe_in_reset_noc
+  reg xcomms_rx_inpipe_in_reset_noc;
+  wire xcomms_rx_inpipe_in_reset_noc$D_IN, xcomms_rx_inpipe_in_reset_noc$EN;
+
+  // register xcomms_rx_inpipe_mimo_rDataCount
+  reg [3 : 0] xcomms_rx_inpipe_mimo_rDataCount;
+  wire [3 : 0] xcomms_rx_inpipe_mimo_rDataCount$D_IN;
+  wire xcomms_rx_inpipe_mimo_rDataCount$EN;
+
+  // register xcomms_rx_inpipe_mimo_rvData
+  reg [87 : 0] xcomms_rx_inpipe_mimo_rvData;
+  wire [87 : 0] xcomms_rx_inpipe_mimo_rvData$D_IN;
+  wire xcomms_rx_inpipe_mimo_rvData$EN;
+
+  // register xcomms_rx_inpipe_pending_flush
+  reg xcomms_rx_inpipe_pending_flush;
+  wire xcomms_rx_inpipe_pending_flush$D_IN, xcomms_rx_inpipe_pending_flush$EN;
+
+  // register xcomms_rx_inpipe_pending_send
+  reg xcomms_rx_inpipe_pending_send;
+  wire xcomms_rx_inpipe_pending_send$D_IN, xcomms_rx_inpipe_pending_send$EN;
+
+  // register xcomms_rx_inpipe_reset_uclk_done1
+  reg xcomms_rx_inpipe_reset_uclk_done1;
+  wire xcomms_rx_inpipe_reset_uclk_done1$D_IN,
+       xcomms_rx_inpipe_reset_uclk_done1$EN;
+
+  // register xcomms_rx_inpipe_reset_uclk_done2
+  reg xcomms_rx_inpipe_reset_uclk_done2;
+  wire xcomms_rx_inpipe_reset_uclk_done2$D_IN,
+       xcomms_rx_inpipe_reset_uclk_done2$EN;
+
+  // register xcomms_rx_inpipe_send_credit_request
+  reg xcomms_rx_inpipe_send_credit_request;
+  wire xcomms_rx_inpipe_send_credit_request$D_IN,
+       xcomms_rx_inpipe_send_credit_request$EN;
+
+  // register xcomms_rx_inpipe_send_underflow
+  reg xcomms_rx_inpipe_send_underflow;
+  wire xcomms_rx_inpipe_send_underflow$D_IN,
+       xcomms_rx_inpipe_send_underflow$EN;
+
+  // register xcomms_rx_inpipe_underflow
+  reg xcomms_rx_inpipe_underflow;
+  wire xcomms_rx_inpipe_underflow$D_IN, xcomms_rx_inpipe_underflow$EN;
+
+  // register xcomms_tx_outpipe_active
+  reg xcomms_tx_outpipe_active;
+  wire xcomms_tx_outpipe_active$D_IN, xcomms_tx_outpipe_active$EN;
+
+  // register xcomms_tx_outpipe_autoflush
+  reg xcomms_tx_outpipe_autoflush;
+  wire xcomms_tx_outpipe_autoflush$D_IN, xcomms_tx_outpipe_autoflush$EN;
+
+  // register xcomms_tx_outpipe_credits
+  reg [15 : 0] xcomms_tx_outpipe_credits;
+  wire [15 : 0] xcomms_tx_outpipe_credits$D_IN;
+  wire xcomms_tx_outpipe_credits$EN;
+
+  // register xcomms_tx_outpipe_elem_count
+  reg [15 : 0] xcomms_tx_outpipe_elem_count;
+  wire [15 : 0] xcomms_tx_outpipe_elem_count$D_IN;
+  wire xcomms_tx_outpipe_elem_count$EN;
+
+  // register xcomms_tx_outpipe_elems
+  reg [655 : 0] xcomms_tx_outpipe_elems;
+  wire [655 : 0] xcomms_tx_outpipe_elems$D_IN;
+  wire xcomms_tx_outpipe_elems$EN;
+
+  // register xcomms_tx_outpipe_flush_requested
+  reg xcomms_tx_outpipe_flush_requested;
+  wire xcomms_tx_outpipe_flush_requested$D_IN,
+       xcomms_tx_outpipe_flush_requested$EN;
+
+  // register xcomms_tx_outpipe_flushing
+  reg xcomms_tx_outpipe_flushing;
+  wire xcomms_tx_outpipe_flushing$D_IN, xcomms_tx_outpipe_flushing$EN;
+
+  // register xcomms_tx_outpipe_in_reset_noc
+  reg xcomms_tx_outpipe_in_reset_noc;
+  wire xcomms_tx_outpipe_in_reset_noc$D_IN, xcomms_tx_outpipe_in_reset_noc$EN;
+
+  // register xcomms_tx_outpipe_in_reset_uclk
+  reg xcomms_tx_outpipe_in_reset_uclk;
+  wire xcomms_tx_outpipe_in_reset_uclk$D_IN,
+       xcomms_tx_outpipe_in_reset_uclk$EN;
+
+  // register xcomms_tx_outpipe_indata_mimo_rDataCount
+  reg [1 : 0] xcomms_tx_outpipe_indata_mimo_rDataCount;
+  wire [1 : 0] xcomms_tx_outpipe_indata_mimo_rDataCount$D_IN;
+  wire xcomms_tx_outpipe_indata_mimo_rDataCount$EN;
+
+  // register xcomms_tx_outpipe_indata_mimo_rvData
+  reg [1311 : 0] xcomms_tx_outpipe_indata_mimo_rvData;
+  wire [1311 : 0] xcomms_tx_outpipe_indata_mimo_rvData$D_IN;
+  wire xcomms_tx_outpipe_indata_mimo_rvData$EN;
+
+  // register xcomms_tx_outpipe_nocAutoFlush
+  reg xcomms_tx_outpipe_nocAutoFlush;
+  wire xcomms_tx_outpipe_nocAutoFlush$D_IN, xcomms_tx_outpipe_nocAutoFlush$EN;
+
+  // register xcomms_tx_outpipe_nocCredits
+  reg [15 : 0] xcomms_tx_outpipe_nocCredits;
+  wire [15 : 0] xcomms_tx_outpipe_nocCredits$D_IN;
+  wire xcomms_tx_outpipe_nocCredits$EN;
+
+  // register xcomms_tx_outpipe_nocUnderFlow
+  reg xcomms_tx_outpipe_nocUnderFlow;
+  wire xcomms_tx_outpipe_nocUnderFlow$D_IN, xcomms_tx_outpipe_nocUnderFlow$EN;
+
+  // register xcomms_tx_outpipe_noc_buf
+  reg [655 : 0] xcomms_tx_outpipe_noc_buf;
+  wire [655 : 0] xcomms_tx_outpipe_noc_buf$D_IN;
+  wire xcomms_tx_outpipe_noc_buf$EN;
+
+  // register xcomms_tx_outpipe_noc_buf_bytes
+  reg [15 : 0] xcomms_tx_outpipe_noc_buf_bytes;
+  reg [15 : 0] xcomms_tx_outpipe_noc_buf_bytes$D_IN;
+  wire xcomms_tx_outpipe_noc_buf_bytes$EN;
+
+  // register xcomms_tx_outpipe_overflow
+  reg xcomms_tx_outpipe_overflow;
+  wire xcomms_tx_outpipe_overflow$D_IN, xcomms_tx_outpipe_overflow$EN;
+
+  // register xcomms_tx_outpipe_pending_recv
+  reg xcomms_tx_outpipe_pending_recv;
+  wire xcomms_tx_outpipe_pending_recv$D_IN, xcomms_tx_outpipe_pending_recv$EN;
+
+  // register xcomms_tx_outpipe_prev_reset_uclk
+  reg xcomms_tx_outpipe_prev_reset_uclk;
+  wire xcomms_tx_outpipe_prev_reset_uclk$D_IN,
+       xcomms_tx_outpipe_prev_reset_uclk$EN;
+
+  // register xcomms_tx_outpipe_sendDataOK
+  reg xcomms_tx_outpipe_sendDataOK;
+  wire xcomms_tx_outpipe_sendDataOK$D_IN, xcomms_tx_outpipe_sendDataOK$EN;
+
+  // ports of submodule _unnamed_
+  wire [755 : 0] _unnamed_$pcie_in_pcie4_cfg_status_vf_power_state,
+		 _unnamed_$pcie_in_pcie4_cfg_status_vf_tph_st_mode;
+  wire [503 : 0] _unnamed_$pcie_in_pcie4_cfg_status_vf_status;
+  wire [251 : 0] _unnamed_$pcie_in_pcie4_cfg_control_vf_flr_in_process,
+		 _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_vf_enable,
+		 _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_vf_mask,
+		 _unnamed_$pcie_in_pcie4_cfg_status_vf_tph_requester_enable;
+  wire [87 : 0] _unnamed_$pcie_in_s_axis_cq_tuser;
+  wire [75 : 0] _unnamed_$cq_recv_get, _unnamed_$rc_recv_get;
+  wire [74 : 0] _unnamed_$pcie_in_s_axis_rc_tuser, _unnamed_$rq_xmit_put;
+  wire [66 : 0] _unnamed_$cc_xmit_put;
+  wire [63 : 0] _unnamed_$pcie_in_m_axis_cc_tdata,
+		_unnamed_$pcie_in_m_axis_rq_tdata,
+		_unnamed_$pcie_in_pcie4_cfg_control_dsn,
+		_unnamed_$pcie_in_pcie4_cfg_external_msix_msix_address,
+		_unnamed_$pcie_in_s_axis_cq_tdata,
+		_unnamed_$pcie_in_s_axis_rc_tdata;
+  wire [61 : 0] _unnamed_$pcie_in_m_axis_rq_tuser;
+  wire [32 : 0] _unnamed_$pcie_in_m_axis_cc_tuser;
+  wire [31 : 0] _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_data,
+		_unnamed_$pcie_in_pcie4_cfg_mesg_tx_transmit_data,
+		_unnamed_$pcie_in_pcie4_cfg_mgmt_read_data,
+		_unnamed_$pcie_in_pcie4_cfg_mgmt_write_data;
+  wire [15 : 0] _unnamed_$pcie_in_pcie4_cfg_status_function_status,
+		_unnamed_$status_function_status;
+  wire [11 : 0] _unnamed_$pcie_in_pcie4_cfg_fc_cpld,
+		_unnamed_$pcie_in_pcie4_cfg_fc_npd,
+		_unnamed_$pcie_in_pcie4_cfg_fc_pd,
+		_unnamed_$pcie_in_pcie4_cfg_status_funstion_power_state,
+		_unnamed_$pcie_in_pcie4_cfg_status_tph_st_mode;
+  wire [9 : 0] _unnamed_$pcie_in_pcie4_cfg_mgmt_addr;
+  wire [7 : 0] _unnamed_$pcie_in_pcie4_cfg_control_bus_number,
+	       _unnamed_$pcie_in_pcie4_cfg_control_ds_bus_number,
+	       _unnamed_$pcie_in_pcie4_cfg_control_ds_port_number,
+	       _unnamed_$pcie_in_pcie4_cfg_control_vf_flr_func_num,
+	       _unnamed_$pcie_in_pcie4_cfg_external_msix_msi_function_number,
+	       _unnamed_$pcie_in_pcie4_cfg_fc_cplh,
+	       _unnamed_$pcie_in_pcie4_cfg_fc_nph,
+	       _unnamed_$pcie_in_pcie4_cfg_fc_ph,
+	       _unnamed_$pcie_in_pcie4_cfg_mesg_rcvd_received_data,
+	       _unnamed_$pcie_in_pcie4_cfg_mgmt_function_number,
+	       _unnamed_$pcie_in_pcie4_cfg_status_rq_tag0,
+	       _unnamed_$pcie_in_pcie4_cfg_status_rq_tag1;
+  wire [5 : 0] _unnamed_$pcie_in_pcie4_cfg_status_ltssm_state,
+	       _unnamed_$pcie_in_pcie4_cfg_status_pcie_cq_np_req_count,
+	       _unnamed_$pcie_in_pcie4_cfg_status_rq_seq_num0,
+	       _unnamed_$pcie_in_pcie4_cfg_status_rq_seq_num1;
+  wire [4 : 0] _unnamed_$pcie_in_pcie4_cfg_control_ds_device_number,
+	       _unnamed_$pcie_in_pcie4_cfg_mesg_rcvd_received_type,
+	       _unnamed_$pcie_in_pcie4_cfg_status_local_error_out;
+  wire [3 : 0] _unnamed_$cfg_interrupt_msix_enabled,
+	       _unnamed_$cfg_interrupt_msix_mask,
+	       _unnamed_$pcie_in_pcie4_cfg_control_flr_done,
+	       _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_msix_enable,
+	       _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_msix_mask,
+	       _unnamed_$pcie_in_pcie4_cfg_interrupt_intrpt,
+	       _unnamed_$pcie_in_pcie4_cfg_interrupt_pending,
+	       _unnamed_$pcie_in_pcie4_cfg_mgmt_byte_enable,
+	       _unnamed_$pcie_in_pcie4_cfg_status_rcb_status,
+	       _unnamed_$pcie_in_pcie4_cfg_status_rq_tag_av,
+	       _unnamed_$pcie_in_pcie4_cfg_status_tfc_npd_av,
+	       _unnamed_$pcie_in_pcie4_cfg_status_tfc_nph_av,
+	       _unnamed_$pcie_in_pcie4_cfg_status_tph_requester_enable,
+	       _unnamed_$status_rcb_status;
+  wire [2 : 0] _unnamed_$pcie_in_pcie4_cfg_fc_sel,
+	       _unnamed_$pcie_in_pcie4_cfg_mesg_tx_transmit_type,
+	       _unnamed_$pcie_in_pcie4_cfg_status_max_read_req,
+	       _unnamed_$pcie_in_pcie4_cfg_status_negotiated_width,
+	       _unnamed_$status_max_read_req;
+  wire [1 : 0] _unnamed_$pcie_in_m_axis_cc_tkeep,
+	       _unnamed_$pcie_in_m_axis_rq_tkeep,
+	       _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_vec_pending,
+	       _unnamed_$pcie_in_pcie4_cfg_status_current_speed,
+	       _unnamed_$pcie_in_pcie4_cfg_status_link_power_state,
+	       _unnamed_$pcie_in_pcie4_cfg_status_max_payload,
+	       _unnamed_$pcie_in_pcie4_cfg_status_obff_enable,
+	       _unnamed_$pcie_in_pcie4_cfg_status_pcie_cq_np_req,
+	       _unnamed_$pcie_in_pcie4_cfg_status_phy_link_status,
+	       _unnamed_$pcie_in_pcie4_cfg_status_rx_pm_state,
+	       _unnamed_$pcie_in_pcie4_cfg_status_tx_pm_state,
+	       _unnamed_$pcie_in_s_axis_cq_tkeep,
+	       _unnamed_$pcie_in_s_axis_rc_tkeep,
+	       _unnamed_$status_max_payload;
+  wire _unnamed_$EN_cc_xmit_put,
+       _unnamed_$EN_cq_recv_get,
+       _unnamed_$EN_rc_recv_get,
+       _unnamed_$EN_rq_xmit_put,
+       _unnamed_$RDY_cc_xmit_put,
+       _unnamed_$RDY_cq_recv_get,
+       _unnamed_$RDY_rc_recv_get,
+       _unnamed_$RDY_rq_xmit_put,
+       _unnamed_$pcie_in_m_axis_cc_tlast,
+       _unnamed_$pcie_in_m_axis_cc_tready,
+       _unnamed_$pcie_in_m_axis_cc_tvalid,
+       _unnamed_$pcie_in_m_axis_rq_tlast,
+       _unnamed_$pcie_in_m_axis_rq_tready,
+       _unnamed_$pcie_in_m_axis_rq_tvalid,
+       _unnamed_$pcie_in_pcie4_cfg_control_config_space_enable,
+       _unnamed_$pcie_in_pcie4_cfg_control_err_cor_in,
+       _unnamed_$pcie_in_pcie4_cfg_control_err_uncor_in,
+       _unnamed_$pcie_in_pcie4_cfg_control_flr_in_process,
+       _unnamed_$pcie_in_pcie4_cfg_control_hot_reset_in,
+       _unnamed_$pcie_in_pcie4_cfg_control_hot_reset_out,
+       _unnamed_$pcie_in_pcie4_cfg_control_link_training_enable,
+       _unnamed_$pcie_in_pcie4_cfg_control_power_state_change_ack,
+       _unnamed_$pcie_in_pcie4_cfg_control_power_state_change_interrupt,
+       _unnamed_$pcie_in_pcie4_cfg_control_req_pm_transition_l23_ready,
+       _unnamed_$pcie_in_pcie4_cfg_control_vf_flr_done,
+       _unnamed_$pcie_in_pcie4_cfg_external_msix_msi_fail,
+       _unnamed_$pcie_in_pcie4_cfg_external_msix_msi_sent,
+       _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_intrpt,
+       _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_vec_pending_status,
+       _unnamed_$pcie_in_pcie4_cfg_interrupt_sent,
+       _unnamed_$pcie_in_pcie4_cfg_mesg_rcvd_received,
+       _unnamed_$pcie_in_pcie4_cfg_mesg_tx_transmit,
+       _unnamed_$pcie_in_pcie4_cfg_mesg_tx_transmit_done,
+       _unnamed_$pcie_in_pcie4_cfg_mgmt_debug_access,
+       _unnamed_$pcie_in_pcie4_cfg_mgmt_read,
+       _unnamed_$pcie_in_pcie4_cfg_mgmt_read_write_done,
+       _unnamed_$pcie_in_pcie4_cfg_mgmt_write,
+       _unnamed_$pcie_in_pcie4_cfg_pm_aspm_l1_entry_reject,
+       _unnamed_$pcie_in_pcie4_cfg_pm_aspm_tx_10s_entry_disable,
+       _unnamed_$pcie_in_pcie4_cfg_status_err_cor_out,
+       _unnamed_$pcie_in_pcie4_cfg_status_err_fatal_out,
+       _unnamed_$pcie_in_pcie4_cfg_status_err_nonfatal_out,
+       _unnamed_$pcie_in_pcie4_cfg_status_local_error_valid,
+       _unnamed_$pcie_in_pcie4_cfg_status_phy_link_down,
+       _unnamed_$pcie_in_pcie4_cfg_status_pl_status_change,
+       _unnamed_$pcie_in_pcie4_cfg_status_rq_seq_num_vld0,
+       _unnamed_$pcie_in_pcie4_cfg_status_rq_seq_num_vld1,
+       _unnamed_$pcie_in_pcie4_cfg_status_rq_tag_vld0,
+       _unnamed_$pcie_in_pcie4_cfg_status_rq_tag_vld1,
+       _unnamed_$pcie_in_pcie4_phy_rdy_out,
+       _unnamed_$pcie_in_pcie4_user_link_up,
+       _unnamed_$pcie_in_s_axis_cq_tlast,
+       _unnamed_$pcie_in_s_axis_cq_tready,
+       _unnamed_$pcie_in_s_axis_cq_tvalid,
+       _unnamed_$pcie_in_s_axis_rc_tlast,
+       _unnamed_$pcie_in_s_axis_rc_tready,
+       _unnamed_$pcie_in_s_axis_rc_tvalid,
+       _unnamed_$status_lnk_up;
+
+  // ports of submodule bridge
+  reg [152 : 0] bridge$cq_tlps_put;
+  wire [152 : 0] bridge$cc_tlps_get, bridge$rc_tlps_put, bridge$rq_tlps_get;
+  wire [31 : 0] bridge$clocks_response_put,
+		bridge$noc_in_beat_v,
+		bridge$noc_out_beat;
+  wire bridge$EN_cc_tlps_get,
+       bridge$EN_clocks_request_get,
+       bridge$EN_clocks_response_put,
+       bridge$EN_cq_tlps_put,
+       bridge$EN_msi_interrupt_clear,
+       bridge$EN_rc_tlps_put,
+       bridge$EN_rq_tlps_get,
+       bridge$RDY_cc_tlps_get,
+       bridge$RDY_cq_tlps_put,
+       bridge$RDY_rc_tlps_put,
+       bridge$RDY_rq_tlps_get,
+       bridge$is_activated,
+       bridge$noc_in_dst_rdy,
+       bridge$noc_in_src_rdy_b,
+       bridge$noc_out_dst_rdy_b,
+       bridge$noc_out_src_rdy,
+       bridge$status_bluenoc_link_is_up_i,
+       bridge$status_interrupts_enabled_i,
+       bridge$status_memory_enabled_i,
+       bridge$status_out_of_reset_i,
+       bridge$status_pcie_link_is_up_i;
+
+  // ports of submodule cc_gearbox_dCombinedReset
+  wire cc_gearbox_dCombinedReset$RST_OUT;
+
+  // ports of submodule cc_gearbox_dCrossedsReset
+  wire cc_gearbox_dCrossedsReset$OUT_RST;
+
+  // ports of submodule cc_gearbox_sCombinedReset
+  wire cc_gearbox_sCombinedReset$RST_OUT;
+
+  // ports of submodule cc_gearbox_sCrosseddReset
+  wire cc_gearbox_sCrosseddReset$OUT_RST;
+
+  // ports of submodule clockGenerators_one_to_one_cclock_pre_negedge_uclk
+  wire clockGenerators_one_to_one_cclock_pre_negedge_uclk$sD_IN,
+       clockGenerators_one_to_one_cclock_pre_negedge_uclk$sEN;
+
+  // ports of submodule clockGenerators_one_to_one_cclock_pre_posedge_uclk
+  wire clockGenerators_one_to_one_cclock_pre_posedge_uclk$sD_IN,
+       clockGenerators_one_to_one_cclock_pre_posedge_uclk$sEN;
+
+  // ports of submodule cq_gearbox_dCombinedReset
+  wire cq_gearbox_dCombinedReset$RST_OUT;
+
+  // ports of submodule cq_gearbox_dCrossedsReset
+  wire cq_gearbox_dCrossedsReset$OUT_RST;
+
+  // ports of submodule cq_gearbox_sCombinedReset
+  wire cq_gearbox_sCombinedReset$RST_OUT;
+
+  // ports of submodule cq_gearbox_sCrosseddReset
+  wire cq_gearbox_sCrosseddReset$OUT_RST;
+
+  // ports of submodule cq_in_buf
+  wire [75 : 0] cq_in_buf$D_IN, cq_in_buf$D_OUT;
+  wire cq_in_buf$CLR,
+       cq_in_buf$DEQ,
+       cq_in_buf$EMPTY_N,
+       cq_in_buf$ENQ,
+       cq_in_buf$FULL_N;
+
+  // ports of submodule dut_dutIfc
+  wire [655 : 0] dut_dutIfc$comms_link_request_get;
+  wire [607 : 0] dut_dutIfc$axi_in_tdata;
+  wire [75 : 0] dut_dutIfc$axi_in_tkeep, dut_dutIfc$axi_in_tstrb;
+  wire [55 : 0] dut_dutIfc$comms_link_response_put;
+  wire dut_dutIfc$CLK_uclk,
+       dut_dutIfc$EN_comms_link_request_get,
+       dut_dutIfc$EN_comms_link_response_put,
+       dut_dutIfc$RDY_comms_link_request_get,
+       dut_dutIfc$RDY_comms_link_response_put,
+       dut_dutIfc$RST_N_urstn,
+       dut_dutIfc$axi_in_tlast,
+       dut_dutIfc$axi_in_tready,
+       dut_dutIfc$axi_in_tvalid;
+
+  // ports of submodule dut_prb_control_ackFifo
+  wire [31 : 0] dut_prb_control_ackFifo$D_IN, dut_prb_control_ackFifo$D_OUT;
+  wire dut_prb_control_ackFifo$CLR,
+       dut_prb_control_ackFifo$DEQ,
+       dut_prb_control_ackFifo$EMPTY_N,
+       dut_prb_control_ackFifo$ENQ,
+       dut_prb_control_ackFifo$FULL_N;
+
+  // ports of submodule dut_prb_control_control_in_buffer_empty_sp
+  wire dut_prb_control_control_in_buffer_empty_sp$dPulse,
+       dut_prb_control_control_in_buffer_empty_sp$sEN,
+       dut_prb_control_control_in_buffer_empty_sp$sRDY;
+
+  // ports of submodule dut_prb_control_control_in_buffer_full_sp
+  wire dut_prb_control_control_in_buffer_full_sp$dPulse,
+       dut_prb_control_control_in_buffer_full_sp$sEN,
+       dut_prb_control_control_in_buffer_full_sp$sRDY;
+
+  // ports of submodule dut_prb_control_control_in_ending_reset
+  wire dut_prb_control_control_in_ending_reset$dPulse,
+       dut_prb_control_control_in_ending_reset$sEN;
+
+  // ports of submodule dut_prb_control_control_in_next_sp
+  wire dut_prb_control_control_in_next_sp$dPulse,
+       dut_prb_control_control_in_next_sp$sEN,
+       dut_prb_control_control_in_next_sp$sRDY;
+
+  // ports of submodule dut_prb_control_control_in_nocResetUClock
+  wire dut_prb_control_control_in_nocResetUClock$OUT_RST;
+
+  // ports of submodule dut_prb_control_control_in_starting_reset
+  wire dut_prb_control_control_in_starting_reset$dPulse,
+       dut_prb_control_control_in_starting_reset$sEN;
+
+  // ports of submodule dut_prb_control_control_in_wait_sp
+  wire dut_prb_control_control_in_wait_sp$dPulse,
+       dut_prb_control_control_in_wait_sp$sEN,
+       dut_prb_control_control_in_wait_sp$sRDY;
+
+  // ports of submodule dut_prb_control_data_out_ending_reset
+  wire dut_prb_control_data_out_ending_reset$dPulse,
+       dut_prb_control_data_out_ending_reset$sEN;
+
+  // ports of submodule dut_prb_control_data_out_finished
+  wire dut_prb_control_data_out_finished$dPulse,
+       dut_prb_control_data_out_finished$sEN,
+       dut_prb_control_data_out_finished$sRDY;
+
+  // ports of submodule dut_prb_control_data_out_next
+  wire dut_prb_control_data_out_next$dPulse,
+       dut_prb_control_data_out_next$sEN,
+       dut_prb_control_data_out_next$sRDY;
+
+  // ports of submodule dut_prb_control_data_out_nocResetUClock
+  wire dut_prb_control_data_out_nocResetUClock$OUT_RST;
+
+  // ports of submodule dut_prb_control_data_out_starting_reset
+  wire dut_prb_control_data_out_starting_reset$dPulse,
+       dut_prb_control_data_out_starting_reset$sEN;
+
+  // ports of submodule dut_prb_control_enff
+  reg [18 : 0] dut_prb_control_enff$D_IN;
+  wire [18 : 0] dut_prb_control_enff$D_OUT;
+  wire dut_prb_control_enff$CLR,
+       dut_prb_control_enff$DEQ,
+       dut_prb_control_enff$EMPTY_N,
+       dut_prb_control_enff$ENQ,
+       dut_prb_control_enff$FULL_N;
+
+  // ports of submodule dut_prb_control_prb_str
+  wire [31 : 0] dut_prb_control_prb_str$D_IN, dut_prb_control_prb_str$D_OUT;
+  wire dut_prb_control_prb_str$CLR,
+       dut_prb_control_prb_str$DEQ,
+       dut_prb_control_prb_str$EMPTY_N,
+       dut_prb_control_prb_str$ENQ,
+       dut_prb_control_prb_str$FULL_N;
+
+  // ports of submodule dut_probeHook
+  wire [31 : 0] dut_probeHook$DATAUP;
+  wire [18 : 0] dut_probeHook$CMD;
+  wire dut_probeHook$ACK,
+       dut_probeHook$CMDEN,
+       dut_probeHook$CTIMER,
+       dut_probeHook$DATAVALID,
+       dut_probeHook$DELAY;
+
+  // ports of submodule epReset125
+  wire epReset125$OUT_RST;
+
+  // ports of submodule fToBridgeBeat
+  reg [31 : 0] fToBridgeBeat$D_IN;
+  wire [31 : 0] fToBridgeBeat$D_OUT;
+  wire fToBridgeBeat$CLR,
+       fToBridgeBeat$DEQ,
+       fToBridgeBeat$EMPTY_N,
+       fToBridgeBeat$ENQ,
+       fToBridgeBeat$FULL_N;
+
+  // ports of submodule gte4
+  wire gte4$O, gte4$ODIV2;
+
+  // ports of submodule init_state_msgFIFO
+  wire [73 : 0] init_state_msgFIFO$dD_OUT, init_state_msgFIFO$sD_IN;
+  wire init_state_msgFIFO$dDEQ,
+       init_state_msgFIFO$dEMPTY_N,
+       init_state_msgFIFO$sENQ,
+       init_state_msgFIFO$sFULL_N;
+
+  // ports of submodule network_status
+  wire network_status$ASSERT_IN, network_status$OUT_RST;
+
+  // ports of submodule rc_gearbox_dCombinedReset
+  wire rc_gearbox_dCombinedReset$RST_OUT;
+
+  // ports of submodule rc_gearbox_dCrossedsReset
+  wire rc_gearbox_dCrossedsReset$OUT_RST;
+
+  // ports of submodule rc_gearbox_sCombinedReset
+  wire rc_gearbox_sCombinedReset$RST_OUT;
+
+  // ports of submodule rc_gearbox_sCrosseddReset
+  wire rc_gearbox_sCrosseddReset$OUT_RST;
+
+  // ports of submodule rc_in_buf
+  wire [75 : 0] rc_in_buf$D_IN, rc_in_buf$D_OUT;
+  wire rc_in_buf$CLR,
+       rc_in_buf$DEQ,
+       rc_in_buf$EMPTY_N,
+       rc_in_buf$ENQ,
+       rc_in_buf$FULL_N;
+
+  // ports of submodule rq_gearbox_dCombinedReset
+  wire rq_gearbox_dCombinedReset$RST_OUT;
+
+  // ports of submodule rq_gearbox_dCrossedsReset
+  wire rq_gearbox_dCrossedsReset$OUT_RST;
+
+  // ports of submodule rq_gearbox_sCombinedReset
+  wire rq_gearbox_sCombinedReset$RST_OUT;
+
+  // ports of submodule rq_gearbox_sCrosseddReset
+  wire rq_gearbox_sCrosseddReset$OUT_RST;
+
+  // ports of submodule rstgen_final_reset
+  wire rstgen_final_reset$RST_OUT;
+
+  // ports of submodule rstgen_inv_clk
+  wire rstgen_inv_clk$CLK_OUT;
+
+  // ports of submodule rstgen_inv_rstgen
+  wire rstgen_inv_rstgen$ASSERT_IN, rstgen_inv_rstgen$OUT_RST;
+
+  // ports of submodule rstgen_inv_rstn
+  wire rstgen_inv_rstn$OUT_RST;
+
+  // ports of submodule rstgen_rstgen
+  wire rstgen_rstgen$ASSERT_IN, rstgen_rstgen$OUT_RST;
+
+  // ports of submodule uclkgen
+  wire uclkgen$CLK_IN,
+       uclkgen$CLK_IN_EN,
+       uclkgen$CLK_OUT,
+       uclkgen$CLK_VAL_OUT,
+       uclkgen$COND_IN,
+       uclkgen$COND_IN_EN;
+
+  // ports of submodule wIsOutOfReset
+  wire wIsOutOfReset$DOUT;
+
+  // ports of submodule xcomms_rx_inpipe_consume_timer
+  wire [3 : 0] xcomms_rx_inpipe_consume_timer$DATA_A,
+	       xcomms_rx_inpipe_consume_timer$DATA_B,
+	       xcomms_rx_inpipe_consume_timer$DATA_C,
+	       xcomms_rx_inpipe_consume_timer$DATA_F,
+	       xcomms_rx_inpipe_consume_timer$Q_OUT;
+  wire xcomms_rx_inpipe_consume_timer$ADDA,
+       xcomms_rx_inpipe_consume_timer$ADDB,
+       xcomms_rx_inpipe_consume_timer$SETC,
+       xcomms_rx_inpipe_consume_timer$SETF;
+
+  // ports of submodule xcomms_rx_inpipe_credit_fifo
+  wire [16 : 0] xcomms_rx_inpipe_credit_fifo$dD_OUT,
+		xcomms_rx_inpipe_credit_fifo$sD_IN;
+  wire xcomms_rx_inpipe_credit_fifo$dDEQ,
+       xcomms_rx_inpipe_credit_fifo$dEMPTY_N,
+       xcomms_rx_inpipe_credit_fifo$sENQ,
+       xcomms_rx_inpipe_credit_fifo$sFULL_N;
+
+  // ports of submodule xcomms_rx_inpipe_credits
+  wire [15 : 0] xcomms_rx_inpipe_credits$DATA_A,
+		xcomms_rx_inpipe_credits$DATA_B,
+		xcomms_rx_inpipe_credits$DATA_C,
+		xcomms_rx_inpipe_credits$DATA_F,
+		xcomms_rx_inpipe_credits$Q_OUT;
+  wire xcomms_rx_inpipe_credits$ADDA,
+       xcomms_rx_inpipe_credits$ADDB,
+       xcomms_rx_inpipe_credits$SETC,
+       xcomms_rx_inpipe_credits$SETF;
+
+  // ports of submodule xcomms_rx_inpipe_data_info_fifo
+  wire [17 : 0] xcomms_rx_inpipe_data_info_fifo$dD_OUT,
+		xcomms_rx_inpipe_data_info_fifo$sD_IN;
+  wire xcomms_rx_inpipe_data_info_fifo$dDEQ,
+       xcomms_rx_inpipe_data_info_fifo$dEMPTY_N,
+       xcomms_rx_inpipe_data_info_fifo$sENQ,
+       xcomms_rx_inpipe_data_info_fifo$sFULL_N;
+
+  // ports of submodule xcomms_rx_inpipe_ending_reset
+  wire xcomms_rx_inpipe_ending_reset$dPulse,
+       xcomms_rx_inpipe_ending_reset$sEN;
+
+  // ports of submodule xcomms_rx_inpipe_in_fifo
+  wire [56 : 0] xcomms_rx_inpipe_in_fifo$dD_OUT,
+		xcomms_rx_inpipe_in_fifo$sD_IN;
+  wire xcomms_rx_inpipe_in_fifo$dDEQ,
+       xcomms_rx_inpipe_in_fifo$dEMPTY_N,
+       xcomms_rx_inpipe_in_fifo$sENQ,
+       xcomms_rx_inpipe_in_fifo$sFULL_N;
+
+  // ports of submodule xcomms_rx_inpipe_nocResetUClock
+  wire xcomms_rx_inpipe_nocResetUClock$OUT_RST;
+
+  // ports of submodule xcomms_rx_inpipe_starting_reset
+  wire xcomms_rx_inpipe_starting_reset$dPulse,
+       xcomms_rx_inpipe_starting_reset$sEN;
+
+  // ports of submodule xcomms_rx_res_fifo_ff
+  wire [55 : 0] xcomms_rx_res_fifo_ff$D_IN, xcomms_rx_res_fifo_ff$D_OUT;
+  wire xcomms_rx_res_fifo_ff$CLR,
+       xcomms_rx_res_fifo_ff$DEQ,
+       xcomms_rx_res_fifo_ff$EMPTY_N,
+       xcomms_rx_res_fifo_ff$ENQ,
+       xcomms_rx_res_fifo_ff$FULL_N;
+
+  // ports of submodule xcomms_tx_outpipe_accumulateTimer
+  wire [4 : 0] xcomms_tx_outpipe_accumulateTimer$DATA_A,
+	       xcomms_tx_outpipe_accumulateTimer$DATA_B,
+	       xcomms_tx_outpipe_accumulateTimer$DATA_C,
+	       xcomms_tx_outpipe_accumulateTimer$DATA_F,
+	       xcomms_tx_outpipe_accumulateTimer$Q_OUT;
+  wire xcomms_tx_outpipe_accumulateTimer$ADDA,
+       xcomms_tx_outpipe_accumulateTimer$ADDB,
+       xcomms_tx_outpipe_accumulateTimer$SETC,
+       xcomms_tx_outpipe_accumulateTimer$SETF;
+
+  // ports of submodule xcomms_tx_outpipe_creditTimer
+  wire [2 : 0] xcomms_tx_outpipe_creditTimer$DATA_A,
+	       xcomms_tx_outpipe_creditTimer$DATA_B,
+	       xcomms_tx_outpipe_creditTimer$DATA_C,
+	       xcomms_tx_outpipe_creditTimer$DATA_F,
+	       xcomms_tx_outpipe_creditTimer$Q_OUT;
+  wire xcomms_tx_outpipe_creditTimer$ADDA,
+       xcomms_tx_outpipe_creditTimer$ADDB,
+       xcomms_tx_outpipe_creditTimer$SETC,
+       xcomms_tx_outpipe_creditTimer$SETF;
+
+  // ports of submodule xcomms_tx_outpipe_credit_fifo
+  wire [17 : 0] xcomms_tx_outpipe_credit_fifo$dD_OUT,
+		xcomms_tx_outpipe_credit_fifo$sD_IN;
+  wire xcomms_tx_outpipe_credit_fifo$dDEQ,
+       xcomms_tx_outpipe_credit_fifo$dEMPTY_N,
+       xcomms_tx_outpipe_credit_fifo$sENQ,
+       xcomms_tx_outpipe_credit_fifo$sFULL_N;
+
+  // ports of submodule xcomms_tx_outpipe_data_info_fifo
+  wire [34 : 0] xcomms_tx_outpipe_data_info_fifo$dD_OUT,
+		xcomms_tx_outpipe_data_info_fifo$sD_IN;
+  wire xcomms_tx_outpipe_data_info_fifo$dDEQ,
+       xcomms_tx_outpipe_data_info_fifo$dEMPTY_N,
+       xcomms_tx_outpipe_data_info_fifo$sENQ,
+       xcomms_tx_outpipe_data_info_fifo$sFULL_N;
+
+  // ports of submodule xcomms_tx_outpipe_ending_reset
+  wire xcomms_tx_outpipe_ending_reset$dPulse,
+       xcomms_tx_outpipe_ending_reset$sEN;
+
+  // ports of submodule xcomms_tx_outpipe_nocResetUClock
+  wire xcomms_tx_outpipe_nocResetUClock$OUT_RST;
+
+  // ports of submodule xcomms_tx_outpipe_out_fifo
+  wire [655 : 0] xcomms_tx_outpipe_out_fifo$dD_OUT,
+		 xcomms_tx_outpipe_out_fifo$sD_IN;
+  wire xcomms_tx_outpipe_out_fifo$dDEQ,
+       xcomms_tx_outpipe_out_fifo$dEMPTY_N,
+       xcomms_tx_outpipe_out_fifo$sENQ,
+       xcomms_tx_outpipe_out_fifo$sFULL_N;
+
+  // ports of submodule xcomms_tx_outpipe_starting_reset
+  wire xcomms_tx_outpipe_starting_reset$dPulse,
+       xcomms_tx_outpipe_starting_reset$sEN;
+
+  // ports of submodule xcomms_tx_res_fifo_ff
+  wire [655 : 0] xcomms_tx_res_fifo_ff$D_IN, xcomms_tx_res_fifo_ff$D_OUT;
+  wire xcomms_tx_res_fifo_ff$CLR,
+       xcomms_tx_res_fifo_ff$DEQ,
+       xcomms_tx_res_fifo_ff$EMPTY_N,
+       xcomms_tx_res_fifo_ff$ENQ,
+       xcomms_tx_res_fifo_ff$FULL_N;
 
   // rule scheduling signals
-  wire CAN_FIRE_axi_in_m_tvalid, WILL_FIRE_axi_in_m_tvalid;
+  wire CAN_FIRE_RL_always_accept_beat,
+       CAN_FIRE_RL_cc_gearbox_dInReset_pre_isResetAssertedUpdate,
+       CAN_FIRE_RL_cc_gearbox_launder_dInReset,
+       CAN_FIRE_RL_cc_gearbox_launder_sInReset,
+       CAN_FIRE_RL_cc_gearbox_sInReset_pre_isResetAssertedUpdate,
+       CAN_FIRE_RL_cc_rl_data,
+       CAN_FIRE_RL_cc_rl_fastclock,
+       CAN_FIRE_RL_cc_rl_get_tlps,
+       CAN_FIRE_RL_cc_rl_header,
+       CAN_FIRE_RL_clockGenerators_incr_cycle_stamp,
+       CAN_FIRE_RL_clockGenerators_one_to_one_cclock_incr,
+       CAN_FIRE_RL_clockGenerators_stall_one_to_one_cclock,
+       CAN_FIRE_RL_clockGenerators_track_reset,
+       CAN_FIRE_RL_connect_data,
+       CAN_FIRE_RL_connect_data_1,
+       CAN_FIRE_RL_connect_dst_rdy,
+       CAN_FIRE_RL_connect_dst_rdy_1,
+       CAN_FIRE_RL_connect_src_rdy,
+       CAN_FIRE_RL_connect_src_rdy_1,
+       CAN_FIRE_RL_cq_gearbox_dInReset_pre_isResetAssertedUpdate,
+       CAN_FIRE_RL_cq_gearbox_launder_dInReset,
+       CAN_FIRE_RL_cq_gearbox_launder_sInReset,
+       CAN_FIRE_RL_cq_gearbox_sInReset_pre_isResetAssertedUpdate,
+       CAN_FIRE_RL_cq_mkConnectionGetPut,
+       CAN_FIRE_RL_cq_rl_data_0,
+       CAN_FIRE_RL_cq_rl_data_1_to_3,
+       CAN_FIRE_RL_cq_rl_data_4,
+       CAN_FIRE_RL_cq_rl_g_to_gearbox,
+       CAN_FIRE_RL_cq_rl_g_to_gearbox_pad_odd_tail,
+       CAN_FIRE_RL_cq_rl_rd_header,
+       CAN_FIRE_RL_cq_rl_slowclock,
+       CAN_FIRE_RL_cq_rl_wr_header,
+       CAN_FIRE_RL_cross_config_values,
+       CAN_FIRE_RL_drive_status_bluenoc_link_up,
+       CAN_FIRE_RL_drive_status_interrupts_enabled,
+       CAN_FIRE_RL_drive_status_memory_enabled,
+       CAN_FIRE_RL_drive_status_out_of_reset,
+       CAN_FIRE_RL_drive_status_pcie_link_up,
+       CAN_FIRE_RL_dut_prb_control_announceCclock,
+       CAN_FIRE_RL_dut_prb_control_contextToPrbStr_connectCommitAck,
+       CAN_FIRE_RL_dut_prb_control_contextToPrbStr_connectData,
+       CAN_FIRE_RL_dut_prb_control_control_in_complete_reset_sequence,
+       CAN_FIRE_RL_dut_prb_control_control_in_data_ready,
+       CAN_FIRE_RL_dut_prb_control_control_in_deassert_after_reset,
+       CAN_FIRE_RL_dut_prb_control_control_in_detect_end_of_scemi_reset,
+       CAN_FIRE_RL_dut_prb_control_control_in_detect_scemi_reset,
+       CAN_FIRE_RL_dut_prb_control_control_in_first_request,
+       CAN_FIRE_RL_dut_prb_control_control_in_handle_scemi_reset,
+       CAN_FIRE_RL_dut_prb_control_control_in_initiate_reset_sequence,
+       CAN_FIRE_RL_dut_prb_control_control_in_port_reset,
+       CAN_FIRE_RL_dut_prb_control_control_in_read_complete,
+       CAN_FIRE_RL_dut_prb_control_control_in_receive,
+       CAN_FIRE_RL_dut_prb_control_control_in_receive_ready,
+       CAN_FIRE_RL_dut_prb_control_control_in_update_remaining,
+       CAN_FIRE_RL_dut_prb_control_data_out_complete_reset_sequence,
+       CAN_FIRE_RL_dut_prb_control_data_out_deassert_after_reset,
+       CAN_FIRE_RL_dut_prb_control_data_out_detect_end_of_scemi_reset,
+       CAN_FIRE_RL_dut_prb_control_data_out_detect_scemi_reset,
+       CAN_FIRE_RL_dut_prb_control_data_out_handle_scemi_reset,
+       CAN_FIRE_RL_dut_prb_control_data_out_initiate_reset_sequence,
+       CAN_FIRE_RL_dut_prb_control_data_out_pok_mkConnectionVtoAf,
+       CAN_FIRE_RL_dut_prb_control_data_out_setOK,
+       CAN_FIRE_RL_dut_prb_control_data_out_update_count,
+       CAN_FIRE_RL_dut_prb_control_dutclkctrl_nconnect_mkConnectionVtoAf,
+       CAN_FIRE_RL_dut_prb_control_dutclkctrl_pconnect_mkConnectionVtoAf,
+       CAN_FIRE_RL_dut_prb_control_flagSample,
+       CAN_FIRE_RL_dut_prb_control_prb_str_recv_doEnq,
+       CAN_FIRE_RL_dut_prb_control_receiveControl,
+       CAN_FIRE_RL_dut_prb_control_receiveFirstData,
+       CAN_FIRE_RL_dut_prb_control_receiveMoreData,
+       CAN_FIRE_RL_dut_prb_control_receiveTrigger,
+       CAN_FIRE_RL_dut_prb_control_requestInput,
+       CAN_FIRE_RL_dut_prb_control_respondToPing,
+       CAN_FIRE_RL_dut_prb_control_sendAck,
+       CAN_FIRE_RL_dut_prb_control_send_en,
+       CAN_FIRE_RL_dut_prb_control_setSample,
+       CAN_FIRE_RL_dut_prb_control_unsetFlag,
+       CAN_FIRE_RL_fFromBridgeBeat_ifc_update,
+       CAN_FIRE_RL_fFromContinueBeat_ifc_update,
+       CAN_FIRE_RL_fS1MsgOut_ifc_update,
+       CAN_FIRE_RL_fS1OutPortAcks_ifc_update,
+       CAN_FIRE_RL_fS2MsgOut_ifc_update,
+       CAN_FIRE_RL_fToContinueBeat_ifc_update,
+       CAN_FIRE_RL_init_state_track_reset,
+       CAN_FIRE_RL_intr_ifc_ctl,
+       CAN_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb,
+       CAN_FIRE_RL_msg_sink_noc_active_execute_outport_acks,
+       CAN_FIRE_RL_msg_sink_noc_active_other_process_other_data,
+       CAN_FIRE_RL_msg_sink_noc_active_receive_beat_from_bridge,
+       CAN_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header,
+       CAN_FIRE_RL_msg_sink_noc_active_scemi1_disregard_packet,
+       CAN_FIRE_RL_msg_sink_noc_active_scemi1_process_inport_data,
+       CAN_FIRE_RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb,
+       CAN_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb,
+       CAN_FIRE_RL_msg_sink_noc_active_scemi2_disregard_packet,
+       CAN_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data,
+       CAN_FIRE_RL_msg_sink_noc_inactive,
+       CAN_FIRE_RL_msg_source_noc_active_arbitrate_transmit_messages,
+       CAN_FIRE_RL_msg_source_noc_active_continue_other,
+       CAN_FIRE_RL_msg_source_noc_active_continue_scemi1,
+       CAN_FIRE_RL_msg_source_noc_active_continue_scemi2,
+       CAN_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other,
+       CAN_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1,
+       CAN_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2,
+       CAN_FIRE_RL_msg_source_noc_active_inports_accumulate_pending_requests,
+       CAN_FIRE_RL_msg_source_noc_active_inports_load_new_request_group,
+       CAN_FIRE_RL_msg_source_noc_active_inports_send_request_message,
+       CAN_FIRE_RL_msg_source_noc_active_inports_start_next_request,
+       CAN_FIRE_RL_msg_source_noc_active_move_to_next_output_beat,
+       CAN_FIRE_RL_msg_source_noc_active_outports_send_data_message_data,
+       CAN_FIRE_RL_msg_source_noc_active_outports_send_data_message_header,
+       CAN_FIRE_RL_msg_source_noc_active_outports_start_data_message,
+       CAN_FIRE_RL_msg_source_noc_active_transmit_beat_to_bridge,
+       CAN_FIRE_RL_msg_source_noc_inactive,
+       CAN_FIRE_RL_msg_source_noc_inactive_inports,
+       CAN_FIRE_RL_rc_gearbox_dInReset_pre_isResetAssertedUpdate,
+       CAN_FIRE_RL_rc_gearbox_launder_dInReset,
+       CAN_FIRE_RL_rc_gearbox_launder_sInReset,
+       CAN_FIRE_RL_rc_gearbox_sInReset_pre_isResetAssertedUpdate,
+       CAN_FIRE_RL_rc_mkConnectionGetPut,
+       CAN_FIRE_RL_rc_rl_data_a,
+       CAN_FIRE_RL_rc_rl_g_to_gearbox,
+       CAN_FIRE_RL_rc_rl_g_to_gearbox_pad_odd_tail,
+       CAN_FIRE_RL_rc_rl_header,
+       CAN_FIRE_RL_register_config_values,
+       CAN_FIRE_RL_reset_inpipe_when_noc_is_inactive,
+       CAN_FIRE_RL_reset_outpipe_when_noc_is_inactive,
+       CAN_FIRE_RL_reset_scemi_if_network_is_inactive,
+       CAN_FIRE_RL_rl_commsIn,
+       CAN_FIRE_RL_rl_commsOut,
+       CAN_FIRE_RL_rq_gearbox_dInReset_pre_isResetAssertedUpdate,
+       CAN_FIRE_RL_rq_gearbox_launder_dInReset,
+       CAN_FIRE_RL_rq_gearbox_launder_sInReset,
+       CAN_FIRE_RL_rq_gearbox_sInReset_pre_isResetAssertedUpdate,
+       CAN_FIRE_RL_rq_rl_data_a,
+       CAN_FIRE_RL_rq_rl_data_b,
+       CAN_FIRE_RL_rq_rl_data_c,
+       CAN_FIRE_RL_rq_rl_fastclock,
+       CAN_FIRE_RL_rq_rl_get_tlps,
+       CAN_FIRE_RL_rq_rl_header,
+       CAN_FIRE_RL_rstgen_trigger,
+       CAN_FIRE_RL_scan_inpipe_credit_index,
+       CAN_FIRE_RL_scan_outpipe_data_index,
+       CAN_FIRE_RL_scan_output_ports,
+       CAN_FIRE_RL_send_outpipe_data_header,
+       CAN_FIRE_RL_send_outpipe_data_message,
+       CAN_FIRE_RL_send_whatever,
+       CAN_FIRE_RL_start_inpipe_credit_request,
+       CAN_FIRE_RL_start_outpipe_data_message,
+       CAN_FIRE_RL_swap_scemi1_outport_grant,
+       CAN_FIRE_RL_toggle_uclock,
+       CAN_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut,
+       CAN_FIRE_RL_xcomms_rx_inpipe_complete_reset_sequence,
+       CAN_FIRE_RL_xcomms_rx_inpipe_consumer_handle_msg,
+       CAN_FIRE_RL_xcomms_rx_inpipe_detect_scemi_reset,
+       CAN_FIRE_RL_xcomms_rx_inpipe_drain_credit_fifo,
+       CAN_FIRE_RL_xcomms_rx_inpipe_drain_data_info_fifo,
+       CAN_FIRE_RL_xcomms_rx_inpipe_drain_in_fifo,
+       CAN_FIRE_RL_xcomms_rx_inpipe_initiate_reset_sequence,
+       CAN_FIRE_RL_xcomms_rx_inpipe_mimo_update,
+       CAN_FIRE_RL_xcomms_rx_inpipe_move_elem,
+       CAN_FIRE_RL_xcomms_rx_inpipe_passReset,
+       CAN_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side,
+       CAN_FIRE_RL_xcomms_rx_inpipe_send_credit_message,
+       CAN_FIRE_RL_xcomms_rx_inpipe_take_completed_element,
+       CAN_FIRE_RL_xcomms_rx_inpipe_tick_timer,
+       CAN_FIRE_RL_xcomms_rx_inpipe_update_elem_count,
+       CAN_FIRE_RL_xcomms_rx_inpipe_update_inpipe_consumer_state,
+       CAN_FIRE_RL_xcomms_tx_connect_res_mkConnectionGetPut,
+       CAN_FIRE_RL_xcomms_tx_outpipe_complete_reset_sequence,
+       CAN_FIRE_RL_xcomms_tx_outpipe_detect_end_of_scemi_reset,
+       CAN_FIRE_RL_xcomms_tx_outpipe_detect_scemi_reset,
+       CAN_FIRE_RL_xcomms_tx_outpipe_drain_credit_fifo,
+       CAN_FIRE_RL_xcomms_tx_outpipe_drain_data_info_fifo,
+       CAN_FIRE_RL_xcomms_tx_outpipe_drain_out_fifo,
+       CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits,
+       CAN_FIRE_RL_xcomms_tx_outpipe_indata_mimo_update,
+       CAN_FIRE_RL_xcomms_tx_outpipe_initiate_reset_sequence,
+       CAN_FIRE_RL_xcomms_tx_outpipe_nocEnqCreditMsg,
+       CAN_FIRE_RL_xcomms_tx_outpipe_nocHandleCreditMsg,
+       CAN_FIRE_RL_xcomms_tx_outpipe_register_flush_request,
+       CAN_FIRE_RL_xcomms_tx_outpipe_remove_taken_beat,
+       CAN_FIRE_RL_xcomms_tx_outpipe_reset_noc_side,
+       CAN_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side,
+       CAN_FIRE_RL_xcomms_tx_outpipe_shift_elements_out_of_buffer,
+       CAN_FIRE_RL_xcomms_tx_outpipe_tickCreditTimer,
+       CAN_FIRE_RL_xcomms_tx_outpipe_transfer_element_data,
+       CAN_FIRE_RL_xcomms_tx_outpipe_update_output_buffer,
+       CAN_FIRE_RL_xcomms_tx_outpipe_update_producer_state,
+       CAN_FIRE_axi_in_m_tvalid,
+       CAN_FIRE_pcie_in_m_axis_cc_m_tready,
+       CAN_FIRE_pcie_in_m_axis_rq_m_tready,
+       CAN_FIRE_pcie_in_pcie4_cfg_control_bus_number,
+       CAN_FIRE_pcie_in_pcie4_cfg_control_flr_in_process,
+       CAN_FIRE_pcie_in_pcie4_cfg_control_hot_reset_out,
+       CAN_FIRE_pcie_in_pcie4_cfg_control_power_state_change_interrupt,
+       CAN_FIRE_pcie_in_pcie4_cfg_control_vf_flr_in_process,
+       CAN_FIRE_pcie_in_pcie4_cfg_external_msix_msi_fail,
+       CAN_FIRE_pcie_in_pcie4_cfg_external_msix_msi_sent,
+       CAN_FIRE_pcie_in_pcie4_cfg_external_msix_msix_msix_enable,
+       CAN_FIRE_pcie_in_pcie4_cfg_external_msix_msix_msix_mask,
+       CAN_FIRE_pcie_in_pcie4_cfg_external_msix_msix_vec_pending_status,
+       CAN_FIRE_pcie_in_pcie4_cfg_external_msix_msix_vf_enable,
+       CAN_FIRE_pcie_in_pcie4_cfg_external_msix_msix_vf_mask,
+       CAN_FIRE_pcie_in_pcie4_cfg_fc_cpld,
+       CAN_FIRE_pcie_in_pcie4_cfg_fc_cplh,
+       CAN_FIRE_pcie_in_pcie4_cfg_fc_npd,
+       CAN_FIRE_pcie_in_pcie4_cfg_fc_nph,
+       CAN_FIRE_pcie_in_pcie4_cfg_fc_pd,
+       CAN_FIRE_pcie_in_pcie4_cfg_fc_ph,
+       CAN_FIRE_pcie_in_pcie4_cfg_interrupt_sent,
+       CAN_FIRE_pcie_in_pcie4_cfg_mesg_rcvd_received,
+       CAN_FIRE_pcie_in_pcie4_cfg_mesg_rcvd_received_data,
+       CAN_FIRE_pcie_in_pcie4_cfg_mesg_rcvd_received_type,
+       CAN_FIRE_pcie_in_pcie4_cfg_mesg_tx_transmit_done,
+       CAN_FIRE_pcie_in_pcie4_cfg_mgmt_read_data,
+       CAN_FIRE_pcie_in_pcie4_cfg_mgmt_read_write_done,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_current_speed,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_err_cor_out,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_err_fatal_out,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_err_nonfatal_out,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_function_status,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_funstion_power_state,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_link_power_state,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_local_error_out,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_local_error_valid,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_ltssm_state,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_max_payload,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_max_read_req,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_negotiated_width,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_obff_enable,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_pcie_cq_np_req_count,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_phy_link_down,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_phy_link_status,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_pl_status_change,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_rcb_status,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_rq_seq_num0,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_rq_seq_num1,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_rq_seq_num_vld0,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_rq_seq_num_vld1,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_rq_tag0,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_rq_tag1,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_rq_tag_av,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_rq_tag_vld0,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_rq_tag_vld1,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_rx_pm_state,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_tfc_npd_av,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_tfc_nph_av,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_tph_requester_enable,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_tph_st_mode,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_tx_pm_state,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_vf_power_state,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_vf_status,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_vf_tph_requester_enable,
+       CAN_FIRE_pcie_in_pcie4_cfg_status_vf_tph_st_mode,
+       CAN_FIRE_pcie_in_pcie4_phy_rdy_out,
+       CAN_FIRE_pcie_in_pcie4_user_link_up,
+       CAN_FIRE_pcie_in_s_axis_cq_m_tvalid,
+       CAN_FIRE_pcie_in_s_axis_rc_m_tvalid,
+       WILL_FIRE_RL_always_accept_beat,
+       WILL_FIRE_RL_cc_gearbox_dInReset_pre_isResetAssertedUpdate,
+       WILL_FIRE_RL_cc_gearbox_launder_dInReset,
+       WILL_FIRE_RL_cc_gearbox_launder_sInReset,
+       WILL_FIRE_RL_cc_gearbox_sInReset_pre_isResetAssertedUpdate,
+       WILL_FIRE_RL_cc_rl_data,
+       WILL_FIRE_RL_cc_rl_fastclock,
+       WILL_FIRE_RL_cc_rl_get_tlps,
+       WILL_FIRE_RL_cc_rl_header,
+       WILL_FIRE_RL_clockGenerators_incr_cycle_stamp,
+       WILL_FIRE_RL_clockGenerators_one_to_one_cclock_incr,
+       WILL_FIRE_RL_clockGenerators_stall_one_to_one_cclock,
+       WILL_FIRE_RL_clockGenerators_track_reset,
+       WILL_FIRE_RL_connect_data,
+       WILL_FIRE_RL_connect_data_1,
+       WILL_FIRE_RL_connect_dst_rdy,
+       WILL_FIRE_RL_connect_dst_rdy_1,
+       WILL_FIRE_RL_connect_src_rdy,
+       WILL_FIRE_RL_connect_src_rdy_1,
+       WILL_FIRE_RL_cq_gearbox_dInReset_pre_isResetAssertedUpdate,
+       WILL_FIRE_RL_cq_gearbox_launder_dInReset,
+       WILL_FIRE_RL_cq_gearbox_launder_sInReset,
+       WILL_FIRE_RL_cq_gearbox_sInReset_pre_isResetAssertedUpdate,
+       WILL_FIRE_RL_cq_mkConnectionGetPut,
+       WILL_FIRE_RL_cq_rl_data_0,
+       WILL_FIRE_RL_cq_rl_data_1_to_3,
+       WILL_FIRE_RL_cq_rl_data_4,
+       WILL_FIRE_RL_cq_rl_g_to_gearbox,
+       WILL_FIRE_RL_cq_rl_g_to_gearbox_pad_odd_tail,
+       WILL_FIRE_RL_cq_rl_rd_header,
+       WILL_FIRE_RL_cq_rl_slowclock,
+       WILL_FIRE_RL_cq_rl_wr_header,
+       WILL_FIRE_RL_cross_config_values,
+       WILL_FIRE_RL_drive_status_bluenoc_link_up,
+       WILL_FIRE_RL_drive_status_interrupts_enabled,
+       WILL_FIRE_RL_drive_status_memory_enabled,
+       WILL_FIRE_RL_drive_status_out_of_reset,
+       WILL_FIRE_RL_drive_status_pcie_link_up,
+       WILL_FIRE_RL_dut_prb_control_announceCclock,
+       WILL_FIRE_RL_dut_prb_control_contextToPrbStr_connectCommitAck,
+       WILL_FIRE_RL_dut_prb_control_contextToPrbStr_connectData,
+       WILL_FIRE_RL_dut_prb_control_control_in_complete_reset_sequence,
+       WILL_FIRE_RL_dut_prb_control_control_in_data_ready,
+       WILL_FIRE_RL_dut_prb_control_control_in_deassert_after_reset,
+       WILL_FIRE_RL_dut_prb_control_control_in_detect_end_of_scemi_reset,
+       WILL_FIRE_RL_dut_prb_control_control_in_detect_scemi_reset,
+       WILL_FIRE_RL_dut_prb_control_control_in_first_request,
+       WILL_FIRE_RL_dut_prb_control_control_in_handle_scemi_reset,
+       WILL_FIRE_RL_dut_prb_control_control_in_initiate_reset_sequence,
+       WILL_FIRE_RL_dut_prb_control_control_in_port_reset,
+       WILL_FIRE_RL_dut_prb_control_control_in_read_complete,
+       WILL_FIRE_RL_dut_prb_control_control_in_receive,
+       WILL_FIRE_RL_dut_prb_control_control_in_receive_ready,
+       WILL_FIRE_RL_dut_prb_control_control_in_update_remaining,
+       WILL_FIRE_RL_dut_prb_control_data_out_complete_reset_sequence,
+       WILL_FIRE_RL_dut_prb_control_data_out_deassert_after_reset,
+       WILL_FIRE_RL_dut_prb_control_data_out_detect_end_of_scemi_reset,
+       WILL_FIRE_RL_dut_prb_control_data_out_detect_scemi_reset,
+       WILL_FIRE_RL_dut_prb_control_data_out_handle_scemi_reset,
+       WILL_FIRE_RL_dut_prb_control_data_out_initiate_reset_sequence,
+       WILL_FIRE_RL_dut_prb_control_data_out_pok_mkConnectionVtoAf,
+       WILL_FIRE_RL_dut_prb_control_data_out_setOK,
+       WILL_FIRE_RL_dut_prb_control_data_out_update_count,
+       WILL_FIRE_RL_dut_prb_control_dutclkctrl_nconnect_mkConnectionVtoAf,
+       WILL_FIRE_RL_dut_prb_control_dutclkctrl_pconnect_mkConnectionVtoAf,
+       WILL_FIRE_RL_dut_prb_control_flagSample,
+       WILL_FIRE_RL_dut_prb_control_prb_str_recv_doEnq,
+       WILL_FIRE_RL_dut_prb_control_receiveControl,
+       WILL_FIRE_RL_dut_prb_control_receiveFirstData,
+       WILL_FIRE_RL_dut_prb_control_receiveMoreData,
+       WILL_FIRE_RL_dut_prb_control_receiveTrigger,
+       WILL_FIRE_RL_dut_prb_control_requestInput,
+       WILL_FIRE_RL_dut_prb_control_respondToPing,
+       WILL_FIRE_RL_dut_prb_control_sendAck,
+       WILL_FIRE_RL_dut_prb_control_send_en,
+       WILL_FIRE_RL_dut_prb_control_setSample,
+       WILL_FIRE_RL_dut_prb_control_unsetFlag,
+       WILL_FIRE_RL_fFromBridgeBeat_ifc_update,
+       WILL_FIRE_RL_fFromContinueBeat_ifc_update,
+       WILL_FIRE_RL_fS1MsgOut_ifc_update,
+       WILL_FIRE_RL_fS1OutPortAcks_ifc_update,
+       WILL_FIRE_RL_fS2MsgOut_ifc_update,
+       WILL_FIRE_RL_fToContinueBeat_ifc_update,
+       WILL_FIRE_RL_init_state_track_reset,
+       WILL_FIRE_RL_intr_ifc_ctl,
+       WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb,
+       WILL_FIRE_RL_msg_sink_noc_active_execute_outport_acks,
+       WILL_FIRE_RL_msg_sink_noc_active_other_process_other_data,
+       WILL_FIRE_RL_msg_sink_noc_active_receive_beat_from_bridge,
+       WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header,
+       WILL_FIRE_RL_msg_sink_noc_active_scemi1_disregard_packet,
+       WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_inport_data,
+       WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb,
+       WILL_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb,
+       WILL_FIRE_RL_msg_sink_noc_active_scemi2_disregard_packet,
+       WILL_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data,
+       WILL_FIRE_RL_msg_sink_noc_inactive,
+       WILL_FIRE_RL_msg_source_noc_active_arbitrate_transmit_messages,
+       WILL_FIRE_RL_msg_source_noc_active_continue_other,
+       WILL_FIRE_RL_msg_source_noc_active_continue_scemi1,
+       WILL_FIRE_RL_msg_source_noc_active_continue_scemi2,
+       WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other,
+       WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1,
+       WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2,
+       WILL_FIRE_RL_msg_source_noc_active_inports_accumulate_pending_requests,
+       WILL_FIRE_RL_msg_source_noc_active_inports_load_new_request_group,
+       WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message,
+       WILL_FIRE_RL_msg_source_noc_active_inports_start_next_request,
+       WILL_FIRE_RL_msg_source_noc_active_move_to_next_output_beat,
+       WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data,
+       WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header,
+       WILL_FIRE_RL_msg_source_noc_active_outports_start_data_message,
+       WILL_FIRE_RL_msg_source_noc_active_transmit_beat_to_bridge,
+       WILL_FIRE_RL_msg_source_noc_inactive,
+       WILL_FIRE_RL_msg_source_noc_inactive_inports,
+       WILL_FIRE_RL_rc_gearbox_dInReset_pre_isResetAssertedUpdate,
+       WILL_FIRE_RL_rc_gearbox_launder_dInReset,
+       WILL_FIRE_RL_rc_gearbox_launder_sInReset,
+       WILL_FIRE_RL_rc_gearbox_sInReset_pre_isResetAssertedUpdate,
+       WILL_FIRE_RL_rc_mkConnectionGetPut,
+       WILL_FIRE_RL_rc_rl_data_a,
+       WILL_FIRE_RL_rc_rl_g_to_gearbox,
+       WILL_FIRE_RL_rc_rl_g_to_gearbox_pad_odd_tail,
+       WILL_FIRE_RL_rc_rl_header,
+       WILL_FIRE_RL_register_config_values,
+       WILL_FIRE_RL_reset_inpipe_when_noc_is_inactive,
+       WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive,
+       WILL_FIRE_RL_reset_scemi_if_network_is_inactive,
+       WILL_FIRE_RL_rl_commsIn,
+       WILL_FIRE_RL_rl_commsOut,
+       WILL_FIRE_RL_rq_gearbox_dInReset_pre_isResetAssertedUpdate,
+       WILL_FIRE_RL_rq_gearbox_launder_dInReset,
+       WILL_FIRE_RL_rq_gearbox_launder_sInReset,
+       WILL_FIRE_RL_rq_gearbox_sInReset_pre_isResetAssertedUpdate,
+       WILL_FIRE_RL_rq_rl_data_a,
+       WILL_FIRE_RL_rq_rl_data_b,
+       WILL_FIRE_RL_rq_rl_data_c,
+       WILL_FIRE_RL_rq_rl_fastclock,
+       WILL_FIRE_RL_rq_rl_get_tlps,
+       WILL_FIRE_RL_rq_rl_header,
+       WILL_FIRE_RL_rstgen_trigger,
+       WILL_FIRE_RL_scan_inpipe_credit_index,
+       WILL_FIRE_RL_scan_outpipe_data_index,
+       WILL_FIRE_RL_scan_output_ports,
+       WILL_FIRE_RL_send_outpipe_data_header,
+       WILL_FIRE_RL_send_outpipe_data_message,
+       WILL_FIRE_RL_send_whatever,
+       WILL_FIRE_RL_start_inpipe_credit_request,
+       WILL_FIRE_RL_start_outpipe_data_message,
+       WILL_FIRE_RL_swap_scemi1_outport_grant,
+       WILL_FIRE_RL_toggle_uclock,
+       WILL_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut,
+       WILL_FIRE_RL_xcomms_rx_inpipe_complete_reset_sequence,
+       WILL_FIRE_RL_xcomms_rx_inpipe_consumer_handle_msg,
+       WILL_FIRE_RL_xcomms_rx_inpipe_detect_scemi_reset,
+       WILL_FIRE_RL_xcomms_rx_inpipe_drain_credit_fifo,
+       WILL_FIRE_RL_xcomms_rx_inpipe_drain_data_info_fifo,
+       WILL_FIRE_RL_xcomms_rx_inpipe_drain_in_fifo,
+       WILL_FIRE_RL_xcomms_rx_inpipe_initiate_reset_sequence,
+       WILL_FIRE_RL_xcomms_rx_inpipe_mimo_update,
+       WILL_FIRE_RL_xcomms_rx_inpipe_move_elem,
+       WILL_FIRE_RL_xcomms_rx_inpipe_passReset,
+       WILL_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side,
+       WILL_FIRE_RL_xcomms_rx_inpipe_send_credit_message,
+       WILL_FIRE_RL_xcomms_rx_inpipe_take_completed_element,
+       WILL_FIRE_RL_xcomms_rx_inpipe_tick_timer,
+       WILL_FIRE_RL_xcomms_rx_inpipe_update_elem_count,
+       WILL_FIRE_RL_xcomms_rx_inpipe_update_inpipe_consumer_state,
+       WILL_FIRE_RL_xcomms_tx_connect_res_mkConnectionGetPut,
+       WILL_FIRE_RL_xcomms_tx_outpipe_complete_reset_sequence,
+       WILL_FIRE_RL_xcomms_tx_outpipe_detect_end_of_scemi_reset,
+       WILL_FIRE_RL_xcomms_tx_outpipe_detect_scemi_reset,
+       WILL_FIRE_RL_xcomms_tx_outpipe_drain_credit_fifo,
+       WILL_FIRE_RL_xcomms_tx_outpipe_drain_data_info_fifo,
+       WILL_FIRE_RL_xcomms_tx_outpipe_drain_out_fifo,
+       WILL_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits,
+       WILL_FIRE_RL_xcomms_tx_outpipe_indata_mimo_update,
+       WILL_FIRE_RL_xcomms_tx_outpipe_initiate_reset_sequence,
+       WILL_FIRE_RL_xcomms_tx_outpipe_nocEnqCreditMsg,
+       WILL_FIRE_RL_xcomms_tx_outpipe_nocHandleCreditMsg,
+       WILL_FIRE_RL_xcomms_tx_outpipe_register_flush_request,
+       WILL_FIRE_RL_xcomms_tx_outpipe_remove_taken_beat,
+       WILL_FIRE_RL_xcomms_tx_outpipe_reset_noc_side,
+       WILL_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side,
+       WILL_FIRE_RL_xcomms_tx_outpipe_shift_elements_out_of_buffer,
+       WILL_FIRE_RL_xcomms_tx_outpipe_tickCreditTimer,
+       WILL_FIRE_RL_xcomms_tx_outpipe_transfer_element_data,
+       WILL_FIRE_RL_xcomms_tx_outpipe_update_output_buffer,
+       WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state,
+       WILL_FIRE_axi_in_m_tvalid,
+       WILL_FIRE_pcie_in_m_axis_cc_m_tready,
+       WILL_FIRE_pcie_in_m_axis_rq_m_tready,
+       WILL_FIRE_pcie_in_pcie4_cfg_control_bus_number,
+       WILL_FIRE_pcie_in_pcie4_cfg_control_flr_in_process,
+       WILL_FIRE_pcie_in_pcie4_cfg_control_hot_reset_out,
+       WILL_FIRE_pcie_in_pcie4_cfg_control_power_state_change_interrupt,
+       WILL_FIRE_pcie_in_pcie4_cfg_control_vf_flr_in_process,
+       WILL_FIRE_pcie_in_pcie4_cfg_external_msix_msi_fail,
+       WILL_FIRE_pcie_in_pcie4_cfg_external_msix_msi_sent,
+       WILL_FIRE_pcie_in_pcie4_cfg_external_msix_msix_msix_enable,
+       WILL_FIRE_pcie_in_pcie4_cfg_external_msix_msix_msix_mask,
+       WILL_FIRE_pcie_in_pcie4_cfg_external_msix_msix_vec_pending_status,
+       WILL_FIRE_pcie_in_pcie4_cfg_external_msix_msix_vf_enable,
+       WILL_FIRE_pcie_in_pcie4_cfg_external_msix_msix_vf_mask,
+       WILL_FIRE_pcie_in_pcie4_cfg_fc_cpld,
+       WILL_FIRE_pcie_in_pcie4_cfg_fc_cplh,
+       WILL_FIRE_pcie_in_pcie4_cfg_fc_npd,
+       WILL_FIRE_pcie_in_pcie4_cfg_fc_nph,
+       WILL_FIRE_pcie_in_pcie4_cfg_fc_pd,
+       WILL_FIRE_pcie_in_pcie4_cfg_fc_ph,
+       WILL_FIRE_pcie_in_pcie4_cfg_interrupt_sent,
+       WILL_FIRE_pcie_in_pcie4_cfg_mesg_rcvd_received,
+       WILL_FIRE_pcie_in_pcie4_cfg_mesg_rcvd_received_data,
+       WILL_FIRE_pcie_in_pcie4_cfg_mesg_rcvd_received_type,
+       WILL_FIRE_pcie_in_pcie4_cfg_mesg_tx_transmit_done,
+       WILL_FIRE_pcie_in_pcie4_cfg_mgmt_read_data,
+       WILL_FIRE_pcie_in_pcie4_cfg_mgmt_read_write_done,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_current_speed,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_err_cor_out,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_err_fatal_out,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_err_nonfatal_out,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_function_status,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_funstion_power_state,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_link_power_state,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_local_error_out,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_local_error_valid,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_ltssm_state,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_max_payload,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_max_read_req,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_negotiated_width,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_obff_enable,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_pcie_cq_np_req_count,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_phy_link_down,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_phy_link_status,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_pl_status_change,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_rcb_status,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_rq_seq_num0,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_rq_seq_num1,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_rq_seq_num_vld0,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_rq_seq_num_vld1,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_rq_tag0,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_rq_tag1,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_rq_tag_av,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_rq_tag_vld0,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_rq_tag_vld1,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_rx_pm_state,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_tfc_npd_av,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_tfc_nph_av,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_tph_requester_enable,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_tph_st_mode,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_tx_pm_state,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_vf_power_state,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_vf_status,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_vf_tph_requester_enable,
+       WILL_FIRE_pcie_in_pcie4_cfg_status_vf_tph_st_mode,
+       WILL_FIRE_pcie_in_pcie4_phy_rdy_out,
+       WILL_FIRE_pcie_in_pcie4_user_link_up,
+       WILL_FIRE_pcie_in_s_axis_cq_m_tvalid,
+       WILL_FIRE_pcie_in_s_axis_rc_m_tvalid;
+
+  // inputs to muxes for submodule ports
+  wire [655 : 0] MUX_xcomms_tx_outpipe_noc_buf$write_1__VAL_2;
+  wire [152 : 0] MUX_bridge$cq_tlps_put_1__VAL_1,
+		 MUX_bridge$cq_tlps_put_1__VAL_2,
+		 MUX_bridge$cq_tlps_put_1__VAL_3,
+		 MUX_bridge$cq_tlps_put_1__VAL_4,
+		 MUX_bridge$rc_tlps_put_1__VAL_1,
+		 MUX_bridge$rc_tlps_put_1__VAL_2;
+  wire [149 : 0] MUX_rq_gearbox_block0$_write_1__VAL_1,
+		 MUX_rq_gearbox_block0$_write_1__VAL_2,
+		 MUX_rq_gearbox_block0$_write_1__VAL_3,
+		 MUX_rq_gearbox_block0$_write_1__VAL_4;
+  wire [139 : 0] MUX_fS1OutPortAcks_ifc_rwEnqData$wset_1__VAL_1,
+		 MUX_fS1OutPortAcks_ifc_rwEnqMask$wset_1__VAL_1;
+  wire [133 : 0] MUX_cc_gearbox_block0$_write_1__VAL_1,
+		 MUX_cc_gearbox_block0$_write_1__VAL_2;
+  wire [127 : 0] MUX_fS1MsgOut_ifc_rwEnqData$wset_1__VAL_1,
+		 MUX_fS1MsgOut_ifc_rwEnqData$wset_1__VAL_2,
+		 MUX_fS1MsgOut_ifc_rwEnqData$wset_1__VAL_3,
+		 MUX_fS1MsgOut_ifc_rwEnqMask$wset_1__VAL_1,
+		 MUX_fS2MsgOut_ifc_rwEnqData$wset_1__VAL_1,
+		 MUX_fS2MsgOut_ifc_rwEnqData$wset_1__VAL_2,
+		 MUX_fS2MsgOut_ifc_rwEnqData$wset_1__VAL_3,
+		 MUX_fToContinueBeat_ifc_rwEnqData$wset_1__VAL_1;
+  wire [75 : 0] MUX_cq_gearbox_elem_0$_write_1__VAL_1,
+		MUX_cq_gearbox_elem_0$_write_1__VAL_2,
+		MUX_cq_gearbox_elem_1$_write_1__VAL_1,
+		MUX_cq_gearbox_elem_1$_write_1__VAL_2,
+		MUX_cq_gearbox_elem_2$_write_1__VAL_1,
+		MUX_cq_gearbox_elem_2$_write_1__VAL_2,
+		MUX_cq_gearbox_elem_3$_write_1__VAL_1,
+		MUX_cq_gearbox_elem_3$_write_1__VAL_2,
+		MUX_rc_gearbox_elem_0$_write_1__VAL_1,
+		MUX_rc_gearbox_elem_0$_write_1__VAL_2,
+		MUX_rc_gearbox_elem_1$_write_1__VAL_1,
+		MUX_rc_gearbox_elem_1$_write_1__VAL_2,
+		MUX_rc_gearbox_elem_2$_write_1__VAL_1,
+		MUX_rc_gearbox_elem_2$_write_1__VAL_2,
+		MUX_rc_gearbox_elem_3$_write_1__VAL_1,
+		MUX_rc_gearbox_elem_3$_write_1__VAL_2;
+  wire [63 : 0] MUX_dut_prb_control_nextSample$write_1__VAL_1;
+  wire [56 : 0] MUX_xcomms_rx_inpipe_elems$write_1__VAL_2;
+  wire [32 : 0] MUX_rq_rg_mdw$write_1__VAL_1, MUX_rq_rg_mdw$write_1__VAL_3;
+  wire [31 : 0] MUX_dut_prb_control_data_out_beats$_write_1__VAL_3,
+		MUX_rS2OutBytes$write_1__VAL_2,
+		MUX_rS2SavedBytes$write_1__VAL_2;
+  wire [18 : 0] MUX_dut_prb_control_enff$enq_1__VAL_1,
+		MUX_dut_prb_control_enff$enq_1__VAL_2,
+		MUX_rS1BitsRem$write_1__VAL_1;
+  wire [15 : 0] MUX_dut_prb_control_count$write_1__VAL_2,
+		MUX_xcomms_rx_inpipe_ecount$write_1__VAL_1,
+		MUX_xcomms_rx_inpipe_elem_count$write_1__VAL_1,
+		MUX_xcomms_rx_inpipe_elems_recvd$write_1__VAL_1,
+		MUX_xcomms_tx_outpipe_credits$write_1__VAL_1,
+		MUX_xcomms_tx_outpipe_elem_count$write_1__VAL_1,
+		MUX_xcomms_tx_outpipe_nocCredits$write_1__VAL_1,
+		MUX_xcomms_tx_outpipe_noc_buf_bytes$write_1__VAL_1;
+  wire [11 : 0] MUX_rS2InCreditIndex$write_1__VAL_2,
+		MUX_rS2OutDataIndex$write_1__VAL_3;
+  wire [10 : 0] MUX_cc_rg_dwcount$write_1__VAL_1,
+		MUX_cc_rg_dwcount$write_1__VAL_2,
+		MUX_cq_rg_dwcount$write_1__VAL_1,
+		MUX_cq_rg_dwcount$write_1__VAL_2,
+		MUX_rc_rg_dwcount$write_1__VAL_1,
+		MUX_rc_rg_dwcount$write_1__VAL_2,
+		MUX_rq_rg_dwcount$write_1__VAL_1,
+		MUX_rq_rg_dwcount$write_1__VAL_2,
+		MUX_rq_rg_dwcount$write_1__VAL_3;
+  wire [7 : 0] MUX_rInMsgBytes$write_1__VAL_2,
+	       MUX_rOutMsgBytes$write_1__VAL_4,
+	       MUX_rS1OutMsgSize$write_1__VAL_1,
+	       MUX_rS1OutMsgSize$write_1__VAL_2,
+	       MUX_rS2OutMsgBytes$write_1__VAL_2;
+  wire [5 : 0] MUX_fS1MsgOut_ifc_rwEnqCount$wset_1__VAL_1;
+  wire [4 : 0] MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__VAL_2;
+  wire [2 : 0] MUX_rS2NumSaved$write_1__VAL_2,
+	       MUX_rvPrevMsgGrant$write_1__VAL_1;
+  wire MUX_cc_gearbox_block0$_write_1__SEL_1,
+       MUX_cc_gearbox_block1$_write_1__SEL_1,
+       MUX_cq_rg_pad_odd_tail$write_1__VAL_1,
+       MUX_dut_prb_control_control_in_remaining$write_1__SEL_1,
+       MUX_dut_prb_control_control_in_remaining$write_1__VAL_1,
+       MUX_dut_prb_control_control_in_status$_write_1__SEL_1,
+       MUX_dut_prb_control_data_out_beats$_write_1__SEL_1,
+       MUX_dut_prb_control_data_out_count$write_1__VAL_1,
+       MUX_dut_prb_control_enff$enq_1__SEL_1,
+       MUX_dut_prb_control_enff$enq_1__SEL_3,
+       MUX_dut_prb_control_nextSample$write_1__SEL_1,
+       MUX_dut_prb_control_nextSample$write_1__SEL_2,
+       MUX_dut_prb_control_pinged$write_1__SEL_3,
+       MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__SEL_1,
+       MUX_fS2MsgOut_ifc_rwEnqCount$wset_1__SEL_1,
+       MUX_fToBridgeBeat$enq_1__SEL_1,
+       MUX_fToBridgeBeat$enq_1__SEL_2,
+       MUX_fToBridgeBeat$enq_1__SEL_3,
+       MUX_fToContinueBeat_ifc_rwEnqCount$wset_1__SEL_1,
+       MUX_lrS1PendingRequests$write_1__VAL_2,
+       MUX_rDecodeSceMi$write_1__SEL_1,
+       MUX_rInMsgBytes$write_1__SEL_2,
+       MUX_rOtherMsgIn$write_1__VAL_2,
+       MUX_rOtherMsgOut$write_1__SEL_3,
+       MUX_rOutMsgBytes$write_1__SEL_4,
+       MUX_rS1BitsRem$write_1__SEL_1,
+       MUX_rS1MsgInIsAck$write_1__SEL_1,
+       MUX_rS1MsgInIsAck$write_1__VAL_1,
+       MUX_rS1MsgInIsData$write_1__VAL_1,
+       MUX_rS1MsgOutDataReq$write_1__SEL_1,
+       MUX_rS1MsgOutReqReq$write_1__SEL_1,
+       MUX_rS1OutDataHeader$write_1__SEL_1,
+       MUX_rS2MsgInIsData$write_1__VAL_2,
+       MUX_rS2MsgOutCredGrant$write_1__SEL_2,
+       MUX_rS2MsgOutCredGrant$write_1__SEL_3,
+       MUX_rS2OutBytes$write_1__SEL_2,
+       MUX_rS2SendOutDataHdr$write_1__SEL_2,
+       MUX_rSceMi1MsgIn$write_1__SEL_2,
+       MUX_rSceMi1MsgOut$write_1__SEL_3,
+       MUX_rSceMi2MsgIn$write_1__SEL_2,
+       MUX_rSceMi2MsgOut$write_1__SEL_3,
+       MUX_rc_gearbox_elem0_status_0$_write_1__SEL_1,
+       MUX_rc_gearbox_elem1_status_0$_write_1__SEL_1,
+       MUX_rc_gearbox_elem_0$_write_1__SEL_1,
+       MUX_rc_gearbox_write_block$write_1__SEL_1,
+       MUX_rc_rg_pad_odd_tail$write_1__VAL_1,
+       MUX_rq_gearbox_block0$_write_1__SEL_1,
+       MUX_rq_gearbox_block0$_write_1__SEL_2,
+       MUX_rq_gearbox_block0$_write_1__SEL_3,
+       MUX_rq_gearbox_block0$_write_1__SEL_4,
+       MUX_rq_gearbox_block1$_write_1__SEL_1,
+       MUX_rq_gearbox_block1$_write_1__SEL_2,
+       MUX_rq_gearbox_block1$_write_1__SEL_3,
+       MUX_rq_gearbox_block1$_write_1__SEL_4,
+       MUX_xcomms_rx_inpipe_ecount$write_1__SEL_2,
+       MUX_xcomms_rx_inpipe_elems$write_1__SEL_1,
+       MUX_xcomms_rx_inpipe_elems$write_1__SEL_2,
+       MUX_xcomms_rx_inpipe_send_credit_request$write_1__SEL_1,
+       MUX_xcomms_rx_inpipe_send_underflow$write_1__SEL_1,
+       MUX_xcomms_rx_inpipe_underflow$write_1__VAL_1,
+       MUX_xcomms_tx_outpipe_active$write_1__VAL_1,
+       MUX_xcomms_tx_outpipe_elem_count$write_1__SEL_1,
+       MUX_xcomms_tx_outpipe_flushing$write_1__VAL_1,
+       MUX_xcomms_tx_outpipe_nocAutoFlush$write_1__SEL_1,
+       MUX_xcomms_tx_outpipe_nocUnderFlow$write_1__SEL_1,
+       MUX_xcomms_tx_outpipe_overflow$write_1__VAL_1,
+       MUX_xcomms_tx_outpipe_pending_recv$write_1__VAL_1;
+
+  // declarations used by system tasks
+  // synopsys translate_off
+  reg [63 : 0] v___2__h99261;
+  reg [63 : 0] v__h142206;
+  // synopsys translate_on
+
+  // remaining internal signals
+  reg [61 : 0] _theResult___snd_address__h34849;
+  reg [31 : 0] CASE_b7042_0_xcomms_rx_inpipe_elems_BITS_31_TO_ETC__q9;
+  reg [23 : 0] CASE_b7042_0_xcomms_rx_inpipe_elems_BITS_55_TO_ETC__q8;
+  reg [15 : 0] CASE_dut_prb_control_ackFifoD_OUT_BITS_31_TO__ETC__q4,
+	       CASE_dut_prb_control_control_in_scemiInportBea_ETC__q10,
+	       CASE_dut_prb_control_enffD_OUT_BITS_18_TO_16__ETC__q11,
+	       CASE_dut_prb_control_prb_strD_OUT_BITS_31_TO__ETC__q5,
+	       IF_dut_prb_control_control_in_dataF_rv_port1___ETC___d1134,
+	       tlp16_be__h12770,
+	       tlp16_be__h15414,
+	       tlp16_be__h57884;
+  reg [4 : 0] IF_cq_f_cq_rv_port0__read__75_BITS_102_TO_99_8_ETC___d203;
+  reg [3 : 0] CASE_rq_f_tlps_rv_BITS_126_TO_125_0_0_1_0_2_1__ETC__q1;
+  reg [1 : 0] IF_cq_f_cq_rv_port0__read__75_BITS_102_TO_99_8_ETC___d199,
+	      n_keep__h38340;
+  reg CASE_b7042_0_xcomms_rx_inpipe_elems_BIT_56_1_0_ETC__q7,
+      IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2332,
+      IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2352,
+      IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2379;
+  wire [1967 : 0] _2673200087794695338776412422716808468155371262_ETC___d1503,
+		  xcomms_tx_outpipe_indata_mimo_rwvEnqData_wget__ETC___d1507;
+  wire [1311 : 0] IF_xcomms_tx_outpipe_indata_mimo_rwvEnqData_wh_ETC___d1527,
+		  xcomms_tx_outpipe_indata_mimo_rvData_511_SRL_0_ETC___d1515;
+  wire [255 : 0] enqData__h154382,
+		 enqData__h155383,
+		 enqData__h224866,
+		 enqData__h226825,
+		 enqData__h227949,
+		 enqMask__h154383,
+		 enqMask__h155384,
+		 enqMask__h224867,
+		 enqMask__h226826,
+		 enqMask__h227950,
+		 nextMask__h154377,
+		 nextMask__h154385,
+		 nextMask__h155378,
+		 nextMask__h155386,
+		 nextMask__h224861,
+		 nextMask__h224869,
+		 nextMask__h226820,
+		 nextMask__h226828,
+		 nextMask__h227944,
+		 nextMask__h227952,
+		 nextStorage__h154376,
+		 nextStorage__h154384,
+		 nextStorage__h155377,
+		 nextStorage__h155385,
+		 nextStorage__h224860,
+		 nextStorage__h224868,
+		 nextStorage__h226819,
+		 nextStorage__h226827,
+		 nextStorage__h227943,
+		 nextStorage__h227951,
+		 x__h154441,
+		 x__h154592,
+		 x__h154707,
+		 x__h155442,
+		 x__h155593,
+		 x__h155708,
+		 x__h224925,
+		 x__h226884,
+		 x__h227035,
+		 x__h227150,
+		 x__h228008,
+		 x__h228159,
+		 x__h228274,
+		 y__h154442,
+		 y__h155443,
+		 y__h224926,
+		 y__h226885,
+		 y__h228009;
+  wire [159 : 0] enqData__h156849,
+		 enqMask__h156850,
+		 nextMask__h156844,
+		 nextMask__h156852,
+		 nextStorage__h156843,
+		 nextStorage__h156851,
+		 x__h156908,
+		 x__h157058,
+		 x__h157172,
+		 y__h156909;
+  wire [151 : 0] IF_cq_gearbox_read_block_34_THEN_cq_gearbox_el_ETC___d173;
+  wire [139 : 0] value__h157059, value__h157173;
+  wire [127 : 0] tlp16_data__h12771,
+		 tlp16_data__h14163,
+		 tlp16_data__h15415,
+		 tlp16_data__h18063,
+		 tlp16_data__h56409,
+		 tlp16_data__h57885,
+		 value__h154593,
+		 value__h154708,
+		 value__h155594,
+		 value__h155709,
+		 value__h227036,
+		 value__h227151,
+		 value__h228160,
+		 value__h228275;
+  wire [119 : 0] _1329227995475430863082461991555563520_SRL_11_M_ETC___d1346,
+		 xcomms_rx_inpipe_mimo_rwvEnqData_wget__348_CON_ETC___d1355;
+  wire [87 : 0] IF_xcomms_rx_inpipe_mimo_rwvEnqData_whas__339__ETC___d1373,
+		xcomms_rx_inpipe_mimo_rvData_359_SRL_0_CONCAT__ETC___d1361;
+  wire [79 : 0] IF_rS1OutMsgIsCont_531_THEN_2_CONCAT_rS1BitsRe_ETC___d2548;
+  wire [75 : 0] IF_cq_gearbox_elem0_status_1__read__2_EQ_cq_ge_ETC___d69,
+		IF_cq_gearbox_elem1_status_1__read__3_EQ_cq_ge_ETC___d76,
+		IF_rc_gearbox_elem0_status_1__read__87_EQ_rc_g_ETC___d724,
+		IF_rc_gearbox_elem1_status_1__read__98_EQ_rc_g_ETC___d731;
+  wire [63 : 0] IF_cq_gearbox_read_block_34_THEN_cq_gearbox_el_ETC___d218,
+		IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829,
+		IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839,
+		_0_CONCAT_IF_fS1OutPortAcks_ifc_rwDeqCount_whas_ETC___d1896,
+		_0_CONCAT_IF_xcomms_tx_outpipe_indata_mimo_rwDe_ETC___d1513,
+		_0_CONCAT_fS1OutPortAcks_ifc_rDataCount_906_MIN_ETC___d1909,
+		_0_CONCAT_xcomms_tx_outpipe_elem_count_622_BITS_ETC___d1647,
+		_0_CONCAT_xcomms_tx_outpipe_elem_count_622_PLUS_ETC___d1653,
+		_656_MUL_2_MINUS_0_CONCAT_xcomms_tx_outpipe_ind_ETC___d1501,
+		bs__h303409,
+		data__h10545,
+		data__h10621,
+		data__h54158,
+		data__h54250,
+		data__h55001,
+		data__h55073,
+		data__h9680,
+		data__h9778,
+		n_data__h25027,
+		n_data__h26079,
+		n_data__h26663,
+		n_data__h28057,
+		n_data__h36875,
+		n_data__h37167,
+		n_data__h37803,
+		n_data__h38338,
+		n_data__h39749,
+		n_data__h41808,
+		n_data__h43208,
+		value__h303530,
+		value__h311583,
+		x__h303568,
+		x__h303603,
+		x__h311619,
+		y__h303569,
+		y__h311618;
+  wire [61 : 0] _theResult___snd_address__h34835;
+  wire [34 : 0] IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1663;
+  wire [31 : 0] IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_270_4_ETC___d1432,
+		IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_270_4_ETC___d1465,
+		IF_clockGenerators_one_to_one_cclock_count_802_ETC___d1805,
+		IF_xcomms_tx_outpipe_in_reset_uclk_473_OR_xcom_ETC___d1787,
+		_11_MINUS_b6643__q3,
+		b__h103255,
+		b__h104872,
+		b__h156930,
+		b__h157119,
+		b__h23782,
+		b__h303085,
+		b__h86643,
+		value__h299103,
+		x__h154556,
+		x__h154699,
+		x__h155700,
+		x__h225040,
+		x__h225183,
+		x__h226999,
+		x__h227142,
+		x__h228123,
+		x__h228266,
+		x__h250435,
+		x__h254355,
+		x__h258266,
+		x__h310225,
+		x__h86687,
+		x__h94058,
+		y__h303604;
+  wire [19 : 0] value__h194274;
+  wire [18 : 0] rS1BitsRem_MINUS_25_SRL_3__q6;
+  wire [15 : 0] IF_xcomms_rx_inpipe_updates_from_ifc_whas__300_ETC___d1303,
+		IF_xcomms_rx_inpipe_updates_from_ifc_whas__300_ETC___d1309,
+		IF_xcomms_rx_inpipe_updates_from_msg_whas__295_ETC___d1298,
+		IF_xcomms_tx_outpipe_add_to_output_buffer_whas_ETC___d1535,
+		IF_xcomms_tx_outpipe_credits_581_ULE_1_779_THE_ETC___d1780,
+		IF_xcomms_tx_outpipe_noc_buf_bytes_ULT_4_THEN__ETC__q2,
+		IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1619,
+		IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1669,
+		IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1711,
+		IF_xcomms_tx_outpipe_updates_from_msg_whas__59_ETC___d1604,
+		b__h97042,
+		tlp16_be__h56408,
+		xcomms_rx_inpipe_elems_recvd_294_PLUS_IF_xcomm_ETC___d1299,
+		xcomms_tx_outpipe_credits_581_PLUS_IF_xcomms_t_ETC___d1605,
+		xcomms_tx_outpipe_elem_count_622_PLUS_IF_xcomm_ETC___d1650;
+  wire [13 : 0] _1_SL_IF_fFromBridgeBeat_ifc_rStorage_817_BIT_1_ETC___d2016;
+  wire [12 : 0] a_bytecount__h23798;
+  wire [10 : 0] NOT_cq_gearbox_elem0_status_1__read__2_EQ_cq_g_ETC___d108,
+		NOT_cq_gearbox_elem1_status_1__read__3_EQ_cq_g_ETC___d131,
+		NOT_rc_gearbox_elem0_status_1__read__87_EQ_rc__ETC___d767,
+		NOT_rc_gearbox_elem1_status_1__read__98_EQ_rc__ETC___d790,
+		_theResult___snd_dwcount__h34848,
+		rq_rg_dwcount_53_MINUS_4___d595,
+		x__h23764;
+  wire [9 : 0] IF_cq_f_cq_rv_port0__read__75_BITS_98_TO_88_90_ETC___d208;
+  wire [8 : 0] b__h251943,
+	       b__h255863,
+	       b__h259774,
+	       value__h250400,
+	       value__h254322,
+	       value__h258233;
+  wire [7 : 0] b__h303293,
+	       rS1OutMsgSize_532_MINUS_4___d2533,
+	       value_BITS_23_TO_16___h300396,
+	       value__h303251;
+  wire [6 : 0] tlp16_hit__h12769;
+  wire [5 : 0] b__h154496,
+	       b__h154827,
+	       b__h155828,
+	       b__h224980,
+	       b__h226939,
+	       b__h227270,
+	       b__h228063,
+	       b__h228394,
+	       rS1BitsRem_537_PLUS_IF_rS1OutMsgIsCont_531_THE_ETC___d2542,
+	       value__h154655,
+	       value__h155656,
+	       value__h225139,
+	       value__h227098,
+	       value__h228222,
+	       x__h229807,
+	       x__h236339;
+  wire [4 : 0] b__h156963, b__h157292, value__h157121;
+  wire [3 : 0] b__h82149, value__h193045, value__h86644, value__h94016;
+  wire [2 : 0] IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_168_ETC___d2385,
+	       IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2681,
+	       b__h303418,
+	       b__h310347,
+	       value__h221710;
+  wire [1 : 0] IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_168_ETC___d2382,
+	       IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281,
+	       b__h101935,
+	       b__h248128,
+	       keep__h31843,
+	       keep__h31938,
+	       keep__h47025,
+	       keep__h47134,
+	       n_keep__h26664,
+	       n_keep__h28058,
+	       n_keep__h41810,
+	       n_keep__h43210,
+	       value__h103256,
+	       value__h104874,
+	       x__h10745,
+	       x__h11098,
+	       x__h23966,
+	       x__h24387,
+	       x__h29704,
+	       x__h30052,
+	       x__h35814,
+	       x__h36235,
+	       x__h44873,
+	       x__h45221,
+	       x__h4939,
+	       x__h49440,
+	       x__h49868,
+	       x__h5371,
+	       x__h55250,
+	       x__h55603;
+  wire IF_IF_xcomms_tx_outpipe_updates_from_ifc_whas__ETC___d1702,
+       IF_cc_gearbox_read_block_01_THEN_IF_NOT_cc_gea_ETC___d442,
+       IF_dut_prb_control_control_in_got_beat_pw_whas_ETC___d987,
+       IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682,
+       IF_rc_gearbox_read_block_93_THEN_NOT_rc_gearbo_ETC___d882,
+       IF_rq_gearbox_read_block_16_THEN_IF_NOT_rq_gea_ETC___d657,
+       IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1642,
+       IF_xcomms_tx_outpipe_updates_from_msg_whas__59_ETC___d1636,
+       NOT_cc_gearbox_read_block_01_02_AND_NOT_cc_gea_ETC___d424,
+       NOT_cc_gearbox_write_block_02_03_AND_cc_gearbo_ETC___d323,
+       NOT_cq_gearbox_read_block_34_35_AND_NOT_cq_gea_ETC___d159,
+       NOT_cq_gearbox_write_block_0_1_AND_NOT_NOT_cq__ETC___d57,
+       NOT_dut_prb_control_flag_042_043_AND_NOT_dut_p_ETC___d1044,
+       NOT_dut_prb_control_sampleIntervalV_3_027_CONC_ETC___d1038,
+       NOT_fFromBridgeBeat_ifc_rDataAvail_849_ULT_4_932___d1933,
+       NOT_fFromBridgeBeat_ifc_rDataCount_830_ULT_4_949___d1950,
+       NOT_fFromBridgeBeat_ifc_rStorage_817_BITS_27_T_ETC___d2096,
+       NOT_fS1OutPortAcks_ifc_rDataAvail_927_ULT_2_986___d1987,
+       NOT_fS2MsgOut_ifc_rDataAvail_261_ULT_8_602___d2603,
+       NOT_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667__ETC___d2684,
+       NOT_rc_gearbox_read_block_93_94_AND_NOT_rc_gea_ETC___d818,
+       NOT_rc_gearbox_write_block_85_86_AND_NOT_NOT_r_ETC___d712,
+       NOT_rq_gearbox_read_block_16_17_AND_NOT_rq_gea_ETC___d639,
+       NOT_rq_gearbox_write_block_68_69_AND_rq_gearbo_ETC___d489,
+       NOT_xcomms_tx_outpipe_elem_count_622_EQ_0_623__ETC___d1665,
+       NOT_xcomms_tx_outpipe_updates_from_ifc_whas__5_ETC___d1682,
+       NOT_xcomms_tx_outpipe_updates_from_ifc_whas__5_ETC___d1689,
+       NOT_xcomms_tx_outpipe_updates_from_ifc_whas__5_ETC___d1696,
+       _0_CONCAT_IF_rS2OutBytes_642_ULE_248_643_THEN_r_ETC___d2647,
+       _0_CONCAT_IF_rS2OutMsgBytes_667_ULE_4_668_THEN__ETC___d2674,
+       _dor1cc_gearbox_block0_status$EN__write,
+       _dor1cc_gearbox_block1_status$EN__write,
+       _dor1cq_gearbox_elem0_status_0$EN__write,
+       _dor1cq_gearbox_elem0_status_1$EN__write,
+       _dor1cq_gearbox_elem1_status_0$EN__write,
+       _dor1cq_gearbox_elem1_status_1$EN__write,
+       _dor1cq_gearbox_write_block$EN_write,
+       _dor1rc_gearbox_block0_status$EN__write,
+       _dor1rc_gearbox_block1_status$EN__write,
+       _dor1rq_gearbox_block0_status$EN__write,
+       _dor1rq_gearbox_block1_status$EN__write,
+       bridge_is_activated__13_AND_rOtherMsgIn_973_AN_ETC___d2133,
+       bridge_is_activated__13_AND_rSceMi1MsgIn_969_A_ETC___d1990,
+       bridge_is_activated__13_AND_rSceMi2MsgIn_970_1_ETC___d2146,
+       cc_gearbox_elem0_status_0__read__06_EQ_cc_gear_ETC___d407,
+       cc_gearbox_elem0_status_1__read__03_EQ_cc_gear_ETC___d405,
+       cc_gearbox_elem1_status_0__read__15_EQ_cc_gear_ETC___d416,
+       cc_gearbox_elem1_status_1__read__12_EQ_cc_gear_ETC___d414,
+       cc_rg_dwcount_67_ULE_2___d377,
+       cq_gearbox_elem0_status_0__read__6_EQ_cq_gearb_ETC___d37,
+       cq_gearbox_elem0_status_1__read__2_EQ_cq_gearb_ETC___d34,
+       cq_gearbox_elem1_status_0__read__7_EQ_cq_gearb_ETC___d48,
+       cq_gearbox_elem1_status_1__read__3_EQ_cq_gearb_ETC___d45,
+       dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1115,
+       dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1138,
+       dut_prb_control_data_out_next_RDY_send__171_AN_ETC___d1208,
+       dut_prb_control_data_out_ok_40_AND_NOT_init_st_ETC___d948,
+       fFromContinueBeat_ifc_rDataCount_168_ULT_4___d2274,
+       fS1MsgOut_ifc_rDataCount_205_ULT_32___d2494,
+       fS1MsgOut_ifc_rDataCount_205_ULT_4___d2276,
+       fS1OutPortAcks_ifc_rDataCount_906_ULT_16___d1966,
+       fS2MsgOut_ifc_rDataCount_242_ULT_32___d2590,
+       fS2MsgOut_ifc_rDataCount_242_ULT_4___d2279,
+       fToContinueBeat_ifc_rDataCount_867_ULT_32___d1945,
+       init_state_cycle_stamp_crossed__035_EQ_dut_prb_ETC___d1037,
+       rInMsgBytes_951_ULE_4___d1994,
+       rOutMsgBytes_271_ULE_4___d2465,
+       rS1BitsRem_537_ULE_32___d2570,
+       rS1OutMsgSize_532_ULE_4___d2572,
+       rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_ULE__ETC___d2671,
+       rSceMi1MsgIn_969_AND_NOT_rSceMi2MsgIn_970_971__ETC___d1977,
+       rSceMi2MsgIn_970_AND_NOT_rSceMi1MsgIn_969_099__ETC___d2102,
+       rc_gearbox_elem0_status_0__read__91_EQ_rc_gear_ETC___d692,
+       rc_gearbox_elem0_status_1__read__87_EQ_rc_gear_ETC___d689,
+       rc_gearbox_elem1_status_0__read__02_EQ_rc_gear_ETC___d703,
+       rc_gearbox_elem1_status_1__read__98_EQ_rc_gear_ETC___d700,
+       rc_in_buf_i_notEmpty__78_AND_NOT_rc_rg_in_pack_ETC___d714,
+       rc_rg_in_packet_79_OR_rc_in_buf_first__81_BIT__ETC___d736,
+       rq_gearbox_elem0_status_0__read__21_EQ_rq_gear_ETC___d622,
+       rq_gearbox_elem0_status_1__read__18_EQ_rq_gear_ETC___d620,
+       rq_gearbox_elem1_status_0__read__30_EQ_rq_gear_ETC___d631,
+       rq_gearbox_elem1_status_1__read__27_EQ_rq_gear_ETC___d629,
+       rq_rg_dwcount_53_ULE_2___d607,
+       rq_rg_dwcount_53_ULE_4___d580,
+       x1__h61520,
+       xcomms_rx_inpipe_elem_count_397_ULT_xcomms_rx__ETC___d1428,
+       xcomms_tx_outpipe_elem_count_622_EQ_0_623_OR_N_ETC___d1634,
+       xcomms_tx_outpipe_elem_count_622_EQ_0_623_OR_N_ETC___d1701,
+       xcomms_tx_outpipe_flushing_609_AND_NOT_xcomms__ETC___d1727,
+       xcomms_tx_outpipe_in_reset_uclk_473_OR_xcomms__ETC___d1765,
+       xcomms_tx_outpipe_indata_mimo_rDataCount_497_U_ETC___d1763,
+       xcomms_tx_outpipe_updates_from_ifc_whas__596_A_ETC___d1612,
+       xcomms_tx_outpipe_updates_from_ifc_whas__596_A_ETC___d1659,
+       xcomms_tx_outpipe_updates_from_msg_whas__592_A_ETC___d1616;
+
+  // oscillator and gates for output clock CLK_sys_clk
+  assign CLK_sys_clk = gte4$ODIV2 ;
+  assign CLK_GATE_sys_clk = 1'b1 ;
+
+  // oscillator and gates for output clock CLK_sys_clk_gt
+  assign CLK_sys_clk_gt = gte4$O ;
+  assign CLK_GATE_sys_clk_gt = 1'b1 ;
+
+  // oscillator and gates for output clock CLK_axi_clk
+  assign CLK_axi_clk = dut_dutIfc$CLK_uclk ;
+  assign CLK_GATE_axi_clk = 1'b1 ;
+
+  // output resets
+  assign RST_N_axi_rstn = dut_dutIfc$RST_N_urstn ;
 
   // action method axi_in_m_tvalid
   assign CAN_FIRE_axi_in_m_tvalid = 1'd1 ;
   assign WILL_FIRE_axi_in_m_tvalid = 1'd1 ;
 
   // value method axi_in_m_tready
-  assign axi_in_tready = 1'd1 ;
+  assign axi_in_tready = dut_dutIfc$axi_in_tready ;
+
+  // value method pcie_in_m_axis_cc_m_tvalid
+  assign m_axis_cc_tvalid = _unnamed_$pcie_in_m_axis_cc_tvalid ;
+
+  // value method pcie_in_m_axis_cc_m_tdata
+  assign m_axis_cc_tdata = _unnamed_$pcie_in_m_axis_cc_tdata ;
+
+  // value method pcie_in_m_axis_cc_m_tkeep
+  assign m_axis_cc_tkeep = _unnamed_$pcie_in_m_axis_cc_tkeep ;
+
+  // value method pcie_in_m_axis_cc_m_tlast
+  assign m_axis_cc_tlast = _unnamed_$pcie_in_m_axis_cc_tlast ;
+
+  // value method pcie_in_m_axis_cc_m_tuser
+  assign m_axis_cc_tuser = _unnamed_$pcie_in_m_axis_cc_tuser ;
+
+  // action method pcie_in_m_axis_cc_m_tready
+  assign CAN_FIRE_pcie_in_m_axis_cc_m_tready = 1'd1 ;
+  assign WILL_FIRE_pcie_in_m_axis_cc_m_tready = 1'd1 ;
+
+  // value method pcie_in_m_axis_rq_m_tvalid
+  assign m_axis_rq_tvalid = _unnamed_$pcie_in_m_axis_rq_tvalid ;
+
+  // value method pcie_in_m_axis_rq_m_tdata
+  assign m_axis_rq_tdata = _unnamed_$pcie_in_m_axis_rq_tdata ;
+
+  // value method pcie_in_m_axis_rq_m_tkeep
+  assign m_axis_rq_tkeep = _unnamed_$pcie_in_m_axis_rq_tkeep ;
+
+  // value method pcie_in_m_axis_rq_m_tlast
+  assign m_axis_rq_tlast = _unnamed_$pcie_in_m_axis_rq_tlast ;
+
+  // value method pcie_in_m_axis_rq_m_tuser
+  assign m_axis_rq_tuser = _unnamed_$pcie_in_m_axis_rq_tuser ;
+
+  // action method pcie_in_m_axis_rq_m_tready
+  assign CAN_FIRE_pcie_in_m_axis_rq_m_tready = 1'd1 ;
+  assign WILL_FIRE_pcie_in_m_axis_rq_m_tready = 1'd1 ;
+
+  // action method pcie_in_s_axis_cq_m_tvalid
+  assign CAN_FIRE_pcie_in_s_axis_cq_m_tvalid = 1'd1 ;
+  assign WILL_FIRE_pcie_in_s_axis_cq_m_tvalid = 1'd1 ;
+
+  // value method pcie_in_s_axis_cq_m_tready
+  assign s_axis_cq_tready = _unnamed_$pcie_in_s_axis_cq_tready ;
+
+  // action method pcie_in_s_axis_rc_m_tvalid
+  assign CAN_FIRE_pcie_in_s_axis_rc_m_tvalid = 1'd1 ;
+  assign WILL_FIRE_pcie_in_s_axis_rc_m_tvalid = 1'd1 ;
+
+  // value method pcie_in_s_axis_rc_m_tready
+  assign s_axis_rc_tready = _unnamed_$pcie_in_s_axis_rc_tready ;
+
+  // value method pcie_in_pcie4_cfg_mgmt_addr
+  assign pcie4_cfg_mgmt_addr = _unnamed_$pcie_in_pcie4_cfg_mgmt_addr ;
+
+  // value method pcie_in_pcie4_cfg_mgmt_byte_enable
+  assign pcie4_cfg_mgmt_byte_enable =
+	     _unnamed_$pcie_in_pcie4_cfg_mgmt_byte_enable ;
+
+  // value method pcie_in_pcie4_cfg_mgmt_debug_access
+  assign pcie4_cfg_mgmt_debug_access =
+	     _unnamed_$pcie_in_pcie4_cfg_mgmt_debug_access ;
+
+  // value method pcie_in_pcie4_cfg_mgmt_function_number
+  assign pcie4_cfg_mgmt_function_number =
+	     _unnamed_$pcie_in_pcie4_cfg_mgmt_function_number ;
+
+  // action method pcie_in_pcie4_cfg_mgmt_read_data
+  assign CAN_FIRE_pcie_in_pcie4_cfg_mgmt_read_data = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_mgmt_read_data = 1'd1 ;
+
+  // value method pcie_in_pcie4_cfg_mgmt_read
+  assign pcie4_cfg_mgmt_read = _unnamed_$pcie_in_pcie4_cfg_mgmt_read ;
+
+  // action method pcie_in_pcie4_cfg_mgmt_read_write_done
+  assign CAN_FIRE_pcie_in_pcie4_cfg_mgmt_read_write_done = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_mgmt_read_write_done = 1'd1 ;
+
+  // value method pcie_in_pcie4_cfg_mgmt_write_data
+  assign pcie4_cfg_mgmt_write_data =
+	     _unnamed_$pcie_in_pcie4_cfg_mgmt_write_data ;
+
+  // value method pcie_in_pcie4_cfg_mgmt_write
+  assign pcie4_cfg_mgmt_write = _unnamed_$pcie_in_pcie4_cfg_mgmt_write ;
+
+  // value method pcie_in_pcie4_cfg_pm_aspm_l1_entry_reject
+  assign pcie4_cfg_pm_aspm_l1_entry_reject =
+	     _unnamed_$pcie_in_pcie4_cfg_pm_aspm_l1_entry_reject ;
+
+  // value method pcie_in_pcie4_cfg_pm_aspm_tx_10s_entry_disable
+  assign pcie4_cfg_pm_aspm_tx_10s_entry_disable =
+	     _unnamed_$pcie_in_pcie4_cfg_pm_aspm_tx_10s_entry_disable ;
+
+  // value method pcie_in_pcie4_cfg_external_msix_msix_address
+  assign pcie4_cfg_external_msix_msix_address =
+	     _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_address ;
+
+  // value method pcie_in_pcie4_cfg_external_msix_msix_data
+  assign pcie4_cfg_external_msix_msix_data =
+	     _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_data ;
+
+  // action method pcie_in_pcie4_cfg_external_msix_msix_msix_enable
+  assign CAN_FIRE_pcie_in_pcie4_cfg_external_msix_msix_msix_enable = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_external_msix_msix_msix_enable = 1'd1 ;
+
+  // value method pcie_in_pcie4_cfg_external_msix_msix_intrpt
+  assign pcie4_cfg_external_msix_msix_intrpt =
+	     _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_intrpt ;
+
+  // action method pcie_in_pcie4_cfg_external_msix_msix_msix_mask
+  assign CAN_FIRE_pcie_in_pcie4_cfg_external_msix_msix_msix_mask = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_external_msix_msix_msix_mask = 1'd1 ;
+
+  // value method pcie_in_pcie4_cfg_external_msix_msix_vec_pending
+  assign pcie4_cfg_external_msix_msix_vec_pending =
+	     _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_vec_pending ;
+
+  // action method pcie_in_pcie4_cfg_external_msix_msix_vec_pending_status
+  assign CAN_FIRE_pcie_in_pcie4_cfg_external_msix_msix_vec_pending_status =
+	     1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_external_msix_msix_vec_pending_status =
+	     1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_external_msix_msix_vf_enable
+  assign CAN_FIRE_pcie_in_pcie4_cfg_external_msix_msix_vf_enable = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_external_msix_msix_vf_enable = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_external_msix_msix_vf_mask
+  assign CAN_FIRE_pcie_in_pcie4_cfg_external_msix_msix_vf_mask = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_external_msix_msix_vf_mask = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_external_msix_msi_fail
+  assign CAN_FIRE_pcie_in_pcie4_cfg_external_msix_msi_fail = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_external_msix_msi_fail = 1'd1 ;
+
+  // value method pcie_in_pcie4_cfg_external_msix_msi_function_number
+  assign pcie4_cfg_external_msix_msi_function_number =
+	     _unnamed_$pcie_in_pcie4_cfg_external_msix_msi_function_number ;
+
+  // action method pcie_in_pcie4_cfg_external_msix_msi_sent
+  assign CAN_FIRE_pcie_in_pcie4_cfg_external_msix_msi_sent = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_external_msix_msi_sent = 1'd1 ;
+
+  // value method pcie_in_pcie4_cfg_interrupt_intrpt
+  assign pcie4_cfg_interrupt_intrpt =
+	     _unnamed_$pcie_in_pcie4_cfg_interrupt_intrpt ;
+
+  // value method pcie_in_pcie4_cfg_interrupt_pending
+  assign pcie4_cfg_interrupt_pending =
+	     _unnamed_$pcie_in_pcie4_cfg_interrupt_pending ;
+
+  // action method pcie_in_pcie4_cfg_interrupt_sent
+  assign CAN_FIRE_pcie_in_pcie4_cfg_interrupt_sent = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_interrupt_sent = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_control_bus_number
+  assign CAN_FIRE_pcie_in_pcie4_cfg_control_bus_number = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_control_bus_number = 1'd1 ;
+
+  // value method pcie_in_pcie4_cfg_control_config_space_enable
+  assign pcie4_cfg_control_config_space_enable =
+	     _unnamed_$pcie_in_pcie4_cfg_control_config_space_enable ;
+
+  // value method pcie_in_pcie4_cfg_control_ds_bus_number
+  assign pcie4_cfg_control_ds_bus_number =
+	     _unnamed_$pcie_in_pcie4_cfg_control_ds_bus_number ;
+
+  // value method pcie_in_pcie4_cfg_control_ds_device_number
+  assign pcie4_cfg_control_ds_device_number =
+	     _unnamed_$pcie_in_pcie4_cfg_control_ds_device_number ;
+
+  // value method pcie_in_pcie4_cfg_control_ds_port_number
+  assign pcie4_cfg_control_ds_port_number =
+	     _unnamed_$pcie_in_pcie4_cfg_control_ds_port_number ;
+
+  // value method pcie_in_pcie4_cfg_control_dsn
+  assign pcie4_cfg_control_dsn = _unnamed_$pcie_in_pcie4_cfg_control_dsn ;
+
+  // value method pcie_in_pcie4_cfg_control_err_cor_in
+  assign pcie4_cfg_control_err_cor_in =
+	     _unnamed_$pcie_in_pcie4_cfg_control_err_cor_in ;
+
+  // value method pcie_in_pcie4_cfg_control_err_uncor_in
+  assign pcie4_cfg_control_err_uncor_in =
+	     _unnamed_$pcie_in_pcie4_cfg_control_err_uncor_in ;
+
+  // value method pcie_in_pcie4_cfg_control_flr_done
+  assign pcie4_cfg_control_flr_done =
+	     _unnamed_$pcie_in_pcie4_cfg_control_flr_done ;
+
+  // action method pcie_in_pcie4_cfg_control_flr_in_process
+  assign CAN_FIRE_pcie_in_pcie4_cfg_control_flr_in_process = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_control_flr_in_process = 1'd1 ;
+
+  // value method pcie_in_pcie4_cfg_control_hot_reset_in
+  assign pcie4_cfg_control_hot_reset_in =
+	     _unnamed_$pcie_in_pcie4_cfg_control_hot_reset_in ;
+
+  // action method pcie_in_pcie4_cfg_control_hot_reset_out
+  assign CAN_FIRE_pcie_in_pcie4_cfg_control_hot_reset_out = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_control_hot_reset_out = 1'd1 ;
+
+  // value method pcie_in_pcie4_cfg_control_link_training_enable
+  assign pcie4_cfg_control_link_training_enable =
+	     _unnamed_$pcie_in_pcie4_cfg_control_link_training_enable ;
+
+  // value method pcie_in_pcie4_cfg_control_power_state_change_ack
+  assign pcie4_cfg_control_power_state_change_ack =
+	     _unnamed_$pcie_in_pcie4_cfg_control_power_state_change_ack ;
+
+  // action method pcie_in_pcie4_cfg_control_power_state_change_interrupt
+  assign CAN_FIRE_pcie_in_pcie4_cfg_control_power_state_change_interrupt =
+	     1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_control_power_state_change_interrupt =
+	     1'd1 ;
+
+  // value method pcie_in_pcie4_cfg_control_req_pm_transition_l23_ready
+  assign pcie4_cfg_control_req_pm_transition_l23_ready =
+	     _unnamed_$pcie_in_pcie4_cfg_control_req_pm_transition_l23_ready ;
+
+  // value method pcie_in_pcie4_cfg_control_vf_flr_done
+  assign pcie4_cfg_control_vf_flr_done =
+	     _unnamed_$pcie_in_pcie4_cfg_control_vf_flr_done ;
+
+  // value method pcie_in_pcie4_cfg_control_vf_flr_func_num
+  assign pcie4_cfg_control_vf_flr_func_num =
+	     _unnamed_$pcie_in_pcie4_cfg_control_vf_flr_func_num ;
+
+  // action method pcie_in_pcie4_cfg_control_vf_flr_in_process
+  assign CAN_FIRE_pcie_in_pcie4_cfg_control_vf_flr_in_process = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_control_vf_flr_in_process = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_fc_cpld
+  assign CAN_FIRE_pcie_in_pcie4_cfg_fc_cpld = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_fc_cpld = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_fc_cplh
+  assign CAN_FIRE_pcie_in_pcie4_cfg_fc_cplh = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_fc_cplh = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_fc_npd
+  assign CAN_FIRE_pcie_in_pcie4_cfg_fc_npd = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_fc_npd = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_fc_nph
+  assign CAN_FIRE_pcie_in_pcie4_cfg_fc_nph = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_fc_nph = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_fc_pd
+  assign CAN_FIRE_pcie_in_pcie4_cfg_fc_pd = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_fc_pd = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_fc_ph
+  assign CAN_FIRE_pcie_in_pcie4_cfg_fc_ph = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_fc_ph = 1'd1 ;
+
+  // value method pcie_in_pcie4_cfg_fc_sel
+  assign pcie4_cfg_fc_sel = _unnamed_$pcie_in_pcie4_cfg_fc_sel ;
+
+  // value method pcie_in_pcie4_cfg_mesg_tx_transmit
+  assign pcie4_cfg_mesg_tx_transmit =
+	     _unnamed_$pcie_in_pcie4_cfg_mesg_tx_transmit ;
+
+  // value method pcie_in_pcie4_cfg_mesg_tx_transmit_data
+  assign pcie4_cfg_mesg_tx_transmit_data =
+	     _unnamed_$pcie_in_pcie4_cfg_mesg_tx_transmit_data ;
+
+  // action method pcie_in_pcie4_cfg_mesg_tx_transmit_done
+  assign CAN_FIRE_pcie_in_pcie4_cfg_mesg_tx_transmit_done = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_mesg_tx_transmit_done = 1'd1 ;
+
+  // value method pcie_in_pcie4_cfg_mesg_tx_transmit_type
+  assign pcie4_cfg_mesg_tx_transmit_type =
+	     _unnamed_$pcie_in_pcie4_cfg_mesg_tx_transmit_type ;
+
+  // action method pcie_in_pcie4_cfg_mesg_rcvd_received
+  assign CAN_FIRE_pcie_in_pcie4_cfg_mesg_rcvd_received = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_mesg_rcvd_received = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_mesg_rcvd_received_data
+  assign CAN_FIRE_pcie_in_pcie4_cfg_mesg_rcvd_received_data = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_mesg_rcvd_received_data = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_mesg_rcvd_received_type
+  assign CAN_FIRE_pcie_in_pcie4_cfg_mesg_rcvd_received_type = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_mesg_rcvd_received_type = 1'd1 ;
+
+  // value method pcie_in_pcie4_cfg_status_pcie_cq_np_req
+  assign pcie4_cfg_status_pcie_cq_np_req =
+	     _unnamed_$pcie_in_pcie4_cfg_status_pcie_cq_np_req ;
+
+  // action method pcie_in_pcie4_cfg_status_pcie_cq_np_req_count
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_pcie_cq_np_req_count = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_pcie_cq_np_req_count = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_current_speed
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_current_speed = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_current_speed = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_err_cor_out
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_err_cor_out = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_err_cor_out = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_err_fatal_out
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_err_fatal_out = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_err_fatal_out = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_err_nonfatal_out
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_err_nonfatal_out = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_err_nonfatal_out = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_funstion_power_state
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_funstion_power_state = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_funstion_power_state = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_function_status
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_function_status = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_function_status = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_link_power_state
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_link_power_state = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_link_power_state = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_local_error_out
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_local_error_out = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_local_error_out = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_local_error_valid
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_local_error_valid = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_local_error_valid = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_ltssm_state
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_ltssm_state = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_ltssm_state = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_max_payload
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_max_payload = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_max_payload = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_max_read_req
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_max_read_req = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_max_read_req = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_negotiated_width
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_negotiated_width = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_negotiated_width = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_obff_enable
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_obff_enable = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_obff_enable = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_phy_link_down
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_phy_link_down = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_phy_link_down = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_phy_link_status
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_phy_link_status = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_phy_link_status = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_pl_status_change
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_pl_status_change = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_pl_status_change = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_rcb_status
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_rcb_status = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_rcb_status = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_rq_seq_num0
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_rq_seq_num0 = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_rq_seq_num0 = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_rq_seq_num1
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_rq_seq_num1 = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_rq_seq_num1 = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_rq_seq_num_vld0
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_rq_seq_num_vld0 = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_rq_seq_num_vld0 = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_rq_seq_num_vld1
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_rq_seq_num_vld1 = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_rq_seq_num_vld1 = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_rq_tag0
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_rq_tag0 = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_rq_tag0 = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_rq_tag1
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_rq_tag1 = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_rq_tag1 = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_rq_tag_av
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_rq_tag_av = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_rq_tag_av = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_rq_tag_vld0
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_rq_tag_vld0 = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_rq_tag_vld0 = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_rq_tag_vld1
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_rq_tag_vld1 = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_rq_tag_vld1 = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_rx_pm_state
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_rx_pm_state = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_rx_pm_state = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_tfc_npd_av
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_tfc_npd_av = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_tfc_npd_av = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_tfc_nph_av
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_tfc_nph_av = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_tfc_nph_av = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_tph_requester_enable
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_tph_requester_enable = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_tph_requester_enable = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_tph_st_mode
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_tph_st_mode = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_tph_st_mode = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_tx_pm_state
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_tx_pm_state = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_tx_pm_state = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_vf_power_state
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_vf_power_state = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_vf_power_state = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_vf_status
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_vf_status = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_vf_status = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_vf_tph_requester_enable
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_vf_tph_requester_enable = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_vf_tph_requester_enable = 1'd1 ;
+
+  // action method pcie_in_pcie4_cfg_status_vf_tph_st_mode
+  assign CAN_FIRE_pcie_in_pcie4_cfg_status_vf_tph_st_mode = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_cfg_status_vf_tph_st_mode = 1'd1 ;
+
+  // action method pcie_in_pcie4_user_link_up
+  assign CAN_FIRE_pcie_in_pcie4_user_link_up = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_user_link_up = 1'd1 ;
+
+  // action method pcie_in_pcie4_phy_rdy_out
+  assign CAN_FIRE_pcie_in_pcie4_phy_rdy_out = 1'd1 ;
+  assign WILL_FIRE_pcie_in_pcie4_phy_rdy_out = 1'd1 ;
+
+  // submodule _unnamed_
+  mkSVF_PCIE _unnamed_(.CLK(CLK_user_clk),
+		       .RST_N(RST_N_user_reset),
+		       .cc_xmit_put(_unnamed_$cc_xmit_put),
+		       .pcie_in_m_axis_cc_tready(_unnamed_$pcie_in_m_axis_cc_tready),
+		       .pcie_in_m_axis_rq_tready(_unnamed_$pcie_in_m_axis_rq_tready),
+		       .pcie_in_pcie4_cfg_control_bus_number(_unnamed_$pcie_in_pcie4_cfg_control_bus_number),
+		       .pcie_in_pcie4_cfg_control_flr_in_process(_unnamed_$pcie_in_pcie4_cfg_control_flr_in_process),
+		       .pcie_in_pcie4_cfg_control_hot_reset_out(_unnamed_$pcie_in_pcie4_cfg_control_hot_reset_out),
+		       .pcie_in_pcie4_cfg_control_power_state_change_interrupt(_unnamed_$pcie_in_pcie4_cfg_control_power_state_change_interrupt),
+		       .pcie_in_pcie4_cfg_control_vf_flr_in_process(_unnamed_$pcie_in_pcie4_cfg_control_vf_flr_in_process),
+		       .pcie_in_pcie4_cfg_external_msix_msi_fail(_unnamed_$pcie_in_pcie4_cfg_external_msix_msi_fail),
+		       .pcie_in_pcie4_cfg_external_msix_msi_sent(_unnamed_$pcie_in_pcie4_cfg_external_msix_msi_sent),
+		       .pcie_in_pcie4_cfg_external_msix_msix_msix_enable(_unnamed_$pcie_in_pcie4_cfg_external_msix_msix_msix_enable),
+		       .pcie_in_pcie4_cfg_external_msix_msix_msix_mask(_unnamed_$pcie_in_pcie4_cfg_external_msix_msix_msix_mask),
+		       .pcie_in_pcie4_cfg_external_msix_msix_vec_pending_status(_unnamed_$pcie_in_pcie4_cfg_external_msix_msix_vec_pending_status),
+		       .pcie_in_pcie4_cfg_external_msix_msix_vf_enable(_unnamed_$pcie_in_pcie4_cfg_external_msix_msix_vf_enable),
+		       .pcie_in_pcie4_cfg_external_msix_msix_vf_mask(_unnamed_$pcie_in_pcie4_cfg_external_msix_msix_vf_mask),
+		       .pcie_in_pcie4_cfg_fc_cpld(_unnamed_$pcie_in_pcie4_cfg_fc_cpld),
+		       .pcie_in_pcie4_cfg_fc_cplh(_unnamed_$pcie_in_pcie4_cfg_fc_cplh),
+		       .pcie_in_pcie4_cfg_fc_npd(_unnamed_$pcie_in_pcie4_cfg_fc_npd),
+		       .pcie_in_pcie4_cfg_fc_nph(_unnamed_$pcie_in_pcie4_cfg_fc_nph),
+		       .pcie_in_pcie4_cfg_fc_pd(_unnamed_$pcie_in_pcie4_cfg_fc_pd),
+		       .pcie_in_pcie4_cfg_fc_ph(_unnamed_$pcie_in_pcie4_cfg_fc_ph),
+		       .pcie_in_pcie4_cfg_interrupt_sent(_unnamed_$pcie_in_pcie4_cfg_interrupt_sent),
+		       .pcie_in_pcie4_cfg_mesg_rcvd_received(_unnamed_$pcie_in_pcie4_cfg_mesg_rcvd_received),
+		       .pcie_in_pcie4_cfg_mesg_rcvd_received_data(_unnamed_$pcie_in_pcie4_cfg_mesg_rcvd_received_data),
+		       .pcie_in_pcie4_cfg_mesg_rcvd_received_type(_unnamed_$pcie_in_pcie4_cfg_mesg_rcvd_received_type),
+		       .pcie_in_pcie4_cfg_mesg_tx_transmit_done(_unnamed_$pcie_in_pcie4_cfg_mesg_tx_transmit_done),
+		       .pcie_in_pcie4_cfg_mgmt_read_data(_unnamed_$pcie_in_pcie4_cfg_mgmt_read_data),
+		       .pcie_in_pcie4_cfg_mgmt_read_write_done(_unnamed_$pcie_in_pcie4_cfg_mgmt_read_write_done),
+		       .pcie_in_pcie4_cfg_status_current_speed(_unnamed_$pcie_in_pcie4_cfg_status_current_speed),
+		       .pcie_in_pcie4_cfg_status_err_cor_out(_unnamed_$pcie_in_pcie4_cfg_status_err_cor_out),
+		       .pcie_in_pcie4_cfg_status_err_fatal_out(_unnamed_$pcie_in_pcie4_cfg_status_err_fatal_out),
+		       .pcie_in_pcie4_cfg_status_err_nonfatal_out(_unnamed_$pcie_in_pcie4_cfg_status_err_nonfatal_out),
+		       .pcie_in_pcie4_cfg_status_function_status(_unnamed_$pcie_in_pcie4_cfg_status_function_status),
+		       .pcie_in_pcie4_cfg_status_funstion_power_state(_unnamed_$pcie_in_pcie4_cfg_status_funstion_power_state),
+		       .pcie_in_pcie4_cfg_status_link_power_state(_unnamed_$pcie_in_pcie4_cfg_status_link_power_state),
+		       .pcie_in_pcie4_cfg_status_local_error_out(_unnamed_$pcie_in_pcie4_cfg_status_local_error_out),
+		       .pcie_in_pcie4_cfg_status_local_error_valid(_unnamed_$pcie_in_pcie4_cfg_status_local_error_valid),
+		       .pcie_in_pcie4_cfg_status_ltssm_state(_unnamed_$pcie_in_pcie4_cfg_status_ltssm_state),
+		       .pcie_in_pcie4_cfg_status_max_payload(_unnamed_$pcie_in_pcie4_cfg_status_max_payload),
+		       .pcie_in_pcie4_cfg_status_max_read_req(_unnamed_$pcie_in_pcie4_cfg_status_max_read_req),
+		       .pcie_in_pcie4_cfg_status_negotiated_width(_unnamed_$pcie_in_pcie4_cfg_status_negotiated_width),
+		       .pcie_in_pcie4_cfg_status_obff_enable(_unnamed_$pcie_in_pcie4_cfg_status_obff_enable),
+		       .pcie_in_pcie4_cfg_status_pcie_cq_np_req_count(_unnamed_$pcie_in_pcie4_cfg_status_pcie_cq_np_req_count),
+		       .pcie_in_pcie4_cfg_status_phy_link_down(_unnamed_$pcie_in_pcie4_cfg_status_phy_link_down),
+		       .pcie_in_pcie4_cfg_status_phy_link_status(_unnamed_$pcie_in_pcie4_cfg_status_phy_link_status),
+		       .pcie_in_pcie4_cfg_status_pl_status_change(_unnamed_$pcie_in_pcie4_cfg_status_pl_status_change),
+		       .pcie_in_pcie4_cfg_status_rcb_status(_unnamed_$pcie_in_pcie4_cfg_status_rcb_status),
+		       .pcie_in_pcie4_cfg_status_rq_seq_num0(_unnamed_$pcie_in_pcie4_cfg_status_rq_seq_num0),
+		       .pcie_in_pcie4_cfg_status_rq_seq_num1(_unnamed_$pcie_in_pcie4_cfg_status_rq_seq_num1),
+		       .pcie_in_pcie4_cfg_status_rq_seq_num_vld0(_unnamed_$pcie_in_pcie4_cfg_status_rq_seq_num_vld0),
+		       .pcie_in_pcie4_cfg_status_rq_seq_num_vld1(_unnamed_$pcie_in_pcie4_cfg_status_rq_seq_num_vld1),
+		       .pcie_in_pcie4_cfg_status_rq_tag0(_unnamed_$pcie_in_pcie4_cfg_status_rq_tag0),
+		       .pcie_in_pcie4_cfg_status_rq_tag1(_unnamed_$pcie_in_pcie4_cfg_status_rq_tag1),
+		       .pcie_in_pcie4_cfg_status_rq_tag_av(_unnamed_$pcie_in_pcie4_cfg_status_rq_tag_av),
+		       .pcie_in_pcie4_cfg_status_rq_tag_vld0(_unnamed_$pcie_in_pcie4_cfg_status_rq_tag_vld0),
+		       .pcie_in_pcie4_cfg_status_rq_tag_vld1(_unnamed_$pcie_in_pcie4_cfg_status_rq_tag_vld1),
+		       .pcie_in_pcie4_cfg_status_rx_pm_state(_unnamed_$pcie_in_pcie4_cfg_status_rx_pm_state),
+		       .pcie_in_pcie4_cfg_status_tfc_npd_av(_unnamed_$pcie_in_pcie4_cfg_status_tfc_npd_av),
+		       .pcie_in_pcie4_cfg_status_tfc_nph_av(_unnamed_$pcie_in_pcie4_cfg_status_tfc_nph_av),
+		       .pcie_in_pcie4_cfg_status_tph_requester_enable(_unnamed_$pcie_in_pcie4_cfg_status_tph_requester_enable),
+		       .pcie_in_pcie4_cfg_status_tph_st_mode(_unnamed_$pcie_in_pcie4_cfg_status_tph_st_mode),
+		       .pcie_in_pcie4_cfg_status_tx_pm_state(_unnamed_$pcie_in_pcie4_cfg_status_tx_pm_state),
+		       .pcie_in_pcie4_cfg_status_vf_power_state(_unnamed_$pcie_in_pcie4_cfg_status_vf_power_state),
+		       .pcie_in_pcie4_cfg_status_vf_status(_unnamed_$pcie_in_pcie4_cfg_status_vf_status),
+		       .pcie_in_pcie4_cfg_status_vf_tph_requester_enable(_unnamed_$pcie_in_pcie4_cfg_status_vf_tph_requester_enable),
+		       .pcie_in_pcie4_cfg_status_vf_tph_st_mode(_unnamed_$pcie_in_pcie4_cfg_status_vf_tph_st_mode),
+		       .pcie_in_pcie4_phy_rdy_out(_unnamed_$pcie_in_pcie4_phy_rdy_out),
+		       .pcie_in_pcie4_user_link_up(_unnamed_$pcie_in_pcie4_user_link_up),
+		       .pcie_in_s_axis_cq_tdata(_unnamed_$pcie_in_s_axis_cq_tdata),
+		       .pcie_in_s_axis_cq_tkeep(_unnamed_$pcie_in_s_axis_cq_tkeep),
+		       .pcie_in_s_axis_cq_tlast(_unnamed_$pcie_in_s_axis_cq_tlast),
+		       .pcie_in_s_axis_cq_tuser(_unnamed_$pcie_in_s_axis_cq_tuser),
+		       .pcie_in_s_axis_cq_tvalid(_unnamed_$pcie_in_s_axis_cq_tvalid),
+		       .pcie_in_s_axis_rc_tdata(_unnamed_$pcie_in_s_axis_rc_tdata),
+		       .pcie_in_s_axis_rc_tkeep(_unnamed_$pcie_in_s_axis_rc_tkeep),
+		       .pcie_in_s_axis_rc_tlast(_unnamed_$pcie_in_s_axis_rc_tlast),
+		       .pcie_in_s_axis_rc_tuser(_unnamed_$pcie_in_s_axis_rc_tuser),
+		       .pcie_in_s_axis_rc_tvalid(_unnamed_$pcie_in_s_axis_rc_tvalid),
+		       .rq_xmit_put(_unnamed_$rq_xmit_put),
+		       .EN_cq_recv_get(_unnamed_$EN_cq_recv_get),
+		       .EN_cc_xmit_put(_unnamed_$EN_cc_xmit_put),
+		       .EN_rq_xmit_put(_unnamed_$EN_rq_xmit_put),
+		       .EN_rc_recv_get(_unnamed_$EN_rc_recv_get),
+		       .pcie_in_m_axis_cc_tvalid(_unnamed_$pcie_in_m_axis_cc_tvalid),
+		       .pcie_in_m_axis_cc_tdata(_unnamed_$pcie_in_m_axis_cc_tdata),
+		       .pcie_in_m_axis_cc_tkeep(_unnamed_$pcie_in_m_axis_cc_tkeep),
+		       .pcie_in_m_axis_cc_tlast(_unnamed_$pcie_in_m_axis_cc_tlast),
+		       .pcie_in_m_axis_cc_tuser(_unnamed_$pcie_in_m_axis_cc_tuser),
+		       .pcie_in_m_axis_rq_tvalid(_unnamed_$pcie_in_m_axis_rq_tvalid),
+		       .pcie_in_m_axis_rq_tdata(_unnamed_$pcie_in_m_axis_rq_tdata),
+		       .pcie_in_m_axis_rq_tkeep(_unnamed_$pcie_in_m_axis_rq_tkeep),
+		       .pcie_in_m_axis_rq_tlast(_unnamed_$pcie_in_m_axis_rq_tlast),
+		       .pcie_in_m_axis_rq_tuser(_unnamed_$pcie_in_m_axis_rq_tuser),
+		       .pcie_in_s_axis_cq_tready(_unnamed_$pcie_in_s_axis_cq_tready),
+		       .pcie_in_s_axis_rc_tready(_unnamed_$pcie_in_s_axis_rc_tready),
+		       .pcie_in_pcie4_cfg_mgmt_addr(_unnamed_$pcie_in_pcie4_cfg_mgmt_addr),
+		       .pcie_in_pcie4_cfg_mgmt_byte_enable(_unnamed_$pcie_in_pcie4_cfg_mgmt_byte_enable),
+		       .pcie_in_pcie4_cfg_mgmt_debug_access(_unnamed_$pcie_in_pcie4_cfg_mgmt_debug_access),
+		       .pcie_in_pcie4_cfg_mgmt_function_number(_unnamed_$pcie_in_pcie4_cfg_mgmt_function_number),
+		       .pcie_in_pcie4_cfg_mgmt_read(_unnamed_$pcie_in_pcie4_cfg_mgmt_read),
+		       .pcie_in_pcie4_cfg_mgmt_write_data(_unnamed_$pcie_in_pcie4_cfg_mgmt_write_data),
+		       .pcie_in_pcie4_cfg_mgmt_write(_unnamed_$pcie_in_pcie4_cfg_mgmt_write),
+		       .pcie_in_pcie4_cfg_pm_aspm_l1_entry_reject(_unnamed_$pcie_in_pcie4_cfg_pm_aspm_l1_entry_reject),
+		       .pcie_in_pcie4_cfg_pm_aspm_tx_10s_entry_disable(_unnamed_$pcie_in_pcie4_cfg_pm_aspm_tx_10s_entry_disable),
+		       .pcie_in_pcie4_cfg_external_msix_msix_address(_unnamed_$pcie_in_pcie4_cfg_external_msix_msix_address),
+		       .pcie_in_pcie4_cfg_external_msix_msix_data(_unnamed_$pcie_in_pcie4_cfg_external_msix_msix_data),
+		       .pcie_in_pcie4_cfg_external_msix_msix_intrpt(_unnamed_$pcie_in_pcie4_cfg_external_msix_msix_intrpt),
+		       .pcie_in_pcie4_cfg_external_msix_msix_vec_pending(_unnamed_$pcie_in_pcie4_cfg_external_msix_msix_vec_pending),
+		       .pcie_in_pcie4_cfg_external_msix_msi_function_number(_unnamed_$pcie_in_pcie4_cfg_external_msix_msi_function_number),
+		       .pcie_in_pcie4_cfg_interrupt_intrpt(_unnamed_$pcie_in_pcie4_cfg_interrupt_intrpt),
+		       .pcie_in_pcie4_cfg_interrupt_pending(_unnamed_$pcie_in_pcie4_cfg_interrupt_pending),
+		       .pcie_in_pcie4_cfg_control_config_space_enable(_unnamed_$pcie_in_pcie4_cfg_control_config_space_enable),
+		       .pcie_in_pcie4_cfg_control_ds_bus_number(_unnamed_$pcie_in_pcie4_cfg_control_ds_bus_number),
+		       .pcie_in_pcie4_cfg_control_ds_device_number(_unnamed_$pcie_in_pcie4_cfg_control_ds_device_number),
+		       .pcie_in_pcie4_cfg_control_ds_port_number(_unnamed_$pcie_in_pcie4_cfg_control_ds_port_number),
+		       .pcie_in_pcie4_cfg_control_dsn(_unnamed_$pcie_in_pcie4_cfg_control_dsn),
+		       .pcie_in_pcie4_cfg_control_err_cor_in(_unnamed_$pcie_in_pcie4_cfg_control_err_cor_in),
+		       .pcie_in_pcie4_cfg_control_err_uncor_in(_unnamed_$pcie_in_pcie4_cfg_control_err_uncor_in),
+		       .pcie_in_pcie4_cfg_control_flr_done(_unnamed_$pcie_in_pcie4_cfg_control_flr_done),
+		       .pcie_in_pcie4_cfg_control_hot_reset_in(_unnamed_$pcie_in_pcie4_cfg_control_hot_reset_in),
+		       .pcie_in_pcie4_cfg_control_link_training_enable(_unnamed_$pcie_in_pcie4_cfg_control_link_training_enable),
+		       .pcie_in_pcie4_cfg_control_power_state_change_ack(_unnamed_$pcie_in_pcie4_cfg_control_power_state_change_ack),
+		       .pcie_in_pcie4_cfg_control_req_pm_transition_l23_ready(_unnamed_$pcie_in_pcie4_cfg_control_req_pm_transition_l23_ready),
+		       .pcie_in_pcie4_cfg_control_vf_flr_done(_unnamed_$pcie_in_pcie4_cfg_control_vf_flr_done),
+		       .pcie_in_pcie4_cfg_control_vf_flr_func_num(_unnamed_$pcie_in_pcie4_cfg_control_vf_flr_func_num),
+		       .pcie_in_pcie4_cfg_fc_sel(_unnamed_$pcie_in_pcie4_cfg_fc_sel),
+		       .pcie_in_pcie4_cfg_mesg_tx_transmit(_unnamed_$pcie_in_pcie4_cfg_mesg_tx_transmit),
+		       .pcie_in_pcie4_cfg_mesg_tx_transmit_data(_unnamed_$pcie_in_pcie4_cfg_mesg_tx_transmit_data),
+		       .pcie_in_pcie4_cfg_mesg_tx_transmit_type(_unnamed_$pcie_in_pcie4_cfg_mesg_tx_transmit_type),
+		       .pcie_in_pcie4_cfg_status_pcie_cq_np_req(_unnamed_$pcie_in_pcie4_cfg_status_pcie_cq_np_req),
+		       .cq_recv_get(_unnamed_$cq_recv_get),
+		       .RDY_cq_recv_get(_unnamed_$RDY_cq_recv_get),
+		       .RDY_cc_xmit_put(_unnamed_$RDY_cc_xmit_put),
+		       .RDY_rq_xmit_put(_unnamed_$RDY_rq_xmit_put),
+		       .rc_recv_get(_unnamed_$rc_recv_get),
+		       .RDY_rc_recv_get(_unnamed_$RDY_rc_recv_get),
+		       .status_lnk_up(_unnamed_$status_lnk_up),
+		       .status_max_payload(_unnamed_$status_max_payload),
+		       .status_max_read_req(_unnamed_$status_max_read_req),
+		       .status_rcb_status(_unnamed_$status_rcb_status),
+		       .status_function_status(_unnamed_$status_function_status),
+		       .cfg_interrupt_msix_enabled(_unnamed_$cfg_interrupt_msix_enabled),
+		       .cfg_interrupt_msix_mask(_unnamed_$cfg_interrupt_msix_mask));
+
+  // submodule bridge
+  mkPCIE3toBNoCFull_4 bridge(.board_content_id(64'h05CE000600080000),
+			     .max_read_req_bytes(max_read_req_bytes),
+			     .max_payload_bytes(max_payload_bytes),
+			     .rcb_mask(rcb_mask),
+			     .msix_enabled(msix_enable),
+			     .msix_mask_all_intr(msix_masked),
+			     .msi_enabled(1'd0),
+			     .CLK(CLK_user_clk_half),
+			     .RST_N(epReset125$OUT_RST),
+			     .clocks_response_put(bridge$clocks_response_put),
+			     .cq_tlps_put(bridge$cq_tlps_put),
+			     .noc_in_beat_v(bridge$noc_in_beat_v),
+			     .noc_in_src_rdy_b(bridge$noc_in_src_rdy_b),
+			     .noc_out_dst_rdy_b(bridge$noc_out_dst_rdy_b),
+			     .rc_tlps_put(bridge$rc_tlps_put),
+			     .status_bluenoc_link_is_up_i(bridge$status_bluenoc_link_is_up_i),
+			     .status_interrupts_enabled_i(bridge$status_interrupts_enabled_i),
+			     .status_memory_enabled_i(bridge$status_memory_enabled_i),
+			     .status_out_of_reset_i(bridge$status_out_of_reset_i),
+			     .status_pcie_link_is_up_i(bridge$status_pcie_link_is_up_i),
+			     .EN_rq_tlps_get(bridge$EN_rq_tlps_get),
+			     .EN_rc_tlps_put(bridge$EN_rc_tlps_put),
+			     .EN_cq_tlps_put(bridge$EN_cq_tlps_put),
+			     .EN_cc_tlps_get(bridge$EN_cc_tlps_get),
+			     .EN_msi_interrupt_clear(bridge$EN_msi_interrupt_clear),
+			     .EN_clocks_request_get(bridge$EN_clocks_request_get),
+			     .EN_clocks_response_put(bridge$EN_clocks_response_put),
+			     .rq_tlps_get(bridge$rq_tlps_get),
+			     .RDY_rq_tlps_get(bridge$RDY_rq_tlps_get),
+			     .RDY_rc_tlps_put(bridge$RDY_rc_tlps_put),
+			     .RDY_cq_tlps_put(bridge$RDY_cq_tlps_put),
+			     .cc_tlps_get(bridge$cc_tlps_get),
+			     .RDY_cc_tlps_get(bridge$RDY_cc_tlps_get),
+			     .noc_in_dst_rdy(bridge$noc_in_dst_rdy),
+			     .noc_out_src_rdy(bridge$noc_out_src_rdy),
+			     .noc_out_beat(bridge$noc_out_beat),
+			     .is_activated(bridge$is_activated),
+			     .rx_activity(),
+			     .tx_activity(),
+			     .msi_interrupt_req(),
+			     .clocks_request_get(),
+			     .RDY_clocks_request_get(),
+			     .RDY_clocks_response_put());
+
+  // submodule cc_gearbox_dCombinedReset
+  ResetEither cc_gearbox_dCombinedReset(.A_RST(RST_N_user_reset),
+					.B_RST(cc_gearbox_dCrossedsReset$OUT_RST),
+					.RST_OUT(cc_gearbox_dCombinedReset$RST_OUT));
+
+  // submodule cc_gearbox_dCrossedsReset
+  SyncReset0 cc_gearbox_dCrossedsReset(.IN_RST(epReset125$OUT_RST),
+				       .OUT_RST(cc_gearbox_dCrossedsReset$OUT_RST));
+
+  // submodule cc_gearbox_sCombinedReset
+  ResetEither cc_gearbox_sCombinedReset(.A_RST(epReset125$OUT_RST),
+					.B_RST(cc_gearbox_sCrosseddReset$OUT_RST),
+					.RST_OUT(cc_gearbox_sCombinedReset$RST_OUT));
+
+  // submodule cc_gearbox_sCrosseddReset
+  SyncReset0 cc_gearbox_sCrosseddReset(.IN_RST(RST_N_user_reset),
+				       .OUT_RST(cc_gearbox_sCrosseddReset$OUT_RST));
+
+  // submodule clockGenerators_one_to_one_cclock_pre_negedge_uclk
+  SyncBit05 #(.init(1'd0)) clockGenerators_one_to_one_cclock_pre_negedge_uclk(.sCLK(CLK_aclk),
+									      .dCLK(uclkgen$CLK_OUT),
+									      .sRST(network_status$OUT_RST),
+									      .sD_IN(clockGenerators_one_to_one_cclock_pre_negedge_uclk$sD_IN),
+									      .sEN(clockGenerators_one_to_one_cclock_pre_negedge_uclk$sEN),
+									      .dD_OUT());
+
+  // submodule clockGenerators_one_to_one_cclock_pre_posedge_uclk
+  SyncBit05 #(.init(1'd0)) clockGenerators_one_to_one_cclock_pre_posedge_uclk(.sCLK(CLK_aclk),
+									      .dCLK(uclkgen$CLK_OUT),
+									      .sRST(network_status$OUT_RST),
+									      .sD_IN(clockGenerators_one_to_one_cclock_pre_posedge_uclk$sD_IN),
+									      .sEN(clockGenerators_one_to_one_cclock_pre_posedge_uclk$sEN),
+									      .dD_OUT());
+
+  // submodule cq_gearbox_dCombinedReset
+  ResetEither cq_gearbox_dCombinedReset(.A_RST(epReset125$OUT_RST),
+					.B_RST(cq_gearbox_dCrossedsReset$OUT_RST),
+					.RST_OUT(cq_gearbox_dCombinedReset$RST_OUT));
+
+  // submodule cq_gearbox_dCrossedsReset
+  SyncReset0 cq_gearbox_dCrossedsReset(.IN_RST(RST_N_user_reset),
+				       .OUT_RST(cq_gearbox_dCrossedsReset$OUT_RST));
+
+  // submodule cq_gearbox_sCombinedReset
+  ResetEither cq_gearbox_sCombinedReset(.A_RST(RST_N_user_reset),
+					.B_RST(cq_gearbox_sCrosseddReset$OUT_RST),
+					.RST_OUT(cq_gearbox_sCombinedReset$RST_OUT));
+
+  // submodule cq_gearbox_sCrosseddReset
+  SyncReset0 cq_gearbox_sCrosseddReset(.IN_RST(epReset125$OUT_RST),
+				       .OUT_RST(cq_gearbox_sCrosseddReset$OUT_RST));
+
+  // submodule cq_in_buf
+  FIFO2 #(.width(32'd76), .guarded(32'd1)) cq_in_buf(.RST(RST_N_user_reset),
+						     .CLK(CLK_user_clk),
+						     .D_IN(cq_in_buf$D_IN),
+						     .ENQ(cq_in_buf$ENQ),
+						     .DEQ(cq_in_buf$DEQ),
+						     .CLR(cq_in_buf$CLR),
+						     .D_OUT(cq_in_buf$D_OUT),
+						     .FULL_N(cq_in_buf$FULL_N),
+						     .EMPTY_N(cq_in_buf$EMPTY_N));
+
+  // submodule dut_dutIfc
+  mkDut dut_dutIfc(.CLK(uclkgen$CLK_OUT),
+		   .RST_N(rstgen_final_reset$RST_OUT),
+		   .axi_in_tdata(dut_dutIfc$axi_in_tdata),
+		   .axi_in_tkeep(dut_dutIfc$axi_in_tkeep),
+		   .axi_in_tlast(dut_dutIfc$axi_in_tlast),
+		   .axi_in_tstrb(dut_dutIfc$axi_in_tstrb),
+		   .axi_in_tvalid(dut_dutIfc$axi_in_tvalid),
+		   .comms_link_response_put(dut_dutIfc$comms_link_response_put),
+		   .EN_comms_link_request_get(dut_dutIfc$EN_comms_link_request_get),
+		   .EN_comms_link_response_put(dut_dutIfc$EN_comms_link_response_put),
+		   .axi_in_tready(dut_dutIfc$axi_in_tready),
+		   .comms_link_request_get(dut_dutIfc$comms_link_request_get),
+		   .RDY_comms_link_request_get(dut_dutIfc$RDY_comms_link_request_get),
+		   .RDY_comms_link_response_put(dut_dutIfc$RDY_comms_link_response_put),
+		   .CLK_uclk(dut_dutIfc$CLK_uclk),
+		   .CLK_GATE_uclk(),
+		   .RST_N_urstn(dut_dutIfc$RST_N_urstn));
+
+  // submodule dut_prb_control_ackFifo
+  FIFO2 #(.width(32'd32),
+	  .guarded(32'd1)) dut_prb_control_ackFifo(.RST(rstgen_final_reset$RST_OUT),
+						   .CLK(uclkgen$CLK_OUT),
+						   .D_IN(dut_prb_control_ackFifo$D_IN),
+						   .ENQ(dut_prb_control_ackFifo$ENQ),
+						   .DEQ(dut_prb_control_ackFifo$DEQ),
+						   .CLR(dut_prb_control_ackFifo$CLR),
+						   .D_OUT(dut_prb_control_ackFifo$D_OUT),
+						   .FULL_N(dut_prb_control_ackFifo$FULL_N),
+						   .EMPTY_N(dut_prb_control_ackFifo$EMPTY_N));
+
+  // submodule dut_prb_control_control_in_buffer_empty_sp
+  SyncHandshake dut_prb_control_control_in_buffer_empty_sp(.sCLK(CLK_user_clk_half),
+							   .dCLK(uclkgen$CLK_OUT),
+							   .sRST(epReset125$OUT_RST),
+							   .sEN(dut_prb_control_control_in_buffer_empty_sp$sEN),
+							   .sRDY(dut_prb_control_control_in_buffer_empty_sp$sRDY),
+							   .dPulse(dut_prb_control_control_in_buffer_empty_sp$dPulse));
+
+  // submodule dut_prb_control_control_in_buffer_full_sp
+  SyncHandshake dut_prb_control_control_in_buffer_full_sp(.sCLK(CLK_user_clk_half),
+							  .dCLK(uclkgen$CLK_OUT),
+							  .sRST(epReset125$OUT_RST),
+							  .sEN(dut_prb_control_control_in_buffer_full_sp$sEN),
+							  .sRDY(dut_prb_control_control_in_buffer_full_sp$sRDY),
+							  .dPulse(dut_prb_control_control_in_buffer_full_sp$dPulse));
+
+  // submodule dut_prb_control_control_in_ending_reset
+  SyncPulse dut_prb_control_control_in_ending_reset(.sCLK(uclkgen$CLK_OUT),
+						    .dCLK(CLK_user_clk_half),
+						    .sRST(dut_prb_control_control_in_nocResetUClock$OUT_RST),
+						    .sEN(dut_prb_control_control_in_ending_reset$sEN),
+						    .dPulse(dut_prb_control_control_in_ending_reset$dPulse));
+
+  // submodule dut_prb_control_control_in_next_sp
+  SyncHandshake dut_prb_control_control_in_next_sp(.sCLK(uclkgen$CLK_OUT),
+						   .dCLK(CLK_user_clk_half),
+						   .sRST(rstgen_final_reset$RST_OUT),
+						   .sEN(dut_prb_control_control_in_next_sp$sEN),
+						   .sRDY(dut_prb_control_control_in_next_sp$sRDY),
+						   .dPulse(dut_prb_control_control_in_next_sp$dPulse));
+
+  // submodule dut_prb_control_control_in_nocResetUClock
+  SyncReset0 dut_prb_control_control_in_nocResetUClock(.IN_RST(epReset125$OUT_RST),
+						       .OUT_RST(dut_prb_control_control_in_nocResetUClock$OUT_RST));
+
+  // submodule dut_prb_control_control_in_param_channelId
+  mkSceMiUInt32Parameter #(.n(32'd0)) dut_prb_control_control_in_param_channelId(.not_used());
+
+  // submodule dut_prb_control_control_in_param_link_type
+  mkSceMiLinkTypeParameter #(.link_type(4'd8)) dut_prb_control_control_in_param_link_type(.not_used());
+
+  // submodule dut_prb_control_control_in_starting_reset
+  SyncPulse dut_prb_control_control_in_starting_reset(.sCLK(uclkgen$CLK_OUT),
+						      .dCLK(CLK_user_clk_half),
+						      .sRST(dut_prb_control_control_in_nocResetUClock$OUT_RST),
+						      .sEN(dut_prb_control_control_in_starting_reset$sEN),
+						      .dPulse(dut_prb_control_control_in_starting_reset$dPulse));
+
+  // submodule dut_prb_control_control_in_wait_sp
+  SyncHandshake dut_prb_control_control_in_wait_sp(.sCLK(uclkgen$CLK_OUT),
+						   .dCLK(CLK_user_clk_half),
+						   .sRST(rstgen_final_reset$RST_OUT),
+						   .sEN(dut_prb_control_control_in_wait_sp$sEN),
+						   .sRDY(dut_prb_control_control_in_wait_sp$sRDY),
+						   .dPulse(dut_prb_control_control_in_wait_sp$dPulse));
+
+  // submodule dut_prb_control_data_out_ending_reset
+  SyncPulse dut_prb_control_data_out_ending_reset(.sCLK(uclkgen$CLK_OUT),
+						  .dCLK(CLK_user_clk_half),
+						  .sRST(dut_prb_control_data_out_nocResetUClock$OUT_RST),
+						  .sEN(dut_prb_control_data_out_ending_reset$sEN),
+						  .dPulse(dut_prb_control_data_out_ending_reset$dPulse));
+
+  // submodule dut_prb_control_data_out_finished
+  SyncHandshake dut_prb_control_data_out_finished(.sCLK(CLK_user_clk_half),
+						  .dCLK(uclkgen$CLK_OUT),
+						  .sRST(epReset125$OUT_RST),
+						  .sEN(dut_prb_control_data_out_finished$sEN),
+						  .sRDY(dut_prb_control_data_out_finished$sRDY),
+						  .dPulse(dut_prb_control_data_out_finished$dPulse));
+
+  // submodule dut_prb_control_data_out_next
+  SyncHandshake dut_prb_control_data_out_next(.sCLK(uclkgen$CLK_OUT),
+					      .dCLK(CLK_user_clk_half),
+					      .sRST(rstgen_final_reset$RST_OUT),
+					      .sEN(dut_prb_control_data_out_next$sEN),
+					      .sRDY(dut_prb_control_data_out_next$sRDY),
+					      .dPulse(dut_prb_control_data_out_next$dPulse));
+
+  // submodule dut_prb_control_data_out_nocResetUClock
+  SyncReset0 dut_prb_control_data_out_nocResetUClock(.IN_RST(epReset125$OUT_RST),
+						     .OUT_RST(dut_prb_control_data_out_nocResetUClock$OUT_RST));
+
+  // submodule dut_prb_control_data_out_param_channelId
+  mkSceMiUInt32Parameter #(.n(32'd0)) dut_prb_control_data_out_param_channelId(.not_used());
+
+  // submodule dut_prb_control_data_out_param_link_type
+  mkSceMiLinkTypeParameter #(.link_type(4'd8)) dut_prb_control_data_out_param_link_type(.not_used());
+
+  // submodule dut_prb_control_data_out_starting_reset
+  SyncPulse dut_prb_control_data_out_starting_reset(.sCLK(uclkgen$CLK_OUT),
+						    .dCLK(CLK_user_clk_half),
+						    .sRST(dut_prb_control_data_out_nocResetUClock$OUT_RST),
+						    .sEN(dut_prb_control_data_out_starting_reset$sEN),
+						    .dPulse(dut_prb_control_data_out_starting_reset$dPulse));
+
+  // submodule dut_prb_control_dutclkctrl_param_clockNum
+  mkSceMiUInt32Parameter #(.n(32'd0)) dut_prb_control_dutclkctrl_param_clockNum(.not_used());
+
+  // submodule dut_prb_control_dutclkctrl_param_link_type
+  mkSceMiLinkTypeParameter #(.link_type(4'd8)) dut_prb_control_dutclkctrl_param_link_type(.not_used());
+
+  // submodule dut_prb_control_enff
+  FIFO2 #(.width(32'd19),
+	  .guarded(32'd1)) dut_prb_control_enff(.RST(rstgen_final_reset$RST_OUT),
+						.CLK(uclkgen$CLK_OUT),
+						.D_IN(dut_prb_control_enff$D_IN),
+						.ENQ(dut_prb_control_enff$ENQ),
+						.DEQ(dut_prb_control_enff$DEQ),
+						.CLR(dut_prb_control_enff$CLR),
+						.D_OUT(dut_prb_control_enff$D_OUT),
+						.FULL_N(dut_prb_control_enff$FULL_N),
+						.EMPTY_N(dut_prb_control_enff$EMPTY_N));
+
+  // submodule dut_prb_control_prb_str
+  FIFO2 #(.width(32'd32),
+	  .guarded(32'd1)) dut_prb_control_prb_str(.RST(rstgen_final_reset$RST_OUT),
+						   .CLK(uclkgen$CLK_OUT),
+						   .D_IN(dut_prb_control_prb_str$D_IN),
+						   .ENQ(dut_prb_control_prb_str$ENQ),
+						   .DEQ(dut_prb_control_prb_str$DEQ),
+						   .CLR(dut_prb_control_prb_str$CLR),
+						   .D_OUT(dut_prb_control_prb_str$D_OUT),
+						   .FULL_N(dut_prb_control_prb_str$FULL_N),
+						   .EMPTY_N(dut_prb_control_prb_str$EMPTY_N));
+
+  // submodule dut_probeHook
+  ProbeHook dut_probeHook(.UCLK(uclkgen$CLK_OUT),
+			  .URST(rstgen_final_reset$RST_OUT),
+			  .CMD(dut_probeHook$CMD),
+			  .ACK(dut_probeHook$ACK),
+			  .CMDEN(dut_probeHook$CMDEN),
+			  .CTIMER(dut_probeHook$CTIMER),
+			  .DATAUP(dut_probeHook$DATAUP),
+			  .DATAVALID(dut_probeHook$DATAVALID),
+			  .DELAY(dut_probeHook$DELAY));
+
+  // submodule epReset125
+  SyncResetA #(.RSTDELAY(32'd3)) epReset125(.CLK(CLK_user_clk_half),
+					    .IN_RST(RST_N_user_reset),
+					    .OUT_RST(epReset125$OUT_RST));
+
+  // submodule fToBridgeBeat
+  FIFOL1 #(.width(32'd32)) fToBridgeBeat(.RST(epReset125$OUT_RST),
+					 .CLK(CLK_user_clk_half),
+					 .D_IN(fToBridgeBeat$D_IN),
+					 .ENQ(fToBridgeBeat$ENQ),
+					 .DEQ(fToBridgeBeat$DEQ),
+					 .CLR(fToBridgeBeat$CLR),
+					 .D_OUT(fToBridgeBeat$D_OUT),
+					 .FULL_N(fToBridgeBeat$FULL_N),
+					 .EMPTY_N(fToBridgeBeat$EMPTY_N));
+
+  // submodule gte4
+  IBUFDS_GTE4 gte4(.CEB(32'd0), .O(gte4$O), .ODIV2(gte4$ODIV2));
+
+  // submodule init_state_msgFIFO
+  SyncFIFO #(.dataWidth(32'd74),
+	     .depth(32'd8),
+	     .indxWidth(32'd3)) init_state_msgFIFO(.sCLK(uclkgen$CLK_OUT),
+						   .dCLK(CLK_user_clk_half),
+						   .sRST(rstgen_final_reset$RST_OUT),
+						   .sD_IN(init_state_msgFIFO$sD_IN),
+						   .sENQ(init_state_msgFIFO$sENQ),
+						   .dDEQ(init_state_msgFIFO$dDEQ),
+						   .sFULL_N(init_state_msgFIFO$sFULL_N),
+						   .dEMPTY_N(init_state_msgFIFO$dEMPTY_N),
+						   .dD_OUT(init_state_msgFIFO$dD_OUT));
+
+  // submodule network_status
+  MakeResetA #(.RSTDELAY(32'd4),
+	       .init(1'd0)) network_status(.CLK(CLK_user_clk_half),
+					   .RST(epReset125$OUT_RST),
+					   .DST_CLK(CLK_aclk),
+					   .ASSERT_IN(network_status$ASSERT_IN),
+					   .ASSERT_OUT(),
+					   .OUT_RST(network_status$OUT_RST));
+
+  // submodule rc_gearbox_dCombinedReset
+  ResetEither rc_gearbox_dCombinedReset(.A_RST(epReset125$OUT_RST),
+					.B_RST(rc_gearbox_dCrossedsReset$OUT_RST),
+					.RST_OUT(rc_gearbox_dCombinedReset$RST_OUT));
+
+  // submodule rc_gearbox_dCrossedsReset
+  SyncReset0 rc_gearbox_dCrossedsReset(.IN_RST(RST_N_user_reset),
+				       .OUT_RST(rc_gearbox_dCrossedsReset$OUT_RST));
+
+  // submodule rc_gearbox_sCombinedReset
+  ResetEither rc_gearbox_sCombinedReset(.A_RST(RST_N_user_reset),
+					.B_RST(rc_gearbox_sCrosseddReset$OUT_RST),
+					.RST_OUT(rc_gearbox_sCombinedReset$RST_OUT));
+
+  // submodule rc_gearbox_sCrosseddReset
+  SyncReset0 rc_gearbox_sCrosseddReset(.IN_RST(epReset125$OUT_RST),
+				       .OUT_RST(rc_gearbox_sCrosseddReset$OUT_RST));
+
+  // submodule rc_in_buf
+  FIFO2 #(.width(32'd76), .guarded(32'd1)) rc_in_buf(.RST(RST_N_user_reset),
+						     .CLK(CLK_user_clk),
+						     .D_IN(rc_in_buf$D_IN),
+						     .ENQ(rc_in_buf$ENQ),
+						     .DEQ(rc_in_buf$DEQ),
+						     .CLR(rc_in_buf$CLR),
+						     .D_OUT(rc_in_buf$D_OUT),
+						     .FULL_N(rc_in_buf$FULL_N),
+						     .EMPTY_N(rc_in_buf$EMPTY_N));
+
+  // submodule rq_gearbox_dCombinedReset
+  ResetEither rq_gearbox_dCombinedReset(.A_RST(RST_N_user_reset),
+					.B_RST(rq_gearbox_dCrossedsReset$OUT_RST),
+					.RST_OUT(rq_gearbox_dCombinedReset$RST_OUT));
+
+  // submodule rq_gearbox_dCrossedsReset
+  SyncReset0 rq_gearbox_dCrossedsReset(.IN_RST(epReset125$OUT_RST),
+				       .OUT_RST(rq_gearbox_dCrossedsReset$OUT_RST));
+
+  // submodule rq_gearbox_sCombinedReset
+  ResetEither rq_gearbox_sCombinedReset(.A_RST(epReset125$OUT_RST),
+					.B_RST(rq_gearbox_sCrosseddReset$OUT_RST),
+					.RST_OUT(rq_gearbox_sCombinedReset$RST_OUT));
+
+  // submodule rq_gearbox_sCrosseddReset
+  SyncReset0 rq_gearbox_sCrosseddReset(.IN_RST(RST_N_user_reset),
+				       .OUT_RST(rq_gearbox_sCrosseddReset$OUT_RST));
+
+  // submodule rstgen_final_reset
+  ResetEither rstgen_final_reset(.A_RST(rstgen_inv_rstgen$OUT_RST),
+				 .B_RST(rstgen_rstgen$OUT_RST),
+				 .RST_OUT(rstgen_final_reset$RST_OUT));
+
+  // submodule rstgen_inv_clk
+  ClockInverter rstgen_inv_clk(.CLK_IN(CLK_aclk),
+			       .PREEDGE(),
+			       .CLK_OUT(rstgen_inv_clk$CLK_OUT));
+
+  // submodule rstgen_inv_rstgen
+  MakeResetA #(.RSTDELAY(32'd1),
+	       .init(1'd0)) rstgen_inv_rstgen(.CLK(rstgen_inv_clk$CLK_OUT),
+					      .RST(rstgen_inv_rstn$OUT_RST),
+					      .DST_CLK(uclkgen$CLK_OUT),
+					      .ASSERT_IN(rstgen_inv_rstgen$ASSERT_IN),
+					      .ASSERT_OUT(),
+					      .OUT_RST(rstgen_inv_rstgen$OUT_RST));
+
+  // submodule rstgen_inv_rstn
+  SyncReset0 rstgen_inv_rstn(.IN_RST(network_status$OUT_RST),
+			     .OUT_RST(rstgen_inv_rstn$OUT_RST));
+
+  // submodule rstgen_rstgen
+  MakeReset0 #(.init(1'd0)) rstgen_rstgen(.CLK(CLK_aclk),
+					  .RST(network_status$OUT_RST),
+					  .ASSERT_IN(rstgen_rstgen$ASSERT_IN),
+					  .ASSERT_OUT(),
+					  .OUT_RST(rstgen_rstgen$OUT_RST));
+
+  // submodule uclkgen
+  MakeClock #(.initVal(1'd0), .initGate(1'd1)) uclkgen(.CLK(CLK_aclk),
+						       .RST(network_status$OUT_RST),
+						       .CLK_IN(uclkgen$CLK_IN),
+						       .COND_IN(uclkgen$COND_IN),
+						       .CLK_IN_EN(uclkgen$CLK_IN_EN),
+						       .COND_IN_EN(uclkgen$COND_IN_EN),
+						       .CLK_VAL_OUT(uclkgen$CLK_VAL_OUT),
+						       .COND_OUT(),
+						       .CLK_GATE_OUT(),
+						       .CLK_OUT(uclkgen$CLK_OUT));
+
+  // submodule wIsOutOfReset
+  SyncWire #(.width(32'd1)) wIsOutOfReset(.DIN(1'd1),
+					  .DOUT(wIsOutOfReset$DOUT));
+
+  // submodule xcomms_rx_inpipe_consume_timer
+  Counter #(.width(32'd4),
+	    .init(4'd15)) xcomms_rx_inpipe_consume_timer(.CLK(uclkgen$CLK_OUT),
+							 .RST(rstgen_final_reset$RST_OUT),
+							 .DATA_A(xcomms_rx_inpipe_consume_timer$DATA_A),
+							 .DATA_B(xcomms_rx_inpipe_consume_timer$DATA_B),
+							 .DATA_C(xcomms_rx_inpipe_consume_timer$DATA_C),
+							 .DATA_F(xcomms_rx_inpipe_consume_timer$DATA_F),
+							 .ADDA(xcomms_rx_inpipe_consume_timer$ADDA),
+							 .ADDB(xcomms_rx_inpipe_consume_timer$ADDB),
+							 .SETC(xcomms_rx_inpipe_consume_timer$SETC),
+							 .SETF(xcomms_rx_inpipe_consume_timer$SETF),
+							 .Q_OUT(xcomms_rx_inpipe_consume_timer$Q_OUT));
+
+  // submodule xcomms_rx_inpipe_credit_fifo
+  SyncFIFO1 #(.dataWidth(32'd17)) xcomms_rx_inpipe_credit_fifo(.sCLK(uclkgen$CLK_OUT),
+							       .dCLK(CLK_user_clk_half),
+							       .sRST(rstgen_final_reset$RST_OUT),
+							       .sD_IN(xcomms_rx_inpipe_credit_fifo$sD_IN),
+							       .sENQ(xcomms_rx_inpipe_credit_fifo$sENQ),
+							       .dDEQ(xcomms_rx_inpipe_credit_fifo$dDEQ),
+							       .sFULL_N(xcomms_rx_inpipe_credit_fifo$sFULL_N),
+							       .dEMPTY_N(xcomms_rx_inpipe_credit_fifo$dEMPTY_N),
+							       .dD_OUT(xcomms_rx_inpipe_credit_fifo$dD_OUT));
+
+  // submodule xcomms_rx_inpipe_credits
+  Counter #(.width(32'd16),
+	    .init(16'd0)) xcomms_rx_inpipe_credits(.CLK(uclkgen$CLK_OUT),
+						   .RST(rstgen_final_reset$RST_OUT),
+						   .DATA_A(xcomms_rx_inpipe_credits$DATA_A),
+						   .DATA_B(xcomms_rx_inpipe_credits$DATA_B),
+						   .DATA_C(xcomms_rx_inpipe_credits$DATA_C),
+						   .DATA_F(xcomms_rx_inpipe_credits$DATA_F),
+						   .ADDA(xcomms_rx_inpipe_credits$ADDA),
+						   .ADDB(xcomms_rx_inpipe_credits$ADDB),
+						   .SETC(xcomms_rx_inpipe_credits$SETC),
+						   .SETF(xcomms_rx_inpipe_credits$SETF),
+						   .Q_OUT(xcomms_rx_inpipe_credits$Q_OUT));
+
+  // submodule xcomms_rx_inpipe_data_info_fifo
+  SyncFIFO #(.dataWidth(32'd18),
+	     .depth(32'd2),
+	     .indxWidth(32'd1)) xcomms_rx_inpipe_data_info_fifo(.sCLK(CLK_user_clk_half),
+								.dCLK(uclkgen$CLK_OUT),
+								.sRST(epReset125$OUT_RST),
+								.sD_IN(xcomms_rx_inpipe_data_info_fifo$sD_IN),
+								.sENQ(xcomms_rx_inpipe_data_info_fifo$sENQ),
+								.dDEQ(xcomms_rx_inpipe_data_info_fifo$dDEQ),
+								.sFULL_N(xcomms_rx_inpipe_data_info_fifo$sFULL_N),
+								.dEMPTY_N(xcomms_rx_inpipe_data_info_fifo$dEMPTY_N),
+								.dD_OUT(xcomms_rx_inpipe_data_info_fifo$dD_OUT));
+
+  // submodule xcomms_rx_inpipe_ending_reset
+  SyncPulse xcomms_rx_inpipe_ending_reset(.sCLK(uclkgen$CLK_OUT),
+					  .dCLK(CLK_user_clk_half),
+					  .sRST(xcomms_rx_inpipe_nocResetUClock$OUT_RST),
+					  .sEN(xcomms_rx_inpipe_ending_reset$sEN),
+					  .dPulse(xcomms_rx_inpipe_ending_reset$dPulse));
+
+  // submodule xcomms_rx_inpipe_in_fifo
+  SyncFIFO #(.dataWidth(32'd57),
+	     .depth(32'd1024),
+	     .indxWidth(32'd10)) xcomms_rx_inpipe_in_fifo(.sCLK(CLK_user_clk_half),
+							  .dCLK(uclkgen$CLK_OUT),
+							  .sRST(epReset125$OUT_RST),
+							  .sD_IN(xcomms_rx_inpipe_in_fifo$sD_IN),
+							  .sENQ(xcomms_rx_inpipe_in_fifo$sENQ),
+							  .dDEQ(xcomms_rx_inpipe_in_fifo$dDEQ),
+							  .sFULL_N(xcomms_rx_inpipe_in_fifo$sFULL_N),
+							  .dEMPTY_N(xcomms_rx_inpipe_in_fifo$dEMPTY_N),
+							  .dD_OUT(xcomms_rx_inpipe_in_fifo$dD_OUT));
+
+  // submodule xcomms_rx_inpipe_nocResetUClock
+  SyncReset0 xcomms_rx_inpipe_nocResetUClock(.IN_RST(epReset125$OUT_RST),
+					     .OUT_RST(xcomms_rx_inpipe_nocResetUClock$OUT_RST));
+
+  // submodule xcomms_rx_inpipe_param_depth
+  mkSceMiUInt32Parameter #(.n(32'd1024)) xcomms_rx_inpipe_param_depth(.not_used());
+
+  // submodule xcomms_rx_inpipe_param_link_type
+  mkSceMiLinkTypeParameter #(.link_type(4'd8)) xcomms_rx_inpipe_param_link_type(.not_used());
+
+  // submodule xcomms_rx_inpipe_param_pipeNum
+  mkSceMiUInt32Parameter #(.n(32'd0)) xcomms_rx_inpipe_param_pipeNum(.not_used());
+
+  // submodule xcomms_rx_inpipe_param_visibility
+  mkSceMiStringParameter #(.n("Fifo")) xcomms_rx_inpipe_param_visibility(.not_used());
+
+  // submodule xcomms_rx_inpipe_starting_reset
+  SyncPulse xcomms_rx_inpipe_starting_reset(.sCLK(uclkgen$CLK_OUT),
+					    .dCLK(CLK_user_clk_half),
+					    .sRST(xcomms_rx_inpipe_nocResetUClock$OUT_RST),
+					    .sEN(xcomms_rx_inpipe_starting_reset$sEN),
+					    .dPulse(xcomms_rx_inpipe_starting_reset$dPulse));
+
+  // submodule xcomms_rx_res_fifo_ff
+  SizedFIFO #(.p1width(32'd56),
+	      .p2depth(32'd4),
+	      .p3cntr_width(32'd2),
+	      .guarded(32'd1)) xcomms_rx_res_fifo_ff(.RST(rstgen_final_reset$RST_OUT),
+						     .CLK(uclkgen$CLK_OUT),
+						     .D_IN(xcomms_rx_res_fifo_ff$D_IN),
+						     .ENQ(xcomms_rx_res_fifo_ff$ENQ),
+						     .DEQ(xcomms_rx_res_fifo_ff$DEQ),
+						     .CLR(xcomms_rx_res_fifo_ff$CLR),
+						     .D_OUT(xcomms_rx_res_fifo_ff$D_OUT),
+						     .FULL_N(xcomms_rx_res_fifo_ff$FULL_N),
+						     .EMPTY_N(xcomms_rx_res_fifo_ff$EMPTY_N));
+
+  // submodule xcomms_tx_outpipe_accumulateTimer
+  Counter #(.width(32'd5),
+	    .init(5'd31)) xcomms_tx_outpipe_accumulateTimer(.CLK(uclkgen$CLK_OUT),
+							    .RST(rstgen_final_reset$RST_OUT),
+							    .DATA_A(xcomms_tx_outpipe_accumulateTimer$DATA_A),
+							    .DATA_B(xcomms_tx_outpipe_accumulateTimer$DATA_B),
+							    .DATA_C(xcomms_tx_outpipe_accumulateTimer$DATA_C),
+							    .DATA_F(xcomms_tx_outpipe_accumulateTimer$DATA_F),
+							    .ADDA(xcomms_tx_outpipe_accumulateTimer$ADDA),
+							    .ADDB(xcomms_tx_outpipe_accumulateTimer$ADDB),
+							    .SETC(xcomms_tx_outpipe_accumulateTimer$SETC),
+							    .SETF(xcomms_tx_outpipe_accumulateTimer$SETF),
+							    .Q_OUT(xcomms_tx_outpipe_accumulateTimer$Q_OUT));
+
+  // submodule xcomms_tx_outpipe_creditTimer
+  Counter #(.width(32'd3),
+	    .init(3'd7)) xcomms_tx_outpipe_creditTimer(.CLK(CLK_user_clk_half),
+						       .RST(epReset125$OUT_RST),
+						       .DATA_A(xcomms_tx_outpipe_creditTimer$DATA_A),
+						       .DATA_B(xcomms_tx_outpipe_creditTimer$DATA_B),
+						       .DATA_C(xcomms_tx_outpipe_creditTimer$DATA_C),
+						       .DATA_F(xcomms_tx_outpipe_creditTimer$DATA_F),
+						       .ADDA(xcomms_tx_outpipe_creditTimer$ADDA),
+						       .ADDB(xcomms_tx_outpipe_creditTimer$ADDB),
+						       .SETC(xcomms_tx_outpipe_creditTimer$SETC),
+						       .SETF(xcomms_tx_outpipe_creditTimer$SETF),
+						       .Q_OUT(xcomms_tx_outpipe_creditTimer$Q_OUT));
+
+  // submodule xcomms_tx_outpipe_credit_fifo
+  SyncFIFO1 #(.dataWidth(32'd18)) xcomms_tx_outpipe_credit_fifo(.sCLK(CLK_user_clk_half),
+								.dCLK(uclkgen$CLK_OUT),
+								.sRST(epReset125$OUT_RST),
+								.sD_IN(xcomms_tx_outpipe_credit_fifo$sD_IN),
+								.sENQ(xcomms_tx_outpipe_credit_fifo$sENQ),
+								.dDEQ(xcomms_tx_outpipe_credit_fifo$dDEQ),
+								.sFULL_N(xcomms_tx_outpipe_credit_fifo$sFULL_N),
+								.dEMPTY_N(xcomms_tx_outpipe_credit_fifo$dEMPTY_N),
+								.dD_OUT(xcomms_tx_outpipe_credit_fifo$dD_OUT));
+
+  // submodule xcomms_tx_outpipe_data_info_fifo
+  SyncFIFO #(.dataWidth(32'd35),
+	     .depth(32'd2),
+	     .indxWidth(32'd1)) xcomms_tx_outpipe_data_info_fifo(.sCLK(uclkgen$CLK_OUT),
+								 .dCLK(CLK_user_clk_half),
+								 .sRST(rstgen_final_reset$RST_OUT),
+								 .sD_IN(xcomms_tx_outpipe_data_info_fifo$sD_IN),
+								 .sENQ(xcomms_tx_outpipe_data_info_fifo$sENQ),
+								 .dDEQ(xcomms_tx_outpipe_data_info_fifo$dDEQ),
+								 .sFULL_N(xcomms_tx_outpipe_data_info_fifo$sFULL_N),
+								 .dEMPTY_N(xcomms_tx_outpipe_data_info_fifo$dEMPTY_N),
+								 .dD_OUT(xcomms_tx_outpipe_data_info_fifo$dD_OUT));
+
+  // submodule xcomms_tx_outpipe_ending_reset
+  SyncPulse xcomms_tx_outpipe_ending_reset(.sCLK(uclkgen$CLK_OUT),
+					   .dCLK(CLK_user_clk_half),
+					   .sRST(xcomms_tx_outpipe_nocResetUClock$OUT_RST),
+					   .sEN(xcomms_tx_outpipe_ending_reset$sEN),
+					   .dPulse(xcomms_tx_outpipe_ending_reset$dPulse));
+
+  // submodule xcomms_tx_outpipe_nocResetUClock
+  SyncReset0 xcomms_tx_outpipe_nocResetUClock(.IN_RST(epReset125$OUT_RST),
+					      .OUT_RST(xcomms_tx_outpipe_nocResetUClock$OUT_RST));
+
+  // submodule xcomms_tx_outpipe_out_fifo
+  SyncFIFO #(.dataWidth(32'd656),
+	     .depth(32'd1024),
+	     .indxWidth(32'd10)) xcomms_tx_outpipe_out_fifo(.sCLK(uclkgen$CLK_OUT),
+							    .dCLK(CLK_user_clk_half),
+							    .sRST(rstgen_final_reset$RST_OUT),
+							    .sD_IN(xcomms_tx_outpipe_out_fifo$sD_IN),
+							    .sENQ(xcomms_tx_outpipe_out_fifo$sENQ),
+							    .dDEQ(xcomms_tx_outpipe_out_fifo$dDEQ),
+							    .sFULL_N(xcomms_tx_outpipe_out_fifo$sFULL_N),
+							    .dEMPTY_N(xcomms_tx_outpipe_out_fifo$dEMPTY_N),
+							    .dD_OUT(xcomms_tx_outpipe_out_fifo$dD_OUT));
+
+  // submodule xcomms_tx_outpipe_param_depth
+  mkSceMiUInt32Parameter #(.n(32'd1024)) xcomms_tx_outpipe_param_depth(.not_used());
+
+  // submodule xcomms_tx_outpipe_param_link_type
+  mkSceMiLinkTypeParameter #(.link_type(4'd8)) xcomms_tx_outpipe_param_link_type(.not_used());
+
+  // submodule xcomms_tx_outpipe_param_pipeNum
+  mkSceMiUInt32Parameter #(.n(32'd0)) xcomms_tx_outpipe_param_pipeNum(.not_used());
+
+  // submodule xcomms_tx_outpipe_param_visibility
+  mkSceMiStringParameter #(.n("Fifo")) xcomms_tx_outpipe_param_visibility(.not_used());
+
+  // submodule xcomms_tx_outpipe_starting_reset
+  SyncPulse xcomms_tx_outpipe_starting_reset(.sCLK(uclkgen$CLK_OUT),
+					     .dCLK(CLK_user_clk_half),
+					     .sRST(xcomms_tx_outpipe_nocResetUClock$OUT_RST),
+					     .sEN(xcomms_tx_outpipe_starting_reset$sEN),
+					     .dPulse(xcomms_tx_outpipe_starting_reset$dPulse));
+
+  // submodule xcomms_tx_res_fifo_ff
+  SizedFIFO #(.p1width(32'd656),
+	      .p2depth(32'd4),
+	      .p3cntr_width(32'd2),
+	      .guarded(32'd1)) xcomms_tx_res_fifo_ff(.RST(rstgen_final_reset$RST_OUT),
+						     .CLK(uclkgen$CLK_OUT),
+						     .D_IN(xcomms_tx_res_fifo_ff$D_IN),
+						     .ENQ(xcomms_tx_res_fifo_ff$ENQ),
+						     .DEQ(xcomms_tx_res_fifo_ff$DEQ),
+						     .CLR(xcomms_tx_res_fifo_ff$CLR),
+						     .D_OUT(xcomms_tx_res_fifo_ff$D_OUT),
+						     .FULL_N(xcomms_tx_res_fifo_ff$FULL_N),
+						     .EMPTY_N(xcomms_tx_res_fifo_ff$EMPTY_N));
+
+  // rule RL_register_config_values
+  assign CAN_FIRE_RL_register_config_values = 1'd1 ;
+  assign WILL_FIRE_RL_register_config_values = 1'd1 ;
+
+  // rule RL_intr_ifc_ctl
+  assign CAN_FIRE_RL_intr_ifc_ctl = 1'd1 ;
+  assign WILL_FIRE_RL_intr_ifc_ctl = 1'd1 ;
+
+  // rule RL_cross_config_values
+  assign CAN_FIRE_RL_cross_config_values = 1'd1 ;
+  assign WILL_FIRE_RL_cross_config_values = 1'd1 ;
+
+  // rule RL_reset_scemi_if_network_is_inactive
+  assign CAN_FIRE_RL_reset_scemi_if_network_is_inactive =
+	     !bridge$is_activated ;
+  assign WILL_FIRE_RL_reset_scemi_if_network_is_inactive =
+	     CAN_FIRE_RL_reset_scemi_if_network_is_inactive ;
+
+  // rule RL_toggle_uclock
+  assign CAN_FIRE_RL_toggle_uclock = 1'd1 ;
+  assign WILL_FIRE_RL_toggle_uclock = 1'd1 ;
+
+  // rule RL_rl_commsOut
+  assign CAN_FIRE_RL_rl_commsOut =
+	     dut_dutIfc$RDY_comms_link_request_get &&
+	     xcomms_tx_res_fifo_ff$FULL_N ;
+  assign WILL_FIRE_RL_rl_commsOut = CAN_FIRE_RL_rl_commsOut ;
+
+  // rule RL_rl_commsIn
+  assign CAN_FIRE_RL_rl_commsIn =
+	     dut_dutIfc$RDY_comms_link_response_put &&
+	     xcomms_rx_res_fifo_ff$EMPTY_N ;
+  assign WILL_FIRE_RL_rl_commsIn = CAN_FIRE_RL_rl_commsIn ;
+
+  // rule RL_msg_sink_noc_active_decode_noc_header_4bpb
+  assign CAN_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb =
+	     fFromBridgeBeat_ifc_rDataCount != 6'd0 &&
+	     (fFromBridgeBeat_ifc_rStorage[31:26] == 6'b101010 ||
+	      fFromBridgeBeat_ifc_rStorage[31:26] == 6'b101011 ||
+	      fToContinueBeat_ifc_rDataCount_867_ULT_32___d1945) &&
+	     bridge$is_activated &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_830_ULT_4_949___d1950 &&
+	     rInMsgBytes == 8'd0 ;
+  assign WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb =
+	     CAN_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb ;
+
+  // rule RL_msg_sink_noc_active_scemi1_decode_scemi_header
+  assign CAN_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header =
+	     fFromBridgeBeat_ifc_rDataCount != 6'd0 &&
+	     (fFromBridgeBeat_ifc_rStorage[31:30] != 2'd3 ||
+	      fS1OutPortAcks_ifc_rDataCount_906_ULT_16___d1966) &&
+	     bridge_is_activated__13_AND_rSceMi1MsgIn_969_A_ETC___d1990 ;
+  assign WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header =
+	     CAN_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header ;
+
+  // rule RL_msg_sink_noc_active_scemi1_process_inport_data
+  assign CAN_FIRE_RL_msg_sink_noc_active_scemi1_process_inport_data =
+	     fFromBridgeBeat_ifc_rDataCount != 6'd0 && bridge$is_activated &&
+	     rSceMi1MsgIn_969_AND_NOT_rSceMi2MsgIn_970_971__ETC___d1977 &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_830_ULT_4_949___d1950 &&
+	     rS1MsgInIsData &&
+	     !rS1MsgInIsAck &&
+	     dut_prb_control_control_in_remaining ;
+  assign WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_inport_data =
+	     CAN_FIRE_RL_msg_sink_noc_active_scemi1_process_inport_data ;
+
+  // rule RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb
+  assign CAN_FIRE_RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb =
+	     fS1OutPortAcks_ifc_rDataCount_906_ULT_16___d1966 &&
+	     fFromBridgeBeat_ifc_rDataCount != 6'd0 &&
+	     bridge$is_activated &&
+	     rSceMi1MsgIn_969_AND_NOT_rSceMi2MsgIn_970_971__ETC___d1977 &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_830_ULT_4_949___d1950 &&
+	     !rS1MsgInIsData &&
+	     rS1MsgInIsAck &&
+	     NOT_fS1OutPortAcks_ifc_rDataAvail_927_ULT_2_986___d1987 ;
+  assign WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb =
+	     CAN_FIRE_RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb ;
+
+  // rule RL_msg_sink_noc_active_scemi1_disregard_packet
+  assign CAN_FIRE_RL_msg_sink_noc_active_scemi1_disregard_packet =
+	     fFromBridgeBeat_ifc_rDataCount != 6'd0 && bridge$is_activated &&
+	     rSceMi1MsgIn_969_AND_NOT_rSceMi2MsgIn_970_971__ETC___d1977 &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_830_ULT_4_949___d1950 &&
+	     !rS1MsgInIsAck &&
+	     !rS1MsgInIsData &&
+	     !rDecodeSceMi ;
+  assign WILL_FIRE_RL_msg_sink_noc_active_scemi1_disregard_packet =
+	     CAN_FIRE_RL_msg_sink_noc_active_scemi1_disregard_packet ;
+
+  // rule RL_msg_sink_noc_active_execute_outport_acks
+  assign CAN_FIRE_RL_msg_sink_noc_active_execute_outport_acks =
+	     fS1OutPortAcks_ifc_rDataCount != 5'd0 &&
+	     (fS1OutPortAcks_ifc_rStorage[9:0] != 10'd0 ||
+	      dut_prb_control_data_out_finished$sRDY) &&
+	     bridge$is_activated ;
+  assign WILL_FIRE_RL_msg_sink_noc_active_execute_outport_acks =
+	     CAN_FIRE_RL_msg_sink_noc_active_execute_outport_acks ;
+
+  // rule RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb
+  assign CAN_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb =
+	     fFromBridgeBeat_ifc_rDataCount != 6'd0 &&
+	     (!fFromBridgeBeat_ifc_rStorage[31] ||
+	      NOT_fFromBridgeBeat_ifc_rStorage_817_BITS_27_T_ETC___d2096) &&
+	     bridge$is_activated &&
+	     rSceMi2MsgIn_970_AND_NOT_rSceMi1MsgIn_969_099__ETC___d2102 &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_830_ULT_4_949___d1950 &&
+	     rDecodeSceMi &&
+	     !rS2MsgInIsData &&
+	     !rS2MsgInIsCred ;
+  assign WILL_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb =
+	     CAN_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb ;
+
+  // rule RL_msg_sink_noc_active_scemi2_disregard_packet
+  assign CAN_FIRE_RL_msg_sink_noc_active_scemi2_disregard_packet =
+	     fFromBridgeBeat_ifc_rDataCount != 6'd0 && bridge$is_activated &&
+	     rSceMi2MsgIn_970_AND_NOT_rSceMi1MsgIn_969_099__ETC___d2102 &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_830_ULT_4_949___d1950 &&
+	     !rS2MsgInIsData &&
+	     !rS2MsgInIsCred &&
+	     !rDecodeSceMi ;
+  assign WILL_FIRE_RL_msg_sink_noc_active_scemi2_disregard_packet =
+	     CAN_FIRE_RL_msg_sink_noc_active_scemi2_disregard_packet ;
+
+  // rule RL_msg_sink_noc_active_other_process_other_data
+  assign CAN_FIRE_RL_msg_sink_noc_active_other_process_other_data =
+	     fToContinueBeat_ifc_rDataCount_867_ULT_32___d1945 &&
+	     fFromBridgeBeat_ifc_rDataCount != 6'd0 &&
+	     bridge_is_activated__13_AND_rOtherMsgIn_973_AN_ETC___d2133 ;
+  assign WILL_FIRE_RL_msg_sink_noc_active_other_process_other_data =
+	     CAN_FIRE_RL_msg_sink_noc_active_other_process_other_data ;
+
+  // rule RL_msg_sink_noc_active_scemi2_process_inpipe_data
+  assign CAN_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data =
+	     fFromBridgeBeat_ifc_rDataCount != 6'd0 &&
+	     !xcomms_rx_inpipe_in_reset_noc &&
+	     xcomms_rx_inpipe_mimo_rDataCount <= 4'd7 &&
+	     bridge_is_activated__13_AND_rSceMi2MsgIn_970_1_ETC___d2146 &&
+	     rS2InPipeNum == 12'd0 ;
+  assign WILL_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data =
+	     CAN_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ;
+
+  // rule RL_msg_sink_noc_inactive
+  assign CAN_FIRE_RL_msg_sink_noc_inactive =
+	     CAN_FIRE_RL_reset_scemi_if_network_is_inactive ;
+  assign WILL_FIRE_RL_msg_sink_noc_inactive =
+	     CAN_FIRE_RL_reset_scemi_if_network_is_inactive ;
+
+  // rule RL_msg_source_noc_active_transmit_beat_to_bridge
+  assign CAN_FIRE_RL_msg_source_noc_active_transmit_beat_to_bridge =
+	     fToBridgeBeat$EMPTY_N && bridge$is_activated ;
+  assign WILL_FIRE_RL_msg_source_noc_active_transmit_beat_to_bridge =
+	     CAN_FIRE_RL_msg_source_noc_active_transmit_beat_to_bridge ;
+
+  // rule RL_msg_source_noc_active_arbitrate_transmit_messages
+  assign CAN_FIRE_RL_msg_source_noc_active_arbitrate_transmit_messages =
+	     bridge$is_activated && rOutMsgBytes == 8'd0 ;
+  assign WILL_FIRE_RL_msg_source_noc_active_arbitrate_transmit_messages =
+	     CAN_FIRE_RL_msg_source_noc_active_arbitrate_transmit_messages ;
+
+  // rule RL_msg_source_noc_active_inports_load_new_request_group
+  assign CAN_FIRE_RL_msg_source_noc_active_inports_load_new_request_group =
+	     bridge$is_activated && !lrS1ActiveRequests && !rS1MsgOutReqReq ;
+  assign WILL_FIRE_RL_msg_source_noc_active_inports_load_new_request_group =
+	     CAN_FIRE_RL_msg_source_noc_active_inports_load_new_request_group ;
+
+  // rule RL_msg_source_noc_active_inports_accumulate_pending_requests
+  assign CAN_FIRE_RL_msg_source_noc_active_inports_accumulate_pending_requests =
+	     bridge$is_activated && (lrS1ActiveRequests || rS1MsgOutReqReq) ;
+  assign WILL_FIRE_RL_msg_source_noc_active_inports_accumulate_pending_requests =
+	     CAN_FIRE_RL_msg_source_noc_active_inports_accumulate_pending_requests ;
+
+  // rule RL_msg_source_noc_active_inports_send_request_message
+  assign CAN_FIRE_RL_msg_source_noc_active_inports_send_request_message =
+	     fS1MsgOut_ifc_rDataCount_205_ULT_32___d2494 &&
+	     bridge$is_activated &&
+	     rS1MsgOutReqReq &&
+	     rS1MsgOutReqGrant &&
+	     fS1MsgOut_ifc_rDataAvail >= 6'd8 ;
+  assign WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message =
+	     CAN_FIRE_RL_msg_source_noc_active_inports_send_request_message ;
+
+  // rule RL_msg_source_noc_inactive_inports
+  assign CAN_FIRE_RL_msg_source_noc_inactive_inports =
+	     CAN_FIRE_RL_reset_scemi_if_network_is_inactive ;
+  assign WILL_FIRE_RL_msg_source_noc_inactive_inports =
+	     CAN_FIRE_RL_reset_scemi_if_network_is_inactive ;
+
+  // rule RL_msg_source_noc_active_outports_send_data_message_header
+  assign CAN_FIRE_RL_msg_source_noc_active_outports_send_data_message_header =
+	     fS1MsgOut_ifc_rDataCount_205_ULT_32___d2494 &&
+	     bridge$is_activated &&
+	     rS1MsgOutDataReq &&
+	     !rS1MsgOutReqGrant &&
+	     rS1OutDataHeader &&
+	     fS1MsgOut_ifc_rDataAvail >= 6'd16 ;
+  assign WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header =
+	     CAN_FIRE_RL_msg_source_noc_active_outports_send_data_message_header ;
+
+  // rule RL_msg_source_noc_active_outports_send_data_message_data
+  assign CAN_FIRE_RL_msg_source_noc_active_outports_send_data_message_data =
+	     fS1MsgOut_ifc_rDataCount_205_ULT_32___d2494 &&
+	     bridge$is_activated &&
+	     rS1MsgOutDataReq &&
+	     !rS1MsgOutReqGrant &&
+	     !rS1OutDataHeader &&
+	     fS1MsgOut_ifc_rDataAvail >= 6'd4 ;
+  assign WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data =
+	     CAN_FIRE_RL_msg_source_noc_active_outports_send_data_message_data ;
+
+  // rule RL_swap_scemi1_outport_grant
+  assign CAN_FIRE_RL_swap_scemi1_outport_grant =
+	     rS1MsgOutReqReq && !rS1MsgOutReqGrant && !rS1MsgOutDataReq ||
+	     rS1MsgOutDataReq && rS1MsgOutReqGrant && !rS1MsgOutReqReq ;
+  assign WILL_FIRE_RL_swap_scemi1_outport_grant =
+	     CAN_FIRE_RL_swap_scemi1_outport_grant ;
+
+  // rule RL_msg_source_noc_active_inports_start_next_request
+  assign CAN_FIRE_RL_msg_source_noc_active_inports_start_next_request =
+	     bridge$is_activated && !rS1MsgOutReqReq && lrS1ActiveRequests ;
+  assign WILL_FIRE_RL_msg_source_noc_active_inports_start_next_request =
+	     CAN_FIRE_RL_msg_source_noc_active_inports_start_next_request ;
+
+  // rule RL_msg_source_noc_active_outports_start_data_message
+  assign CAN_FIRE_RL_msg_source_noc_active_outports_start_data_message =
+	     init_state_msgFIFO$dEMPTY_N && bridge$is_activated &&
+	     init_state_msgFIFO$dEMPTY_N &&
+	     !rS1MsgOutDataReq &&
+	     !rS1OutDataHeader ;
+  assign WILL_FIRE_RL_msg_source_noc_active_outports_start_data_message =
+	     CAN_FIRE_RL_msg_source_noc_active_outports_start_data_message ;
+
+  // rule RL_start_outpipe_data_message
+  assign CAN_FIRE_RL_start_outpipe_data_message =
+	     !xcomms_tx_outpipe_in_reset_noc &&
+	     xcomms_tx_outpipe_data_info_fifo$dEMPTY_N &&
+	     !rS2SendOutDataMsg &&
+	     rS2OutDataIndex == 12'd0 ;
+  assign WILL_FIRE_RL_start_outpipe_data_message =
+	     CAN_FIRE_RL_start_outpipe_data_message ;
+
+  // rule RL_start_inpipe_credit_request
+  assign CAN_FIRE_RL_start_inpipe_credit_request =
+	     fS2MsgOut_ifc_rDataCount_242_ULT_32___d2590 &&
+	     !xcomms_rx_inpipe_in_reset_noc &&
+	     xcomms_rx_inpipe_credit_fifo$dEMPTY_N &&
+	     rS2InCreditIndex == 12'd0 &&
+	     rS2MsgOutCredGrant &&
+	     !CAN_FIRE_RL_start_outpipe_data_message &&
+	     NOT_fS2MsgOut_ifc_rDataAvail_261_ULT_8_602___d2603 &&
+	     bridge$is_activated ;
+  assign WILL_FIRE_RL_start_inpipe_credit_request =
+	     CAN_FIRE_RL_start_inpipe_credit_request &&
+	     !WILL_FIRE_RL_start_outpipe_data_message ;
+
+  // rule RL_scan_inpipe_credit_index
+  assign CAN_FIRE_RL_scan_inpipe_credit_index =
+	     NOT_fS2MsgOut_ifc_rDataAvail_261_ULT_8_602___d2603 ;
+  assign WILL_FIRE_RL_scan_inpipe_credit_index =
+	     NOT_fS2MsgOut_ifc_rDataAvail_261_ULT_8_602___d2603 ;
+
+  // rule RL_reset_inpipe_when_noc_is_inactive
+  assign CAN_FIRE_RL_reset_inpipe_when_noc_is_inactive =
+	     CAN_FIRE_RL_reset_scemi_if_network_is_inactive ;
+  assign WILL_FIRE_RL_reset_inpipe_when_noc_is_inactive =
+	     CAN_FIRE_RL_reset_scemi_if_network_is_inactive ;
+
+  // rule RL_scan_outpipe_data_index
+  assign CAN_FIRE_RL_scan_outpipe_data_index =
+	     !rS2SendOutDataMsg &&
+	     NOT_fS2MsgOut_ifc_rDataAvail_261_ULT_8_602___d2603 ;
+  assign WILL_FIRE_RL_scan_outpipe_data_index =
+	     CAN_FIRE_RL_scan_outpipe_data_index &&
+	     !WILL_FIRE_RL_start_outpipe_data_message ;
+
+  // rule RL_send_outpipe_data_header
+  assign CAN_FIRE_RL_send_outpipe_data_header =
+	     fS2MsgOut_ifc_rDataCount_242_ULT_32___d2590 &&
+	     rS2SendOutDataMsg &&
+	     rS2SendOutDataHdr &&
+	     !rS2MsgOutCredGrant &&
+	     NOT_fS2MsgOut_ifc_rDataAvail_261_ULT_8_602___d2603 ;
+  assign WILL_FIRE_RL_send_outpipe_data_header =
+	     CAN_FIRE_RL_send_outpipe_data_header ;
+
+  // rule RL_send_outpipe_data_message
+  assign CAN_FIRE_RL_send_outpipe_data_message =
+	     NOT_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667__ETC___d2684 &&
+	     rS2SendOutDataMsg &&
+	     !rS2SendOutDataHdr &&
+	     rS2OutDataIndex == 12'd0 &&
+	     !rS2MsgOutCredGrant &&
+	     fS2MsgOut_ifc_rDataAvail >= 6'd4 ;
+  assign WILL_FIRE_RL_send_outpipe_data_message =
+	     CAN_FIRE_RL_send_outpipe_data_message ;
+
+  // rule RL_reset_outpipe_when_noc_is_inactive
+  assign CAN_FIRE_RL_reset_outpipe_when_noc_is_inactive =
+	     CAN_FIRE_RL_reset_scemi_if_network_is_inactive ;
+  assign WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive =
+	     CAN_FIRE_RL_reset_scemi_if_network_is_inactive ;
+
+  // rule RL_connect_src_rdy
+  assign CAN_FIRE_RL_connect_src_rdy = 1'd1 ;
+  assign WILL_FIRE_RL_connect_src_rdy = 1'd1 ;
+
+  // rule RL_connect_dst_rdy
+  assign CAN_FIRE_RL_connect_dst_rdy = 1'd1 ;
+  assign WILL_FIRE_RL_connect_dst_rdy = 1'd1 ;
+
+  // rule RL_connect_data
+  assign CAN_FIRE_RL_connect_data = 1'd1 ;
+  assign WILL_FIRE_RL_connect_data = 1'd1 ;
+
+  // rule RL_msg_sink_noc_active_receive_beat_from_bridge
+  assign CAN_FIRE_RL_msg_sink_noc_active_receive_beat_from_bridge =
+	     fFromBridgeBeat_ifc_rDataCount < 6'd32 && bridge$is_activated &&
+	     NOT_fFromBridgeBeat_ifc_rDataAvail_849_ULT_4_932___d1933 &&
+	     bridge$noc_out_src_rdy ;
+  assign WILL_FIRE_RL_msg_sink_noc_active_receive_beat_from_bridge =
+	     CAN_FIRE_RL_msg_sink_noc_active_receive_beat_from_bridge ;
+
+  // rule RL_connect_src_rdy_1
+  assign CAN_FIRE_RL_connect_src_rdy_1 = 1'd1 ;
+  assign WILL_FIRE_RL_connect_src_rdy_1 = 1'd1 ;
+
+  // rule RL_msg_source_noc_inactive
+  assign CAN_FIRE_RL_msg_source_noc_inactive =
+	     CAN_FIRE_RL_reset_scemi_if_network_is_inactive ;
+  assign WILL_FIRE_RL_msg_source_noc_inactive =
+	     CAN_FIRE_RL_reset_scemi_if_network_is_inactive ;
+
+  // rule RL_connect_dst_rdy_1
+  assign CAN_FIRE_RL_connect_dst_rdy_1 = 1'd1 ;
+  assign WILL_FIRE_RL_connect_dst_rdy_1 = 1'd1 ;
+
+  // rule RL_msg_source_noc_active_move_to_next_output_beat
+  assign CAN_FIRE_RL_msg_source_noc_active_move_to_next_output_beat =
+	     fToBridgeBeat$EMPTY_N && bridge$is_activated &&
+	     bridge$noc_in_dst_rdy ;
+  assign WILL_FIRE_RL_msg_source_noc_active_move_to_next_output_beat =
+	     CAN_FIRE_RL_msg_source_noc_active_move_to_next_output_beat ;
+
+  // rule RL_msg_source_noc_active_dispatch_next_granted_other
+  assign CAN_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other =
+	     fFromContinueBeat_ifc_rDataCount != 6'd0 &&
+	     fToBridgeBeat$FULL_N &&
+	     bridge$is_activated &&
+	     CAN_FIRE_RL_msg_source_noc_active_arbitrate_transmit_messages &&
+	     rOutMsgBytes == 8'd0 &&
+	     b__h248128 == 2'd0 &&
+	     !fFromContinueBeat_ifc_rDataCount_168_ULT_4___d2274 ;
+  assign WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other =
+	     CAN_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other ;
+
+  // rule RL_msg_source_noc_active_dispatch_next_granted_scemi1
+  assign CAN_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 =
+	     fS1MsgOut_ifc_rDataCount != 6'd0 && fToBridgeBeat$FULL_N &&
+	     bridge$is_activated &&
+	     CAN_FIRE_RL_msg_source_noc_active_arbitrate_transmit_messages &&
+	     rOutMsgBytes == 8'd0 &&
+	     b__h248128 == 2'd1 &&
+	     !fS1MsgOut_ifc_rDataCount_205_ULT_4___d2276 ;
+  assign WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 =
+	     CAN_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 ;
+
+  // rule RL_msg_source_noc_active_dispatch_next_granted_scemi2
+  assign CAN_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 =
+	     fS2MsgOut_ifc_rDataCount != 6'd0 && fToBridgeBeat$FULL_N &&
+	     bridge$is_activated &&
+	     CAN_FIRE_RL_msg_source_noc_active_arbitrate_transmit_messages &&
+	     rOutMsgBytes == 8'd0 &&
+	     b__h248128 == 2'd2 &&
+	     !fS2MsgOut_ifc_rDataCount_242_ULT_4___d2279 ;
+  assign WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 =
+	     CAN_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 ;
+
+  // rule RL_msg_source_noc_active_continue_other
+  assign CAN_FIRE_RL_msg_source_noc_active_continue_other =
+	     fFromContinueBeat_ifc_rDataCount != 6'd0 &&
+	     fToBridgeBeat$FULL_N &&
+	     bridge$is_activated &&
+	     rOtherMsgOut &&
+	     !rSceMi1MsgOut &&
+	     !rSceMi2MsgOut &&
+	     rOutMsgBytes != 8'd0 &&
+	     !fFromContinueBeat_ifc_rDataCount_168_ULT_4___d2274 ;
+  assign WILL_FIRE_RL_msg_source_noc_active_continue_other =
+	     CAN_FIRE_RL_msg_source_noc_active_continue_other ;
+
+  // rule RL_msg_source_noc_active_continue_scemi1
+  assign CAN_FIRE_RL_msg_source_noc_active_continue_scemi1 =
+	     fS1MsgOut_ifc_rDataCount != 6'd0 && fToBridgeBeat$FULL_N &&
+	     bridge$is_activated &&
+	     rSceMi1MsgOut &&
+	     !rSceMi2MsgOut &&
+	     !rOtherMsgOut &&
+	     rOutMsgBytes != 8'd0 &&
+	     !fS1MsgOut_ifc_rDataCount_205_ULT_4___d2276 ;
+  assign WILL_FIRE_RL_msg_source_noc_active_continue_scemi1 =
+	     CAN_FIRE_RL_msg_source_noc_active_continue_scemi1 ;
+
+  // rule RL_msg_source_noc_active_continue_scemi2
+  assign CAN_FIRE_RL_msg_source_noc_active_continue_scemi2 =
+	     fS2MsgOut_ifc_rDataCount != 6'd0 && fToBridgeBeat$FULL_N &&
+	     bridge$is_activated &&
+	     rSceMi2MsgOut &&
+	     !rSceMi1MsgOut &&
+	     !rOtherMsgOut &&
+	     rOutMsgBytes != 8'd0 &&
+	     !fS2MsgOut_ifc_rDataCount_242_ULT_4___d2279 ;
+  assign WILL_FIRE_RL_msg_source_noc_active_continue_scemi2 =
+	     CAN_FIRE_RL_msg_source_noc_active_continue_scemi2 ;
+
+  // rule RL_connect_data_1
+  assign CAN_FIRE_RL_connect_data_1 = 1'd1 ;
+  assign WILL_FIRE_RL_connect_data_1 = 1'd1 ;
+
+  // rule RL_send_whatever
+  assign CAN_FIRE_RL_send_whatever = 1'd1 ;
+  assign WILL_FIRE_RL_send_whatever = 1'd1 ;
+
+  // rule RL_always_accept_beat
+  assign CAN_FIRE_RL_always_accept_beat = 1'd1 ;
+  assign WILL_FIRE_RL_always_accept_beat = 1'd1 ;
+
+  // rule RL_drive_status_pcie_link_up
+  assign CAN_FIRE_RL_drive_status_pcie_link_up = 1'd1 ;
+  assign WILL_FIRE_RL_drive_status_pcie_link_up = 1'd1 ;
+
+  // rule RL_drive_status_bluenoc_link_up
+  assign CAN_FIRE_RL_drive_status_bluenoc_link_up = 1'd1 ;
+  assign WILL_FIRE_RL_drive_status_bluenoc_link_up = 1'd1 ;
+
+  // rule RL_drive_status_interrupts_enabled
+  assign CAN_FIRE_RL_drive_status_interrupts_enabled = 1'd1 ;
+  assign WILL_FIRE_RL_drive_status_interrupts_enabled = 1'd1 ;
+
+  // rule RL_drive_status_memory_enabled
+  assign CAN_FIRE_RL_drive_status_memory_enabled = 1'd1 ;
+  assign WILL_FIRE_RL_drive_status_memory_enabled = 1'd1 ;
+
+  // rule RL_drive_status_out_of_reset
+  assign CAN_FIRE_RL_drive_status_out_of_reset = 1'd1 ;
+  assign WILL_FIRE_RL_drive_status_out_of_reset = 1'd1 ;
+
+  // rule RL_cq_mkConnectionGetPut
+  assign CAN_FIRE_RL_cq_mkConnectionGetPut =
+	     _unnamed_$RDY_cq_recv_get && cq_in_buf$FULL_N ;
+  assign WILL_FIRE_RL_cq_mkConnectionGetPut =
+	     CAN_FIRE_RL_cq_mkConnectionGetPut ;
+
+  // rule RL_cq_rl_rd_header
+  assign CAN_FIRE_RL_cq_rl_rd_header =
+	     cq_f_cq_rv[152] && bridge$RDY_cq_tlps_put && cq_f_cq_rv[11] &&
+	     (cq_f_cq_rv[102:99] == 4'd0 || cq_f_cq_rv[102:99] == 4'd2) ;
+  assign WILL_FIRE_RL_cq_rl_rd_header = CAN_FIRE_RL_cq_rl_rd_header ;
+
+  // rule RL_cq_rl_data_0
+  assign CAN_FIRE_RL_cq_rl_data_0 =
+	     cq_f_cq_rv[152] && !cq_f_cq_rv[11] && cq_rg_dwcount == 11'd0 ;
+  assign WILL_FIRE_RL_cq_rl_data_0 = CAN_FIRE_RL_cq_rl_data_0 ;
+
+  // rule RL_cq_rl_data_1_to_3
+  assign CAN_FIRE_RL_cq_rl_data_1_to_3 =
+	     cq_f_cq_rv[152] && bridge$RDY_cq_tlps_put && !cq_f_cq_rv[11] &&
+	     cq_rg_dwcount != 11'd0 &&
+	     cq_rg_dwcount < 11'd4 ;
+  assign WILL_FIRE_RL_cq_rl_data_1_to_3 = CAN_FIRE_RL_cq_rl_data_1_to_3 ;
+
+  // rule RL_cq_gearbox_launder_dInReset
+  assign CAN_FIRE_RL_cq_gearbox_launder_dInReset = 1'd1 ;
+  assign WILL_FIRE_RL_cq_gearbox_launder_dInReset = 1'd1 ;
+
+  // rule RL_cq_rl_wr_header
+  assign CAN_FIRE_RL_cq_rl_wr_header =
+	     cq_f_cq_rv[152] &&
+	     NOT_cq_gearbox_read_block_34_35_AND_NOT_cq_gea_ETC___d159 &&
+	     bridge$RDY_cq_tlps_put &&
+	     cq_f_cq_rv[11] &&
+	     (cq_f_cq_rv[102:99] == 4'd1 || cq_f_cq_rv[102:99] == 4'd3) ;
+  assign WILL_FIRE_RL_cq_rl_wr_header = CAN_FIRE_RL_cq_rl_wr_header ;
+
+  // rule RL_cq_rl_data_4
+  assign CAN_FIRE_RL_cq_rl_data_4 =
+	     cq_f_cq_rv[152] &&
+	     NOT_cq_gearbox_read_block_34_35_AND_NOT_cq_gea_ETC___d159 &&
+	     bridge$RDY_cq_tlps_put &&
+	     !cq_f_cq_rv[11] &&
+	     cq_rg_dwcount > 11'd3 ;
+  assign WILL_FIRE_RL_cq_rl_data_4 = CAN_FIRE_RL_cq_rl_data_4 ;
+
+  // rule RL_cq_rl_slowclock
+  assign CAN_FIRE_RL_cq_rl_slowclock =
+	     NOT_cq_gearbox_read_block_34_35_AND_NOT_cq_gea_ETC___d159 &&
+	     !cq_f_cq_rv$port1__read[152] ;
+  assign WILL_FIRE_RL_cq_rl_slowclock = CAN_FIRE_RL_cq_rl_slowclock ;
+
+  // rule RL_cq_gearbox_launder_sInReset
+  assign CAN_FIRE_RL_cq_gearbox_launder_sInReset = 1'd1 ;
+  assign WILL_FIRE_RL_cq_gearbox_launder_sInReset = 1'd1 ;
+
+  // rule RL_cq_rl_g_to_gearbox
+  assign CAN_FIRE_RL_cq_rl_g_to_gearbox =
+	     NOT_cq_gearbox_write_block_0_1_AND_NOT_NOT_cq__ETC___d57 &&
+	     cq_in_buf$EMPTY_N &&
+	     !cq_rg_pad_odd_tail ;
+  assign WILL_FIRE_RL_cq_rl_g_to_gearbox = CAN_FIRE_RL_cq_rl_g_to_gearbox ;
+
+  // rule RL_cq_rl_g_to_gearbox_pad_odd_tail
+  assign CAN_FIRE_RL_cq_rl_g_to_gearbox_pad_odd_tail =
+	     NOT_cq_gearbox_write_block_0_1_AND_NOT_NOT_cq__ETC___d57 &&
+	     cq_rg_pad_odd_tail ;
+  assign WILL_FIRE_RL_cq_rl_g_to_gearbox_pad_odd_tail =
+	     CAN_FIRE_RL_cq_rl_g_to_gearbox_pad_odd_tail ;
+
+  // rule RL_cq_gearbox_sInReset_pre_isResetAssertedUpdate
+  assign CAN_FIRE_RL_cq_gearbox_sInReset_pre_isResetAssertedUpdate =
+	     cq_gearbox_sInReset_pre_isInReset ;
+  assign WILL_FIRE_RL_cq_gearbox_sInReset_pre_isResetAssertedUpdate =
+	     cq_gearbox_sInReset_pre_isInReset ;
+
+  // rule RL_cq_gearbox_dInReset_pre_isResetAssertedUpdate
+  assign CAN_FIRE_RL_cq_gearbox_dInReset_pre_isResetAssertedUpdate =
+	     cq_gearbox_dInReset_pre_isInReset ;
+  assign WILL_FIRE_RL_cq_gearbox_dInReset_pre_isResetAssertedUpdate =
+	     cq_gearbox_dInReset_pre_isInReset ;
+
+  // rule RL_cc_gearbox_launder_sInReset
+  assign CAN_FIRE_RL_cc_gearbox_launder_sInReset = 1'd1 ;
+  assign WILL_FIRE_RL_cc_gearbox_launder_sInReset = 1'd1 ;
+
+  // rule RL_cc_rl_header
+  assign CAN_FIRE_RL_cc_rl_header =
+	     cc_f_tlps_rv[153] &&
+	     NOT_cc_gearbox_write_block_02_03_AND_cc_gearbo_ETC___d323 &&
+	     cc_f_tlps_rv[152] ;
+  assign WILL_FIRE_RL_cc_rl_header = CAN_FIRE_RL_cc_rl_header ;
+
+  // rule RL_cc_rl_data
+  assign CAN_FIRE_RL_cc_rl_data =
+	     cc_f_tlps_rv[153] &&
+	     NOT_cc_gearbox_write_block_02_03_AND_cc_gearbo_ETC___d323 &&
+	     !cc_f_tlps_rv[152] &&
+	     cc_rg_dwcount != 11'd0 ;
+  assign WILL_FIRE_RL_cc_rl_data = CAN_FIRE_RL_cc_rl_data ;
+
+  // rule RL_cc_rl_get_tlps
+  assign CAN_FIRE_RL_cc_rl_get_tlps =
+	     bridge$RDY_cc_tlps_get && !cc_f_tlps_rv$port1__read[153] ;
+  assign WILL_FIRE_RL_cc_rl_get_tlps = CAN_FIRE_RL_cc_rl_get_tlps ;
+
+  // rule RL_cc_gearbox_launder_dInReset
+  assign CAN_FIRE_RL_cc_gearbox_launder_dInReset = 1'd1 ;
+  assign WILL_FIRE_RL_cc_gearbox_launder_dInReset = 1'd1 ;
+
+  // rule RL_cc_rl_fastclock
+  assign CAN_FIRE_RL_cc_rl_fastclock =
+	     NOT_cc_gearbox_read_block_01_02_AND_NOT_cc_gea_ETC___d424 &&
+	     IF_cc_gearbox_read_block_01_THEN_IF_NOT_cc_gea_ETC___d442 ;
+  assign WILL_FIRE_RL_cc_rl_fastclock = CAN_FIRE_RL_cc_rl_fastclock ;
+
+  // rule RL_cc_gearbox_sInReset_pre_isResetAssertedUpdate
+  assign CAN_FIRE_RL_cc_gearbox_sInReset_pre_isResetAssertedUpdate =
+	     cc_gearbox_sInReset_pre_isInReset ;
+  assign WILL_FIRE_RL_cc_gearbox_sInReset_pre_isResetAssertedUpdate =
+	     cc_gearbox_sInReset_pre_isInReset ;
+
+  // rule RL_cc_gearbox_dInReset_pre_isResetAssertedUpdate
+  assign CAN_FIRE_RL_cc_gearbox_dInReset_pre_isResetAssertedUpdate =
+	     cc_gearbox_dInReset_pre_isInReset ;
+  assign WILL_FIRE_RL_cc_gearbox_dInReset_pre_isResetAssertedUpdate =
+	     cc_gearbox_dInReset_pre_isInReset ;
+
+  // rule RL_rq_gearbox_launder_sInReset
+  assign CAN_FIRE_RL_rq_gearbox_launder_sInReset = 1'd1 ;
+  assign WILL_FIRE_RL_rq_gearbox_launder_sInReset = 1'd1 ;
+
+  // rule RL_rq_rl_header
+  assign CAN_FIRE_RL_rq_rl_header =
+	     rq_f_tlps_rv[153] &&
+	     NOT_rq_gearbox_write_block_68_69_AND_rq_gearbo_ETC___d489 &&
+	     !rq_rg_mdw[32] &&
+	     rq_f_tlps_rv[152] ;
+  assign WILL_FIRE_RL_rq_rl_header = CAN_FIRE_RL_rq_rl_header ;
+
+  // rule RL_rq_rl_data_a
+  assign CAN_FIRE_RL_rq_rl_data_a =
+	     NOT_rq_gearbox_write_block_68_69_AND_rq_gearbo_ETC___d489 &&
+	     rq_rg_mdw[32] &&
+	     rq_rg_dwcount == 11'd1 ;
+  assign WILL_FIRE_RL_rq_rl_data_a = CAN_FIRE_RL_rq_rl_data_a ;
+
+  // rule RL_rq_rl_data_b
+  assign CAN_FIRE_RL_rq_rl_data_b =
+	     rq_f_tlps_rv[153] &&
+	     NOT_rq_gearbox_write_block_68_69_AND_rq_gearbo_ETC___d489 &&
+	     rq_rg_mdw[32] &&
+	     rq_rg_dwcount != 11'd1 ;
+  assign WILL_FIRE_RL_rq_rl_data_b = CAN_FIRE_RL_rq_rl_data_b ;
+
+  // rule RL_rq_rl_data_c
+  assign CAN_FIRE_RL_rq_rl_data_c =
+	     rq_f_tlps_rv[153] &&
+	     NOT_rq_gearbox_write_block_68_69_AND_rq_gearbo_ETC___d489 &&
+	     !rq_rg_mdw[32] &&
+	     !rq_f_tlps_rv[152] &&
+	     rq_rg_dwcount != 11'd0 ;
+  assign WILL_FIRE_RL_rq_rl_data_c = CAN_FIRE_RL_rq_rl_data_c ;
+
+  // rule RL_rq_rl_get_tlps
+  assign CAN_FIRE_RL_rq_rl_get_tlps =
+	     bridge$RDY_rq_tlps_get && !rq_f_tlps_rv$port1__read[153] ;
+  assign WILL_FIRE_RL_rq_rl_get_tlps = CAN_FIRE_RL_rq_rl_get_tlps ;
+
+  // rule RL_rq_gearbox_launder_dInReset
+  assign CAN_FIRE_RL_rq_gearbox_launder_dInReset = 1'd1 ;
+  assign WILL_FIRE_RL_rq_gearbox_launder_dInReset = 1'd1 ;
+
+  // rule RL_rq_rl_fastclock
+  assign CAN_FIRE_RL_rq_rl_fastclock =
+	     NOT_rq_gearbox_read_block_16_17_AND_NOT_rq_gea_ETC___d639 &&
+	     IF_rq_gearbox_read_block_16_THEN_IF_NOT_rq_gea_ETC___d657 ;
+  assign WILL_FIRE_RL_rq_rl_fastclock = CAN_FIRE_RL_rq_rl_fastclock ;
+
+  // rule RL_rq_gearbox_sInReset_pre_isResetAssertedUpdate
+  assign CAN_FIRE_RL_rq_gearbox_sInReset_pre_isResetAssertedUpdate =
+	     rq_gearbox_sInReset_pre_isInReset ;
+  assign WILL_FIRE_RL_rq_gearbox_sInReset_pre_isResetAssertedUpdate =
+	     rq_gearbox_sInReset_pre_isInReset ;
+
+  // rule RL_rq_gearbox_dInReset_pre_isResetAssertedUpdate
+  assign CAN_FIRE_RL_rq_gearbox_dInReset_pre_isResetAssertedUpdate =
+	     rq_gearbox_dInReset_pre_isInReset ;
+  assign WILL_FIRE_RL_rq_gearbox_dInReset_pre_isResetAssertedUpdate =
+	     rq_gearbox_dInReset_pre_isInReset ;
+
+  // rule RL_rc_mkConnectionGetPut
+  assign CAN_FIRE_RL_rc_mkConnectionGetPut =
+	     _unnamed_$RDY_rc_recv_get && rc_in_buf$FULL_N ;
+  assign WILL_FIRE_RL_rc_mkConnectionGetPut =
+	     CAN_FIRE_RL_rc_mkConnectionGetPut ;
+
+  // rule RL_rc_gearbox_launder_sInReset
+  assign CAN_FIRE_RL_rc_gearbox_launder_sInReset = 1'd1 ;
+  assign WILL_FIRE_RL_rc_gearbox_launder_sInReset = 1'd1 ;
+
+  // rule RL_rc_rl_g_to_gearbox
+  assign CAN_FIRE_RL_rc_rl_g_to_gearbox =
+	     rc_in_buf_i_notEmpty__78_AND_NOT_rc_rg_in_pack_ETC___d714 &&
+	     !rc_rg_pad_odd_tail ;
+  assign WILL_FIRE_RL_rc_rl_g_to_gearbox = CAN_FIRE_RL_rc_rl_g_to_gearbox ;
+
+  // rule RL_rc_rl_g_to_gearbox_pad_odd_tail
+  assign CAN_FIRE_RL_rc_rl_g_to_gearbox_pad_odd_tail =
+	     NOT_rc_gearbox_write_block_85_86_AND_NOT_NOT_r_ETC___d712 &&
+	     rc_rg_pad_odd_tail ;
+  assign WILL_FIRE_RL_rc_rl_g_to_gearbox_pad_odd_tail =
+	     CAN_FIRE_RL_rc_rl_g_to_gearbox_pad_odd_tail ;
+
+  // rule RL_rc_gearbox_launder_dInReset
+  assign CAN_FIRE_RL_rc_gearbox_launder_dInReset = 1'd1 ;
+  assign WILL_FIRE_RL_rc_gearbox_launder_dInReset = 1'd1 ;
+
+  // rule RL_rc_rl_header
+  assign CAN_FIRE_RL_rc_rl_header =
+	     NOT_rc_gearbox_read_block_93_94_AND_NOT_rc_gea_ETC___d818 &&
+	     bridge$RDY_rc_tlps_put &&
+	     (rc_gearbox_read_block ?
+		rc_gearbox_elem_2[11] :
+		rc_gearbox_elem_0[11]) ;
+  assign WILL_FIRE_RL_rc_rl_header = CAN_FIRE_RL_rc_rl_header ;
+
+  // rule RL_rc_rl_data_a
+  assign CAN_FIRE_RL_rc_rl_data_a =
+	     NOT_rc_gearbox_read_block_93_94_AND_NOT_rc_gea_ETC___d818 &&
+	     bridge$RDY_rc_tlps_put &&
+	     IF_rc_gearbox_read_block_93_THEN_NOT_rc_gearbo_ETC___d882 ;
+  assign WILL_FIRE_RL_rc_rl_data_a = CAN_FIRE_RL_rc_rl_data_a ;
+
+  // rule RL_rc_gearbox_sInReset_pre_isResetAssertedUpdate
+  assign CAN_FIRE_RL_rc_gearbox_sInReset_pre_isResetAssertedUpdate =
+	     rc_gearbox_sInReset_pre_isInReset ;
+  assign WILL_FIRE_RL_rc_gearbox_sInReset_pre_isResetAssertedUpdate =
+	     rc_gearbox_sInReset_pre_isInReset ;
+
+  // rule RL_rc_gearbox_dInReset_pre_isResetAssertedUpdate
+  assign CAN_FIRE_RL_rc_gearbox_dInReset_pre_isResetAssertedUpdate =
+	     rc_gearbox_dInReset_pre_isInReset ;
+  assign WILL_FIRE_RL_rc_gearbox_dInReset_pre_isResetAssertedUpdate =
+	     rc_gearbox_dInReset_pre_isInReset ;
+
+  // rule RL_rstgen_trigger
+  assign CAN_FIRE_RL_rstgen_trigger = !rstgen_init ;
+  assign WILL_FIRE_RL_rstgen_trigger = CAN_FIRE_RL_rstgen_trigger ;
+
+  // rule RL_init_state_track_reset
+  assign CAN_FIRE_RL_init_state_track_reset = 1'd1 ;
+  assign WILL_FIRE_RL_init_state_track_reset = 1'd1 ;
+
+  // rule RL_dut_prb_control_setSample
+  assign CAN_FIRE_RL_dut_prb_control_setSample =
+	     dut_prb_control_enff$FULL_N &&
+	     NOT_dut_prb_control_sampleIntervalV_3_027_CONC_ETC___d1038 ;
+  assign WILL_FIRE_RL_dut_prb_control_setSample =
+	     CAN_FIRE_RL_dut_prb_control_setSample ;
+
+  // rule RL_dut_prb_control_flagSample
+  assign CAN_FIRE_RL_dut_prb_control_flagSample =
+	     NOT_dut_prb_control_flag_042_043_AND_NOT_dut_p_ETC___d1044 &&
+	     init_state_cycle_stamp_crossed__035_EQ_dut_prb_ETC___d1037 ;
+  assign WILL_FIRE_RL_dut_prb_control_flagSample =
+	     CAN_FIRE_RL_dut_prb_control_flagSample &&
+	     !WILL_FIRE_RL_dut_prb_control_setSample ;
+
+  // rule RL_dut_prb_control_unsetFlag
+  assign CAN_FIRE_RL_dut_prb_control_unsetFlag =
+	     dut_prb_control_enff$FULL_N && dut_prb_control_flag ;
+  assign WILL_FIRE_RL_dut_prb_control_unsetFlag =
+	     CAN_FIRE_RL_dut_prb_control_unsetFlag &&
+	     !WILL_FIRE_RL_dut_prb_control_setSample ;
+
+  // rule RL_dut_prb_control_send_en
+  assign CAN_FIRE_RL_dut_prb_control_send_en = dut_prb_control_enff$EMPTY_N ;
+  assign WILL_FIRE_RL_dut_prb_control_send_en = dut_prb_control_enff$EMPTY_N ;
+
+  // rule RL_dut_prb_control_announceCclock
+  assign CAN_FIRE_RL_dut_prb_control_announceCclock = 1'b0 ;
+  assign WILL_FIRE_RL_dut_prb_control_announceCclock = 1'b0 ;
+
+  // rule RL_dut_prb_control_data_out_detect_scemi_reset
+  assign CAN_FIRE_RL_dut_prb_control_data_out_detect_scemi_reset =
+	     dut_prb_control_data_out_in_reset_uclk ;
+  assign WILL_FIRE_RL_dut_prb_control_data_out_detect_scemi_reset =
+	     dut_prb_control_data_out_in_reset_uclk ;
+
+  // rule RL_dut_prb_control_data_out_detect_end_of_scemi_reset
+  assign CAN_FIRE_RL_dut_prb_control_data_out_detect_end_of_scemi_reset =
+	     1'd1 ;
+  assign WILL_FIRE_RL_dut_prb_control_data_out_detect_end_of_scemi_reset =
+	     1'd1 ;
+
+  // rule RL_dut_prb_control_data_out_deassert_after_reset
+  assign CAN_FIRE_RL_dut_prb_control_data_out_deassert_after_reset =
+	     dut_prb_control_data_out_in_reset_uclk ;
+  assign WILL_FIRE_RL_dut_prb_control_data_out_deassert_after_reset =
+	     dut_prb_control_data_out_in_reset_uclk ;
+
+  // rule RL_dut_prb_control_data_out_update_count
+  assign CAN_FIRE_RL_dut_prb_control_data_out_update_count =
+	     !dut_prb_control_data_out_in_reset_noc &&
+	     (dut_prb_control_data_out_decr$whas ||
+	      dut_prb_control_data_out_next$dPulse) ;
+  assign WILL_FIRE_RL_dut_prb_control_data_out_update_count =
+	     CAN_FIRE_RL_dut_prb_control_data_out_update_count ;
+
+  // rule RL_dut_prb_control_data_out_initiate_reset_sequence
+  assign CAN_FIRE_RL_dut_prb_control_data_out_initiate_reset_sequence =
+	     !dut_prb_control_data_out_in_reset_noc &&
+	     dut_prb_control_data_out_starting_reset$dPulse ;
+  assign WILL_FIRE_RL_dut_prb_control_data_out_initiate_reset_sequence =
+	     CAN_FIRE_RL_dut_prb_control_data_out_initiate_reset_sequence ;
+
+  // rule RL_dut_prb_control_data_out_handle_scemi_reset
+  assign CAN_FIRE_RL_dut_prb_control_data_out_handle_scemi_reset =
+	     dut_prb_control_data_out_in_reset_noc ;
+  assign WILL_FIRE_RL_dut_prb_control_data_out_handle_scemi_reset =
+	     dut_prb_control_data_out_in_reset_noc ;
+
+  // rule RL_dut_prb_control_data_out_complete_reset_sequence
+  assign CAN_FIRE_RL_dut_prb_control_data_out_complete_reset_sequence =
+	     dut_prb_control_data_out_in_reset_noc &&
+	     dut_prb_control_data_out_ending_reset$dPulse ;
+  assign WILL_FIRE_RL_dut_prb_control_data_out_complete_reset_sequence =
+	     CAN_FIRE_RL_dut_prb_control_data_out_complete_reset_sequence ;
+
+  // rule RL_dut_prb_control_data_out_pok_mkConnectionVtoAf
+  assign CAN_FIRE_RL_dut_prb_control_data_out_pok_mkConnectionVtoAf = 1'd1 ;
+  assign WILL_FIRE_RL_dut_prb_control_data_out_pok_mkConnectionVtoAf = 1'd1 ;
+
+  // rule RL_dut_prb_control_respondToPing
+  assign CAN_FIRE_RL_dut_prb_control_respondToPing =
+	     dut_prb_control_data_out_next$sRDY &&
+	     init_state_msgFIFO$sFULL_N &&
+	     dut_prb_control_data_out_ok_40_AND_NOT_init_st_ETC___d948 &&
+	     dut_prb_control_count == 16'd0 &&
+	     dut_prb_control_pinged ;
+  assign WILL_FIRE_RL_dut_prb_control_respondToPing =
+	     CAN_FIRE_RL_dut_prb_control_respondToPing &&
+	     !WILL_FIRE_RL_dut_prb_control_receiveTrigger ;
+
+  // rule RL_dut_prb_control_sendAck
+  assign CAN_FIRE_RL_dut_prb_control_sendAck =
+	     dut_prb_control_data_out_next$sRDY &&
+	     init_state_msgFIFO$sFULL_N &&
+	     dut_prb_control_data_out_ok_40_AND_NOT_init_st_ETC___d948 &&
+	     dut_prb_control_ackFifo$EMPTY_N &&
+	     dut_prb_control_count == 16'd0 &&
+	     !dut_prb_control_pinged ;
+  assign WILL_FIRE_RL_dut_prb_control_sendAck =
+	     CAN_FIRE_RL_dut_prb_control_sendAck &&
+	     !WILL_FIRE_RL_dut_prb_control_receiveTrigger ;
+
+  // rule RL_dut_prb_control_control_in_detect_scemi_reset
+  assign CAN_FIRE_RL_dut_prb_control_control_in_detect_scemi_reset =
+	     dut_prb_control_control_in_in_reset_uclk ;
+  assign WILL_FIRE_RL_dut_prb_control_control_in_detect_scemi_reset =
+	     dut_prb_control_control_in_in_reset_uclk ;
+
+  // rule RL_dut_prb_control_control_in_detect_end_of_scemi_reset
+  assign CAN_FIRE_RL_dut_prb_control_control_in_detect_end_of_scemi_reset =
+	     1'd1 ;
+  assign WILL_FIRE_RL_dut_prb_control_control_in_detect_end_of_scemi_reset =
+	     1'd1 ;
+
+  // rule RL_dut_prb_control_control_in_deassert_after_reset
+  assign CAN_FIRE_RL_dut_prb_control_control_in_deassert_after_reset =
+	     dut_prb_control_control_in_in_reset_uclk ;
+  assign WILL_FIRE_RL_dut_prb_control_control_in_deassert_after_reset =
+	     dut_prb_control_control_in_in_reset_uclk ;
+
+  // rule RL_dut_prb_control_control_in_data_ready
+  assign CAN_FIRE_RL_dut_prb_control_control_in_data_ready =
+	     dut_prb_control_control_in_status == 2'd1 &&
+	     dut_prb_control_control_in_buffer_full_sp$dPulse ;
+  assign WILL_FIRE_RL_dut_prb_control_control_in_data_ready =
+	     CAN_FIRE_RL_dut_prb_control_control_in_data_ready ;
+
+  // rule RL_dut_prb_control_control_in_port_reset
+  assign CAN_FIRE_RL_dut_prb_control_control_in_port_reset =
+	     dut_prb_control_control_in_wait_sp$sRDY &&
+	     dut_prb_control_control_in_status == 2'd3 &&
+	     dut_prb_control_control_in_buffer_empty_sp$dPulse ;
+  assign WILL_FIRE_RL_dut_prb_control_control_in_port_reset =
+	     CAN_FIRE_RL_dut_prb_control_control_in_port_reset ;
+
+  // rule RL_dut_prb_control_control_in_handle_scemi_reset
+  assign CAN_FIRE_RL_dut_prb_control_control_in_handle_scemi_reset =
+	     dut_prb_control_control_in_in_reset_noc ;
+  assign WILL_FIRE_RL_dut_prb_control_control_in_handle_scemi_reset =
+	     dut_prb_control_control_in_in_reset_noc ;
+
+  // rule RL_dut_prb_control_control_in_complete_reset_sequence
+  assign CAN_FIRE_RL_dut_prb_control_control_in_complete_reset_sequence =
+	     dut_prb_control_control_in_in_reset_noc &&
+	     dut_prb_control_control_in_ending_reset$dPulse ;
+  assign WILL_FIRE_RL_dut_prb_control_control_in_complete_reset_sequence =
+	     CAN_FIRE_RL_dut_prb_control_control_in_complete_reset_sequence ;
+
+  // rule RL_dut_prb_control_control_in_update_remaining
+  assign CAN_FIRE_RL_dut_prb_control_control_in_update_remaining =
+	     IF_dut_prb_control_control_in_got_beat_pw_whas_ETC___d987 &&
+	     !dut_prb_control_control_in_in_reset_noc &&
+	     (dut_prb_control_control_in_got_beat_pw$whas ||
+	      dut_prb_control_control_in_next_sp$dPulse ||
+	      dut_prb_control_control_in_wait_sp$dPulse) ;
+  assign WILL_FIRE_RL_dut_prb_control_control_in_update_remaining =
+	     CAN_FIRE_RL_dut_prb_control_control_in_update_remaining ;
+
+  // rule RL_dut_prb_control_control_in_initiate_reset_sequence
+  assign CAN_FIRE_RL_dut_prb_control_control_in_initiate_reset_sequence =
+	     !dut_prb_control_control_in_in_reset_noc &&
+	     dut_prb_control_control_in_starting_reset$dPulse ;
+  assign WILL_FIRE_RL_dut_prb_control_control_in_initiate_reset_sequence =
+	     CAN_FIRE_RL_dut_prb_control_control_in_initiate_reset_sequence ;
+
+  // rule RL_dut_prb_control_control_in_receive_ready
+  assign CAN_FIRE_RL_dut_prb_control_control_in_receive_ready =
+	     dut_prb_control_control_in_requestF_rv &&
+	     !dut_prb_control_control_in_dataF_rv[17] ;
+  assign WILL_FIRE_RL_dut_prb_control_control_in_receive_ready =
+	     CAN_FIRE_RL_dut_prb_control_control_in_receive_ready ;
+
+  // rule RL_dut_prb_control_control_in_first_request
+  assign CAN_FIRE_RL_dut_prb_control_control_in_first_request =
+	     dut_prb_control_control_in_next_sp$sRDY &&
+	     dut_prb_control_control_in_wait_sp$sRDY &&
+	     dut_prb_control_control_in_status == 2'd0 &&
+	     CAN_FIRE_RL_dut_prb_control_control_in_receive_ready ;
+  assign WILL_FIRE_RL_dut_prb_control_control_in_first_request =
+	     CAN_FIRE_RL_dut_prb_control_control_in_first_request ;
+
+  // rule RL_dut_prb_control_control_in_receive
+  assign CAN_FIRE_RL_dut_prb_control_control_in_receive =
+	     dut_prb_control_control_in_status == 2'd2 &&
+	     dut_prb_control_control_in_requestF_rv &&
+	     !dut_prb_control_control_in_dataF_rv[17] ;
+  assign WILL_FIRE_RL_dut_prb_control_control_in_receive =
+	     CAN_FIRE_RL_dut_prb_control_control_in_receive ;
+
+  // rule RL_dut_prb_control_requestInput
+  assign CAN_FIRE_RL_dut_prb_control_requestInput =
+	     !dut_prb_control_control_in_requestF_rv$port1__read ;
+  assign WILL_FIRE_RL_dut_prb_control_requestInput =
+	     CAN_FIRE_RL_dut_prb_control_requestInput ;
+
+  // rule RL_dut_prb_control_receiveControl
+  assign CAN_FIRE_RL_dut_prb_control_receiveControl =
+	     dut_prb_control_control_in_dataF_rv$port1__read[17] &&
+	     (dut_prb_control_control_in_dataF_rv$port1__read[15:13] !=
+	      3'd0 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] !=
+	      3'd1 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] !=
+	      3'd2 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] !=
+	      3'd3 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] !=
+	      3'd4 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] !=
+	      3'd5 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] !=
+	      3'd6 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[12:0] ==
+	      13'h1FFF ||
+	      dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1115) ;
+  assign WILL_FIRE_RL_dut_prb_control_receiveControl =
+	     CAN_FIRE_RL_dut_prb_control_receiveControl &&
+	     !WILL_FIRE_RL_dut_prb_control_receiveTrigger &&
+	     !WILL_FIRE_RL_dut_prb_control_unsetFlag &&
+	     !WILL_FIRE_RL_dut_prb_control_setSample ;
+
+  // rule RL_dut_prb_control_control_in_read_complete
+  assign CAN_FIRE_RL_dut_prb_control_control_in_read_complete =
+	     dut_prb_control_control_in_next_sp$sRDY &&
+	     dut_prb_control_control_in_status == 2'd2 &&
+	     CAN_FIRE_RL_dut_prb_control_control_in_receive_ready ;
+  assign WILL_FIRE_RL_dut_prb_control_control_in_read_complete =
+	     CAN_FIRE_RL_dut_prb_control_control_in_read_complete ;
+
+  // rule RL_dut_prb_control_contextToPrbStr_connectData
+  assign CAN_FIRE_RL_dut_prb_control_contextToPrbStr_connectData =
+	     dut_probeHook$DATAVALID ;
+  assign WILL_FIRE_RL_dut_prb_control_contextToPrbStr_connectData =
+	     dut_probeHook$DATAVALID ;
+
+  // rule RL_dut_prb_control_dutclkctrl_pconnect_mkConnectionVtoAf
+  assign CAN_FIRE_RL_dut_prb_control_dutclkctrl_pconnect_mkConnectionVtoAf =
+	     1'd1 ;
+  assign WILL_FIRE_RL_dut_prb_control_dutclkctrl_pconnect_mkConnectionVtoAf =
+	     1'd1 ;
+
+  // rule RL_dut_prb_control_dutclkctrl_nconnect_mkConnectionVtoAf
+  assign CAN_FIRE_RL_dut_prb_control_dutclkctrl_nconnect_mkConnectionVtoAf =
+	     1'd1 ;
+  assign WILL_FIRE_RL_dut_prb_control_dutclkctrl_nconnect_mkConnectionVtoAf =
+	     1'd1 ;
+
+  // rule RL_dut_prb_control_contextToPrbStr_connectCommitAck
+  assign CAN_FIRE_RL_dut_prb_control_contextToPrbStr_connectCommitAck =
+	     dut_prb_control_prb_str$FULL_N ;
+  assign WILL_FIRE_RL_dut_prb_control_contextToPrbStr_connectCommitAck =
+	     dut_prb_control_prb_str$FULL_N ;
+
+  // rule RL_dut_prb_control_receiveTrigger
+  assign CAN_FIRE_RL_dut_prb_control_receiveTrigger =
+	     dut_prb_control_data_out_next$sRDY &&
+	     init_state_msgFIFO$sFULL_N &&
+	     dut_prb_control_data_out_ok_40_AND_NOT_init_st_ETC___d948 &&
+	     dut_prb_control_enff$FULL_N &&
+	     dut_prb_control_prb_str$EMPTY_N &&
+	     dut_prb_control_count == 16'd0 &&
+	     dut_prb_control_prb_str$D_OUT[15:3] == 13'd8191 ;
+  assign WILL_FIRE_RL_dut_prb_control_receiveTrigger =
+	     CAN_FIRE_RL_dut_prb_control_receiveTrigger &&
+	     !WILL_FIRE_RL_dut_prb_control_unsetFlag &&
+	     !WILL_FIRE_RL_dut_prb_control_setSample ;
+
+  // rule RL_dut_prb_control_receiveFirstData
+  assign CAN_FIRE_RL_dut_prb_control_receiveFirstData =
+	     dut_prb_control_data_out_next_RDY_send__171_AN_ETC___d1208 &&
+	     dut_prb_control_count == 16'd0 ;
+  assign WILL_FIRE_RL_dut_prb_control_receiveFirstData =
+	     CAN_FIRE_RL_dut_prb_control_receiveFirstData &&
+	     !WILL_FIRE_RL_dut_prb_control_sendAck &&
+	     !WILL_FIRE_RL_dut_prb_control_respondToPing &&
+	     !WILL_FIRE_RL_dut_prb_control_receiveTrigger ;
+
+  // rule RL_dut_prb_control_receiveMoreData
+  assign CAN_FIRE_RL_dut_prb_control_receiveMoreData =
+	     dut_prb_control_data_out_next_RDY_send__171_AN_ETC___d1208 &&
+	     dut_prb_control_count != 16'd0 ;
+  assign WILL_FIRE_RL_dut_prb_control_receiveMoreData =
+	     CAN_FIRE_RL_dut_prb_control_receiveMoreData ;
+
+  // rule RL_scan_output_ports
+  assign CAN_FIRE_RL_scan_output_ports = 1'd1 ;
+  assign WILL_FIRE_RL_scan_output_ports = 1'd1 ;
+
+  // rule RL_dut_prb_control_data_out_setOK
+  assign CAN_FIRE_RL_dut_prb_control_data_out_setOK =
+	     dut_prb_control_data_out_finished$dPulse ;
+  assign WILL_FIRE_RL_dut_prb_control_data_out_setOK =
+	     dut_prb_control_data_out_finished$dPulse ;
+
+  // rule RL_dut_prb_control_prb_str_recv_doEnq
+  assign CAN_FIRE_RL_dut_prb_control_prb_str_recv_doEnq =
+	     dut_prb_control_prb_str$FULL_N && dut_probeHook$DATAVALID ;
+  assign WILL_FIRE_RL_dut_prb_control_prb_str_recv_doEnq =
+	     CAN_FIRE_RL_dut_prb_control_prb_str_recv_doEnq ;
+
+  // rule RL_xcomms_rx_inpipe_detect_scemi_reset
+  assign CAN_FIRE_RL_xcomms_rx_inpipe_detect_scemi_reset =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_passReset ;
+  assign WILL_FIRE_RL_xcomms_rx_inpipe_detect_scemi_reset =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_passReset ;
+
+  // rule RL_xcomms_rx_inpipe_passReset
+  assign CAN_FIRE_RL_xcomms_rx_inpipe_passReset =
+	     !xcomms_rx_inpipe_reset_uclk_done1 ;
+  assign WILL_FIRE_RL_xcomms_rx_inpipe_passReset =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_passReset ;
+
+  // rule RL_xcomms_rx_inpipe_consumer_handle_msg
+  assign CAN_FIRE_RL_xcomms_rx_inpipe_consumer_handle_msg =
+	     xcomms_rx_inpipe_data_info_fifo$dEMPTY_N &&
+	     xcomms_rx_inpipe_reset_uclk_done2 ;
+  assign WILL_FIRE_RL_xcomms_rx_inpipe_consumer_handle_msg =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_consumer_handle_msg ;
+
+  // rule RL_xcomms_rx_inpipe_send_credit_message
+  assign CAN_FIRE_RL_xcomms_rx_inpipe_send_credit_message =
+	     xcomms_rx_inpipe_credit_fifo$sFULL_N &&
+	     xcomms_rx_inpipe_reset_uclk_done2 &&
+	     (xcomms_rx_inpipe_send_underflow ||
+	      xcomms_rx_inpipe_credits$Q_OUT == 16'd1024 ||
+	      xcomms_rx_inpipe_consume_timer$Q_OUT == 4'd0 &&
+	      xcomms_rx_inpipe_credits$Q_OUT != 16'd0 &&
+	      xcomms_rx_inpipe_send_credit_request) ;
+  assign WILL_FIRE_RL_xcomms_rx_inpipe_send_credit_message =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_send_credit_message ;
+
+  // rule RL_xcomms_rx_inpipe_tick_timer
+  assign CAN_FIRE_RL_xcomms_rx_inpipe_tick_timer =
+	     xcomms_rx_inpipe_consume_timer$Q_OUT != 4'd0 ;
+  assign WILL_FIRE_RL_xcomms_rx_inpipe_tick_timer =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_tick_timer ;
+
+  // rule RL_xcomms_rx_inpipe_take_completed_element
+  assign CAN_FIRE_RL_xcomms_rx_inpipe_take_completed_element =
+	     xcomms_rx_inpipe_in_fifo$sFULL_N &&
+	     !xcomms_rx_inpipe_in_reset_noc &&
+	     xcomms_rx_inpipe_ecount != 16'd0 &&
+	     xcomms_rx_inpipe_mimo_rDataCount >= 4'd7 ;
+  assign WILL_FIRE_RL_xcomms_rx_inpipe_take_completed_element =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_take_completed_element ;
+
+  // rule RL_xcomms_rx_inpipe_initiate_reset_sequence
+  assign CAN_FIRE_RL_xcomms_rx_inpipe_initiate_reset_sequence =
+	     !xcomms_rx_inpipe_in_reset_noc &&
+	     xcomms_rx_inpipe_starting_reset$dPulse ;
+  assign WILL_FIRE_RL_xcomms_rx_inpipe_initiate_reset_sequence =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_initiate_reset_sequence ;
+
+  // rule RL_xcomms_rx_inpipe_drain_credit_fifo
+  assign CAN_FIRE_RL_xcomms_rx_inpipe_drain_credit_fifo =
+	     xcomms_rx_inpipe_credit_fifo$dEMPTY_N &&
+	     xcomms_rx_inpipe_in_reset_noc ;
+  assign WILL_FIRE_RL_xcomms_rx_inpipe_drain_credit_fifo =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_drain_credit_fifo ;
+
+  // rule RL_xcomms_rx_inpipe_complete_reset_sequence
+  assign CAN_FIRE_RL_xcomms_rx_inpipe_complete_reset_sequence =
+	     xcomms_rx_inpipe_in_reset_noc &&
+	     xcomms_rx_inpipe_ending_reset$dPulse ;
+  assign WILL_FIRE_RL_xcomms_rx_inpipe_complete_reset_sequence =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_complete_reset_sequence ;
+
+  // rule RL_xcomms_rx_inpipe_drain_data_info_fifo
+  assign CAN_FIRE_RL_xcomms_rx_inpipe_drain_data_info_fifo =
+	     xcomms_rx_inpipe_data_info_fifo$dEMPTY_N &&
+	     !xcomms_rx_inpipe_reset_uclk_done2 ;
+  assign WILL_FIRE_RL_xcomms_rx_inpipe_drain_data_info_fifo =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_drain_data_info_fifo ;
+
+  // rule RL_xcomms_rx_inpipe_drain_in_fifo
+  assign CAN_FIRE_RL_xcomms_rx_inpipe_drain_in_fifo =
+	     xcomms_rx_inpipe_in_fifo$dEMPTY_N &&
+	     !xcomms_rx_inpipe_reset_uclk_done2 ;
+  assign WILL_FIRE_RL_xcomms_rx_inpipe_drain_in_fifo =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_drain_in_fifo ;
+
+  // rule RL_xcomms_rx_inpipe_reset_uclock_side
+  assign CAN_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side =
+	     xcomms_rx_inpipe_reset_uclk_done1 &&
+	     !xcomms_rx_inpipe_reset_uclk_done2 &&
+	     !xcomms_rx_inpipe_data_info_fifo$dEMPTY_N &&
+	     !xcomms_rx_inpipe_in_fifo$dEMPTY_N ;
+  assign WILL_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side ;
+
+  // rule RL_xcomms_rx_inpipe_mimo_update
+  assign CAN_FIRE_RL_xcomms_rx_inpipe_mimo_update =
+	     b__h82149 != 4'd0 || value__h94016 != 4'd0 ;
+  assign WILL_FIRE_RL_xcomms_rx_inpipe_mimo_update =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_mimo_update ;
+
+  // rule RL_xcomms_rx_connect_res_mkConnectionGetPut
+  assign CAN_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut =
+	     IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_270_4_ETC___d1432 !=
+	     32'd0 &&
+	     xcomms_rx_res_fifo_ff$FULL_N ;
+  assign WILL_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut =
+	     CAN_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut ;
+
+  // rule RL_xcomms_rx_inpipe_update_inpipe_consumer_state
+  assign CAN_FIRE_RL_xcomms_rx_inpipe_update_inpipe_consumer_state =
+	     xcomms_rx_inpipe_reset_uclk_done2 ;
+  assign WILL_FIRE_RL_xcomms_rx_inpipe_update_inpipe_consumer_state =
+	     xcomms_rx_inpipe_reset_uclk_done2 ;
+
+  // rule RL_xcomms_rx_inpipe_move_elem
+  assign CAN_FIRE_RL_xcomms_rx_inpipe_move_elem =
+	     xcomms_rx_inpipe_in_fifo$dEMPTY_N &&
+	     (xcomms_rx_inpipe_elem_count != 16'd0 ||
+	      xcomms_rx_inpipe_in_fifo$dEMPTY_N) &&
+	     xcomms_rx_inpipe_elem_count != 16'd1 &&
+	     xcomms_rx_inpipe_reset_uclk_done2 ;
+  assign WILL_FIRE_RL_xcomms_rx_inpipe_move_elem =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_move_elem ;
+
+  // rule RL_xcomms_rx_inpipe_update_elem_count
+  assign CAN_FIRE_RL_xcomms_rx_inpipe_update_elem_count =
+	     xcomms_rx_inpipe_reset_uclk_done2 ;
+  assign WILL_FIRE_RL_xcomms_rx_inpipe_update_elem_count =
+	     xcomms_rx_inpipe_reset_uclk_done2 ;
+
+  // rule RL_xcomms_tx_outpipe_detect_scemi_reset
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_detect_scemi_reset =
+	     xcomms_tx_outpipe_in_reset_uclk ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_detect_scemi_reset =
+	     xcomms_tx_outpipe_in_reset_uclk ;
+
+  // rule RL_xcomms_tx_outpipe_detect_end_of_scemi_reset
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_detect_end_of_scemi_reset = 1'd1 ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_detect_end_of_scemi_reset = 1'd1 ;
+
+  // rule RL_xcomms_tx_outpipe_shift_elements_out_of_buffer
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_shift_elements_out_of_buffer =
+	     xcomms_tx_outpipe_indata_mimo_rDataCount != 2'd0 &&
+	     xcomms_tx_outpipe_out_fifo$sFULL_N &&
+	     !xcomms_tx_outpipe_in_reset_uclk ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_shift_elements_out_of_buffer =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_shift_elements_out_of_buffer ;
+
+  // rule RL_xcomms_tx_outpipe_transfer_element_data
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_transfer_element_data =
+	     xcomms_tx_outpipe_out_fifo$dEMPTY_N &&
+	     !xcomms_tx_outpipe_in_reset_noc &&
+	     xcomms_tx_outpipe_noc_buf_bytes == 16'd0 ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_transfer_element_data =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_transfer_element_data ;
+
+  // rule RL_xcomms_tx_outpipe_remove_taken_beat
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_remove_taken_beat =
+	     !xcomms_tx_outpipe_in_reset_noc &&
+	     xcomms_tx_outpipe_noc_buf_bytes != 16'd0 &&
+	     xcomms_tx_outpipe_data_beat_taken$whas ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_remove_taken_beat =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_remove_taken_beat ;
+
+  // rule RL_xcomms_tx_outpipe_initiate_reset_sequence
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_initiate_reset_sequence =
+	     !xcomms_tx_outpipe_in_reset_noc &&
+	     xcomms_tx_outpipe_starting_reset$dPulse ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_initiate_reset_sequence =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_initiate_reset_sequence ;
+
+  // rule RL_xcomms_tx_outpipe_handle_returned_credits
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits =
+	     xcomms_tx_outpipe_credit_fifo$dEMPTY_N &&
+	     !xcomms_tx_outpipe_in_reset_uclk &&
+	     xcomms_tx_outpipe_data_info_fifo$sFULL_N ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits ;
+
+  // rule RL_xcomms_tx_outpipe_nocEnqCreditMsg
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_nocEnqCreditMsg =
+	     xcomms_tx_outpipe_credit_fifo$sFULL_N &&
+	     (xcomms_tx_outpipe_nocUnderFlow ||
+	      xcomms_tx_outpipe_creditTimer$Q_OUT == 3'd0 &&
+	      xcomms_tx_outpipe_nocCredits != 16'd0) ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_nocEnqCreditMsg =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_nocEnqCreditMsg &&
+	     !WILL_FIRE_RL_xcomms_tx_outpipe_nocHandleCreditMsg ;
+
+  // rule RL_xcomms_tx_outpipe_tickCreditTimer
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_tickCreditTimer =
+	     xcomms_tx_outpipe_creditTimer$Q_OUT != 3'd0 ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_tickCreditTimer =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_tickCreditTimer ;
+
+  // rule RL_xcomms_tx_outpipe_nocHandleCreditMsg
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_nocHandleCreditMsg =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb &&
+	     !fFromBridgeBeat_ifc_rStorage[31] &&
+	     fFromBridgeBeat_ifc_rStorage[27:16] == 12'd0 ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_nocHandleCreditMsg =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_nocHandleCreditMsg ;
+
+  // rule RL_xcomms_tx_outpipe_drain_data_info_fifo
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_drain_data_info_fifo =
+	     xcomms_tx_outpipe_data_info_fifo$dEMPTY_N &&
+	     xcomms_tx_outpipe_in_reset_noc ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_drain_data_info_fifo =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_drain_data_info_fifo ;
+
+  // rule RL_xcomms_tx_outpipe_drain_out_fifo
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_drain_out_fifo =
+	     xcomms_tx_outpipe_out_fifo$dEMPTY_N &&
+	     xcomms_tx_outpipe_in_reset_noc ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_drain_out_fifo =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_drain_out_fifo ;
+
+  // rule RL_xcomms_tx_outpipe_reset_noc_side
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_reset_noc_side =
+	     xcomms_tx_outpipe_in_reset_noc ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_reset_noc_side =
+	     xcomms_tx_outpipe_in_reset_noc ;
+
+  // rule RL_xcomms_tx_outpipe_complete_reset_sequence
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_complete_reset_sequence =
+	     xcomms_tx_outpipe_in_reset_noc &&
+	     xcomms_tx_outpipe_ending_reset$dPulse ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_complete_reset_sequence =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_complete_reset_sequence ;
+
+  // rule RL_xcomms_tx_outpipe_drain_credit_fifo
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_drain_credit_fifo =
+	     xcomms_tx_outpipe_credit_fifo$dEMPTY_N &&
+	     xcomms_tx_outpipe_in_reset_uclk ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_drain_credit_fifo =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_drain_credit_fifo ;
+
+  // rule RL_xcomms_tx_outpipe_reset_uclock_side
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side =
+	     xcomms_tx_outpipe_in_reset_uclk &&
+	     !xcomms_tx_outpipe_credit_fifo$dEMPTY_N ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side ;
+
+  // rule RL_xcomms_tx_connect_res_mkConnectionGetPut
+  assign CAN_FIRE_RL_xcomms_tx_connect_res_mkConnectionGetPut =
+	     ((xcomms_tx_outpipe_in_reset_uclk_473_OR_xcomms__ETC___d1765 ||
+	       !xcomms_tx_outpipe_data_info_fifo$sFULL_N) ?
+		32'd0 :
+		{ 16'd0, xcomms_tx_outpipe_credits }) !=
+	     32'd0 &&
+	     xcomms_tx_res_fifo_ff$EMPTY_N ;
+  assign WILL_FIRE_RL_xcomms_tx_connect_res_mkConnectionGetPut =
+	     CAN_FIRE_RL_xcomms_tx_connect_res_mkConnectionGetPut ;
+
+  // rule RL_xcomms_tx_outpipe_update_output_buffer
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_update_output_buffer =
+	     (IF_xcomms_tx_outpipe_add_to_output_buffer_whas_ETC___d1535 ==
+	      16'd0 ||
+	      xcomms_tx_outpipe_indata_mimo_rDataCount < 2'd2) &&
+	     !xcomms_tx_outpipe_in_reset_uclk ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_update_output_buffer =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_update_output_buffer ;
+
+  // rule RL_xcomms_tx_outpipe_update_producer_state
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_update_producer_state =
+	     IF_xcomms_tx_outpipe_updates_from_msg_whas__59_ETC___d1636 &&
+	     !xcomms_tx_outpipe_in_reset_uclk ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_update_producer_state ;
+
+  // rule RL_xcomms_tx_outpipe_register_flush_request
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_register_flush_request =
+	     !xcomms_tx_outpipe_in_reset_uclk &&
+	     xcomms_tx_outpipe_flush_done$whas ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_register_flush_request =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_register_flush_request ;
+
+  // rule RL_xcomms_tx_outpipe_indata_mimo_update
+  assign CAN_FIRE_RL_xcomms_tx_outpipe_indata_mimo_update =
+	     b__h101935 != 2'd0 || value__h104874 != 2'd0 ||
+	     CAN_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side ;
+  assign WILL_FIRE_RL_xcomms_tx_outpipe_indata_mimo_update =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_indata_mimo_update ;
+
+  // rule RL_clockGenerators_track_reset
+  assign CAN_FIRE_RL_clockGenerators_track_reset = !x1__h61520 ;
+  assign WILL_FIRE_RL_clockGenerators_track_reset =
+	     CAN_FIRE_RL_clockGenerators_track_reset ;
+
+  // rule RL_clockGenerators_stall_one_to_one_cclock
+  assign CAN_FIRE_RL_clockGenerators_stall_one_to_one_cclock = 1'd1 ;
+  assign WILL_FIRE_RL_clockGenerators_stall_one_to_one_cclock = 1'd1 ;
+
+  // rule RL_clockGenerators_incr_cycle_stamp
+  assign CAN_FIRE_RL_clockGenerators_incr_cycle_stamp = 1'b0 ;
+  assign WILL_FIRE_RL_clockGenerators_incr_cycle_stamp = 1'b0 ;
+
+  // rule RL_clockGenerators_one_to_one_cclock_incr
+  assign CAN_FIRE_RL_clockGenerators_one_to_one_cclock_incr = 1'b0 ;
+  assign WILL_FIRE_RL_clockGenerators_one_to_one_cclock_incr = 1'b0 ;
+
+  // rule RL_fFromBridgeBeat_ifc_update
+  assign CAN_FIRE_RL_fFromBridgeBeat_ifc_update = 1'd1 ;
+  assign WILL_FIRE_RL_fFromBridgeBeat_ifc_update = 1'd1 ;
+
+  // rule RL_fToContinueBeat_ifc_update
+  assign CAN_FIRE_RL_fToContinueBeat_ifc_update = 1'd1 ;
+  assign WILL_FIRE_RL_fToContinueBeat_ifc_update = 1'd1 ;
+
+  // rule RL_fS1OutPortAcks_ifc_update
+  assign CAN_FIRE_RL_fS1OutPortAcks_ifc_update = 1'd1 ;
+  assign WILL_FIRE_RL_fS1OutPortAcks_ifc_update = 1'd1 ;
+
+  // rule RL_fFromContinueBeat_ifc_update
+  assign CAN_FIRE_RL_fFromContinueBeat_ifc_update = 1'd1 ;
+  assign WILL_FIRE_RL_fFromContinueBeat_ifc_update = 1'd1 ;
+
+  // rule RL_fS1MsgOut_ifc_update
+  assign CAN_FIRE_RL_fS1MsgOut_ifc_update = 1'd1 ;
+  assign WILL_FIRE_RL_fS1MsgOut_ifc_update = 1'd1 ;
+
+  // rule RL_fS2MsgOut_ifc_update
+  assign CAN_FIRE_RL_fS2MsgOut_ifc_update = 1'd1 ;
+  assign WILL_FIRE_RL_fS2MsgOut_ifc_update = 1'd1 ;
+
+  // inputs to muxes for submodule ports
+  assign MUX_cc_gearbox_block0$_write_1__SEL_1 =
+	     WILL_FIRE_RL_cc_rl_header && !cc_gearbox_write_block ;
+  assign MUX_cc_gearbox_block1$_write_1__SEL_1 =
+	     WILL_FIRE_RL_cc_rl_header && cc_gearbox_write_block ;
+  assign MUX_dut_prb_control_control_in_remaining$write_1__SEL_1 =
+	     WILL_FIRE_RL_dut_prb_control_control_in_update_remaining &&
+	     (dut_prb_control_control_in_got_beat_pw$whas ||
+	      dut_prb_control_control_in_wait_sp$dPulse) ;
+  assign MUX_dut_prb_control_control_in_status$_write_1__SEL_1 =
+	     WILL_FIRE_RL_dut_prb_control_control_in_port_reset ||
+	     WILL_FIRE_RL_dut_prb_control_control_in_first_request ;
+  assign MUX_dut_prb_control_data_out_beats$_write_1__SEL_1 =
+	     WILL_FIRE_RL_dut_prb_control_receiveMoreData ||
+	     WILL_FIRE_RL_dut_prb_control_receiveFirstData ||
+	     WILL_FIRE_RL_dut_prb_control_receiveTrigger ;
+  assign MUX_dut_prb_control_enff$enq_1__SEL_1 =
+	     WILL_FIRE_RL_dut_prb_control_receiveControl &&
+	     (dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd0 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd1 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd2 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd4 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd5 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd6 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[12:0] !=
+	      13'h1FFF) &&
+	     (dut_prb_control_control_in_dataF_rv$port1__read[9:0] ==
+	      10'd1023 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] !=
+	      3'd3 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[12] ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] !=
+	      2'd2) ;
+  assign MUX_dut_prb_control_enff$enq_1__SEL_3 =
+	     WILL_FIRE_RL_dut_prb_control_unsetFlag ||
+	     WILL_FIRE_RL_dut_prb_control_setSample ;
+  assign MUX_dut_prb_control_nextSample$write_1__SEL_1 =
+	     WILL_FIRE_RL_dut_prb_control_unsetFlag &&
+	     { dut_prb_control_sampleIntervalV_3,
+	       dut_prb_control_sampleIntervalV_2,
+	       dut_prb_control_sampleIntervalV_1,
+	       dut_prb_control_sampleIntervalV } !=
+	     32'd0 ;
+  assign MUX_dut_prb_control_nextSample$write_1__SEL_2 =
+	     WILL_FIRE_RL_dut_prb_control_receiveControl &&
+	     dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1138 ;
+  assign MUX_dut_prb_control_pinged$write_1__SEL_3 =
+	     WILL_FIRE_RL_dut_prb_control_receiveControl &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] != 3'd0 &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] != 3'd1 &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] != 3'd2 &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] != 3'd3 &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] != 3'd4 &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] != 3'd5 &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] != 3'd6 &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[12:0] ==
+	     13'h1FFF ;
+  assign MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__SEL_1 =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header &&
+	     fFromBridgeBeat_ifc_rStorage[31:30] == 2'd3 ;
+  assign MUX_fS2MsgOut_ifc_rwEnqCount$wset_1__SEL_1 =
+	     WILL_FIRE_RL_send_outpipe_data_message &&
+	     !IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682 ;
+  assign MUX_fToBridgeBeat$enq_1__SEL_1 =
+	     WILL_FIRE_RL_msg_source_noc_active_continue_other ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other ;
+  assign MUX_fToBridgeBeat$enq_1__SEL_2 =
+	     WILL_FIRE_RL_msg_source_noc_active_continue_scemi1 ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 ;
+  assign MUX_fToBridgeBeat$enq_1__SEL_3 =
+	     WILL_FIRE_RL_msg_source_noc_active_continue_scemi2 ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 ;
+  assign MUX_fToContinueBeat_ifc_rwEnqCount$wset_1__SEL_1 =
+	     WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb &&
+	     fFromBridgeBeat_ifc_rStorage[31:26] != 6'b101010 &&
+	     fFromBridgeBeat_ifc_rStorage[31:26] != 6'b101011 ;
+  assign MUX_rDecodeSceMi$write_1__SEL_1 =
+	     WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb &&
+	     (fFromBridgeBeat_ifc_rStorage[31:26] == 6'b101010 ||
+	      fFromBridgeBeat_ifc_rStorage[31:26] == 6'b101011) ;
+  assign MUX_rInMsgBytes$write_1__SEL_2 =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ||
+	     WILL_FIRE_RL_msg_sink_noc_active_other_process_other_data ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_disregard_packet ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_disregard_packet ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_inport_data ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header ;
+  assign MUX_rOtherMsgOut$write_1__SEL_3 =
+	     WILL_FIRE_RL_msg_source_noc_inactive ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 ;
+  assign MUX_rOutMsgBytes$write_1__SEL_4 =
+	     WILL_FIRE_RL_msg_source_noc_active_continue_scemi2 ||
+	     WILL_FIRE_RL_msg_source_noc_active_continue_scemi1 ||
+	     WILL_FIRE_RL_msg_source_noc_active_continue_other ;
+  assign MUX_rS1BitsRem$write_1__SEL_1 =
+	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
+	     (!rS1BitsRem_537_ULE_32___d2570 ||
+	      !rS1OutMsgSize_532_ULE_4___d2572) ;
+  assign MUX_rS1MsgInIsAck$write_1__SEL_1 =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header &&
+	     (fFromBridgeBeat_ifc_rStorage[31:30] == 2'd0 ||
+	      fFromBridgeBeat_ifc_rStorage[31:30] == 2'd3) ;
+  assign MUX_rS1MsgOutDataReq$write_1__SEL_1 =
+	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
+	     rS1OutMsgSize_532_ULE_4___d2572 &&
+	     rS1BitsRem_537_ULE_32___d2570 ;
+  assign MUX_rS1MsgOutReqReq$write_1__SEL_1 =
+	     WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message ||
+	     WILL_FIRE_RL_msg_source_noc_inactive ;
+  assign MUX_rS1OutDataHeader$write_1__SEL_1 =
+	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
+	     rS1OutMsgSize_532_ULE_4___d2572 &&
+	     !rS1BitsRem_537_ULE_32___d2570 ;
+  assign MUX_rS2MsgOutCredGrant$write_1__SEL_2 =
+	     WILL_FIRE_RL_send_outpipe_data_message &&
+	     !IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682 &&
+	     _0_CONCAT_IF_rS2OutMsgBytes_667_ULE_4_668_THEN__ETC___d2674 &&
+	     rS2OutBytes == 32'd0 ;
+  assign MUX_rS2MsgOutCredGrant$write_1__SEL_3 =
+	     WILL_FIRE_RL_send_outpipe_data_header &&
+	     value__h299103[7:0] == 8'd0 ;
+  assign MUX_rS2OutBytes$write_1__SEL_2 =
+	     WILL_FIRE_RL_send_outpipe_data_header &&
+	     value__h299103[7:0] != 8'd0 ;
+  assign MUX_rS2SendOutDataHdr$write_1__SEL_2 =
+	     WILL_FIRE_RL_send_outpipe_data_message &&
+	     !IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682 &&
+	     _0_CONCAT_IF_rS2OutMsgBytes_667_ULE_4_668_THEN__ETC___d2674 &&
+	     rS2OutBytes != 32'd0 ;
+  assign MUX_rSceMi1MsgIn$write_1__SEL_2 =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_disregard_packet ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_inport_data ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header ;
+  assign MUX_rSceMi1MsgOut$write_1__SEL_3 =
+	     WILL_FIRE_RL_msg_source_noc_inactive ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other ;
+  assign MUX_rSceMi2MsgIn$write_1__SEL_2 =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_disregard_packet ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb ;
+  assign MUX_rSceMi2MsgOut$write_1__SEL_3 =
+	     WILL_FIRE_RL_msg_source_noc_inactive ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other ;
+  assign MUX_rc_gearbox_elem0_status_0$_write_1__SEL_1 =
+	     WILL_FIRE_RL_rc_rl_g_to_gearbox_pad_odd_tail &&
+	     !rc_gearbox_write_block ;
+  assign MUX_rc_gearbox_elem1_status_0$_write_1__SEL_1 =
+	     WILL_FIRE_RL_rc_rl_g_to_gearbox_pad_odd_tail &&
+	     rc_gearbox_write_block ;
+  assign MUX_rc_gearbox_elem_0$_write_1__SEL_1 =
+	     WILL_FIRE_RL_rc_rl_g_to_gearbox &&
+	     (rc_rg_in_packet || rc_in_buf$D_OUT[11]) ;
+  assign MUX_rc_gearbox_write_block$write_1__SEL_1 =
+	     WILL_FIRE_RL_rc_rl_g_to_gearbox_pad_odd_tail &&
+	     (rc_gearbox_write_block &&
+	      !rc_gearbox_elem1_status_0__read__02_EQ_rc_gear_ETC___d703 ||
+	      !rc_gearbox_write_block &&
+	      !rc_gearbox_elem0_status_0__read__91_EQ_rc_gear_ETC___d692) ;
+  assign MUX_rq_gearbox_block0$_write_1__SEL_1 =
+	     WILL_FIRE_RL_rq_rl_header && !rq_gearbox_write_block ;
+  assign MUX_rq_gearbox_block0$_write_1__SEL_2 =
+	     WILL_FIRE_RL_rq_rl_data_a && !rq_gearbox_write_block ;
+  assign MUX_rq_gearbox_block0$_write_1__SEL_3 =
+	     WILL_FIRE_RL_rq_rl_data_b && !rq_gearbox_write_block ;
+  assign MUX_rq_gearbox_block0$_write_1__SEL_4 =
+	     WILL_FIRE_RL_rq_rl_data_c && !rq_gearbox_write_block ;
+  assign MUX_rq_gearbox_block1$_write_1__SEL_1 =
+	     WILL_FIRE_RL_rq_rl_header && rq_gearbox_write_block ;
+  assign MUX_rq_gearbox_block1$_write_1__SEL_2 =
+	     WILL_FIRE_RL_rq_rl_data_a && rq_gearbox_write_block ;
+  assign MUX_rq_gearbox_block1$_write_1__SEL_3 =
+	     WILL_FIRE_RL_rq_rl_data_b && rq_gearbox_write_block ;
+  assign MUX_rq_gearbox_block1$_write_1__SEL_4 =
+	     WILL_FIRE_RL_rq_rl_data_c && rq_gearbox_write_block ;
+  assign MUX_xcomms_rx_inpipe_ecount$write_1__SEL_2 =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb &&
+	     fFromBridgeBeat_ifc_rStorage[31] &&
+	     fFromBridgeBeat_ifc_rStorage[27:16] == 12'd0 ;
+  assign MUX_xcomms_rx_inpipe_elems$write_1__SEL_1 =
+	     WILL_FIRE_RL_xcomms_rx_inpipe_move_elem &&
+	     xcomms_rx_inpipe_elem_count == 16'd0 ;
+  assign MUX_xcomms_rx_inpipe_elems$write_1__SEL_2 =
+	     WILL_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut &&
+	     xcomms_rx_inpipe_reset_uclk_done2 &&
+	     (xcomms_rx_inpipe_elem_count == 16'd1 ||
+	      !xcomms_rx_inpipe_elem_count_397_ULT_xcomms_rx__ETC___d1428) ;
+  assign MUX_xcomms_rx_inpipe_send_credit_request$write_1__SEL_1 =
+	     xcomms_rx_inpipe_reset_uclk_done2 &&
+	     (CAN_FIRE_RL_xcomms_rx_inpipe_consumer_handle_msg &&
+	      xcomms_rx_inpipe_updates_from_msg$wget[2] ||
+	      MUX_xcomms_rx_inpipe_elems$write_1__SEL_2 &&
+	      xcomms_rx_inpipe_updates_from_ifc$wget[1]) ;
+  assign MUX_xcomms_rx_inpipe_send_underflow$write_1__SEL_1 =
+	     xcomms_rx_inpipe_reset_uclk_done2 &&
+	     MUX_xcomms_rx_inpipe_elems$write_1__SEL_2 &&
+	     xcomms_rx_inpipe_updates_from_ifc$wget[0] ;
+  assign MUX_xcomms_tx_outpipe_elem_count$write_1__SEL_1 =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state &&
+	     (CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits &&
+	      xcomms_tx_outpipe_updates_from_msg$wget[1] ||
+	      xcomms_tx_outpipe_updates_from_ifc_whas__596_A_ETC___d1612 ||
+	      xcomms_tx_outpipe_add_to_output_buffer$whas &&
+	      xcomms_tx_outpipe_updates_from_ifc$wget[0] ||
+	      NOT_xcomms_tx_outpipe_elem_count_622_EQ_0_623__ETC___d1665) ;
+  assign MUX_xcomms_tx_outpipe_nocAutoFlush$write_1__SEL_1 =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_nocHandleCreditMsg &&
+	     xcomms_tx_outpipe_creditMsg$wget[0] ;
+  assign MUX_xcomms_tx_outpipe_nocUnderFlow$write_1__SEL_1 =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_nocHandleCreditMsg &&
+	     xcomms_tx_outpipe_creditMsg$wget[1] ;
+  assign MUX_bridge$cq_tlps_put_1__VAL_1 =
+	     { 1'd1,
+	       cq_f_cq_rv[102:99] == 4'd0 || cq_f_cq_rv[102:99] == 4'd2 ||
+	       cq_f_cq_rv[98:88] == 11'd1,
+	       tlp16_hit__h12769,
+	       tlp16_be__h12770,
+	       tlp16_data__h12771 } ;
+  assign MUX_bridge$cq_tlps_put_1__VAL_2 =
+	     { 1'd1,
+	       cq_f_cq_rv[102:99] == 4'd0 || cq_f_cq_rv[102:99] == 4'd2 ||
+	       cq_f_cq_rv[98:88] == 11'd1,
+	       tlp16_hit__h12769,
+	       tlp16_be__h12770,
+	       tlp16_data__h14163 } ;
+  assign MUX_bridge$cq_tlps_put_1__VAL_3 =
+	     { 9'd128, tlp16_be__h15414, tlp16_data__h15415 } ;
+  assign MUX_bridge$cq_tlps_put_1__VAL_4 =
+	     { 1'd0, cq_rg_dwcount == 11'd4, 23'd65535, tlp16_data__h18063 } ;
+  assign MUX_bridge$rc_tlps_put_1__VAL_1 =
+	     { 1'd1,
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[42:32] ==
+	       11'd0 ||
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[42:32] ==
+	       11'd1,
+	       7'd1,
+	       tlp16_be__h56408,
+	       tlp16_data__h56409 } ;
+  assign MUX_bridge$rc_tlps_put_1__VAL_2 =
+	     { 1'd0,
+	       rc_rg_dwcount <= 11'd4,
+	       7'd0,
+	       tlp16_be__h57884,
+	       tlp16_data__h57885 } ;
+  assign MUX_cc_gearbox_block0$_write_1__VAL_1 =
+	     { n_data__h25027,
+	       2'b11,
+	       cc_f_tlps_rv[151],
+	       n_data__h26079,
+	       3'd6 } ;
+  assign MUX_cc_gearbox_block0$_write_1__VAL_2 =
+	     { n_data__h26663,
+	       n_keep__h26664,
+	       cc_rg_dwcount <= 11'd4,
+	       n_data__h28057,
+	       n_keep__h28058,
+	       cc_rg_dwcount_67_ULE_2___d377 } ;
+  assign MUX_cc_rg_dwcount$write_1__VAL_1 = x__h23764 - 11'd1 ;
+  assign MUX_cc_rg_dwcount$write_1__VAL_2 =
+	     (cc_rg_dwcount < 11'd4) ? 11'd0 : cc_rg_dwcount - 11'd4 ;
+  assign MUX_cq_gearbox_elem_0$_write_1__VAL_1 =
+	     cq_gearbox_write_block ?
+	       cq_gearbox_elem_0 :
+	       (cq_gearbox_elem0_status_0__read__6_EQ_cq_gearb_ETC___d37 ?
+		  cq_in_buf$D_OUT :
+		  cq_gearbox_elem_0) ;
+  assign MUX_cq_gearbox_elem_0$_write_1__VAL_2 =
+	     cq_gearbox_write_block ?
+	       cq_gearbox_elem_0 :
+	       { data__h9680,
+		 !cq_gearbox_elem0_status_0__read__6_EQ_cq_gearb_ETC___d37 &&
+		 cq_gearbox_elem_0[11],
+		 !cq_gearbox_elem0_status_0__read__6_EQ_cq_gearb_ETC___d37 &&
+		 cq_gearbox_elem_0[10],
+		 cq_gearbox_elem0_status_0__read__6_EQ_cq_gearb_ETC___d37 ?
+		   10'd0 :
+		   cq_gearbox_elem_0[9:0] } ;
+  assign MUX_cq_gearbox_elem_1$_write_1__VAL_1 =
+	     cq_gearbox_write_block ?
+	       cq_gearbox_elem_1 :
+	       IF_cq_gearbox_elem0_status_1__read__2_EQ_cq_ge_ETC___d69 ;
+  assign MUX_cq_gearbox_elem_1$_write_1__VAL_2 =
+	     cq_gearbox_write_block ?
+	       cq_gearbox_elem_1 :
+	       { data__h9778,
+		 (!cq_gearbox_elem0_status_1__read__2_EQ_cq_gearb_ETC___d34 ||
+		  cq_gearbox_elem0_status_0__read__6_EQ_cq_gearb_ETC___d37) &&
+		 cq_gearbox_elem_1[11],
+		 NOT_cq_gearbox_elem0_status_1__read__2_EQ_cq_g_ETC___d108 } ;
+  assign MUX_cq_gearbox_elem_2$_write_1__VAL_1 =
+	     cq_gearbox_write_block ?
+	       (cq_gearbox_elem1_status_0__read__7_EQ_cq_gearb_ETC___d48 ?
+		  cq_in_buf$D_OUT :
+		  cq_gearbox_elem_2) :
+	       cq_gearbox_elem_2 ;
+  assign MUX_cq_gearbox_elem_2$_write_1__VAL_2 =
+	     cq_gearbox_write_block ?
+	       { data__h10545,
+		 !cq_gearbox_elem1_status_0__read__7_EQ_cq_gearb_ETC___d48 &&
+		 cq_gearbox_elem_2[11],
+		 !cq_gearbox_elem1_status_0__read__7_EQ_cq_gearb_ETC___d48 &&
+		 cq_gearbox_elem_2[10],
+		 cq_gearbox_elem1_status_0__read__7_EQ_cq_gearb_ETC___d48 ?
+		   10'd0 :
+		   cq_gearbox_elem_2[9:0] } :
+	       cq_gearbox_elem_2 ;
+  assign MUX_cq_gearbox_elem_3$_write_1__VAL_1 =
+	     cq_gearbox_write_block ?
+	       IF_cq_gearbox_elem1_status_1__read__3_EQ_cq_ge_ETC___d76 :
+	       cq_gearbox_elem_3 ;
+  assign MUX_cq_gearbox_elem_3$_write_1__VAL_2 =
+	     cq_gearbox_write_block ?
+	       { data__h10621,
+		 (!cq_gearbox_elem1_status_1__read__3_EQ_cq_gearb_ETC___d45 ||
+		  cq_gearbox_elem1_status_0__read__7_EQ_cq_gearb_ETC___d48) &&
+		 cq_gearbox_elem_3[11],
+		 NOT_cq_gearbox_elem1_status_1__read__3_EQ_cq_g_ETC___d131 } :
+	       cq_gearbox_elem_3 ;
+  assign MUX_cq_rg_dwcount$write_1__VAL_1 = cq_f_cq_rv[98:88] - 11'd1 ;
+  assign MUX_cq_rg_dwcount$write_1__VAL_2 = cq_rg_dwcount - 11'd4 ;
+  assign MUX_cq_rg_pad_odd_tail$write_1__VAL_1 =
+	     cq_in_buf$D_OUT[10] && cq_rg_even_enq ;
+  assign MUX_dut_prb_control_control_in_remaining$write_1__VAL_1 =
+	     !dut_prb_control_control_in_got_beat_pw$whas ||
+	     dut_prb_control_control_in_remaining - 1'd1 ;
+  assign MUX_dut_prb_control_count$write_1__VAL_2 =
+	     dut_prb_control_count - 16'd1 ;
+  assign MUX_dut_prb_control_data_out_beats$_write_1__VAL_3 =
+	     { CASE_dut_prb_control_ackFifoD_OUT_BITS_31_TO__ETC__q4,
+	       dut_prb_control_ackFifo$D_OUT[15:0] } ;
+  assign MUX_dut_prb_control_data_out_count$write_1__VAL_1 =
+	     !dut_prb_control_data_out_decr$whas ||
+	     dut_prb_control_data_out_count - 1'd1 ;
+  assign MUX_dut_prb_control_enff$enq_1__VAL_1 =
+	     (dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 &&
+	      !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
+	      2'd2 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] ==
+	      10'd1023) ?
+	       19'd221178 :
+	       { IF_dut_prb_control_control_in_dataF_rv_port1___ETC___d1134,
+		 dut_prb_control_control_in_dataF_rv$port1__read[16] ?
+		   3'd2 :
+		   3'd1 } ;
+  assign MUX_dut_prb_control_enff$enq_1__VAL_2 =
+	     { CASE_dut_prb_control_prb_strD_OUT_BITS_31_TO__ETC__q5,
+	       dut_prb_control_prb_str$D_OUT[2:0] } ;
+  assign MUX_dut_prb_control_nextSample$write_1__VAL_1 =
+	     init_state_cycle_stamp +
+	     { 32'd0,
+	       dut_prb_control_sampleIntervalV_3,
+	       dut_prb_control_sampleIntervalV_2,
+	       dut_prb_control_sampleIntervalV_1,
+	       dut_prb_control_sampleIntervalV } ;
+  assign MUX_fS1MsgOut_ifc_rwEnqCount$wset_1__VAL_1 =
+	     rS1OutMsgIsCont ? 6'd8 : 6'd16 ;
+  assign MUX_fS1MsgOut_ifc_rwEnqData$wset_1__VAL_1 =
+	     { 86'd1048576, rS1RequestedPort, 32'hA8040100 } ;
+  assign MUX_fS1MsgOut_ifc_rwEnqData$wset_1__VAL_2 =
+	     { 96'd0, dut_prb_control_data_out_beats } ;
+  assign MUX_fS1MsgOut_ifc_rwEnqData$wset_1__VAL_3 =
+	     { IF_rS1OutMsgIsCont_531_THEN_2_CONCAT_rS1BitsRe_ETC___d2548,
+	       rS1BitsRem[5:0],
+	       rS1OutPort,
+	       8'd168,
+	       rS1OutMsgSize,
+	       16'd256 } ;
+  assign MUX_fS1MsgOut_ifc_rwEnqMask$wset_1__VAL_1 =
+	     rS1OutMsgIsCont ?
+	       128'h0000000000000000FFFFFFFFFFFFFFFF :
+	       128'hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ;
+  assign MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__VAL_2 =
+	     { 1'd0, value__h193045 } ;
+  assign MUX_fS1OutPortAcks_ifc_rwEnqData$wset_1__VAL_1 =
+	     { 120'd0, value__h194274 } ;
+  assign MUX_fS1OutPortAcks_ifc_rwEnqMask$wset_1__VAL_1 =
+	     { _1_SL_IF_fFromBridgeBeat_ifc_rStorage_817_BIT_1_ETC___d2016[13] ?
+		 10'd1023 :
+		 10'd0,
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_817_BIT_1_ETC___d2016[12] ?
+		 10'd1023 :
+		 10'd0,
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_817_BIT_1_ETC___d2016[11] ?
+		 10'd1023 :
+		 10'd0,
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_817_BIT_1_ETC___d2016[10] ?
+		 10'd1023 :
+		 10'd0,
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_817_BIT_1_ETC___d2016[9] ?
+		 10'd1023 :
+		 10'd0,
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_817_BIT_1_ETC___d2016[8] ?
+		 10'd1023 :
+		 10'd0,
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_817_BIT_1_ETC___d2016[7] ?
+		 10'd1023 :
+		 10'd0,
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_817_BIT_1_ETC___d2016[6] ?
+		 10'd1023 :
+		 10'd0,
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_817_BIT_1_ETC___d2016[5] ?
+		 10'd1023 :
+		 10'd0,
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_817_BIT_1_ETC___d2016[4] ?
+		 10'd1023 :
+		 10'd0,
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_817_BIT_1_ETC___d2016[3] ?
+		 10'd1023 :
+		 10'd0,
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_817_BIT_1_ETC___d2016[2] ?
+		 10'd1023 :
+		 10'd0,
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_817_BIT_1_ETC___d2016[1] ?
+		 10'd1023 :
+		 10'd0,
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_817_BIT_1_ETC___d2016[0] ?
+		 10'd1023 :
+		 10'd0 } ;
+  assign MUX_fS2MsgOut_ifc_rwEnqData$wset_1__VAL_1 =
+	     { 96'd0, value__h311583[31:0] } ;
+  assign MUX_fS2MsgOut_ifc_rwEnqData$wset_1__VAL_2 =
+	     { 65'd0,
+	       xcomms_rx_inpipe_credit_fifo$dD_OUT[0],
+	       2'd0,
+	       rS2InCreditIndex,
+	       xcomms_rx_inpipe_credit_fifo$dD_OUT[16:1],
+	       32'hAC040100 } ;
+  assign MUX_fS2MsgOut_ifc_rwEnqData$wset_1__VAL_3 =
+	     { 65'd1,
+	       _0_CONCAT_IF_rS2OutBytes_642_ULE_248_643_THEN_r_ETC___d2647 &&
+	       rS2OutDataOverflow,
+	       _0_CONCAT_IF_rS2OutBytes_642_ULE_248_643_THEN_r_ETC___d2647 &&
+	       rS2OutDataFlush,
+	       _0_CONCAT_IF_rS2OutBytes_642_ULE_248_643_THEN_r_ETC___d2647 &&
+	       rS2OutDataEOM,
+	       rS2OutDataIndex,
+	       24'd172,
+	       value_BITS_23_TO_16___h300396,
+	       16'd256 } ;
+  assign MUX_fToContinueBeat_ifc_rwEnqData$wset_1__VAL_1 =
+	     { 96'd0, fFromBridgeBeat_ifc_rStorage[31:0] } ;
+  assign MUX_lrS1PendingRequests$write_1__VAL_2 =
+	     lrS1PendingRequests ||
+	     dut_prb_control_control_in_next_sp$dPulse ;
+  assign MUX_rInMsgBytes$write_1__VAL_2 =
+	     rInMsgBytes_951_ULE_4___d1994 ? 8'd0 : rInMsgBytes - 8'd4 ;
+  assign MUX_rOtherMsgIn$write_1__VAL_2 =
+	     fFromBridgeBeat_ifc_rStorage[31:26] != 6'b101010 &&
+	     fFromBridgeBeat_ifc_rStorage[31:26] != 6'b101011 ;
+  assign MUX_rOutMsgBytes$write_1__VAL_4 =
+	     rOutMsgBytes_271_ULE_4___d2465 ? 8'd0 : rOutMsgBytes - 8'd4 ;
+  assign MUX_rS1BitsRem$write_1__VAL_1 = rS1BitsRem - 19'd32 ;
+  assign MUX_rS1MsgInIsAck$write_1__VAL_1 =
+	     fFromBridgeBeat_ifc_rStorage[31:30] != 2'd0 &&
+	     !rInMsgBytes_951_ULE_4___d1994 ;
+  assign MUX_rS1MsgInIsData$write_1__VAL_1 =
+	     fFromBridgeBeat_ifc_rStorage[31:30] == 2'd0 &&
+	     !rInMsgBytes_951_ULE_4___d1994 ;
+  assign MUX_rS1OutMsgSize$write_1__VAL_1 =
+	     rS1OutMsgSize_532_ULE_4___d2572 ?
+	       ((rS1BitsRem < 19'd2016) ?
+		  8'd4 + rS1BitsRem_MINUS_25_SRL_3__q6[7:0] :
+		  8'd252) :
+	       rS1OutMsgSize_532_MINUS_4___d2533 ;
+  assign MUX_rS1OutMsgSize$write_1__VAL_2 =
+	     rS1OutMsgIsCont ?
+	       rS1OutMsgSize_532_MINUS_4___d2533 :
+	       rS1OutMsgSize - 8'd12 ;
+  assign MUX_rS2InCreditIndex$write_1__VAL_2 =
+	     (rS2InCreditIndex == 12'd0) ?
+	       rS2InCreditIndex :
+	       rS2InCreditIndex + 12'd1 ;
+  assign MUX_rS2MsgInIsData$write_1__VAL_2 =
+	     fFromBridgeBeat_ifc_rStorage[31] &&
+	     !rInMsgBytes_951_ULE_4___d1994 ;
+  assign MUX_rS2NumSaved$write_1__VAL_2 =
+	     IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682 ?
+	       IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2681 :
+	       b__h310347 ;
+  assign MUX_rS2OutBytes$write_1__VAL_2 = rS2OutBytes - b__h303085 ;
+  assign MUX_rS2OutDataIndex$write_1__VAL_3 =
+	     (rS2OutDataIndex == 12'd0) ?
+	       rS2OutDataIndex :
+	       rS2OutDataIndex + 12'd1 ;
+  assign MUX_rS2OutMsgBytes$write_1__VAL_2 = rS2OutMsgBytes - b__h303293 ;
+  assign MUX_rS2SavedBytes$write_1__VAL_2 =
+	     IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682 ?
+	       bs__h303409[31:0] :
+	       value__h303530[31:0] ;
+  assign MUX_rc_gearbox_elem_0$_write_1__VAL_1 =
+	     rc_gearbox_write_block ?
+	       rc_gearbox_elem_0 :
+	       (rc_gearbox_elem0_status_0__read__91_EQ_rc_gear_ETC___d692 ?
+		  rc_in_buf$D_OUT :
+		  rc_gearbox_elem_0) ;
+  assign MUX_rc_gearbox_elem_0$_write_1__VAL_2 =
+	     rc_gearbox_write_block ?
+	       rc_gearbox_elem_0 :
+	       { data__h54158,
+		 !rc_gearbox_elem0_status_0__read__91_EQ_rc_gear_ETC___d692 &&
+		 rc_gearbox_elem_0[11],
+		 !rc_gearbox_elem0_status_0__read__91_EQ_rc_gear_ETC___d692 &&
+		 rc_gearbox_elem_0[10],
+		 rc_gearbox_elem0_status_0__read__91_EQ_rc_gear_ETC___d692 ?
+		   10'd0 :
+		   rc_gearbox_elem_0[9:0] } ;
+  assign MUX_rc_gearbox_elem_1$_write_1__VAL_1 =
+	     rc_gearbox_write_block ?
+	       rc_gearbox_elem_1 :
+	       IF_rc_gearbox_elem0_status_1__read__87_EQ_rc_g_ETC___d724 ;
+  assign MUX_rc_gearbox_elem_1$_write_1__VAL_2 =
+	     rc_gearbox_write_block ?
+	       rc_gearbox_elem_1 :
+	       { data__h54250,
+		 (!rc_gearbox_elem0_status_1__read__87_EQ_rc_gear_ETC___d689 ||
+		  rc_gearbox_elem0_status_0__read__91_EQ_rc_gear_ETC___d692) &&
+		 rc_gearbox_elem_1[11],
+		 NOT_rc_gearbox_elem0_status_1__read__87_EQ_rc__ETC___d767 } ;
+  assign MUX_rc_gearbox_elem_2$_write_1__VAL_1 =
+	     rc_gearbox_write_block ?
+	       (rc_gearbox_elem1_status_0__read__02_EQ_rc_gear_ETC___d703 ?
+		  rc_in_buf$D_OUT :
+		  rc_gearbox_elem_2) :
+	       rc_gearbox_elem_2 ;
+  assign MUX_rc_gearbox_elem_2$_write_1__VAL_2 =
+	     rc_gearbox_write_block ?
+	       { data__h55001,
+		 !rc_gearbox_elem1_status_0__read__02_EQ_rc_gear_ETC___d703 &&
+		 rc_gearbox_elem_2[11],
+		 !rc_gearbox_elem1_status_0__read__02_EQ_rc_gear_ETC___d703 &&
+		 rc_gearbox_elem_2[10],
+		 rc_gearbox_elem1_status_0__read__02_EQ_rc_gear_ETC___d703 ?
+		   10'd0 :
+		   rc_gearbox_elem_2[9:0] } :
+	       rc_gearbox_elem_2 ;
+  assign MUX_rc_gearbox_elem_3$_write_1__VAL_1 =
+	     rc_gearbox_write_block ?
+	       IF_rc_gearbox_elem1_status_1__read__98_EQ_rc_g_ETC___d731 :
+	       rc_gearbox_elem_3 ;
+  assign MUX_rc_gearbox_elem_3$_write_1__VAL_2 =
+	     rc_gearbox_write_block ?
+	       { data__h55073,
+		 (!rc_gearbox_elem1_status_1__read__98_EQ_rc_gear_ETC___d700 ||
+		  rc_gearbox_elem1_status_0__read__02_EQ_rc_gear_ETC___d703) &&
+		 rc_gearbox_elem_3[11],
+		 NOT_rc_gearbox_elem1_status_1__read__98_EQ_rc__ETC___d790 } :
+	       rc_gearbox_elem_3 ;
+  assign MUX_rc_rg_dwcount$write_1__VAL_1 =
+	     (IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[42:32] ==
+	      11'd0) ?
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[42:32] :
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[42:32] -
+	       11'd1 ;
+  assign MUX_rc_rg_dwcount$write_1__VAL_2 =
+	     (rc_rg_dwcount < 11'd4) ? 11'd0 : rc_rg_dwcount - 11'd4 ;
+  assign MUX_rc_rg_pad_odd_tail$write_1__VAL_1 =
+	     rc_in_buf$D_OUT[10] && rc_rg_even_enq ;
+  assign MUX_rq_gearbox_block0$_write_1__VAL_1 =
+	     { n_data__h36875,
+	       rq_f_tlps_rv[151] && rq_f_tlps_rv[126:125] != 2'd2,
+	       2'b11,
+	       rq_f_tlps_rv[67:64],
+	       rq_f_tlps_rv[71:68],
+	       n_data__h37167,
+	       3'd3,
+	       rq_f_tlps_rv[67:64],
+	       rq_f_tlps_rv[71:68] } ;
+  assign MUX_rq_gearbox_block0$_write_1__VAL_2 =
+	     { 67'd4,
+	       rq_rg_first_be,
+	       rq_rg_last_be,
+	       n_data__h37803,
+	       3'd5,
+	       rq_rg_first_be,
+	       rq_rg_last_be } ;
+  assign MUX_rq_gearbox_block0$_write_1__VAL_3 =
+	     { n_data__h38338,
+	       rq_rg_dwcount_53_ULE_4___d580,
+	       n_keep__h38340,
+	       rq_rg_first_be,
+	       rq_rg_last_be,
+	       n_data__h39749,
+	       rq_rg_dwcount == 11'd2,
+	       2'b11,
+	       rq_rg_first_be,
+	       rq_rg_last_be } ;
+  assign MUX_rq_gearbox_block0$_write_1__VAL_4 =
+	     { n_data__h41808,
+	       rq_rg_dwcount_53_ULE_4___d580,
+	       n_keep__h41810,
+	       rq_rg_first_be,
+	       rq_rg_last_be,
+	       n_data__h43208,
+	       rq_rg_dwcount_53_ULE_2___d607,
+	       n_keep__h43210,
+	       rq_rg_first_be,
+	       rq_rg_last_be } ;
+  assign MUX_rq_rg_dwcount$write_1__VAL_1 =
+	     (rq_f_tlps_rv[126:125] == 2'd2 ||
+	      rq_f_tlps_rv[126:125] == 2'd3) ?
+	       _theResult___snd_dwcount__h34848 :
+	       11'd0 ;
+  assign MUX_rq_rg_dwcount$write_1__VAL_2 =
+	     (rq_rg_dwcount < 11'd4) ?
+	       11'd0 :
+	       rq_rg_dwcount_53_MINUS_4___d595 ;
+  assign MUX_rq_rg_dwcount$write_1__VAL_3 =
+	     rq_rg_dwcount_53_ULE_4___d580 ?
+	       11'd0 :
+	       rq_rg_dwcount_53_MINUS_4___d595 ;
+  assign MUX_rq_rg_mdw$write_1__VAL_1 =
+	     { rq_f_tlps_rv[126:125] == 2'd2,
+	       rq_f_tlps_rv[7:0],
+	       rq_f_tlps_rv[15:8],
+	       rq_f_tlps_rv[23:16],
+	       rq_f_tlps_rv[31:24] } ;
+  assign MUX_rq_rg_mdw$write_1__VAL_3 =
+	     { !rq_rg_dwcount_53_ULE_4___d580,
+	       rq_f_tlps_rv[7:0],
+	       rq_f_tlps_rv[15:8],
+	       rq_f_tlps_rv[23:16],
+	       rq_f_tlps_rv[31:24] } ;
+  assign MUX_rvPrevMsgGrant$write_1__VAL_1 =
+	     (IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281 !=
+	      2'd0 &&
+	      IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2332) ?
+	       3'd1 :
+	       IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_168_ETC___d2385 ;
+  assign MUX_xcomms_rx_inpipe_ecount$write_1__VAL_1 =
+	     xcomms_rx_inpipe_ecount - 16'd1 ;
+  assign MUX_xcomms_rx_inpipe_elem_count$write_1__VAL_1 =
+	     (xcomms_rx_inpipe_elem_count -
+	      (MUX_xcomms_rx_inpipe_elems$write_1__SEL_2 ?
+		 b__h97042 :
+		 16'd0)) +
+	     (CAN_FIRE_RL_xcomms_rx_inpipe_move_elem ? 16'd1 : 16'd0) ;
+  assign MUX_xcomms_rx_inpipe_elems$write_1__VAL_2 =
+	     { b__h97042 <= 16'd1 &&
+	       CASE_b7042_0_xcomms_rx_inpipe_elems_BIT_56_1_0_ETC__q7,
+	       CASE_b7042_0_xcomms_rx_inpipe_elems_BITS_55_TO_ETC__q8,
+	       CASE_b7042_0_xcomms_rx_inpipe_elems_BITS_31_TO_ETC__q9 } ;
+  assign MUX_xcomms_rx_inpipe_elems_recvd$write_1__VAL_1 =
+	     xcomms_rx_inpipe_elems_recvd_294_PLUS_IF_xcomm_ETC___d1299 -
+	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__300_ETC___d1303 ;
+  assign MUX_xcomms_rx_inpipe_underflow$write_1__VAL_1 =
+	     xcomms_rx_inpipe_underflow &&
+	     IF_xcomms_rx_inpipe_updates_from_msg_whas__295_ETC___d1298 ==
+	     16'd0 &&
+	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__300_ETC___d1309 ==
+	     16'd0 ||
+	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__300_ETC___d1303 !=
+	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__300_ETC___d1309 &&
+	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__300_ETC___d1303 ==
+	     xcomms_rx_inpipe_elems_recvd_294_PLUS_IF_xcomm_ETC___d1299 ;
+  assign MUX_xcomms_tx_outpipe_active$write_1__VAL_1 =
+	     (xcomms_tx_outpipe_active ||
+	      IF_xcomms_tx_outpipe_updates_from_msg_whas__59_ETC___d1604 !=
+	      16'd0) &&
+	     (!xcomms_tx_outpipe_add_to_output_buffer$whas ||
+	      !xcomms_tx_outpipe_updates_from_ifc$wget[3]) ;
+  assign MUX_xcomms_tx_outpipe_credits$write_1__VAL_1 =
+	     xcomms_tx_outpipe_credits_581_PLUS_IF_xcomms_t_ETC___d1605 -
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1619 ;
+  assign MUX_xcomms_tx_outpipe_elem_count$write_1__VAL_1 =
+	     (CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits &&
+	      xcomms_tx_outpipe_updates_from_msg$wget[1]) ?
+	       IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1619 :
+	       IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1669 ;
+  assign MUX_xcomms_tx_outpipe_flushing$write_1__VAL_1 =
+	     xcomms_tx_outpipe_flushing_609_AND_NOT_xcomms__ETC___d1727 ||
+	     xcomms_tx_outpipe_flush_requested &&
+	     xcomms_tx_outpipe_credits_581_PLUS_IF_xcomms_t_ETC___d1605 !=
+	     16'd1024 &&
+	     !xcomms_tx_outpipe_flushing ;
+  assign MUX_xcomms_tx_outpipe_nocCredits$write_1__VAL_1 =
+	     xcomms_tx_outpipe_nocCredits +
+	     xcomms_tx_outpipe_creditMsg$wget[17:2] ;
+  assign MUX_xcomms_tx_outpipe_noc_buf$write_1__VAL_2 =
+	     { 32'd0, xcomms_tx_outpipe_noc_buf[655:32] } ;
+  assign MUX_xcomms_tx_outpipe_noc_buf_bytes$write_1__VAL_1 =
+	     xcomms_tx_outpipe_noc_buf_bytes -
+	     { 13'd0,
+	       IF_xcomms_tx_outpipe_noc_buf_bytes_ULT_4_THEN__ETC__q2[2:0] } ;
+  assign MUX_xcomms_tx_outpipe_overflow$write_1__VAL_1 =
+	     xcomms_tx_outpipe_overflow &&
+	     (!CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits ||
+	      !xcomms_tx_outpipe_updates_from_msg$wget[0]) ||
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1711 !=
+	     16'd0 &&
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1619 !=
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1711 ;
+  assign MUX_xcomms_tx_outpipe_pending_recv$write_1__VAL_1 =
+	     (xcomms_tx_outpipe_pending_recv ||
+	      CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits &&
+	      xcomms_tx_outpipe_updates_from_msg$wget[2]) &&
+	     (!CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits ||
+	      !xcomms_tx_outpipe_updates_from_msg$wget[1]) ;
+
+  // probes
+  assign dut_prb_control_data_out_okToSend$PROBE =
+	     dut_prb_control_data_out_ok_40_AND_NOT_init_st_ETC___d948 ;
+  assign dut_prb_control_data_out_okToSend$PROBE_VALID = 1'd1 ;
+  assign dut_prb_control_dutclkctrl_allowNeg$PROBE =
+	     !dut_probeHook$DELAY && !dut_prb_control_prb_str$EMPTY_N ;
+  assign dut_prb_control_dutclkctrl_allowNeg$PROBE_VALID = 1'd1 ;
+  assign dut_prb_control_dutclkctrl_allowPos$PROBE =
+	     !dut_probeHook$DELAY && !dut_prb_control_prb_str$EMPTY_N ;
+  assign dut_prb_control_dutclkctrl_allowPos$PROBE_VALID = 1'd1 ;
+
+  // inlined wires
+  assign xcomms_rx_inpipe_updates_from_msg$wget =
+	     { xcomms_rx_inpipe_data_info_fifo$dD_OUT[17:2],
+	       1'd0,
+	       xcomms_rx_inpipe_data_info_fifo$dD_OUT[1:0] } ;
+  assign xcomms_rx_inpipe_updates_from_ifc$wget =
+	     { b__h97042, 16'd1, b__h97042 != 16'd0, 1'd0 } ;
+  assign xcomms_rx_inpipe_mimo_rwEnqCount$wget = { 1'd0, value__h221710 } ;
+  assign xcomms_tx_outpipe_indata_mimo_rwEnqCount$wget =
+	     { 1'd0,
+	       IF_xcomms_tx_outpipe_add_to_output_buffer_whas_ETC___d1535[0] } ;
+  assign xcomms_tx_outpipe_indata_mimo_rwEnqCount$whas =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_update_output_buffer &&
+	     IF_xcomms_tx_outpipe_add_to_output_buffer_whas_ETC___d1535 !=
+	     16'd0 ;
+  assign xcomms_tx_outpipe_add_to_output_buffer$wget =
+	     { xcomms_tx_res_fifo_ff$D_OUT,
+	       IF_xcomms_tx_outpipe_credits_581_ULE_1_779_THE_ETC___d1780 } ;
+  assign xcomms_tx_outpipe_add_to_output_buffer$whas =
+	     WILL_FIRE_RL_xcomms_tx_connect_res_mkConnectionGetPut &&
+	     !xcomms_tx_outpipe_in_reset_uclk &&
+	     !xcomms_tx_outpipe_flushing &&
+	     !xcomms_tx_outpipe_flush_requested &&
+	     xcomms_tx_outpipe_indata_mimo_rDataCount_497_U_ETC___d1763 &&
+	     xcomms_tx_outpipe_data_info_fifo$sFULL_N ;
+  assign xcomms_tx_outpipe_updates_from_msg$wget =
+	     { xcomms_tx_outpipe_credit_fifo$dD_OUT[17:1],
+	       1'd0,
+	       xcomms_tx_outpipe_overflow &&
+	       xcomms_tx_outpipe_credits +
+	       xcomms_tx_outpipe_credit_fifo$dD_OUT[17:2] !=
+	       16'd0 } ;
+  assign xcomms_tx_outpipe_updates_from_ifc$wget =
+	     { 16'd1,
+	       IF_xcomms_tx_outpipe_credits_581_ULE_1_779_THE_ETC___d1780,
+	       IF_xcomms_tx_outpipe_credits_581_ULE_1_779_THE_ETC___d1780 !=
+	       16'd0,
+	       3'd0 } ;
+  assign xcomms_tx_outpipe_creditMsg$wget =
+	     { fFromBridgeBeat_ifc_rStorage[15:0],
+	       fFromBridgeBeat_ifc_rStorage[30:29] } ;
+  assign fFromBridgeBeat_ifc_rwDeqCount$whas =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ||
+	     WILL_FIRE_RL_msg_sink_noc_active_other_process_other_data ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_disregard_packet ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_disregard_packet ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_inport_data ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header ||
+	     WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb ;
+  assign fFromBridgeBeat_ifc_rwEnqData$wget = { 96'd0, bridge$noc_out_beat } ;
+  assign fToContinueBeat_ifc_rwEnqCount$whas =
+	     WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb &&
+	     fFromBridgeBeat_ifc_rStorage[31:26] != 6'b101010 &&
+	     fFromBridgeBeat_ifc_rStorage[31:26] != 6'b101011 ||
+	     WILL_FIRE_RL_msg_sink_noc_active_other_process_other_data ;
+  assign fToContinueBeat_ifc_rwEnqData$wget =
+	     MUX_fToContinueBeat_ifc_rwEnqCount$wset_1__SEL_1 ?
+	       MUX_fToContinueBeat_ifc_rwEnqData$wset_1__VAL_1 :
+	       fFromBridgeBeat_ifc_rStorage[127:0] ;
+  assign fS1OutPortAcks_ifc_rwEnqCount$wget =
+	     MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__SEL_1 ?
+	       MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__VAL_2 :
+	       MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__VAL_2 ;
+  assign fS1OutPortAcks_ifc_rwEnqCount$whas =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header &&
+	     fFromBridgeBeat_ifc_rStorage[31:30] == 2'd3 ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb ;
+  assign fS1OutPortAcks_ifc_rwEnqData$wget =
+	     MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__SEL_1 ?
+	       MUX_fS1OutPortAcks_ifc_rwEnqData$wset_1__VAL_1 :
+	       MUX_fS1OutPortAcks_ifc_rwEnqData$wset_1__VAL_1 ;
+  assign fS1OutPortAcks_ifc_rwEnqMask$wget =
+	     MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__SEL_1 ?
+	       MUX_fS1OutPortAcks_ifc_rwEnqMask$wset_1__VAL_1 :
+	       MUX_fS1OutPortAcks_ifc_rwEnqMask$wset_1__VAL_1 ;
+  always@(WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header or
+	  MUX_fS1MsgOut_ifc_rwEnqCount$wset_1__VAL_1 or
+	  WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data or
+	  WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header:
+	  fS1MsgOut_ifc_rwEnqCount$wget =
+	      MUX_fS1MsgOut_ifc_rwEnqCount$wset_1__VAL_1;
+      WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data:
+	  fS1MsgOut_ifc_rwEnqCount$wget = 6'd4;
+      WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message:
+	  fS1MsgOut_ifc_rwEnqCount$wget = 6'd8;
+      default: fS1MsgOut_ifc_rwEnqCount$wget =
+		   6'b101010 /* unspecified value */ ;
+    endcase
+  end
+  assign fS1MsgOut_ifc_rwEnqCount$whas =
+	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header ||
+	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data ||
+	     WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message ;
+  always@(WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message or
+	  MUX_fS1MsgOut_ifc_rwEnqData$wset_1__VAL_1 or
+	  WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data or
+	  MUX_fS1MsgOut_ifc_rwEnqData$wset_1__VAL_2 or
+	  WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header or
+	  MUX_fS1MsgOut_ifc_rwEnqData$wset_1__VAL_3)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message:
+	  fS1MsgOut_ifc_rwEnqData$wget =
+	      MUX_fS1MsgOut_ifc_rwEnqData$wset_1__VAL_1;
+      WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data:
+	  fS1MsgOut_ifc_rwEnqData$wget =
+	      MUX_fS1MsgOut_ifc_rwEnqData$wset_1__VAL_2;
+      WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header:
+	  fS1MsgOut_ifc_rwEnqData$wget =
+	      MUX_fS1MsgOut_ifc_rwEnqData$wset_1__VAL_3;
+      default: fS1MsgOut_ifc_rwEnqData$wget =
+		   128'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA /* unspecified value */ ;
+    endcase
+  end
+  assign fS1MsgOut_ifc_rwEnqData$whas =
+	     WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message ||
+	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data ||
+	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header ;
+  always@(WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header or
+	  MUX_fS1MsgOut_ifc_rwEnqMask$wset_1__VAL_1 or
+	  WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data or
+	  WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header:
+	  fS1MsgOut_ifc_rwEnqMask$wget =
+	      MUX_fS1MsgOut_ifc_rwEnqMask$wset_1__VAL_1;
+      WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data:
+	  fS1MsgOut_ifc_rwEnqMask$wget =
+	      128'h000000000000000000000000FFFFFFFF;
+      WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message:
+	  fS1MsgOut_ifc_rwEnqMask$wget =
+	      128'h0000000000000000FFFFFFFFFFFFFFFF;
+      default: fS1MsgOut_ifc_rwEnqMask$wget =
+		   128'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA /* unspecified value */ ;
+    endcase
+  end
+  assign fS2MsgOut_ifc_rwEnqCount$wget =
+	     MUX_fS2MsgOut_ifc_rwEnqCount$wset_1__SEL_1 ? 6'd4 : 6'd8 ;
+  assign fS2MsgOut_ifc_rwEnqCount$whas =
+	     WILL_FIRE_RL_send_outpipe_data_message &&
+	     !IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682 ||
+	     WILL_FIRE_RL_send_outpipe_data_header ||
+	     WILL_FIRE_RL_start_inpipe_credit_request ;
+  always@(MUX_fS2MsgOut_ifc_rwEnqCount$wset_1__SEL_1 or
+	  MUX_fS2MsgOut_ifc_rwEnqData$wset_1__VAL_1 or
+	  WILL_FIRE_RL_start_inpipe_credit_request or
+	  MUX_fS2MsgOut_ifc_rwEnqData$wset_1__VAL_2 or
+	  WILL_FIRE_RL_send_outpipe_data_header or
+	  MUX_fS2MsgOut_ifc_rwEnqData$wset_1__VAL_3)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_fS2MsgOut_ifc_rwEnqCount$wset_1__SEL_1:
+	  fS2MsgOut_ifc_rwEnqData$wget =
+	      MUX_fS2MsgOut_ifc_rwEnqData$wset_1__VAL_1;
+      WILL_FIRE_RL_start_inpipe_credit_request:
+	  fS2MsgOut_ifc_rwEnqData$wget =
+	      MUX_fS2MsgOut_ifc_rwEnqData$wset_1__VAL_2;
+      WILL_FIRE_RL_send_outpipe_data_header:
+	  fS2MsgOut_ifc_rwEnqData$wget =
+	      MUX_fS2MsgOut_ifc_rwEnqData$wset_1__VAL_3;
+      default: fS2MsgOut_ifc_rwEnqData$wget =
+		   128'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA /* unspecified value */ ;
+    endcase
+  end
+  assign fS2MsgOut_ifc_rwEnqData$whas =
+	     WILL_FIRE_RL_send_outpipe_data_message &&
+	     !IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682 ||
+	     WILL_FIRE_RL_start_inpipe_credit_request ||
+	     WILL_FIRE_RL_send_outpipe_data_header ;
+  assign fS2MsgOut_ifc_rwEnqMask$wget =
+	     MUX_fS2MsgOut_ifc_rwEnqCount$wset_1__SEL_1 ?
+	       128'h000000000000000000000000FFFFFFFF :
+	       128'h0000000000000000FFFFFFFFFFFFFFFF ;
+  assign rc_gearbox_pwEnqueue$whas =
+	     WILL_FIRE_RL_rc_rl_g_to_gearbox &&
+	     (rc_rg_in_packet || rc_in_buf$D_OUT[11]) ||
+	     WILL_FIRE_RL_rc_rl_g_to_gearbox_pad_odd_tail ;
+  assign rc_gearbox_pwDequeue$whas =
+	     WILL_FIRE_RL_rc_rl_data_a || WILL_FIRE_RL_rc_rl_header ;
+  assign dut_prb_control_data_out_decr$whas =
+	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
+	     rS1OutPort == 10'd0 &&
+	     dut_prb_control_data_out_count ;
+  assign dut_prb_control_control_in_got_beat_pw$whas =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_inport_data &&
+	     rS1InPortNum == 10'd0 &&
+	     dut_prb_control_control_in_remaining ;
+  assign xcomms_tx_outpipe_data_beat_taken$whas =
+	     WILL_FIRE_RL_send_outpipe_data_message &&
+	     (rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_ULE__ETC___d2671 ||
+	      !_0_CONCAT_IF_rS2OutMsgBytes_667_ULE_4_668_THEN__ETC___d2674) &&
+	     xcomms_tx_outpipe_noc_buf_bytes != 16'd0 ;
+  assign xcomms_tx_outpipe_flush_done$whas =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state &&
+	     xcomms_tx_outpipe_updates_from_ifc_whas__596_A_ETC___d1659 ;
+  assign cq_f_cq_rv$EN_port0__write =
+	     WILL_FIRE_RL_cq_rl_data_4 || WILL_FIRE_RL_cq_rl_data_1_to_3 ||
+	     WILL_FIRE_RL_cq_rl_data_0 ||
+	     WILL_FIRE_RL_cq_rl_rd_header ||
+	     WILL_FIRE_RL_cq_rl_wr_header ;
+  assign cq_f_cq_rv$port1__read =
+	     cq_f_cq_rv$EN_port0__write ?
+	       153'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       cq_f_cq_rv ;
+  assign cq_f_cq_rv$port1__write_1 =
+	     { 1'd1,
+	       IF_cq_gearbox_read_block_34_THEN_cq_gearbox_el_ETC___d173 } ;
+  assign cq_f_cq_rv$port2__read =
+	     CAN_FIRE_RL_cq_rl_slowclock ?
+	       cq_f_cq_rv$port1__write_1 :
+	       cq_f_cq_rv$port1__read ;
+  assign cc_f_tlps_rv$EN_port0__write =
+	     WILL_FIRE_RL_cc_rl_data || WILL_FIRE_RL_cc_rl_header ;
+  assign cc_f_tlps_rv$port1__read =
+	     cc_f_tlps_rv$EN_port0__write ?
+	       154'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       cc_f_tlps_rv ;
+  assign cc_f_tlps_rv$port1__write_1 = { 1'd1, bridge$cc_tlps_get } ;
+  assign cc_f_tlps_rv$port2__read =
+	     CAN_FIRE_RL_cc_rl_get_tlps ?
+	       cc_f_tlps_rv$port1__write_1 :
+	       cc_f_tlps_rv$port1__read ;
+  assign rq_f_tlps_rv$EN_port0__write =
+	     WILL_FIRE_RL_rq_rl_data_c || WILL_FIRE_RL_rq_rl_data_b ||
+	     WILL_FIRE_RL_rq_rl_header ;
+  assign rq_f_tlps_rv$port1__read =
+	     rq_f_tlps_rv$EN_port0__write ?
+	       154'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA :
+	       rq_f_tlps_rv ;
+  assign rq_f_tlps_rv$port1__write_1 = { 1'd1, bridge$rq_tlps_get } ;
+  assign rq_f_tlps_rv$port2__read =
+	     CAN_FIRE_RL_rq_rl_get_tlps ?
+	       rq_f_tlps_rv$port1__write_1 :
+	       rq_f_tlps_rv$port1__read ;
+  assign dut_prb_control_control_in_requestF_rv$port1__read =
+	     !CAN_FIRE_RL_dut_prb_control_control_in_receive &&
+	     dut_prb_control_control_in_requestF_rv ;
+  assign dut_prb_control_control_in_dataF_rv$port0__write_1 =
+	     { 1'd1,
+	       dut_prb_control_control_in_scemiInportBeats[16],
+	       CASE_dut_prb_control_control_in_scemiInportBea_ETC__q10 } ;
+  assign dut_prb_control_control_in_dataF_rv$port1__read =
+	     CAN_FIRE_RL_dut_prb_control_control_in_receive ?
+	       dut_prb_control_control_in_dataF_rv$port0__write_1 :
+	       dut_prb_control_control_in_dataF_rv ;
+  assign dut_prb_control_control_in_dataF_rv$port2__read =
+	     WILL_FIRE_RL_dut_prb_control_receiveControl ?
+	       18'd43690 :
+	       dut_prb_control_control_in_dataF_rv$port1__read ;
+
+  // register cc_f_tlps_rv
+  assign cc_f_tlps_rv$D_IN = cc_f_tlps_rv$port2__read ;
+  assign cc_f_tlps_rv$EN = 1'b1 ;
+
+  // register cc_gearbox_block0
+  assign cc_gearbox_block0$D_IN =
+	     MUX_cc_gearbox_block0$_write_1__SEL_1 ?
+	       MUX_cc_gearbox_block0$_write_1__VAL_1 :
+	       MUX_cc_gearbox_block0$_write_1__VAL_2 ;
+  assign cc_gearbox_block0$EN =
+	     WILL_FIRE_RL_cc_rl_header && !cc_gearbox_write_block ||
+	     WILL_FIRE_RL_cc_rl_data && !cc_gearbox_write_block ;
+
+  // register cc_gearbox_block0_status
+  assign cc_gearbox_block0_status$D_IN = !cc_gearbox_block0_status ;
+  assign cc_gearbox_block0_status$EN =
+	     _dor1cc_gearbox_block0_status$EN__write &&
+	     !cc_gearbox_write_block ;
+
+  // register cc_gearbox_block1
+  assign cc_gearbox_block1$D_IN =
+	     MUX_cc_gearbox_block1$_write_1__SEL_1 ?
+	       MUX_cc_gearbox_block0$_write_1__VAL_1 :
+	       MUX_cc_gearbox_block0$_write_1__VAL_2 ;
+  assign cc_gearbox_block1$EN =
+	     WILL_FIRE_RL_cc_rl_header && cc_gearbox_write_block ||
+	     WILL_FIRE_RL_cc_rl_data && cc_gearbox_write_block ;
+
+  // register cc_gearbox_block1_status
+  assign cc_gearbox_block1_status$D_IN = !cc_gearbox_block1_status ;
+  assign cc_gearbox_block1_status$EN =
+	     _dor1cc_gearbox_block1_status$EN__write &&
+	     cc_gearbox_write_block ;
+
+  // register cc_gearbox_dInReset_pre_isInReset
+  assign cc_gearbox_dInReset_pre_isInReset$D_IN = 1'd0 ;
+  assign cc_gearbox_dInReset_pre_isInReset$EN =
+	     cc_gearbox_dInReset_pre_isInReset ;
+
+  // register cc_gearbox_elem0_status_0
+  assign cc_gearbox_elem0_status_0$D_IN = cc_gearbox_block0_status ;
+  assign cc_gearbox_elem0_status_0$EN =
+	     WILL_FIRE_RL_cc_rl_fastclock && !cc_gearbox_read_block ;
+
+  // register cc_gearbox_elem0_status_1
+  assign cc_gearbox_elem0_status_1$D_IN = cc_gearbox_elem0_status_0 ;
+  assign cc_gearbox_elem0_status_1$EN =
+	     WILL_FIRE_RL_cc_rl_fastclock && !cc_gearbox_read_block ;
+
+  // register cc_gearbox_elem1_status_0
+  assign cc_gearbox_elem1_status_0$D_IN = cc_gearbox_block1_status ;
+  assign cc_gearbox_elem1_status_0$EN =
+	     WILL_FIRE_RL_cc_rl_fastclock && cc_gearbox_read_block ;
+
+  // register cc_gearbox_elem1_status_1
+  assign cc_gearbox_elem1_status_1$D_IN = cc_gearbox_elem1_status_0 ;
+  assign cc_gearbox_elem1_status_1$EN =
+	     WILL_FIRE_RL_cc_rl_fastclock && cc_gearbox_read_block ;
+
+  // register cc_gearbox_read_block
+  assign cc_gearbox_read_block$D_IN = !cc_gearbox_read_block ;
+  assign cc_gearbox_read_block$EN =
+	     WILL_FIRE_RL_cc_rl_fastclock &&
+	     (cc_gearbox_read_block &&
+	      cc_gearbox_elem1_status_0__read__15_EQ_cc_gear_ETC___d416 ||
+	      !cc_gearbox_read_block &&
+	      cc_gearbox_elem0_status_0__read__06_EQ_cc_gear_ETC___d407) ;
+
+  // register cc_gearbox_sInReset_pre_isInReset
+  assign cc_gearbox_sInReset_pre_isInReset$D_IN = 1'd0 ;
+  assign cc_gearbox_sInReset_pre_isInReset$EN =
+	     cc_gearbox_sInReset_pre_isInReset ;
+
+  // register cc_gearbox_write_block
+  assign cc_gearbox_write_block$D_IN = ~cc_gearbox_write_block ;
+  assign cc_gearbox_write_block$EN =
+	     WILL_FIRE_RL_cc_rl_data || WILL_FIRE_RL_cc_rl_header ;
+
+  // register cc_rg_dwcount
+  assign cc_rg_dwcount$D_IN =
+	     WILL_FIRE_RL_cc_rl_header ?
+	       MUX_cc_rg_dwcount$write_1__VAL_1 :
+	       MUX_cc_rg_dwcount$write_1__VAL_2 ;
+  assign cc_rg_dwcount$EN =
+	     WILL_FIRE_RL_cc_rl_header || WILL_FIRE_RL_cc_rl_data ;
+
+  // register clockGenerators_free_stamp
+  assign clockGenerators_free_stamp$D_IN = 1'd1 ;
+  assign clockGenerators_free_stamp$EN =
+	     CAN_FIRE_RL_clockGenerators_track_reset ;
+
+  // register clockGenerators_one_to_one_cclock_count
+  assign clockGenerators_one_to_one_cclock_count$D_IN =
+	     IF_clockGenerators_one_to_one_cclock_count_802_ETC___d1805 ;
+  assign clockGenerators_one_to_one_cclock_count$EN = 1'b0 ;
+
+  // register cq_f_cq_rv
+  assign cq_f_cq_rv$D_IN = cq_f_cq_rv$port2__read ;
+  assign cq_f_cq_rv$EN = 1'b1 ;
+
+  // register cq_gearbox_block0_status
+  assign cq_gearbox_block0_status$D_IN = !cq_gearbox_block0_status ;
+  assign cq_gearbox_block0_status$EN =
+	     WILL_FIRE_RL_cq_rl_slowclock && !cq_gearbox_read_block ;
+
+  // register cq_gearbox_block1_status
+  assign cq_gearbox_block1_status$D_IN = !cq_gearbox_block1_status ;
+  assign cq_gearbox_block1_status$EN =
+	     WILL_FIRE_RL_cq_rl_slowclock && cq_gearbox_read_block ;
+
+  // register cq_gearbox_dInReset_pre_isInReset
+  assign cq_gearbox_dInReset_pre_isInReset$D_IN = 1'd0 ;
+  assign cq_gearbox_dInReset_pre_isInReset$EN =
+	     cq_gearbox_dInReset_pre_isInReset ;
+
+  // register cq_gearbox_elem0_status_0
+  assign cq_gearbox_elem0_status_0$D_IN = !cq_gearbox_block0_status ;
+  assign cq_gearbox_elem0_status_0$EN =
+	     _dor1cq_gearbox_elem0_status_0$EN__write &&
+	     !cq_gearbox_write_block ;
+
+  // register cq_gearbox_elem0_status_1
+  assign cq_gearbox_elem0_status_1$D_IN = cq_gearbox_elem0_status_0 ;
+  assign cq_gearbox_elem0_status_1$EN =
+	     _dor1cq_gearbox_elem0_status_1$EN__write &&
+	     !cq_gearbox_write_block ;
+
+  // register cq_gearbox_elem1_status_0
+  assign cq_gearbox_elem1_status_0$D_IN = !cq_gearbox_block1_status ;
+  assign cq_gearbox_elem1_status_0$EN =
+	     _dor1cq_gearbox_elem1_status_0$EN__write &&
+	     cq_gearbox_write_block ;
+
+  // register cq_gearbox_elem1_status_1
+  assign cq_gearbox_elem1_status_1$D_IN = cq_gearbox_elem1_status_0 ;
+  assign cq_gearbox_elem1_status_1$EN =
+	     _dor1cq_gearbox_elem1_status_1$EN__write &&
+	     cq_gearbox_write_block ;
+
+  // register cq_gearbox_elem_0
+  assign cq_gearbox_elem_0$D_IN =
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox ?
+	       MUX_cq_gearbox_elem_0$_write_1__VAL_1 :
+	       MUX_cq_gearbox_elem_0$_write_1__VAL_2 ;
+  assign cq_gearbox_elem_0$EN =
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox ||
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox_pad_odd_tail ;
+
+  // register cq_gearbox_elem_1
+  assign cq_gearbox_elem_1$D_IN =
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox ?
+	       MUX_cq_gearbox_elem_1$_write_1__VAL_1 :
+	       MUX_cq_gearbox_elem_1$_write_1__VAL_2 ;
+  assign cq_gearbox_elem_1$EN =
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox ||
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox_pad_odd_tail ;
+
+  // register cq_gearbox_elem_2
+  assign cq_gearbox_elem_2$D_IN =
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox ?
+	       MUX_cq_gearbox_elem_2$_write_1__VAL_1 :
+	       MUX_cq_gearbox_elem_2$_write_1__VAL_2 ;
+  assign cq_gearbox_elem_2$EN =
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox ||
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox_pad_odd_tail ;
+
+  // register cq_gearbox_elem_3
+  assign cq_gearbox_elem_3$D_IN =
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox ?
+	       MUX_cq_gearbox_elem_3$_write_1__VAL_1 :
+	       MUX_cq_gearbox_elem_3$_write_1__VAL_2 ;
+  assign cq_gearbox_elem_3$EN =
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox ||
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox_pad_odd_tail ;
+
+  // register cq_gearbox_read_block
+  assign cq_gearbox_read_block$D_IN = ~cq_gearbox_read_block ;
+  assign cq_gearbox_read_block$EN = CAN_FIRE_RL_cq_rl_slowclock ;
+
+  // register cq_gearbox_sInReset_pre_isInReset
+  assign cq_gearbox_sInReset_pre_isInReset$D_IN = 1'd0 ;
+  assign cq_gearbox_sInReset_pre_isInReset$EN =
+	     cq_gearbox_sInReset_pre_isInReset ;
+
+  // register cq_gearbox_write_block
+  assign cq_gearbox_write_block$D_IN = !cq_gearbox_write_block ;
+  assign cq_gearbox_write_block$EN =
+	     _dor1cq_gearbox_write_block$EN_write &&
+	     (cq_gearbox_write_block &&
+	      !cq_gearbox_elem1_status_0__read__7_EQ_cq_gearb_ETC___d48 ||
+	      !cq_gearbox_write_block &&
+	      !cq_gearbox_elem0_status_0__read__6_EQ_cq_gearb_ETC___d37) ;
+
+  // register cq_rg_dwcount
+  always@(WILL_FIRE_RL_cq_rl_wr_header or
+	  MUX_cq_rg_dwcount$write_1__VAL_1 or
+	  WILL_FIRE_RL_cq_rl_data_4 or
+	  MUX_cq_rg_dwcount$write_1__VAL_2 or WILL_FIRE_RL_cq_rl_data_1_to_3)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_cq_rl_wr_header:
+	  cq_rg_dwcount$D_IN = MUX_cq_rg_dwcount$write_1__VAL_1;
+      WILL_FIRE_RL_cq_rl_data_4:
+	  cq_rg_dwcount$D_IN = MUX_cq_rg_dwcount$write_1__VAL_2;
+      WILL_FIRE_RL_cq_rl_data_1_to_3: cq_rg_dwcount$D_IN = 11'd0;
+      default: cq_rg_dwcount$D_IN = 11'b01010101010 /* unspecified value */ ;
+    endcase
+  end
+  assign cq_rg_dwcount$EN =
+	     WILL_FIRE_RL_cq_rl_wr_header || WILL_FIRE_RL_cq_rl_data_4 ||
+	     WILL_FIRE_RL_cq_rl_data_1_to_3 ;
+
+  // register cq_rg_even_enq
+  assign cq_rg_even_enq$D_IN =
+	     !WILL_FIRE_RL_cq_rl_g_to_gearbox || !cq_rg_even_enq ;
+  assign cq_rg_even_enq$EN =
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox ||
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox_pad_odd_tail ;
+
+  // register cq_rg_pad_odd_tail
+  assign cq_rg_pad_odd_tail$D_IN =
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox &&
+	     MUX_cq_rg_pad_odd_tail$write_1__VAL_1 ;
+  assign cq_rg_pad_odd_tail$EN =
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox ||
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox_pad_odd_tail ;
+
+  // register dut_prb_control_control_in_dataF_rv
+  assign dut_prb_control_control_in_dataF_rv$D_IN =
+	     dut_prb_control_control_in_dataF_rv$port2__read ;
+  assign dut_prb_control_control_in_dataF_rv$EN = 1'b1 ;
+
+  // register dut_prb_control_control_in_in_reset_noc
+  assign dut_prb_control_control_in_in_reset_noc$D_IN =
+	     !WILL_FIRE_RL_dut_prb_control_control_in_complete_reset_sequence ;
+  assign dut_prb_control_control_in_in_reset_noc$EN =
+	     WILL_FIRE_RL_dut_prb_control_control_in_complete_reset_sequence ||
+	     WILL_FIRE_RL_dut_prb_control_control_in_initiate_reset_sequence ;
+
+  // register dut_prb_control_control_in_in_reset_uclk
+  assign dut_prb_control_control_in_in_reset_uclk$D_IN = 1'd0 ;
+  assign dut_prb_control_control_in_in_reset_uclk$EN =
+	     dut_prb_control_control_in_in_reset_uclk ;
+
+  // register dut_prb_control_control_in_prev_reset_uclk
+  assign dut_prb_control_control_in_prev_reset_uclk$D_IN =
+	     dut_prb_control_control_in_in_reset_uclk ;
+  assign dut_prb_control_control_in_prev_reset_uclk$EN = 1'd1 ;
+
+  // register dut_prb_control_control_in_remaining
+  assign dut_prb_control_control_in_remaining$D_IN =
+	     MUX_dut_prb_control_control_in_remaining$write_1__SEL_1 &&
+	     MUX_dut_prb_control_control_in_remaining$write_1__VAL_1 ;
+  assign dut_prb_control_control_in_remaining$EN =
+	     WILL_FIRE_RL_dut_prb_control_control_in_update_remaining &&
+	     (dut_prb_control_control_in_got_beat_pw$whas ||
+	      dut_prb_control_control_in_wait_sp$dPulse) ||
+	     dut_prb_control_control_in_in_reset_noc ;
+
+  // register dut_prb_control_control_in_requestF_rv
+  assign dut_prb_control_control_in_requestF_rv$D_IN = 1'b1 ;
+  assign dut_prb_control_control_in_requestF_rv$EN = 1'b1 ;
+
+  // register dut_prb_control_control_in_scemiInportBeats
+  assign dut_prb_control_control_in_scemiInportBeats$D_IN =
+	     fFromBridgeBeat_ifc_rStorage[31:0] ;
+  assign dut_prb_control_control_in_scemiInportBeats$EN =
+	     dut_prb_control_control_in_got_beat_pw$whas ;
+
+  // register dut_prb_control_control_in_status
+  always@(MUX_dut_prb_control_control_in_status$_write_1__SEL_1 or
+	  WILL_FIRE_RL_dut_prb_control_control_in_data_ready or
+	  WILL_FIRE_RL_dut_prb_control_control_in_read_complete)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_dut_prb_control_control_in_status$_write_1__SEL_1:
+	  dut_prb_control_control_in_status$D_IN = 2'd1;
+      WILL_FIRE_RL_dut_prb_control_control_in_data_ready:
+	  dut_prb_control_control_in_status$D_IN = 2'd2;
+      WILL_FIRE_RL_dut_prb_control_control_in_read_complete:
+	  dut_prb_control_control_in_status$D_IN = 2'd3;
+      default: dut_prb_control_control_in_status$D_IN =
+		   2'b10 /* unspecified value */ ;
+    endcase
+  end
+  assign dut_prb_control_control_in_status$EN =
+	     WILL_FIRE_RL_dut_prb_control_control_in_port_reset ||
+	     WILL_FIRE_RL_dut_prb_control_control_in_first_request ||
+	     WILL_FIRE_RL_dut_prb_control_control_in_data_ready ||
+	     WILL_FIRE_RL_dut_prb_control_control_in_read_complete ;
+
+  // register dut_prb_control_count
+  assign dut_prb_control_count$D_IN =
+	     WILL_FIRE_RL_dut_prb_control_receiveFirstData ?
+	       dut_prb_control_prb_str$D_OUT[15:0] :
+	       MUX_dut_prb_control_count$write_1__VAL_2 ;
+  assign dut_prb_control_count$EN =
+	     WILL_FIRE_RL_dut_prb_control_receiveFirstData ||
+	     WILL_FIRE_RL_dut_prb_control_receiveMoreData ;
+
+  // register dut_prb_control_data_out_beats
+  always@(MUX_dut_prb_control_data_out_beats$_write_1__SEL_1 or
+	  dut_prb_control_prb_str$D_OUT or
+	  WILL_FIRE_RL_dut_prb_control_respondToPing or
+	  WILL_FIRE_RL_dut_prb_control_sendAck or
+	  MUX_dut_prb_control_data_out_beats$_write_1__VAL_3)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_dut_prb_control_data_out_beats$_write_1__SEL_1:
+	  dut_prb_control_data_out_beats$D_IN = dut_prb_control_prb_str$D_OUT;
+      WILL_FIRE_RL_dut_prb_control_respondToPing:
+	  dut_prb_control_data_out_beats$D_IN = 32'hFFFFAAAA;
+      WILL_FIRE_RL_dut_prb_control_sendAck:
+	  dut_prb_control_data_out_beats$D_IN =
+	      MUX_dut_prb_control_data_out_beats$_write_1__VAL_3;
+      default: dut_prb_control_data_out_beats$D_IN =
+		   32'hAAAAAAAA /* unspecified value */ ;
+    endcase
+  end
+  assign dut_prb_control_data_out_beats$EN =
+	     WILL_FIRE_RL_dut_prb_control_receiveMoreData ||
+	     WILL_FIRE_RL_dut_prb_control_receiveFirstData ||
+	     WILL_FIRE_RL_dut_prb_control_receiveTrigger ||
+	     WILL_FIRE_RL_dut_prb_control_respondToPing ||
+	     WILL_FIRE_RL_dut_prb_control_sendAck ;
+
+  // register dut_prb_control_data_out_count
+  assign dut_prb_control_data_out_count$D_IN =
+	     WILL_FIRE_RL_dut_prb_control_data_out_update_count &&
+	     MUX_dut_prb_control_data_out_count$write_1__VAL_1 ;
+  assign dut_prb_control_data_out_count$EN =
+	     WILL_FIRE_RL_dut_prb_control_data_out_update_count ||
+	     dut_prb_control_data_out_in_reset_noc ;
+
+  // register dut_prb_control_data_out_in_reset_noc
+  assign dut_prb_control_data_out_in_reset_noc$D_IN =
+	     !WILL_FIRE_RL_dut_prb_control_data_out_complete_reset_sequence ;
+  assign dut_prb_control_data_out_in_reset_noc$EN =
+	     WILL_FIRE_RL_dut_prb_control_data_out_complete_reset_sequence ||
+	     WILL_FIRE_RL_dut_prb_control_data_out_initiate_reset_sequence ;
+
+  // register dut_prb_control_data_out_in_reset_uclk
+  assign dut_prb_control_data_out_in_reset_uclk$D_IN = 1'd0 ;
+  assign dut_prb_control_data_out_in_reset_uclk$EN =
+	     dut_prb_control_data_out_in_reset_uclk ;
+
+  // register dut_prb_control_data_out_ok
+  assign dut_prb_control_data_out_ok$D_IN =
+	     dut_prb_control_data_out_finished$dPulse ;
+  assign dut_prb_control_data_out_ok$EN =
+	     WILL_FIRE_RL_dut_prb_control_receiveMoreData ||
+	     WILL_FIRE_RL_dut_prb_control_sendAck ||
+	     WILL_FIRE_RL_dut_prb_control_respondToPing ||
+	     WILL_FIRE_RL_dut_prb_control_receiveFirstData ||
+	     WILL_FIRE_RL_dut_prb_control_receiveTrigger ||
+	     dut_prb_control_data_out_finished$dPulse ;
+
+  // register dut_prb_control_data_out_prev_reset_uclk
+  assign dut_prb_control_data_out_prev_reset_uclk$D_IN =
+	     dut_prb_control_data_out_in_reset_uclk ;
+  assign dut_prb_control_data_out_prev_reset_uclk$EN = 1'd1 ;
+
+  // register dut_prb_control_flag
+  assign dut_prb_control_flag$D_IN = !WILL_FIRE_RL_dut_prb_control_unsetFlag ;
+  assign dut_prb_control_flag$EN =
+	     WILL_FIRE_RL_dut_prb_control_unsetFlag ||
+	     WILL_FIRE_RL_dut_prb_control_flagSample ;
+
+  // register dut_prb_control_nextSample
+  always@(MUX_dut_prb_control_nextSample$write_1__SEL_1 or
+	  MUX_dut_prb_control_nextSample$write_1__VAL_1 or
+	  MUX_dut_prb_control_nextSample$write_1__SEL_2 or
+	  WILL_FIRE_RL_dut_prb_control_setSample)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_dut_prb_control_nextSample$write_1__SEL_1:
+	  dut_prb_control_nextSample$D_IN =
+	      MUX_dut_prb_control_nextSample$write_1__VAL_1;
+      MUX_dut_prb_control_nextSample$write_1__SEL_2:
+	  dut_prb_control_nextSample$D_IN =
+	      MUX_dut_prb_control_nextSample$write_1__VAL_1;
+      WILL_FIRE_RL_dut_prb_control_setSample:
+	  dut_prb_control_nextSample$D_IN =
+	      MUX_dut_prb_control_nextSample$write_1__VAL_1;
+      default: dut_prb_control_nextSample$D_IN =
+		   64'hAAAAAAAAAAAAAAAA /* unspecified value */ ;
+    endcase
+  end
+  assign dut_prb_control_nextSample$EN =
+	     MUX_dut_prb_control_nextSample$write_1__SEL_1 ||
+	     WILL_FIRE_RL_dut_prb_control_receiveControl &&
+	     dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1138 ||
+	     WILL_FIRE_RL_dut_prb_control_setSample ;
+
+  // register dut_prb_control_pinged
+  always@(WILL_FIRE_RL_dut_prb_control_receiveMoreData or
+	  WILL_FIRE_RL_dut_prb_control_receiveFirstData or
+	  MUX_dut_prb_control_pinged$write_1__SEL_3 or
+	  WILL_FIRE_RL_dut_prb_control_respondToPing)
+  case (1'b1)
+    WILL_FIRE_RL_dut_prb_control_receiveMoreData ||
+    WILL_FIRE_RL_dut_prb_control_receiveFirstData:
+	dut_prb_control_pinged$D_IN = 1'd0;
+    MUX_dut_prb_control_pinged$write_1__SEL_3:
+	dut_prb_control_pinged$D_IN = 1'd1;
+    WILL_FIRE_RL_dut_prb_control_respondToPing:
+	dut_prb_control_pinged$D_IN = 1'd0;
+    default: dut_prb_control_pinged$D_IN = 1'b0 /* unspecified value */ ;
+  endcase
+  assign dut_prb_control_pinged$EN =
+	     WILL_FIRE_RL_dut_prb_control_receiveControl &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] != 3'd0 &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] != 3'd1 &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] != 3'd2 &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] != 3'd3 &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] != 3'd4 &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] != 3'd5 &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] != 3'd6 &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[12:0] ==
+	     13'h1FFF ||
+	     WILL_FIRE_RL_dut_prb_control_receiveMoreData ||
+	     WILL_FIRE_RL_dut_prb_control_respondToPing ||
+	     WILL_FIRE_RL_dut_prb_control_receiveFirstData ;
+
+  // register dut_prb_control_sampleIntervalV
+  assign dut_prb_control_sampleIntervalV$D_IN =
+	     (dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 &&
+	      !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
+	      2'd2 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] == 10'd0) ?
+	       8'd0 :
+	       dut_prb_control_control_in_dataF_rv$port1__read[7:0] ;
+  assign dut_prb_control_sampleIntervalV$EN =
+	     WILL_FIRE_RL_dut_prb_control_receiveControl &&
+	     (dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 &&
+	      !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
+	      2'd2 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] == 10'd0 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:8] == 2'd0 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] !=
+	      10'd1023 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 &&
+	      !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
+	      2'd2 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] != 10'd0) ;
+
+  // register dut_prb_control_sampleIntervalV_1
+  assign dut_prb_control_sampleIntervalV_1$D_IN =
+	     (dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 &&
+	      !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
+	      2'd2 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] == 10'd0) ?
+	       8'd0 :
+	       dut_prb_control_control_in_dataF_rv$port1__read[7:0] ;
+  assign dut_prb_control_sampleIntervalV_1$EN =
+	     WILL_FIRE_RL_dut_prb_control_receiveControl &&
+	     (dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 &&
+	      !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
+	      2'd2 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] == 10'd0 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:8] == 2'd1 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] !=
+	      10'd1023 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 &&
+	      !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
+	      2'd2 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] != 10'd0) ;
+
+  // register dut_prb_control_sampleIntervalV_2
+  assign dut_prb_control_sampleIntervalV_2$D_IN =
+	     (dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 &&
+	      !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
+	      2'd2 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] == 10'd0) ?
+	       8'd0 :
+	       dut_prb_control_control_in_dataF_rv$port1__read[7:0] ;
+  assign dut_prb_control_sampleIntervalV_2$EN =
+	     WILL_FIRE_RL_dut_prb_control_receiveControl &&
+	     (dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 &&
+	      !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
+	      2'd2 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] == 10'd0 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:8] == 2'd2 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] !=
+	      10'd1023 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 &&
+	      !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
+	      2'd2 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] != 10'd0) ;
+
+  // register dut_prb_control_sampleIntervalV_3
+  assign dut_prb_control_sampleIntervalV_3$D_IN =
+	     (dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 &&
+	      !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
+	      2'd2 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] == 10'd0) ?
+	       8'd0 :
+	       dut_prb_control_control_in_dataF_rv$port1__read[7:0] ;
+  assign dut_prb_control_sampleIntervalV_3$EN =
+	     WILL_FIRE_RL_dut_prb_control_receiveControl &&
+	     (dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 &&
+	      !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
+	      2'd2 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] == 10'd0 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:8] == 2'd3 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] !=
+	      10'd1023 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 &&
+	      !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
+	      2'd2 &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] != 10'd0) ;
+
+  // register fFromBridgeBeat_ifc_rDataAvail
+  assign fFromBridgeBeat_ifc_rDataAvail$D_IN =
+	     (!bridge$is_activated) ?
+	       6'd32 :
+	       fFromBridgeBeat_ifc_rDataAvail + b__h154496 - b__h154827 ;
+  assign fFromBridgeBeat_ifc_rDataAvail$EN = 1'd1 ;
+
+  // register fFromBridgeBeat_ifc_rDataCount
+  assign fFromBridgeBeat_ifc_rDataCount$D_IN =
+	     (!bridge$is_activated) ? 6'd0 : value__h154655 + b__h154827 ;
+  assign fFromBridgeBeat_ifc_rDataCount$EN = 1'd1 ;
+
+  // register fFromBridgeBeat_ifc_rStorage
+  assign fFromBridgeBeat_ifc_rStorage$D_IN =
+	     (!bridge$is_activated) ? 256'd0 : nextStorage__h154384 ;
+  assign fFromBridgeBeat_ifc_rStorage$EN = 1'd1 ;
+
+  // register fFromBridgeBeat_ifc_rStorageMask
+  assign fFromBridgeBeat_ifc_rStorageMask$D_IN =
+	     (!bridge$is_activated) ? 256'd0 : nextMask__h154385 ;
+  assign fFromBridgeBeat_ifc_rStorageMask$EN = 1'd1 ;
+
+  // register fFromContinueBeat_ifc_rDataAvail
+  assign fFromContinueBeat_ifc_rDataAvail$D_IN =
+	     (!bridge$is_activated) ?
+	       6'd32 :
+	       fFromContinueBeat_ifc_rDataAvail + b__h224980 - 6'd0 ;
+  assign fFromContinueBeat_ifc_rDataAvail$EN = 1'd1 ;
+
+  // register fFromContinueBeat_ifc_rDataCount
+  assign fFromContinueBeat_ifc_rDataCount$D_IN =
+	     (!bridge$is_activated) ? 6'd0 : value__h225139 + 6'd0 ;
+  assign fFromContinueBeat_ifc_rDataCount$EN = 1'd1 ;
+
+  // register fFromContinueBeat_ifc_rStorage
+  assign fFromContinueBeat_ifc_rStorage$D_IN =
+	     (!bridge$is_activated) ? 256'd0 : nextStorage__h224868 ;
+  assign fFromContinueBeat_ifc_rStorage$EN = 1'd1 ;
+
+  // register fFromContinueBeat_ifc_rStorageMask
+  assign fFromContinueBeat_ifc_rStorageMask$D_IN =
+	     (!bridge$is_activated) ? 256'd0 : nextMask__h224869 ;
+  assign fFromContinueBeat_ifc_rStorageMask$EN = 1'd1 ;
+
+  // register fS1MsgOut_ifc_rDataAvail
+  assign fS1MsgOut_ifc_rDataAvail$D_IN =
+	     (!bridge$is_activated) ?
+	       6'd32 :
+	       fS1MsgOut_ifc_rDataAvail + b__h226939 - b__h227270 ;
+  assign fS1MsgOut_ifc_rDataAvail$EN = 1'd1 ;
+
+  // register fS1MsgOut_ifc_rDataCount
+  assign fS1MsgOut_ifc_rDataCount$D_IN =
+	     (!bridge$is_activated) ? 6'd0 : value__h227098 + b__h227270 ;
+  assign fS1MsgOut_ifc_rDataCount$EN = 1'd1 ;
+
+  // register fS1MsgOut_ifc_rStorage
+  assign fS1MsgOut_ifc_rStorage$D_IN =
+	     (!bridge$is_activated) ? 256'd0 : nextStorage__h226827 ;
+  assign fS1MsgOut_ifc_rStorage$EN = 1'd1 ;
+
+  // register fS1MsgOut_ifc_rStorageMask
+  assign fS1MsgOut_ifc_rStorageMask$D_IN =
+	     (!bridge$is_activated) ? 256'd0 : nextMask__h226828 ;
+  assign fS1MsgOut_ifc_rStorageMask$EN = 1'd1 ;
+
+  // register fS1OutPortAcks_ifc_rDataAvail
+  assign fS1OutPortAcks_ifc_rDataAvail$D_IN =
+	     (!bridge$is_activated) ?
+	       5'd16 :
+	       fS1OutPortAcks_ifc_rDataAvail + b__h156963 - b__h157292 ;
+  assign fS1OutPortAcks_ifc_rDataAvail$EN = 1'd1 ;
+
+  // register fS1OutPortAcks_ifc_rDataCount
+  assign fS1OutPortAcks_ifc_rDataCount$D_IN =
+	     (!bridge$is_activated) ? 5'd0 : value__h157121 + b__h157292 ;
+  assign fS1OutPortAcks_ifc_rDataCount$EN = 1'd1 ;
+
+  // register fS1OutPortAcks_ifc_rStorage
+  assign fS1OutPortAcks_ifc_rStorage$D_IN =
+	     (!bridge$is_activated) ? 160'd0 : nextStorage__h156851 ;
+  assign fS1OutPortAcks_ifc_rStorage$EN = 1'd1 ;
+
+  // register fS1OutPortAcks_ifc_rStorageMask
+  assign fS1OutPortAcks_ifc_rStorageMask$D_IN =
+	     (!bridge$is_activated) ? 160'd0 : nextMask__h156852 ;
+  assign fS1OutPortAcks_ifc_rStorageMask$EN = 1'd1 ;
+
+  // register fS2MsgOut_ifc_rDataAvail
+  assign fS2MsgOut_ifc_rDataAvail$D_IN =
+	     (!bridge$is_activated) ?
+	       6'd32 :
+	       fS2MsgOut_ifc_rDataAvail + b__h228063 - b__h228394 ;
+  assign fS2MsgOut_ifc_rDataAvail$EN = 1'd1 ;
+
+  // register fS2MsgOut_ifc_rDataCount
+  assign fS2MsgOut_ifc_rDataCount$D_IN =
+	     (!bridge$is_activated) ? 6'd0 : value__h228222 + b__h228394 ;
+  assign fS2MsgOut_ifc_rDataCount$EN = 1'd1 ;
+
+  // register fS2MsgOut_ifc_rStorage
+  assign fS2MsgOut_ifc_rStorage$D_IN =
+	     (!bridge$is_activated) ? 256'd0 : nextStorage__h227951 ;
+  assign fS2MsgOut_ifc_rStorage$EN = 1'd1 ;
+
+  // register fS2MsgOut_ifc_rStorageMask
+  assign fS2MsgOut_ifc_rStorageMask$D_IN =
+	     (!bridge$is_activated) ? 256'd0 : nextMask__h227952 ;
+  assign fS2MsgOut_ifc_rStorageMask$EN = 1'd1 ;
+
+  // register fToContinueBeat_ifc_rDataAvail
+  assign fToContinueBeat_ifc_rDataAvail$D_IN =
+	     (!bridge$is_activated) ?
+	       6'd32 :
+	       fToContinueBeat_ifc_rDataAvail + 6'd0 - b__h155828 ;
+  assign fToContinueBeat_ifc_rDataAvail$EN = 1'd1 ;
+
+  // register fToContinueBeat_ifc_rDataCount
+  assign fToContinueBeat_ifc_rDataCount$D_IN =
+	     (!bridge$is_activated) ? 6'd0 : value__h155656 + b__h155828 ;
+  assign fToContinueBeat_ifc_rDataCount$EN = 1'd1 ;
+
+  // register fToContinueBeat_ifc_rStorage
+  assign fToContinueBeat_ifc_rStorage$D_IN =
+	     (!bridge$is_activated) ? 256'd0 : nextStorage__h155385 ;
+  assign fToContinueBeat_ifc_rStorage$EN = 1'd1 ;
+
+  // register fToContinueBeat_ifc_rStorageMask
+  assign fToContinueBeat_ifc_rStorageMask$D_IN =
+	     (!bridge$is_activated) ? 256'd0 : nextMask__h155386 ;
+  assign fToContinueBeat_ifc_rStorageMask$EN = 1'd1 ;
+
+  // register init_state_any_in_reset_uclk
+  assign init_state_any_in_reset_uclk$D_IN = 1'b0 ;
+  assign init_state_any_in_reset_uclk$EN = 1'd1 ;
+
+  // register init_state_cycle_stamp
+  assign init_state_cycle_stamp$D_IN = init_state_cycle_stamp + 64'd1 ;
+  assign init_state_cycle_stamp$EN = 1'b0 ;
+
+  // register init_state_out_port
+  assign init_state_out_port$D_IN =
+	     (init_state_out_port == 10'd0) ?
+	       init_state_out_port :
+	       init_state_out_port + 10'd1 ;
+  assign init_state_out_port$EN = 1'd1 ;
+
+  // register intr_on
+  assign intr_on$D_IN =
+	     msix_enable_cr && _unnamed_$status_function_status[2] ;
+  assign intr_on$EN = 1'd1 ;
+
+  // register lnk_up_cr
+  assign lnk_up_cr$D_IN = _unnamed_$status_lnk_up ;
+  assign lnk_up_cr$EN = 1'd1 ;
+
+  // register lrS1ActiveRequests
+  assign lrS1ActiveRequests$D_IN =
+	     WILL_FIRE_RL_msg_source_noc_active_inports_load_new_request_group &&
+	     lrS1PendingRequests ;
+  assign lrS1ActiveRequests$EN =
+	     WILL_FIRE_RL_msg_source_noc_active_inports_load_new_request_group ||
+	     WILL_FIRE_RL_msg_source_noc_inactive_inports ||
+	     WILL_FIRE_RL_msg_source_noc_active_inports_start_next_request ;
+
+  // register lrS1PendingRequests
+  always@(WILL_FIRE_RL_msg_source_noc_active_inports_load_new_request_group or
+	  dut_prb_control_control_in_next_sp$dPulse or
+	  WILL_FIRE_RL_msg_source_noc_active_inports_accumulate_pending_requests or
+	  MUX_lrS1PendingRequests$write_1__VAL_2 or
+	  WILL_FIRE_RL_msg_source_noc_inactive_inports)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_msg_source_noc_active_inports_load_new_request_group:
+	  lrS1PendingRequests$D_IN =
+	      dut_prb_control_control_in_next_sp$dPulse;
+      WILL_FIRE_RL_msg_source_noc_active_inports_accumulate_pending_requests:
+	  lrS1PendingRequests$D_IN = MUX_lrS1PendingRequests$write_1__VAL_2;
+      WILL_FIRE_RL_msg_source_noc_inactive_inports:
+	  lrS1PendingRequests$D_IN = 1'd0;
+      default: lrS1PendingRequests$D_IN = 1'b0 /* unspecified value */ ;
+    endcase
+  end
+  assign lrS1PendingRequests$EN =
+	     WILL_FIRE_RL_msg_source_noc_active_inports_load_new_request_group ||
+	     WILL_FIRE_RL_msg_source_noc_active_inports_accumulate_pending_requests ||
+	     WILL_FIRE_RL_msg_source_noc_inactive_inports ;
+
+  // register max_payload_bytes
+  assign max_payload_bytes$D_IN = max_payload_cr ;
+  assign max_payload_bytes$EN = 1'd1 ;
+
+  // register max_payload_cr
+  assign max_payload_cr$D_IN = 13'd128 << _unnamed_$status_max_payload ;
+  assign max_payload_cr$EN = 1'd1 ;
+
+  // register max_rd_req_cr
+  assign max_rd_req_cr$D_IN = 13'd128 << _unnamed_$status_max_read_req ;
+  assign max_rd_req_cr$EN = 1'd1 ;
+
+  // register max_read_req_bytes
+  assign max_read_req_bytes$D_IN = max_rd_req_cr ;
+  assign max_read_req_bytes$EN = 1'd1 ;
+
+  // register msix_enable
+  assign msix_enable$D_IN = msix_enable_cr ;
+  assign msix_enable$EN = 1'd1 ;
+
+  // register msix_enable_cr
+  assign msix_enable_cr$D_IN = _unnamed_$cfg_interrupt_msix_enabled[0] ;
+  assign msix_enable_cr$EN = 1'd1 ;
+
+  // register msix_masked
+  assign msix_masked$D_IN = msix_masked_cr ;
+  assign msix_masked$EN = 1'd1 ;
+
+  // register msix_masked_cr
+  assign msix_masked_cr$D_IN = _unnamed_$cfg_interrupt_msix_mask[0] ;
+  assign msix_masked_cr$EN = 1'd1 ;
+
+  // register rDecodeSceMi
+  assign rDecodeSceMi$D_IN = MUX_rDecodeSceMi$write_1__SEL_1 ;
+  assign rDecodeSceMi$EN =
+	     WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb &&
+	     (fFromBridgeBeat_ifc_rStorage[31:26] == 6'b101010 ||
+	      fFromBridgeBeat_ifc_rStorage[31:26] == 6'b101011) ||
+	     WILL_FIRE_RL_msg_sink_noc_inactive ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header ;
+
+  // register rInMsgBytes
+  always@(WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb or
+	  fFromBridgeBeat_ifc_rStorage or
+	  MUX_rInMsgBytes$write_1__SEL_2 or
+	  MUX_rInMsgBytes$write_1__VAL_2 or
+	  WILL_FIRE_RL_msg_sink_noc_inactive)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb:
+	  rInMsgBytes$D_IN = fFromBridgeBeat_ifc_rStorage[23:16];
+      MUX_rInMsgBytes$write_1__SEL_2:
+	  rInMsgBytes$D_IN = MUX_rInMsgBytes$write_1__VAL_2;
+      WILL_FIRE_RL_msg_sink_noc_inactive: rInMsgBytes$D_IN = 8'd0;
+      default: rInMsgBytes$D_IN = 8'b10101010 /* unspecified value */ ;
+    endcase
+  end
+  assign rInMsgBytes$EN =
+	     WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ||
+	     WILL_FIRE_RL_msg_sink_noc_active_other_process_other_data ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_disregard_packet ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_disregard_packet ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_inport_data ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header ||
+	     WILL_FIRE_RL_msg_sink_noc_inactive ;
+
+  // register rOtherMsgIn
+  always@(WILL_FIRE_RL_msg_sink_noc_active_other_process_other_data or
+	  rInMsgBytes_951_ULE_4___d1994 or
+	  WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb or
+	  MUX_rOtherMsgIn$write_1__VAL_2 or
+	  WILL_FIRE_RL_msg_sink_noc_inactive)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_msg_sink_noc_active_other_process_other_data:
+	  rOtherMsgIn$D_IN = !rInMsgBytes_951_ULE_4___d1994;
+      WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb:
+	  rOtherMsgIn$D_IN = MUX_rOtherMsgIn$write_1__VAL_2;
+      WILL_FIRE_RL_msg_sink_noc_inactive: rOtherMsgIn$D_IN = 1'd0;
+      default: rOtherMsgIn$D_IN = 1'b0 /* unspecified value */ ;
+    endcase
+  end
+  assign rOtherMsgIn$EN =
+	     WILL_FIRE_RL_msg_sink_noc_active_other_process_other_data ||
+	     WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb ||
+	     WILL_FIRE_RL_msg_sink_noc_inactive ;
+
+  // register rOtherMsgOut
+  always@(WILL_FIRE_RL_msg_source_noc_active_continue_other or
+	  rOutMsgBytes_271_ULE_4___d2465 or
+	  WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other or
+	  value__h250400 or MUX_rOtherMsgOut$write_1__SEL_3)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_msg_source_noc_active_continue_other:
+	  rOtherMsgOut$D_IN = !rOutMsgBytes_271_ULE_4___d2465;
+      WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other:
+	  rOtherMsgOut$D_IN = value__h250400 != 9'd0;
+      MUX_rOtherMsgOut$write_1__SEL_3: rOtherMsgOut$D_IN = 1'd0;
+      default: rOtherMsgOut$D_IN = 1'b0 /* unspecified value */ ;
+    endcase
+  end
+  assign rOtherMsgOut$EN =
+	     WILL_FIRE_RL_msg_source_noc_active_continue_other ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other ||
+	     WILL_FIRE_RL_msg_source_noc_inactive ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 ;
+
+  // register rOutMsgBytes
+  always@(WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other or
+	  value__h250400 or
+	  WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 or
+	  value__h254322 or
+	  WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 or
+	  value__h258233 or
+	  MUX_rOutMsgBytes$write_1__SEL_4 or
+	  MUX_rOutMsgBytes$write_1__VAL_4 or
+	  WILL_FIRE_RL_msg_source_noc_inactive)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other:
+	  rOutMsgBytes$D_IN = value__h250400[7:0];
+      WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1:
+	  rOutMsgBytes$D_IN = value__h254322[7:0];
+      WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2:
+	  rOutMsgBytes$D_IN = value__h258233[7:0];
+      MUX_rOutMsgBytes$write_1__SEL_4:
+	  rOutMsgBytes$D_IN = MUX_rOutMsgBytes$write_1__VAL_4;
+      WILL_FIRE_RL_msg_source_noc_inactive: rOutMsgBytes$D_IN = 8'd0;
+      default: rOutMsgBytes$D_IN = 8'b10101010 /* unspecified value */ ;
+    endcase
+  end
+  assign rOutMsgBytes$EN =
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 ||
+	     WILL_FIRE_RL_msg_source_noc_active_continue_scemi2 ||
+	     WILL_FIRE_RL_msg_source_noc_active_continue_scemi1 ||
+	     WILL_FIRE_RL_msg_source_noc_active_continue_other ||
+	     WILL_FIRE_RL_msg_source_noc_inactive ;
+
+  // register rS1BitsRem
+  assign rS1BitsRem$D_IN =
+	     MUX_rS1BitsRem$write_1__SEL_1 ?
+	       MUX_rS1BitsRem$write_1__VAL_1 :
+	       19'd32 ;
+  assign rS1BitsRem$EN =
+	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
+	     (!rS1BitsRem_537_ULE_32___d2570 ||
+	      !rS1OutMsgSize_532_ULE_4___d2572) ||
+	     WILL_FIRE_RL_msg_source_noc_active_outports_start_data_message ;
+
+  // register rS1CycleStamp
+  assign rS1CycleStamp$D_IN = init_state_msgFIFO$dD_OUT[73:10] ;
+  assign rS1CycleStamp$EN =
+	     CAN_FIRE_RL_msg_source_noc_active_outports_start_data_message ;
+
+  // register rS1InPortNum
+  assign rS1InPortNum$D_IN = fFromBridgeBeat_ifc_rStorage[9:0] ;
+  assign rS1InPortNum$EN =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header &&
+	     fFromBridgeBeat_ifc_rStorage[31:30] == 2'd0 ;
+
+  // register rS1MsgInIsAck
+  assign rS1MsgInIsAck$D_IN =
+	     MUX_rS1MsgInIsAck$write_1__SEL_1 ?
+	       MUX_rS1MsgInIsAck$write_1__VAL_1 :
+	       !rInMsgBytes_951_ULE_4___d1994 ;
+  assign rS1MsgInIsAck$EN =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header &&
+	     (fFromBridgeBeat_ifc_rStorage[31:30] == 2'd0 ||
+	      fFromBridgeBeat_ifc_rStorage[31:30] == 2'd3) ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb ;
+
+  // register rS1MsgInIsData
+  assign rS1MsgInIsData$D_IN =
+	     MUX_rS1MsgInIsAck$write_1__SEL_1 ?
+	       MUX_rS1MsgInIsData$write_1__VAL_1 :
+	       !rInMsgBytes_951_ULE_4___d1994 ;
+  assign rS1MsgInIsData$EN =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header &&
+	     (fFromBridgeBeat_ifc_rStorage[31:30] == 2'd0 ||
+	      fFromBridgeBeat_ifc_rStorage[31:30] == 2'd3) ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_inport_data ;
+
+  // register rS1MsgOutDataReq
+  assign rS1MsgOutDataReq$D_IN =
+	     !MUX_rS1MsgOutDataReq$write_1__SEL_1 &&
+	     !WILL_FIRE_RL_msg_source_noc_inactive ;
+  assign rS1MsgOutDataReq$EN =
+	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
+	     rS1OutMsgSize_532_ULE_4___d2572 &&
+	     rS1BitsRem_537_ULE_32___d2570 ||
+	     WILL_FIRE_RL_msg_source_noc_inactive ||
+	     WILL_FIRE_RL_msg_source_noc_active_outports_start_data_message ;
+
+  // register rS1MsgOutReqGrant
+  always@(WILL_FIRE_RL_msg_source_noc_inactive or
+	  WILL_FIRE_RL_swap_scemi1_outport_grant or
+	  rS1MsgOutReqGrant or
+	  MUX_rS1MsgOutDataReq$write_1__SEL_1 or
+	  WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message)
+  case (1'b1)
+    WILL_FIRE_RL_msg_source_noc_inactive: rS1MsgOutReqGrant$D_IN = 1'd1;
+    WILL_FIRE_RL_swap_scemi1_outport_grant:
+	rS1MsgOutReqGrant$D_IN = !rS1MsgOutReqGrant;
+    MUX_rS1MsgOutDataReq$write_1__SEL_1: rS1MsgOutReqGrant$D_IN = 1'd1;
+    WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message:
+	rS1MsgOutReqGrant$D_IN = 1'd0;
+    default: rS1MsgOutReqGrant$D_IN = 1'b0 /* unspecified value */ ;
+  endcase
+  assign rS1MsgOutReqGrant$EN =
+	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
+	     rS1OutMsgSize_532_ULE_4___d2572 &&
+	     rS1BitsRem_537_ULE_32___d2570 ||
+	     WILL_FIRE_RL_swap_scemi1_outport_grant ||
+	     WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message ||
+	     WILL_FIRE_RL_msg_source_noc_inactive ;
+
+  // register rS1MsgOutReqReq
+  assign rS1MsgOutReqReq$D_IN = !MUX_rS1MsgOutReqReq$write_1__SEL_1 ;
+  assign rS1MsgOutReqReq$EN =
+	     WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message ||
+	     WILL_FIRE_RL_msg_source_noc_inactive ||
+	     WILL_FIRE_RL_msg_source_noc_active_inports_start_next_request ;
+
+  // register rS1OutDataHeader
+  assign rS1OutDataHeader$D_IN =
+	     !WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header ;
+  assign rS1OutDataHeader$EN =
+	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
+	     rS1OutMsgSize_532_ULE_4___d2572 &&
+	     !rS1BitsRem_537_ULE_32___d2570 ||
+	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header ||
+	     WILL_FIRE_RL_msg_source_noc_active_outports_start_data_message ;
+
+  // register rS1OutMsgIsCont
+  assign rS1OutMsgIsCont$D_IN = MUX_rS1OutDataHeader$write_1__SEL_1 ;
+  assign rS1OutMsgIsCont$EN =
+	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
+	     rS1OutMsgSize_532_ULE_4___d2572 &&
+	     !rS1BitsRem_537_ULE_32___d2570 ||
+	     WILL_FIRE_RL_msg_source_noc_active_outports_start_data_message ;
+
+  // register rS1OutMsgSize
+  always@(MUX_rS1BitsRem$write_1__SEL_1 or
+	  MUX_rS1OutMsgSize$write_1__VAL_1 or
+	  WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header or
+	  MUX_rS1OutMsgSize$write_1__VAL_2 or
+	  WILL_FIRE_RL_msg_source_noc_active_outports_start_data_message)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_rS1BitsRem$write_1__SEL_1:
+	  rS1OutMsgSize$D_IN = MUX_rS1OutMsgSize$write_1__VAL_1;
+      WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header:
+	  rS1OutMsgSize$D_IN = MUX_rS1OutMsgSize$write_1__VAL_2;
+      WILL_FIRE_RL_msg_source_noc_active_outports_start_data_message:
+	  rS1OutMsgSize$D_IN = 8'd16;
+      default: rS1OutMsgSize$D_IN = 8'b10101010 /* unspecified value */ ;
+    endcase
+  end
+  assign rS1OutMsgSize$EN =
+	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
+	     (!rS1BitsRem_537_ULE_32___d2570 ||
+	      !rS1OutMsgSize_532_ULE_4___d2572) ||
+	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header ||
+	     WILL_FIRE_RL_msg_source_noc_active_outports_start_data_message ;
+
+  // register rS1OutPort
+  assign rS1OutPort$D_IN = init_state_msgFIFO$dD_OUT[9:0] ;
+  assign rS1OutPort$EN =
+	     CAN_FIRE_RL_msg_source_noc_active_outports_start_data_message ;
+
+  // register rS1RequestedPort
+  assign rS1RequestedPort$D_IN = 10'd0 ;
+  assign rS1RequestedPort$EN =
+	     WILL_FIRE_RL_msg_source_noc_inactive_inports ||
+	     WILL_FIRE_RL_msg_source_noc_active_inports_load_new_request_group ;
+
+  // register rS2InCreditIndex
+  assign rS2InCreditIndex$D_IN =
+	     WILL_FIRE_RL_reset_inpipe_when_noc_is_inactive ?
+	       12'd0 :
+	       MUX_rS2InCreditIndex$write_1__VAL_2 ;
+  assign rS2InCreditIndex$EN =
+	     WILL_FIRE_RL_scan_inpipe_credit_index ||
+	     WILL_FIRE_RL_reset_inpipe_when_noc_is_inactive ;
+
+  // register rS2InPipeNum
+  assign rS2InPipeNum$D_IN = fFromBridgeBeat_ifc_rStorage[27:16] ;
+  assign rS2InPipeNum$EN =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb &&
+	     fFromBridgeBeat_ifc_rStorage[31] ;
+
+  // register rS2MsgInIsCred
+  assign rS2MsgInIsCred$D_IN = 1'd0 ;
+  assign rS2MsgInIsCred$EN =
+	     CAN_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb ;
+
+  // register rS2MsgInIsData
+  assign rS2MsgInIsData$D_IN =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ?
+	       !rInMsgBytes_951_ULE_4___d1994 :
+	       MUX_rS2MsgInIsData$write_1__VAL_2 ;
+  assign rS2MsgInIsData$EN =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb ;
+
+  // register rS2MsgOutCredGrant
+  assign rS2MsgOutCredGrant$D_IN =
+	     WILL_FIRE_RL_msg_source_noc_inactive ||
+	     MUX_rS2MsgOutCredGrant$write_1__SEL_2 ||
+	     MUX_rS2MsgOutCredGrant$write_1__SEL_3 ;
+  assign rS2MsgOutCredGrant$EN =
+	     WILL_FIRE_RL_send_outpipe_data_header &&
+	     value__h299103[7:0] == 8'd0 ||
+	     WILL_FIRE_RL_send_outpipe_data_message &&
+	     !IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682 &&
+	     _0_CONCAT_IF_rS2OutMsgBytes_667_ULE_4_668_THEN__ETC___d2674 &&
+	     rS2OutBytes == 32'd0 ||
+	     WILL_FIRE_RL_start_outpipe_data_message ||
+	     WILL_FIRE_RL_msg_source_noc_inactive ;
+
+  // register rS2MsgOutDataReq
+  assign rS2MsgOutDataReq$D_IN = 1'd0 ;
+  assign rS2MsgOutDataReq$EN =
+	     CAN_FIRE_RL_reset_scemi_if_network_is_inactive ;
+
+  // register rS2NumSaved
+  assign rS2NumSaved$D_IN =
+	     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ?
+	       3'd0 :
+	       MUX_rS2NumSaved$write_1__VAL_2 ;
+  assign rS2NumSaved$EN =
+	     WILL_FIRE_RL_send_outpipe_data_message &&
+	     (b__h303418 != 3'd0 ||
+	      !IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682) ||
+	     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ;
+
+  // register rS2OutBytes
+  always@(WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive or
+	  MUX_rS2OutBytes$write_1__SEL_2 or
+	  MUX_rS2OutBytes$write_1__VAL_2 or
+	  WILL_FIRE_RL_start_outpipe_data_message or
+	  xcomms_tx_outpipe_data_info_fifo$dD_OUT)
+  case (1'b1)
+    WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive: rS2OutBytes$D_IN = 32'd0;
+    MUX_rS2OutBytes$write_1__SEL_2:
+	rS2OutBytes$D_IN = MUX_rS2OutBytes$write_1__VAL_2;
+    WILL_FIRE_RL_start_outpipe_data_message:
+	rS2OutBytes$D_IN = xcomms_tx_outpipe_data_info_fifo$dD_OUT[34:3];
+    default: rS2OutBytes$D_IN = 32'hAAAAAAAA /* unspecified value */ ;
+  endcase
+  assign rS2OutBytes$EN =
+	     WILL_FIRE_RL_send_outpipe_data_header &&
+	     value__h299103[7:0] != 8'd0 ||
+	     WILL_FIRE_RL_start_outpipe_data_message ||
+	     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ;
+
+  // register rS2OutDataEOM
+  assign rS2OutDataEOM$D_IN = xcomms_tx_outpipe_data_info_fifo$dD_OUT[0] ;
+  assign rS2OutDataEOM$EN = CAN_FIRE_RL_start_outpipe_data_message ;
+
+  // register rS2OutDataFlush
+  assign rS2OutDataFlush$D_IN = xcomms_tx_outpipe_data_info_fifo$dD_OUT[1] ;
+  assign rS2OutDataFlush$EN = CAN_FIRE_RL_start_outpipe_data_message ;
+
+  // register rS2OutDataIndex
+  always@(WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive or
+	  MUX_rS2MsgOutCredGrant$write_1__SEL_2 or
+	  MUX_rS2MsgOutCredGrant$write_1__SEL_3 or
+	  MUX_rS2OutDataIndex$write_1__VAL_3 or
+	  WILL_FIRE_RL_scan_outpipe_data_index)
+  case (1'b1)
+    WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ||
+    MUX_rS2MsgOutCredGrant$write_1__SEL_2:
+	rS2OutDataIndex$D_IN = 12'd0;
+    MUX_rS2MsgOutCredGrant$write_1__SEL_3:
+	rS2OutDataIndex$D_IN = MUX_rS2OutDataIndex$write_1__VAL_3;
+    WILL_FIRE_RL_scan_outpipe_data_index:
+	rS2OutDataIndex$D_IN = MUX_rS2OutDataIndex$write_1__VAL_3;
+    default: rS2OutDataIndex$D_IN = 12'b101010101010 /* unspecified value */ ;
+  endcase
+  assign rS2OutDataIndex$EN =
+	     WILL_FIRE_RL_send_outpipe_data_header &&
+	     value__h299103[7:0] == 8'd0 ||
+	     WILL_FIRE_RL_send_outpipe_data_message &&
+	     !IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682 &&
+	     _0_CONCAT_IF_rS2OutMsgBytes_667_ULE_4_668_THEN__ETC___d2674 &&
+	     rS2OutBytes == 32'd0 ||
+	     WILL_FIRE_RL_scan_outpipe_data_index ||
+	     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ;
+
+  // register rS2OutDataOverflow
+  assign rS2OutDataOverflow$D_IN =
+	     xcomms_tx_outpipe_data_info_fifo$dD_OUT[2] ;
+  assign rS2OutDataOverflow$EN = CAN_FIRE_RL_start_outpipe_data_message ;
+
+  // register rS2OutMsgBytes
+  always@(WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive or
+	  MUX_fS2MsgOut_ifc_rwEnqCount$wset_1__SEL_1 or
+	  MUX_rS2OutMsgBytes$write_1__VAL_2 or
+	  MUX_rS2OutBytes$write_1__SEL_2 or value__h299103)
+  case (1'b1)
+    WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive:
+	rS2OutMsgBytes$D_IN = 8'd0;
+    MUX_fS2MsgOut_ifc_rwEnqCount$wset_1__SEL_1:
+	rS2OutMsgBytes$D_IN = MUX_rS2OutMsgBytes$write_1__VAL_2;
+    MUX_rS2OutBytes$write_1__SEL_2: rS2OutMsgBytes$D_IN = value__h299103[7:0];
+    default: rS2OutMsgBytes$D_IN = 8'b10101010 /* unspecified value */ ;
+  endcase
+  assign rS2OutMsgBytes$EN =
+	     WILL_FIRE_RL_send_outpipe_data_message &&
+	     !IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682 ||
+	     WILL_FIRE_RL_send_outpipe_data_header &&
+	     value__h299103[7:0] != 8'd0 ||
+	     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ;
+
+  // register rS2SavedBytes
+  assign rS2SavedBytes$D_IN =
+	     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ?
+	       32'd0 :
+	       MUX_rS2SavedBytes$write_1__VAL_2 ;
+  assign rS2SavedBytes$EN =
+	     WILL_FIRE_RL_send_outpipe_data_message &&
+	     (b__h303418 != 3'd0 ||
+	      !IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682) ||
+	     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ;
+
+  // register rS2SendOutDataHdr
+  always@(WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive or
+	  MUX_rS2SendOutDataHdr$write_1__SEL_2 or
+	  MUX_rS2OutBytes$write_1__SEL_2 or
+	  WILL_FIRE_RL_start_outpipe_data_message)
+  case (1'b1)
+    WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive:
+	rS2SendOutDataHdr$D_IN = 1'd0;
+    MUX_rS2SendOutDataHdr$write_1__SEL_2: rS2SendOutDataHdr$D_IN = 1'd1;
+    MUX_rS2OutBytes$write_1__SEL_2: rS2SendOutDataHdr$D_IN = 1'd0;
+    WILL_FIRE_RL_start_outpipe_data_message: rS2SendOutDataHdr$D_IN = 1'd1;
+    default: rS2SendOutDataHdr$D_IN = 1'b0 /* unspecified value */ ;
+  endcase
+  assign rS2SendOutDataHdr$EN =
+	     WILL_FIRE_RL_send_outpipe_data_header &&
+	     value__h299103[7:0] != 8'd0 ||
+	     WILL_FIRE_RL_send_outpipe_data_message &&
+	     !IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682 &&
+	     _0_CONCAT_IF_rS2OutMsgBytes_667_ULE_4_668_THEN__ETC___d2674 &&
+	     rS2OutBytes != 32'd0 ||
+	     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ||
+	     WILL_FIRE_RL_start_outpipe_data_message ;
+
+  // register rS2SendOutDataMsg
+  assign rS2SendOutDataMsg$D_IN =
+	     !WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive &&
+	     !MUX_rS2MsgOutCredGrant$write_1__SEL_2 &&
+	     !MUX_rS2MsgOutCredGrant$write_1__SEL_3 ;
+  assign rS2SendOutDataMsg$EN =
+	     WILL_FIRE_RL_send_outpipe_data_header &&
+	     value__h299103[7:0] == 8'd0 ||
+	     WILL_FIRE_RL_send_outpipe_data_message &&
+	     !IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682 &&
+	     _0_CONCAT_IF_rS2OutMsgBytes_667_ULE_4_668_THEN__ETC___d2674 &&
+	     rS2OutBytes == 32'd0 ||
+	     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ||
+	     WILL_FIRE_RL_start_outpipe_data_message ;
+
+  // register rSceMi1MsgIn
+  always@(WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb or
+	  fFromBridgeBeat_ifc_rStorage or
+	  MUX_rSceMi1MsgIn$write_1__SEL_2 or
+	  rInMsgBytes_951_ULE_4___d1994 or WILL_FIRE_RL_msg_sink_noc_inactive)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb:
+	  rSceMi1MsgIn$D_IN =
+	      fFromBridgeBeat_ifc_rStorage[31:26] == 6'b101010;
+      MUX_rSceMi1MsgIn$write_1__SEL_2:
+	  rSceMi1MsgIn$D_IN = !rInMsgBytes_951_ULE_4___d1994;
+      WILL_FIRE_RL_msg_sink_noc_inactive: rSceMi1MsgIn$D_IN = 1'd0;
+      default: rSceMi1MsgIn$D_IN = 1'b0 /* unspecified value */ ;
+    endcase
+  end
+  assign rSceMi1MsgIn$EN =
+	     WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_disregard_packet ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_inport_data ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header ||
+	     WILL_FIRE_RL_msg_sink_noc_inactive ;
+
+  // register rSceMi1MsgOut
+  always@(WILL_FIRE_RL_msg_source_noc_active_continue_scemi1 or
+	  rOutMsgBytes_271_ULE_4___d2465 or
+	  WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 or
+	  value__h254322 or MUX_rSceMi1MsgOut$write_1__SEL_3)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_msg_source_noc_active_continue_scemi1:
+	  rSceMi1MsgOut$D_IN = !rOutMsgBytes_271_ULE_4___d2465;
+      WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1:
+	  rSceMi1MsgOut$D_IN = value__h254322 != 9'd0;
+      MUX_rSceMi1MsgOut$write_1__SEL_3: rSceMi1MsgOut$D_IN = 1'd0;
+      default: rSceMi1MsgOut$D_IN = 1'b0 /* unspecified value */ ;
+    endcase
+  end
+  assign rSceMi1MsgOut$EN =
+	     WILL_FIRE_RL_msg_source_noc_active_continue_scemi1 ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 ||
+	     WILL_FIRE_RL_msg_source_noc_inactive ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other ;
+
+  // register rSceMi2MsgIn
+  always@(WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb or
+	  fFromBridgeBeat_ifc_rStorage or
+	  MUX_rSceMi2MsgIn$write_1__SEL_2 or
+	  rInMsgBytes_951_ULE_4___d1994 or WILL_FIRE_RL_msg_sink_noc_inactive)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb:
+	  rSceMi2MsgIn$D_IN =
+	      fFromBridgeBeat_ifc_rStorage[31:26] == 6'b101011;
+      MUX_rSceMi2MsgIn$write_1__SEL_2:
+	  rSceMi2MsgIn$D_IN = !rInMsgBytes_951_ULE_4___d1994;
+      WILL_FIRE_RL_msg_sink_noc_inactive: rSceMi2MsgIn$D_IN = 1'd0;
+      default: rSceMi2MsgIn$D_IN = 1'b0 /* unspecified value */ ;
+    endcase
+  end
+  assign rSceMi2MsgIn$EN =
+	     WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_disregard_packet ||
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb ||
+	     WILL_FIRE_RL_msg_sink_noc_inactive ;
+
+  // register rSceMi2MsgOut
+  always@(WILL_FIRE_RL_msg_source_noc_active_continue_scemi2 or
+	  rOutMsgBytes_271_ULE_4___d2465 or
+	  WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 or
+	  value__h258233 or MUX_rSceMi2MsgOut$write_1__SEL_3)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_msg_source_noc_active_continue_scemi2:
+	  rSceMi2MsgOut$D_IN = !rOutMsgBytes_271_ULE_4___d2465;
+      WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2:
+	  rSceMi2MsgOut$D_IN = value__h258233 != 9'd0;
+      MUX_rSceMi2MsgOut$write_1__SEL_3: rSceMi2MsgOut$D_IN = 1'd0;
+      default: rSceMi2MsgOut$D_IN = 1'b0 /* unspecified value */ ;
+    endcase
+  end
+  assign rSceMi2MsgOut$EN =
+	     WILL_FIRE_RL_msg_source_noc_active_continue_scemi2 ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 ||
+	     WILL_FIRE_RL_msg_source_noc_inactive ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other ;
+
+  // register rc_gearbox_block0_status
+  assign rc_gearbox_block0_status$D_IN = !rc_gearbox_block0_status ;
+  assign rc_gearbox_block0_status$EN =
+	     _dor1rc_gearbox_block0_status$EN__write &&
+	     !rc_gearbox_read_block ;
+
+  // register rc_gearbox_block1_status
+  assign rc_gearbox_block1_status$D_IN = !rc_gearbox_block1_status ;
+  assign rc_gearbox_block1_status$EN =
+	     _dor1rc_gearbox_block1_status$EN__write &&
+	     rc_gearbox_read_block ;
+
+  // register rc_gearbox_dInReset_pre_isInReset
+  assign rc_gearbox_dInReset_pre_isInReset$D_IN = 1'd0 ;
+  assign rc_gearbox_dInReset_pre_isInReset$EN =
+	     rc_gearbox_dInReset_pre_isInReset ;
+
+  // register rc_gearbox_elem0_status_0
+  assign rc_gearbox_elem0_status_0$D_IN =
+	     MUX_rc_gearbox_elem0_status_0$_write_1__SEL_1 ?
+	       !rc_gearbox_block0_status :
+	       !rc_gearbox_block0_status ;
+  assign rc_gearbox_elem0_status_0$EN =
+	     WILL_FIRE_RL_rc_rl_g_to_gearbox_pad_odd_tail &&
+	     !rc_gearbox_write_block ||
+	     WILL_FIRE_RL_rc_rl_g_to_gearbox &&
+	     (rc_rg_in_packet || rc_in_buf$D_OUT[11]) &&
+	     !rc_gearbox_write_block ;
+
+  // register rc_gearbox_elem0_status_1
+  assign rc_gearbox_elem0_status_1$D_IN = rc_gearbox_elem0_status_0 ;
+  assign rc_gearbox_elem0_status_1$EN =
+	     WILL_FIRE_RL_rc_rl_g_to_gearbox_pad_odd_tail &&
+	     !rc_gearbox_write_block ||
+	     WILL_FIRE_RL_rc_rl_g_to_gearbox &&
+	     (rc_rg_in_packet || rc_in_buf$D_OUT[11]) &&
+	     !rc_gearbox_write_block ;
+
+  // register rc_gearbox_elem1_status_0
+  assign rc_gearbox_elem1_status_0$D_IN =
+	     MUX_rc_gearbox_elem1_status_0$_write_1__SEL_1 ?
+	       !rc_gearbox_block1_status :
+	       !rc_gearbox_block1_status ;
+  assign rc_gearbox_elem1_status_0$EN =
+	     WILL_FIRE_RL_rc_rl_g_to_gearbox_pad_odd_tail &&
+	     rc_gearbox_write_block ||
+	     WILL_FIRE_RL_rc_rl_g_to_gearbox &&
+	     (rc_rg_in_packet || rc_in_buf$D_OUT[11]) &&
+	     rc_gearbox_write_block ;
+
+  // register rc_gearbox_elem1_status_1
+  assign rc_gearbox_elem1_status_1$D_IN = rc_gearbox_elem1_status_0 ;
+  assign rc_gearbox_elem1_status_1$EN =
+	     WILL_FIRE_RL_rc_rl_g_to_gearbox_pad_odd_tail &&
+	     rc_gearbox_write_block ||
+	     WILL_FIRE_RL_rc_rl_g_to_gearbox &&
+	     (rc_rg_in_packet || rc_in_buf$D_OUT[11]) &&
+	     rc_gearbox_write_block ;
+
+  // register rc_gearbox_elem_0
+  assign rc_gearbox_elem_0$D_IN =
+	     MUX_rc_gearbox_elem_0$_write_1__SEL_1 ?
+	       MUX_rc_gearbox_elem_0$_write_1__VAL_1 :
+	       MUX_rc_gearbox_elem_0$_write_1__VAL_2 ;
+  assign rc_gearbox_elem_0$EN = rc_gearbox_pwEnqueue$whas ;
+
+  // register rc_gearbox_elem_1
+  assign rc_gearbox_elem_1$D_IN =
+	     MUX_rc_gearbox_elem_0$_write_1__SEL_1 ?
+	       MUX_rc_gearbox_elem_1$_write_1__VAL_1 :
+	       MUX_rc_gearbox_elem_1$_write_1__VAL_2 ;
+  assign rc_gearbox_elem_1$EN = rc_gearbox_pwEnqueue$whas ;
+
+  // register rc_gearbox_elem_2
+  assign rc_gearbox_elem_2$D_IN =
+	     MUX_rc_gearbox_elem_0$_write_1__SEL_1 ?
+	       MUX_rc_gearbox_elem_2$_write_1__VAL_1 :
+	       MUX_rc_gearbox_elem_2$_write_1__VAL_2 ;
+  assign rc_gearbox_elem_2$EN = rc_gearbox_pwEnqueue$whas ;
+
+  // register rc_gearbox_elem_3
+  assign rc_gearbox_elem_3$D_IN =
+	     MUX_rc_gearbox_elem_0$_write_1__SEL_1 ?
+	       MUX_rc_gearbox_elem_3$_write_1__VAL_1 :
+	       MUX_rc_gearbox_elem_3$_write_1__VAL_2 ;
+  assign rc_gearbox_elem_3$EN = rc_gearbox_pwEnqueue$whas ;
+
+  // register rc_gearbox_read_block
+  assign rc_gearbox_read_block$D_IN = ~rc_gearbox_read_block ;
+  assign rc_gearbox_read_block$EN = rc_gearbox_pwDequeue$whas ;
+
+  // register rc_gearbox_sInReset_pre_isInReset
+  assign rc_gearbox_sInReset_pre_isInReset$D_IN = 1'd0 ;
+  assign rc_gearbox_sInReset_pre_isInReset$EN =
+	     rc_gearbox_sInReset_pre_isInReset ;
+
+  // register rc_gearbox_write_block
+  assign rc_gearbox_write_block$D_IN =
+	     MUX_rc_gearbox_write_block$write_1__SEL_1 ?
+	       !rc_gearbox_write_block :
+	       !rc_gearbox_write_block ;
+  assign rc_gearbox_write_block$EN =
+	     MUX_rc_gearbox_write_block$write_1__SEL_1 ||
+	     WILL_FIRE_RL_rc_rl_g_to_gearbox &&
+	     rc_rg_in_packet_79_OR_rc_in_buf_first__81_BIT__ETC___d736 ;
+
+  // register rc_rg_dwcount
+  assign rc_rg_dwcount$D_IN =
+	     WILL_FIRE_RL_rc_rl_header ?
+	       MUX_rc_rg_dwcount$write_1__VAL_1 :
+	       MUX_rc_rg_dwcount$write_1__VAL_2 ;
+  assign rc_rg_dwcount$EN =
+	     WILL_FIRE_RL_rc_rl_header || WILL_FIRE_RL_rc_rl_data_a ;
+
+  // register rc_rg_even_enq
+  assign rc_rg_even_enq$D_IN =
+	     !MUX_rc_gearbox_elem_0$_write_1__SEL_1 || !rc_rg_even_enq ;
+  assign rc_rg_even_enq$EN = rc_gearbox_pwEnqueue$whas ;
+
+  // register rc_rg_in_packet
+  assign rc_rg_in_packet$D_IN = !rc_in_buf$D_OUT[10] ;
+  assign rc_rg_in_packet$EN = MUX_rc_gearbox_elem_0$_write_1__SEL_1 ;
+
+  // register rc_rg_pad_odd_tail
+  assign rc_rg_pad_odd_tail$D_IN =
+	     MUX_rc_gearbox_elem_0$_write_1__SEL_1 &&
+	     MUX_rc_rg_pad_odd_tail$write_1__VAL_1 ;
+  assign rc_rg_pad_odd_tail$EN = rc_gearbox_pwEnqueue$whas ;
+
+  // register rcb_cr
+  assign rcb_cr$D_IN = 8'd64 << _unnamed_$status_rcb_status[0] ;
+  assign rcb_cr$EN = 1'd1 ;
+
+  // register rcb_mask
+  assign rcb_mask$D_IN = (rcb_cr == 8'd64) ? 7'h3F : 7'h7F ;
+  assign rcb_mask$EN = 1'd1 ;
+
+  // register rq_f_tlps_rv
+  assign rq_f_tlps_rv$D_IN = rq_f_tlps_rv$port2__read ;
+  assign rq_f_tlps_rv$EN = 1'b1 ;
+
+  // register rq_gearbox_block0
+  always@(MUX_rq_gearbox_block0$_write_1__SEL_1 or
+	  MUX_rq_gearbox_block0$_write_1__VAL_1 or
+	  MUX_rq_gearbox_block0$_write_1__SEL_2 or
+	  MUX_rq_gearbox_block0$_write_1__VAL_2 or
+	  MUX_rq_gearbox_block0$_write_1__SEL_3 or
+	  MUX_rq_gearbox_block0$_write_1__VAL_3 or
+	  MUX_rq_gearbox_block0$_write_1__SEL_4 or
+	  MUX_rq_gearbox_block0$_write_1__VAL_4)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_rq_gearbox_block0$_write_1__SEL_1:
+	  rq_gearbox_block0$D_IN = MUX_rq_gearbox_block0$_write_1__VAL_1;
+      MUX_rq_gearbox_block0$_write_1__SEL_2:
+	  rq_gearbox_block0$D_IN = MUX_rq_gearbox_block0$_write_1__VAL_2;
+      MUX_rq_gearbox_block0$_write_1__SEL_3:
+	  rq_gearbox_block0$D_IN = MUX_rq_gearbox_block0$_write_1__VAL_3;
+      MUX_rq_gearbox_block0$_write_1__SEL_4:
+	  rq_gearbox_block0$D_IN = MUX_rq_gearbox_block0$_write_1__VAL_4;
+      default: rq_gearbox_block0$D_IN =
+		   150'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA /* unspecified value */ ;
+    endcase
+  end
+  assign rq_gearbox_block0$EN =
+	     WILL_FIRE_RL_rq_rl_header && !rq_gearbox_write_block ||
+	     WILL_FIRE_RL_rq_rl_data_a && !rq_gearbox_write_block ||
+	     WILL_FIRE_RL_rq_rl_data_b && !rq_gearbox_write_block ||
+	     WILL_FIRE_RL_rq_rl_data_c && !rq_gearbox_write_block ;
+
+  // register rq_gearbox_block0_status
+  assign rq_gearbox_block0_status$D_IN = !rq_gearbox_block0_status ;
+  assign rq_gearbox_block0_status$EN =
+	     _dor1rq_gearbox_block0_status$EN__write &&
+	     !rq_gearbox_write_block ;
+
+  // register rq_gearbox_block1
+  always@(MUX_rq_gearbox_block1$_write_1__SEL_1 or
+	  MUX_rq_gearbox_block0$_write_1__VAL_1 or
+	  MUX_rq_gearbox_block1$_write_1__SEL_2 or
+	  MUX_rq_gearbox_block0$_write_1__VAL_2 or
+	  MUX_rq_gearbox_block1$_write_1__SEL_3 or
+	  MUX_rq_gearbox_block0$_write_1__VAL_3 or
+	  MUX_rq_gearbox_block1$_write_1__SEL_4 or
+	  MUX_rq_gearbox_block0$_write_1__VAL_4)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_rq_gearbox_block1$_write_1__SEL_1:
+	  rq_gearbox_block1$D_IN = MUX_rq_gearbox_block0$_write_1__VAL_1;
+      MUX_rq_gearbox_block1$_write_1__SEL_2:
+	  rq_gearbox_block1$D_IN = MUX_rq_gearbox_block0$_write_1__VAL_2;
+      MUX_rq_gearbox_block1$_write_1__SEL_3:
+	  rq_gearbox_block1$D_IN = MUX_rq_gearbox_block0$_write_1__VAL_3;
+      MUX_rq_gearbox_block1$_write_1__SEL_4:
+	  rq_gearbox_block1$D_IN = MUX_rq_gearbox_block0$_write_1__VAL_4;
+      default: rq_gearbox_block1$D_IN =
+		   150'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA /* unspecified value */ ;
+    endcase
+  end
+  assign rq_gearbox_block1$EN =
+	     WILL_FIRE_RL_rq_rl_header && rq_gearbox_write_block ||
+	     WILL_FIRE_RL_rq_rl_data_a && rq_gearbox_write_block ||
+	     WILL_FIRE_RL_rq_rl_data_b && rq_gearbox_write_block ||
+	     WILL_FIRE_RL_rq_rl_data_c && rq_gearbox_write_block ;
+
+  // register rq_gearbox_block1_status
+  assign rq_gearbox_block1_status$D_IN = !rq_gearbox_block1_status ;
+  assign rq_gearbox_block1_status$EN =
+	     _dor1rq_gearbox_block1_status$EN__write &&
+	     rq_gearbox_write_block ;
+
+  // register rq_gearbox_dInReset_pre_isInReset
+  assign rq_gearbox_dInReset_pre_isInReset$D_IN = 1'd0 ;
+  assign rq_gearbox_dInReset_pre_isInReset$EN =
+	     rq_gearbox_dInReset_pre_isInReset ;
+
+  // register rq_gearbox_elem0_status_0
+  assign rq_gearbox_elem0_status_0$D_IN = rq_gearbox_block0_status ;
+  assign rq_gearbox_elem0_status_0$EN =
+	     WILL_FIRE_RL_rq_rl_fastclock && !rq_gearbox_read_block ;
+
+  // register rq_gearbox_elem0_status_1
+  assign rq_gearbox_elem0_status_1$D_IN = rq_gearbox_elem0_status_0 ;
+  assign rq_gearbox_elem0_status_1$EN =
+	     WILL_FIRE_RL_rq_rl_fastclock && !rq_gearbox_read_block ;
+
+  // register rq_gearbox_elem1_status_0
+  assign rq_gearbox_elem1_status_0$D_IN = rq_gearbox_block1_status ;
+  assign rq_gearbox_elem1_status_0$EN =
+	     WILL_FIRE_RL_rq_rl_fastclock && rq_gearbox_read_block ;
+
+  // register rq_gearbox_elem1_status_1
+  assign rq_gearbox_elem1_status_1$D_IN = rq_gearbox_elem1_status_0 ;
+  assign rq_gearbox_elem1_status_1$EN =
+	     WILL_FIRE_RL_rq_rl_fastclock && rq_gearbox_read_block ;
+
+  // register rq_gearbox_read_block
+  assign rq_gearbox_read_block$D_IN = !rq_gearbox_read_block ;
+  assign rq_gearbox_read_block$EN =
+	     WILL_FIRE_RL_rq_rl_fastclock &&
+	     (rq_gearbox_read_block &&
+	      rq_gearbox_elem1_status_0__read__30_EQ_rq_gear_ETC___d631 ||
+	      !rq_gearbox_read_block &&
+	      rq_gearbox_elem0_status_0__read__21_EQ_rq_gear_ETC___d622) ;
+
+  // register rq_gearbox_sInReset_pre_isInReset
+  assign rq_gearbox_sInReset_pre_isInReset$D_IN = 1'd0 ;
+  assign rq_gearbox_sInReset_pre_isInReset$EN =
+	     rq_gearbox_sInReset_pre_isInReset ;
+
+  // register rq_gearbox_write_block
+  assign rq_gearbox_write_block$D_IN = ~rq_gearbox_write_block ;
+  assign rq_gearbox_write_block$EN =
+	     WILL_FIRE_RL_rq_rl_data_c || WILL_FIRE_RL_rq_rl_data_b ||
+	     WILL_FIRE_RL_rq_rl_data_a ||
+	     WILL_FIRE_RL_rq_rl_header ;
+
+  // register rq_rg_dwcount
+  always@(WILL_FIRE_RL_rq_rl_header or
+	  MUX_rq_rg_dwcount$write_1__VAL_1 or
+	  WILL_FIRE_RL_rq_rl_data_c or
+	  MUX_rq_rg_dwcount$write_1__VAL_2 or
+	  WILL_FIRE_RL_rq_rl_data_b or
+	  MUX_rq_rg_dwcount$write_1__VAL_3 or WILL_FIRE_RL_rq_rl_data_a)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_rq_rl_header:
+	  rq_rg_dwcount$D_IN = MUX_rq_rg_dwcount$write_1__VAL_1;
+      WILL_FIRE_RL_rq_rl_data_c:
+	  rq_rg_dwcount$D_IN = MUX_rq_rg_dwcount$write_1__VAL_2;
+      WILL_FIRE_RL_rq_rl_data_b:
+	  rq_rg_dwcount$D_IN = MUX_rq_rg_dwcount$write_1__VAL_3;
+      WILL_FIRE_RL_rq_rl_data_a: rq_rg_dwcount$D_IN = 11'd0;
+      default: rq_rg_dwcount$D_IN = 11'b01010101010 /* unspecified value */ ;
+    endcase
+  end
+  assign rq_rg_dwcount$EN =
+	     WILL_FIRE_RL_rq_rl_header || WILL_FIRE_RL_rq_rl_data_c ||
+	     WILL_FIRE_RL_rq_rl_data_b ||
+	     WILL_FIRE_RL_rq_rl_data_a ;
+
+  // register rq_rg_first_be
+  assign rq_rg_first_be$D_IN = rq_f_tlps_rv[67:64] ;
+  assign rq_rg_first_be$EN = CAN_FIRE_RL_rq_rl_header ;
+
+  // register rq_rg_last_be
+  assign rq_rg_last_be$D_IN = rq_f_tlps_rv[71:68] ;
+  assign rq_rg_last_be$EN = CAN_FIRE_RL_rq_rl_header ;
+
+  // register rq_rg_mdw
+  always@(WILL_FIRE_RL_rq_rl_header or
+	  MUX_rq_rg_mdw$write_1__VAL_1 or
+	  WILL_FIRE_RL_rq_rl_data_a or
+	  WILL_FIRE_RL_rq_rl_data_b or MUX_rq_rg_mdw$write_1__VAL_3)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_rq_rl_header:
+	  rq_rg_mdw$D_IN = MUX_rq_rg_mdw$write_1__VAL_1;
+      WILL_FIRE_RL_rq_rl_data_a: rq_rg_mdw$D_IN = 33'h0AAAAAAAA;
+      WILL_FIRE_RL_rq_rl_data_b:
+	  rq_rg_mdw$D_IN = MUX_rq_rg_mdw$write_1__VAL_3;
+      default: rq_rg_mdw$D_IN = 33'h0AAAAAAAA /* unspecified value */ ;
+    endcase
+  end
+  assign rq_rg_mdw$EN =
+	     WILL_FIRE_RL_rq_rl_header || WILL_FIRE_RL_rq_rl_data_a ||
+	     WILL_FIRE_RL_rq_rl_data_b ;
+
+  // register rstgen_init
+  assign rstgen_init$D_IN = 1'd1 ;
+  assign rstgen_init$EN = CAN_FIRE_RL_rstgen_trigger ;
+
+  // register rvPrevMsgGrant
+  assign rvPrevMsgGrant$D_IN =
+	     WILL_FIRE_RL_msg_source_noc_active_arbitrate_transmit_messages ?
+	       MUX_rvPrevMsgGrant$write_1__VAL_1 :
+	       3'd0 ;
+  assign rvPrevMsgGrant$EN =
+	     WILL_FIRE_RL_msg_source_noc_active_arbitrate_transmit_messages ||
+	     WILL_FIRE_RL_msg_source_noc_inactive ;
+
+  // register rvPrevPrevMsgGrant
+  assign rvPrevPrevMsgGrant$D_IN =
+	     WILL_FIRE_RL_msg_source_noc_active_arbitrate_transmit_messages ?
+	       rvPrevMsgGrant :
+	       3'd0 ;
+  assign rvPrevPrevMsgGrant$EN =
+	     WILL_FIRE_RL_msg_source_noc_active_arbitrate_transmit_messages ||
+	     WILL_FIRE_RL_msg_source_noc_inactive ;
+
+  // register xcomms_rx_inpipe_active
+  assign xcomms_rx_inpipe_active$D_IN = 1'd0 ;
+  assign xcomms_rx_inpipe_active$EN =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side ;
+
+  // register xcomms_rx_inpipe_ecount
+  assign xcomms_rx_inpipe_ecount$D_IN =
+	     WILL_FIRE_RL_xcomms_rx_inpipe_take_completed_element ?
+	       MUX_xcomms_rx_inpipe_ecount$write_1__VAL_1 :
+	       fFromBridgeBeat_ifc_rStorage[15:0] ;
+  assign xcomms_rx_inpipe_ecount$EN =
+	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb &&
+	     fFromBridgeBeat_ifc_rStorage[31] &&
+	     fFromBridgeBeat_ifc_rStorage[27:16] == 12'd0 ||
+	     WILL_FIRE_RL_xcomms_rx_inpipe_take_completed_element ;
+
+  // register xcomms_rx_inpipe_elem_count
+  assign xcomms_rx_inpipe_elem_count$D_IN =
+	     xcomms_rx_inpipe_reset_uclk_done2 ?
+	       MUX_xcomms_rx_inpipe_elem_count$write_1__VAL_1 :
+	       16'd0 ;
+  assign xcomms_rx_inpipe_elem_count$EN =
+	     xcomms_rx_inpipe_reset_uclk_done2 ||
+	     WILL_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side ;
+
+  // register xcomms_rx_inpipe_elems
+  always@(MUX_xcomms_rx_inpipe_elems$write_1__SEL_1 or
+	  xcomms_rx_inpipe_in_fifo$dD_OUT or
+	  MUX_xcomms_rx_inpipe_elems$write_1__SEL_2 or
+	  MUX_xcomms_rx_inpipe_elems$write_1__VAL_2 or
+	  WILL_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side)
+  case (1'b1)
+    MUX_xcomms_rx_inpipe_elems$write_1__SEL_1:
+	xcomms_rx_inpipe_elems$D_IN = xcomms_rx_inpipe_in_fifo$dD_OUT;
+    MUX_xcomms_rx_inpipe_elems$write_1__SEL_2:
+	xcomms_rx_inpipe_elems$D_IN =
+	    MUX_xcomms_rx_inpipe_elems$write_1__VAL_2;
+    WILL_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side:
+	xcomms_rx_inpipe_elems$D_IN = 57'h0AAAAAAAAAAAAAA;
+    default: xcomms_rx_inpipe_elems$D_IN =
+		 57'h0AAAAAAAAAAAAAA /* unspecified value */ ;
+  endcase
+  assign xcomms_rx_inpipe_elems$EN =
+	     WILL_FIRE_RL_xcomms_rx_inpipe_move_elem &&
+	     xcomms_rx_inpipe_elem_count == 16'd0 ||
+	     WILL_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut &&
+	     xcomms_rx_inpipe_reset_uclk_done2 &&
+	     (xcomms_rx_inpipe_elem_count == 16'd1 ||
+	      !xcomms_rx_inpipe_elem_count_397_ULT_xcomms_rx__ETC___d1428) ||
+	     WILL_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side ;
+
+  // register xcomms_rx_inpipe_elems_recvd
+  assign xcomms_rx_inpipe_elems_recvd$D_IN =
+	     xcomms_rx_inpipe_reset_uclk_done2 ?
+	       MUX_xcomms_rx_inpipe_elems_recvd$write_1__VAL_1 :
+	       16'd0 ;
+  assign xcomms_rx_inpipe_elems_recvd$EN =
+	     xcomms_rx_inpipe_reset_uclk_done2 ||
+	     WILL_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side ;
+
+  // register xcomms_rx_inpipe_eom_in
+  assign xcomms_rx_inpipe_eom_in$D_IN = fFromBridgeBeat_ifc_rStorage[28] ;
+  assign xcomms_rx_inpipe_eom_in$EN =
+	     MUX_xcomms_rx_inpipe_ecount$write_1__SEL_2 ;
+
+  // register xcomms_rx_inpipe_in_reset_noc
+  assign xcomms_rx_inpipe_in_reset_noc$D_IN =
+	     !WILL_FIRE_RL_xcomms_rx_inpipe_complete_reset_sequence ;
+  assign xcomms_rx_inpipe_in_reset_noc$EN =
+	     WILL_FIRE_RL_xcomms_rx_inpipe_complete_reset_sequence ||
+	     WILL_FIRE_RL_xcomms_rx_inpipe_initiate_reset_sequence ;
+
+  // register xcomms_rx_inpipe_mimo_rDataCount
+  assign xcomms_rx_inpipe_mimo_rDataCount$D_IN =
+	     CAN_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ?
+	       value__h86644 + b__h82149 :
+	       value__h86644 ;
+  assign xcomms_rx_inpipe_mimo_rDataCount$EN =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_mimo_update ;
+
+  // register xcomms_rx_inpipe_mimo_rvData
+  assign xcomms_rx_inpipe_mimo_rvData$D_IN =
+	     IF_xcomms_rx_inpipe_mimo_rwvEnqData_whas__339__ETC___d1373 ;
+  assign xcomms_rx_inpipe_mimo_rvData$EN =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_mimo_update ;
+
+  // register xcomms_rx_inpipe_pending_flush
+  assign xcomms_rx_inpipe_pending_flush$D_IN = 1'b0 ;
+  assign xcomms_rx_inpipe_pending_flush$EN = 1'b0 ;
+
+  // register xcomms_rx_inpipe_pending_send
+  assign xcomms_rx_inpipe_pending_send$D_IN = 1'd0 ;
+  assign xcomms_rx_inpipe_pending_send$EN =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side ;
+
+  // register xcomms_rx_inpipe_reset_uclk_done1
+  assign xcomms_rx_inpipe_reset_uclk_done1$D_IN = 1'd1 ;
+  assign xcomms_rx_inpipe_reset_uclk_done1$EN =
+	     WILL_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side ||
+	     WILL_FIRE_RL_xcomms_rx_inpipe_passReset ;
+
+  // register xcomms_rx_inpipe_reset_uclk_done2
+  assign xcomms_rx_inpipe_reset_uclk_done2$D_IN = 1'd1 ;
+  assign xcomms_rx_inpipe_reset_uclk_done2$EN =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side ;
+
+  // register xcomms_rx_inpipe_send_credit_request
+  assign xcomms_rx_inpipe_send_credit_request$D_IN =
+	     MUX_xcomms_rx_inpipe_send_credit_request$write_1__SEL_1 ;
+  assign xcomms_rx_inpipe_send_credit_request$EN =
+	     MUX_xcomms_rx_inpipe_send_credit_request$write_1__SEL_1 ||
+	     WILL_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side ||
+	     WILL_FIRE_RL_xcomms_rx_inpipe_send_credit_message ;
+
+  // register xcomms_rx_inpipe_send_underflow
+  assign xcomms_rx_inpipe_send_underflow$D_IN =
+	     MUX_xcomms_rx_inpipe_send_underflow$write_1__SEL_1 ;
+  assign xcomms_rx_inpipe_send_underflow$EN =
+	     xcomms_rx_inpipe_reset_uclk_done2 &&
+	     MUX_xcomms_rx_inpipe_elems$write_1__SEL_2 &&
+	     xcomms_rx_inpipe_updates_from_ifc$wget[0] ||
+	     WILL_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side ||
+	     WILL_FIRE_RL_xcomms_rx_inpipe_send_credit_message ;
+
+  // register xcomms_rx_inpipe_underflow
+  assign xcomms_rx_inpipe_underflow$D_IN =
+	     xcomms_rx_inpipe_reset_uclk_done2 &&
+	     MUX_xcomms_rx_inpipe_underflow$write_1__VAL_1 ;
+  assign xcomms_rx_inpipe_underflow$EN =
+	     xcomms_rx_inpipe_reset_uclk_done2 ||
+	     WILL_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side ;
+
+  // register xcomms_tx_outpipe_active
+  assign xcomms_tx_outpipe_active$D_IN =
+	     !WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state ||
+	     MUX_xcomms_tx_outpipe_active$write_1__VAL_1 ;
+  assign xcomms_tx_outpipe_active$EN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state ||
+	     WILL_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side ;
+
+  // register xcomms_tx_outpipe_autoflush
+  assign xcomms_tx_outpipe_autoflush$D_IN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits &&
+	     xcomms_tx_outpipe_credit_fifo$dD_OUT[0] ;
+  assign xcomms_tx_outpipe_autoflush$EN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits ||
+	     WILL_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side ;
+
+  // register xcomms_tx_outpipe_credits
+  assign xcomms_tx_outpipe_credits$D_IN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state ?
+	       MUX_xcomms_tx_outpipe_credits$write_1__VAL_1 :
+	       16'd1024 ;
+  assign xcomms_tx_outpipe_credits$EN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state ||
+	     WILL_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side ;
+
+  // register xcomms_tx_outpipe_elem_count
+  assign xcomms_tx_outpipe_elem_count$D_IN =
+	     MUX_xcomms_tx_outpipe_elem_count$write_1__SEL_1 ?
+	       MUX_xcomms_tx_outpipe_elem_count$write_1__VAL_1 :
+	       16'd0 ;
+  assign xcomms_tx_outpipe_elem_count$EN =
+	     MUX_xcomms_tx_outpipe_elem_count$write_1__SEL_1 ||
+	     WILL_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side ;
+
+  // register xcomms_tx_outpipe_elems
+  assign xcomms_tx_outpipe_elems$D_IN = 656'h0 ;
+  assign xcomms_tx_outpipe_elems$EN = 1'b0 ;
+
+  // register xcomms_tx_outpipe_flush_requested
+  assign xcomms_tx_outpipe_flush_requested$D_IN = 1'd0 ;
+  assign xcomms_tx_outpipe_flush_requested$EN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_register_flush_request ||
+	     WILL_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side ;
+
+  // register xcomms_tx_outpipe_flushing
+  assign xcomms_tx_outpipe_flushing$D_IN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state &&
+	     MUX_xcomms_tx_outpipe_flushing$write_1__VAL_1 ;
+  assign xcomms_tx_outpipe_flushing$EN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state ||
+	     WILL_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side ;
+
+  // register xcomms_tx_outpipe_in_reset_noc
+  assign xcomms_tx_outpipe_in_reset_noc$D_IN =
+	     !WILL_FIRE_RL_xcomms_tx_outpipe_complete_reset_sequence ;
+  assign xcomms_tx_outpipe_in_reset_noc$EN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_complete_reset_sequence ||
+	     WILL_FIRE_RL_xcomms_tx_outpipe_initiate_reset_sequence ;
+
+  // register xcomms_tx_outpipe_in_reset_uclk
+  assign xcomms_tx_outpipe_in_reset_uclk$D_IN = 1'd0 ;
+  assign xcomms_tx_outpipe_in_reset_uclk$EN =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side ;
+
+  // register xcomms_tx_outpipe_indata_mimo_rDataCount
+  assign xcomms_tx_outpipe_indata_mimo_rDataCount$D_IN =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side ?
+	       2'd0 :
+	       (xcomms_tx_outpipe_indata_mimo_rwEnqCount$whas ?
+		  value__h103256 + b__h101935 :
+		  value__h103256) ;
+  assign xcomms_tx_outpipe_indata_mimo_rDataCount$EN =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_indata_mimo_update ;
+
+  // register xcomms_tx_outpipe_indata_mimo_rvData
+  assign xcomms_tx_outpipe_indata_mimo_rvData$D_IN =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side ?
+	       1312'd0 :
+	       IF_xcomms_tx_outpipe_indata_mimo_rwvEnqData_wh_ETC___d1527 ;
+  assign xcomms_tx_outpipe_indata_mimo_rvData$EN =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_indata_mimo_update ;
+
+  // register xcomms_tx_outpipe_nocAutoFlush
+  assign xcomms_tx_outpipe_nocAutoFlush$D_IN =
+	     MUX_xcomms_tx_outpipe_nocAutoFlush$write_1__SEL_1 ;
+  assign xcomms_tx_outpipe_nocAutoFlush$EN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_nocHandleCreditMsg &&
+	     xcomms_tx_outpipe_creditMsg$wget[0] ||
+	     WILL_FIRE_RL_xcomms_tx_outpipe_nocEnqCreditMsg ;
+
+  // register xcomms_tx_outpipe_nocCredits
+  assign xcomms_tx_outpipe_nocCredits$D_IN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_nocHandleCreditMsg ?
+	       MUX_xcomms_tx_outpipe_nocCredits$write_1__VAL_1 :
+	       16'd0 ;
+  assign xcomms_tx_outpipe_nocCredits$EN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_nocHandleCreditMsg ||
+	     WILL_FIRE_RL_xcomms_tx_outpipe_nocEnqCreditMsg ;
+
+  // register xcomms_tx_outpipe_nocUnderFlow
+  assign xcomms_tx_outpipe_nocUnderFlow$D_IN =
+	     MUX_xcomms_tx_outpipe_nocUnderFlow$write_1__SEL_1 ;
+  assign xcomms_tx_outpipe_nocUnderFlow$EN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_nocHandleCreditMsg &&
+	     xcomms_tx_outpipe_creditMsg$wget[1] ||
+	     WILL_FIRE_RL_xcomms_tx_outpipe_nocEnqCreditMsg ;
+
+  // register xcomms_tx_outpipe_noc_buf
+  assign xcomms_tx_outpipe_noc_buf$D_IN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_transfer_element_data ?
+	       xcomms_tx_outpipe_out_fifo$dD_OUT :
+	       MUX_xcomms_tx_outpipe_noc_buf$write_1__VAL_2 ;
+  assign xcomms_tx_outpipe_noc_buf$EN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_transfer_element_data ||
+	     WILL_FIRE_RL_xcomms_tx_outpipe_remove_taken_beat ;
+
+  // register xcomms_tx_outpipe_noc_buf_bytes
+  always@(WILL_FIRE_RL_xcomms_tx_outpipe_remove_taken_beat or
+	  MUX_xcomms_tx_outpipe_noc_buf_bytes$write_1__VAL_1 or
+	  xcomms_tx_outpipe_in_reset_noc or
+	  WILL_FIRE_RL_xcomms_tx_outpipe_transfer_element_data)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_xcomms_tx_outpipe_remove_taken_beat:
+	  xcomms_tx_outpipe_noc_buf_bytes$D_IN =
+	      MUX_xcomms_tx_outpipe_noc_buf_bytes$write_1__VAL_1;
+      xcomms_tx_outpipe_in_reset_noc:
+	  xcomms_tx_outpipe_noc_buf_bytes$D_IN = 16'd0;
+      WILL_FIRE_RL_xcomms_tx_outpipe_transfer_element_data:
+	  xcomms_tx_outpipe_noc_buf_bytes$D_IN = 16'd82;
+      default: xcomms_tx_outpipe_noc_buf_bytes$D_IN =
+		   16'b1010101010101010 /* unspecified value */ ;
+    endcase
+  end
+  assign xcomms_tx_outpipe_noc_buf_bytes$EN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_remove_taken_beat ||
+	     xcomms_tx_outpipe_in_reset_noc ||
+	     WILL_FIRE_RL_xcomms_tx_outpipe_transfer_element_data ;
+
+  // register xcomms_tx_outpipe_overflow
+  assign xcomms_tx_outpipe_overflow$D_IN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state &&
+	     MUX_xcomms_tx_outpipe_overflow$write_1__VAL_1 ;
+  assign xcomms_tx_outpipe_overflow$EN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state ||
+	     WILL_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side ;
+
+  // register xcomms_tx_outpipe_pending_recv
+  assign xcomms_tx_outpipe_pending_recv$D_IN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state &&
+	     MUX_xcomms_tx_outpipe_pending_recv$write_1__VAL_1 ;
+  assign xcomms_tx_outpipe_pending_recv$EN =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state ||
+	     WILL_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side ;
+
+  // register xcomms_tx_outpipe_prev_reset_uclk
+  assign xcomms_tx_outpipe_prev_reset_uclk$D_IN =
+	     xcomms_tx_outpipe_in_reset_uclk ;
+  assign xcomms_tx_outpipe_prev_reset_uclk$EN = 1'd1 ;
+
+  // register xcomms_tx_outpipe_sendDataOK
+  assign xcomms_tx_outpipe_sendDataOK$D_IN =
+	     (!CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits ||
+	      !xcomms_tx_outpipe_updates_from_msg$wget[1]) &&
+	     NOT_xcomms_tx_outpipe_updates_from_ifc_whas__5_ETC___d1696 &&
+	     (!xcomms_tx_outpipe_add_to_output_buffer$whas ||
+	      !xcomms_tx_outpipe_updates_from_ifc$wget[0]) &&
+	     IF_IF_xcomms_tx_outpipe_updates_from_ifc_whas__ETC___d1702 ;
+  assign xcomms_tx_outpipe_sendDataOK$EN =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_update_producer_state ;
+
+  // submodule _unnamed_
+  assign _unnamed_$cc_xmit_put =
+	     cc_gearbox_read_block ?
+	       ((!cc_gearbox_elem1_status_1__read__12_EQ_cc_gear_ETC___d414 &&
+		 cc_gearbox_elem1_status_0__read__15_EQ_cc_gear_ETC___d416) ?
+		  cc_gearbox_block1[133:67] :
+		  cc_gearbox_block1[66:0]) :
+	       ((!cc_gearbox_elem0_status_1__read__03_EQ_cc_gear_ETC___d405 &&
+		 cc_gearbox_elem0_status_0__read__06_EQ_cc_gear_ETC___d407) ?
+		  cc_gearbox_block0[133:67] :
+		  cc_gearbox_block0[66:0]) ;
+  assign _unnamed_$pcie_in_m_axis_cc_tready = m_axis_cc_tready ;
+  assign _unnamed_$pcie_in_m_axis_rq_tready = m_axis_rq_tready ;
+  assign _unnamed_$pcie_in_pcie4_cfg_control_bus_number =
+	     pcie4_cfg_control_bus_number ;
+  assign _unnamed_$pcie_in_pcie4_cfg_control_flr_in_process =
+	     pcie4_cfg_control_flr_in_process ;
+  assign _unnamed_$pcie_in_pcie4_cfg_control_hot_reset_out =
+	     pcie4_cfg_control_hot_reset_out ;
+  assign _unnamed_$pcie_in_pcie4_cfg_control_power_state_change_interrupt =
+	     pcie4_cfg_control_power_state_change_interrupt ;
+  assign _unnamed_$pcie_in_pcie4_cfg_control_vf_flr_in_process =
+	     pcie4_cfg_control_vf_flr_in_process ;
+  assign _unnamed_$pcie_in_pcie4_cfg_external_msix_msi_fail =
+	     pcie4_cfg_external_msix_msi_fail ;
+  assign _unnamed_$pcie_in_pcie4_cfg_external_msix_msi_sent =
+	     pcie4_cfg_external_msix_msi_sent ;
+  assign _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_msix_enable =
+	     pcie4_cfg_external_msix_msix_msix_enable ;
+  assign _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_msix_mask =
+	     pcie4_cfg_external_msix_msix_msix_mask ;
+  assign _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_vec_pending_status =
+	     pcie4_cfg_external_msix_msix_vec_pending_status ;
+  assign _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_vf_enable =
+	     pcie4_cfg_external_msix_msix_vf_enable ;
+  assign _unnamed_$pcie_in_pcie4_cfg_external_msix_msix_vf_mask =
+	     pcie4_cfg_external_msix_msix_vf_mask ;
+  assign _unnamed_$pcie_in_pcie4_cfg_fc_cpld = pcie4_cfg_fc_cpld ;
+  assign _unnamed_$pcie_in_pcie4_cfg_fc_cplh = pcie4_cfg_fc_cplh ;
+  assign _unnamed_$pcie_in_pcie4_cfg_fc_npd = pcie4_cfg_fc_npd ;
+  assign _unnamed_$pcie_in_pcie4_cfg_fc_nph = pcie4_cfg_fc_nph ;
+  assign _unnamed_$pcie_in_pcie4_cfg_fc_pd = pcie4_cfg_fc_pd ;
+  assign _unnamed_$pcie_in_pcie4_cfg_fc_ph = pcie4_cfg_fc_ph ;
+  assign _unnamed_$pcie_in_pcie4_cfg_interrupt_sent =
+	     pcie4_cfg_interrupt_sent ;
+  assign _unnamed_$pcie_in_pcie4_cfg_mesg_rcvd_received =
+	     pcie4_cfg_mesg_rcvd_received ;
+  assign _unnamed_$pcie_in_pcie4_cfg_mesg_rcvd_received_data =
+	     pcie4_cfg_mesg_rcvd_received_data ;
+  assign _unnamed_$pcie_in_pcie4_cfg_mesg_rcvd_received_type =
+	     pcie4_cfg_mesg_rcvd_received_type ;
+  assign _unnamed_$pcie_in_pcie4_cfg_mesg_tx_transmit_done =
+	     pcie4_cfg_mesg_tx_transmit_done ;
+  assign _unnamed_$pcie_in_pcie4_cfg_mgmt_read_data =
+	     pcie4_cfg_mgmt_read_data ;
+  assign _unnamed_$pcie_in_pcie4_cfg_mgmt_read_write_done =
+	     pcie4_cfg_mgmt_read_write_done ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_current_speed =
+	     pcie4_cfg_status_current_speed ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_err_cor_out =
+	     pcie4_cfg_status_err_cor_out ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_err_fatal_out =
+	     pcie4_cfg_status_err_fatal_out ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_err_nonfatal_out =
+	     pcie4_cfg_status_err_nonfatal_out ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_function_status =
+	     pcie4_cfg_status_function_status ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_funstion_power_state =
+	     pcie4_cfg_status_funstion_power_state ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_link_power_state =
+	     pcie4_cfg_status_link_power_state ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_local_error_out =
+	     pcie4_cfg_status_local_error_out ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_local_error_valid =
+	     pcie4_cfg_status_local_error_valid ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_ltssm_state =
+	     pcie4_cfg_status_ltssm_state ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_max_payload =
+	     pcie4_cfg_status_max_payload ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_max_read_req =
+	     pcie4_cfg_status_max_read_req ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_negotiated_width =
+	     pcie4_cfg_status_negotiated_width ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_obff_enable =
+	     pcie4_cfg_status_obff_enable ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_pcie_cq_np_req_count =
+	     pcie4_cfg_status_pcie_cq_np_req_count ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_phy_link_down =
+	     pcie4_cfg_status_phy_link_down ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_phy_link_status =
+	     pcie4_cfg_status_phy_link_status ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_pl_status_change =
+	     pcie4_cfg_status_pl_status_change ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_rcb_status =
+	     pcie4_cfg_status_rcb_status ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_rq_seq_num0 =
+	     pcie4_cfg_status_rq_seq_num0 ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_rq_seq_num1 =
+	     pcie4_cfg_status_rq_seq_num1 ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_rq_seq_num_vld0 =
+	     pcie4_cfg_status_rq_seq_num_vld0 ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_rq_seq_num_vld1 =
+	     pcie4_cfg_status_rq_seq_num_vld1 ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_rq_tag0 =
+	     pcie4_cfg_status_rq_tag0 ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_rq_tag1 =
+	     pcie4_cfg_status_rq_tag1 ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_rq_tag_av =
+	     pcie4_cfg_status_rq_tag_av ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_rq_tag_vld0 =
+	     pcie4_cfg_status_rq_tag_vld0 ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_rq_tag_vld1 =
+	     pcie4_cfg_status_rq_tag_vld1 ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_rx_pm_state =
+	     pcie4_cfg_status_rx_pm_state ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_tfc_npd_av =
+	     pcie4_cfg_status_tfc_npd_av ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_tfc_nph_av =
+	     pcie4_cfg_status_tfc_nph_av ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_tph_requester_enable =
+	     pcie4_cfg_status_tph_requester_enable ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_tph_st_mode =
+	     pcie4_cfg_status_tph_st_mode ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_tx_pm_state =
+	     pcie4_cfg_status_tx_pm_state ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_vf_power_state =
+	     pcie4_cfg_status_vf_power_state ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_vf_status =
+	     pcie4_cfg_status_vf_status ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_vf_tph_requester_enable =
+	     pcie4_cfg_status_vf_tph_requester_enable ;
+  assign _unnamed_$pcie_in_pcie4_cfg_status_vf_tph_st_mode =
+	     pcie4_cfg_status_vf_tph_st_mode ;
+  assign _unnamed_$pcie_in_pcie4_phy_rdy_out = pcie4_phy_rdy_out ;
+  assign _unnamed_$pcie_in_pcie4_user_link_up = pcie4_user_link_up ;
+  assign _unnamed_$pcie_in_s_axis_cq_tdata = s_axis_cq_tdata ;
+  assign _unnamed_$pcie_in_s_axis_cq_tkeep = s_axis_cq_tkeep ;
+  assign _unnamed_$pcie_in_s_axis_cq_tlast = s_axis_cq_tlast ;
+  assign _unnamed_$pcie_in_s_axis_cq_tuser = s_axis_cq_tuser ;
+  assign _unnamed_$pcie_in_s_axis_cq_tvalid = s_axis_cq_tvalid ;
+  assign _unnamed_$pcie_in_s_axis_rc_tdata = s_axis_rc_tdata ;
+  assign _unnamed_$pcie_in_s_axis_rc_tkeep = s_axis_rc_tkeep ;
+  assign _unnamed_$pcie_in_s_axis_rc_tlast = s_axis_rc_tlast ;
+  assign _unnamed_$pcie_in_s_axis_rc_tuser = s_axis_rc_tuser ;
+  assign _unnamed_$pcie_in_s_axis_rc_tvalid = s_axis_rc_tvalid ;
+  assign _unnamed_$rq_xmit_put =
+	     rq_gearbox_read_block ?
+	       ((!rq_gearbox_elem1_status_1__read__27_EQ_rq_gear_ETC___d629 &&
+		 rq_gearbox_elem1_status_0__read__30_EQ_rq_gear_ETC___d631) ?
+		  rq_gearbox_block1[149:75] :
+		  rq_gearbox_block1[74:0]) :
+	       ((!rq_gearbox_elem0_status_1__read__18_EQ_rq_gear_ETC___d620 &&
+		 rq_gearbox_elem0_status_0__read__21_EQ_rq_gear_ETC___d622) ?
+		  rq_gearbox_block0[149:75] :
+		  rq_gearbox_block0[74:0]) ;
+  assign _unnamed_$EN_cq_recv_get = CAN_FIRE_RL_cq_mkConnectionGetPut ;
+  assign _unnamed_$EN_cc_xmit_put =
+	     WILL_FIRE_RL_cc_rl_fastclock &&
+	     (cc_gearbox_read_block ? keep__h31938 : keep__h31843) != 2'd0 ;
+  assign _unnamed_$EN_rq_xmit_put =
+	     WILL_FIRE_RL_rq_rl_fastclock &&
+	     (rq_gearbox_read_block ? keep__h47134 : keep__h47025) != 2'd0 ;
+  assign _unnamed_$EN_rc_recv_get = CAN_FIRE_RL_rc_mkConnectionGetPut ;
+
+  // submodule bridge
+  assign bridge$clocks_response_put = 32'h0 ;
+  always@(WILL_FIRE_RL_cq_rl_wr_header or
+	  MUX_bridge$cq_tlps_put_1__VAL_1 or
+	  WILL_FIRE_RL_cq_rl_rd_header or
+	  MUX_bridge$cq_tlps_put_1__VAL_2 or
+	  WILL_FIRE_RL_cq_rl_data_1_to_3 or
+	  MUX_bridge$cq_tlps_put_1__VAL_3 or
+	  WILL_FIRE_RL_cq_rl_data_4 or MUX_bridge$cq_tlps_put_1__VAL_4)
+  begin
+    case (1'b1) // synopsys parallel_case
+      WILL_FIRE_RL_cq_rl_wr_header:
+	  bridge$cq_tlps_put = MUX_bridge$cq_tlps_put_1__VAL_1;
+      WILL_FIRE_RL_cq_rl_rd_header:
+	  bridge$cq_tlps_put = MUX_bridge$cq_tlps_put_1__VAL_2;
+      WILL_FIRE_RL_cq_rl_data_1_to_3:
+	  bridge$cq_tlps_put = MUX_bridge$cq_tlps_put_1__VAL_3;
+      WILL_FIRE_RL_cq_rl_data_4:
+	  bridge$cq_tlps_put = MUX_bridge$cq_tlps_put_1__VAL_4;
+      default: bridge$cq_tlps_put =
+		   153'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA /* unspecified value */ ;
+    endcase
+  end
+  assign bridge$noc_in_beat_v = fToBridgeBeat$D_OUT ;
+  assign bridge$noc_in_src_rdy_b = fToBridgeBeat$EMPTY_N ;
+  assign bridge$noc_out_dst_rdy_b =
+	     NOT_fFromBridgeBeat_ifc_rDataAvail_849_ULT_4_932___d1933 ;
+  assign bridge$rc_tlps_put =
+	     WILL_FIRE_RL_rc_rl_header ?
+	       MUX_bridge$rc_tlps_put_1__VAL_1 :
+	       MUX_bridge$rc_tlps_put_1__VAL_2 ;
+  assign bridge$status_bluenoc_link_is_up_i = bridge$is_activated ;
+  assign bridge$status_interrupts_enabled_i = intr_on ;
+  assign bridge$status_memory_enabled_i = 1'd1 ;
+  assign bridge$status_out_of_reset_i = wIsOutOfReset$DOUT ;
+  assign bridge$status_pcie_link_is_up_i = lnk_up_cr ;
+  assign bridge$EN_rq_tlps_get = CAN_FIRE_RL_rq_rl_get_tlps ;
+  assign bridge$EN_rc_tlps_put =
+	     WILL_FIRE_RL_rc_rl_header || WILL_FIRE_RL_rc_rl_data_a ;
+  assign bridge$EN_cq_tlps_put =
+	     WILL_FIRE_RL_cq_rl_wr_header || WILL_FIRE_RL_cq_rl_rd_header ||
+	     WILL_FIRE_RL_cq_rl_data_1_to_3 ||
+	     WILL_FIRE_RL_cq_rl_data_4 ;
+  assign bridge$EN_cc_tlps_get = CAN_FIRE_RL_cc_rl_get_tlps ;
+  assign bridge$EN_msi_interrupt_clear = 1'b0 ;
+  assign bridge$EN_clocks_request_get = 1'b0 ;
+  assign bridge$EN_clocks_response_put = 1'b0 ;
+
+  // submodule clockGenerators_one_to_one_cclock_pre_negedge_uclk
+  assign clockGenerators_one_to_one_cclock_pre_negedge_uclk$sD_IN =
+	     IF_clockGenerators_one_to_one_cclock_count_802_ETC___d1805 ==
+	     32'd1 ;
+  assign clockGenerators_one_to_one_cclock_pre_negedge_uclk$sEN = 1'b0 ;
+
+  // submodule clockGenerators_one_to_one_cclock_pre_posedge_uclk
+  assign clockGenerators_one_to_one_cclock_pre_posedge_uclk$sD_IN =
+	     IF_clockGenerators_one_to_one_cclock_count_802_ETC___d1805 ==
+	     32'd0 ;
+  assign clockGenerators_one_to_one_cclock_pre_posedge_uclk$sEN = 1'b0 ;
+
+  // submodule cq_in_buf
+  assign cq_in_buf$D_IN = _unnamed_$cq_recv_get ;
+  assign cq_in_buf$ENQ = CAN_FIRE_RL_cq_mkConnectionGetPut ;
+  assign cq_in_buf$DEQ = CAN_FIRE_RL_cq_rl_g_to_gearbox ;
+  assign cq_in_buf$CLR = 1'b0 ;
+
+  // submodule dut_dutIfc
+  assign dut_dutIfc$axi_in_tdata = axi_in_tdata ;
+  assign dut_dutIfc$axi_in_tkeep = axi_in_tkeep ;
+  assign dut_dutIfc$axi_in_tlast = axi_in_tlast ;
+  assign dut_dutIfc$axi_in_tstrb = axi_in_tstrb ;
+  assign dut_dutIfc$axi_in_tvalid = axi_in_tvalid ;
+  assign dut_dutIfc$comms_link_response_put = xcomms_rx_res_fifo_ff$D_OUT ;
+  assign dut_dutIfc$EN_comms_link_request_get = CAN_FIRE_RL_rl_commsOut ;
+  assign dut_dutIfc$EN_comms_link_response_put = CAN_FIRE_RL_rl_commsIn ;
+
+  // submodule dut_prb_control_ackFifo
+  assign dut_prb_control_ackFifo$D_IN =
+	     { IF_dut_prb_control_control_in_dataF_rv_port1___ETC___d1134,
+	       16'hFFF9 } ;
+  assign dut_prb_control_ackFifo$ENQ =
+	     WILL_FIRE_RL_dut_prb_control_receiveControl &&
+	     (dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd0 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd1 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd2 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd4 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd5 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd6 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[12:0] !=
+	      13'h1FFF) &&
+	     (dut_prb_control_control_in_dataF_rv$port1__read[15:13] !=
+	      3'd3 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[12] ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] !=
+	      2'd2) &&
+	     !dut_prb_control_control_in_dataF_rv$port1__read[16] ;
+  assign dut_prb_control_ackFifo$DEQ = WILL_FIRE_RL_dut_prb_control_sendAck ;
+  assign dut_prb_control_ackFifo$CLR = 1'b0 ;
+
+  // submodule dut_prb_control_control_in_buffer_empty_sp
+  assign dut_prb_control_control_in_buffer_empty_sp$sEN =
+	     WILL_FIRE_RL_dut_prb_control_control_in_update_remaining &&
+	     !dut_prb_control_control_in_got_beat_pw$whas &&
+	     dut_prb_control_control_in_next_sp$dPulse ;
+
+  // submodule dut_prb_control_control_in_buffer_full_sp
+  assign dut_prb_control_control_in_buffer_full_sp$sEN =
+	     WILL_FIRE_RL_dut_prb_control_control_in_update_remaining &&
+	     dut_prb_control_control_in_got_beat_pw$whas &&
+	     dut_prb_control_control_in_remaining ;
+
+  // submodule dut_prb_control_control_in_ending_reset
+  assign dut_prb_control_control_in_ending_reset$sEN =
+	     !dut_prb_control_control_in_in_reset_uclk &&
+	     dut_prb_control_control_in_prev_reset_uclk ;
+
+  // submodule dut_prb_control_control_in_next_sp
+  assign dut_prb_control_control_in_next_sp$sEN =
+	     WILL_FIRE_RL_dut_prb_control_control_in_read_complete ||
+	     WILL_FIRE_RL_dut_prb_control_control_in_first_request ;
+
+  // submodule dut_prb_control_control_in_starting_reset
+  assign dut_prb_control_control_in_starting_reset$sEN =
+	     dut_prb_control_control_in_in_reset_uclk ;
+
+  // submodule dut_prb_control_control_in_wait_sp
+  assign dut_prb_control_control_in_wait_sp$sEN =
+	     MUX_dut_prb_control_control_in_status$_write_1__SEL_1 ;
+
+  // submodule dut_prb_control_data_out_ending_reset
+  assign dut_prb_control_data_out_ending_reset$sEN =
+	     !dut_prb_control_data_out_in_reset_uclk &&
+	     dut_prb_control_data_out_prev_reset_uclk ;
+
+  // submodule dut_prb_control_data_out_finished
+  assign dut_prb_control_data_out_finished$sEN =
+	     WILL_FIRE_RL_msg_sink_noc_active_execute_outport_acks &&
+	     fS1OutPortAcks_ifc_rStorage[9:0] == 10'd0 ;
+
+  // submodule dut_prb_control_data_out_next
+  assign dut_prb_control_data_out_next$sEN =
+	     WILL_FIRE_RL_dut_prb_control_receiveMoreData ||
+	     WILL_FIRE_RL_dut_prb_control_sendAck ||
+	     WILL_FIRE_RL_dut_prb_control_respondToPing ||
+	     WILL_FIRE_RL_dut_prb_control_receiveFirstData ||
+	     WILL_FIRE_RL_dut_prb_control_receiveTrigger ;
+
+  // submodule dut_prb_control_data_out_starting_reset
+  assign dut_prb_control_data_out_starting_reset$sEN =
+	     dut_prb_control_data_out_in_reset_uclk ;
+
+  // submodule dut_prb_control_enff
+  always@(MUX_dut_prb_control_enff$enq_1__SEL_1 or
+	  MUX_dut_prb_control_enff$enq_1__VAL_1 or
+	  WILL_FIRE_RL_dut_prb_control_receiveTrigger or
+	  MUX_dut_prb_control_enff$enq_1__VAL_2 or
+	  MUX_dut_prb_control_enff$enq_1__SEL_3)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_dut_prb_control_enff$enq_1__SEL_1:
+	  dut_prb_control_enff$D_IN = MUX_dut_prb_control_enff$enq_1__VAL_1;
+      WILL_FIRE_RL_dut_prb_control_receiveTrigger:
+	  dut_prb_control_enff$D_IN = MUX_dut_prb_control_enff$enq_1__VAL_2;
+      MUX_dut_prb_control_enff$enq_1__SEL_3:
+	  dut_prb_control_enff$D_IN = 19'd221178;
+      default: dut_prb_control_enff$D_IN =
+		   19'b0101010101010101010 /* unspecified value */ ;
+    endcase
+  end
+  assign dut_prb_control_enff$ENQ =
+	     WILL_FIRE_RL_dut_prb_control_receiveControl &&
+	     (dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd0 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd1 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd2 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd4 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd5 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd6 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[12:0] !=
+	      13'h1FFF) &&
+	     (dut_prb_control_control_in_dataF_rv$port1__read[9:0] ==
+	      10'd1023 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:13] !=
+	      3'd3 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[12] ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] !=
+	      2'd2) ||
+	     WILL_FIRE_RL_dut_prb_control_receiveTrigger ||
+	     WILL_FIRE_RL_dut_prb_control_unsetFlag ||
+	     WILL_FIRE_RL_dut_prb_control_setSample ;
+  assign dut_prb_control_enff$DEQ = dut_prb_control_enff$EMPTY_N ;
+  assign dut_prb_control_enff$CLR = 1'b0 ;
+
+  // submodule dut_prb_control_prb_str
+  assign dut_prb_control_prb_str$D_IN = dut_probeHook$DATAUP ;
+  assign dut_prb_control_prb_str$ENQ =
+	     CAN_FIRE_RL_dut_prb_control_prb_str_recv_doEnq ;
+  assign dut_prb_control_prb_str$DEQ =
+	     MUX_dut_prb_control_data_out_beats$_write_1__SEL_1 ;
+  assign dut_prb_control_prb_str$CLR = 1'b0 ;
+
+  // submodule dut_probeHook
+  assign dut_probeHook$CMD =
+	     { CASE_dut_prb_control_enffD_OUT_BITS_18_TO_16__ETC__q11,
+	       dut_prb_control_enff$D_OUT[2:0] } ;
+  assign dut_probeHook$ACK = dut_prb_control_prb_str$FULL_N ;
+  assign dut_probeHook$CMDEN = dut_prb_control_enff$EMPTY_N ;
+  assign dut_probeHook$CTIMER = 1'b0 ;
+
+  // submodule fToBridgeBeat
+  always@(MUX_fToBridgeBeat$enq_1__SEL_1 or
+	  fFromContinueBeat_ifc_rStorage or
+	  MUX_fToBridgeBeat$enq_1__SEL_2 or
+	  fS1MsgOut_ifc_rStorage or
+	  MUX_fToBridgeBeat$enq_1__SEL_3 or fS2MsgOut_ifc_rStorage)
+  begin
+    case (1'b1) // synopsys parallel_case
+      MUX_fToBridgeBeat$enq_1__SEL_1:
+	  fToBridgeBeat$D_IN = fFromContinueBeat_ifc_rStorage[31:0];
+      MUX_fToBridgeBeat$enq_1__SEL_2:
+	  fToBridgeBeat$D_IN = fS1MsgOut_ifc_rStorage[31:0];
+      MUX_fToBridgeBeat$enq_1__SEL_3:
+	  fToBridgeBeat$D_IN = fS2MsgOut_ifc_rStorage[31:0];
+      default: fToBridgeBeat$D_IN = 32'hAAAAAAAA /* unspecified value */ ;
+    endcase
+  end
+  assign fToBridgeBeat$ENQ =
+	     WILL_FIRE_RL_msg_source_noc_active_continue_other ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other ||
+	     WILL_FIRE_RL_msg_source_noc_active_continue_scemi1 ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 ||
+	     WILL_FIRE_RL_msg_source_noc_active_continue_scemi2 ||
+	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 ;
+  assign fToBridgeBeat$DEQ =
+	     CAN_FIRE_RL_msg_source_noc_active_move_to_next_output_beat ;
+  assign fToBridgeBeat$CLR = CAN_FIRE_RL_reset_scemi_if_network_is_inactive ;
+
+  // submodule init_state_msgFIFO
+  assign init_state_msgFIFO$sD_IN = { init_state_cycle_stamp, 10'd0 } ;
+  assign init_state_msgFIFO$sENQ =
+	     WILL_FIRE_RL_dut_prb_control_receiveMoreData ||
+	     WILL_FIRE_RL_dut_prb_control_sendAck ||
+	     WILL_FIRE_RL_dut_prb_control_respondToPing ||
+	     WILL_FIRE_RL_dut_prb_control_receiveFirstData ||
+	     WILL_FIRE_RL_dut_prb_control_receiveTrigger ;
+  assign init_state_msgFIFO$dDEQ =
+	     CAN_FIRE_RL_msg_source_noc_active_outports_start_data_message ;
+
+  // submodule network_status
+  assign network_status$ASSERT_IN =
+	     CAN_FIRE_RL_reset_scemi_if_network_is_inactive ;
+
+  // submodule rc_in_buf
+  assign rc_in_buf$D_IN = _unnamed_$rc_recv_get ;
+  assign rc_in_buf$ENQ = CAN_FIRE_RL_rc_mkConnectionGetPut ;
+  assign rc_in_buf$DEQ = CAN_FIRE_RL_rc_rl_g_to_gearbox ;
+  assign rc_in_buf$CLR = 1'b0 ;
+
+  // submodule rstgen_inv_rstgen
+  assign rstgen_inv_rstgen$ASSERT_IN = CAN_FIRE_RL_rstgen_trigger ;
+
+  // submodule rstgen_rstgen
+  assign rstgen_rstgen$ASSERT_IN = 1'b0 ;
+
+  // submodule uclkgen
+  assign uclkgen$CLK_IN = x1__h61520 ;
+  assign uclkgen$COND_IN = 1'b0 ;
+  assign uclkgen$CLK_IN_EN = 1'd1 ;
+  assign uclkgen$COND_IN_EN = 1'b0 ;
+
+  // submodule xcomms_rx_inpipe_consume_timer
+  assign xcomms_rx_inpipe_consume_timer$DATA_A = 4'h0 ;
+  assign xcomms_rx_inpipe_consume_timer$DATA_B = 4'd15 ;
+  assign xcomms_rx_inpipe_consume_timer$DATA_C = 4'h0 ;
+  assign xcomms_rx_inpipe_consume_timer$DATA_F = 4'd15 ;
+  assign xcomms_rx_inpipe_consume_timer$ADDA = 1'b0 ;
+  assign xcomms_rx_inpipe_consume_timer$ADDB =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_tick_timer ;
+  assign xcomms_rx_inpipe_consume_timer$SETC = 1'b0 ;
+  assign xcomms_rx_inpipe_consume_timer$SETF =
+	     xcomms_rx_inpipe_reset_uclk_done2 &&
+	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__300_ETC___d1303 !=
+	     16'd0 ;
+
+  // submodule xcomms_rx_inpipe_credit_fifo
+  assign xcomms_rx_inpipe_credit_fifo$sD_IN =
+	     { xcomms_rx_inpipe_credits$Q_OUT,
+	       xcomms_rx_inpipe_send_underflow } ;
+  assign xcomms_rx_inpipe_credit_fifo$sENQ =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_send_credit_message ;
+  assign xcomms_rx_inpipe_credit_fifo$dDEQ =
+	     WILL_FIRE_RL_xcomms_rx_inpipe_drain_credit_fifo ||
+	     WILL_FIRE_RL_start_inpipe_credit_request ;
+
+  // submodule xcomms_rx_inpipe_credits
+  assign xcomms_rx_inpipe_credits$DATA_A =
+	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__300_ETC___d1303 ;
+  assign xcomms_rx_inpipe_credits$DATA_B = -xcomms_rx_inpipe_credits$Q_OUT ;
+  assign xcomms_rx_inpipe_credits$DATA_C = 16'h0 ;
+  assign xcomms_rx_inpipe_credits$DATA_F = 16'd0 ;
+  assign xcomms_rx_inpipe_credits$ADDA = xcomms_rx_inpipe_reset_uclk_done2 ;
+  assign xcomms_rx_inpipe_credits$ADDB =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_send_credit_message ;
+  assign xcomms_rx_inpipe_credits$SETC = 1'b0 ;
+  assign xcomms_rx_inpipe_credits$SETF =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side ;
+
+  // submodule xcomms_rx_inpipe_data_info_fifo
+  assign xcomms_rx_inpipe_data_info_fifo$sD_IN =
+	     xcomms_tx_outpipe_creditMsg$wget ;
+  assign xcomms_rx_inpipe_data_info_fifo$sENQ =
+	     MUX_xcomms_rx_inpipe_ecount$write_1__SEL_2 ;
+  assign xcomms_rx_inpipe_data_info_fifo$dDEQ =
+	     WILL_FIRE_RL_xcomms_rx_inpipe_drain_data_info_fifo ||
+	     WILL_FIRE_RL_xcomms_rx_inpipe_consumer_handle_msg ;
+
+  // submodule xcomms_rx_inpipe_ending_reset
+  assign xcomms_rx_inpipe_ending_reset$sEN =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side ;
+
+  // submodule xcomms_rx_inpipe_in_fifo
+  assign xcomms_rx_inpipe_in_fifo$sD_IN =
+	     { xcomms_rx_inpipe_ecount == 16'd1 && xcomms_rx_inpipe_eom_in,
+	       xcomms_rx_inpipe_mimo_rvData[55:0] } ;
+  assign xcomms_rx_inpipe_in_fifo$sENQ =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_take_completed_element ;
+  assign xcomms_rx_inpipe_in_fifo$dDEQ =
+	     WILL_FIRE_RL_xcomms_rx_inpipe_drain_in_fifo ||
+	     WILL_FIRE_RL_xcomms_rx_inpipe_move_elem ;
+
+  // submodule xcomms_rx_inpipe_starting_reset
+  assign xcomms_rx_inpipe_starting_reset$sEN =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_passReset ;
+
+  // submodule xcomms_rx_res_fifo_ff
+  assign xcomms_rx_res_fifo_ff$D_IN = xcomms_rx_inpipe_elems[55:0] ;
+  assign xcomms_rx_res_fifo_ff$ENQ =
+	     CAN_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut ;
+  assign xcomms_rx_res_fifo_ff$DEQ = CAN_FIRE_RL_rl_commsIn ;
+  assign xcomms_rx_res_fifo_ff$CLR = 1'b0 ;
+
+  // submodule xcomms_tx_outpipe_accumulateTimer
+  assign xcomms_tx_outpipe_accumulateTimer$DATA_A = 5'h0 ;
+  assign xcomms_tx_outpipe_accumulateTimer$DATA_B = 5'd31 ;
+  assign xcomms_tx_outpipe_accumulateTimer$DATA_C = 5'h0 ;
+  assign xcomms_tx_outpipe_accumulateTimer$DATA_F = 5'd31 ;
+  assign xcomms_tx_outpipe_accumulateTimer$ADDA = 1'b0 ;
+  assign xcomms_tx_outpipe_accumulateTimer$ADDB =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state &&
+	     (!CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits ||
+	      !xcomms_tx_outpipe_updates_from_msg$wget[1]) &&
+	     NOT_xcomms_tx_outpipe_updates_from_ifc_whas__5_ETC___d1689 ;
+  assign xcomms_tx_outpipe_accumulateTimer$SETC = 1'b0 ;
+  assign xcomms_tx_outpipe_accumulateTimer$SETF =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state &&
+	     (!CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits ||
+	      !xcomms_tx_outpipe_updates_from_msg$wget[1]) &&
+	     NOT_xcomms_tx_outpipe_updates_from_ifc_whas__5_ETC___d1682 &&
+	     (!xcomms_tx_outpipe_add_to_output_buffer$whas ||
+	      !xcomms_tx_outpipe_updates_from_ifc$wget[0]) &&
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1619 !=
+	     16'd0 ;
+
+  // submodule xcomms_tx_outpipe_creditTimer
+  assign xcomms_tx_outpipe_creditTimer$DATA_A = 3'h0 ;
+  assign xcomms_tx_outpipe_creditTimer$DATA_B = 3'd7 ;
+  assign xcomms_tx_outpipe_creditTimer$DATA_C = 3'h0 ;
+  assign xcomms_tx_outpipe_creditTimer$DATA_F = 3'd7 ;
+  assign xcomms_tx_outpipe_creditTimer$ADDA = 1'b0 ;
+  assign xcomms_tx_outpipe_creditTimer$ADDB =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_tickCreditTimer ;
+  assign xcomms_tx_outpipe_creditTimer$SETC = 1'b0 ;
+  assign xcomms_tx_outpipe_creditTimer$SETF =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_nocHandleCreditMsg ;
+
+  // submodule xcomms_tx_outpipe_credit_fifo
+  assign xcomms_tx_outpipe_credit_fifo$sD_IN =
+	     { xcomms_tx_outpipe_nocCredits,
+	       xcomms_tx_outpipe_nocUnderFlow,
+	       xcomms_tx_outpipe_nocAutoFlush } ;
+  assign xcomms_tx_outpipe_credit_fifo$sENQ =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_nocEnqCreditMsg ;
+  assign xcomms_tx_outpipe_credit_fifo$dDEQ =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_drain_credit_fifo ||
+	     WILL_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits ;
+
+  // submodule xcomms_tx_outpipe_data_info_fifo
+  assign xcomms_tx_outpipe_data_info_fifo$sD_IN =
+	     (CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits &&
+	      xcomms_tx_outpipe_updates_from_msg$wget[1]) ?
+	       { _0_CONCAT_xcomms_tx_outpipe_elem_count_622_BITS_ETC___d1647[31:0],
+		 2'd0,
+		 xcomms_tx_outpipe_add_to_output_buffer$whas &&
+		 xcomms_tx_outpipe_updates_from_ifc$wget[0] } :
+	       IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1663 ;
+  assign xcomms_tx_outpipe_data_info_fifo$sENQ =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state &&
+	     (CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits &&
+	      xcomms_tx_outpipe_updates_from_msg$wget[1] ||
+	      xcomms_tx_outpipe_updates_from_ifc_whas__596_A_ETC___d1612 ||
+	      xcomms_tx_outpipe_add_to_output_buffer$whas &&
+	      xcomms_tx_outpipe_updates_from_ifc$wget[0] ||
+	      IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1642) ;
+  assign xcomms_tx_outpipe_data_info_fifo$dDEQ =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_drain_data_info_fifo ||
+	     WILL_FIRE_RL_start_outpipe_data_message ;
+
+  // submodule xcomms_tx_outpipe_ending_reset
+  assign xcomms_tx_outpipe_ending_reset$sEN =
+	     !xcomms_tx_outpipe_in_reset_uclk &&
+	     xcomms_tx_outpipe_prev_reset_uclk ;
+
+  // submodule xcomms_tx_outpipe_out_fifo
+  assign xcomms_tx_outpipe_out_fifo$sD_IN =
+	     xcomms_tx_outpipe_indata_mimo_rvData[655:0] ;
+  assign xcomms_tx_outpipe_out_fifo$sENQ =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_shift_elements_out_of_buffer ;
+  assign xcomms_tx_outpipe_out_fifo$dDEQ =
+	     WILL_FIRE_RL_xcomms_tx_outpipe_drain_out_fifo ||
+	     WILL_FIRE_RL_xcomms_tx_outpipe_transfer_element_data ;
+
+  // submodule xcomms_tx_outpipe_starting_reset
+  assign xcomms_tx_outpipe_starting_reset$sEN =
+	     xcomms_tx_outpipe_in_reset_uclk ;
+
+  // submodule xcomms_tx_res_fifo_ff
+  assign xcomms_tx_res_fifo_ff$D_IN = dut_dutIfc$comms_link_request_get ;
+  assign xcomms_tx_res_fifo_ff$ENQ = CAN_FIRE_RL_rl_commsOut ;
+  assign xcomms_tx_res_fifo_ff$DEQ =
+	     CAN_FIRE_RL_xcomms_tx_connect_res_mkConnectionGetPut ;
+  assign xcomms_tx_res_fifo_ff$CLR = 1'b0 ;
+
+  // remaining internal signals
+  assign IF_IF_xcomms_tx_outpipe_updates_from_ifc_whas__ETC___d1702 =
+	     (IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1619 ==
+	      16'd0) ?
+	       xcomms_tx_outpipe_elem_count_622_EQ_0_623_OR_N_ETC___d1701 :
+	       xcomms_tx_outpipe_sendDataOK ||
+	       xcomms_tx_outpipe_add_to_output_buffer$whas &&
+	       xcomms_tx_outpipe_updates_from_ifc$wget[3] ;
+  assign IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_168_ETC___d2382 =
+	     (IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281 !=
+	      2'd0 &&
+	      IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2352) ?
+	       2'd1 :
+	       ((IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281 !=
+		 2'd0 &&
+		 IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2379) ?
+		  2'd2 :
+		  2'd3) ;
+  assign IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_168_ETC___d2385 =
+	     (IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281 !=
+	      2'd0 &&
+	      IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2352) ?
+	       3'd2 :
+	       ((IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281 !=
+		 2'd0 &&
+		 IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2379) ?
+		  3'd4 :
+		  3'd0) ;
+  assign IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_270_4_ETC___d1432 =
+	     (!xcomms_rx_inpipe_reset_uclk_done2 ||
+	      xcomms_rx_inpipe_elem_count != 16'd1 &&
+	      xcomms_rx_inpipe_elem_count_397_ULT_xcomms_rx__ETC___d1428) ?
+	       32'd0 :
+	       { 16'd0, xcomms_rx_inpipe_elem_count } ;
+  assign IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_270_4_ETC___d1465 =
+	     (!xcomms_rx_inpipe_reset_uclk_done2 ||
+	      xcomms_rx_inpipe_elem_count != 16'd1 &&
+	      xcomms_rx_inpipe_elem_count_397_ULT_xcomms_rx__ETC___d1428) ?
+	       32'd0 :
+	       { 16'd0, b__h97042 } ;
+  assign IF_cc_gearbox_read_block_01_THEN_IF_NOT_cc_gea_ETC___d442 =
+	     (cc_gearbox_read_block ? keep__h31938 : keep__h31843) == 2'd0 ||
+	     _unnamed_$RDY_cc_xmit_put ;
+  assign IF_clockGenerators_one_to_one_cclock_count_802_ETC___d1805 =
+	     (clockGenerators_one_to_one_cclock_count == 32'd1) ?
+	       32'd0 :
+	       clockGenerators_one_to_one_cclock_count + 32'd1 ;
+  assign IF_cq_f_cq_rv_port0__read__75_BITS_98_TO_88_90_ETC___d208 =
+	     (cq_f_cq_rv[98:88] == 11'd1024) ? 10'd0 : cq_f_cq_rv[97:88] ;
+  assign IF_cq_gearbox_elem0_status_1__read__2_EQ_cq_ge_ETC___d69 =
+	     (cq_gearbox_elem0_status_1__read__2_EQ_cq_gearb_ETC___d34 &&
+	      !cq_gearbox_elem0_status_0__read__6_EQ_cq_gearb_ETC___d37) ?
+	       cq_in_buf$D_OUT :
+	       cq_gearbox_elem_1 ;
+  assign IF_cq_gearbox_elem1_status_1__read__3_EQ_cq_ge_ETC___d76 =
+	     (cq_gearbox_elem1_status_1__read__3_EQ_cq_gearb_ETC___d45 &&
+	      !cq_gearbox_elem1_status_0__read__7_EQ_cq_gearb_ETC___d48) ?
+	       cq_in_buf$D_OUT :
+	       cq_gearbox_elem_3 ;
+  assign IF_cq_gearbox_read_block_34_THEN_cq_gearbox_el_ETC___d173 =
+	     cq_gearbox_read_block ?
+	       { cq_gearbox_elem_3, cq_gearbox_elem_2 } :
+	       { cq_gearbox_elem_1, cq_gearbox_elem_0 } ;
+  assign IF_cq_gearbox_read_block_34_THEN_cq_gearbox_el_ETC___d218 =
+	     cq_gearbox_read_block ?
+	       cq_gearbox_elem_2[75:12] :
+	       cq_gearbox_elem_0[75:12] ;
+  assign IF_dut_prb_control_control_in_got_beat_pw_whas_ETC___d987 =
+	     dut_prb_control_control_in_got_beat_pw$whas ?
+	       !dut_prb_control_control_in_remaining ||
+	       dut_prb_control_control_in_buffer_full_sp$sRDY :
+	       !dut_prb_control_control_in_next_sp$dPulse ||
+	       dut_prb_control_control_in_buffer_empty_sp$sRDY ;
+  assign IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281 =
+	     (fFromContinueBeat_ifc_rDataCount_168_ULT_4___d2274 ?
+		2'd0 :
+		2'd1) +
+	     (fS1MsgOut_ifc_rDataCount_205_ULT_4___d2276 ? 2'd0 : 2'd1) +
+	     (fS2MsgOut_ifc_rDataCount_242_ULT_4___d2279 ? 2'd0 : 2'd1) ;
+  assign IF_rS1OutMsgIsCont_531_THEN_2_CONCAT_rS1BitsRe_ETC___d2548 =
+	     { rS1OutMsgIsCont ?
+		 { 66'd2,
+		   rS1BitsRem_537_PLUS_IF_rS1OutMsgIsCont_531_THE_ETC___d2542 } :
+		 { rS1CycleStamp,
+		   2'd2,
+		   rS1BitsRem_537_PLUS_IF_rS1OutMsgIsCont_531_THE_ETC___d2542 },
+	       rS1BitsRem[13:6] } ;
+  assign IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2681 =
+	     b__h303418 + rS2NumSaved ;
+  assign IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682 =
+	     IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2681 <
+	     value__h303251[2:0] ;
+  assign IF_rc_gearbox_elem0_status_1__read__87_EQ_rc_g_ETC___d724 =
+	     (rc_gearbox_elem0_status_1__read__87_EQ_rc_gear_ETC___d689 &&
+	      !rc_gearbox_elem0_status_0__read__91_EQ_rc_gear_ETC___d692) ?
+	       rc_in_buf$D_OUT :
+	       rc_gearbox_elem_1 ;
+  assign IF_rc_gearbox_elem1_status_1__read__98_EQ_rc_g_ETC___d731 =
+	     (rc_gearbox_elem1_status_1__read__98_EQ_rc_gear_ETC___d700 &&
+	      !rc_gearbox_elem1_status_0__read__02_EQ_rc_gear_ETC___d703) ?
+	       rc_in_buf$D_OUT :
+	       rc_gearbox_elem_3 ;
+  assign IF_rc_gearbox_read_block_93_THEN_NOT_rc_gearbo_ETC___d882 =
+	     (rc_gearbox_read_block ?
+		!rc_gearbox_elem_2[11] :
+		!rc_gearbox_elem_0[11]) &&
+	     rc_rg_dwcount != 11'd0 ;
+  assign IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829 =
+	     rc_gearbox_read_block ?
+	       rc_gearbox_elem_2[75:12] :
+	       rc_gearbox_elem_0[75:12] ;
+  assign IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839 =
+	     rc_gearbox_read_block ?
+	       rc_gearbox_elem_3[75:12] :
+	       rc_gearbox_elem_1[75:12] ;
+  assign IF_rq_gearbox_read_block_16_THEN_IF_NOT_rq_gea_ETC___d657 =
+	     (rq_gearbox_read_block ? keep__h47134 : keep__h47025) == 2'd0 ||
+	     _unnamed_$RDY_rq_xmit_put ;
+  assign IF_xcomms_rx_inpipe_mimo_rwvEnqData_whas__339__ETC___d1373 =
+	     CAN_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ?
+	       { _1329227995475430863082461991555563520_SRL_11_M_ETC___d1346[87:8] &
+		 xcomms_rx_inpipe_mimo_rwvEnqData_wget__348_CON_ETC___d1355[87:8] |
+		 ~_1329227995475430863082461991555563520_SRL_11_M_ETC___d1346[87:8] &
+		 xcomms_rx_inpipe_mimo_rvData_359_SRL_0_CONCAT__ETC___d1361[87:8],
+		 _1329227995475430863082461991555563520_SRL_11_M_ETC___d1346[7:0] &
+		 xcomms_rx_inpipe_mimo_rwvEnqData_wget__348_CON_ETC___d1355[7:0] |
+		 ~_1329227995475430863082461991555563520_SRL_11_M_ETC___d1346[7:0] &
+		 xcomms_rx_inpipe_mimo_rvData_359_SRL_0_CONCAT__ETC___d1361[7:0] } :
+	       xcomms_rx_inpipe_mimo_rvData_359_SRL_0_CONCAT__ETC___d1361 ;
+  assign IF_xcomms_rx_inpipe_updates_from_ifc_whas__300_ETC___d1303 =
+	     MUX_xcomms_rx_inpipe_elems$write_1__SEL_2 ?
+	       xcomms_rx_inpipe_updates_from_ifc$wget[33:18] :
+	       16'd0 ;
+  assign IF_xcomms_rx_inpipe_updates_from_ifc_whas__300_ETC___d1309 =
+	     MUX_xcomms_rx_inpipe_elems$write_1__SEL_2 ?
+	       xcomms_rx_inpipe_updates_from_ifc$wget[17:2] :
+	       16'd0 ;
+  assign IF_xcomms_rx_inpipe_updates_from_msg_whas__295_ETC___d1298 =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_consumer_handle_msg ?
+	       xcomms_rx_inpipe_updates_from_msg$wget[18:3] :
+	       16'd0 ;
+  assign IF_xcomms_tx_outpipe_add_to_output_buffer_whas_ETC___d1535 =
+	     xcomms_tx_outpipe_add_to_output_buffer$whas ?
+	       xcomms_tx_outpipe_add_to_output_buffer$wget[15:0] :
+	       16'd0 ;
+  assign IF_xcomms_tx_outpipe_credits_581_ULE_1_779_THE_ETC___d1780 =
+	     (xcomms_tx_outpipe_credits <= 16'd1) ?
+	       xcomms_tx_outpipe_credits :
+	       16'd1 ;
+  assign IF_xcomms_tx_outpipe_in_reset_uclk_473_OR_xcom_ETC___d1787 =
+	     (xcomms_tx_outpipe_in_reset_uclk_473_OR_xcomms__ETC___d1765 ||
+	      !xcomms_tx_outpipe_data_info_fifo$sFULL_N) ?
+	       32'd0 :
+	       { 16'd0,
+		 IF_xcomms_tx_outpipe_credits_581_ULE_1_779_THE_ETC___d1780 } ;
+  assign IF_xcomms_tx_outpipe_indata_mimo_rwvEnqData_wh_ETC___d1527 =
+	     xcomms_tx_outpipe_indata_mimo_rwEnqCount$whas ?
+	       { _2673200087794695338776412422716808468155371262_ETC___d1503[1311:656] &
+		 xcomms_tx_outpipe_indata_mimo_rwvEnqData_wget__ETC___d1507[1311:656] |
+		 ~_2673200087794695338776412422716808468155371262_ETC___d1503[1311:656] &
+		 xcomms_tx_outpipe_indata_mimo_rvData_511_SRL_0_ETC___d1515[1311:656],
+		 _2673200087794695338776412422716808468155371262_ETC___d1503[655:0] &
+		 xcomms_tx_outpipe_indata_mimo_rwvEnqData_wget__ETC___d1507[655:0] |
+		 ~_2673200087794695338776412422716808468155371262_ETC___d1503[655:0] &
+		 xcomms_tx_outpipe_indata_mimo_rvData_511_SRL_0_ETC___d1515[655:0] } :
+	       xcomms_tx_outpipe_indata_mimo_rvData_511_SRL_0_ETC___d1515 ;
+  assign IF_xcomms_tx_outpipe_noc_buf_bytes_ULT_4_THEN__ETC__q2 =
+	     (xcomms_tx_outpipe_noc_buf_bytes < 16'd4) ?
+	       xcomms_tx_outpipe_noc_buf_bytes :
+	       16'd4 ;
+  assign IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1619 =
+	     xcomms_tx_outpipe_add_to_output_buffer$whas ?
+	       xcomms_tx_outpipe_updates_from_ifc$wget[19:4] :
+	       16'd0 ;
+  assign IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1642 =
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1619 ==
+	     16'd0 &&
+	     xcomms_tx_outpipe_elem_count != 16'd0 &&
+	     xcomms_tx_outpipe_sendDataOK &&
+	     (xcomms_tx_outpipe_accumulateTimer$Q_OUT == 5'd0 ||
+	      xcomms_tx_outpipe_credits == 16'd0) ;
+  assign IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1663 =
+	     (xcomms_tx_outpipe_updates_from_ifc_whas__596_A_ETC___d1612 ||
+	      xcomms_tx_outpipe_add_to_output_buffer$whas &&
+	      xcomms_tx_outpipe_updates_from_ifc$wget[0]) ?
+	       { _0_CONCAT_xcomms_tx_outpipe_elem_count_622_PLUS_ETC___d1653[31:0],
+		 xcomms_tx_outpipe_add_to_output_buffer$whas &&
+		 xcomms_tx_outpipe_updates_from_ifc$wget[2],
+		 xcomms_tx_outpipe_updates_from_ifc_whas__596_A_ETC___d1659,
+		 xcomms_tx_outpipe_add_to_output_buffer$whas &&
+		 xcomms_tx_outpipe_updates_from_ifc$wget[0] } :
+	       { _0_CONCAT_xcomms_tx_outpipe_elem_count_622_BITS_ETC___d1647[31:0],
+		 3'd0 } ;
+  assign IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1669 =
+	     (xcomms_tx_outpipe_updates_from_ifc_whas__596_A_ETC___d1612 ||
+	      xcomms_tx_outpipe_add_to_output_buffer$whas &&
+	      xcomms_tx_outpipe_updates_from_ifc$wget[0]) ?
+	       16'd0 :
+	       ((IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1619 ==
+		 16'd0) ?
+		  IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1619 :
+		  xcomms_tx_outpipe_elem_count_622_PLUS_IF_xcomm_ETC___d1650) ;
+  assign IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1711 =
+	     xcomms_tx_outpipe_add_to_output_buffer$whas ?
+	       xcomms_tx_outpipe_updates_from_ifc$wget[35:20] :
+	       16'd0 ;
+  assign IF_xcomms_tx_outpipe_updates_from_msg_whas__59_ETC___d1604 =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits ?
+	       xcomms_tx_outpipe_updates_from_msg$wget[18:3] :
+	       16'd0 ;
+  assign IF_xcomms_tx_outpipe_updates_from_msg_whas__59_ETC___d1636 =
+	     xcomms_tx_outpipe_updates_from_msg_whas__592_A_ETC___d1616 ?
+	       xcomms_tx_outpipe_data_info_fifo$sFULL_N :
+	       IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1619 !=
+	       16'd0 ||
+	       xcomms_tx_outpipe_elem_count_622_EQ_0_623_OR_N_ETC___d1634 ;
+  assign NOT_cc_gearbox_read_block_01_02_AND_NOT_cc_gea_ETC___d424 =
+	     (!cc_gearbox_read_block && x__h29704 != 2'd3 ||
+	      cc_gearbox_read_block && x__h30052 != 2'd3) &&
+	     !cc_gearbox_dInReset_pre_isInReset ;
+  assign NOT_cc_gearbox_write_block_02_03_AND_cc_gearbo_ETC___d323 =
+	     (!cc_gearbox_write_block && x__h23966 == 2'd3 ||
+	      cc_gearbox_write_block && x__h24387 == 2'd3) &&
+	     !cc_gearbox_sInReset_pre_isInReset ;
+  assign NOT_cq_gearbox_elem0_status_1__read__2_EQ_cq_g_ETC___d108 =
+	     { (!cq_gearbox_elem0_status_1__read__2_EQ_cq_gearb_ETC___d34 ||
+		cq_gearbox_elem0_status_0__read__6_EQ_cq_gearb_ETC___d37) &&
+	       cq_gearbox_elem_1[10],
+	       (cq_gearbox_elem0_status_1__read__2_EQ_cq_gearb_ETC___d34 &&
+		!cq_gearbox_elem0_status_0__read__6_EQ_cq_gearb_ETC___d37) ?
+		 10'd0 :
+		 cq_gearbox_elem_1[9:0] } ;
+  assign NOT_cq_gearbox_elem1_status_1__read__3_EQ_cq_g_ETC___d131 =
+	     { (!cq_gearbox_elem1_status_1__read__3_EQ_cq_gearb_ETC___d45 ||
+		cq_gearbox_elem1_status_0__read__7_EQ_cq_gearb_ETC___d48) &&
+	       cq_gearbox_elem_3[10],
+	       (cq_gearbox_elem1_status_1__read__3_EQ_cq_gearb_ETC___d45 &&
+		!cq_gearbox_elem1_status_0__read__7_EQ_cq_gearb_ETC___d48) ?
+		 10'd0 :
+		 cq_gearbox_elem_3[9:0] } ;
+  assign NOT_cq_gearbox_read_block_34_35_AND_NOT_cq_gea_ETC___d159 =
+	     (!cq_gearbox_read_block && x__h10745 == 2'd3 ||
+	      cq_gearbox_read_block && x__h11098 == 2'd3) &&
+	     !cq_gearbox_dInReset_pre_isInReset ;
+  assign NOT_cq_gearbox_write_block_0_1_AND_NOT_NOT_cq__ETC___d57 =
+	     (!cq_gearbox_write_block && x__h4939 != 2'd3 ||
+	      cq_gearbox_write_block && x__h5371 != 2'd3) &&
+	     !cq_gearbox_sInReset_pre_isInReset ;
+  assign NOT_dut_prb_control_flag_042_043_AND_NOT_dut_p_ETC___d1044 =
+	     !dut_prb_control_flag &&
+	     { dut_prb_control_sampleIntervalV_3,
+	       dut_prb_control_sampleIntervalV_2,
+	       dut_prb_control_sampleIntervalV_1,
+	       dut_prb_control_sampleIntervalV } !=
+	     32'd0 ;
+  assign NOT_dut_prb_control_sampleIntervalV_3_027_CONC_ETC___d1038 =
+	     { dut_prb_control_sampleIntervalV_3,
+	       dut_prb_control_sampleIntervalV_2,
+	       dut_prb_control_sampleIntervalV_1,
+	       dut_prb_control_sampleIntervalV } !=
+	     32'd0 &&
+	     init_state_cycle_stamp_crossed__035_EQ_dut_prb_ETC___d1037 ;
+  assign NOT_fFromBridgeBeat_ifc_rDataAvail_849_ULT_4_932___d1933 =
+	     fFromBridgeBeat_ifc_rDataAvail >= 6'd4 ;
+  assign NOT_fFromBridgeBeat_ifc_rDataCount_830_ULT_4_949___d1950 =
+	     fFromBridgeBeat_ifc_rDataCount >= 6'd4 ;
+  assign NOT_fFromBridgeBeat_ifc_rStorage_817_BITS_27_T_ETC___d2096 =
+	     (fFromBridgeBeat_ifc_rStorage[27:16] != 12'd0 ||
+	      !xcomms_rx_inpipe_in_reset_noc &&
+	      xcomms_rx_inpipe_ecount == 16'd0) &&
+	     (fFromBridgeBeat_ifc_rStorage[27:16] != 12'd0 ||
+	      xcomms_rx_inpipe_data_info_fifo$sFULL_N) ;
+  assign NOT_fS1OutPortAcks_ifc_rDataAvail_927_ULT_2_986___d1987 =
+	     fS1OutPortAcks_ifc_rDataAvail >= 5'd2 ;
+  assign NOT_fS2MsgOut_ifc_rDataAvail_261_ULT_8_602___d2603 =
+	     fS2MsgOut_ifc_rDataAvail >= 6'd8 ;
+  assign NOT_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667__ETC___d2684 =
+	     (!rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_ULE__ETC___d2671 &&
+	      _0_CONCAT_IF_rS2OutMsgBytes_667_ULE_4_668_THEN__ETC___d2674 ||
+	      !xcomms_tx_outpipe_in_reset_noc) &&
+	     (IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2682 ||
+	      fS2MsgOut_ifc_rDataCount_242_ULT_32___d2590) ;
+  assign NOT_rc_gearbox_elem0_status_1__read__87_EQ_rc__ETC___d767 =
+	     { (!rc_gearbox_elem0_status_1__read__87_EQ_rc_gear_ETC___d689 ||
+		rc_gearbox_elem0_status_0__read__91_EQ_rc_gear_ETC___d692) &&
+	       rc_gearbox_elem_1[10],
+	       (rc_gearbox_elem0_status_1__read__87_EQ_rc_gear_ETC___d689 &&
+		!rc_gearbox_elem0_status_0__read__91_EQ_rc_gear_ETC___d692) ?
+		 10'd0 :
+		 rc_gearbox_elem_1[9:0] } ;
+  assign NOT_rc_gearbox_elem1_status_1__read__98_EQ_rc__ETC___d790 =
+	     { (!rc_gearbox_elem1_status_1__read__98_EQ_rc_gear_ETC___d700 ||
+		rc_gearbox_elem1_status_0__read__02_EQ_rc_gear_ETC___d703) &&
+	       rc_gearbox_elem_3[10],
+	       (rc_gearbox_elem1_status_1__read__98_EQ_rc_gear_ETC___d700 &&
+		!rc_gearbox_elem1_status_0__read__02_EQ_rc_gear_ETC___d703) ?
+		 10'd0 :
+		 rc_gearbox_elem_3[9:0] } ;
+  assign NOT_rc_gearbox_read_block_93_94_AND_NOT_rc_gea_ETC___d818 =
+	     (!rc_gearbox_read_block && x__h55250 == 2'd3 ||
+	      rc_gearbox_read_block && x__h55603 == 2'd3) &&
+	     !rc_gearbox_dInReset_pre_isInReset ;
+  assign NOT_rc_gearbox_write_block_85_86_AND_NOT_NOT_r_ETC___d712 =
+	     (!rc_gearbox_write_block && x__h49440 != 2'd3 ||
+	      rc_gearbox_write_block && x__h49868 != 2'd3) &&
+	     !rc_gearbox_sInReset_pre_isInReset ;
+  assign NOT_rq_gearbox_read_block_16_17_AND_NOT_rq_gea_ETC___d639 =
+	     (!rq_gearbox_read_block && x__h44873 != 2'd3 ||
+	      rq_gearbox_read_block && x__h45221 != 2'd3) &&
+	     !rq_gearbox_dInReset_pre_isInReset ;
+  assign NOT_rq_gearbox_write_block_68_69_AND_rq_gearbo_ETC___d489 =
+	     (!rq_gearbox_write_block && x__h35814 == 2'd3 ||
+	      rq_gearbox_write_block && x__h36235 == 2'd3) &&
+	     !rq_gearbox_sInReset_pre_isInReset ;
+  assign NOT_xcomms_tx_outpipe_elem_count_622_EQ_0_623__ETC___d1665 =
+	     xcomms_tx_outpipe_elem_count != 16'd0 &&
+	     xcomms_tx_outpipe_sendDataOK &&
+	     (xcomms_tx_outpipe_accumulateTimer$Q_OUT == 5'd0 ||
+	      xcomms_tx_outpipe_credits == 16'd0) ||
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1619 !=
+	     16'd0 ;
+  assign NOT_xcomms_tx_outpipe_updates_from_ifc_whas__5_ETC___d1682 =
+	     (!xcomms_tx_outpipe_add_to_output_buffer$whas ||
+	      !xcomms_tx_outpipe_updates_from_ifc$wget[2] &&
+	      !xcomms_tx_outpipe_updates_from_ifc$wget[1]) &&
+	     (!xcomms_tx_outpipe_flush_requested ||
+	      xcomms_tx_outpipe_credits_581_PLUS_IF_xcomms_t_ETC___d1605 ==
+	      16'd1024 ||
+	      xcomms_tx_outpipe_flushing) ;
+  assign NOT_xcomms_tx_outpipe_updates_from_ifc_whas__5_ETC___d1689 =
+	     NOT_xcomms_tx_outpipe_updates_from_ifc_whas__5_ETC___d1682 &&
+	     (!xcomms_tx_outpipe_add_to_output_buffer$whas ||
+	      !xcomms_tx_outpipe_updates_from_ifc$wget[0]) &&
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1619 ==
+	     16'd0 &&
+	     (xcomms_tx_outpipe_elem_count == 16'd0 ||
+	      !xcomms_tx_outpipe_sendDataOK ||
+	      xcomms_tx_outpipe_credits != 16'd0) &&
+	     xcomms_tx_outpipe_accumulateTimer$Q_OUT != 5'd0 ;
+  assign NOT_xcomms_tx_outpipe_updates_from_ifc_whas__5_ETC___d1696 =
+	     (!xcomms_tx_outpipe_add_to_output_buffer$whas ||
+	      !xcomms_tx_outpipe_updates_from_ifc$wget[2]) &&
+	     (!xcomms_tx_outpipe_add_to_output_buffer$whas ||
+	      !xcomms_tx_outpipe_updates_from_ifc$wget[1]) &&
+	     (!xcomms_tx_outpipe_flush_requested ||
+	      xcomms_tx_outpipe_credits_581_PLUS_IF_xcomms_t_ETC___d1605 ==
+	      16'd1024 ||
+	      xcomms_tx_outpipe_flushing) ;
+  assign _0_CONCAT_IF_fS1OutPortAcks_ifc_rwDeqCount_whas_ETC___d1896 =
+	     b__h156930 * 32'd10 ;
+  assign _0_CONCAT_IF_rS2OutBytes_642_ULE_248_643_THEN_r_ETC___d2647 =
+	     b__h303085 == rS2OutBytes ;
+  assign _0_CONCAT_IF_rS2OutMsgBytes_667_ULE_4_668_THEN__ETC___d2674 =
+	     b__h303293 == rS2OutMsgBytes ;
+  assign _0_CONCAT_IF_xcomms_tx_outpipe_indata_mimo_rwDe_ETC___d1513 =
+	     b__h104872 * 32'd656 ;
+  assign _0_CONCAT_fS1OutPortAcks_ifc_rDataCount_906_MIN_ETC___d1909 =
+	     b__h157119 * 32'd10 ;
+  assign _0_CONCAT_xcomms_tx_outpipe_elem_count_622_BITS_ETC___d1647 =
+	     { 21'd0, xcomms_tx_outpipe_elem_count[10:0] } * 32'd82 ;
+  assign _0_CONCAT_xcomms_tx_outpipe_elem_count_622_PLUS_ETC___d1653 =
+	     { 21'd0,
+	       xcomms_tx_outpipe_elem_count_622_PLUS_IF_xcomm_ETC___d1650[10:0] } *
+	     32'd82 ;
+  assign _11_MINUS_b6643__q3 = 32'd11 - b__h86643 ;
+  assign _1329227995475430863082461991555563520_SRL_11_M_ETC___d1346 =
+	     120'hFFFFFFFF0000000000000000000000 >> x__h86687 ;
+  assign _1_SL_IF_fFromBridgeBeat_ifc_rStorage_817_BIT_1_ETC___d2016 =
+	     (14'd1 << value__h193045) - 14'd1 ;
+  assign _2673200087794695338776412422716808468155371262_ETC___d1503 =
+	     1968'hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 >>
+	     _656_MUL_2_MINUS_0_CONCAT_xcomms_tx_outpipe_ind_ETC___d1501[31:0] ;
+  assign _656_MUL_2_MINUS_0_CONCAT_xcomms_tx_outpipe_ind_ETC___d1501 =
+	     32'd656 * (32'd2 - b__h103255) ;
+  assign _dor1cc_gearbox_block0_status$EN__write =
+	     WILL_FIRE_RL_cc_rl_data || WILL_FIRE_RL_cc_rl_header ;
+  assign _dor1cc_gearbox_block1_status$EN__write =
+	     WILL_FIRE_RL_cc_rl_data || WILL_FIRE_RL_cc_rl_header ;
+  assign _dor1cq_gearbox_elem0_status_0$EN__write =
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox_pad_odd_tail ||
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox ;
+  assign _dor1cq_gearbox_elem0_status_1$EN__write =
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox_pad_odd_tail ||
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox ;
+  assign _dor1cq_gearbox_elem1_status_0$EN__write =
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox_pad_odd_tail ||
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox ;
+  assign _dor1cq_gearbox_elem1_status_1$EN__write =
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox_pad_odd_tail ||
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox ;
+  assign _dor1cq_gearbox_write_block$EN_write =
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox_pad_odd_tail ||
+	     WILL_FIRE_RL_cq_rl_g_to_gearbox ;
+  assign _dor1rc_gearbox_block0_status$EN__write =
+	     WILL_FIRE_RL_rc_rl_data_a || WILL_FIRE_RL_rc_rl_header ;
+  assign _dor1rc_gearbox_block1_status$EN__write =
+	     WILL_FIRE_RL_rc_rl_data_a || WILL_FIRE_RL_rc_rl_header ;
+  assign _dor1rq_gearbox_block0_status$EN__write =
+	     WILL_FIRE_RL_rq_rl_data_c || WILL_FIRE_RL_rq_rl_data_b ||
+	     WILL_FIRE_RL_rq_rl_data_a ||
+	     WILL_FIRE_RL_rq_rl_header ;
+  assign _dor1rq_gearbox_block1_status$EN__write =
+	     WILL_FIRE_RL_rq_rl_data_c || WILL_FIRE_RL_rq_rl_data_b ||
+	     WILL_FIRE_RL_rq_rl_data_a ||
+	     WILL_FIRE_RL_rq_rl_header ;
+  assign _theResult___snd_address__h34835 = { 32'd0, rq_f_tlps_rv[63:34] } ;
+  assign _theResult___snd_dwcount__h34848 =
+	     (rq_f_tlps_rv[105:96] == 10'd0) ?
+	       11'd1024 :
+	       { 1'd0, rq_f_tlps_rv[105:96] } ;
+  assign a_bytecount__h23798 =
+	     (cc_f_tlps_rv[75:64] == 12'd0) ?
+	       13'd4096 :
+	       { 1'd0, cc_f_tlps_rv[75:64] } ;
+  assign b__h101935 =
+	     xcomms_tx_outpipe_indata_mimo_rwEnqCount$whas ?
+	       xcomms_tx_outpipe_indata_mimo_rwEnqCount$wget :
+	       2'd0 ;
+  assign b__h103255 = { 30'd0, value__h103256 } ;
+  assign b__h104872 = { 30'd0, value__h104874 } ;
+  assign b__h154496 = fFromBridgeBeat_ifc_rwDeqCount$whas ? 6'd4 : 6'd0 ;
+  assign b__h154827 =
+	     CAN_FIRE_RL_msg_sink_noc_active_receive_beat_from_bridge ?
+	       6'd4 :
+	       6'd0 ;
+  assign b__h155828 = fToContinueBeat_ifc_rwEnqCount$whas ? 6'd4 : 6'd0 ;
+  assign b__h156930 = { 27'd0, b__h156963 } ;
+  assign b__h156963 =
+	     CAN_FIRE_RL_msg_sink_noc_active_execute_outport_acks ?
+	       5'd1 :
+	       5'd0 ;
+  assign b__h157119 = { 27'd0, value__h157121 } ;
+  assign b__h157292 =
+	     fS1OutPortAcks_ifc_rwEnqCount$whas ?
+	       fS1OutPortAcks_ifc_rwEnqCount$wget :
+	       5'd0 ;
+  assign b__h224980 = MUX_fToBridgeBeat$enq_1__SEL_1 ? 6'd4 : 6'd0 ;
+  assign b__h226939 = MUX_fToBridgeBeat$enq_1__SEL_2 ? 6'd4 : 6'd0 ;
+  assign b__h227270 =
+	     fS1MsgOut_ifc_rwEnqCount$whas ?
+	       fS1MsgOut_ifc_rwEnqCount$wget :
+	       6'd0 ;
+  assign b__h228063 = MUX_fToBridgeBeat$enq_1__SEL_3 ? 6'd4 : 6'd0 ;
+  assign b__h228394 =
+	     fS2MsgOut_ifc_rwEnqCount$whas ?
+	       fS2MsgOut_ifc_rwEnqCount$wget :
+	       6'd0 ;
+  assign b__h23782 =
+	     { cc_f_tlps_rv[7:0],
+	       cc_f_tlps_rv[15:8],
+	       cc_f_tlps_rv[23:16],
+	       cc_f_tlps_rv[31:24] } ;
+  assign b__h248128 =
+	     (IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281 !=
+	      2'd0 &&
+	      IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2332) ?
+	       2'd0 :
+	       IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_168_ETC___d2382 ;
+  assign b__h251943 = { 1'd0, fFromContinueBeat_ifc_rStorage[23:16] } ;
+  assign b__h255863 = { 1'd0, fS1MsgOut_ifc_rStorage[23:16] } ;
+  assign b__h259774 = { 1'd0, fS2MsgOut_ifc_rStorage[23:16] } ;
+  assign b__h303085 = { 24'd0, value__h299103[7:0] } ;
+  assign b__h303293 = { 5'd0, value__h303251[2:0] } ;
+  assign b__h303418 =
+	     (rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_ULE__ETC___d2671 ||
+	      !_0_CONCAT_IF_rS2OutMsgBytes_667_ULE_4_668_THEN__ETC___d2674) ?
+	       ((xcomms_tx_outpipe_noc_buf_bytes == 16'd0) ?
+		  3'd0 :
+		  IF_xcomms_tx_outpipe_noc_buf_bytes_ULT_4_THEN__ETC__q2[2:0]) :
+	       3'd0 ;
+  assign b__h310347 =
+	     IF_rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_U_ETC___d2681 -
+	     value__h303251[2:0] ;
+  assign b__h82149 =
+	     CAN_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ?
+	       xcomms_rx_inpipe_mimo_rwEnqCount$wget :
+	       4'd0 ;
+  assign b__h86643 = { 28'd0, value__h86644 } ;
+  assign b__h97042 =
+	     ((xcomms_rx_inpipe_elems[56] ?
+		 16'd1 :
+		 xcomms_rx_inpipe_elem_count) !=
+	      16'd0) ?
+	       16'd1 :
+	       xcomms_rx_inpipe_elem_count ;
+  assign bridge_is_activated__13_AND_rOtherMsgIn_973_AN_ETC___d2133 =
+	     bridge$is_activated && rOtherMsgIn && !rSceMi1MsgIn &&
+	     !rSceMi2MsgIn &&
+	     rInMsgBytes != 8'd0 &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_830_ULT_4_949___d1950 &&
+	     fToContinueBeat_ifc_rDataAvail >= 6'd4 ;
+  assign bridge_is_activated__13_AND_rSceMi1MsgIn_969_A_ETC___d1990 =
+	     bridge$is_activated &&
+	     rSceMi1MsgIn_969_AND_NOT_rSceMi2MsgIn_970_971__ETC___d1977 &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_830_ULT_4_949___d1950 &&
+	     rDecodeSceMi &&
+	     !rS1MsgInIsAck &&
+	     !rS1MsgInIsData &&
+	     NOT_fS1OutPortAcks_ifc_rDataAvail_927_ULT_2_986___d1987 ;
+  assign bridge_is_activated__13_AND_rSceMi2MsgIn_970_1_ETC___d2146 =
+	     bridge$is_activated && rSceMi2MsgIn && !rSceMi1MsgIn &&
+	     !rOtherMsgIn &&
+	     rInMsgBytes != 8'd0 &&
+	     rS2MsgInIsData &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_830_ULT_4_949___d1950 ;
+  assign bs__h303409 = x__h303568 | y__h303569 ;
+  assign cc_gearbox_elem0_status_0__read__06_EQ_cc_gear_ETC___d407 =
+	     cc_gearbox_elem0_status_0 == cc_gearbox_block0_status ;
+  assign cc_gearbox_elem0_status_1__read__03_EQ_cc_gear_ETC___d405 =
+	     cc_gearbox_elem0_status_1 == cc_gearbox_block0_status ;
+  assign cc_gearbox_elem1_status_0__read__15_EQ_cc_gear_ETC___d416 =
+	     cc_gearbox_elem1_status_0 == cc_gearbox_block1_status ;
+  assign cc_gearbox_elem1_status_1__read__12_EQ_cc_gear_ETC___d414 =
+	     cc_gearbox_elem1_status_1 == cc_gearbox_block1_status ;
+  assign cc_rg_dwcount_67_ULE_2___d377 = cc_rg_dwcount <= 11'd2 ;
+  assign cq_gearbox_elem0_status_0__read__6_EQ_cq_gearb_ETC___d37 =
+	     cq_gearbox_elem0_status_0 == cq_gearbox_block0_status ;
+  assign cq_gearbox_elem0_status_1__read__2_EQ_cq_gearb_ETC___d34 =
+	     cq_gearbox_elem0_status_1 == cq_gearbox_block0_status ;
+  assign cq_gearbox_elem1_status_0__read__7_EQ_cq_gearb_ETC___d48 =
+	     cq_gearbox_elem1_status_0 == cq_gearbox_block1_status ;
+  assign cq_gearbox_elem1_status_1__read__3_EQ_cq_gearb_ETC___d45 =
+	     cq_gearbox_elem1_status_1 == cq_gearbox_block1_status ;
+  assign data__h10545 =
+	     cq_gearbox_elem1_status_0__read__7_EQ_cq_gearb_ETC___d48 ?
+	       64'd0 :
+	       cq_gearbox_elem_2[75:12] ;
+  assign data__h10621 =
+	     (cq_gearbox_elem1_status_1__read__3_EQ_cq_gearb_ETC___d45 &&
+	      !cq_gearbox_elem1_status_0__read__7_EQ_cq_gearb_ETC___d48) ?
+	       64'd0 :
+	       cq_gearbox_elem_3[75:12] ;
+  assign data__h54158 =
+	     rc_gearbox_elem0_status_0__read__91_EQ_rc_gear_ETC___d692 ?
+	       64'd0 :
+	       rc_gearbox_elem_0[75:12] ;
+  assign data__h54250 =
+	     (rc_gearbox_elem0_status_1__read__87_EQ_rc_gear_ETC___d689 &&
+	      !rc_gearbox_elem0_status_0__read__91_EQ_rc_gear_ETC___d692) ?
+	       64'd0 :
+	       rc_gearbox_elem_1[75:12] ;
+  assign data__h55001 =
+	     rc_gearbox_elem1_status_0__read__02_EQ_rc_gear_ETC___d703 ?
+	       64'd0 :
+	       rc_gearbox_elem_2[75:12] ;
+  assign data__h55073 =
+	     (rc_gearbox_elem1_status_1__read__98_EQ_rc_gear_ETC___d700 &&
+	      !rc_gearbox_elem1_status_0__read__02_EQ_rc_gear_ETC___d703) ?
+	       64'd0 :
+	       rc_gearbox_elem_3[75:12] ;
+  assign data__h9680 =
+	     cq_gearbox_elem0_status_0__read__6_EQ_cq_gearb_ETC___d37 ?
+	       64'd0 :
+	       cq_gearbox_elem_0[75:12] ;
+  assign data__h9778 =
+	     (cq_gearbox_elem0_status_1__read__2_EQ_cq_gearb_ETC___d34 &&
+	      !cq_gearbox_elem0_status_0__read__6_EQ_cq_gearb_ETC___d37) ?
+	       64'd0 :
+	       cq_gearbox_elem_1[75:12] ;
+  assign dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1115 =
+	     (dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	      3'd3 &&
+	      !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+	      dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
+	      2'd2 ||
+	      dut_prb_control_control_in_dataF_rv$port1__read[16] ||
+	      dut_prb_control_ackFifo$FULL_N) &&
+	     ((dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+	       3'd3 &&
+	       !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+	       dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
+	       2'd2 &&
+	       dut_prb_control_control_in_dataF_rv$port1__read[9:0] ==
+	       10'd1023) ?
+		dut_prb_control_enff$FULL_N :
+		dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
+		3'd3 &&
+		!dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+		dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
+		2'd2 ||
+		dut_prb_control_enff$FULL_N) ;
+  assign dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1138 =
+	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] == 3'd3 &&
+	     !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[11:10] == 2'd2 &&
+	     dut_prb_control_control_in_dataF_rv$port1__read[9:0] ==
+	     10'd1023 &&
+	     { dut_prb_control_sampleIntervalV_3,
+	       dut_prb_control_sampleIntervalV_2,
+	       dut_prb_control_sampleIntervalV_1,
+	       dut_prb_control_sampleIntervalV } !=
+	     32'd0 ;
+  assign dut_prb_control_data_out_next_RDY_send__171_AN_ETC___d1208 =
+	     dut_prb_control_data_out_next$sRDY &&
+	     init_state_msgFIFO$sFULL_N &&
+	     dut_prb_control_data_out_ok_40_AND_NOT_init_st_ETC___d948 &&
+	     dut_prb_control_prb_str$EMPTY_N ;
+  assign dut_prb_control_data_out_ok_40_AND_NOT_init_st_ETC___d948 =
+	     dut_prb_control_data_out_ok && !init_state_any_in_reset_uclk &&
+	     init_state_out_port == 10'd0 &&
+	     init_state_msgFIFO$sFULL_N ;
+  assign enqData__h154382 = x__h154592 << x__h154699 ;
+  assign enqData__h155383 = x__h155593 << x__h155700 ;
+  assign enqData__h156849 =
+	     x__h157058 <<
+	     _0_CONCAT_fS1OutPortAcks_ifc_rDataCount_906_MIN_ETC___d1909[31:0] ;
+  assign enqData__h224866 = 256'd0 << x__h225183 ;
+  assign enqData__h226825 = x__h227035 << x__h227142 ;
+  assign enqData__h227949 = x__h228159 << x__h228266 ;
+  assign enqMask__h154383 = x__h154707 << x__h154699 ;
+  assign enqMask__h155384 = x__h155708 << x__h155700 ;
+  assign enqMask__h156850 =
+	     x__h157172 <<
+	     _0_CONCAT_fS1OutPortAcks_ifc_rDataCount_906_MIN_ETC___d1909[31:0] ;
+  assign enqMask__h224867 = enqData__h224866 ;
+  assign enqMask__h226826 = x__h227150 << x__h227142 ;
+  assign enqMask__h227950 = x__h228274 << x__h228266 ;
+  assign fFromContinueBeat_ifc_rDataCount_168_ULT_4___d2274 =
+	     fFromContinueBeat_ifc_rDataCount < 6'd4 ;
+  assign fS1MsgOut_ifc_rDataCount_205_ULT_32___d2494 =
+	     fS1MsgOut_ifc_rDataCount < 6'd32 ;
+  assign fS1MsgOut_ifc_rDataCount_205_ULT_4___d2276 =
+	     fS1MsgOut_ifc_rDataCount < 6'd4 ;
+  assign fS1OutPortAcks_ifc_rDataCount_906_ULT_16___d1966 =
+	     fS1OutPortAcks_ifc_rDataCount < 5'd16 ;
+  assign fS2MsgOut_ifc_rDataCount_242_ULT_32___d2590 =
+	     fS2MsgOut_ifc_rDataCount < 6'd32 ;
+  assign fS2MsgOut_ifc_rDataCount_242_ULT_4___d2279 =
+	     fS2MsgOut_ifc_rDataCount < 6'd4 ;
+  assign fToContinueBeat_ifc_rDataCount_867_ULT_32___d1945 =
+	     fToContinueBeat_ifc_rDataCount < 6'd32 ;
+  assign init_state_cycle_stamp_crossed__035_EQ_dut_prb_ETC___d1037 =
+	     init_state_cycle_stamp == dut_prb_control_nextSample ;
+  assign keep__h31843 =
+	     (!cc_gearbox_elem0_status_1__read__03_EQ_cc_gear_ETC___d405 &&
+	      cc_gearbox_elem0_status_0__read__06_EQ_cc_gear_ETC___d407) ?
+	       cc_gearbox_block0[69:68] :
+	       cc_gearbox_block0[2:1] ;
+  assign keep__h31938 =
+	     (!cc_gearbox_elem1_status_1__read__12_EQ_cc_gear_ETC___d414 &&
+	      cc_gearbox_elem1_status_0__read__15_EQ_cc_gear_ETC___d416) ?
+	       cc_gearbox_block1[69:68] :
+	       cc_gearbox_block1[2:1] ;
+  assign keep__h47025 =
+	     (!rq_gearbox_elem0_status_1__read__18_EQ_rq_gear_ETC___d620 &&
+	      rq_gearbox_elem0_status_0__read__21_EQ_rq_gear_ETC___d622) ?
+	       rq_gearbox_block0[84:83] :
+	       rq_gearbox_block0[9:8] ;
+  assign keep__h47134 =
+	     (!rq_gearbox_elem1_status_1__read__27_EQ_rq_gear_ETC___d629 &&
+	      rq_gearbox_elem1_status_0__read__30_EQ_rq_gear_ETC___d631) ?
+	       rq_gearbox_block1[84:83] :
+	       rq_gearbox_block1[9:8] ;
+  assign n_data__h25027 =
+	     { b__h23782,
+	       2'd0,
+	       cc_f_tlps_rv[109:108],
+	       cc_f_tlps_rv[118:116],
+	       1'd0,
+	       cc_f_tlps_rv[95:80],
+	       cc_f_tlps_rv[47:40] } ;
+  assign n_data__h26079 =
+	     { cc_f_tlps_rv[63:48],
+	       1'd0,
+	       cc_f_tlps_rv[110],
+	       cc_f_tlps_rv[79:77],
+	       x__h23764,
+	       3'd0,
+	       a_bytecount__h23798,
+	       9'd0,
+	       cc_f_tlps_rv[38:32] } ;
+  assign n_data__h26663 =
+	     { b__h23782,
+	       cc_f_tlps_rv[39:32],
+	       cc_f_tlps_rv[47:40],
+	       cc_f_tlps_rv[55:48],
+	       cc_f_tlps_rv[63:56] } ;
+  assign n_data__h28057 =
+	     { cc_f_tlps_rv[71:64],
+	       cc_f_tlps_rv[79:72],
+	       cc_f_tlps_rv[87:80],
+	       cc_f_tlps_rv[95:88],
+	       cc_f_tlps_rv[103:96],
+	       cc_f_tlps_rv[111:104],
+	       cc_f_tlps_rv[119:112],
+	       cc_f_tlps_rv[127:120] } ;
+  assign n_data__h36875 =
+	     { 2'd0,
+	       rq_f_tlps_rv[109:108],
+	       rq_f_tlps_rv[118:116],
+	       17'd0,
+	       rq_f_tlps_rv[79:72],
+	       rq_f_tlps_rv[95:80],
+	       rq_f_tlps_rv[110],
+	       CASE_rq_f_tlps_rv_BITS_126_TO_125_0_0_1_0_2_1__ETC__q1,
+	       _theResult___snd_dwcount__h34848 } ;
+  assign n_data__h37167 = { _theResult___snd_address__h34849, 2'd0 } ;
+  assign n_data__h37803 = { 32'b0, rq_rg_mdw[31:0] } ;
+  assign n_data__h38338 =
+	     { rq_f_tlps_rv[39:32],
+	       rq_f_tlps_rv[47:40],
+	       rq_f_tlps_rv[55:48],
+	       rq_f_tlps_rv[63:56],
+	       rq_f_tlps_rv[71:64],
+	       rq_f_tlps_rv[79:72],
+	       rq_f_tlps_rv[87:80],
+	       rq_f_tlps_rv[95:88] } ;
+  assign n_data__h39749 =
+	     { rq_f_tlps_rv[103:96],
+	       rq_f_tlps_rv[111:104],
+	       rq_f_tlps_rv[119:112],
+	       rq_f_tlps_rv[127:120],
+	       rq_rg_mdw[31:0] } ;
+  assign n_data__h41808 =
+	     { rq_f_tlps_rv[7:0],
+	       rq_f_tlps_rv[15:8],
+	       rq_f_tlps_rv[23:16],
+	       rq_f_tlps_rv[31:24],
+	       rq_f_tlps_rv[39:32],
+	       rq_f_tlps_rv[47:40],
+	       rq_f_tlps_rv[55:48],
+	       rq_f_tlps_rv[63:56] } ;
+  assign n_data__h43208 =
+	     { rq_f_tlps_rv[71:64],
+	       rq_f_tlps_rv[79:72],
+	       rq_f_tlps_rv[87:80],
+	       rq_f_tlps_rv[95:88],
+	       rq_f_tlps_rv[103:96],
+	       rq_f_tlps_rv[111:104],
+	       rq_f_tlps_rv[119:112],
+	       rq_f_tlps_rv[127:120] } ;
+  assign n_keep__h26664 =
+	     cc_rg_dwcount_67_ULE_2___d377 ?
+	       2'b0 :
+	       ((cc_rg_dwcount == 11'd3) ? 2'b01 : 2'b11) ;
+  assign n_keep__h28058 = (cc_rg_dwcount == 11'd1) ? 2'b01 : 2'b11 ;
+  assign n_keep__h41810 =
+	     rq_rg_dwcount_53_ULE_2___d607 ?
+	       2'b0 :
+	       ((rq_rg_dwcount == 11'd3) ? 2'b01 : 2'b11) ;
+  assign n_keep__h43210 = (rq_rg_dwcount == 11'd1) ? 2'b01 : 2'b11 ;
+  assign nextMask__h154377 = fFromBridgeBeat_ifc_rStorageMask >> x__h154556 ;
+  assign nextMask__h154385 = nextMask__h154377 | enqMask__h154383 ;
+  assign nextMask__h155378 = fToContinueBeat_ifc_rStorageMask >> 0 ;
+  assign nextMask__h155386 = nextMask__h155378 | enqMask__h155384 ;
+  assign nextMask__h156844 =
+	     fS1OutPortAcks_ifc_rStorageMask >>
+	     _0_CONCAT_IF_fS1OutPortAcks_ifc_rwDeqCount_whas_ETC___d1896[31:0] ;
+  assign nextMask__h156852 = nextMask__h156844 | enqMask__h156850 ;
+  assign nextMask__h224861 =
+	     fFromContinueBeat_ifc_rStorageMask >> x__h225040 ;
+  assign nextMask__h224869 = nextMask__h224861 | enqMask__h224867 ;
+  assign nextMask__h226820 = fS1MsgOut_ifc_rStorageMask >> x__h226999 ;
+  assign nextMask__h226828 = nextMask__h226820 | enqMask__h226826 ;
+  assign nextMask__h227944 = fS2MsgOut_ifc_rStorageMask >> x__h228123 ;
+  assign nextMask__h227952 = nextMask__h227944 | enqMask__h227950 ;
+  assign nextStorage__h154376 = fFromBridgeBeat_ifc_rStorage >> x__h154556 ;
+  assign nextStorage__h154384 = x__h154441 | y__h154442 ;
+  assign nextStorage__h155377 = fToContinueBeat_ifc_rStorage >> 0 ;
+  assign nextStorage__h155385 = x__h155442 | y__h155443 ;
+  assign nextStorage__h156843 =
+	     fS1OutPortAcks_ifc_rStorage >>
+	     _0_CONCAT_IF_fS1OutPortAcks_ifc_rwDeqCount_whas_ETC___d1896[31:0] ;
+  assign nextStorage__h156851 = x__h156908 | y__h156909 ;
+  assign nextStorage__h224860 = fFromContinueBeat_ifc_rStorage >> x__h225040 ;
+  assign nextStorage__h224868 = x__h224925 | y__h224926 ;
+  assign nextStorage__h226819 = fS1MsgOut_ifc_rStorage >> x__h226999 ;
+  assign nextStorage__h226827 = x__h226884 | y__h226885 ;
+  assign nextStorage__h227943 = fS2MsgOut_ifc_rStorage >> x__h228123 ;
+  assign nextStorage__h227951 = x__h228008 | y__h228009 ;
+  assign rInMsgBytes_951_ULE_4___d1994 = rInMsgBytes <= 8'd4 ;
+  assign rOutMsgBytes_271_ULE_4___d2465 = rOutMsgBytes <= 8'd4 ;
+  assign rS1BitsRem_537_PLUS_IF_rS1OutMsgIsCont_531_THE_ETC___d2542 =
+	     { rS1BitsRem + (rS1OutMsgIsCont ? 19'd32 : 19'd96) <= 19'd2016,
+	       rS1BitsRem[18:14] } ;
+  assign rS1BitsRem_537_ULE_32___d2570 = rS1BitsRem <= 19'd32 ;
+  assign rS1BitsRem_MINUS_25_SRL_3__q6 = (rS1BitsRem - 19'd25) >> 3 ;
+  assign rS1OutMsgSize_532_MINUS_4___d2533 = rS1OutMsgSize - 8'd4 ;
+  assign rS1OutMsgSize_532_ULE_4___d2572 = rS1OutMsgSize <= 8'd4 ;
+  assign rS2NumSaved_666_ULT_IF_rS2OutMsgBytes_667_ULE__ETC___d2671 =
+	     rS2NumSaved < value__h303251[2:0] ;
+  assign rSceMi1MsgIn_969_AND_NOT_rSceMi2MsgIn_970_971__ETC___d1977 =
+	     rSceMi1MsgIn && !rSceMi2MsgIn && !rOtherMsgIn &&
+	     rInMsgBytes != 8'd0 ;
+  assign rSceMi2MsgIn_970_AND_NOT_rSceMi1MsgIn_969_099__ETC___d2102 =
+	     rSceMi2MsgIn && !rSceMi1MsgIn && !rOtherMsgIn &&
+	     rInMsgBytes != 8'd0 ;
+  assign rc_gearbox_elem0_status_0__read__91_EQ_rc_gear_ETC___d692 =
+	     rc_gearbox_elem0_status_0 == rc_gearbox_block0_status ;
+  assign rc_gearbox_elem0_status_1__read__87_EQ_rc_gear_ETC___d689 =
+	     rc_gearbox_elem0_status_1 == rc_gearbox_block0_status ;
+  assign rc_gearbox_elem1_status_0__read__02_EQ_rc_gear_ETC___d703 =
+	     rc_gearbox_elem1_status_0 == rc_gearbox_block1_status ;
+  assign rc_gearbox_elem1_status_1__read__98_EQ_rc_gear_ETC___d700 =
+	     rc_gearbox_elem1_status_1 == rc_gearbox_block1_status ;
+  assign rc_in_buf_i_notEmpty__78_AND_NOT_rc_rg_in_pack_ETC___d714 =
+	     rc_in_buf$EMPTY_N &&
+	     (!rc_rg_in_packet && !rc_in_buf$D_OUT[11] ||
+	      NOT_rc_gearbox_write_block_85_86_AND_NOT_NOT_r_ETC___d712) ;
+  assign rc_rg_in_packet_79_OR_rc_in_buf_first__81_BIT__ETC___d736 =
+	     (rc_rg_in_packet || rc_in_buf$D_OUT[11]) &&
+	     (rc_gearbox_write_block &&
+	      !rc_gearbox_elem1_status_0__read__02_EQ_rc_gear_ETC___d703 ||
+	      !rc_gearbox_write_block &&
+	      !rc_gearbox_elem0_status_0__read__91_EQ_rc_gear_ETC___d692) ;
+  assign rq_gearbox_elem0_status_0__read__21_EQ_rq_gear_ETC___d622 =
+	     rq_gearbox_elem0_status_0 == rq_gearbox_block0_status ;
+  assign rq_gearbox_elem0_status_1__read__18_EQ_rq_gear_ETC___d620 =
+	     rq_gearbox_elem0_status_1 == rq_gearbox_block0_status ;
+  assign rq_gearbox_elem1_status_0__read__30_EQ_rq_gear_ETC___d631 =
+	     rq_gearbox_elem1_status_0 == rq_gearbox_block1_status ;
+  assign rq_gearbox_elem1_status_1__read__27_EQ_rq_gear_ETC___d629 =
+	     rq_gearbox_elem1_status_1 == rq_gearbox_block1_status ;
+  assign rq_rg_dwcount_53_MINUS_4___d595 = rq_rg_dwcount - 11'd4 ;
+  assign rq_rg_dwcount_53_ULE_2___d607 = rq_rg_dwcount <= 11'd2 ;
+  assign rq_rg_dwcount_53_ULE_4___d580 = rq_rg_dwcount <= 11'd4 ;
+  assign tlp16_be__h56408 =
+	     (IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[42:32] ==
+	      11'd0) ?
+	       16'hFFF0 :
+	       16'hFFFF ;
+  assign tlp16_data__h12771 =
+	     { 1'd0,
+	       IF_cq_f_cq_rv_port0__read__75_BITS_102_TO_99_8_ETC___d199,
+	       IF_cq_f_cq_rv_port0__read__75_BITS_102_TO_99_8_ETC___d203,
+	       1'd0,
+	       cq_f_cq_rv[147:145],
+	       6'd0,
+	       cq_f_cq_rv[149:148],
+	       2'd0,
+	       IF_cq_f_cq_rv_port0__read__75_BITS_98_TO_88_90_ETC___d208,
+	       cq_f_cq_rv[119:104],
+	       cq_f_cq_rv[127:120],
+	       cq_f_cq_rv[3:0],
+	       cq_f_cq_rv[7:4],
+	       cq_f_cq_rv[43:14],
+	       2'd0,
+	       IF_cq_gearbox_read_block_34_THEN_cq_gearbox_el_ETC___d218[7:0],
+	       IF_cq_gearbox_read_block_34_THEN_cq_gearbox_el_ETC___d218[15:8],
+	       IF_cq_gearbox_read_block_34_THEN_cq_gearbox_el_ETC___d218[23:16],
+	       IF_cq_gearbox_read_block_34_THEN_cq_gearbox_el_ETC___d218[31:24] } ;
+  assign tlp16_data__h14163 =
+	     { 1'd0,
+	       IF_cq_f_cq_rv_port0__read__75_BITS_102_TO_99_8_ETC___d199,
+	       IF_cq_f_cq_rv_port0__read__75_BITS_102_TO_99_8_ETC___d203,
+	       1'd0,
+	       cq_f_cq_rv[147:145],
+	       6'd0,
+	       cq_f_cq_rv[149:148],
+	       2'd0,
+	       IF_cq_f_cq_rv_port0__read__75_BITS_98_TO_88_90_ETC___d208,
+	       cq_f_cq_rv[119:104],
+	       cq_f_cq_rv[127:120],
+	       cq_f_cq_rv[3:0],
+	       cq_f_cq_rv[7:4],
+	       cq_f_cq_rv[43:14],
+	       34'd0 } ;
+  assign tlp16_data__h15415 =
+	     { cq_f_cq_rv[51:44],
+	       cq_f_cq_rv[59:52],
+	       cq_f_cq_rv[67:60],
+	       cq_f_cq_rv[75:68],
+	       cq_f_cq_rv[95:88],
+	       cq_f_cq_rv[103:96],
+	       cq_f_cq_rv[111:104],
+	       cq_f_cq_rv[119:112],
+	       cq_f_cq_rv[127:120],
+	       cq_f_cq_rv[135:128],
+	       cq_f_cq_rv[143:136],
+	       cq_f_cq_rv[151:144],
+	       32'd0 } ;
+  assign tlp16_data__h18063 =
+	     { cq_f_cq_rv[51:44],
+	       cq_f_cq_rv[59:52],
+	       cq_f_cq_rv[67:60],
+	       cq_f_cq_rv[75:68],
+	       cq_f_cq_rv[95:88],
+	       cq_f_cq_rv[103:96],
+	       cq_f_cq_rv[111:104],
+	       cq_f_cq_rv[119:112],
+	       cq_f_cq_rv[127:120],
+	       cq_f_cq_rv[135:128],
+	       cq_f_cq_rv[143:136],
+	       cq_f_cq_rv[151:144],
+	       IF_cq_gearbox_read_block_34_THEN_cq_gearbox_el_ETC___d218[7:0],
+	       IF_cq_gearbox_read_block_34_THEN_cq_gearbox_el_ETC___d218[15:8],
+	       IF_cq_gearbox_read_block_34_THEN_cq_gearbox_el_ETC___d218[23:16],
+	       IF_cq_gearbox_read_block_34_THEN_cq_gearbox_el_ETC___d218[31:24] } ;
+  assign tlp16_data__h56409 =
+	     { 9'd148,
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839[27:25],
+	       5'd0,
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[46],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839[29:28],
+	       2'd0,
+	       (IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[42:32] ==
+		11'd1024) ?
+		 10'd0 :
+		 IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[41:32],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839[23:8],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[45:43],
+	       1'd0,
+	       (IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[28:16] ==
+		13'd4096) ?
+		 12'd0 :
+		 IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[27:16],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[63:48],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839[7:0],
+	       1'd0,
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[6:0],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839[39:32],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839[47:40],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839[55:48],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839[63:56] } ;
+  assign tlp16_data__h57885 =
+	     { IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[7:0],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[15:8],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[23:16],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[31:24],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[39:32],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[47:40],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[55:48],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d829[63:56],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839[7:0],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839[15:8],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839[23:16],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839[31:24],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839[39:32],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839[47:40],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839[55:48],
+	       IF_rc_gearbox_read_block_93_THEN_rc_gearbox_el_ETC___d839[63:56] } ;
+  assign tlp16_hit__h12769 = 7'd1 << cq_f_cq_rv[138:136] ;
+  assign value_BITS_23_TO_16___h300396 = value__h299103[7:0] + 8'd4 ;
+  assign value__h103256 =
+	     xcomms_tx_outpipe_indata_mimo_rDataCount - value__h104874 ;
+  assign value__h104874 =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_shift_elements_out_of_buffer ?
+	       2'd1 :
+	       2'd0 ;
+  assign value__h154593 =
+	     CAN_FIRE_RL_msg_sink_noc_active_receive_beat_from_bridge ?
+	       fFromBridgeBeat_ifc_rwEnqData$wget :
+	       128'd0 ;
+  assign value__h154655 = fFromBridgeBeat_ifc_rDataCount - b__h154496 ;
+  assign value__h154708 =
+	     CAN_FIRE_RL_msg_sink_noc_active_receive_beat_from_bridge ?
+	       128'h000000000000000000000000FFFFFFFF :
+	       128'd0 ;
+  assign value__h155594 =
+	     fToContinueBeat_ifc_rwEnqCount$whas ?
+	       fToContinueBeat_ifc_rwEnqData$wget :
+	       128'd0 ;
+  assign value__h155656 = fToContinueBeat_ifc_rDataCount - 6'd0 ;
+  assign value__h155709 =
+	     fToContinueBeat_ifc_rwEnqCount$whas ?
+	       128'h000000000000000000000000FFFFFFFF :
+	       128'd0 ;
+  assign value__h157059 =
+	     fS1OutPortAcks_ifc_rwEnqCount$whas ?
+	       fS1OutPortAcks_ifc_rwEnqData$wget :
+	       140'd0 ;
+  assign value__h157121 = fS1OutPortAcks_ifc_rDataCount - b__h156963 ;
+  assign value__h157173 =
+	     fS1OutPortAcks_ifc_rwEnqCount$whas ?
+	       fS1OutPortAcks_ifc_rwEnqMask$wget :
+	       140'd0 ;
+  assign value__h193045 =
+	     fFromBridgeBeat_ifc_rStorage[10] ?
+	       (fFromBridgeBeat_ifc_rStorage[26] ? 4'd2 : 4'd1) :
+	       (fFromBridgeBeat_ifc_rStorage[26] ? 4'd1 : 4'd0) ;
+  assign value__h194274 =
+	     fFromBridgeBeat_ifc_rStorage[10] ?
+	       (fFromBridgeBeat_ifc_rStorage[26] ?
+		  { fFromBridgeBeat_ifc_rStorage[9:0],
+		    fFromBridgeBeat_ifc_rStorage[25:16] } :
+		  { 10'h2AA, fFromBridgeBeat_ifc_rStorage[9:0] }) :
+	       { 10'h2AA, fFromBridgeBeat_ifc_rStorage[25:16] } ;
+  assign value__h221710 =
+	     rInMsgBytes_951_ULE_4___d1994 ? rInMsgBytes[2:0] : 3'd4 ;
+  assign value__h225139 = fFromContinueBeat_ifc_rDataCount - b__h224980 ;
+  assign value__h227036 =
+	     fS1MsgOut_ifc_rwEnqData$whas ?
+	       fS1MsgOut_ifc_rwEnqData$wget :
+	       128'd0 ;
+  assign value__h227098 = fS1MsgOut_ifc_rDataCount - b__h226939 ;
+  assign value__h227151 =
+	     fS1MsgOut_ifc_rwEnqCount$whas ?
+	       fS1MsgOut_ifc_rwEnqMask$wget :
+	       128'd0 ;
+  assign value__h228160 =
+	     fS2MsgOut_ifc_rwEnqData$whas ?
+	       fS2MsgOut_ifc_rwEnqData$wget :
+	       128'd0 ;
+  assign value__h228222 = fS2MsgOut_ifc_rDataCount - b__h228063 ;
+  assign value__h228275 =
+	     fS2MsgOut_ifc_rwEnqCount$whas ?
+	       fS2MsgOut_ifc_rwEnqMask$wget :
+	       128'd0 ;
+  assign value__h250400 =
+	     (x__h250435 + 32'd4 <= 32'd4) ?
+	       9'd0 :
+	       (b__h251943 - 9'd4) + 9'd4 ;
+  assign value__h254322 =
+	     (x__h254355 + 32'd4 <= 32'd4) ?
+	       9'd0 :
+	       (b__h255863 - 9'd4) + 9'd4 ;
+  assign value__h258233 =
+	     (x__h258266 + 32'd4 <= 32'd4) ?
+	       9'd0 :
+	       (b__h259774 - 9'd4) + 9'd4 ;
+  assign value__h299103 = (rS2OutBytes <= 32'd248) ? rS2OutBytes : 32'd248 ;
+  assign value__h303251 = (rS2OutMsgBytes <= 8'd4) ? rS2OutMsgBytes : 8'd4 ;
+  assign value__h303530 = bs__h303409 >> x__h310225 ;
+  assign value__h311583 = bs__h303409 & y__h311618 ;
+  assign value__h86644 = xcomms_rx_inpipe_mimo_rDataCount - value__h94016 ;
+  assign value__h94016 =
+	     CAN_FIRE_RL_xcomms_rx_inpipe_take_completed_element ?
+	       4'd7 :
+	       4'd0 ;
+  assign x1__h61520 = ~uclkgen$CLK_VAL_OUT ;
+  assign x__h10745 =
+	     { cq_gearbox_elem0_status_1 != cq_gearbox_block0_status,
+	       cq_gearbox_elem0_status_0 != cq_gearbox_block0_status } ;
+  assign x__h11098 =
+	     { cq_gearbox_elem1_status_1 != cq_gearbox_block1_status,
+	       cq_gearbox_elem1_status_0 != cq_gearbox_block1_status } ;
+  assign x__h154441 = nextStorage__h154376 & nextMask__h154377 ;
+  assign x__h154556 = { 23'd0, b__h154496, 3'd0 } ;
+  assign x__h154592 = { 128'd0, value__h154593 } ;
+  assign x__h154699 = { 23'd0, value__h154655, 3'd0 } ;
+  assign x__h154707 = { 128'd0, value__h154708 } ;
+  assign x__h155442 = nextStorage__h155377 & nextMask__h155378 ;
+  assign x__h155593 = { 128'd0, value__h155594 } ;
+  assign x__h155700 = { 23'd0, value__h155656, 3'd0 } ;
+  assign x__h155708 = { 128'd0, value__h155709 } ;
+  assign x__h156908 = nextStorage__h156843 & nextMask__h156844 ;
+  assign x__h157058 = { 20'd0, value__h157059 } ;
+  assign x__h157172 = { 20'd0, value__h157173 } ;
+  assign x__h224925 = nextStorage__h224860 & nextMask__h224861 ;
+  assign x__h225040 = { 23'd0, b__h224980, 3'd0 } ;
+  assign x__h225183 = { 23'd0, value__h225139, 3'd0 } ;
+  assign x__h226884 = nextStorage__h226819 & nextMask__h226820 ;
+  assign x__h226999 = { 23'd0, b__h226939, 3'd0 } ;
+  assign x__h227035 = { 128'd0, value__h227036 } ;
+  assign x__h227142 = { 23'd0, value__h227098, 3'd0 } ;
+  assign x__h227150 = { 128'd0, value__h227151 } ;
+  assign x__h228008 = nextStorage__h227943 & nextMask__h227944 ;
+  assign x__h228123 = { 23'd0, b__h228063, 3'd0 } ;
+  assign x__h228159 = { 128'd0, value__h228160 } ;
+  assign x__h228266 = { 23'd0, value__h228222, 3'd0 } ;
+  assign x__h228274 = { 128'd0, value__h228275 } ;
+  assign x__h229807 =
+	     { !fS2MsgOut_ifc_rDataCount_242_ULT_4___d2279,
+	       !fS1MsgOut_ifc_rDataCount_205_ULT_4___d2276,
+	       !fFromContinueBeat_ifc_rDataCount_168_ULT_4___d2274,
+	       rvPrevMsgGrant } ;
+  assign x__h236339 = { rvPrevMsgGrant, rvPrevPrevMsgGrant } ;
+  assign x__h23764 =
+	     (cc_f_tlps_rv[105:96] == 10'd0) ?
+	       11'd1024 :
+	       { 1'd0, cc_f_tlps_rv[105:96] } ;
+  assign x__h23966 =
+	     { cc_gearbox_elem0_status_1 == cc_gearbox_block0_status,
+	       cc_gearbox_elem0_status_0 == cc_gearbox_block0_status } ;
+  assign x__h24387 =
+	     { cc_gearbox_elem1_status_1 == cc_gearbox_block1_status,
+	       cc_gearbox_elem1_status_0 == cc_gearbox_block1_status } ;
+  assign x__h250435 = { 24'd0, fFromContinueBeat_ifc_rStorage[23:16] } ;
+  assign x__h254355 = { 24'd0, fS1MsgOut_ifc_rStorage[23:16] } ;
+  assign x__h258266 = { 24'd0, fS2MsgOut_ifc_rStorage[23:16] } ;
+  assign x__h29704 =
+	     { cc_gearbox_elem0_status_1__read__03_EQ_cc_gear_ETC___d405,
+	       cc_gearbox_elem0_status_0__read__06_EQ_cc_gear_ETC___d407 } ;
+  assign x__h30052 =
+	     { cc_gearbox_elem1_status_1__read__12_EQ_cc_gear_ETC___d414,
+	       cc_gearbox_elem1_status_0__read__15_EQ_cc_gear_ETC___d416 } ;
+  assign x__h303568 = { 32'd0, rS2SavedBytes } ;
+  assign x__h303603 = { 32'd0, xcomms_tx_outpipe_noc_buf[31:0] } ;
+  assign x__h310225 = { 26'd0, value__h303251[2:0], 3'd0 } ;
+  assign x__h311619 = 64'hFFFFFFFFFFFFFFFF << x__h310225 ;
+  assign x__h35814 =
+	     { rq_gearbox_elem0_status_1 == rq_gearbox_block0_status,
+	       rq_gearbox_elem0_status_0 == rq_gearbox_block0_status } ;
+  assign x__h36235 =
+	     { rq_gearbox_elem1_status_1 == rq_gearbox_block1_status,
+	       rq_gearbox_elem1_status_0 == rq_gearbox_block1_status } ;
+  assign x__h44873 =
+	     { rq_gearbox_elem0_status_1__read__18_EQ_rq_gear_ETC___d620,
+	       rq_gearbox_elem0_status_0__read__21_EQ_rq_gear_ETC___d622 } ;
+  assign x__h45221 =
+	     { rq_gearbox_elem1_status_1__read__27_EQ_rq_gear_ETC___d629,
+	       rq_gearbox_elem1_status_0__read__30_EQ_rq_gear_ETC___d631 } ;
+  assign x__h4939 =
+	     { !cq_gearbox_elem0_status_1__read__2_EQ_cq_gearb_ETC___d34,
+	       !cq_gearbox_elem0_status_0__read__6_EQ_cq_gearb_ETC___d37 } ;
+  assign x__h49440 =
+	     { !rc_gearbox_elem0_status_1__read__87_EQ_rc_gear_ETC___d689,
+	       !rc_gearbox_elem0_status_0__read__91_EQ_rc_gear_ETC___d692 } ;
+  assign x__h49868 =
+	     { !rc_gearbox_elem1_status_1__read__98_EQ_rc_gear_ETC___d700,
+	       !rc_gearbox_elem1_status_0__read__02_EQ_rc_gear_ETC___d703 } ;
+  assign x__h5371 =
+	     { !cq_gearbox_elem1_status_1__read__3_EQ_cq_gearb_ETC___d45,
+	       !cq_gearbox_elem1_status_0__read__7_EQ_cq_gearb_ETC___d48 } ;
+  assign x__h55250 =
+	     { rc_gearbox_elem0_status_1 != rc_gearbox_block0_status,
+	       rc_gearbox_elem0_status_0 != rc_gearbox_block0_status } ;
+  assign x__h55603 =
+	     { rc_gearbox_elem1_status_1 != rc_gearbox_block1_status,
+	       rc_gearbox_elem1_status_0 != rc_gearbox_block1_status } ;
+  assign x__h86687 = { _11_MINUS_b6643__q3[28:0], 3'd0 } ;
+  assign x__h94058 = { 25'd0, value__h94016, 3'd0 } ;
+  assign xcomms_rx_inpipe_elem_count_397_ULT_xcomms_rx__ETC___d1428 =
+	     xcomms_rx_inpipe_elem_count < xcomms_rx_inpipe_elems_recvd ;
+  assign xcomms_rx_inpipe_elems_recvd_294_PLUS_IF_xcomm_ETC___d1299 =
+	     xcomms_rx_inpipe_elems_recvd +
+	     IF_xcomms_rx_inpipe_updates_from_msg_whas__295_ETC___d1298 ;
+  assign xcomms_rx_inpipe_mimo_rvData_359_SRL_0_CONCAT__ETC___d1361 =
+	     xcomms_rx_inpipe_mimo_rvData >> x__h94058 ;
+  assign xcomms_rx_inpipe_mimo_rwvEnqData_wget__348_CON_ETC___d1355 =
+	     { fFromBridgeBeat_ifc_rStorage[31:0], 88'd0 } >> x__h86687 ;
+  assign xcomms_tx_outpipe_credits_581_PLUS_IF_xcomms_t_ETC___d1605 =
+	     xcomms_tx_outpipe_credits +
+	     IF_xcomms_tx_outpipe_updates_from_msg_whas__59_ETC___d1604 ;
+  assign xcomms_tx_outpipe_elem_count_622_EQ_0_623_OR_N_ETC___d1634 =
+	     xcomms_tx_outpipe_elem_count == 16'd0 ||
+	     !xcomms_tx_outpipe_sendDataOK ||
+	     xcomms_tx_outpipe_accumulateTimer$Q_OUT != 5'd0 &&
+	     xcomms_tx_outpipe_credits != 16'd0 ||
+	     xcomms_tx_outpipe_data_info_fifo$sFULL_N ;
+  assign xcomms_tx_outpipe_elem_count_622_EQ_0_623_OR_N_ETC___d1701 =
+	     (xcomms_tx_outpipe_elem_count == 16'd0 ||
+	      !xcomms_tx_outpipe_sendDataOK ||
+	      xcomms_tx_outpipe_accumulateTimer$Q_OUT != 5'd0 &&
+	      xcomms_tx_outpipe_credits != 16'd0) &&
+	     (xcomms_tx_outpipe_sendDataOK ||
+	      xcomms_tx_outpipe_add_to_output_buffer$whas &&
+	      xcomms_tx_outpipe_updates_from_ifc$wget[3]) ;
+  assign xcomms_tx_outpipe_elem_count_622_PLUS_IF_xcomm_ETC___d1650 =
+	     xcomms_tx_outpipe_elem_count +
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__59_ETC___d1619 ;
+  assign xcomms_tx_outpipe_flushing_609_AND_NOT_xcomms__ETC___d1727 =
+	     xcomms_tx_outpipe_flushing &&
+	     (xcomms_tx_outpipe_credits_581_PLUS_IF_xcomms_t_ETC___d1605 !=
+	      16'd1024 ||
+	      IF_xcomms_tx_outpipe_updates_from_msg_whas__59_ETC___d1604 ==
+	      16'd0) ||
+	     xcomms_tx_outpipe_add_to_output_buffer$whas &&
+	     xcomms_tx_outpipe_updates_from_ifc$wget[1] ;
+  assign xcomms_tx_outpipe_in_reset_uclk_473_OR_xcomms__ETC___d1765 =
+	     xcomms_tx_outpipe_in_reset_uclk || xcomms_tx_outpipe_flushing ||
+	     xcomms_tx_outpipe_flush_requested ||
+	     !xcomms_tx_outpipe_indata_mimo_rDataCount_497_U_ETC___d1763 ;
+  assign xcomms_tx_outpipe_indata_mimo_rDataCount_497_U_ETC___d1763 =
+	     xcomms_tx_outpipe_indata_mimo_rDataCount <= 2'd1 ;
+  assign xcomms_tx_outpipe_indata_mimo_rvData_511_SRL_0_ETC___d1515 =
+	     xcomms_tx_outpipe_indata_mimo_rvData >>
+	     _0_CONCAT_IF_xcomms_tx_outpipe_indata_mimo_rwDe_ETC___d1513[31:0] ;
+  assign xcomms_tx_outpipe_indata_mimo_rwvEnqData_wget__ETC___d1507 =
+	     { xcomms_tx_outpipe_add_to_output_buffer$wget[671:16],
+	       1312'd0 } >>
+	     _656_MUL_2_MINUS_0_CONCAT_xcomms_tx_outpipe_ind_ETC___d1501[31:0] ;
+  assign xcomms_tx_outpipe_updates_from_ifc_whas__596_A_ETC___d1612 =
+	     xcomms_tx_outpipe_add_to_output_buffer$whas &&
+	     (xcomms_tx_outpipe_updates_from_ifc$wget[2] ||
+	      xcomms_tx_outpipe_updates_from_ifc$wget[1]) ||
+	     xcomms_tx_outpipe_flush_requested &&
+	     xcomms_tx_outpipe_credits_581_PLUS_IF_xcomms_t_ETC___d1605 !=
+	     16'd1024 &&
+	     !xcomms_tx_outpipe_flushing ;
+  assign xcomms_tx_outpipe_updates_from_ifc_whas__596_A_ETC___d1659 =
+	     xcomms_tx_outpipe_add_to_output_buffer$whas &&
+	     xcomms_tx_outpipe_updates_from_ifc$wget[1] ||
+	     xcomms_tx_outpipe_flush_requested &&
+	     xcomms_tx_outpipe_credits_581_PLUS_IF_xcomms_t_ETC___d1605 !=
+	     16'd1024 &&
+	     !xcomms_tx_outpipe_flushing ;
+  assign xcomms_tx_outpipe_updates_from_msg_whas__592_A_ETC___d1616 =
+	     CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits &&
+	     xcomms_tx_outpipe_updates_from_msg$wget[1] ||
+	     xcomms_tx_outpipe_updates_from_ifc_whas__596_A_ETC___d1612 ||
+	     xcomms_tx_outpipe_add_to_output_buffer$whas &&
+	     xcomms_tx_outpipe_updates_from_ifc$wget[0] ;
+  assign y__h154442 = enqData__h154382 & enqMask__h154383 ;
+  assign y__h155443 = enqData__h155383 & enqMask__h155384 ;
+  assign y__h156909 = enqData__h156849 & enqMask__h156850 ;
+  assign y__h224926 = enqData__h224866 & enqMask__h224867 ;
+  assign y__h226885 = enqData__h226825 & enqMask__h226826 ;
+  assign y__h228009 = enqData__h227949 & enqMask__h227950 ;
+  assign y__h303569 = x__h303603 << y__h303604 ;
+  assign y__h303604 = { 26'd0, rS2NumSaved, 3'd0 } ;
+  assign y__h311618 = ~x__h311619 ;
+  always@(cq_rg_dwcount)
+  begin
+    case (cq_rg_dwcount)
+      11'd1: tlp16_be__h15414 = 16'hF000;
+      11'd2: tlp16_be__h15414 = 16'hFF00;
+      11'd3: tlp16_be__h15414 = 16'hFFF0;
+      default: tlp16_be__h15414 = 16'd0;
+    endcase
+  end
+  always@(rq_rg_dwcount)
+  begin
+    case (rq_rg_dwcount)
+      11'd2: n_keep__h38340 = 2'b0;
+      11'd3: n_keep__h38340 = 2'b01;
+      default: n_keep__h38340 = 2'b11;
+    endcase
+  end
+  always@(rc_rg_dwcount)
+  begin
+    case (rc_rg_dwcount)
+      11'd1: tlp16_be__h57884 = 16'hF000;
+      11'd2: tlp16_be__h57884 = 16'hFF00;
+      11'd3: tlp16_be__h57884 = 16'hFFF0;
+      default: tlp16_be__h57884 = 16'hFFFF;
+    endcase
+  end
+  always@(rq_f_tlps_rv or _theResult___snd_address__h34835)
+  begin
+    case (rq_f_tlps_rv[126:125])
+      2'd1, 2'd3: _theResult___snd_address__h34849 = rq_f_tlps_rv[63:2];
+      default: _theResult___snd_address__h34849 =
+		   _theResult___snd_address__h34835;
+    endcase
+  end
+  always@(rq_f_tlps_rv)
+  begin
+    case (rq_f_tlps_rv[126:125])
+      2'd0, 2'd1:
+	  CASE_rq_f_tlps_rv_BITS_126_TO_125_0_0_1_0_2_1__ETC__q1 = 4'd0;
+      2'd2, 2'd3:
+	  CASE_rq_f_tlps_rv_BITS_126_TO_125_0_0_1_0_2_1__ETC__q1 = 4'd1;
+    endcase
+  end
+  always@(cq_f_cq_rv)
+  begin
+    case (cq_f_cq_rv[102:99])
+      4'd0, 4'd2: tlp16_be__h12770 = 16'hFFF0;
+      default: tlp16_be__h12770 = 16'hFFFF;
+    endcase
+  end
+  always@(cq_f_cq_rv)
+  begin
+    case (cq_f_cq_rv[102:99])
+      4'd0, 4'd1:
+	  IF_cq_f_cq_rv_port0__read__75_BITS_102_TO_99_8_ETC___d203 = 5'd0;
+      default: IF_cq_f_cq_rv_port0__read__75_BITS_102_TO_99_8_ETC___d203 =
+		   5'd2;
+    endcase
+  end
+  always@(cq_f_cq_rv)
+  begin
+    case (cq_f_cq_rv[102:99])
+      4'd0, 4'd2:
+	  IF_cq_f_cq_rv_port0__read__75_BITS_102_TO_99_8_ETC___d199 = 2'd0;
+      4'd1: IF_cq_f_cq_rv_port0__read__75_BITS_102_TO_99_8_ETC___d199 = 2'd2;
+      default: IF_cq_f_cq_rv_port0__read__75_BITS_102_TO_99_8_ETC___d199 =
+		   2'd2;
+    endcase
+  end
+  always@(IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281 or
+	  x__h236339 or
+	  fS1MsgOut_ifc_rDataCount_205_ULT_4___d2276 or x__h229807)
+  begin
+    case (IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281)
+      2'd1:
+	  IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2352 =
+	      !fS1MsgOut_ifc_rDataCount_205_ULT_4___d2276;
+      2'd2:
+	  IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2352 =
+	      x__h229807 == 6'd25 || x__h229807 == 6'd48 ||
+	      x__h229807 == 6'd49 ||
+	      x__h229807 == 6'd52;
+      default: IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2352 =
+		   IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281 ==
+		   2'd3 &&
+		   (x__h236339 == 6'd8 || x__h236339 == 6'd9 ||
+		    x__h236339 == 6'd12 ||
+		    x__h236339 == 6'd33);
+    endcase
+  end
+  always@(IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281 or
+	  x__h236339 or
+	  fFromContinueBeat_ifc_rDataCount_168_ULT_4___d2274 or x__h229807)
+  begin
+    case (IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281)
+      2'd1:
+	  IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2332 =
+	      !fFromContinueBeat_ifc_rDataCount_168_ULT_4___d2274;
+      2'd2:
+	  IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2332 =
+	      x__h229807 == 6'd24 || x__h229807 == 6'd26 ||
+	      x__h229807 == 6'd28 ||
+	      x__h229807 == 6'd44;
+      default: IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2332 =
+		   IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281 ==
+		   2'd3 &&
+		   x__h236339 != 6'd8 &&
+		   x__h236339 != 6'd9 &&
+		   x__h236339 != 6'd10 &&
+		   x__h236339 != 6'd12 &&
+		   x__h236339 != 6'd16 &&
+		   x__h236339 != 6'd17 &&
+		   x__h236339 != 6'd18 &&
+		   x__h236339 != 6'd33;
+    endcase
+  end
+  always@(IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281 or
+	  x__h236339 or
+	  fS2MsgOut_ifc_rDataCount_242_ULT_4___d2279 or x__h229807)
+  begin
+    case (IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281)
+      2'd1:
+	  IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2379 =
+	      !fS2MsgOut_ifc_rDataCount_242_ULT_4___d2279;
+      2'd2:
+	  IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2379 =
+	      x__h229807 == 6'd50 || x__h229807 == 6'd40 ||
+	      x__h229807 == 6'd41 ||
+	      x__h229807 == 6'd42;
+      default: IF_IF_fFromContinueBeat_ifc_rDataCount_168_ULT_ETC___d2379 =
+		   IF_fFromContinueBeat_ifc_rDataCount_168_ULT_4__ETC___d2281 ==
+		   2'd3 &&
+		   (x__h236339 == 6'd10 || x__h236339 == 6'd16 ||
+		    x__h236339 == 6'd17 ||
+		    x__h236339 == 6'd18);
+    endcase
+  end
+  always@(dut_prb_control_ackFifo$D_OUT)
+  begin
+    case (dut_prb_control_ackFifo$D_OUT[31:29])
+      3'd0, 3'd1, 3'd2, 3'd3, 3'd4, 3'd5, 3'd6:
+	  CASE_dut_prb_control_ackFifoD_OUT_BITS_31_TO__ETC__q4 =
+	      dut_prb_control_ackFifo$D_OUT[31:16];
+      3'd7:
+	  CASE_dut_prb_control_ackFifoD_OUT_BITS_31_TO__ETC__q4 =
+	      { 3'd7, dut_prb_control_ackFifo$D_OUT[28:16] };
+    endcase
+  end
+  always@(dut_prb_control_prb_str$D_OUT)
+  begin
+    case (dut_prb_control_prb_str$D_OUT[31:29])
+      3'd0, 3'd1, 3'd2, 3'd3, 3'd4, 3'd5, 3'd6:
+	  CASE_dut_prb_control_prb_strD_OUT_BITS_31_TO__ETC__q5 =
+	      dut_prb_control_prb_str$D_OUT[31:16];
+      3'd7:
+	  CASE_dut_prb_control_prb_strD_OUT_BITS_31_TO__ETC__q5 =
+	      { 3'd7, dut_prb_control_prb_str$D_OUT[28:16] };
+    endcase
+  end
+  always@(b__h97042 or xcomms_rx_inpipe_elems)
+  begin
+    case (b__h97042)
+      16'd0:
+	  CASE_b7042_0_xcomms_rx_inpipe_elems_BIT_56_1_0_ETC__q7 =
+	      xcomms_rx_inpipe_elems[56];
+      16'd1: CASE_b7042_0_xcomms_rx_inpipe_elems_BIT_56_1_0_ETC__q7 = 1'd0;
+      default: CASE_b7042_0_xcomms_rx_inpipe_elems_BIT_56_1_0_ETC__q7 =
+		   1'b0 /* unspecified value */ ;
+    endcase
+  end
+  always@(b__h97042 or xcomms_rx_inpipe_elems)
+  begin
+    case (b__h97042)
+      16'd0:
+	  CASE_b7042_0_xcomms_rx_inpipe_elems_BITS_55_TO_ETC__q8 =
+	      xcomms_rx_inpipe_elems[55:32];
+      16'd1:
+	  CASE_b7042_0_xcomms_rx_inpipe_elems_BITS_55_TO_ETC__q8 = 24'hAAAAAA;
+      default: CASE_b7042_0_xcomms_rx_inpipe_elems_BITS_55_TO_ETC__q8 =
+		   24'b101010101010101010101010 /* unspecified value */ ;
+    endcase
+  end
+  always@(b__h97042 or xcomms_rx_inpipe_elems)
+  begin
+    case (b__h97042)
+      16'd0:
+	  CASE_b7042_0_xcomms_rx_inpipe_elems_BITS_31_TO_ETC__q9 =
+	      xcomms_rx_inpipe_elems[31:0];
+      16'd1:
+	  CASE_b7042_0_xcomms_rx_inpipe_elems_BITS_31_TO_ETC__q9 =
+	      32'hAAAAAAAA;
+      default: CASE_b7042_0_xcomms_rx_inpipe_elems_BITS_31_TO_ETC__q9 =
+		   32'hAAAAAAAA /* unspecified value */ ;
+    endcase
+  end
+  always@(dut_prb_control_control_in_scemiInportBeats)
+  begin
+    case (dut_prb_control_control_in_scemiInportBeats[15:13])
+      3'd0, 3'd1, 3'd2, 3'd3, 3'd4, 3'd5, 3'd6:
+	  CASE_dut_prb_control_control_in_scemiInportBea_ETC__q10 =
+	      dut_prb_control_control_in_scemiInportBeats[15:0];
+      3'd7:
+	  CASE_dut_prb_control_control_in_scemiInportBea_ETC__q10 =
+	      { 3'd7, dut_prb_control_control_in_scemiInportBeats[12:0] };
+    endcase
+  end
+  always@(dut_prb_control_control_in_dataF_rv$port1__read)
+  begin
+    case (dut_prb_control_control_in_dataF_rv$port1__read[15:13])
+      3'd0, 3'd1, 3'd2, 3'd3, 3'd4, 3'd5, 3'd6:
+	  IF_dut_prb_control_control_in_dataF_rv_port1___ETC___d1134 =
+	      dut_prb_control_control_in_dataF_rv$port1__read[15:0];
+      3'd7:
+	  IF_dut_prb_control_control_in_dataF_rv_port1___ETC___d1134 =
+	      { 3'd7, dut_prb_control_control_in_dataF_rv$port1__read[12:0] };
+    endcase
+  end
+  always@(dut_prb_control_enff$D_OUT)
+  begin
+    case (dut_prb_control_enff$D_OUT[18:16])
+      3'd0, 3'd1, 3'd2, 3'd3, 3'd4, 3'd5, 3'd6:
+	  CASE_dut_prb_control_enffD_OUT_BITS_18_TO_16__ETC__q11 =
+	      dut_prb_control_enff$D_OUT[18:3];
+      3'd7:
+	  CASE_dut_prb_control_enffD_OUT_BITS_18_TO_16__ETC__q11 =
+	      { 3'd7, dut_prb_control_enff$D_OUT[15:3] };
+    endcase
+  end
+
+  // handling of inlined registers
+
+  always@(posedge CLK_user_clk)
+  begin
+    if (RST_N_user_reset == `BSV_RESET_VALUE)
+      begin
+        cc_gearbox_elem0_status_0 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	cc_gearbox_elem0_status_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	cc_gearbox_elem1_status_0 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	cc_gearbox_elem1_status_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	cc_gearbox_read_block <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	cq_gearbox_elem0_status_0 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	cq_gearbox_elem0_status_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	cq_gearbox_elem1_status_0 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	cq_gearbox_elem1_status_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	cq_gearbox_elem_0 <= `BSV_ASSIGNMENT_DELAY 76'd0;
+	cq_gearbox_elem_1 <= `BSV_ASSIGNMENT_DELAY 76'd0;
+	cq_gearbox_elem_2 <= `BSV_ASSIGNMENT_DELAY 76'd0;
+	cq_gearbox_elem_3 <= `BSV_ASSIGNMENT_DELAY 76'd0;
+	cq_gearbox_write_block <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	cq_rg_even_enq <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	cq_rg_pad_odd_tail <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	intr_on <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	lnk_up_cr <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	max_payload_cr <= `BSV_ASSIGNMENT_DELAY 13'd128;
+	max_rd_req_cr <= `BSV_ASSIGNMENT_DELAY 13'd128;
+	msix_enable_cr <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	msix_masked_cr <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	rc_gearbox_elem0_status_0 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rc_gearbox_elem0_status_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rc_gearbox_elem1_status_0 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rc_gearbox_elem1_status_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rc_gearbox_elem_0 <= `BSV_ASSIGNMENT_DELAY 76'd0;
+	rc_gearbox_elem_1 <= `BSV_ASSIGNMENT_DELAY 76'd0;
+	rc_gearbox_elem_2 <= `BSV_ASSIGNMENT_DELAY 76'd0;
+	rc_gearbox_elem_3 <= `BSV_ASSIGNMENT_DELAY 76'd0;
+	rc_gearbox_write_block <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rc_rg_even_enq <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	rc_rg_in_packet <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rc_rg_pad_odd_tail <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rcb_cr <= `BSV_ASSIGNMENT_DELAY 8'd128;
+	rq_gearbox_elem0_status_0 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rq_gearbox_elem0_status_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rq_gearbox_elem1_status_0 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rq_gearbox_elem1_status_1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rq_gearbox_read_block <= `BSV_ASSIGNMENT_DELAY 1'd0;
+      end
+    else
+      begin
+        if (cc_gearbox_elem0_status_0$EN)
+	  cc_gearbox_elem0_status_0 <= `BSV_ASSIGNMENT_DELAY
+	      cc_gearbox_elem0_status_0$D_IN;
+	if (cc_gearbox_elem0_status_1$EN)
+	  cc_gearbox_elem0_status_1 <= `BSV_ASSIGNMENT_DELAY
+	      cc_gearbox_elem0_status_1$D_IN;
+	if (cc_gearbox_elem1_status_0$EN)
+	  cc_gearbox_elem1_status_0 <= `BSV_ASSIGNMENT_DELAY
+	      cc_gearbox_elem1_status_0$D_IN;
+	if (cc_gearbox_elem1_status_1$EN)
+	  cc_gearbox_elem1_status_1 <= `BSV_ASSIGNMENT_DELAY
+	      cc_gearbox_elem1_status_1$D_IN;
+	if (cc_gearbox_read_block$EN)
+	  cc_gearbox_read_block <= `BSV_ASSIGNMENT_DELAY
+	      cc_gearbox_read_block$D_IN;
+	if (cq_gearbox_elem0_status_0$EN)
+	  cq_gearbox_elem0_status_0 <= `BSV_ASSIGNMENT_DELAY
+	      cq_gearbox_elem0_status_0$D_IN;
+	if (cq_gearbox_elem0_status_1$EN)
+	  cq_gearbox_elem0_status_1 <= `BSV_ASSIGNMENT_DELAY
+	      cq_gearbox_elem0_status_1$D_IN;
+	if (cq_gearbox_elem1_status_0$EN)
+	  cq_gearbox_elem1_status_0 <= `BSV_ASSIGNMENT_DELAY
+	      cq_gearbox_elem1_status_0$D_IN;
+	if (cq_gearbox_elem1_status_1$EN)
+	  cq_gearbox_elem1_status_1 <= `BSV_ASSIGNMENT_DELAY
+	      cq_gearbox_elem1_status_1$D_IN;
+	if (cq_gearbox_elem_0$EN)
+	  cq_gearbox_elem_0 <= `BSV_ASSIGNMENT_DELAY cq_gearbox_elem_0$D_IN;
+	if (cq_gearbox_elem_1$EN)
+	  cq_gearbox_elem_1 <= `BSV_ASSIGNMENT_DELAY cq_gearbox_elem_1$D_IN;
+	if (cq_gearbox_elem_2$EN)
+	  cq_gearbox_elem_2 <= `BSV_ASSIGNMENT_DELAY cq_gearbox_elem_2$D_IN;
+	if (cq_gearbox_elem_3$EN)
+	  cq_gearbox_elem_3 <= `BSV_ASSIGNMENT_DELAY cq_gearbox_elem_3$D_IN;
+	if (cq_gearbox_write_block$EN)
+	  cq_gearbox_write_block <= `BSV_ASSIGNMENT_DELAY
+	      cq_gearbox_write_block$D_IN;
+	if (cq_rg_even_enq$EN)
+	  cq_rg_even_enq <= `BSV_ASSIGNMENT_DELAY cq_rg_even_enq$D_IN;
+	if (cq_rg_pad_odd_tail$EN)
+	  cq_rg_pad_odd_tail <= `BSV_ASSIGNMENT_DELAY cq_rg_pad_odd_tail$D_IN;
+	if (intr_on$EN) intr_on <= `BSV_ASSIGNMENT_DELAY intr_on$D_IN;
+	if (lnk_up_cr$EN) lnk_up_cr <= `BSV_ASSIGNMENT_DELAY lnk_up_cr$D_IN;
+	if (max_payload_cr$EN)
+	  max_payload_cr <= `BSV_ASSIGNMENT_DELAY max_payload_cr$D_IN;
+	if (max_rd_req_cr$EN)
+	  max_rd_req_cr <= `BSV_ASSIGNMENT_DELAY max_rd_req_cr$D_IN;
+	if (msix_enable_cr$EN)
+	  msix_enable_cr <= `BSV_ASSIGNMENT_DELAY msix_enable_cr$D_IN;
+	if (msix_masked_cr$EN)
+	  msix_masked_cr <= `BSV_ASSIGNMENT_DELAY msix_masked_cr$D_IN;
+	if (rc_gearbox_elem0_status_0$EN)
+	  rc_gearbox_elem0_status_0 <= `BSV_ASSIGNMENT_DELAY
+	      rc_gearbox_elem0_status_0$D_IN;
+	if (rc_gearbox_elem0_status_1$EN)
+	  rc_gearbox_elem0_status_1 <= `BSV_ASSIGNMENT_DELAY
+	      rc_gearbox_elem0_status_1$D_IN;
+	if (rc_gearbox_elem1_status_0$EN)
+	  rc_gearbox_elem1_status_0 <= `BSV_ASSIGNMENT_DELAY
+	      rc_gearbox_elem1_status_0$D_IN;
+	if (rc_gearbox_elem1_status_1$EN)
+	  rc_gearbox_elem1_status_1 <= `BSV_ASSIGNMENT_DELAY
+	      rc_gearbox_elem1_status_1$D_IN;
+	if (rc_gearbox_elem_0$EN)
+	  rc_gearbox_elem_0 <= `BSV_ASSIGNMENT_DELAY rc_gearbox_elem_0$D_IN;
+	if (rc_gearbox_elem_1$EN)
+	  rc_gearbox_elem_1 <= `BSV_ASSIGNMENT_DELAY rc_gearbox_elem_1$D_IN;
+	if (rc_gearbox_elem_2$EN)
+	  rc_gearbox_elem_2 <= `BSV_ASSIGNMENT_DELAY rc_gearbox_elem_2$D_IN;
+	if (rc_gearbox_elem_3$EN)
+	  rc_gearbox_elem_3 <= `BSV_ASSIGNMENT_DELAY rc_gearbox_elem_3$D_IN;
+	if (rc_gearbox_write_block$EN)
+	  rc_gearbox_write_block <= `BSV_ASSIGNMENT_DELAY
+	      rc_gearbox_write_block$D_IN;
+	if (rc_rg_even_enq$EN)
+	  rc_rg_even_enq <= `BSV_ASSIGNMENT_DELAY rc_rg_even_enq$D_IN;
+	if (rc_rg_in_packet$EN)
+	  rc_rg_in_packet <= `BSV_ASSIGNMENT_DELAY rc_rg_in_packet$D_IN;
+	if (rc_rg_pad_odd_tail$EN)
+	  rc_rg_pad_odd_tail <= `BSV_ASSIGNMENT_DELAY rc_rg_pad_odd_tail$D_IN;
+	if (rcb_cr$EN) rcb_cr <= `BSV_ASSIGNMENT_DELAY rcb_cr$D_IN;
+	if (rq_gearbox_elem0_status_0$EN)
+	  rq_gearbox_elem0_status_0 <= `BSV_ASSIGNMENT_DELAY
+	      rq_gearbox_elem0_status_0$D_IN;
+	if (rq_gearbox_elem0_status_1$EN)
+	  rq_gearbox_elem0_status_1 <= `BSV_ASSIGNMENT_DELAY
+	      rq_gearbox_elem0_status_1$D_IN;
+	if (rq_gearbox_elem1_status_0$EN)
+	  rq_gearbox_elem1_status_0 <= `BSV_ASSIGNMENT_DELAY
+	      rq_gearbox_elem1_status_0$D_IN;
+	if (rq_gearbox_elem1_status_1$EN)
+	  rq_gearbox_elem1_status_1 <= `BSV_ASSIGNMENT_DELAY
+	      rq_gearbox_elem1_status_1$D_IN;
+	if (rq_gearbox_read_block$EN)
+	  rq_gearbox_read_block <= `BSV_ASSIGNMENT_DELAY
+	      rq_gearbox_read_block$D_IN;
+      end
+  end
+
+  always@(posedge CLK_user_clk_half)
+  begin
+    if (epReset125$OUT_RST == `BSV_RESET_VALUE)
+      begin
+        cc_f_tlps_rv <= `BSV_ASSIGNMENT_DELAY
+	    154'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+	cc_gearbox_block0 <= `BSV_ASSIGNMENT_DELAY 134'd0;
+	cc_gearbox_block0_status <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	cc_gearbox_block1 <= `BSV_ASSIGNMENT_DELAY 134'd0;
+	cc_gearbox_block1_status <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	cc_gearbox_write_block <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	cc_rg_dwcount <= `BSV_ASSIGNMENT_DELAY 11'd0;
+	cq_f_cq_rv <= `BSV_ASSIGNMENT_DELAY
+	    153'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+	cq_gearbox_block0_status <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	cq_gearbox_block1_status <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	cq_gearbox_read_block <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	dut_prb_control_control_in_in_reset_noc <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	dut_prb_control_control_in_remaining <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	dut_prb_control_control_in_scemiInportBeats <= `BSV_ASSIGNMENT_DELAY
+	    32'd0;
+	dut_prb_control_data_out_count <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	dut_prb_control_data_out_in_reset_noc <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	fFromBridgeBeat_ifc_rDataAvail <= `BSV_ASSIGNMENT_DELAY 6'd32;
+	fFromBridgeBeat_ifc_rDataCount <= `BSV_ASSIGNMENT_DELAY 6'd0;
+	fFromBridgeBeat_ifc_rStorage <= `BSV_ASSIGNMENT_DELAY 256'd0;
+	fFromBridgeBeat_ifc_rStorageMask <= `BSV_ASSIGNMENT_DELAY 256'd0;
+	fFromContinueBeat_ifc_rDataAvail <= `BSV_ASSIGNMENT_DELAY 6'd32;
+	fFromContinueBeat_ifc_rDataCount <= `BSV_ASSIGNMENT_DELAY 6'd0;
+	fFromContinueBeat_ifc_rStorage <= `BSV_ASSIGNMENT_DELAY 256'd0;
+	fFromContinueBeat_ifc_rStorageMask <= `BSV_ASSIGNMENT_DELAY 256'd0;
+	fS1MsgOut_ifc_rDataAvail <= `BSV_ASSIGNMENT_DELAY 6'd32;
+	fS1MsgOut_ifc_rDataCount <= `BSV_ASSIGNMENT_DELAY 6'd0;
+	fS1MsgOut_ifc_rStorage <= `BSV_ASSIGNMENT_DELAY 256'd0;
+	fS1MsgOut_ifc_rStorageMask <= `BSV_ASSIGNMENT_DELAY 256'd0;
+	fS1OutPortAcks_ifc_rDataAvail <= `BSV_ASSIGNMENT_DELAY 5'd16;
+	fS1OutPortAcks_ifc_rDataCount <= `BSV_ASSIGNMENT_DELAY 5'd0;
+	fS1OutPortAcks_ifc_rStorage <= `BSV_ASSIGNMENT_DELAY 160'd0;
+	fS1OutPortAcks_ifc_rStorageMask <= `BSV_ASSIGNMENT_DELAY 160'd0;
+	fS2MsgOut_ifc_rDataAvail <= `BSV_ASSIGNMENT_DELAY 6'd32;
+	fS2MsgOut_ifc_rDataCount <= `BSV_ASSIGNMENT_DELAY 6'd0;
+	fS2MsgOut_ifc_rStorage <= `BSV_ASSIGNMENT_DELAY 256'd0;
+	fS2MsgOut_ifc_rStorageMask <= `BSV_ASSIGNMENT_DELAY 256'd0;
+	fToContinueBeat_ifc_rDataAvail <= `BSV_ASSIGNMENT_DELAY 6'd32;
+	fToContinueBeat_ifc_rDataCount <= `BSV_ASSIGNMENT_DELAY 6'd0;
+	fToContinueBeat_ifc_rStorage <= `BSV_ASSIGNMENT_DELAY 256'd0;
+	fToContinueBeat_ifc_rStorageMask <= `BSV_ASSIGNMENT_DELAY 256'd0;
+	lrS1ActiveRequests <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	lrS1PendingRequests <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	max_payload_bytes <= `BSV_ASSIGNMENT_DELAY 13'd128;
+	max_read_req_bytes <= `BSV_ASSIGNMENT_DELAY 13'd128;
+	msix_enable <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	msix_masked <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	rDecodeSceMi <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rInMsgBytes <= `BSV_ASSIGNMENT_DELAY 8'd0;
+	rOtherMsgIn <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rOtherMsgOut <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rOutMsgBytes <= `BSV_ASSIGNMENT_DELAY 8'd0;
+	rS1MsgInIsAck <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rS1MsgInIsData <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rS1MsgOutDataReq <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rS1MsgOutReqGrant <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	rS1MsgOutReqReq <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rS1OutDataHeader <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rS1RequestedPort <= `BSV_ASSIGNMENT_DELAY 10'd0;
+	rS2InCreditIndex <= `BSV_ASSIGNMENT_DELAY 12'd0;
+	rS2MsgInIsCred <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rS2MsgInIsData <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rS2MsgOutCredGrant <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	rS2MsgOutDataReq <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rS2NumSaved <= `BSV_ASSIGNMENT_DELAY 3'd0;
+	rS2OutBytes <= `BSV_ASSIGNMENT_DELAY 32'd0;
+	rS2OutDataEOM <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rS2OutDataFlush <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rS2OutDataIndex <= `BSV_ASSIGNMENT_DELAY 12'd0;
+	rS2OutDataOverflow <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rS2OutMsgBytes <= `BSV_ASSIGNMENT_DELAY 8'd0;
+	rS2SavedBytes <= `BSV_ASSIGNMENT_DELAY 32'd0;
+	rS2SendOutDataHdr <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rS2SendOutDataMsg <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rSceMi1MsgIn <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rSceMi1MsgOut <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rSceMi2MsgIn <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rSceMi2MsgOut <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rc_gearbox_block0_status <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rc_gearbox_block1_status <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rc_gearbox_read_block <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rcb_mask <= `BSV_ASSIGNMENT_DELAY 7'h3F;
+	rq_f_tlps_rv <= `BSV_ASSIGNMENT_DELAY
+	    154'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+	rq_gearbox_block0 <= `BSV_ASSIGNMENT_DELAY 150'd0;
+	rq_gearbox_block0_status <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rq_gearbox_block1 <= `BSV_ASSIGNMENT_DELAY 150'd0;
+	rq_gearbox_block1_status <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rq_gearbox_write_block <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rq_rg_dwcount <= `BSV_ASSIGNMENT_DELAY 11'd0;
+	rvPrevMsgGrant <= `BSV_ASSIGNMENT_DELAY 3'd0;
+	rvPrevPrevMsgGrant <= `BSV_ASSIGNMENT_DELAY 3'd0;
+	xcomms_rx_inpipe_ecount <= `BSV_ASSIGNMENT_DELAY 16'd0;
+	xcomms_rx_inpipe_mimo_rDataCount <= `BSV_ASSIGNMENT_DELAY 4'd0;
+	xcomms_rx_inpipe_mimo_rvData <= `BSV_ASSIGNMENT_DELAY 88'd0;
+	xcomms_tx_outpipe_in_reset_noc <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	xcomms_tx_outpipe_nocAutoFlush <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	xcomms_tx_outpipe_nocCredits <= `BSV_ASSIGNMENT_DELAY 16'd0;
+	xcomms_tx_outpipe_nocUnderFlow <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	xcomms_tx_outpipe_noc_buf_bytes <= `BSV_ASSIGNMENT_DELAY 16'd0;
+      end
+    else
+      begin
+        if (cc_f_tlps_rv$EN)
+	  cc_f_tlps_rv <= `BSV_ASSIGNMENT_DELAY cc_f_tlps_rv$D_IN;
+	if (cc_gearbox_block0$EN)
+	  cc_gearbox_block0 <= `BSV_ASSIGNMENT_DELAY cc_gearbox_block0$D_IN;
+	if (cc_gearbox_block0_status$EN)
+	  cc_gearbox_block0_status <= `BSV_ASSIGNMENT_DELAY
+	      cc_gearbox_block0_status$D_IN;
+	if (cc_gearbox_block1$EN)
+	  cc_gearbox_block1 <= `BSV_ASSIGNMENT_DELAY cc_gearbox_block1$D_IN;
+	if (cc_gearbox_block1_status$EN)
+	  cc_gearbox_block1_status <= `BSV_ASSIGNMENT_DELAY
+	      cc_gearbox_block1_status$D_IN;
+	if (cc_gearbox_write_block$EN)
+	  cc_gearbox_write_block <= `BSV_ASSIGNMENT_DELAY
+	      cc_gearbox_write_block$D_IN;
+	if (cc_rg_dwcount$EN)
+	  cc_rg_dwcount <= `BSV_ASSIGNMENT_DELAY cc_rg_dwcount$D_IN;
+	if (cq_f_cq_rv$EN)
+	  cq_f_cq_rv <= `BSV_ASSIGNMENT_DELAY cq_f_cq_rv$D_IN;
+	if (cq_gearbox_block0_status$EN)
+	  cq_gearbox_block0_status <= `BSV_ASSIGNMENT_DELAY
+	      cq_gearbox_block0_status$D_IN;
+	if (cq_gearbox_block1_status$EN)
+	  cq_gearbox_block1_status <= `BSV_ASSIGNMENT_DELAY
+	      cq_gearbox_block1_status$D_IN;
+	if (cq_gearbox_read_block$EN)
+	  cq_gearbox_read_block <= `BSV_ASSIGNMENT_DELAY
+	      cq_gearbox_read_block$D_IN;
+	if (dut_prb_control_control_in_in_reset_noc$EN)
+	  dut_prb_control_control_in_in_reset_noc <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_control_in_in_reset_noc$D_IN;
+	if (dut_prb_control_control_in_remaining$EN)
+	  dut_prb_control_control_in_remaining <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_control_in_remaining$D_IN;
+	if (dut_prb_control_control_in_scemiInportBeats$EN)
+	  dut_prb_control_control_in_scemiInportBeats <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_control_in_scemiInportBeats$D_IN;
+	if (dut_prb_control_data_out_count$EN)
+	  dut_prb_control_data_out_count <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_data_out_count$D_IN;
+	if (dut_prb_control_data_out_in_reset_noc$EN)
+	  dut_prb_control_data_out_in_reset_noc <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_data_out_in_reset_noc$D_IN;
+	if (fFromBridgeBeat_ifc_rDataAvail$EN)
+	  fFromBridgeBeat_ifc_rDataAvail <= `BSV_ASSIGNMENT_DELAY
+	      fFromBridgeBeat_ifc_rDataAvail$D_IN;
+	if (fFromBridgeBeat_ifc_rDataCount$EN)
+	  fFromBridgeBeat_ifc_rDataCount <= `BSV_ASSIGNMENT_DELAY
+	      fFromBridgeBeat_ifc_rDataCount$D_IN;
+	if (fFromBridgeBeat_ifc_rStorage$EN)
+	  fFromBridgeBeat_ifc_rStorage <= `BSV_ASSIGNMENT_DELAY
+	      fFromBridgeBeat_ifc_rStorage$D_IN;
+	if (fFromBridgeBeat_ifc_rStorageMask$EN)
+	  fFromBridgeBeat_ifc_rStorageMask <= `BSV_ASSIGNMENT_DELAY
+	      fFromBridgeBeat_ifc_rStorageMask$D_IN;
+	if (fFromContinueBeat_ifc_rDataAvail$EN)
+	  fFromContinueBeat_ifc_rDataAvail <= `BSV_ASSIGNMENT_DELAY
+	      fFromContinueBeat_ifc_rDataAvail$D_IN;
+	if (fFromContinueBeat_ifc_rDataCount$EN)
+	  fFromContinueBeat_ifc_rDataCount <= `BSV_ASSIGNMENT_DELAY
+	      fFromContinueBeat_ifc_rDataCount$D_IN;
+	if (fFromContinueBeat_ifc_rStorage$EN)
+	  fFromContinueBeat_ifc_rStorage <= `BSV_ASSIGNMENT_DELAY
+	      fFromContinueBeat_ifc_rStorage$D_IN;
+	if (fFromContinueBeat_ifc_rStorageMask$EN)
+	  fFromContinueBeat_ifc_rStorageMask <= `BSV_ASSIGNMENT_DELAY
+	      fFromContinueBeat_ifc_rStorageMask$D_IN;
+	if (fS1MsgOut_ifc_rDataAvail$EN)
+	  fS1MsgOut_ifc_rDataAvail <= `BSV_ASSIGNMENT_DELAY
+	      fS1MsgOut_ifc_rDataAvail$D_IN;
+	if (fS1MsgOut_ifc_rDataCount$EN)
+	  fS1MsgOut_ifc_rDataCount <= `BSV_ASSIGNMENT_DELAY
+	      fS1MsgOut_ifc_rDataCount$D_IN;
+	if (fS1MsgOut_ifc_rStorage$EN)
+	  fS1MsgOut_ifc_rStorage <= `BSV_ASSIGNMENT_DELAY
+	      fS1MsgOut_ifc_rStorage$D_IN;
+	if (fS1MsgOut_ifc_rStorageMask$EN)
+	  fS1MsgOut_ifc_rStorageMask <= `BSV_ASSIGNMENT_DELAY
+	      fS1MsgOut_ifc_rStorageMask$D_IN;
+	if (fS1OutPortAcks_ifc_rDataAvail$EN)
+	  fS1OutPortAcks_ifc_rDataAvail <= `BSV_ASSIGNMENT_DELAY
+	      fS1OutPortAcks_ifc_rDataAvail$D_IN;
+	if (fS1OutPortAcks_ifc_rDataCount$EN)
+	  fS1OutPortAcks_ifc_rDataCount <= `BSV_ASSIGNMENT_DELAY
+	      fS1OutPortAcks_ifc_rDataCount$D_IN;
+	if (fS1OutPortAcks_ifc_rStorage$EN)
+	  fS1OutPortAcks_ifc_rStorage <= `BSV_ASSIGNMENT_DELAY
+	      fS1OutPortAcks_ifc_rStorage$D_IN;
+	if (fS1OutPortAcks_ifc_rStorageMask$EN)
+	  fS1OutPortAcks_ifc_rStorageMask <= `BSV_ASSIGNMENT_DELAY
+	      fS1OutPortAcks_ifc_rStorageMask$D_IN;
+	if (fS2MsgOut_ifc_rDataAvail$EN)
+	  fS2MsgOut_ifc_rDataAvail <= `BSV_ASSIGNMENT_DELAY
+	      fS2MsgOut_ifc_rDataAvail$D_IN;
+	if (fS2MsgOut_ifc_rDataCount$EN)
+	  fS2MsgOut_ifc_rDataCount <= `BSV_ASSIGNMENT_DELAY
+	      fS2MsgOut_ifc_rDataCount$D_IN;
+	if (fS2MsgOut_ifc_rStorage$EN)
+	  fS2MsgOut_ifc_rStorage <= `BSV_ASSIGNMENT_DELAY
+	      fS2MsgOut_ifc_rStorage$D_IN;
+	if (fS2MsgOut_ifc_rStorageMask$EN)
+	  fS2MsgOut_ifc_rStorageMask <= `BSV_ASSIGNMENT_DELAY
+	      fS2MsgOut_ifc_rStorageMask$D_IN;
+	if (fToContinueBeat_ifc_rDataAvail$EN)
+	  fToContinueBeat_ifc_rDataAvail <= `BSV_ASSIGNMENT_DELAY
+	      fToContinueBeat_ifc_rDataAvail$D_IN;
+	if (fToContinueBeat_ifc_rDataCount$EN)
+	  fToContinueBeat_ifc_rDataCount <= `BSV_ASSIGNMENT_DELAY
+	      fToContinueBeat_ifc_rDataCount$D_IN;
+	if (fToContinueBeat_ifc_rStorage$EN)
+	  fToContinueBeat_ifc_rStorage <= `BSV_ASSIGNMENT_DELAY
+	      fToContinueBeat_ifc_rStorage$D_IN;
+	if (fToContinueBeat_ifc_rStorageMask$EN)
+	  fToContinueBeat_ifc_rStorageMask <= `BSV_ASSIGNMENT_DELAY
+	      fToContinueBeat_ifc_rStorageMask$D_IN;
+	if (lrS1ActiveRequests$EN)
+	  lrS1ActiveRequests <= `BSV_ASSIGNMENT_DELAY lrS1ActiveRequests$D_IN;
+	if (lrS1PendingRequests$EN)
+	  lrS1PendingRequests <= `BSV_ASSIGNMENT_DELAY
+	      lrS1PendingRequests$D_IN;
+	if (max_payload_bytes$EN)
+	  max_payload_bytes <= `BSV_ASSIGNMENT_DELAY max_payload_bytes$D_IN;
+	if (max_read_req_bytes$EN)
+	  max_read_req_bytes <= `BSV_ASSIGNMENT_DELAY max_read_req_bytes$D_IN;
+	if (msix_enable$EN)
+	  msix_enable <= `BSV_ASSIGNMENT_DELAY msix_enable$D_IN;
+	if (msix_masked$EN)
+	  msix_masked <= `BSV_ASSIGNMENT_DELAY msix_masked$D_IN;
+	if (rDecodeSceMi$EN)
+	  rDecodeSceMi <= `BSV_ASSIGNMENT_DELAY rDecodeSceMi$D_IN;
+	if (rInMsgBytes$EN)
+	  rInMsgBytes <= `BSV_ASSIGNMENT_DELAY rInMsgBytes$D_IN;
+	if (rOtherMsgIn$EN)
+	  rOtherMsgIn <= `BSV_ASSIGNMENT_DELAY rOtherMsgIn$D_IN;
+	if (rOtherMsgOut$EN)
+	  rOtherMsgOut <= `BSV_ASSIGNMENT_DELAY rOtherMsgOut$D_IN;
+	if (rOutMsgBytes$EN)
+	  rOutMsgBytes <= `BSV_ASSIGNMENT_DELAY rOutMsgBytes$D_IN;
+	if (rS1MsgInIsAck$EN)
+	  rS1MsgInIsAck <= `BSV_ASSIGNMENT_DELAY rS1MsgInIsAck$D_IN;
+	if (rS1MsgInIsData$EN)
+	  rS1MsgInIsData <= `BSV_ASSIGNMENT_DELAY rS1MsgInIsData$D_IN;
+	if (rS1MsgOutDataReq$EN)
+	  rS1MsgOutDataReq <= `BSV_ASSIGNMENT_DELAY rS1MsgOutDataReq$D_IN;
+	if (rS1MsgOutReqGrant$EN)
+	  rS1MsgOutReqGrant <= `BSV_ASSIGNMENT_DELAY rS1MsgOutReqGrant$D_IN;
+	if (rS1MsgOutReqReq$EN)
+	  rS1MsgOutReqReq <= `BSV_ASSIGNMENT_DELAY rS1MsgOutReqReq$D_IN;
+	if (rS1OutDataHeader$EN)
+	  rS1OutDataHeader <= `BSV_ASSIGNMENT_DELAY rS1OutDataHeader$D_IN;
+	if (rS1RequestedPort$EN)
+	  rS1RequestedPort <= `BSV_ASSIGNMENT_DELAY rS1RequestedPort$D_IN;
+	if (rS2InCreditIndex$EN)
+	  rS2InCreditIndex <= `BSV_ASSIGNMENT_DELAY rS2InCreditIndex$D_IN;
+	if (rS2MsgInIsCred$EN)
+	  rS2MsgInIsCred <= `BSV_ASSIGNMENT_DELAY rS2MsgInIsCred$D_IN;
+	if (rS2MsgInIsData$EN)
+	  rS2MsgInIsData <= `BSV_ASSIGNMENT_DELAY rS2MsgInIsData$D_IN;
+	if (rS2MsgOutCredGrant$EN)
+	  rS2MsgOutCredGrant <= `BSV_ASSIGNMENT_DELAY rS2MsgOutCredGrant$D_IN;
+	if (rS2MsgOutDataReq$EN)
+	  rS2MsgOutDataReq <= `BSV_ASSIGNMENT_DELAY rS2MsgOutDataReq$D_IN;
+	if (rS2NumSaved$EN)
+	  rS2NumSaved <= `BSV_ASSIGNMENT_DELAY rS2NumSaved$D_IN;
+	if (rS2OutBytes$EN)
+	  rS2OutBytes <= `BSV_ASSIGNMENT_DELAY rS2OutBytes$D_IN;
+	if (rS2OutDataEOM$EN)
+	  rS2OutDataEOM <= `BSV_ASSIGNMENT_DELAY rS2OutDataEOM$D_IN;
+	if (rS2OutDataFlush$EN)
+	  rS2OutDataFlush <= `BSV_ASSIGNMENT_DELAY rS2OutDataFlush$D_IN;
+	if (rS2OutDataIndex$EN)
+	  rS2OutDataIndex <= `BSV_ASSIGNMENT_DELAY rS2OutDataIndex$D_IN;
+	if (rS2OutDataOverflow$EN)
+	  rS2OutDataOverflow <= `BSV_ASSIGNMENT_DELAY rS2OutDataOverflow$D_IN;
+	if (rS2OutMsgBytes$EN)
+	  rS2OutMsgBytes <= `BSV_ASSIGNMENT_DELAY rS2OutMsgBytes$D_IN;
+	if (rS2SavedBytes$EN)
+	  rS2SavedBytes <= `BSV_ASSIGNMENT_DELAY rS2SavedBytes$D_IN;
+	if (rS2SendOutDataHdr$EN)
+	  rS2SendOutDataHdr <= `BSV_ASSIGNMENT_DELAY rS2SendOutDataHdr$D_IN;
+	if (rS2SendOutDataMsg$EN)
+	  rS2SendOutDataMsg <= `BSV_ASSIGNMENT_DELAY rS2SendOutDataMsg$D_IN;
+	if (rSceMi1MsgIn$EN)
+	  rSceMi1MsgIn <= `BSV_ASSIGNMENT_DELAY rSceMi1MsgIn$D_IN;
+	if (rSceMi1MsgOut$EN)
+	  rSceMi1MsgOut <= `BSV_ASSIGNMENT_DELAY rSceMi1MsgOut$D_IN;
+	if (rSceMi2MsgIn$EN)
+	  rSceMi2MsgIn <= `BSV_ASSIGNMENT_DELAY rSceMi2MsgIn$D_IN;
+	if (rSceMi2MsgOut$EN)
+	  rSceMi2MsgOut <= `BSV_ASSIGNMENT_DELAY rSceMi2MsgOut$D_IN;
+	if (rc_gearbox_block0_status$EN)
+	  rc_gearbox_block0_status <= `BSV_ASSIGNMENT_DELAY
+	      rc_gearbox_block0_status$D_IN;
+	if (rc_gearbox_block1_status$EN)
+	  rc_gearbox_block1_status <= `BSV_ASSIGNMENT_DELAY
+	      rc_gearbox_block1_status$D_IN;
+	if (rc_gearbox_read_block$EN)
+	  rc_gearbox_read_block <= `BSV_ASSIGNMENT_DELAY
+	      rc_gearbox_read_block$D_IN;
+	if (rcb_mask$EN) rcb_mask <= `BSV_ASSIGNMENT_DELAY rcb_mask$D_IN;
+	if (rq_f_tlps_rv$EN)
+	  rq_f_tlps_rv <= `BSV_ASSIGNMENT_DELAY rq_f_tlps_rv$D_IN;
+	if (rq_gearbox_block0$EN)
+	  rq_gearbox_block0 <= `BSV_ASSIGNMENT_DELAY rq_gearbox_block0$D_IN;
+	if (rq_gearbox_block0_status$EN)
+	  rq_gearbox_block0_status <= `BSV_ASSIGNMENT_DELAY
+	      rq_gearbox_block0_status$D_IN;
+	if (rq_gearbox_block1$EN)
+	  rq_gearbox_block1 <= `BSV_ASSIGNMENT_DELAY rq_gearbox_block1$D_IN;
+	if (rq_gearbox_block1_status$EN)
+	  rq_gearbox_block1_status <= `BSV_ASSIGNMENT_DELAY
+	      rq_gearbox_block1_status$D_IN;
+	if (rq_gearbox_write_block$EN)
+	  rq_gearbox_write_block <= `BSV_ASSIGNMENT_DELAY
+	      rq_gearbox_write_block$D_IN;
+	if (rq_rg_dwcount$EN)
+	  rq_rg_dwcount <= `BSV_ASSIGNMENT_DELAY rq_rg_dwcount$D_IN;
+	if (rvPrevMsgGrant$EN)
+	  rvPrevMsgGrant <= `BSV_ASSIGNMENT_DELAY rvPrevMsgGrant$D_IN;
+	if (rvPrevPrevMsgGrant$EN)
+	  rvPrevPrevMsgGrant <= `BSV_ASSIGNMENT_DELAY rvPrevPrevMsgGrant$D_IN;
+	if (xcomms_rx_inpipe_ecount$EN)
+	  xcomms_rx_inpipe_ecount <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_rx_inpipe_ecount$D_IN;
+	if (xcomms_rx_inpipe_mimo_rDataCount$EN)
+	  xcomms_rx_inpipe_mimo_rDataCount <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_rx_inpipe_mimo_rDataCount$D_IN;
+	if (xcomms_rx_inpipe_mimo_rvData$EN)
+	  xcomms_rx_inpipe_mimo_rvData <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_rx_inpipe_mimo_rvData$D_IN;
+	if (xcomms_tx_outpipe_in_reset_noc$EN)
+	  xcomms_tx_outpipe_in_reset_noc <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_in_reset_noc$D_IN;
+	if (xcomms_tx_outpipe_nocAutoFlush$EN)
+	  xcomms_tx_outpipe_nocAutoFlush <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_nocAutoFlush$D_IN;
+	if (xcomms_tx_outpipe_nocCredits$EN)
+	  xcomms_tx_outpipe_nocCredits <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_nocCredits$D_IN;
+	if (xcomms_tx_outpipe_nocUnderFlow$EN)
+	  xcomms_tx_outpipe_nocUnderFlow <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_nocUnderFlow$D_IN;
+	if (xcomms_tx_outpipe_noc_buf_bytes$EN)
+	  xcomms_tx_outpipe_noc_buf_bytes <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_noc_buf_bytes$D_IN;
+      end
+    if (cq_rg_dwcount$EN)
+      cq_rg_dwcount <= `BSV_ASSIGNMENT_DELAY cq_rg_dwcount$D_IN;
+    if (rS1BitsRem$EN) rS1BitsRem <= `BSV_ASSIGNMENT_DELAY rS1BitsRem$D_IN;
+    if (rS1CycleStamp$EN)
+      rS1CycleStamp <= `BSV_ASSIGNMENT_DELAY rS1CycleStamp$D_IN;
+    if (rS1InPortNum$EN)
+      rS1InPortNum <= `BSV_ASSIGNMENT_DELAY rS1InPortNum$D_IN;
+    if (rS1OutMsgIsCont$EN)
+      rS1OutMsgIsCont <= `BSV_ASSIGNMENT_DELAY rS1OutMsgIsCont$D_IN;
+    if (rS1OutMsgSize$EN)
+      rS1OutMsgSize <= `BSV_ASSIGNMENT_DELAY rS1OutMsgSize$D_IN;
+    if (rS1OutPort$EN) rS1OutPort <= `BSV_ASSIGNMENT_DELAY rS1OutPort$D_IN;
+    if (rS2InPipeNum$EN)
+      rS2InPipeNum <= `BSV_ASSIGNMENT_DELAY rS2InPipeNum$D_IN;
+    if (rc_rg_dwcount$EN)
+      rc_rg_dwcount <= `BSV_ASSIGNMENT_DELAY rc_rg_dwcount$D_IN;
+    if (rq_rg_first_be$EN)
+      rq_rg_first_be <= `BSV_ASSIGNMENT_DELAY rq_rg_first_be$D_IN;
+    if (rq_rg_last_be$EN)
+      rq_rg_last_be <= `BSV_ASSIGNMENT_DELAY rq_rg_last_be$D_IN;
+    if (rq_rg_mdw$EN) rq_rg_mdw <= `BSV_ASSIGNMENT_DELAY rq_rg_mdw$D_IN;
+    if (xcomms_rx_inpipe_eom_in$EN)
+      xcomms_rx_inpipe_eom_in <= `BSV_ASSIGNMENT_DELAY
+	  xcomms_rx_inpipe_eom_in$D_IN;
+    if (xcomms_tx_outpipe_noc_buf$EN)
+      xcomms_tx_outpipe_noc_buf <= `BSV_ASSIGNMENT_DELAY
+	  xcomms_tx_outpipe_noc_buf$D_IN;
+  end
+
+  always@(posedge CLK_aclk)
+  begin
+    if (network_status$OUT_RST == `BSV_RESET_VALUE)
+      begin
+        clockGenerators_free_stamp <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	clockGenerators_one_to_one_cclock_count <= `BSV_ASSIGNMENT_DELAY
+	    32'd0;
+	init_state_any_in_reset_uclk <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	init_state_cycle_stamp <= `BSV_ASSIGNMENT_DELAY 64'd0;
+      end
+    else
+      begin
+        if (clockGenerators_free_stamp$EN)
+	  clockGenerators_free_stamp <= `BSV_ASSIGNMENT_DELAY
+	      clockGenerators_free_stamp$D_IN;
+	if (clockGenerators_one_to_one_cclock_count$EN)
+	  clockGenerators_one_to_one_cclock_count <= `BSV_ASSIGNMENT_DELAY
+	      clockGenerators_one_to_one_cclock_count$D_IN;
+	if (init_state_any_in_reset_uclk$EN)
+	  init_state_any_in_reset_uclk <= `BSV_ASSIGNMENT_DELAY
+	      init_state_any_in_reset_uclk$D_IN;
+	if (init_state_cycle_stamp$EN)
+	  init_state_cycle_stamp <= `BSV_ASSIGNMENT_DELAY
+	      init_state_cycle_stamp$D_IN;
+      end
+  end
+
+  always@(posedge uclkgen$CLK_OUT)
+  begin
+    if (rstgen_final_reset$RST_OUT == `BSV_RESET_VALUE)
+      begin
+        dut_prb_control_control_in_dataF_rv <= `BSV_ASSIGNMENT_DELAY
+	    18'd43690;
+	dut_prb_control_control_in_in_reset_uclk <= `BSV_ASSIGNMENT_DELAY
+	    1'd1;
+	dut_prb_control_control_in_prev_reset_uclk <= `BSV_ASSIGNMENT_DELAY
+	    1'd1;
+	dut_prb_control_control_in_requestF_rv <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	dut_prb_control_control_in_status <= `BSV_ASSIGNMENT_DELAY 2'd0;
+	dut_prb_control_count <= `BSV_ASSIGNMENT_DELAY 16'd0;
+	dut_prb_control_data_out_in_reset_uclk <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	dut_prb_control_data_out_ok <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	dut_prb_control_data_out_prev_reset_uclk <= `BSV_ASSIGNMENT_DELAY
+	    1'd1;
+	dut_prb_control_flag <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	dut_prb_control_nextSample <= `BSV_ASSIGNMENT_DELAY 64'd0;
+	dut_prb_control_pinged <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	dut_prb_control_sampleIntervalV <= `BSV_ASSIGNMENT_DELAY 8'd0;
+	dut_prb_control_sampleIntervalV_1 <= `BSV_ASSIGNMENT_DELAY 8'd0;
+	dut_prb_control_sampleIntervalV_2 <= `BSV_ASSIGNMENT_DELAY 8'd0;
+	dut_prb_control_sampleIntervalV_3 <= `BSV_ASSIGNMENT_DELAY 8'd0;
+	init_state_out_port <= `BSV_ASSIGNMENT_DELAY 10'd0;
+	xcomms_rx_inpipe_pending_flush <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	xcomms_tx_outpipe_active <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	xcomms_tx_outpipe_autoflush <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	xcomms_tx_outpipe_credits <= `BSV_ASSIGNMENT_DELAY 16'd1024;
+	xcomms_tx_outpipe_elem_count <= `BSV_ASSIGNMENT_DELAY 16'd0;
+	xcomms_tx_outpipe_flush_requested <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	xcomms_tx_outpipe_flushing <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	xcomms_tx_outpipe_in_reset_uclk <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	xcomms_tx_outpipe_indata_mimo_rDataCount <= `BSV_ASSIGNMENT_DELAY
+	    2'd0;
+	xcomms_tx_outpipe_indata_mimo_rvData <= `BSV_ASSIGNMENT_DELAY 1312'd0;
+	xcomms_tx_outpipe_overflow <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	xcomms_tx_outpipe_pending_recv <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	xcomms_tx_outpipe_prev_reset_uclk <= `BSV_ASSIGNMENT_DELAY 1'd1;
+	xcomms_tx_outpipe_sendDataOK <= `BSV_ASSIGNMENT_DELAY 1'd0;
+      end
+    else
+      begin
+        if (dut_prb_control_control_in_dataF_rv$EN)
+	  dut_prb_control_control_in_dataF_rv <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_control_in_dataF_rv$D_IN;
+	if (dut_prb_control_control_in_in_reset_uclk$EN)
+	  dut_prb_control_control_in_in_reset_uclk <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_control_in_in_reset_uclk$D_IN;
+	if (dut_prb_control_control_in_prev_reset_uclk$EN)
+	  dut_prb_control_control_in_prev_reset_uclk <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_control_in_prev_reset_uclk$D_IN;
+	if (dut_prb_control_control_in_requestF_rv$EN)
+	  dut_prb_control_control_in_requestF_rv <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_control_in_requestF_rv$D_IN;
+	if (dut_prb_control_control_in_status$EN)
+	  dut_prb_control_control_in_status <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_control_in_status$D_IN;
+	if (dut_prb_control_count$EN)
+	  dut_prb_control_count <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_count$D_IN;
+	if (dut_prb_control_data_out_in_reset_uclk$EN)
+	  dut_prb_control_data_out_in_reset_uclk <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_data_out_in_reset_uclk$D_IN;
+	if (dut_prb_control_data_out_ok$EN)
+	  dut_prb_control_data_out_ok <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_data_out_ok$D_IN;
+	if (dut_prb_control_data_out_prev_reset_uclk$EN)
+	  dut_prb_control_data_out_prev_reset_uclk <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_data_out_prev_reset_uclk$D_IN;
+	if (dut_prb_control_flag$EN)
+	  dut_prb_control_flag <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_flag$D_IN;
+	if (dut_prb_control_nextSample$EN)
+	  dut_prb_control_nextSample <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_nextSample$D_IN;
+	if (dut_prb_control_pinged$EN)
+	  dut_prb_control_pinged <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_pinged$D_IN;
+	if (dut_prb_control_sampleIntervalV$EN)
+	  dut_prb_control_sampleIntervalV <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_sampleIntervalV$D_IN;
+	if (dut_prb_control_sampleIntervalV_1$EN)
+	  dut_prb_control_sampleIntervalV_1 <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_sampleIntervalV_1$D_IN;
+	if (dut_prb_control_sampleIntervalV_2$EN)
+	  dut_prb_control_sampleIntervalV_2 <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_sampleIntervalV_2$D_IN;
+	if (dut_prb_control_sampleIntervalV_3$EN)
+	  dut_prb_control_sampleIntervalV_3 <= `BSV_ASSIGNMENT_DELAY
+	      dut_prb_control_sampleIntervalV_3$D_IN;
+	if (init_state_out_port$EN)
+	  init_state_out_port <= `BSV_ASSIGNMENT_DELAY
+	      init_state_out_port$D_IN;
+	if (xcomms_rx_inpipe_pending_flush$EN)
+	  xcomms_rx_inpipe_pending_flush <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_rx_inpipe_pending_flush$D_IN;
+	if (xcomms_tx_outpipe_active$EN)
+	  xcomms_tx_outpipe_active <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_active$D_IN;
+	if (xcomms_tx_outpipe_autoflush$EN)
+	  xcomms_tx_outpipe_autoflush <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_autoflush$D_IN;
+	if (xcomms_tx_outpipe_credits$EN)
+	  xcomms_tx_outpipe_credits <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_credits$D_IN;
+	if (xcomms_tx_outpipe_elem_count$EN)
+	  xcomms_tx_outpipe_elem_count <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_elem_count$D_IN;
+	if (xcomms_tx_outpipe_flush_requested$EN)
+	  xcomms_tx_outpipe_flush_requested <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_flush_requested$D_IN;
+	if (xcomms_tx_outpipe_flushing$EN)
+	  xcomms_tx_outpipe_flushing <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_flushing$D_IN;
+	if (xcomms_tx_outpipe_in_reset_uclk$EN)
+	  xcomms_tx_outpipe_in_reset_uclk <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_in_reset_uclk$D_IN;
+	if (xcomms_tx_outpipe_indata_mimo_rDataCount$EN)
+	  xcomms_tx_outpipe_indata_mimo_rDataCount <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_indata_mimo_rDataCount$D_IN;
+	if (xcomms_tx_outpipe_indata_mimo_rvData$EN)
+	  xcomms_tx_outpipe_indata_mimo_rvData <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_indata_mimo_rvData$D_IN;
+	if (xcomms_tx_outpipe_overflow$EN)
+	  xcomms_tx_outpipe_overflow <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_overflow$D_IN;
+	if (xcomms_tx_outpipe_pending_recv$EN)
+	  xcomms_tx_outpipe_pending_recv <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_pending_recv$D_IN;
+	if (xcomms_tx_outpipe_prev_reset_uclk$EN)
+	  xcomms_tx_outpipe_prev_reset_uclk <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_prev_reset_uclk$D_IN;
+	if (xcomms_tx_outpipe_sendDataOK$EN)
+	  xcomms_tx_outpipe_sendDataOK <= `BSV_ASSIGNMENT_DELAY
+	      xcomms_tx_outpipe_sendDataOK$D_IN;
+      end
+    if (dut_prb_control_data_out_beats$EN)
+      dut_prb_control_data_out_beats <= `BSV_ASSIGNMENT_DELAY
+	  dut_prb_control_data_out_beats$D_IN;
+    if (xcomms_rx_inpipe_active$EN)
+      xcomms_rx_inpipe_active <= `BSV_ASSIGNMENT_DELAY
+	  xcomms_rx_inpipe_active$D_IN;
+    if (xcomms_rx_inpipe_elem_count$EN)
+      xcomms_rx_inpipe_elem_count <= `BSV_ASSIGNMENT_DELAY
+	  xcomms_rx_inpipe_elem_count$D_IN;
+    if (xcomms_rx_inpipe_elems$EN)
+      xcomms_rx_inpipe_elems <= `BSV_ASSIGNMENT_DELAY
+	  xcomms_rx_inpipe_elems$D_IN;
+    if (xcomms_rx_inpipe_elems_recvd$EN)
+      xcomms_rx_inpipe_elems_recvd <= `BSV_ASSIGNMENT_DELAY
+	  xcomms_rx_inpipe_elems_recvd$D_IN;
+    if (xcomms_rx_inpipe_pending_send$EN)
+      xcomms_rx_inpipe_pending_send <= `BSV_ASSIGNMENT_DELAY
+	  xcomms_rx_inpipe_pending_send$D_IN;
+    if (xcomms_rx_inpipe_send_credit_request$EN)
+      xcomms_rx_inpipe_send_credit_request <= `BSV_ASSIGNMENT_DELAY
+	  xcomms_rx_inpipe_send_credit_request$D_IN;
+    if (xcomms_rx_inpipe_send_underflow$EN)
+      xcomms_rx_inpipe_send_underflow <= `BSV_ASSIGNMENT_DELAY
+	  xcomms_rx_inpipe_send_underflow$D_IN;
+    if (xcomms_rx_inpipe_underflow$EN)
+      xcomms_rx_inpipe_underflow <= `BSV_ASSIGNMENT_DELAY
+	  xcomms_rx_inpipe_underflow$D_IN;
+    if (xcomms_tx_outpipe_elems$EN)
+      xcomms_tx_outpipe_elems <= `BSV_ASSIGNMENT_DELAY
+	  xcomms_tx_outpipe_elems$D_IN;
+  end
+
+  always@(posedge CLK_user_clk or
+	  `BSV_RESET_EDGE rc_gearbox_sCombinedReset$RST_OUT)
+  if (rc_gearbox_sCombinedReset$RST_OUT == `BSV_RESET_VALUE)
+    begin
+      rc_gearbox_sInReset_pre_isInReset <= `BSV_ASSIGNMENT_DELAY 1'd1;
+    end
+  else
+    begin
+      if (rc_gearbox_sInReset_pre_isInReset$EN)
+	rc_gearbox_sInReset_pre_isInReset <= `BSV_ASSIGNMENT_DELAY
+	    rc_gearbox_sInReset_pre_isInReset$D_IN;
+    end
+
+  always@(posedge CLK_user_clk or
+	  `BSV_RESET_EDGE rq_gearbox_dCombinedReset$RST_OUT)
+  if (rq_gearbox_dCombinedReset$RST_OUT == `BSV_RESET_VALUE)
+    begin
+      rq_gearbox_dInReset_pre_isInReset <= `BSV_ASSIGNMENT_DELAY 1'd1;
+    end
+  else
+    begin
+      if (rq_gearbox_dInReset_pre_isInReset$EN)
+	rq_gearbox_dInReset_pre_isInReset <= `BSV_ASSIGNMENT_DELAY
+	    rq_gearbox_dInReset_pre_isInReset$D_IN;
+    end
+
+  always@(posedge CLK_user_clk or
+	  `BSV_RESET_EDGE cc_gearbox_dCombinedReset$RST_OUT)
+  if (cc_gearbox_dCombinedReset$RST_OUT == `BSV_RESET_VALUE)
+    begin
+      cc_gearbox_dInReset_pre_isInReset <= `BSV_ASSIGNMENT_DELAY 1'd1;
+    end
+  else
+    begin
+      if (cc_gearbox_dInReset_pre_isInReset$EN)
+	cc_gearbox_dInReset_pre_isInReset <= `BSV_ASSIGNMENT_DELAY
+	    cc_gearbox_dInReset_pre_isInReset$D_IN;
+    end
+
+  always@(posedge CLK_user_clk or
+	  `BSV_RESET_EDGE cq_gearbox_sCombinedReset$RST_OUT)
+  if (cq_gearbox_sCombinedReset$RST_OUT == `BSV_RESET_VALUE)
+    begin
+      cq_gearbox_sInReset_pre_isInReset <= `BSV_ASSIGNMENT_DELAY 1'd1;
+    end
+  else
+    begin
+      if (cq_gearbox_sInReset_pre_isInReset$EN)
+	cq_gearbox_sInReset_pre_isInReset <= `BSV_ASSIGNMENT_DELAY
+	    cq_gearbox_sInReset_pre_isInReset$D_IN;
+    end
+
+  always@(posedge CLK_user_clk_half or
+	  `BSV_RESET_EDGE rc_gearbox_dCombinedReset$RST_OUT)
+  if (rc_gearbox_dCombinedReset$RST_OUT == `BSV_RESET_VALUE)
+    begin
+      rc_gearbox_dInReset_pre_isInReset <= `BSV_ASSIGNMENT_DELAY 1'd1;
+    end
+  else
+    begin
+      if (rc_gearbox_dInReset_pre_isInReset$EN)
+	rc_gearbox_dInReset_pre_isInReset <= `BSV_ASSIGNMENT_DELAY
+	    rc_gearbox_dInReset_pre_isInReset$D_IN;
+    end
+
+  always@(posedge CLK_user_clk_half or
+	  `BSV_RESET_EDGE rq_gearbox_sCombinedReset$RST_OUT)
+  if (rq_gearbox_sCombinedReset$RST_OUT == `BSV_RESET_VALUE)
+    begin
+      rq_gearbox_sInReset_pre_isInReset <= `BSV_ASSIGNMENT_DELAY 1'd1;
+    end
+  else
+    begin
+      if (rq_gearbox_sInReset_pre_isInReset$EN)
+	rq_gearbox_sInReset_pre_isInReset <= `BSV_ASSIGNMENT_DELAY
+	    rq_gearbox_sInReset_pre_isInReset$D_IN;
+    end
+
+  always@(posedge CLK_user_clk_half or
+	  `BSV_RESET_EDGE cc_gearbox_sCombinedReset$RST_OUT)
+  if (cc_gearbox_sCombinedReset$RST_OUT == `BSV_RESET_VALUE)
+    begin
+      cc_gearbox_sInReset_pre_isInReset <= `BSV_ASSIGNMENT_DELAY 1'd1;
+    end
+  else
+    begin
+      if (cc_gearbox_sInReset_pre_isInReset$EN)
+	cc_gearbox_sInReset_pre_isInReset <= `BSV_ASSIGNMENT_DELAY
+	    cc_gearbox_sInReset_pre_isInReset$D_IN;
+    end
+
+  always@(posedge CLK_user_clk_half or
+	  `BSV_RESET_EDGE cq_gearbox_dCombinedReset$RST_OUT)
+  if (cq_gearbox_dCombinedReset$RST_OUT == `BSV_RESET_VALUE)
+    begin
+      cq_gearbox_dInReset_pre_isInReset <= `BSV_ASSIGNMENT_DELAY 1'd1;
+    end
+  else
+    begin
+      if (cq_gearbox_dInReset_pre_isInReset$EN)
+	cq_gearbox_dInReset_pre_isInReset <= `BSV_ASSIGNMENT_DELAY
+	    cq_gearbox_dInReset_pre_isInReset$D_IN;
+    end
+
+  always@(posedge CLK_user_clk_half or `BSV_RESET_EDGE epReset125$OUT_RST)
+  if (epReset125$OUT_RST == `BSV_RESET_VALUE)
+    begin
+      xcomms_rx_inpipe_in_reset_noc <= `BSV_ASSIGNMENT_DELAY 1'd0;
+    end
+  else
+    begin
+      if (xcomms_rx_inpipe_in_reset_noc$EN)
+	xcomms_rx_inpipe_in_reset_noc <= `BSV_ASSIGNMENT_DELAY
+	    xcomms_rx_inpipe_in_reset_noc$D_IN;
+    end
+
+  always@(posedge uclkgen$CLK_OUT or
+	  `BSV_RESET_EDGE rstgen_final_reset$RST_OUT)
+  if (rstgen_final_reset$RST_OUT == `BSV_RESET_VALUE)
+    begin
+      xcomms_rx_inpipe_reset_uclk_done1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+      xcomms_rx_inpipe_reset_uclk_done2 <= `BSV_ASSIGNMENT_DELAY 1'd0;
+    end
+  else
+    begin
+      if (xcomms_rx_inpipe_reset_uclk_done1$EN)
+	xcomms_rx_inpipe_reset_uclk_done1 <= `BSV_ASSIGNMENT_DELAY
+	    xcomms_rx_inpipe_reset_uclk_done1$D_IN;
+      if (xcomms_rx_inpipe_reset_uclk_done2$EN)
+	xcomms_rx_inpipe_reset_uclk_done2 <= `BSV_ASSIGNMENT_DELAY
+	    xcomms_rx_inpipe_reset_uclk_done2$D_IN;
+    end
+
+  always@(posedge rstgen_inv_clk$CLK_OUT or
+	  `BSV_RESET_EDGE rstgen_inv_rstn$OUT_RST)
+  if (rstgen_inv_rstn$OUT_RST == `BSV_RESET_VALUE)
+    begin
+      rstgen_init <= `BSV_ASSIGNMENT_DELAY 1'd0;
+    end
+  else
+    begin
+      if (rstgen_init$EN)
+	rstgen_init <= `BSV_ASSIGNMENT_DELAY rstgen_init$D_IN;
+    end
+
+  // synopsys translate_off
+  `ifdef BSV_NO_INITIAL_BLOCKS
+  `else // not BSV_NO_INITIAL_BLOCKS
+  initial
+  begin
+    cc_f_tlps_rv = 154'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    cc_gearbox_block0 = 134'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    cc_gearbox_block0_status = 1'h0;
+    cc_gearbox_block1 = 134'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    cc_gearbox_block1_status = 1'h0;
+    cc_gearbox_dInReset_pre_isInReset = 1'h0;
+    cc_gearbox_elem0_status_0 = 1'h0;
+    cc_gearbox_elem0_status_1 = 1'h0;
+    cc_gearbox_elem1_status_0 = 1'h0;
+    cc_gearbox_elem1_status_1 = 1'h0;
+    cc_gearbox_read_block = 1'h0;
+    cc_gearbox_sInReset_pre_isInReset = 1'h0;
+    cc_gearbox_write_block = 1'h0;
+    cc_rg_dwcount = 11'h2AA;
+    clockGenerators_free_stamp = 1'h0;
+    clockGenerators_one_to_one_cclock_count = 32'hAAAAAAAA;
+    cq_f_cq_rv = 153'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    cq_gearbox_block0_status = 1'h0;
+    cq_gearbox_block1_status = 1'h0;
+    cq_gearbox_dInReset_pre_isInReset = 1'h0;
+    cq_gearbox_elem0_status_0 = 1'h0;
+    cq_gearbox_elem0_status_1 = 1'h0;
+    cq_gearbox_elem1_status_0 = 1'h0;
+    cq_gearbox_elem1_status_1 = 1'h0;
+    cq_gearbox_elem_0 = 76'hAAAAAAAAAAAAAAAAAAA;
+    cq_gearbox_elem_1 = 76'hAAAAAAAAAAAAAAAAAAA;
+    cq_gearbox_elem_2 = 76'hAAAAAAAAAAAAAAAAAAA;
+    cq_gearbox_elem_3 = 76'hAAAAAAAAAAAAAAAAAAA;
+    cq_gearbox_read_block = 1'h0;
+    cq_gearbox_sInReset_pre_isInReset = 1'h0;
+    cq_gearbox_write_block = 1'h0;
+    cq_rg_dwcount = 11'h2AA;
+    cq_rg_even_enq = 1'h0;
+    cq_rg_pad_odd_tail = 1'h0;
+    dut_prb_control_control_in_dataF_rv = 18'h2AAAA;
+    dut_prb_control_control_in_in_reset_noc = 1'h0;
+    dut_prb_control_control_in_in_reset_uclk = 1'h0;
+    dut_prb_control_control_in_prev_reset_uclk = 1'h0;
+    dut_prb_control_control_in_remaining = 1'h0;
+    dut_prb_control_control_in_requestF_rv = 1'h0;
+    dut_prb_control_control_in_scemiInportBeats = 32'hAAAAAAAA;
+    dut_prb_control_control_in_status = 2'h2;
+    dut_prb_control_count = 16'hAAAA;
+    dut_prb_control_data_out_beats = 32'hAAAAAAAA;
+    dut_prb_control_data_out_count = 1'h0;
+    dut_prb_control_data_out_in_reset_noc = 1'h0;
+    dut_prb_control_data_out_in_reset_uclk = 1'h0;
+    dut_prb_control_data_out_ok = 1'h0;
+    dut_prb_control_data_out_prev_reset_uclk = 1'h0;
+    dut_prb_control_flag = 1'h0;
+    dut_prb_control_nextSample = 64'hAAAAAAAAAAAAAAAA;
+    dut_prb_control_pinged = 1'h0;
+    dut_prb_control_sampleIntervalV = 8'hAA;
+    dut_prb_control_sampleIntervalV_1 = 8'hAA;
+    dut_prb_control_sampleIntervalV_2 = 8'hAA;
+    dut_prb_control_sampleIntervalV_3 = 8'hAA;
+    fFromBridgeBeat_ifc_rDataAvail = 6'h2A;
+    fFromBridgeBeat_ifc_rDataCount = 6'h2A;
+    fFromBridgeBeat_ifc_rStorage =
+	256'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    fFromBridgeBeat_ifc_rStorageMask =
+	256'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    fFromContinueBeat_ifc_rDataAvail = 6'h2A;
+    fFromContinueBeat_ifc_rDataCount = 6'h2A;
+    fFromContinueBeat_ifc_rStorage =
+	256'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    fFromContinueBeat_ifc_rStorageMask =
+	256'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    fS1MsgOut_ifc_rDataAvail = 6'h2A;
+    fS1MsgOut_ifc_rDataCount = 6'h2A;
+    fS1MsgOut_ifc_rStorage =
+	256'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    fS1MsgOut_ifc_rStorageMask =
+	256'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    fS1OutPortAcks_ifc_rDataAvail = 5'h0A;
+    fS1OutPortAcks_ifc_rDataCount = 5'h0A;
+    fS1OutPortAcks_ifc_rStorage =
+	160'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    fS1OutPortAcks_ifc_rStorageMask =
+	160'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    fS2MsgOut_ifc_rDataAvail = 6'h2A;
+    fS2MsgOut_ifc_rDataCount = 6'h2A;
+    fS2MsgOut_ifc_rStorage =
+	256'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    fS2MsgOut_ifc_rStorageMask =
+	256'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    fToContinueBeat_ifc_rDataAvail = 6'h2A;
+    fToContinueBeat_ifc_rDataCount = 6'h2A;
+    fToContinueBeat_ifc_rStorage =
+	256'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    fToContinueBeat_ifc_rStorageMask =
+	256'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    init_state_any_in_reset_uclk = 1'h0;
+    init_state_cycle_stamp = 64'hAAAAAAAAAAAAAAAA;
+    init_state_out_port = 10'h2AA;
+    intr_on = 1'h0;
+    lnk_up_cr = 1'h0;
+    lrS1ActiveRequests = 1'h0;
+    lrS1PendingRequests = 1'h0;
+    max_payload_bytes = 13'h0AAA;
+    max_payload_cr = 13'h0AAA;
+    max_rd_req_cr = 13'h0AAA;
+    max_read_req_bytes = 13'h0AAA;
+    msix_enable = 1'h0;
+    msix_enable_cr = 1'h0;
+    msix_masked = 1'h0;
+    msix_masked_cr = 1'h0;
+    rDecodeSceMi = 1'h0;
+    rInMsgBytes = 8'hAA;
+    rOtherMsgIn = 1'h0;
+    rOtherMsgOut = 1'h0;
+    rOutMsgBytes = 8'hAA;
+    rS1BitsRem = 19'h2AAAA;
+    rS1CycleStamp = 64'hAAAAAAAAAAAAAAAA;
+    rS1InPortNum = 10'h2AA;
+    rS1MsgInIsAck = 1'h0;
+    rS1MsgInIsData = 1'h0;
+    rS1MsgOutDataReq = 1'h0;
+    rS1MsgOutReqGrant = 1'h0;
+    rS1MsgOutReqReq = 1'h0;
+    rS1OutDataHeader = 1'h0;
+    rS1OutMsgIsCont = 1'h0;
+    rS1OutMsgSize = 8'hAA;
+    rS1OutPort = 10'h2AA;
+    rS1RequestedPort = 10'h2AA;
+    rS2InCreditIndex = 12'hAAA;
+    rS2InPipeNum = 12'hAAA;
+    rS2MsgInIsCred = 1'h0;
+    rS2MsgInIsData = 1'h0;
+    rS2MsgOutCredGrant = 1'h0;
+    rS2MsgOutDataReq = 1'h0;
+    rS2NumSaved = 3'h2;
+    rS2OutBytes = 32'hAAAAAAAA;
+    rS2OutDataEOM = 1'h0;
+    rS2OutDataFlush = 1'h0;
+    rS2OutDataIndex = 12'hAAA;
+    rS2OutDataOverflow = 1'h0;
+    rS2OutMsgBytes = 8'hAA;
+    rS2SavedBytes = 32'hAAAAAAAA;
+    rS2SendOutDataHdr = 1'h0;
+    rS2SendOutDataMsg = 1'h0;
+    rSceMi1MsgIn = 1'h0;
+    rSceMi1MsgOut = 1'h0;
+    rSceMi2MsgIn = 1'h0;
+    rSceMi2MsgOut = 1'h0;
+    rc_gearbox_block0_status = 1'h0;
+    rc_gearbox_block1_status = 1'h0;
+    rc_gearbox_dInReset_pre_isInReset = 1'h0;
+    rc_gearbox_elem0_status_0 = 1'h0;
+    rc_gearbox_elem0_status_1 = 1'h0;
+    rc_gearbox_elem1_status_0 = 1'h0;
+    rc_gearbox_elem1_status_1 = 1'h0;
+    rc_gearbox_elem_0 = 76'hAAAAAAAAAAAAAAAAAAA;
+    rc_gearbox_elem_1 = 76'hAAAAAAAAAAAAAAAAAAA;
+    rc_gearbox_elem_2 = 76'hAAAAAAAAAAAAAAAAAAA;
+    rc_gearbox_elem_3 = 76'hAAAAAAAAAAAAAAAAAAA;
+    rc_gearbox_read_block = 1'h0;
+    rc_gearbox_sInReset_pre_isInReset = 1'h0;
+    rc_gearbox_write_block = 1'h0;
+    rc_rg_dwcount = 11'h2AA;
+    rc_rg_even_enq = 1'h0;
+    rc_rg_in_packet = 1'h0;
+    rc_rg_pad_odd_tail = 1'h0;
+    rcb_cr = 8'hAA;
+    rcb_mask = 7'h2A;
+    rq_f_tlps_rv = 154'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    rq_gearbox_block0 = 150'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    rq_gearbox_block0_status = 1'h0;
+    rq_gearbox_block1 = 150'h2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    rq_gearbox_block1_status = 1'h0;
+    rq_gearbox_dInReset_pre_isInReset = 1'h0;
+    rq_gearbox_elem0_status_0 = 1'h0;
+    rq_gearbox_elem0_status_1 = 1'h0;
+    rq_gearbox_elem1_status_0 = 1'h0;
+    rq_gearbox_elem1_status_1 = 1'h0;
+    rq_gearbox_read_block = 1'h0;
+    rq_gearbox_sInReset_pre_isInReset = 1'h0;
+    rq_gearbox_write_block = 1'h0;
+    rq_rg_dwcount = 11'h2AA;
+    rq_rg_first_be = 4'hA;
+    rq_rg_last_be = 4'hA;
+    rq_rg_mdw = 33'h0AAAAAAAA;
+    rstgen_init = 1'h0;
+    rvPrevMsgGrant = 3'h2;
+    rvPrevPrevMsgGrant = 3'h2;
+    xcomms_rx_inpipe_active = 1'h0;
+    xcomms_rx_inpipe_ecount = 16'hAAAA;
+    xcomms_rx_inpipe_elem_count = 16'hAAAA;
+    xcomms_rx_inpipe_elems = 57'h0AAAAAAAAAAAAAA;
+    xcomms_rx_inpipe_elems_recvd = 16'hAAAA;
+    xcomms_rx_inpipe_eom_in = 1'h0;
+    xcomms_rx_inpipe_in_reset_noc = 1'h0;
+    xcomms_rx_inpipe_mimo_rDataCount = 4'hA;
+    xcomms_rx_inpipe_mimo_rvData = 88'hAAAAAAAAAAAAAAAAAAAAAA;
+    xcomms_rx_inpipe_pending_flush = 1'h0;
+    xcomms_rx_inpipe_pending_send = 1'h0;
+    xcomms_rx_inpipe_reset_uclk_done1 = 1'h0;
+    xcomms_rx_inpipe_reset_uclk_done2 = 1'h0;
+    xcomms_rx_inpipe_send_credit_request = 1'h0;
+    xcomms_rx_inpipe_send_underflow = 1'h0;
+    xcomms_rx_inpipe_underflow = 1'h0;
+    xcomms_tx_outpipe_active = 1'h0;
+    xcomms_tx_outpipe_autoflush = 1'h0;
+    xcomms_tx_outpipe_credits = 16'hAAAA;
+    xcomms_tx_outpipe_elem_count = 16'hAAAA;
+    xcomms_tx_outpipe_elems =
+	656'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    xcomms_tx_outpipe_flush_requested = 1'h0;
+    xcomms_tx_outpipe_flushing = 1'h0;
+    xcomms_tx_outpipe_in_reset_noc = 1'h0;
+    xcomms_tx_outpipe_in_reset_uclk = 1'h0;
+    xcomms_tx_outpipe_indata_mimo_rDataCount = 2'h2;
+    xcomms_tx_outpipe_indata_mimo_rvData =
+	1312'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    xcomms_tx_outpipe_nocAutoFlush = 1'h0;
+    xcomms_tx_outpipe_nocCredits = 16'hAAAA;
+    xcomms_tx_outpipe_nocUnderFlow = 1'h0;
+    xcomms_tx_outpipe_noc_buf =
+	656'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+    xcomms_tx_outpipe_noc_buf_bytes = 16'hAAAA;
+    xcomms_tx_outpipe_overflow = 1'h0;
+    xcomms_tx_outpipe_pending_recv = 1'h0;
+    xcomms_tx_outpipe_prev_reset_uclk = 1'h0;
+    xcomms_tx_outpipe_sendDataOK = 1'h0;
+  end
+  `endif // BSV_NO_INITIAL_BLOCKS
+  // synopsys translate_on
+
+  // handling of system tasks
+
+  // synopsys translate_off
+  always@(negedge dut_dutIfc$CLK_uclk or negedge uclkgen$CLK_OUT)
+  begin
+    #0;
+    if (rstgen_final_reset$RST_OUT != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut &&
+	  IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_270_4_ETC___d1465 != 32'd1)
+	begin
+	  v___2__h99261 = $time;
+	  #0;
+	end
+    if (rstgen_final_reset$RST_OUT != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut &&
+	  IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_270_4_ETC___d1465 != 32'd1)
+	$display("Time %0d: ERROR: incomplete pipe receive: expected %0d, got %0d",
+		 v___2__h99261,
+		 $signed(32'd1),
+		 $unsigned(IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_270_4_ETC___d1465));
+    if (rstgen_final_reset$RST_OUT != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_xcomms_tx_connect_res_mkConnectionGetPut &&
+	  IF_xcomms_tx_outpipe_in_reset_uclk_473_OR_xcom_ETC___d1787 != 32'd1)
+	begin
+	  v__h142206 = $time;
+	  #0;
+	end
+    if (rstgen_final_reset$RST_OUT != `BSV_RESET_VALUE)
+      if (WILL_FIRE_RL_xcomms_tx_connect_res_mkConnectionGetPut &&
+	  IF_xcomms_tx_outpipe_in_reset_uclk_473_OR_xcom_ETC___d1787 != 32'd1)
+	$display("Time %0d: ERROR: incomplete pipe send: attempted %0d, got %0d",
+		 v__h142206,
+		 $signed(32'd1),
+		 $unsigned(IF_xcomms_tx_outpipe_in_reset_uclk_473_OR_xcom_ETC___d1787));
+  end
+  // synopsys translate_on
 endmodule  // mkSVF_Bridge
 
