@@ -30,5 +30,5 @@ updatemem -force --meminfo $BASE_DIR/vivado/blk_mem_gen_0.mmi \
 err_msg $? "Error! Updating memory failed!"
 
 cp $LTXFILE $BASE_DIR/bitstreams/design_1_bootrom.ltx
-echo "Success! New bit file can found at $BASE_DIR/bitstreams/design1_bootrom.bit"
+echo "Success! New bit file can found at $BASE_DIR/bitstreams/design_1_bootrom.bit"
 
