@@ -13,7 +13,7 @@ import pipes
 
 import pexpect
 
-print_log_names = True
+print_log_names = False
 real_stdout = sys.stdout
 
 # Note that gdb comes with its own testsuite. I was unable to figure out how to
