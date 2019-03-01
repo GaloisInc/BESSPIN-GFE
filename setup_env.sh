@@ -6,9 +6,15 @@ BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 # Check if RISCV path has been previously set by user
 # if not, use local installation
 if [ "a$RISCV" == "a" ]; then
+	echo "RISCV variable not found. Using local installation of RISCV tools"
 	export RISCV=$BASE_DIR/riscv-tools
 	export PATH=$BASE_DIR/riscv-tools/bin:$PATH
+	echo "setting PATH = $PATH"
+	echo "setting RISCV = $RISCV"
 fi
+
+# Use the custom fork of openocd
+export PATH=$BASE_DIR/riscv-tools/bin/openocd:$PATH
 
 function err_msg { 
 	if [[ $1 -ne 0 ]]; then
