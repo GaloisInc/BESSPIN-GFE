@@ -17,3 +17,10 @@ set_property SLEW SLOW [get_ports rs232_uart_rts]
 create_clock -period 40.000 -name tck -waveform {0.000 20.000} [get_pins xilinx_jtag_0/tck]
 
 set_clock_groups -asynchronous -group tck -group {default_250mhz_clk1_clk_p mmcm_clkout0 mmcm_clkout1}
+
+# ----- Bitstream Constraints -----
+
+set_property CONFIG_MODE SPIx8 [current_design]
+set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 8 [current_design]
+set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
+

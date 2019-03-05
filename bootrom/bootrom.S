@@ -3,9 +3,6 @@
 	.text
 	.globl _start
 _start:
-	// Rocket apparently needs this, but it will likely trap on Piccolo and Flute
-	csrwi 0x7c1, 0 // disable chicken bits
-
 	csrr a0, mhartid
 	la a1, _dtb
 
