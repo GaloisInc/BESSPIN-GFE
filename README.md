@@ -27,14 +27,32 @@ After setting up an ssh key, clone this repo by running
 git clone git@gitlab-ext.galois.com:ssith/gfe.git
 ```
 
+### Install RISCV Toolchain ###
+
+Install the standard RISCV toolchain for compiling Linux and other tests for the SSITH processors.
+```bash
+git clone https://github.com/riscv/riscv-gnu-toolchain.git
+cd riscv-gnu-toolchain
+./configure --prefix=$RISCV_INSTALL --with-arch=rv32gc --with-abi=ilp32
+make       # Install the 32 bit newlib toolchain for testing the P1
+./configure --prefix=$RISCV_INSTALL
+make       # Install the 64 bit newlib toochain for testing the P2
+./configure --prefix=$RISCV_INSTALL 
+make linux # Install the 64 bit linux toolchain
+```
+Follow the instructions [here](https://github.com/riscv/riscv-gnu-toolchain) for more information.
+
 ### Install RISCV Tools ###
 
 This GFE has been tested with a particular fork of riscv-tools that includes an upstream change to riscv-openocd that allows for JTAG debugging over the  same Xilinx JTAG connection used to program the VCU118.
-Please use the version of riscv-tools submoduled in this repo under `$GFE_REPO/riscv-tools.`
+It also submodules Galois forks of riscv-tests and riscv-pk customized for the reference processors.
+Please use the version of OpenOCD included in riscv-tools submoduled in this repo under `$GFE_REPO/riscv-tools.`
 
-To install, first set the RISCV path with `export RISCV=$GFE_REPO/riscv-tools` and initialize the riscv-tools and other submodules with `cd $GFE_REPO && ./init_submodules.sh`.
-This will place the riscv binaries in `$GFE_REPO/riscv-tools/bin`, where the testing scripts expect them.
-Next, install the 32-bit RISCV toolchain using the directions in `$GFE_REPO/riscv-tools/README.md`. Please make sure to build the 32 bit version using `build-rv32ima.sh`.
+A convenient way to install this custom version of OpenOCD is to build the riscv toolchain from riscv-tools.
+To install, first set the RISCV path with `export RISCV=$GFE_REPO/riscv-tools` and initialize riscv-tools and other submodules with `cd $GFE_REPO && ./init_submodules.sh`.
+This will place the openocd binary in `$GFE_REPO/riscv-tools/bin` where the testing scripts expect it.
+Next, install the RISCV toolchain using the directions in `$GFE_REPO/riscv-tools/README.md` (i.e. run `build.sh`).
+After installing openocd, be sure to set the RISCV variable back to point to your standard riscv-gnu-toolchain installation by running `export RISCV=$RISCV_INSTALL`.
 
 ### Install Vivado ###
 
