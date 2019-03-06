@@ -2,19 +2,27 @@
 
 # Get the path to the root folder of the git repository
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+SETUP_ENV_ERR=0
+
+# Use the custom fork of openocd
+export PATH=$BASE_DIR/riscv-tools/bin:$PATH
+OPENOCD_BIN=$BASE_DIR/riscv-tools/bin/openocd
+if [ ! -f $OPENOCD_BIN ]; then
+	echo "ERROR: Could not find OpenOCD binary at $OPENOCD_BIN"
+	SETUP_ENV_ERR=-1
+fi
 
 # Check if RISCV path has been previously set by user
 # if not, use local installation
 if [ "a$RISCV" == "a" ]; then
-	echo "RISCV variable not found. Using local installation of RISCV tools"
-	export RISCV=$BASE_DIR/riscv-tools
-	export PATH=$BASE_DIR/riscv-tools/bin:$PATH
-	echo "setting PATH = $PATH"
-	echo "setting RISCV = $RISCV"
+	echo "ERROR: RISCV variable not found."
+	echo "Please set RISCV to your installation of the riscv-gnu-toolchain"
+	SETUP_ENV_ERR=-1
+else
+	echo "RISCV variable found, adding $RISCV/bin to your PATH"
+	export PATH=$RISCV/bin:$PATH
+	echo "PATH = $PATH"
 fi
-
-# Use the custom fork of openocd
-export PATH=$BASE_DIR/riscv-tools/bin/openocd:$PATH
 
 function err_msg { 
 	if [[ $1 -ne 0 ]]; then
@@ -31,8 +39,8 @@ function check_file {
 }
 
 function proc_usage {
-        echo "Usage: $0 [chisel_p1|chisel_p2|bluespec_p1|bluespec_p2]"
-        echo "Please specify a bluespec or chisel processor!"
+    echo "Usage: $0 [chisel_p1|chisel_p2|bluespec_p1|bluespec_p2]"
+    echo "Please specify a bluespec or chisel processor!"
 }
 
 function proc_picker {

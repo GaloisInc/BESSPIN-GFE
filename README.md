@@ -27,14 +27,32 @@ After setting up an ssh key, clone this repo by running
 git clone git@gitlab-ext.galois.com:ssith/gfe.git
 ```
 
+### Install RISCV Toolchain ###
+
+Install the standard RISCV toolchain for compiling Linux and other tests for the SSITH processors.
+```bash
+git clone https://github.com/riscv/riscv-gnu-toolchain.git
+cd riscv-gnu-toolchain
+./configure --prefix=$RISCV_INSTALL --with-arch=rv32gc --with-abi=ilp32
+make       # Install the 32 bit newlib toolchain for testing the P1
+./configure --prefix=$RISCV_INSTALL
+make       # Install the 64 bit newlib toochain for testing the P2
+./configure --prefix=$RISCV_INSTALL 
+make linux # Install the 64 bit linux toolchain
+```
+Follow the instructions [here](https://github.com/riscv/riscv-gnu-toolchain) for more information.
+
 ### Install RISCV Tools ###
 
 This GFE has been tested with a particular fork of riscv-tools that includes an upstream change to riscv-openocd that allows for JTAG debugging over the  same Xilinx JTAG connection used to program the VCU118.
-Please use the version of riscv-tools submoduled in this repo under `$GFE_REPO/riscv-tools.`
+It also submodules Galois forks of riscv-tests and riscv-pk customized for the reference processors.
+Please use the version of OpenOCD included in riscv-tools submoduled in this repo under `$GFE_REPO/riscv-tools.`
 
-To install, first set the RISCV path with `export RISCV=$GFE_REPO/riscv-tools` and initialize the riscv-tools and other submodules with `cd $GFE_REPO && ./init_submodules.sh`.
-This will place the riscv binaries in `$GFE_REPO/riscv-tools/bin`, where the testing scripts expect them.
-Next, install the 32-bit RISCV toolchain using the directions in `$GFE_REPO/riscv-tools/README.md`. Please make sure to build the 32 bit version using `build-rv32ima.sh`.
+A convenient way to install this custom version of OpenOCD is to build the riscv toolchain from riscv-tools.
+To install, first set the RISCV path with `export RISCV=$GFE_REPO/riscv-tools` and initialize riscv-tools and other submodules with `cd $GFE_REPO && ./init_submodules.sh`.
+This will place the openocd binary in `$GFE_REPO/riscv-tools/bin` where the testing scripts expect it.
+Next, install the RISCV toolchain using the directions in `$GFE_REPO/riscv-tools/README.md` (i.e. run `build.sh`).
+After installing openocd, be sure to set the RISCV variable back to point to your standard riscv-gnu-toolchain installation by running `export RISCV=$RISCV_INSTALL`.
 
 ### Install Vivado ###
 
@@ -177,13 +195,13 @@ Click `Run Simulation` in the Vivado GUI and refer to the Vivado documentation f
 
 ### Adding in Your Processor ###
 
-We recommend using the Vivado IP integrator flow to add a new processor into the GFE. This should require minimal effort to integrate the processor and this flow is already demonstrated for the Chisel and Bluespec P1 processors. Using the integrator flow requires wrapping the processor in a Xilinx User IP block and updating the necessary IP search paths to find the new IP. The Chisel and Bluespec Vivado projects are created by sourcing the same tcl for the block diagram (`soc_bd.tcl`). The only difference is the location from which it pulls in the ssith_processor IP block.
+We recommend using the Vivado IP integrator flow to add a new processor into the GFE. This should require minimal effort to integrate the processor and this flow is already demonstrated for the Chisel and Bluespec processors. Using the integrator flow requires wrapping the processor in a Xilinx User IP block and updating the necessary IP search paths to find the new IP. The Chisel and Bluespec Vivado projects are created by sourcing the same tcl for the block diagram (`soc_bd.tcl`). The only difference is the location from which it pulls in the ssith_processor IP block.
 
 The steps to add in a new processor are as follows:
 
-1. Duplicate the top level verilog file `mkCore_P1.v` from the Chisel or Bluespec designs and modify it to instantiate the new processor. See `$GFE_REPO/chisel_processors/xilinx_ip/hdl/mkP1_Core.v` and `$GFE_REPO/bluespec-processors/P1/Piccolo/src_SSITH_P1/xilinx_ip/hdl/mkP1_Core.v` for examples.
-2. Copy the component.xml file from one of the two processors and modify it to include all the paths to the RTL files for your design. See `$GFE_REPO/bluespec-processors/P1/Piccolo/src_SSITH_P1/xilinx_ip/component.xml` and `$GFE_REPO/chisel_processors/xilinx_ip/component.xml`. This is the most clunky part of the process, but is relatively straight forward.
-    *  Copy a reference component.xml file to a new folder (i.e. `cp $GFE_REPO/chisel_processors/xilinx_ip/component.xml new_processor/`)
+1. Duplicate the top level verilog file `mkCore_P1.v` from the Chisel or Bluespec designs and modify it to instantiate the new processor. See `$GFE_REPO/chisel_processors/P1/xilinx_ip/hdl/mkP1_Core.v` and `$GFE_REPO/bluespec-processors/P1/Piccolo/src_SSITH_P1/xilinx_ip/hdl/mkP1_Core.v` for examples.
+2. Copy the component.xml file from one of the two processors and modify it to include all the paths to the RTL files for your design. See `$GFE_REPO/bluespec-processors/P1/Piccolo/src_SSITH_P1/xilinx_ip/component.xml` and `$GFE_REPO/chisel_processors/P1/xilinx_ip/component.xml`. This is the most clunky part of the process, but is relatively straight forward.
+    *  Copy a reference component.xml file to a new folder (i.e. `cp $GFE_REPO/chisel_processors/P1/xilinx_ip/component.xml new_processor/`)
     *  Replace references to old verilog files within component.xml. Replace `spirit:file` entries such as 
     ```xml
     <spirit:file>
@@ -198,7 +216,7 @@ The steps to add in a new processor are as follows:
         <spirit:fileType>verilogSource</spirit:fileType>
     </spirit:file>
     ```
-    The paths in component.xml are relative to its parent directory (i.e. `$GFE_REPO/chisel_processors/xilinx_ip/`).
+    The paths in component.xml are relative to its parent directory (i.e. `$GFE_REPO/chisel_processors/P1/xilinx_ip/`).
     * Note that the component.xml file contains a set of files used for simulation (xilinx_anylanguagebehavioralsimulation_view_fileset) and another set used for synthesis. Make sure to replace or remove file entries as necessary in each of these sections.
     * Vivado discovers user IP by searching all it's IP repository paths looking for component.xml files. This is the reason for the specific name. This file fully describes the new processor's IP block and can be modified through a gui if desired using the IP packager flow. It is easier to start with an example component.xml file to ensure the port naming and external interfaces match those used by the block diagram.
 
@@ -218,13 +236,12 @@ The steps to add in a new processor are as follows:
 
 5. Synthesize and build the design using the normal flow. Note that users will have to update the User IP as prompted in the gui after each modification to the component.xml file or reference Verilog files.
 
-Fortunately, we have provided two examples of wrapped processors, one for the Chisel P1 processor and another for the Bluespec processor, and we have provided a common top level Verilog file for P1 processors to limit user effort in wrapping their processor.
-
 All that is required (and therefore tracked by git) to create a Xilinx User IP block is a component.xml file and the corresponding verilog source files.
+If using the Vivado GUI IP packager, the additional project collateral does not need to be tracked by git.
 
 ### Modifying the GFE ###
 
-To save changes to the block diagram in git (everything outside the P1 IP block), please open the block diagram in Vivado and run `write_bd_tcl -force ../tcl/soc_bd.tcl`. Additionally, update `tcl/soc.tcl` to add any project settings.
+To save changes to the block diagram in git (everything outside the SSITH Processor IP block), please open the block diagram in Vivado and run `write_bd_tcl -force ../tcl/soc_bd.tcl`. Additionally, update `tcl/soc.tcl` to add any project settings.
 
 ### Rebuilding the Chisel and Bluespec Processors ###
 
