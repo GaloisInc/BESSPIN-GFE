@@ -90,7 +90,7 @@ class TestGfe(BaseGfeTest):
             stopbits=2,
             bytesize=8)
 
-        self.gfe.launchElf(uart_elf_path)
+        self.gfe.launchElf(uart_elf_path, openocd_log=True, gdb_log=True)
 
         # Allow the riscv program to get started and configure UART
         time.sleep(0.2)
