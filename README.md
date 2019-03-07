@@ -162,6 +162,8 @@ Pass....
 
 If you see error messages, then something went wrong.
 
+To run any `.elf` file on the GFE, you can use the `run_elf.py` script in `$GFE_REPO/testing/scripts/`. It can be run using `python run_elf.py path_to_elf/file.elf`. By default the program waits 0.5 seconds before printing what it has received from UART, but this can be changed by using the `--runtime X` argument where X is the number of seconds to wait.
+
 #### Running Linux and Busybox ####
 
 The following instructions describe now to boot Linux with Busybox.
