@@ -6,7 +6,7 @@
 	compatible = "unknown,unknown";
 	model = "unknown,unknown";
 	chosen {
-		bootargs = "earlyprintk loglevel=15";
+		bootargs = "earlyprintk console=ttyS0,115200 loglevel=15";
 	};
 	cpus {
 		#address-cells = <1>;
@@ -73,9 +73,7 @@
 			compatible = "xlnx,axi-ethernet-7.01.a", "xlnx,axi-ethernet-1.00.a";
 			memory-region = <&reserved>;
 			device_type = "network";
-//			interrupts-extended = <&plic 4 &plic 3>;
-			interrupt-parent = <&plic>;
-			interrupts = <2>;
+			interrupts-extended = <&plic 2>;
 			axistream-connected = <&axi_dma>;
 			axistream-connected-control = <&axi_dma>;
 			phy-mode = "sgmii";
@@ -87,7 +85,6 @@
 			phy-handle = <&phy0>;
 			local-mac-address = [00 0a 35 04 db 5a];
 			clock-frequency = <83333000>;
-//			dma-ranges = <0x20000000 0x20000000 0x400000>;
 			axi_ethernet_mdio: mdio {
 				#address-cells = <1>;
 				#size-cells = <0>;
@@ -99,21 +96,18 @@
 			};
 		};
 		axi_dma: dma@62200000 {
-//			#dma-cells = <1>;
 			compatible = "xlnx,eth-dma";
 			reg = <0x62200000 0x10000>;
-			interrupt-parent = <&plic>;
-			interrupts = <4 3>;
-//			dma-ranges = <0x20000000 0x20000000 0x400000>;
-//			interrupts-extended = <&plic 4 &plic 3>;
+			interrupts-extended = <&plic 3 &plic 4>;
 			axistream-connected = <&axi_ethernet_eth>;
 			axistream-connected-control = <&axi_ethernet_eth>;
 		};
 		ns16550: uart@62300000 {
+			current-speed = <115200>;
 			compatible = "ns16550a";
 			interrupts-extended = <&plic 1>;
 			reg = <0x62300000 0x1000>;
-			clock-frequency = <83333000>;
+			clock-frequency = <83333333>;
 			reg-shift = <2>;
 		};
 	};

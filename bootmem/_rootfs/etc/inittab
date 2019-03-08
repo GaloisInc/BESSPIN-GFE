@@ -1,2 +1,2 @@
 ::sysinit:/etc/init.d/rcS
-console::askfirst:/bin/sh
+console::askfirst:-/bin/sh
