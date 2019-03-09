@@ -81,6 +81,7 @@
 			xlnx,txcsum = <0x2>;
 			xlnx,phy-type = <0x4>;
 			phy-handle = <&phy0>;
+			xlnx,vcu118;
 			local-mac-address = [00 0a 35 04 db 5a];
 			clock-frequency = <83333000>;
 			axi_ethernet_mdio: mdio {
