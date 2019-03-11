@@ -124,6 +124,7 @@ set bCheckIPsPassed 1
 set bCheckIPs 1
 if { $bCheckIPs == 1 } {
    set list_check_ips "\ 
+Galois:user:iobuf:1.0\
 ssith:user:ssith_processor:1.0\
 ssith:user:xilinx_jtag:1.0\
 xilinx.com:ip:axi_bram_ctrl:4.0\
@@ -207,6 +208,7 @@ proc create_hier_cell_gfe_subsystem { parentCell nameHier } {
   create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 S01_AXI
   create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:ddr4_rtl:1.0 ddr4_sdram_c1
   create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 default_250mhz_clk1
+  create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:mdio_io:1.0 eth_mdio
   create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:sgmii_rtl:1.0 sgmii_lvds
   create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 sgmii_phyclk
 
@@ -255,9 +257,18 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   set_property -dict [ list \
    CONFIG.DIFFCLK_BOARD_INTERFACE {sgmii_phyclk} \
    CONFIG.ETHERNET_BOARD_INTERFACE {sgmii_lvds} \
-   CONFIG.MDIO_BOARD_INTERFACE {Custom} \
+   CONFIG.MDIO_BOARD_INTERFACE {mdio_mdc} \
+   CONFIG.PHYADDR {1} \
    CONFIG.PHYRST_BOARD_INTERFACE {phy_reset_out} \
    CONFIG.PHY_TYPE {SGMII} \
+   CONFIG.RXCSUM {Full} \
+   CONFIG.RXVLAN_STRP {false} \
+   CONFIG.RXVLAN_TRAN {false} \
+   CONFIG.TXCSUM {Full} \
+   CONFIG.TXVLAN_STRP {false} \
+   CONFIG.TXVLAN_TRAN {false} \
+   CONFIG.axiliteclkrate {100} \
+   CONFIG.axisclkrate {100} \
  ] $axi_ethernet_0
 
   # Create instance: axi_gpio_0, and set properties
@@ -266,7 +277,7 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
    CONFIG.C_ALL_INPUTS {0} \
    CONFIG.C_ALL_OUTPUTS {1} \
    CONFIG.C_IS_DUAL {0} \
-   CONFIG.C_TRI_DEFAULT {0x00000000} \
+   CONFIG.C_TRI_DEFAULT {0xFFFFFFFF} \
  ] $axi_gpio_0
 
   # Create instance: axi_interconnect_0, and set properties
@@ -327,21 +338,19 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
 
   # Create instance: proc_sys_reset_0, and set properties
   set proc_sys_reset_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_0 ]
-    set_property -dict [ list \
-   CONFIG.C_EXT_RESET_HIGH {1} \
-   CONFIG.C_EXT_RST_WIDTH {4} \
+  set_property -dict [ list \
    CONFIG.C_AUX_RESET_HIGH {1} \
    CONFIG.C_AUX_RST_WIDTH {4} \
+   CONFIG.C_EXT_RST_WIDTH {4} \
    CONFIG.C_NUM_BUS_RST {1} \
  ] $proc_sys_reset_0
 
   # Create instance: proc_sys_reset_1, and set properties
   set proc_sys_reset_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_1 ]
-    set_property -dict [ list \
-   CONFIG.C_EXT_RESET_HIGH {1} \
-   CONFIG.C_EXT_RST_WIDTH {4} \
+  set_property -dict [ list \
    CONFIG.C_AUX_RESET_HIGH {1} \
    CONFIG.C_AUX_RST_WIDTH {4} \
+   CONFIG.C_EXT_RST_WIDTH {4} \
    CONFIG.C_NUM_BUS_RST {1} \
  ] $proc_sys_reset_1
 
@@ -387,6 +396,7 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   connect_bd_intf_net -intf_net axi_dma_0_M_AXI_SG [get_bd_intf_pins axi_dma_0/M_AXI_SG] [get_bd_intf_pins axi_interconnect_0/S02_AXI]
   connect_bd_intf_net -intf_net axi_ethernet_0_m_axis_rxd [get_bd_intf_pins axi_dma_0/S_AXIS_S2MM] [get_bd_intf_pins axi_ethernet_0/m_axis_rxd]
   connect_bd_intf_net -intf_net axi_ethernet_0_m_axis_rxs [get_bd_intf_pins axi_dma_0/S_AXIS_STS] [get_bd_intf_pins axi_ethernet_0/m_axis_rxs]
+  connect_bd_intf_net -intf_net axi_ethernet_0_mdio [get_bd_intf_pins eth_mdio] [get_bd_intf_pins axi_ethernet_0/mdio]
   connect_bd_intf_net -intf_net axi_interconnect_0_M00_AXI [get_bd_intf_pins axi_clock_converter_0/S_AXI] [get_bd_intf_pins axi_interconnect_0/M00_AXI]
   connect_bd_intf_net -intf_net axi_interconnect_0_M01_AXI [get_bd_intf_pins axi_interconnect_0/M01_AXI] [get_bd_intf_pins axi_uart16550_0/S_AXI]
   connect_bd_intf_net -intf_net axi_interconnect_0_M02_AXI [get_bd_intf_pins axi_bram_ctrl_0/S_AXI] [get_bd_intf_pins axi_interconnect_0/M02_AXI]
@@ -423,7 +433,6 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   connect_bd_net -net xlconcat_0_dout [get_bd_pins interrupt] [get_bd_pins xlconcat_0/dout]
   connect_bd_net -net xlconstant_0_dout [get_bd_pins axi_quad_spi_0/gsr] [get_bd_pins axi_quad_spi_0/gts] [get_bd_pins axi_quad_spi_0/usrcclkts] [get_bd_pins axi_uart16550_0/freeze] [get_bd_pins proc_sys_reset_0/mb_debug_sys_rst] [get_bd_pins proc_sys_reset_1/mb_debug_sys_rst] [get_bd_pins xlconstant_0/dout]
   connect_bd_net -net xlconstant_1_dout [get_bd_pins axi_quad_spi_0/keyclearb] [get_bd_pins axi_quad_spi_0/usrdoneo] [get_bd_pins axi_quad_spi_0/usrdonets] [get_bd_pins proc_sys_reset_0/dcm_locked] [get_bd_pins proc_sys_reset_1/dcm_locked] [get_bd_pins xlconstant_1/dout]
-  connect_bd_net -net xlconstant_2_dout [get_bd_pins axi_ethernet_0/mdio_mdio_i] [get_bd_pins xlconstant_2/dout]
   connect_bd_net -net xlconstant_3_dout [get_bd_pins xlconcat_0/In5] [get_bd_pins xlconstant_3/dout]
   connect_bd_net -net xlslice_0_Dout [get_bd_pins proc_sys_reset_0/aux_reset_in] [get_bd_pins xlslice_0/Dout]
 
@@ -477,6 +486,8 @@ proc create_root_design { parentCell } {
    ] $sgmii_phyclk
 
   # Create ports
+  set mdio_io [ create_bd_port -dir IO mdio_io ]
+  set mdio_mdc [ create_bd_port -dir O -type clk mdio_mdc ]
   set phy_reset_out [ create_bd_port -dir O -from 0 -to 0 -type rst phy_reset_out ]
   set reset [ create_bd_port -dir I -type rst reset ]
   set_property -dict [ list \
@@ -490,8 +501,25 @@ proc create_root_design { parentCell } {
   # Create instance: gfe_subsystem
   create_hier_cell_gfe_subsystem [current_bd_instance .] gfe_subsystem
 
+  # Create instance: iobuf_0, and set properties
+  set iobuf_0 [ create_bd_cell -type ip -vlnv Galois:user:iobuf:1.0 iobuf_0 ]
+
   # Create instance: ssith_processor_0, and set properties
   set ssith_processor_0 [ create_bd_cell -type ip -vlnv ssith:user:ssith_processor:1.0 ssith_processor_0 ]
+
+  set_property -dict [ list \
+   CONFIG.SUPPORTS_NARROW_BURST {1} \
+   CONFIG.NUM_READ_OUTSTANDING {2} \
+   CONFIG.NUM_WRITE_OUTSTANDING {2} \
+   CONFIG.MAX_BURST_LENGTH {256} \
+ ] [get_bd_intf_pins /ssith_processor_0/master0]
+
+  set_property -dict [ list \
+   CONFIG.SUPPORTS_NARROW_BURST {1} \
+   CONFIG.NUM_READ_OUTSTANDING {2} \
+   CONFIG.NUM_WRITE_OUTSTANDING {2} \
+   CONFIG.MAX_BURST_LENGTH {256} \
+ ] [get_bd_intf_pins /ssith_processor_0/master1]
 
   # Create instance: xilinx_jtag_0, and set properties
   set xilinx_jtag_0 [ create_bd_cell -type ip -vlnv ssith:user:xilinx_jtag:1.0 xilinx_jtag_0 ]
@@ -505,7 +533,12 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net sgmii_phyclk_1 [get_bd_intf_ports sgmii_phyclk] [get_bd_intf_pins gfe_subsystem/sgmii_phyclk]
 
   # Create port connections
+  connect_bd_net -net Net [get_bd_ports mdio_io] [get_bd_pins iobuf_0/io]
   connect_bd_net -net ddr4_0_addn_ui_clkout1 [get_bd_pins gfe_subsystem/ACLK] [get_bd_pins ssith_processor_0/CLK] [get_bd_pins xilinx_jtag_0/clk]
+  connect_bd_net -net eth_mdio_mdio_i_1 [get_bd_pins gfe_subsystem/eth_mdio_mdio_i] [get_bd_pins iobuf_0/data_o]
+  connect_bd_net -net gfe_subsystem_eth_mdio_mdc [get_bd_ports mdio_mdc] [get_bd_pins gfe_subsystem/eth_mdio_mdc]
+  connect_bd_net -net gfe_subsystem_eth_mdio_mdio_o [get_bd_pins gfe_subsystem/eth_mdio_mdio_o] [get_bd_pins iobuf_0/data_i]
+  connect_bd_net -net gfe_subsystem_eth_mdio_mdio_t [get_bd_pins gfe_subsystem/eth_mdio_mdio_t] [get_bd_pins iobuf_0/data_t]
   connect_bd_net -net gfe_subsystem_interrupt [get_bd_pins gfe_subsystem/interrupt] [get_bd_pins ssith_processor_0/cpu_external_interrupt_req]
   connect_bd_net -net gfe_subsystem_phy_reset_out [get_bd_ports phy_reset_out] [get_bd_pins gfe_subsystem/phy_reset_out]
   connect_bd_net -net gfe_subsystem_rs232_uart_rts [get_bd_ports rs232_uart_rts] [get_bd_pins gfe_subsystem/rs232_uart_rts]
@@ -520,8 +553,8 @@ proc create_root_design { parentCell } {
   connect_bd_net -net xilinx_jtag_0_tms [get_bd_pins ssith_processor_0/jtag_tms] [get_bd_pins xilinx_jtag_0/tms]
 
   # Create address segments
-  create_bd_addr_seg -range 0x00001000 -offset 0x70000000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
-  create_bd_addr_seg -range 0x00001000 -offset 0x70000000 [get_bd_addr_spaces ssith_processor_0/master1] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
+  create_bd_addr_seg -range 0x00004000 -offset 0x70000000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
+  create_bd_addr_seg -range 0x00004000 -offset 0x70000000 [get_bd_addr_spaces ssith_processor_0/master1] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
   create_bd_addr_seg -range 0x00010000 -offset 0x62200000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/axi_dma_0/S_AXI_LITE/Reg] SEG_axi_dma_0_Reg
   create_bd_addr_seg -range 0x00010000 -offset 0x62200000 [get_bd_addr_spaces ssith_processor_0/master1] [get_bd_addr_segs gfe_subsystem/axi_dma_0/S_AXI_LITE/Reg] SEG_axi_dma_0_Reg
   create_bd_addr_seg -range 0x00040000 -offset 0x62100000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/axi_ethernet_0/s_axi/Reg0] SEG_axi_ethernet_0_Reg0
@@ -532,16 +565,16 @@ proc create_root_design { parentCell } {
   create_bd_addr_seg -range 0x00010000 -offset 0x40000000 [get_bd_addr_spaces ssith_processor_0/master1] [get_bd_addr_segs gfe_subsystem/axi_quad_spi_0/aximm/MEM0] SEG_axi_quad_spi_0_MEM0
   create_bd_addr_seg -range 0x00001000 -offset 0x62300000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/axi_uart16550_0/S_AXI/Reg] SEG_axi_uart16550_0_Reg
   create_bd_addr_seg -range 0x00001000 -offset 0x62300000 [get_bd_addr_spaces ssith_processor_0/master1] [get_bd_addr_segs gfe_subsystem/axi_uart16550_0/S_AXI/Reg] SEG_axi_uart16550_0_Reg
-  create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_0_C0_DDR4_ADDRESS_BLOCK
-  create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces ssith_processor_0/master1] [get_bd_addr_segs gfe_subsystem/ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_0_C0_DDR4_ADDRESS_BLOCK
-  create_bd_addr_seg -range 0x00001000 -offset 0x70000000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_SG] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
-  create_bd_addr_seg -range 0x00001000 -offset 0x70000000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_MM2S] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
-  create_bd_addr_seg -range 0x00001000 -offset 0x70000000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_S2MM] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
-  create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_SG] [get_bd_addr_segs gfe_subsystem/ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_0_C0_DDR4_ADDRESS_BLOCK
-  create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_MM2S] [get_bd_addr_segs gfe_subsystem/ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_0_C0_DDR4_ADDRESS_BLOCK
-  create_bd_addr_seg -range 0x40000000 -offset 0x80000000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_S2MM] [get_bd_addr_segs gfe_subsystem/ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_0_C0_DDR4_ADDRESS_BLOCK
+  create_bd_addr_seg -range 0x80000000 -offset 0x80000000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_0_C0_DDR4_ADDRESS_BLOCK
+  create_bd_addr_seg -range 0x80000000 -offset 0x80000000 [get_bd_addr_spaces ssith_processor_0/master1] [get_bd_addr_segs gfe_subsystem/ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_0_C0_DDR4_ADDRESS_BLOCK
+  create_bd_addr_seg -range 0x80000000 -offset 0x80000000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_SG] [get_bd_addr_segs gfe_subsystem/ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_0_C0_DDR4_ADDRESS_BLOCK
+  create_bd_addr_seg -range 0x80000000 -offset 0x80000000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_MM2S] [get_bd_addr_segs gfe_subsystem/ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_0_C0_DDR4_ADDRESS_BLOCK
+  create_bd_addr_seg -range 0x80000000 -offset 0x80000000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_S2MM] [get_bd_addr_segs gfe_subsystem/ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_0_C0_DDR4_ADDRESS_BLOCK
 
   # Exclude Address Segments
+  create_bd_addr_seg -range 0x00004000 -offset 0x70000000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_MM2S] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
+  exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_MM2S/SEG_axi_bram_ctrl_0_Mem0]
+
   create_bd_addr_seg -range 0x00010000 -offset 0x62200000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_MM2S] [get_bd_addr_segs gfe_subsystem/axi_dma_0/S_AXI_LITE/Reg] SEG_axi_dma_0_Reg
   exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_MM2S/SEG_axi_dma_0_Reg]
 
@@ -557,6 +590,9 @@ proc create_root_design { parentCell } {
   create_bd_addr_seg -range 0x00001000 -offset 0x62300000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_MM2S] [get_bd_addr_segs gfe_subsystem/axi_uart16550_0/S_AXI/Reg] SEG_axi_uart16550_0_Reg
   exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_MM2S/SEG_axi_uart16550_0_Reg]
 
+  create_bd_addr_seg -range 0x00004000 -offset 0x70000000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_S2MM] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
+  exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_S2MM/SEG_axi_bram_ctrl_0_Mem0]
+
   create_bd_addr_seg -range 0x00010000 -offset 0x62200000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_S2MM] [get_bd_addr_segs gfe_subsystem/axi_dma_0/S_AXI_LITE/Reg] SEG_axi_dma_0_Reg
   exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_S2MM/SEG_axi_dma_0_Reg]
 
@@ -571,6 +607,9 @@ proc create_root_design { parentCell } {
 
   create_bd_addr_seg -range 0x00001000 -offset 0x62300000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_S2MM] [get_bd_addr_segs gfe_subsystem/axi_uart16550_0/S_AXI/Reg] SEG_axi_uart16550_0_Reg
   exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_S2MM/SEG_axi_uart16550_0_Reg]
+
+  create_bd_addr_seg -range 0x00004000 -offset 0x70000000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_SG] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
+  exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_SG/SEG_axi_bram_ctrl_0_Mem0]
 
   create_bd_addr_seg -range 0x00010000 -offset 0x62200000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_SG] [get_bd_addr_segs gfe_subsystem/axi_dma_0/S_AXI_LITE/Reg] SEG_axi_dma_0_Reg
   exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_SG/SEG_axi_dma_0_Reg]

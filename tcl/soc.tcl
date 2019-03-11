@@ -150,6 +150,7 @@ set obj [get_filesets sources_1]
 set_property "ip_repo_paths" [list \
  "[file normalize "$proc_path"]" \
  "[file normalize "../jtag"]" \
+ "[file normalize "../iobuf"]" \
  ] $obj
 
 # Generate block diagram

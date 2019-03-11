@@ -6,8 +6,6 @@ _start:
 	csrr a0, mhartid
 	la a1, _dtb
 
-	//li t0, FLASH_BASE
-	//jr t0
 1:
 	j 1b
 
