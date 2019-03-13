@@ -28,6 +28,8 @@ if { [info exists ::origin_dir_loc] } {
 set project_name ""
 set proc_name ""
 set proc_path ""
+# Set default clock frequency (MHz) for the GFE subsystem and processor
+set clock_freq_mhz 83
 
 variable script_file
 set script_file "soc.tcl"
@@ -46,6 +48,7 @@ proc help {} {
   puts "$script_file -tclargs \[--project_name <name>\]"
   puts "$script_file -tclargs \[--proc_name <name>\]"
   puts "$script_file -tclargs \[--proc_path <path>\]"
+  puts "$script_file -tclargs \[--clock_freq_mhz <freq>\]"
   puts "$script_file -tclargs \[--help\]\n"
   puts "Usage:"
   puts "Name                   Description"
@@ -62,6 +65,8 @@ proc help {} {
   puts "\[--proc_path <path>\] Path to the IP directory containing the processor."
   puts "                     This path is relative to origin_dir, and the directory."
   puts "                     should contain the component.xml.\n"
+  puts "\[--clock_freq_mhz <freq>\] Set the clock frequency (in MHz) used for "
+  puts "                             the processor and gfe gfe_subsystem"
   puts "\[--help\]               Print help information for this script"
   puts "-------------------------------------------------------------------------\n"
   exit 0
@@ -75,6 +80,7 @@ if { $::argc > 0 } {
       "--project_name" { incr i; set project_name [lindex $::argv $i] }
       "--proc_name" { incr i; set proc_name [lindex $::argv $i] }
       "--proc_path" { incr i; set proc_path [lindex $::argv $i] }
+      "--clock_freq_mhz" { incr i; set clock_freq_mhz [lindex $::argv $i] }
       "--help"         { help }
       default {
         if { [regexp {^-} $option] } {
@@ -155,6 +161,9 @@ set_property "ip_repo_paths" [list \
 
 # Generate block diagram
 source $origin_dir/soc_bd.tcl
+
+# Configure the clock frequency
+set_property -dict [list CONFIG.ADDN_UI_CLKOUT1_FREQ_HZ $clock_freq_mhz] [get_bd_cells gfe_subsystem/ddr4_0]
 
 # Rebuild user ip_repo's index before adding any source files
 update_ip_catalog -rebuild

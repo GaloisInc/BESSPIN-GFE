@@ -59,10 +59,12 @@ proc write_mmi {cell_name} {
 		# If preloading the bootrom is not working, check the generated mmi file against the
 		# BRAMS implemented in the design. The mmi file should include all the BRAMs you
 		# expect to preload. If not, this sequence may be wrong.
+		#
+		# WARNING: Updatemem only works on mmi files with equal width bitlanes.
+		# updatemem is not compatible with the sequences below (bram >= 4)
 		set sequence "1,5,14,23,31"
 		set bus_blocks 1
 	} elseif {$bram >= 4 && $bram < 8} {
-		# This has been set for the Ultrascale architecture in Vivado 2017.4. See note above
 		set sequence "8,17,26,31"
 		set bus_blocks 1
 	} else {
@@ -86,7 +88,7 @@ proc write_mmi {cell_name} {
 				set MSB [lindex $sequence $i]
 
 				if {$MSB == $bmm_msb && $block_start == [lindex $split_ranges 0]} {
-
+					
 					set bram_type [get_property REF_NAME [get_cells [lindex $cell_name_bram $j]]]
 					set status [get_property STATUS [get_cells [lindex $cell_name_bram $j]]]
 																							
