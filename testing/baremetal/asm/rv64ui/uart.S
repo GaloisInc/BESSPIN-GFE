@@ -31,26 +31,15 @@ RVTEST_CODE_BEGIN
   # SETUP UART 
   #-------------------------------------------------------------
 
-  # UART_LCR = 0x80
-  # This configures the DLAB bit, which allows writing into the Divisor Latch 
-  # least significant and most significant bytes.
-  li t1, 0x80
-  addi t3, t0, UART_LCR
-  sw t1, 0(t3)
-  # Write to the Divisor Latch least significant byte and write
-  # to the Divisor Latch most significant byte in that order.
-  li t1, UART_DLL_VAL 
-  addi t3, t0, UART_DLL
-  sw t1, 0(t3)
-  li t1, UART_DLM_VAL
-  addi t3, t0, UART_DLM
-  sw t1, 0(t3)
+  # ASSUME THE DIVISOR BITS ARE ALREADY SET APPROPRIATELY
+  # test_gfe_unittest.py will do this prior to running this test
+
   # UART_LCR = 0x1F
   # This configures word length to 8 bits,
   # number of stop bits to 2, parity is enabled and set to even parity and the 
   # DLAB bit is set to 0 to enable the use of the Transmitter Holding register
   # and Receiver Buffer register data for transmission and reception
-  li t1, 0x1F
+  li t1, UART_LCR_8E2
   addi t3, t0, UART_LCR
   sw t1, 0(t3)
 
