@@ -234,15 +234,44 @@ class TestFreeRTOS(BaseGfeTest):
         # No auto-checking
         return
 
-class TestFreeRTOS32(TestGfe):
+class TestLinux(BaseGfeTest):
 
-    def getXlen(self):
-        return '32'
+    def getBootImage(self):
+        return os.path.join(
+            os.path.dirname(os.path.dirname(os.getcwd())),
+            'bootmem', 'build-bbl', 'bbl')
 
-class TestFreeRTOS64(TestGfe):
+    def setupUart(self):
+        # Setup pySerial UART
+        self.gfe.setupUart(
+            timeout = 1,
+            baud=115200,
+            parity="NONE",
+            stopbits=2,
+            bytesize=8)
+        print("Setup pySerial UART") 
 
     def getXlen(self):
         return '64'
+
+    def test_boot(self):
+        linux_elf = self.getBootImage()
+        self.setupUart()
+        print(linux_elf)
+        self.gfe.launchElf(linux_elf)
+
+        time.sleep(15)
+
+        # Receive print statements
+        num_rxed =  self.gfe.uart_session.in_waiting
+        rx = self.gfe.uart_session.read( num_rxed ) 
+        print("gdb log: {}".format(self.gfe.getGdbLog()))
+        print("received {}".format(rx))
+
+        self.assertIn(
+            "Please press Enter to activate this console",
+            rx,
+            "Linux Log: {}".format(rx))
 
 class BaseTestIsaGfe(BaseGfeTest):
     """ISA unittest base class for P1 and P2 processors.

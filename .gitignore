@@ -6,6 +6,7 @@ bootrom/bootrom.bin
 bootrom/bootrom.img
 bootrom/bootrom.hex
 bootrom/bootrom.mem
+bootrom/bootrom.bytereversed.mem
 bootrom/bootrom.dump
 testing/baremetal/build
 *.pyc
