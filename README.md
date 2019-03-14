@@ -167,7 +167,24 @@ To run any `.elf` file on the GFE, you can use the `run_elf.py` script in `$GFE_
 #### Running FreeRTOS + TCP/IP stack ####
 Details about the FreeRTOS TCP/IP stack can be found [here](https://www.freertos.org/FreeRTOS-Plus/FreeRTOS_Plus_TCP/index.html). We provide a small example, demonstrating 
 the DHCP, ICMP (ping), UDP and TCP functionality. The setup is little bit involved, hence it is not automated yet. The demo can also be modified to better suit your use-case.
-We will walk through two scenarios.
+
+Our setup is below:
+```
+----------------------------------                                 ---------------------------------------
+|    HOST COMPUTER               |                                 |      FPGA Board                     |
+|    DHCP server                 |              Ethernet cable     |      DHCP On                        |
+|    IP: 10.88.88.2              |<===============================>|      IP: assumed to be 10.88.88.3   |
+|    Netmask: 255.255.255.0      |                                 |      MAC: 00:0A:35:04:DB:77         |
+----------------------------------                                 ---------------------------------------
+```
+
+If you want to replicate our setup you should:
+1) Install and start a DHCP server on your host machine (make sure you configure it to service the interface that is connected to the FPGA).
+A howto guide is for example [here](https://www.tecmint.com/install-dhcp-server-in-ubuntu-debian/)
+2) If you have only one FPGA on the network, then you can leave the MAC address as is,
+otherwise [change it](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L325) 
+to the MAC address of the particular board (there is a sticker).
+3) If you change the host IP, reflect the changes accordingly in [FreeRTOSIPConfig](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L315)
 
 **Scenario 1: DHCP**
 
@@ -193,7 +210,7 @@ DNS Server Address: 10.88.88.1
 ```
 which means the FreeRTOS got assigned an IP address and is ready to communicate.
 
-13) Open a new terminal, and type `ping 10.88.88.3` - you should see something like this:
+13) Open a new terminal, and type `ping 10.88.88.3` (or whatever is the FPGA's IP address) - you should see something like this:
 ```
 $ ping 10.88.88.3
 PING 10.88.88.3 (10.88.88.3) 56(84) bytes of data.
@@ -212,7 +229,8 @@ rtt min/avg/max/mdev = 8.838/9.663/14.183/1.851 ms
 That means ping is working and your FPGA is responding.
 
 14) Now open another terminal and run TCP Echo server at port 9999: `ncat -l 9999 --keep-open --exec "/bin/cat" -v`
-After a few seconds, you will see something like this:
+Note that this will work only if your TCP Echo server is at 10.88.88.2 (or you [updated the config file](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L315)
+). After a few seconds, you will see something like this:
 ```
 $ ncat -l 9999 --keep-open --exec "/bin/cat" -v
 Ncat: Version 7.60 ( https://nmap.org/ncat )
@@ -228,25 +246,19 @@ Ncat: Connection from 10.88.88.3.
 Ncat: Connection from 10.88.88.3:14588.
 ```
 
-15) start `wireshark` and inspect the interface that is at the same network as the FPGA. You sould clearly see the ICMP ping requests and responses, as well as the TCP packets
+
+15) [Optional] start `wireshark` and inspect the interface that is at the same network as the FPGA. You sould clearly see the ICMP ping requests and responses, as well as the TCP packets
 to and from the echo server.
-16) Send a UDP packet with `socat stdio udp4-connect:10.88.88.3:5006 <<< "Hello there"`. In the minicom output, you should see `prvSimpleZeroCopyServerTask: received $N bytes` depending 
+16) [Optional] Send a UDP packet with `socat stdio udp4-connect:10.88.88.3:5006 <<< "Hello there"`. In the minicom output, you should see `prvSimpleZeroCopyServerTask: received $N bytes` depending 
 on how much data you send. **Hint:** instead of minicom, you can use `cat /dev/ttyUSB1 > log.txt` to redirect the serial output into a log file for later inspection.
 
-**Scenario 2: Static address**
-
-Follow the steps below:
-
-1) you have to disable DHCP [here](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L150)
-2) you have to specify your static IP address [here](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L315)
-3) for this scenario it is better to have a point-to-point connection, so you connect your FPGA directly to your host computer, and configure the eth interface to a matching static IP address
-4) the rest is identical to scenario 1
 
 **Troubleshooting**
 
 If something doesn't work, then:
 1) check that your connection is correct (e.g. if you have a DHCP server, it is enabled in the FreeRTOS config, or that your static IP is correct)
 2) sometimes restarting the FPGA with `CPU_RESET` button (or typing `reset` in GDB) will help
+3) Check out our [Issue](https://gitlab-ext.galois.com/ssith/gfe/issues) - maybe you have a problem we already know about.
 
 #### Running Linux and Busybox ####
 
