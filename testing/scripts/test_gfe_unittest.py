@@ -16,6 +16,10 @@ class BaseGfeTest(unittest.TestCase):
     def getXlen(self):
         return '32'
 
+    def getFreq(self):
+        """Return the processor frequency in Hz"""
+        return 83000000
+
     def getGdbPath(self):
         if '32' in self.getXlen():
             return gfeparameters.gdb_path32
@@ -80,16 +84,32 @@ class TestGfe(BaseGfeTest):
         else:
             uart_elf = 'rv32ui-p-uart'
 
+        uart_baud_rate = 9600
         uart_elf_path = os.path.abspath(
             os.path.join(self.path_to_asm, uart_elf))
         print("Using: " + uart_elf_path)
+
         self.gfe.setupUart(
             timeout=1,
-            baud=9600,
+            baud=uart_baud_rate,
             parity="EVEN",
             stopbits=2,
             bytesize=8)
 
+        # Setup the UART devisor bits to account for GFEs at
+        # different frequencies
+        divisor = int(self.getFreq()/(16 * uart_baud_rate))
+        # Get the upper and lower divisor bytes into dlm and dll respectively
+        uart_dll_val = struct.unpack("B", struct.pack(">I", divisor)[-1])[0]
+        uart_dlm_val = struct.unpack("B", struct.pack(">I", divisor)[-2])[0]
+        uart_base = gfeparameters.UART_BASE
+        print("Uart baud rate {} Clock Freq {}\nSetting divisor to {}. dlm = {}, dll = {}".format(
+            uart_baud_rate, self.getFreq(),
+            divisor, hex(uart_dlm_val), hex(uart_dll_val)))
+        self.gfe.riscvWrite32(uart_base + gfeparameters.UART_LCR, 0x80)
+        self.gfe.riscvWrite32(uart_base + gfeparameters.UART_DLL, uart_dll_val)
+        self.gfe.riscvWrite32(uart_base + gfeparameters.UART_DLM, uart_dlm_val)
+        print("Launching UART assembly test {}".format(uart_elf_path))      
         self.gfe.launchElf(uart_elf_path, openocd_log=True, gdb_log=True)
 
         # Allow the riscv program to get started and configure UART
@@ -158,10 +178,16 @@ class TestGfe32(TestGfe):
     def getXlen(self):
         return '32'
 
+    def getFreq(self):
+        return 83000000
+
 class TestGfe64(TestGfe):
 
     def getXlen(self):
         return '64'
+
+    def getFreq(self):
+        return 50000000
 
 class TestFreeRTOS(BaseGfeTest):
 
@@ -234,15 +260,44 @@ class TestFreeRTOS(BaseGfeTest):
         # No auto-checking
         return
 
-class TestFreeRTOS32(TestGfe):
+class TestLinux(BaseGfeTest):
 
-    def getXlen(self):
-        return '32'
+    def getBootImage(self):
+        return os.path.join(
+            os.path.dirname(os.path.dirname(os.getcwd())),
+            'bootmem', 'build-bbl', 'bbl')
 
-class TestFreeRTOS64(TestGfe):
+    def setupUart(self):
+        # Setup pySerial UART
+        self.gfe.setupUart(
+            timeout = 1,
+            baud=115200,
+            parity="NONE",
+            stopbits=2,
+            bytesize=8)
+        print("Setup pySerial UART") 
 
     def getXlen(self):
         return '64'
+
+    def test_boot(self):
+        linux_elf = self.getBootImage()
+        self.setupUart()
+        print(linux_elf)
+        self.gfe.launchElf(linux_elf)
+
+        time.sleep(15)
+
+        # Receive print statements
+        num_rxed =  self.gfe.uart_session.in_waiting
+        rx = self.gfe.uart_session.read( num_rxed ) 
+        print("gdb log: {}".format(self.gfe.getGdbLog()))
+        print("received {}".format(rx))
+
+        self.assertIn(
+            "Please press Enter to activate this console",
+            rx,
+            "Linux Log: {}".format(rx))
 
 class BaseTestIsaGfe(BaseGfeTest):
     """ISA unittest base class for P1 and P2 processors.

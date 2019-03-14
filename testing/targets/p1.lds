@@ -2,7 +2,7 @@ OUTPUT_ARCH( "riscv" )
 
 SECTIONS
 {
-  . = 0x80000000;
+  . = 0xC0000000;
   .text : 
   {
     *(.text.entry)

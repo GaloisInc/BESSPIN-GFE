@@ -16,7 +16,7 @@ function freertos_test {
 
 	cd $BASE_DIR/testing/scripts
 	python $python_unittest_script TestFreeRTOS.$2
-	err_msg $? "One or more FreeRTOS Tests failed"
+	err_msg $? "FreeRTOS test TestFreeRTOS.$2 failed"
 }
 
 freertos_test main_blinky test_blink
