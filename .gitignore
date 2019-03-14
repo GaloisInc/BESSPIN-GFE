@@ -10,5 +10,7 @@ bootrom/bootrom.bytereversed.mem
 bootrom/bootrom.dump
 testing/baremetal/build
 *.pyc
+test_32.gdb
+test_64.gdb
 # filesystem artifacts
 ._*
