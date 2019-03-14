@@ -167,15 +167,15 @@ To run any `.elf` file on the GFE, you can use the `run_elf.py` script in `$GFE_
 #### Running FreeRTOS + TCP/IP stack ####
 Details about the FreeRTOS TCP/IP stack can be found [here](https://www.freertos.org/FreeRTOS-Plus/FreeRTOS_Plus_TCP/index.html). We provide a small example, demonstrating 
 the DHCP, ICMP (ping), UDP and TCP functionality. The setup is little bit involved, hence it is not automated yet. The demo can also be modified to better suit your use-case.
-We wall you through two scenarios.
+We will walk through two scenarios.
 
 **Scenario 1: DHCP**
 
 Follow the steps below:
 
-1) Program your FPGA with P1 bitstream: `./program_fpga.sh chisel_p1`
+1) Program your FPGA with a P1 bitstream: `./program_fpga.sh chisel_p1`
 2) Start openocd with `openocd -f $GFE_REPO/testing/targets/ssith_gfe.cfg`
-3) Connect FPGA Ethernet port into a router/switch that provides DHCP server. Our router has adress/netmask 10.88.88.1/255.255.255.0
+3) Connect the FPGA Ethernet port into a router/switch that provides a DHCP server. Our router has an adress/netmask of 10.88.88.1/255.255.255.0
 4) Connect your host computer to the same router.
 5) Go to the demo directory: `cd FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1`
 6) Generate `main_tcp.elf` binary: `export PROG=main_tcp; make clean; make`
