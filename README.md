@@ -190,7 +190,7 @@ to the MAC address of the particular board (there is a sticker).
 
 Follow the steps below:
 
-1) Program your FPGA with a P1 bitstream: `./program_fpga.sh chisel_p1`
+1) Program your FPGA with a P1 bitstream: `./program_fpga.sh chisel_p1` **NOTE:** If you have already programmed the FPGA, at least restart it before continuing to make sure it is in a good state. 
 2) Start openocd with `openocd -f $GFE_REPO/testing/targets/ssith_gfe.cfg`
 3) Connect the FPGA Ethernet port into a router/switch that provides a DHCP server. Our router has an adress/netmask of 10.88.88.1/255.255.255.0
 4) Connect your host computer to the same router.
