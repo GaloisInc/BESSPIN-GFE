@@ -263,7 +263,7 @@ proc create_hier_cell_svf_pcie_bridge { parentCell nameHier } {
    CONFIG.PF2_DEVICE_ID {9018} \
    CONFIG.PF3_DEVICE_ID {9018} \
    CONFIG.PL_LINK_CAP_MAX_LINK_WIDTH {X8} \
-   CONFIG.REF_CLK_FREQ {250_MHz} \
+   CONFIG.REF_CLK_FREQ {100_MHz} \
    CONFIG.RX_PPM_OFFSET {600} \
    CONFIG.SYS_RST_N_BOARD_INTERFACE {pcie_perstn} \
    CONFIG.axisten_freq {250} \

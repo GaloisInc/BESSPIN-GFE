@@ -1382,7 +1382,7 @@ module mkSVF_PCIE(CLK,
   assign WILL_FIRE_pcie_in_pcie4_cfg_control_bus_number = 1'd1 ;
 
   // value method pcie_in_pcie4_cfg_control_config_space_enable
-  assign pcie_in_pcie4_cfg_control_config_space_enable = 1'd0 ;
+  assign pcie_in_pcie4_cfg_control_config_space_enable = 1'd1 ;
 
   // value method pcie_in_pcie4_cfg_control_ds_bus_number
   assign pcie_in_pcie4_cfg_control_ds_bus_number = 8'd0 ;
@@ -1494,7 +1494,7 @@ module mkSVF_PCIE(CLK,
   assign WILL_FIRE_pcie_in_pcie4_cfg_mesg_rcvd_received_type = 1'd1 ;
 
   // value method pcie_in_pcie4_cfg_status_pcie_cq_np_req
-  assign pcie_in_pcie4_cfg_status_pcie_cq_np_req = 2'd0 ;
+  assign pcie_in_pcie4_cfg_status_pcie_cq_np_req = 2'd3 ;
 
   // action method pcie_in_pcie4_cfg_status_pcie_cq_np_req_count
   assign CAN_FIRE_pcie_in_pcie4_cfg_status_pcie_cq_np_req_count = 1'd1 ;
@@ -1899,7 +1899,7 @@ module mkSVF_PCIE(CLK,
   assign fAxiRc_rv$port0__write_1 =
 	     { 1'd1,
 	       pcie_in_s_axis_rc_tdata,
-	       pcie_in_s_axis_rc_tuser[40],
+	       pcie_in_s_axis_rc_tuser[32],
 	       pcie_in_s_axis_rc_tlast,
 	       pcie_in_s_axis_rc_tkeep,
 	       pcie_in_s_axis_rc_tuser[7:0] } ;

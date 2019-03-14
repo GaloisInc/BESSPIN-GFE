@@ -20,7 +20,7 @@
 // axi_in_tstrb                   I    76 reg
 // axi_in_tkeep                   I    76 reg
 // axi_in_tlast                   I     1 reg
-// comms_link_response_put        I    56 reg
+// comms_link_response_put        I   176 reg
 // EN_comms_link_response_put     I     1
 // EN_comms_link_request_get      I     1
 //
@@ -83,7 +83,7 @@ module mkDut(CLK,
   output RDY_comms_link_request_get;
 
   // action method comms_link_response_put
-  input  [55 : 0] comms_link_response_put;
+  input  [175 : 0] comms_link_response_put;
   input  EN_comms_link_response_put;
   output RDY_comms_link_response_put;
 
@@ -118,7 +118,7 @@ module mkDut(CLK,
   // ports of submodule bytevec_mux
   wire [655 : 0] bytevec_mux$client_request_get;
   wire [607 : 0] bytevec_mux$to_verifier_put;
-  wire [55 : 0] bytevec_mux$client_response_put;
+  wire [175 : 0] bytevec_mux$client_response_put;
   wire bytevec_mux$EN_client_request_get,
        bytevec_mux$EN_client_response_put,
        bytevec_mux$EN_from_console_get,

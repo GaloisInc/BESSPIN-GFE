@@ -17,7 +17,7 @@
 // RDY_to_verifier_put            O     1 reg
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
-// client_response_put            I    56 reg
+// client_response_put            I   176 reg
 // to_verifier_put                I   608 reg
 // EN_init                        I     1
 // EN_client_response_put         I     1
@@ -83,7 +83,7 @@ module mkBytevec_Mux_HW_Side(CLK,
   output RDY_client_request_get;
 
   // action method client_response_put
-  input  [55 : 0] client_response_put;
+  input  [175 : 0] client_response_put;
   input  EN_client_response_put;
   output RDY_client_response_put;
 
@@ -132,7 +132,7 @@ module mkBytevec_Mux_HW_Side(CLK,
   wire test_succeeded$D_IN, test_succeeded$EN;
 
   // ports of submodule f_bytevec_from_host
-  wire [55 : 0] f_bytevec_from_host$D_IN, f_bytevec_from_host$D_OUT;
+  wire [175 : 0] f_bytevec_from_host$D_IN, f_bytevec_from_host$D_OUT;
   wire f_bytevec_from_host$CLR,
        f_bytevec_from_host$DEQ,
        f_bytevec_from_host$EMPTY_N,
@@ -232,15 +232,15 @@ module mkBytevec_Mux_HW_Side(CLK,
   assign WILL_FIRE_to_verifier_put = EN_to_verifier_put ;
 
   // submodule f_bytevec_from_host
-  FIFO2 #(.width(32'd56), .guarded(32'd1)) f_bytevec_from_host(.RST(RST_N),
-							       .CLK(CLK),
-							       .D_IN(f_bytevec_from_host$D_IN),
-							       .ENQ(f_bytevec_from_host$ENQ),
-							       .DEQ(f_bytevec_from_host$DEQ),
-							       .CLR(f_bytevec_from_host$CLR),
-							       .D_OUT(f_bytevec_from_host$D_OUT),
-							       .FULL_N(f_bytevec_from_host$FULL_N),
-							       .EMPTY_N(f_bytevec_from_host$EMPTY_N));
+  FIFO2 #(.width(32'd176), .guarded(32'd1)) f_bytevec_from_host(.RST(RST_N),
+								.CLK(CLK),
+								.D_IN(f_bytevec_from_host$D_IN),
+								.ENQ(f_bytevec_from_host$ENQ),
+								.DEQ(f_bytevec_from_host$DEQ),
+								.CLR(f_bytevec_from_host$CLR),
+								.D_OUT(f_bytevec_from_host$D_OUT),
+								.FULL_N(f_bytevec_from_host$FULL_N),
+								.EMPTY_N(f_bytevec_from_host$EMPTY_N));
 
   // submodule f_bytevec_to_host
   FIFO2 #(.width(32'd656), .guarded(32'd1)) f_bytevec_to_host(.RST(RST_N),
