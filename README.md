@@ -164,6 +164,90 @@ If you see error messages, then something went wrong.
 
 To run any `.elf` file on the GFE, you can use the `run_elf.py` script in `$GFE_REPO/testing/scripts/`. It can be run using `python run_elf.py path_to_elf/file.elf`. By default the program waits 0.5 seconds before printing what it has received from UART, but this can be changed by using the `--runtime X` argument where X is the number of seconds to wait.
 
+#### Running FreeRTOS + TCP/IP stack ####
+Details about the FreeRTOS TCP/IP stack can be found [here](https://www.freertos.org/FreeRTOS-Plus/FreeRTOS_Plus_TCP/index.html). We provide a small example, demonstrating 
+the DHCP, ICMP (ping), UDP and TCP functionality. The setup is little bit involved, hence it is not automated yet. The demo can also be modified to better suit your use-case.
+We wall you through two scenarios.
+
+**Scenario 1: DHCP**
+
+Follow the steps below:
+
+1) Program your FPGA with P1 bitstream: `./program_fpga.sh chisel_p1`
+2) Start openocd with `openocd -f $GFE_REPO/testing/targets/ssith_gfe.cfg`
+3) Connect FPGA Ethernet port into a router/switch that provides DHCP server. Our router has adress/netmask 10.88.88.1/255.255.255.0
+4) Connect your host computer to the same router.
+5) Go to the demo directory: `cd FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1`
+6) Generate `main_tcp.elf` binary: `export PROG=main_tcp; make clean; make`
+7) Start GDB: `riscv32-unknown-elf-gdb main_tcp.elf`
+8) in your GDB session type: `target remote localhost:3333`
+9) in your GDB session type: `load`
+10) start minicom: `minicom -D /dev/ttyUSB1 -b 115200` **NOTE:** The default baud rate for TCP example is 115200 baud.
+11) in your GDB session type: `continue`
+12) In minicom, you will see a bunch of debug prints. The interesting piece is when you get:
+```
+IP Address: 10.88.88.3
+Subnet Mask: 255.255.255.0
+Gateway Address: 10.88.88.1
+DNS Server Address: 10.88.88.1
+```
+which means the FreeRTOS got assigned an IP address and is ready to communicate.
+
+13) Open a new terminal, and type `ping 10.88.88.3` - you should see something like this:
+```
+$ ping 10.88.88.3
+PING 10.88.88.3 (10.88.88.3) 56(84) bytes of data.
+64 bytes from 10.88.88.3: icmp_seq=1 ttl=64 time=14.1 ms
+64 bytes from 10.88.88.3: icmp_seq=2 ttl=64 time=9.22 ms
+64 bytes from 10.88.88.3: icmp_seq=3 ttl=64 time=8.85 ms
+64 bytes from 10.88.88.3: icmp_seq=4 ttl=64 time=8.84 ms
+64 bytes from 10.88.88.3: icmp_seq=5 ttl=64 time=8.85 ms
+64 bytes from 10.88.88.3: icmp_seq=6 ttl=64 time=8.83 ms
+64 bytes from 10.88.88.3: icmp_seq=7 ttl=64 time=8.83 ms
+^C
+--- 10.88.88.3 ping statistics ---
+7 packets transmitted, 7 received, 0% packet loss, time 6007ms
+rtt min/avg/max/mdev = 8.838/9.663/14.183/1.851 ms
+```
+That means ping is working and your FPGA is responding.
+
+14) Now open another terminal and run TCP Echo server at port 9999: `ncat -l 9999 --keep-open --exec "/bin/cat" -v`
+After a few seconds, you will see something like this:
+```
+$ ncat -l 9999 --keep-open --exec "/bin/cat" -v
+Ncat: Version 7.60 ( https://nmap.org/ncat )
+Ncat: Generating a temporary 1024-bit RSA key. Use --ssl-key and --ssl-cert to use a permanent one.
+Ncat: SHA-1 fingerprint: 2EDF 34C4 1F16 FF89 0AE1 6B1B F236 D933 A4DD 030E
+Ncat: Listening on :::9999
+Ncat: Listening on 0.0.0.0:9999
+Ncat: Connection from 10.88.88.3.
+Ncat: Connection from 10.88.88.3:25816.
+Ncat: Connection from 10.88.88.3.
+Ncat: Connection from 10.88.88.3:2334.
+Ncat: Connection from 10.88.88.3.
+Ncat: Connection from 10.88.88.3:14588.
+```
+
+15) start `wireshark` and inspect the interface that is at the same network as the FPGA. You sould clearly see the ICMP ping requests and responses, as well as the TCP packets
+to and from the echo server.
+16) Send a UDP packet with `socat stdio udp4-connect:10.88.88.3:5006 <<< "Hello there"`. In the minicom output, you should see `prvSimpleZeroCopyServerTask: received $N bytes` depending 
+on how much data you send. **Hint:** instead of minicom, you can use `cat /dev/ttyUSB1 > log.txt` to redirect the serial output into a log file for later inspection.
+
+**Scenario 2: Static address**
+
+Follow the steps below:
+
+1) you have to disable DHCP [here](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L150)
+2) you have to specify your static IP address [here](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L315)
+3) for this scenario it is better to have a point-to-point connection, so you connect your FPGA directly to your host computer, and configure the eth interface to a matching static IP address
+4) the rest is identical to scenario 1
+
+**Troubleshooting**
+
+If something doesn't work, then:
+1) check that your connection is correct (e.g. if you have a DHCP server, it is enabled in the FreeRTOS config, or that your static IP is correct)
+2) sometimes restarting the FPGA with `CPU_RESET` button (or typing `reset` in GDB) will help
+
 #### Running Linux and Busybox ####
 
 The following instructions describe now to boot Linux with Busybox.
