@@ -11,7 +11,7 @@
 	cpus {
 		#address-cells = <1>;
 		#size-cells = <0>;
-		timebase-frequency = <83333000>;
+		timebase-frequency = <50000000>;
 		CPU0: cpu@0 {
 			device_type = "cpu";
 			reg = <0>;
@@ -23,7 +23,7 @@
 			riscv,isa = "rv64imafdc";
 			mmu-type = "riscv,sv39";
 #endif
-			clock-frequency = <83333000>;
+			clock-frequency = <50000000>;
 			CPU0_intc: interrupt-controller {
 				#interrupt-cells = <1>;
 				interrupt-controller;
@@ -83,7 +83,7 @@
 			phy-handle = <&phy0>;
 			xlnx,vcu118;
 			local-mac-address = [00 0a 35 04 db 5a];
-			clock-frequency = <83333000>;
+			clock-frequency = <50000000>;
 			axi_ethernet_mdio: mdio {
 				#address-cells = <1>;
 				#size-cells = <0>;
