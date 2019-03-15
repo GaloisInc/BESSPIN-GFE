@@ -192,6 +192,9 @@ class TestGfe64(TestGfe):
 
 class TestFreeRTOS(BaseGfeTest):
 
+    def getFreq(self):
+        return 83000000
+
     def setUp(self):
         # Reset the GFE
         self.gfe = gfetester.gfetester(gdb_path=self.getGdbPath())
@@ -204,7 +207,7 @@ class TestFreeRTOS(BaseGfeTest):
         # Setup pySerial UART
         self.gfe.setupUart(
             timeout = 1,
-            baud=9600,
+            baud=115200,
             parity="NONE",
             stopbits=2,
             bytesize=8)
