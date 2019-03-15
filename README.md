@@ -287,6 +287,77 @@ Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `
 
 In the serial terminal you should expect to see Linux boot messages.  The final message says ```Please press Enter to activate this console.```.  If you do as instructed (press enter), you will be presented with a shell running on the GFE system.
 
+##### Using Ethernet on Linux
+
+The GFE-configured Linux kernel includes the Xilinx AXI Ethernet driver. You should see the following messages in the boot log:
+```
+[    4.320000] xilinx_axienet 62100000.ethernet: assigned reserved memory node ethernet@62100000
+[    4.330000] xilinx_axienet 62100000.ethernet: TX_CSUM 2
+[    4.330000] xilinx_axienet 62100000.ethernet: RX_CSUM 2
+[    4.340000] xilinx_axienet 62100000.ethernet: enabling VCU118-specific quirk fixes
+[    4.350000] libphy: Xilinx Axi Ethernet MDIO: probed
+```
+
+The provided configuration of busybox includes some basic networking utilities (ifconfig, udhcpc, ping, telnet, telnetd) to get you started. Additional utilities can be compiled into busybox or loaded into the filesystem image (add them to `$GFE_REPO/bootmem/_rootfs/`).
+
+***Note*** Due to a bug when statically linking glibc into busybox, DNS resolution does not work. This will be fixed in a future GFE release either in busybox or by switching to a full Linux distro.
+
+**DHCP IP Example**
+
+If the VCU118 is connected to a network that has a DHCP server, you can configure networking using the following commands:
+```
+/ # ifconfig eth0 up
+...
+xilinx_axienet 62100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx
+...
+/ # udhcpc -i eth0
+udhcpc: started, v1.30.1
+Setting IP address 0.0.0.0 on eth0
+udhcpc: sending discover
+udhcpc: sending select for 10.0.0.11
+udhcpc: lease of 10.0.0.11 obtained, lease time 259200
+Setting IP address 10.0.0.11 on eth0
+Deleting routers
+route: SIOCDELRT: No such process
+Adding router 10.0.0.2
+Recreating /etc/resolv.conf
+ Adding DNS server 10.0.0.2
+/ # ping 4.2.2.1
+PING 4.2.2.1 (4.2.2.1): 56 data bytes
+64 bytes from 4.2.2.1: seq=0 ttl=57 time=22.107 ms
+64 bytes from 4.2.2.1: seq=1 ttl=57 time=20.754 ms
+64 bytes from 4.2.2.1: seq=2 ttl=57 time=20.908 ms
+64 bytes from 4.2.2.1: seq=3 ttl=57 time=20.778 ms
+^C
+--- 4.2.2.1 ping statistics ---
+4 packets transmitted, 4 packets received, 0% packet loss
+round-trip min/avg/max = 20.754/21.136/22.107 ms
+
+/ # 
+```
+
+**Static IP Example**
+
+Use the commands below to enable networking when a DHCP server is not available. Replace the IP and router addresses as necessary for your setup:
+```
+/ # ifconfig eth0 10.0.0.3
+...
+xilinx_axienet 62100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx
+...
+/ # route add -net 0.0.0.0 gw 10.0.0.2
+/ # ping 4.2.2.1
+PING 4.2.2.1 (4.2.2.1): 56 data bytes
+64 bytes from 4.2.2.1: seq=0 ttl=57 time=23.320 ms
+64 bytes from 4.2.2.1: seq=1 ttl=57 time=20.738 ms
+...
+^C
+--- 4.2.2.1 ping statistics ---
+20 packets transmitted, 20 packets received, 0% packet loss
+round-trip min/avg/max = 20.536/20.913/23.320 ms
+
+/ # 
+```
+
 ### Simulation ###
 
 Click `Run Simulation` in the Vivado GUI and refer to the Vivado documentation for using XSIM in a project flow, such as [UG937](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug937-vivado-design-suite-simulation-tutorial.pdf). If necessary, create a testbench around the top level project to generate stimulus for components outside the GFE (i.e. DDR memories, UART, JTAG).
