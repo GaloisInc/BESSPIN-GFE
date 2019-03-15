@@ -6,7 +6,7 @@
 	compatible = "unknown,unknown";
 	model = "unknown,unknown";
 	chosen {
-		bootargs = "earlyprintk console=ttyS0,115200 loglevel=15";
+		bootargs = "earlyprintk loglevel=15";
 	};
 	cpus {
 		#address-cells = <1>;
