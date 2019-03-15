@@ -10,6 +10,7 @@ import os
 import time
 import struct
 import glob
+import sys
 
 class BaseGfeTest(unittest.TestCase):
     """GFE base testing class. All GFE Python unittests inherit from this class"""
@@ -283,21 +284,30 @@ class TestLinux(BaseGfeTest):
     def test_boot(self):
         linux_elf = self.getBootImage()
         self.setupUart()
-        print(linux_elf)
+        linux_boot_timeout = 15 # Wait 15 seconds for linux to boot
+
+        print("Loading Linux Elf {}".format(linux_elf))
         self.gfe.launchElf(linux_elf)
 
-        time.sleep(15)
+        print("Booting Linux with a timeout of {}s".format(linux_boot_timeout))
+        print("Linux launched")
 
-        # Receive print statements
-        num_rxed =  self.gfe.uart_session.in_waiting
-        rx = self.gfe.uart_session.read( num_rxed ) 
-        print("gdb log: {}".format(self.gfe.getGdbLog()))
-        print("received {}".format(rx))
+        # Store all UART output while linux is booting
+        rx_buf = [] # Try reading a large chunk of data, blocking for timeout secs.
+        print("First read")
+        start_time = time.time()
+        while time.time() < (start_time + linux_boot_timeout):
+            pending = self.gfe.uart_session.in_waiting
+            if pending:
+                data = self.gfe.uart_session.read(pending)
+                rx_buf.append(data) # Append read chunks to the list.
+                sys.stdout.write(data)
+        print("Timeout reached")
 
-        self.assertIn(
-            "Please press Enter to activate this console",
-            rx,
-            "Linux Log: {}".format(rx))
+        rx = ''.join(rx_buf)
+
+        self.assertIn("Xilinx Axi Ethernet MDIO: probed", rx)
+        self.assertIn("Please press Enter to activate this console", rx)
 
 class BaseTestIsaGfe(BaseGfeTest):
     """ISA unittest base class for P1 and P2 processors.

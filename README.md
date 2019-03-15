@@ -262,7 +262,7 @@ If something doesn't work, then:
 
 #### Running Linux and Busybox ####
 
-The following instructions describe now to boot Linux with Busybox.
+The following instructions describe how to boot Linux with Busybox.
 
 ##### Build the memory image
 
