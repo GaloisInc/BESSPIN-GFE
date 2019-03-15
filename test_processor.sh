@@ -8,7 +8,7 @@ err_msg $SETUP_ENV_ERR "Sourcing setup_env.sh failed"
 proc_picker $1
 
 # Program the FPGA with the appropriate bitstream
-# ./program_fpga.sh $proc_name
+./program_fpga.sh $proc_name
 
 echo "Testing $proc_name"
 
