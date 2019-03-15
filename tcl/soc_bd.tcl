@@ -301,7 +301,6 @@ proc create_hier_cell_svf_pcie_bridge { parentCell nameHier } {
 
   # Create port connections
   connect_bd_net -net clk_wiz_1_clk_out1 [get_bd_pins clk_wiz_1/clk_out1] [get_bd_pins mkSVF_Bridge_0/CLK_user_clk_half]
-  connect_bd_net -net gfe_subsystem_ACLK [get_bd_pins CLK] [get_bd_pins mkSVF_Bridge_0/CLK_aclk]
   connect_bd_net -net ibufds_gte4_0_o [get_bd_pins ibufds_gte4_0/o] [get_bd_pins pcie4_uscale_plus_0/sys_clk_gt]
   connect_bd_net -net ibufds_gte4_0_odiv2 [get_bd_pins ibufds_gte4_0/odiv2] [get_bd_pins pcie4_uscale_plus_0/sys_clk]
   connect_bd_net -net mkSVF_Bridge_0_pcie4_cfg_control_config_space_enable [get_bd_pins mkSVF_Bridge_0/pcie4_cfg_control_config_space_enable] [get_bd_pins pcie4_uscale_plus_0/cfg_config_space_enable]
@@ -718,6 +717,7 @@ proc create_root_design { parentCell } {
   set mdio_io [ create_bd_port -dir IO mdio_io ]
   set mdio_mdc [ create_bd_port -dir O -type clk mdio_mdc ]
 
+  set pcie_perstn [ create_bd_port -dir I -type rst pcie_perstn ]
   set_property -dict [ list \
    CONFIG.POLARITY {ACTIVE_LOW} \
  ] $pcie_perstn
@@ -736,9 +736,6 @@ proc create_root_design { parentCell } {
 
   # Create instance: iobuf_0, and set properties
   set iobuf_0 [ create_bd_cell -type ip -vlnv Galois:user:iobuf:1.0 iobuf_0 ]
-
-  # Create instance: mkSVF_Bridge_0, and set properties
-  set mkSVF_Bridge_0 [ create_bd_cell -type ip -vlnv bluespec:user:mkSVF_Bridge:1.0 mkSVF_Bridge_0 ]
 
   # Create instance: ssith_processor_0, and set properties
   set ssith_processor_0 [ create_bd_cell -type ip -vlnv ssith:user:ssith_processor:1.0 ssith_processor_0 ]
@@ -781,8 +778,6 @@ proc create_root_design { parentCell } {
   connect_bd_net -net gfe_subsystem_eth_mdio_mdc [get_bd_ports mdio_mdc] [get_bd_pins gfe_subsystem/eth_mdio_mdc]
   connect_bd_net -net gfe_subsystem_eth_mdio_mdio_o [get_bd_pins gfe_subsystem/eth_mdio_mdio_o] [get_bd_pins iobuf_0/data_i]
   connect_bd_net -net gfe_subsystem_eth_mdio_mdio_t [get_bd_pins gfe_subsystem/eth_mdio_mdio_t] [get_bd_pins iobuf_0/data_t]
-  connect_bd_net -net ddr4_0_addn_ui_clkout1 [get_bd_pins gfe_subsystem/ACLK] [get_bd_pins mkSVF_Bridge_0/CLK] [get_bd_pins ssith_processor_0/CLK] [get_bd_pins xilinx_jtag_0/clk]
-  connect_bd_net -net gfe_subsystem_ACLK [get_bd_pins gfe_subsystem/ACLK] [get_bd_pins ssith_processor_0/CLK] [get_bd_pins svf_pcie_bridge/CLK] [get_bd_pins xilinx_jtag_0/clk]
   connect_bd_net -net gfe_subsystem_interrupt [get_bd_pins gfe_subsystem/interrupt] [get_bd_pins ssith_processor_0/cpu_external_interrupt_req]
   connect_bd_net -net gfe_subsystem_phy_reset_out [get_bd_ports phy_reset_out] [get_bd_pins gfe_subsystem/phy_reset_out]
   connect_bd_net -net gfe_subsystem_rs232_uart_rts [get_bd_ports rs232_uart_rts] [get_bd_pins gfe_subsystem/rs232_uart_rts]
