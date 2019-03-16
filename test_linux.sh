@@ -11,7 +11,7 @@ python_unittest_script=test_gfe_unittest.py
 
 function linux_test {
 	cd $linux_folder
-	# make
+	make
 	err_msg $? "Building Linux failed"
 
 	cd $BASE_DIR/testing/scripts

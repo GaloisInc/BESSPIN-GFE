@@ -33,11 +33,11 @@ Install the standard RISCV toolchain for compiling Linux and other tests for the
 ```bash
 git clone https://github.com/riscv/riscv-gnu-toolchain.git
 cd riscv-gnu-toolchain
+git submodule update --init --recursive
 ./configure --prefix=$RISCV_INSTALL --with-arch=rv32gc --with-abi=ilp32
 make       # Install the 32 bit newlib toolchain for testing the P1
 ./configure --prefix=$RISCV_INSTALL
 make       # Install the 64 bit newlib toochain for testing the P2
-./configure --prefix=$RISCV_INSTALL 
 make linux # Install the 64 bit linux toolchain
 ```
 Follow the instructions [here](https://github.com/riscv/riscv-gnu-toolchain) for more information.
