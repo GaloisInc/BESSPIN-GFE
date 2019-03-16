@@ -621,28 +621,6 @@
         </spirit:parameter>
       </spirit:parameters>
     </spirit:busInterface>
-    <spirit:busInterface>
-      <spirit:name>RST_N_axi_rstn</spirit:name>
-      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="reset" spirit:version="1.0"/>
-      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="reset_rtl" spirit:version="1.0"/>
-      <spirit:master/>
-      <spirit:portMaps>
-        <spirit:portMap>
-          <spirit:logicalPort>
-            <spirit:name>RST</spirit:name>
-          </spirit:logicalPort>
-          <spirit:physicalPort>
-            <spirit:name>RST_N_axi_rstn</spirit:name>
-          </spirit:physicalPort>
-        </spirit:portMap>
-      </spirit:portMaps>
-      <spirit:parameters>
-        <spirit:parameter>
-          <spirit:name>POLARITY</spirit:name>
-          <spirit:value spirit:id="BUSIFPARAM_VALUE.RST_N_AXI_RSTN.POLARITY" spirit:choiceRef="choice_list_9d8b0d81">ACTIVE_LOW</spirit:value>
-        </spirit:parameter>
-      </spirit:parameters>
-    </spirit:busInterface>
   </spirit:busInterfaces>
   <spirit:model>
     <spirit:views>
@@ -658,7 +636,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>fa940897</spirit:value>
+            <spirit:value>dc8c0629</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -674,7 +652,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>88e0fe49</spirit:value>
+            <spirit:value>e5ca9626</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -2803,45 +2781,6 @@
           </spirit:wireTypeDefs>
         </spirit:wire>
       </spirit:port>
-      <spirit:port>
-        <spirit:name>CLK_axi_clk</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>wire</spirit:typeName>
-              <spirit:viewNameRef>xilinx_anylanguagesynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_anylanguagebehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>CLK_GATE_axi_clk</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>wire</spirit:typeName>
-              <spirit:viewNameRef>xilinx_anylanguagesynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_anylanguagebehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>RST_N_axi_rstn</spirit:name>
-        <spirit:wire>
-          <spirit:direction>out</spirit:direction>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>wire</spirit:typeName>
-              <spirit:viewNameRef>xilinx_anylanguagesynthesis</spirit:viewNameRef>
-              <spirit:viewNameRef>xilinx_anylanguagebehavioralsimulation</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-        </spirit:wire>
-      </spirit:port>
     </spirit:ports>
   </spirit:model>
   <spirit:choices>
@@ -3090,8 +3029,8 @@
       </xilinx:taxonomies>
       <xilinx:displayName>mkSVF_Bridge_v1_0</xilinx:displayName>
       <xilinx:definitionSource>package_project</xilinx:definitionSource>
-      <xilinx:coreRevision>29</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2019-03-07T22:23:01Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>31</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2019-03-16T01:43:54Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="nopcore"/>
         <xilinx:tag xilinx:name="bluespec:user:mkSVF_Bridge:1.0_ARCHIVE_LOCATION">/export/home/stoy/examples/galois/gfe1/svf</xilinx:tag>
@@ -3099,9 +3038,9 @@
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2017.4</xilinx:xilinxVersion>
-      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="61e85e2c"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="2cc2bd0a"/>
-      <xilinx:checksum xilinx:scope="ports" xilinx:value="6f18cb82"/>
+      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="af940f5a"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="fecc5e99"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="ea7de02b"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="6ea9c1fe"/>
     </xilinx:packagingInfo>
   </spirit:vendorExtensions>

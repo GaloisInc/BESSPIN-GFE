@@ -6,7 +6,7 @@
 //
 // Ports:
 // Name                         I/O  size props
-// axi_in_tready                  O     1 reg
+// axi_in_tready                  O     1
 // m_axis_cc_tvalid               O     1 reg
 // m_axis_cc_tdata                O    64
 // m_axis_cc_tkeep                O     2
@@ -54,9 +54,6 @@
 // pcie4_cfg_mesg_tx_transmit_data  O    32 const
 // pcie4_cfg_mesg_tx_transmit_type  O     3 const
 // pcie4_cfg_status_pcie_cq_np_req  O     2 const
-// CLK_axi_clk                    O     1 clock
-// CLK_GATE_axi_clk               O     1 const
-// RST_N_axi_rstn                 O     1 reset
 // CLK_user_clk                   I     1 clock
 // RST_N_user_reset               I     1 reset
 // CLK_user_clk_half              I     1 clock
@@ -414,12 +411,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
 		    pcie4_user_link_up,
 
-		    pcie4_phy_rdy_out,
-
-		    CLK_axi_clk,
-		    CLK_GATE_axi_clk,
-
-		    RST_N_axi_rstn);
+		    pcie4_phy_rdy_out);
   input  CLK_user_clk;
   input  RST_N_user_reset;
   input  CLK_user_clk_half;
@@ -792,13 +784,6 @@ module mkSVF_Bridge(CLK_user_clk,
   // action method pcie_in_pcie4_phy_rdy_out
   input  pcie4_phy_rdy_out;
 
-  // oscillator and gates for output clock CLK_axi_clk
-  output CLK_axi_clk;
-  output CLK_GATE_axi_clk;
-
-  // output resets
-  output RST_N_axi_rstn;
-
   // signals for module outputs
   wire [63 : 0] m_axis_cc_tdata,
 		m_axis_rq_tdata,
@@ -825,10 +810,7 @@ module mkSVF_Bridge(CLK_user_clk,
 	       m_axis_rq_tkeep,
 	       pcie4_cfg_external_msix_msix_vec_pending,
 	       pcie4_cfg_status_pcie_cq_np_req;
-  wire CLK_GATE_axi_clk,
-       CLK_axi_clk,
-       RST_N_axi_rstn,
-       axi_in_tready,
+  wire axi_in_tready,
        m_axis_cc_tlast,
        m_axis_cc_tvalid,
        m_axis_rq_tlast,
@@ -972,15 +954,6 @@ module mkSVF_Bridge(CLK_user_clk,
   reg [10 : 0] cc_rg_dwcount;
   wire [10 : 0] cc_rg_dwcount$D_IN;
   wire cc_rg_dwcount$EN;
-
-  // register clockGenerators_free_stamp
-  reg clockGenerators_free_stamp;
-  wire clockGenerators_free_stamp$D_IN, clockGenerators_free_stamp$EN;
-
-  // register clockGenerators_one_to_one_cclock_count
-  reg [31 : 0] clockGenerators_one_to_one_cclock_count;
-  wire [31 : 0] clockGenerators_one_to_one_cclock_count$D_IN;
-  wire clockGenerators_one_to_one_cclock_count$EN;
 
   // register cq_f_cq_rv
   reg [152 : 0] cq_f_cq_rv;
@@ -1306,6 +1279,10 @@ module mkSVF_Bridge(CLK_user_clk,
   // register intr_on
   reg intr_on;
   wire intr_on$D_IN, intr_on$EN;
+
+  // register isInReset_isInReset
+  reg isInReset_isInReset;
+  wire isInReset_isInReset$D_IN, isInReset_isInReset$EN;
 
   // register lnk_up_cr
   reg lnk_up_cr;
@@ -1697,10 +1674,6 @@ module mkSVF_Bridge(CLK_user_clk,
   reg [32 : 0] rq_rg_mdw$D_IN;
   wire rq_rg_mdw$EN;
 
-  // register rstgen_init
-  reg rstgen_init;
-  wire rstgen_init$D_IN, rstgen_init$EN;
-
   // register rvPrevMsgGrant
   reg [2 : 0] rvPrevMsgGrant;
   wire [2 : 0] rvPrevMsgGrant$D_IN;
@@ -2061,14 +2034,6 @@ module mkSVF_Bridge(CLK_user_clk,
   // ports of submodule cc_gearbox_sCrosseddReset
   wire cc_gearbox_sCrosseddReset$OUT_RST;
 
-  // ports of submodule clockGenerators_one_to_one_cclock_pre_negedge_uclk
-  wire clockGenerators_one_to_one_cclock_pre_negedge_uclk$sD_IN,
-       clockGenerators_one_to_one_cclock_pre_negedge_uclk$sEN;
-
-  // ports of submodule clockGenerators_one_to_one_cclock_pre_posedge_uclk
-  wire clockGenerators_one_to_one_cclock_pre_posedge_uclk$sD_IN,
-       clockGenerators_one_to_one_cclock_pre_posedge_uclk$sEN;
-
   // ports of submodule cq_gearbox_dCombinedReset
   wire cq_gearbox_dCombinedReset$RST_OUT;
 
@@ -2099,7 +2064,6 @@ module mkSVF_Bridge(CLK_user_clk,
        dut_dutIfc$EN_comms_link_response_put,
        dut_dutIfc$RDY_comms_link_request_get,
        dut_dutIfc$RDY_comms_link_response_put,
-       dut_dutIfc$RST_N_urstn,
        dut_dutIfc$axi_in_tlast,
        dut_dutIfc$axi_in_tready,
        dut_dutIfc$axi_in_tvalid;
@@ -2243,29 +2207,6 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // ports of submodule rq_gearbox_sCrosseddReset
   wire rq_gearbox_sCrosseddReset$OUT_RST;
-
-  // ports of submodule rstgen_final_reset
-  wire rstgen_final_reset$RST_OUT;
-
-  // ports of submodule rstgen_inv_clk
-  wire rstgen_inv_clk$CLK_OUT;
-
-  // ports of submodule rstgen_inv_rstgen
-  wire rstgen_inv_rstgen$ASSERT_IN, rstgen_inv_rstgen$OUT_RST;
-
-  // ports of submodule rstgen_inv_rstn
-  wire rstgen_inv_rstn$OUT_RST;
-
-  // ports of submodule rstgen_rstgen
-  wire rstgen_rstgen$ASSERT_IN, rstgen_rstgen$OUT_RST;
-
-  // ports of submodule uclkgen
-  wire uclkgen$CLK_IN,
-       uclkgen$CLK_IN_EN,
-       uclkgen$CLK_OUT,
-       uclkgen$CLK_VAL_OUT,
-       uclkgen$COND_IN,
-       uclkgen$COND_IN_EN;
 
   // ports of submodule user_reset_n
   wire user_reset_n$RESET_OUT;
@@ -2413,10 +2354,6 @@ module mkSVF_Bridge(CLK_user_clk,
        CAN_FIRE_RL_cc_rl_fastclock,
        CAN_FIRE_RL_cc_rl_get_tlps,
        CAN_FIRE_RL_cc_rl_header,
-       CAN_FIRE_RL_clockGenerators_incr_cycle_stamp,
-       CAN_FIRE_RL_clockGenerators_one_to_one_cclock_incr,
-       CAN_FIRE_RL_clockGenerators_stall_one_to_one_cclock,
-       CAN_FIRE_RL_clockGenerators_track_reset,
        CAN_FIRE_RL_connect_data,
        CAN_FIRE_RL_connect_data_1,
        CAN_FIRE_RL_connect_dst_rdy,
@@ -2490,6 +2427,7 @@ module mkSVF_Bridge(CLK_user_clk,
        CAN_FIRE_RL_field_clock_request,
        CAN_FIRE_RL_init_state_track_reset,
        CAN_FIRE_RL_intr_ifc_ctl,
+       CAN_FIRE_RL_isInReset_isResetAssertedUpdate,
        CAN_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb,
        CAN_FIRE_RL_msg_sink_noc_active_execute_outport_acks,
        CAN_FIRE_RL_msg_sink_noc_active_other_process_other_data,
@@ -2545,7 +2483,6 @@ module mkSVF_Bridge(CLK_user_clk,
        CAN_FIRE_RL_rq_rl_fastclock,
        CAN_FIRE_RL_rq_rl_get_tlps,
        CAN_FIRE_RL_rq_rl_header,
-       CAN_FIRE_RL_rstgen_trigger,
        CAN_FIRE_RL_scan_inpipe_credit_index,
        CAN_FIRE_RL_scan_outpipe_data_index,
        CAN_FIRE_RL_scan_output_ports,
@@ -2555,7 +2492,6 @@ module mkSVF_Bridge(CLK_user_clk,
        CAN_FIRE_RL_start_inpipe_credit_request,
        CAN_FIRE_RL_start_outpipe_data_message,
        CAN_FIRE_RL_swap_scemi1_outport_grant,
-       CAN_FIRE_RL_toggle_uclock,
        CAN_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut,
        CAN_FIRE_RL_xcomms_rx_inpipe_complete_reset_sequence,
        CAN_FIRE_RL_xcomms_rx_inpipe_consumer_handle_msg,
@@ -2673,10 +2609,6 @@ module mkSVF_Bridge(CLK_user_clk,
        WILL_FIRE_RL_cc_rl_fastclock,
        WILL_FIRE_RL_cc_rl_get_tlps,
        WILL_FIRE_RL_cc_rl_header,
-       WILL_FIRE_RL_clockGenerators_incr_cycle_stamp,
-       WILL_FIRE_RL_clockGenerators_one_to_one_cclock_incr,
-       WILL_FIRE_RL_clockGenerators_stall_one_to_one_cclock,
-       WILL_FIRE_RL_clockGenerators_track_reset,
        WILL_FIRE_RL_connect_data,
        WILL_FIRE_RL_connect_data_1,
        WILL_FIRE_RL_connect_dst_rdy,
@@ -2750,6 +2682,7 @@ module mkSVF_Bridge(CLK_user_clk,
        WILL_FIRE_RL_field_clock_request,
        WILL_FIRE_RL_init_state_track_reset,
        WILL_FIRE_RL_intr_ifc_ctl,
+       WILL_FIRE_RL_isInReset_isResetAssertedUpdate,
        WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb,
        WILL_FIRE_RL_msg_sink_noc_active_execute_outport_acks,
        WILL_FIRE_RL_msg_sink_noc_active_other_process_other_data,
@@ -2805,7 +2738,6 @@ module mkSVF_Bridge(CLK_user_clk,
        WILL_FIRE_RL_rq_rl_fastclock,
        WILL_FIRE_RL_rq_rl_get_tlps,
        WILL_FIRE_RL_rq_rl_header,
-       WILL_FIRE_RL_rstgen_trigger,
        WILL_FIRE_RL_scan_inpipe_credit_index,
        WILL_FIRE_RL_scan_outpipe_data_index,
        WILL_FIRE_RL_scan_output_ports,
@@ -2815,7 +2747,6 @@ module mkSVF_Bridge(CLK_user_clk,
        WILL_FIRE_RL_start_inpipe_credit_request,
        WILL_FIRE_RL_start_outpipe_data_message,
        WILL_FIRE_RL_swap_scemi1_outport_grant,
-       WILL_FIRE_RL_toggle_uclock,
        WILL_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut,
        WILL_FIRE_RL_xcomms_rx_inpipe_complete_reset_sequence,
        WILL_FIRE_RL_xcomms_rx_inpipe_consumer_handle_msg,
@@ -2966,7 +2897,7 @@ module mkSVF_Bridge(CLK_user_clk,
 		MUX_rc_gearbox_elem_2$_write_1__VAL_2,
 		MUX_rc_gearbox_elem_3$_write_1__VAL_1,
 		MUX_rc_gearbox_elem_3$_write_1__VAL_2;
-  wire [63 : 0] MUX_dut_prb_control_nextSample$write_1__VAL_2;
+  wire [63 : 0] MUX_dut_prb_control_nextSample$write_1__VAL_1;
   wire [32 : 0] MUX_rq_rg_mdw$write_1__VAL_1, MUX_rq_rg_mdw$write_1__VAL_3;
   wire [31 : 0] MUX_dut_prb_control_data_out_beats$_write_1__VAL_3,
 		MUX_rS2OutBytes$write_1__VAL_2,
@@ -2999,7 +2930,7 @@ module mkSVF_Bridge(CLK_user_clk,
 	       MUX_rS1OutMsgSize$write_1__VAL_2,
 	       MUX_rS2OutMsgBytes$write_1__VAL_2;
   wire [5 : 0] MUX_fS1MsgOut_ifc_rwEnqCount$wset_1__VAL_1;
-  wire [4 : 0] MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__VAL_1;
+  wire [4 : 0] MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__VAL_2;
   wire [2 : 0] MUX_rS2NumSaved$write_1__VAL_2,
 	       MUX_rvPrevMsgGrant$write_1__VAL_1;
   wire MUX_cc_gearbox_block0$_write_1__SEL_1,
@@ -3043,7 +2974,7 @@ module mkSVF_Bridge(CLK_user_clk,
        MUX_rSceMi1MsgOut$write_1__SEL_3,
        MUX_rSceMi2MsgIn$write_1__SEL_2,
        MUX_rSceMi2MsgOut$write_1__SEL_3,
-       MUX_rc_gearbox_elem0_status_0$_write_1__SEL_1,
+       MUX_rc_gearbox_elem0_status_1$_write_1__SEL_1,
        MUX_rc_gearbox_elem1_status_0$_write_1__SEL_1,
        MUX_rc_gearbox_elem_0$_write_1__SEL_1,
        MUX_rc_gearbox_write_block$write_1__SEL_1,
@@ -3072,19 +3003,19 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [63 : 0] v___2__h117697;
-  reg [63 : 0] v__h160642;
+  reg [63 : 0] v___2__h117148;
+  reg [63 : 0] v__h160093;
   // synopsys translate_on
 
   // remaining internal signals
-  reg [143 : 0] CASE_b15478_0_xcomms_rx_inpipe_elems_BITS_175__ETC__q8;
+  reg [143 : 0] CASE_b14929_0_xcomms_rx_inpipe_elems_BITS_175__ETC__q8;
   reg [61 : 0] _theResult___snd_address__h34940;
-  reg [31 : 0] CASE_b15478_0_xcomms_rx_inpipe_elems_BITS_31_T_ETC__q9;
+  reg [31 : 0] CASE_b14929_0_xcomms_rx_inpipe_elems_BITS_31_T_ETC__q9;
   reg [15 : 0] CASE_dut_prb_control_ackFifoD_OUT_BITS_31_TO__ETC__q4,
 	       CASE_dut_prb_control_control_in_scemiInportBea_ETC__q10,
 	       CASE_dut_prb_control_enffD_OUT_BITS_18_TO_16__ETC__q11,
 	       CASE_dut_prb_control_prb_strD_OUT_BITS_31_TO__ETC__q5,
-	       IF_dut_prb_control_control_in_dataF_rv_port1___ETC___d1137,
+	       IF_dut_prb_control_control_in_dataF_rv_port1___ETC___d1133,
 	       tlp16_be__h12861,
 	       tlp16_be__h15505,
 	       tlp16_be__h57975;
@@ -3092,93 +3023,93 @@ module mkSVF_Bridge(CLK_user_clk,
   reg [3 : 0] CASE_rq_f_tlps_rv_BITS_126_TO_125_0_0_1_0_2_1__ETC__q1;
   reg [1 : 0] IF_cq_f_cq_rv_port0__read__78_BITS_102_TO_99_8_ETC___d202,
 	      n_keep__h38431;
-  reg CASE_b15478_0_xcomms_rx_inpipe_elems_BIT_176_1_ETC__q7,
-      IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2342,
-      IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2362,
-      IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2389;
-  wire [1967 : 0] _2673200087794695338776412422716808468155371262_ETC___d1513,
-		  xcomms_tx_outpipe_indata_mimo_rwvEnqData_wget__ETC___d1517;
-  wire [1311 : 0] IF_xcomms_tx_outpipe_indata_mimo_rwvEnqData_wh_ETC___d1537,
-		  xcomms_tx_outpipe_indata_mimo_rvData_521_SRL_0_ETC___d1525;
-  wire [255 : 0] enqData__h174618,
-		 enqData__h175619,
-		 enqData__h245102,
-		 enqData__h247061,
-		 enqData__h248185,
-		 enqMask__h174619,
-		 enqMask__h175620,
-		 enqMask__h245103,
-		 enqMask__h247062,
-		 enqMask__h248186,
-		 nextMask__h174613,
-		 nextMask__h174621,
-		 nextMask__h175614,
-		 nextMask__h175622,
-		 nextMask__h245097,
-		 nextMask__h245105,
-		 nextMask__h247056,
-		 nextMask__h247064,
-		 nextMask__h248180,
-		 nextMask__h248188,
-		 nextStorage__h174612,
-		 nextStorage__h174620,
-		 nextStorage__h175613,
-		 nextStorage__h175621,
-		 nextStorage__h245096,
-		 nextStorage__h245104,
-		 nextStorage__h247055,
-		 nextStorage__h247063,
-		 nextStorage__h248179,
-		 nextStorage__h248187,
-		 x__h174677,
-		 x__h174828,
-		 x__h174943,
-		 x__h175678,
-		 x__h175829,
-		 x__h175944,
-		 x__h245161,
-		 x__h247120,
-		 x__h247271,
-		 x__h247386,
-		 x__h248244,
-		 x__h248395,
-		 x__h248510,
-		 y__h174678,
-		 y__h175679,
-		 y__h245162,
-		 y__h247121,
-		 y__h248245;
-  wire [239 : 0] _1766847064367008190252995990204176220188146270_ETC___d1349,
-		 xcomms_rx_inpipe_mimo_rwvEnqData_wget__351_CON_ETC___d1365;
-  wire [207 : 0] IF_xcomms_rx_inpipe_mimo_rwvEnqData_whas__342__ETC___d1383,
-		 xcomms_rx_inpipe_mimo_rvData_369_SRL_0_CONCAT__ETC___d1371;
-  wire [159 : 0] enqData__h177085,
-		 enqMask__h177086,
-		 nextMask__h177080,
-		 nextMask__h177088,
-		 nextStorage__h177079,
-		 nextStorage__h177087,
-		 x__h177144,
-		 x__h177294,
-		 x__h177408,
-		 y__h177145;
+  reg CASE_b14929_0_xcomms_rx_inpipe_elems_BIT_176_1_ETC__q7,
+      IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2322,
+      IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2342,
+      IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2369;
+  wire [1967 : 0] _2673200087794695338776412422716808468155371262_ETC___d1509,
+		  xcomms_tx_outpipe_indata_mimo_rwvEnqData_wget__ETC___d1513;
+  wire [1311 : 0] IF_xcomms_tx_outpipe_indata_mimo_rwvEnqData_wh_ETC___d1533,
+		  xcomms_tx_outpipe_indata_mimo_rvData_517_SRL_0_ETC___d1521;
+  wire [255 : 0] enqData__h173257,
+		 enqData__h174258,
+		 enqData__h243798,
+		 enqData__h245757,
+		 enqData__h246881,
+		 enqMask__h173258,
+		 enqMask__h174259,
+		 enqMask__h243799,
+		 enqMask__h245758,
+		 enqMask__h246882,
+		 nextMask__h173252,
+		 nextMask__h173260,
+		 nextMask__h174253,
+		 nextMask__h174261,
+		 nextMask__h243793,
+		 nextMask__h243801,
+		 nextMask__h245752,
+		 nextMask__h245760,
+		 nextMask__h246876,
+		 nextMask__h246884,
+		 nextStorage__h173251,
+		 nextStorage__h173259,
+		 nextStorage__h174252,
+		 nextStorage__h174260,
+		 nextStorage__h243792,
+		 nextStorage__h243800,
+		 nextStorage__h245751,
+		 nextStorage__h245759,
+		 nextStorage__h246875,
+		 nextStorage__h246883,
+		 x__h173316,
+		 x__h173467,
+		 x__h173582,
+		 x__h174317,
+		 x__h174468,
+		 x__h174583,
+		 x__h243857,
+		 x__h245816,
+		 x__h245967,
+		 x__h246082,
+		 x__h246940,
+		 x__h247091,
+		 x__h247206,
+		 y__h173317,
+		 y__h174318,
+		 y__h243858,
+		 y__h245817,
+		 y__h246941;
+  wire [239 : 0] _1766847064367008190252995990204176220188146270_ETC___d1345,
+		 xcomms_rx_inpipe_mimo_rwvEnqData_wget__347_CON_ETC___d1361;
+  wire [207 : 0] IF_xcomms_rx_inpipe_mimo_rwvEnqData_whas__338__ETC___d1379,
+		 xcomms_rx_inpipe_mimo_rvData_365_SRL_0_CONCAT__ETC___d1367;
+  wire [159 : 0] enqData__h175724,
+		 enqMask__h175725,
+		 nextMask__h175719,
+		 nextMask__h175727,
+		 nextStorage__h175718,
+		 nextStorage__h175726,
+		 x__h175783,
+		 x__h175933,
+		 x__h176047,
+		 y__h175784;
   wire [151 : 0] IF_cq_gearbox_read_block_37_THEN_cq_gearbox_el_ETC___d176;
-  wire [139 : 0] value__h177295, value__h177409;
+  wire [139 : 0] value__h175934, value__h176048;
   wire [127 : 0] tlp16_data__h12862,
 		 tlp16_data__h14254,
 		 tlp16_data__h15506,
 		 tlp16_data__h18154,
 		 tlp16_data__h56500,
 		 tlp16_data__h57976,
-		 value__h174829,
-		 value__h174944,
-		 value__h175830,
-		 value__h175945,
-		 value__h247272,
-		 value__h247387,
-		 value__h248396,
-		 value__h248511;
-  wire [79 : 0] IF_rS1OutMsgIsCont_541_THEN_2_CONCAT_rS1BitsRe_ETC___d2558;
+		 value__h173468,
+		 value__h173583,
+		 value__h174469,
+		 value__h174584,
+		 value__h245968,
+		 value__h246083,
+		 value__h247092,
+		 value__h247207;
+  wire [79 : 0] IF_rS1OutMsgIsCont_521_THEN_2_CONCAT_rS1BitsRe_ETC___d2538;
   wire [75 : 0] IF_cq_gearbox_elem0_status_1__read__5_EQ_cq_ge_ETC___d72,
 		IF_cq_gearbox_elem1_status_1__read__6_EQ_cq_ge_ETC___d79,
 		IF_rc_gearbox_elem0_status_1__read__90_EQ_rc_g_ETC___d727,
@@ -3186,13 +3117,13 @@ module mkSVF_Bridge(CLK_user_clk,
   wire [63 : 0] IF_cq_gearbox_read_block_37_THEN_cq_gearbox_el_ETC___d221,
 		IF_rc_gearbox_read_block_96_THEN_rc_gearbox_el_ETC___d832,
 		IF_rc_gearbox_read_block_96_THEN_rc_gearbox_el_ETC___d842,
-		_0_CONCAT_IF_fS1OutPortAcks_ifc_rwDeqCount_whas_ETC___d1906,
-		_0_CONCAT_IF_xcomms_tx_outpipe_indata_mimo_rwDe_ETC___d1523,
-		_0_CONCAT_fS1OutPortAcks_ifc_rDataCount_916_MIN_ETC___d1919,
-		_0_CONCAT_xcomms_tx_outpipe_elem_count_632_BITS_ETC___d1657,
-		_0_CONCAT_xcomms_tx_outpipe_elem_count_632_PLUS_ETC___d1663,
-		_656_MUL_2_MINUS_0_CONCAT_xcomms_tx_outpipe_ind_ETC___d1511,
-		bs__h323645,
+		_0_CONCAT_IF_fS1OutPortAcks_ifc_rwDeqCount_whas_ETC___d1886,
+		_0_CONCAT_IF_xcomms_tx_outpipe_indata_mimo_rwDe_ETC___d1519,
+		_0_CONCAT_fS1OutPortAcks_ifc_rDataCount_896_MIN_ETC___d1899,
+		_0_CONCAT_xcomms_tx_outpipe_elem_count_628_BITS_ETC___d1653,
+		_0_CONCAT_xcomms_tx_outpipe_elem_count_628_PLUS_ETC___d1659,
+		_656_MUL_2_MINUS_0_CONCAT_xcomms_tx_outpipe_ind_ETC___d1507,
+		bs__h322341,
 		data__h10636,
 		data__h10712,
 		data__h54249,
@@ -3212,62 +3143,61 @@ module mkSVF_Bridge(CLK_user_clk,
 		n_data__h39840,
 		n_data__h41899,
 		n_data__h43299,
-		value__h323766,
-		value__h331819,
-		x__h323804,
-		x__h323839,
-		x__h331855,
-		y__h323805,
-		y__h331854;
+		value__h322462,
+		value__h330515,
+		x__h322500,
+		x__h322535,
+		x__h330551,
+		y__h322501,
+		y__h330550;
   wire [61 : 0] _theResult___snd_address__h34926;
-  wire [34 : 0] IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1673;
-  wire [31 : 0] IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_273_4_ETC___d1442,
-		IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_273_4_ETC___d1475,
-		IF_clockGenerators_one_to_one_cclock_count_812_ETC___d1815,
-		IF_xcomms_tx_outpipe_in_reset_uclk_483_OR_xcom_ETC___d1797,
-		_26_MINUS_b2749__q3,
-		b__h121691,
-		b__h123308,
-		b__h177166,
-		b__h177355,
+  wire [34 : 0] IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1669;
+  wire [31 : 0] IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_269_4_ETC___d1438,
+		IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_269_4_ETC___d1471,
+		IF_xcomms_tx_outpipe_in_reset_uclk_479_OR_xcom_ETC___d1793,
+		_26_MINUS_b2200__q3,
+		b__h121142,
+		b__h122759,
+		b__h175805,
+		b__h175994,
 		b__h23873,
-		b__h323321,
-		b__h92749,
-		value__h319339,
-		x__h108894,
-		x__h174792,
-		x__h174935,
-		x__h175936,
-		x__h245276,
-		x__h245419,
-		x__h247235,
-		x__h247378,
-		x__h248359,
-		x__h248502,
-		x__h270671,
-		x__h274591,
-		x__h278502,
-		x__h330461,
-		x__h92793,
-		y__h323840;
-  wire [19 : 0] value__h214510;
+		b__h322017,
+		b__h92200,
+		value__h318035,
+		x__h108345,
+		x__h173431,
+		x__h173574,
+		x__h174575,
+		x__h243972,
+		x__h244115,
+		x__h245931,
+		x__h246074,
+		x__h247055,
+		x__h247198,
+		x__h269367,
+		x__h273287,
+		x__h277198,
+		x__h329157,
+		x__h92244,
+		y__h322536;
+  wire [19 : 0] value__h213206;
   wire [18 : 0] rS1BitsRem_MINUS_25_SRL_3__q6;
-  wire [15 : 0] IF_xcomms_rx_inpipe_updates_from_ifc_whas__303_ETC___d1306,
-		IF_xcomms_rx_inpipe_updates_from_ifc_whas__303_ETC___d1312,
-		IF_xcomms_rx_inpipe_updates_from_msg_whas__298_ETC___d1301,
-		IF_xcomms_tx_outpipe_add_to_output_buffer_whas_ETC___d1545,
-		IF_xcomms_tx_outpipe_credits_591_ULE_1_789_THE_ETC___d1790,
+  wire [15 : 0] IF_xcomms_rx_inpipe_updates_from_ifc_whas__299_ETC___d1302,
+		IF_xcomms_rx_inpipe_updates_from_ifc_whas__299_ETC___d1308,
+		IF_xcomms_rx_inpipe_updates_from_msg_whas__294_ETC___d1297,
+		IF_xcomms_tx_outpipe_add_to_output_buffer_whas_ETC___d1541,
+		IF_xcomms_tx_outpipe_credits_587_ULE_1_785_THE_ETC___d1786,
 		IF_xcomms_tx_outpipe_noc_buf_bytes_ULT_4_THEN__ETC__q2,
-		IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1629,
-		IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1679,
-		IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1721,
-		IF_xcomms_tx_outpipe_updates_from_msg_whas__60_ETC___d1614,
-		b__h115478,
+		IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1625,
+		IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1675,
+		IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1717,
+		IF_xcomms_tx_outpipe_updates_from_msg_whas__59_ETC___d1610,
+		b__h114929,
 		tlp16_be__h56499,
-		xcomms_rx_inpipe_elems_recvd_297_PLUS_IF_xcomm_ETC___d1302,
-		xcomms_tx_outpipe_credits_591_PLUS_IF_xcomms_t_ETC___d1615,
-		xcomms_tx_outpipe_elem_count_632_PLUS_IF_xcomm_ETC___d1660;
-  wire [13 : 0] _1_SL_IF_fFromBridgeBeat_ifc_rStorage_827_BIT_1_ETC___d2026;
+		xcomms_rx_inpipe_elems_recvd_293_PLUS_IF_xcomm_ETC___d1298,
+		xcomms_tx_outpipe_credits_587_PLUS_IF_xcomms_t_ETC___d1611,
+		xcomms_tx_outpipe_elem_count_628_PLUS_IF_xcomm_ETC___d1656;
+  wire [13 : 0] _1_SL_IF_fFromBridgeBeat_ifc_rStorage_807_BIT_1_ETC___d2006;
   wire [12 : 0] a_bytecount__h23889;
   wire [10 : 0] NOT_cq_gearbox_elem0_status_1__read__5_EQ_cq_g_ETC___d111,
 		NOT_cq_gearbox_elem1_status_1__read__6_EQ_cq_g_ETC___d134,
@@ -3277,49 +3207,49 @@ module mkSVF_Bridge(CLK_user_clk,
 		rq_rg_dwcount_56_MINUS_4___d598,
 		x__h23855;
   wire [9 : 0] IF_cq_f_cq_rv_port0__read__78_BITS_98_TO_88_93_ETC___d211;
-  wire [8 : 0] b__h272179,
-	       b__h276099,
-	       b__h280010,
-	       value__h270636,
-	       value__h274558,
-	       value__h278469;
-  wire [7 : 0] b__h323529,
-	       rS1OutMsgSize_542_MINUS_4___d2543,
-	       value_BITS_23_TO_16___h320632,
-	       value__h323487;
+  wire [8 : 0] b__h270875,
+	       b__h274795,
+	       b__h278706,
+	       value__h269332,
+	       value__h273254,
+	       value__h277165;
+  wire [7 : 0] b__h322225,
+	       rS1OutMsgSize_522_MINUS_4___d2523,
+	       value_BITS_23_TO_16___h319328,
+	       value__h322183;
   wire [6 : 0] tlp16_hit__h12860;
-  wire [5 : 0] b__h174732,
-	       b__h175063,
-	       b__h176064,
-	       b__h245216,
-	       b__h247175,
-	       b__h247506,
-	       b__h248299,
-	       b__h248630,
-	       rS1BitsRem_547_PLUS_IF_rS1OutMsgIsCont_541_THE_ETC___d2552,
-	       value__h174891,
-	       value__h175892,
-	       value__h245375,
-	       value__h247334,
-	       value__h248458,
-	       x__h250043,
-	       x__h256575;
-  wire [4 : 0] b__h177199,
-	       b__h177528,
-	       b__h83695,
-	       value__h108852,
-	       value__h177357,
-	       value__h92750;
-  wire [3 : 0] value__h213281;
-  wire [2 : 0] IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_178_ETC___d2395,
-	       IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2691,
-	       b__h323654,
-	       b__h330583,
-	       value__h241946;
-  wire [1 : 0] IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_178_ETC___d2392,
-	       IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291,
-	       b__h120371,
-	       b__h268364,
+  wire [5 : 0] b__h173371,
+	       b__h173702,
+	       b__h174703,
+	       b__h243912,
+	       b__h245871,
+	       b__h246202,
+	       b__h246995,
+	       b__h247326,
+	       rS1BitsRem_527_PLUS_IF_rS1OutMsgIsCont_521_THE_ETC___d2532,
+	       value__h173530,
+	       value__h174531,
+	       value__h244071,
+	       value__h246030,
+	       value__h247154,
+	       x__h248739,
+	       x__h255271;
+  wire [4 : 0] b__h175838,
+	       b__h176167,
+	       b__h83146,
+	       value__h108303,
+	       value__h175996,
+	       value__h92201;
+  wire [3 : 0] value__h211977;
+  wire [2 : 0] IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_158_ETC___d2375,
+	       IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2671,
+	       b__h322350,
+	       b__h329279,
+	       value__h240642;
+  wire [1 : 0] IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_158_ETC___d2372,
+	       IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271,
+	       b__h119822,
+	       b__h267060,
 	       keep__h31934,
 	       keep__h32029,
 	       keep__h47116,
@@ -3328,8 +3258,8 @@ module mkSVF_Bridge(CLK_user_clk,
 	       n_keep__h28149,
 	       n_keep__h41901,
 	       n_keep__h43301,
-	       value__h121692,
-	       value__h123310,
+	       value__h121143,
+	       value__h122761,
 	       x__h10836,
 	       x__h11189,
 	       x__h24057,
@@ -3346,36 +3276,37 @@ module mkSVF_Bridge(CLK_user_clk,
 	       x__h5462,
 	       x__h55341,
 	       x__h55694;
-  wire IF_IF_xcomms_tx_outpipe_updates_from_ifc_whas__ETC___d1712,
+  wire IF_IF_xcomms_tx_outpipe_updates_from_ifc_whas__ETC___d1708,
        IF_cc_gearbox_read_block_04_THEN_IF_NOT_cc_gea_ETC___d445,
-       IF_dut_prb_control_control_in_got_beat_pw_whas_ETC___d990,
-       IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692,
+       IF_dut_prb_control_control_in_got_beat_pw_whas_ETC___d986,
+       IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672,
        IF_rc_gearbox_read_block_96_THEN_NOT_rc_gearbo_ETC___d885,
        IF_rq_gearbox_read_block_19_THEN_IF_NOT_rq_gea_ETC___d660,
-       IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1652,
-       IF_xcomms_tx_outpipe_updates_from_msg_whas__60_ETC___d1646,
+       IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1648,
+       IF_xcomms_tx_outpipe_updates_from_msg_whas__59_ETC___d1642,
        NOT_cc_gearbox_read_block_04_05_AND_NOT_cc_gea_ETC___d427,
        NOT_cc_gearbox_write_block_05_06_AND_cc_gearbo_ETC___d326,
        NOT_cq_gearbox_read_block_37_38_AND_NOT_cq_gea_ETC___d162,
        NOT_cq_gearbox_write_block_3_4_AND_NOT_NOT_cq__ETC___d60,
-       NOT_dut_prb_control_flag_045_046_AND_NOT_dut_p_ETC___d1047,
-       NOT_dut_prb_control_sampleIntervalV_3_030_CONC_ETC___d1041,
-       NOT_fFromBridgeBeat_ifc_rDataAvail_859_ULT_4_942___d1943,
-       NOT_fFromBridgeBeat_ifc_rDataCount_840_ULT_4_959___d1960,
-       NOT_fFromBridgeBeat_ifc_rStorage_827_BITS_27_T_ETC___d2106,
-       NOT_fS1OutPortAcks_ifc_rDataAvail_937_ULT_2_996___d1997,
-       NOT_fS2MsgOut_ifc_rDataAvail_271_ULT_8_612___d2613,
-       NOT_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677__ETC___d2694,
+       NOT_dut_prb_control_flag_041_042_AND_NOT_dut_p_ETC___d1043,
+       NOT_dut_prb_control_sampleIntervalV_3_026_CONC_ETC___d1037,
+       NOT_fFromBridgeBeat_ifc_rDataAvail_839_ULT_4_922___d1923,
+       NOT_fFromBridgeBeat_ifc_rDataCount_820_ULT_4_939___d1940,
+       NOT_fFromBridgeBeat_ifc_rStorage_807_BITS_27_T_ETC___d2086,
+       NOT_fS1OutPortAcks_ifc_rDataAvail_917_ULT_2_976___d1977,
+       NOT_fS2MsgOut_ifc_rDataAvail_251_ULT_8_592___d2593,
+       NOT_isInReset_isInReset_716___d2732,
+       NOT_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657__ETC___d2674,
        NOT_rc_gearbox_read_block_96_97_AND_NOT_rc_gea_ETC___d821,
        NOT_rc_gearbox_write_block_88_89_AND_NOT_NOT_r_ETC___d715,
        NOT_rq_gearbox_read_block_19_20_AND_NOT_rq_gea_ETC___d642,
        NOT_rq_gearbox_write_block_71_72_AND_rq_gearbo_ETC___d492,
-       NOT_xcomms_tx_outpipe_elem_count_632_EQ_0_633__ETC___d1675,
-       NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1692,
-       NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1699,
-       NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1706,
-       _0_CONCAT_IF_rS2OutBytes_652_ULE_248_653_THEN_r_ETC___d2657,
-       _0_CONCAT_IF_rS2OutMsgBytes_677_ULE_4_678_THEN__ETC___d2684,
+       NOT_xcomms_tx_outpipe_elem_count_628_EQ_0_629__ETC___d1671,
+       NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1688,
+       NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1695,
+       NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1702,
+       _0_CONCAT_IF_rS2OutBytes_632_ULE_248_633_THEN_r_ETC___d2637,
+       _0_CONCAT_IF_rS2OutMsgBytes_657_ULE_4_658_THEN__ETC___d2664,
        _dor1cc_gearbox_block0_status$EN__write,
        _dor1cc_gearbox_block1_status$EN__write,
        _dor1cq_gearbox_elem0_status_0$EN__write,
@@ -3387,9 +3318,9 @@ module mkSVF_Bridge(CLK_user_clk,
        _dor1rc_gearbox_block1_status$EN__write,
        _dor1rq_gearbox_block0_status$EN__write,
        _dor1rq_gearbox_block1_status$EN__write,
-       bridge_is_activated__16_AND_rOtherMsgIn_983_AN_ETC___d2143,
-       bridge_is_activated__16_AND_rSceMi1MsgIn_979_A_ETC___d2000,
-       bridge_is_activated__16_AND_rSceMi2MsgIn_980_1_ETC___d2156,
+       bridge_is_activated__16_AND_rOtherMsgIn_963_AN_ETC___d2123,
+       bridge_is_activated__16_AND_rSceMi1MsgIn_959_A_ETC___d1980,
+       bridge_is_activated__16_AND_rSceMi2MsgIn_960_1_ETC___d2136,
        cc_gearbox_elem0_status_0__read__09_EQ_cc_gear_ETC___d410,
        cc_gearbox_elem0_status_1__read__06_EQ_cc_gear_ETC___d408,
        cc_gearbox_elem1_status_0__read__18_EQ_cc_gear_ETC___d419,
@@ -3399,25 +3330,25 @@ module mkSVF_Bridge(CLK_user_clk,
        cq_gearbox_elem0_status_1__read__5_EQ_cq_gearb_ETC___d37,
        cq_gearbox_elem1_status_0__read__0_EQ_cq_gearb_ETC___d51,
        cq_gearbox_elem1_status_1__read__6_EQ_cq_gearb_ETC___d48,
-       dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1118,
-       dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1141,
-       dut_prb_control_data_out_next_RDY_send__174_AN_ETC___d1211,
-       dut_prb_control_data_out_ok_43_AND_NOT_init_st_ETC___d951,
-       fFromContinueBeat_ifc_rDataCount_178_ULT_4___d2284,
-       fS1MsgOut_ifc_rDataCount_215_ULT_32___d2504,
-       fS1MsgOut_ifc_rDataCount_215_ULT_4___d2286,
-       fS1OutPortAcks_ifc_rDataCount_916_ULT_16___d1976,
-       fS2MsgOut_ifc_rDataCount_252_ULT_32___d2600,
-       fS2MsgOut_ifc_rDataCount_252_ULT_4___d2289,
-       fToContinueBeat_ifc_rDataCount_877_ULT_32___d1955,
-       init_state_cycle_stamp_crossed__038_EQ_dut_prb_ETC___d1040,
-       rInMsgBytes_961_ULE_4___d2004,
-       rOutMsgBytes_281_ULE_4___d2475,
-       rS1BitsRem_547_ULE_32___d2580,
-       rS1OutMsgSize_542_ULE_4___d2582,
-       rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_ULE__ETC___d2681,
-       rSceMi1MsgIn_979_AND_NOT_rSceMi2MsgIn_980_981__ETC___d1987,
-       rSceMi2MsgIn_980_AND_NOT_rSceMi1MsgIn_979_109__ETC___d2112,
+       dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1114,
+       dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1137,
+       dut_prb_control_data_out_next_RDY_send__170_AN_ETC___d1207,
+       dut_prb_control_data_out_ok_39_AND_NOT_init_st_ETC___d947,
+       fFromContinueBeat_ifc_rDataCount_158_ULT_4___d2264,
+       fS1MsgOut_ifc_rDataCount_195_ULT_32___d2484,
+       fS1MsgOut_ifc_rDataCount_195_ULT_4___d2266,
+       fS1OutPortAcks_ifc_rDataCount_896_ULT_16___d1956,
+       fS2MsgOut_ifc_rDataCount_232_ULT_32___d2580,
+       fS2MsgOut_ifc_rDataCount_232_ULT_4___d2269,
+       fToContinueBeat_ifc_rDataCount_857_ULT_32___d1935,
+       init_state_cycle_stamp_crossed__034_EQ_dut_prb_ETC___d1036,
+       rInMsgBytes_941_ULE_4___d1984,
+       rOutMsgBytes_261_ULE_4___d2455,
+       rS1BitsRem_527_ULE_32___d2560,
+       rS1OutMsgSize_522_ULE_4___d2562,
+       rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_ULE__ETC___d2661,
+       rSceMi1MsgIn_959_AND_NOT_rSceMi2MsgIn_960_961__ETC___d1967,
+       rSceMi2MsgIn_960_AND_NOT_rSceMi1MsgIn_959_089__ETC___d2092,
        rc_gearbox_elem0_status_0__read__94_EQ_rc_gear_ETC___d695,
        rc_gearbox_elem0_status_1__read__90_EQ_rc_gear_ETC___d692,
        rc_gearbox_elem1_status_0__read__05_EQ_rc_gear_ETC___d706,
@@ -3430,30 +3361,22 @@ module mkSVF_Bridge(CLK_user_clk,
        rq_gearbox_elem1_status_1__read__30_EQ_rq_gear_ETC___d632,
        rq_rg_dwcount_56_ULE_2___d610,
        rq_rg_dwcount_56_ULE_4___d583,
-       x1__h61611,
-       xcomms_rx_inpipe_elem_count_407_ULT_xcomms_rx__ETC___d1438,
-       xcomms_tx_outpipe_elem_count_632_EQ_0_633_OR_N_ETC___d1644,
-       xcomms_tx_outpipe_elem_count_632_EQ_0_633_OR_N_ETC___d1711,
-       xcomms_tx_outpipe_flushing_619_AND_NOT_xcomms__ETC___d1737,
-       xcomms_tx_outpipe_in_reset_uclk_483_OR_xcomms__ETC___d1775,
-       xcomms_tx_outpipe_indata_mimo_rDataCount_507_U_ETC___d1773,
-       xcomms_tx_outpipe_updates_from_ifc_whas__606_A_ETC___d1622,
-       xcomms_tx_outpipe_updates_from_ifc_whas__606_A_ETC___d1669,
-       xcomms_tx_outpipe_updates_from_msg_whas__602_A_ETC___d1626;
-
-  // oscillator and gates for output clock CLK_axi_clk
-  assign CLK_axi_clk = dut_dutIfc$CLK_uclk ;
-  assign CLK_GATE_axi_clk = 1'b1 ;
-
-  // output resets
-  assign RST_N_axi_rstn = dut_dutIfc$RST_N_urstn ;
+       xcomms_rx_inpipe_elem_count_403_ULT_xcomms_rx__ETC___d1434,
+       xcomms_tx_outpipe_elem_count_628_EQ_0_629_OR_N_ETC___d1640,
+       xcomms_tx_outpipe_elem_count_628_EQ_0_629_OR_N_ETC___d1707,
+       xcomms_tx_outpipe_flushing_615_AND_NOT_xcomms__ETC___d1733,
+       xcomms_tx_outpipe_in_reset_uclk_479_OR_xcomms__ETC___d1771,
+       xcomms_tx_outpipe_indata_mimo_rDataCount_503_U_ETC___d1769,
+       xcomms_tx_outpipe_updates_from_ifc_whas__602_A_ETC___d1618,
+       xcomms_tx_outpipe_updates_from_ifc_whas__602_A_ETC___d1665,
+       xcomms_tx_outpipe_updates_from_msg_whas__598_A_ETC___d1622;
 
   // action method axi_in_m_tvalid
   assign CAN_FIRE_axi_in_m_tvalid = 1'd1 ;
   assign WILL_FIRE_axi_in_m_tvalid = 1'd1 ;
 
   // value method axi_in_m_tready
-  assign axi_in_tready = dut_dutIfc$axi_in_tready ;
+  assign axi_in_tready = dut_dutIfc$axi_in_tready || isInReset_isInReset ;
 
   // value method pcie_in_m_axis_cc_m_tvalid
   assign m_axis_cc_tvalid = _unnamed_$pcie_in_m_axis_cc_tvalid ;
@@ -4116,22 +4039,6 @@ module mkSVF_Bridge(CLK_user_clk,
   SyncReset0 cc_gearbox_sCrosseddReset(.IN_RST(user_reset_n$RESET_OUT),
 				       .OUT_RST(cc_gearbox_sCrosseddReset$OUT_RST));
 
-  // submodule clockGenerators_one_to_one_cclock_pre_negedge_uclk
-  SyncBit05 #(.init(1'd0)) clockGenerators_one_to_one_cclock_pre_negedge_uclk(.sCLK(CLK_aclk),
-									      .dCLK(uclkgen$CLK_OUT),
-									      .sRST(network_status$OUT_RST),
-									      .sD_IN(clockGenerators_one_to_one_cclock_pre_negedge_uclk$sD_IN),
-									      .sEN(clockGenerators_one_to_one_cclock_pre_negedge_uclk$sEN),
-									      .dD_OUT());
-
-  // submodule clockGenerators_one_to_one_cclock_pre_posedge_uclk
-  SyncBit05 #(.init(1'd0)) clockGenerators_one_to_one_cclock_pre_posedge_uclk(.sCLK(CLK_aclk),
-									      .dCLK(uclkgen$CLK_OUT),
-									      .sRST(network_status$OUT_RST),
-									      .sD_IN(clockGenerators_one_to_one_cclock_pre_posedge_uclk$sD_IN),
-									      .sEN(clockGenerators_one_to_one_cclock_pre_posedge_uclk$sEN),
-									      .dD_OUT());
-
   // submodule cq_gearbox_dCombinedReset
   ResetEither cq_gearbox_dCombinedReset(.A_RST(epReset125$OUT_RST),
 					.B_RST(cq_gearbox_dCrossedsReset$OUT_RST),
@@ -4163,8 +4070,8 @@ module mkSVF_Bridge(CLK_user_clk,
 				     .EMPTY_N(cq_in_buf$EMPTY_N));
 
   // submodule dut_dutIfc
-  mkDut dut_dutIfc(.CLK(uclkgen$CLK_OUT),
-		   .RST_N(rstgen_final_reset$RST_OUT),
+  mkDut dut_dutIfc(.CLK(CLK_aclk),
+		   .RST_N(network_status$OUT_RST),
 		   .axi_in_tdata(dut_dutIfc$axi_in_tdata),
 		   .axi_in_tkeep(dut_dutIfc$axi_in_tkeep),
 		   .axi_in_tlast(dut_dutIfc$axi_in_tlast),
@@ -4179,12 +4086,12 @@ module mkSVF_Bridge(CLK_user_clk,
 		   .RDY_comms_link_response_put(dut_dutIfc$RDY_comms_link_response_put),
 		   .CLK_uclk(dut_dutIfc$CLK_uclk),
 		   .CLK_GATE_uclk(),
-		   .RST_N_urstn(dut_dutIfc$RST_N_urstn));
+		   .RST_N_urstn());
 
   // submodule dut_prb_control_ackFifo
   FIFO2 #(.width(32'd32),
-	  .guarded(32'd1)) dut_prb_control_ackFifo(.RST(rstgen_final_reset$RST_OUT),
-						   .CLK(uclkgen$CLK_OUT),
+	  .guarded(32'd1)) dut_prb_control_ackFifo(.RST(network_status$OUT_RST),
+						   .CLK(CLK_aclk),
 						   .D_IN(dut_prb_control_ackFifo$D_IN),
 						   .ENQ(dut_prb_control_ackFifo$ENQ),
 						   .DEQ(dut_prb_control_ackFifo$DEQ),
@@ -4195,7 +4102,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // submodule dut_prb_control_control_in_buffer_empty_sp
   SyncHandshake dut_prb_control_control_in_buffer_empty_sp(.sCLK(CLK_user_clk_half),
-							   .dCLK(uclkgen$CLK_OUT),
+							   .dCLK(CLK_aclk),
 							   .sRST(epReset125$OUT_RST),
 							   .sEN(dut_prb_control_control_in_buffer_empty_sp$sEN),
 							   .sRDY(dut_prb_control_control_in_buffer_empty_sp$sRDY),
@@ -4203,23 +4110,23 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // submodule dut_prb_control_control_in_buffer_full_sp
   SyncHandshake dut_prb_control_control_in_buffer_full_sp(.sCLK(CLK_user_clk_half),
-							  .dCLK(uclkgen$CLK_OUT),
+							  .dCLK(CLK_aclk),
 							  .sRST(epReset125$OUT_RST),
 							  .sEN(dut_prb_control_control_in_buffer_full_sp$sEN),
 							  .sRDY(dut_prb_control_control_in_buffer_full_sp$sRDY),
 							  .dPulse(dut_prb_control_control_in_buffer_full_sp$dPulse));
 
   // submodule dut_prb_control_control_in_ending_reset
-  SyncPulse dut_prb_control_control_in_ending_reset(.sCLK(uclkgen$CLK_OUT),
+  SyncPulse dut_prb_control_control_in_ending_reset(.sCLK(CLK_aclk),
 						    .dCLK(CLK_user_clk_half),
 						    .sRST(dut_prb_control_control_in_nocResetUClock$OUT_RST),
 						    .sEN(dut_prb_control_control_in_ending_reset$sEN),
 						    .dPulse(dut_prb_control_control_in_ending_reset$dPulse));
 
   // submodule dut_prb_control_control_in_next_sp
-  SyncHandshake dut_prb_control_control_in_next_sp(.sCLK(uclkgen$CLK_OUT),
+  SyncHandshake dut_prb_control_control_in_next_sp(.sCLK(CLK_aclk),
 						   .dCLK(CLK_user_clk_half),
-						   .sRST(rstgen_final_reset$RST_OUT),
+						   .sRST(network_status$OUT_RST),
 						   .sEN(dut_prb_control_control_in_next_sp$sEN),
 						   .sRDY(dut_prb_control_control_in_next_sp$sRDY),
 						   .dPulse(dut_prb_control_control_in_next_sp$dPulse));
@@ -4235,22 +4142,22 @@ module mkSVF_Bridge(CLK_user_clk,
   mkSceMiLinkTypeParameter #(.link_type(4'd8)) dut_prb_control_control_in_param_link_type(.not_used());
 
   // submodule dut_prb_control_control_in_starting_reset
-  SyncPulse dut_prb_control_control_in_starting_reset(.sCLK(uclkgen$CLK_OUT),
+  SyncPulse dut_prb_control_control_in_starting_reset(.sCLK(CLK_aclk),
 						      .dCLK(CLK_user_clk_half),
 						      .sRST(dut_prb_control_control_in_nocResetUClock$OUT_RST),
 						      .sEN(dut_prb_control_control_in_starting_reset$sEN),
 						      .dPulse(dut_prb_control_control_in_starting_reset$dPulse));
 
   // submodule dut_prb_control_control_in_wait_sp
-  SyncHandshake dut_prb_control_control_in_wait_sp(.sCLK(uclkgen$CLK_OUT),
+  SyncHandshake dut_prb_control_control_in_wait_sp(.sCLK(CLK_aclk),
 						   .dCLK(CLK_user_clk_half),
-						   .sRST(rstgen_final_reset$RST_OUT),
+						   .sRST(network_status$OUT_RST),
 						   .sEN(dut_prb_control_control_in_wait_sp$sEN),
 						   .sRDY(dut_prb_control_control_in_wait_sp$sRDY),
 						   .dPulse(dut_prb_control_control_in_wait_sp$dPulse));
 
   // submodule dut_prb_control_data_out_ending_reset
-  SyncPulse dut_prb_control_data_out_ending_reset(.sCLK(uclkgen$CLK_OUT),
+  SyncPulse dut_prb_control_data_out_ending_reset(.sCLK(CLK_aclk),
 						  .dCLK(CLK_user_clk_half),
 						  .sRST(dut_prb_control_data_out_nocResetUClock$OUT_RST),
 						  .sEN(dut_prb_control_data_out_ending_reset$sEN),
@@ -4258,16 +4165,16 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // submodule dut_prb_control_data_out_finished
   SyncHandshake dut_prb_control_data_out_finished(.sCLK(CLK_user_clk_half),
-						  .dCLK(uclkgen$CLK_OUT),
+						  .dCLK(CLK_aclk),
 						  .sRST(epReset125$OUT_RST),
 						  .sEN(dut_prb_control_data_out_finished$sEN),
 						  .sRDY(dut_prb_control_data_out_finished$sRDY),
 						  .dPulse(dut_prb_control_data_out_finished$dPulse));
 
   // submodule dut_prb_control_data_out_next
-  SyncHandshake dut_prb_control_data_out_next(.sCLK(uclkgen$CLK_OUT),
+  SyncHandshake dut_prb_control_data_out_next(.sCLK(CLK_aclk),
 					      .dCLK(CLK_user_clk_half),
-					      .sRST(rstgen_final_reset$RST_OUT),
+					      .sRST(network_status$OUT_RST),
 					      .sEN(dut_prb_control_data_out_next$sEN),
 					      .sRDY(dut_prb_control_data_out_next$sRDY),
 					      .dPulse(dut_prb_control_data_out_next$dPulse));
@@ -4283,7 +4190,7 @@ module mkSVF_Bridge(CLK_user_clk,
   mkSceMiLinkTypeParameter #(.link_type(4'd8)) dut_prb_control_data_out_param_link_type(.not_used());
 
   // submodule dut_prb_control_data_out_starting_reset
-  SyncPulse dut_prb_control_data_out_starting_reset(.sCLK(uclkgen$CLK_OUT),
+  SyncPulse dut_prb_control_data_out_starting_reset(.sCLK(CLK_aclk),
 						    .dCLK(CLK_user_clk_half),
 						    .sRST(dut_prb_control_data_out_nocResetUClock$OUT_RST),
 						    .sEN(dut_prb_control_data_out_starting_reset$sEN),
@@ -4297,8 +4204,8 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // submodule dut_prb_control_enff
   FIFO2 #(.width(32'd19),
-	  .guarded(32'd1)) dut_prb_control_enff(.RST(rstgen_final_reset$RST_OUT),
-						.CLK(uclkgen$CLK_OUT),
+	  .guarded(32'd1)) dut_prb_control_enff(.RST(network_status$OUT_RST),
+						.CLK(CLK_aclk),
 						.D_IN(dut_prb_control_enff$D_IN),
 						.ENQ(dut_prb_control_enff$ENQ),
 						.DEQ(dut_prb_control_enff$DEQ),
@@ -4309,8 +4216,8 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // submodule dut_prb_control_prb_str
   FIFO2 #(.width(32'd32),
-	  .guarded(32'd1)) dut_prb_control_prb_str(.RST(rstgen_final_reset$RST_OUT),
-						   .CLK(uclkgen$CLK_OUT),
+	  .guarded(32'd1)) dut_prb_control_prb_str(.RST(network_status$OUT_RST),
+						   .CLK(CLK_aclk),
 						   .D_IN(dut_prb_control_prb_str$D_IN),
 						   .ENQ(dut_prb_control_prb_str$ENQ),
 						   .DEQ(dut_prb_control_prb_str$DEQ),
@@ -4320,8 +4227,8 @@ module mkSVF_Bridge(CLK_user_clk,
 						   .EMPTY_N(dut_prb_control_prb_str$EMPTY_N));
 
   // submodule dut_probeHook
-  ProbeHook dut_probeHook(.UCLK(uclkgen$CLK_OUT),
-			  .URST(rstgen_final_reset$RST_OUT),
+  ProbeHook dut_probeHook(.UCLK(CLK_aclk),
+			  .URST(network_status$OUT_RST),
 			  .CMD(dut_probeHook$CMD),
 			  .ACK(dut_probeHook$ACK),
 			  .CMDEN(dut_probeHook$CMDEN),
@@ -4349,9 +4256,9 @@ module mkSVF_Bridge(CLK_user_clk,
   // submodule init_state_msgFIFO
   SyncFIFO #(.dataWidth(32'd74),
 	     .depth(32'd8),
-	     .indxWidth(32'd3)) init_state_msgFIFO(.sCLK(uclkgen$CLK_OUT),
+	     .indxWidth(32'd3)) init_state_msgFIFO(.sCLK(CLK_aclk),
 						   .dCLK(CLK_user_clk_half),
-						   .sRST(rstgen_final_reset$RST_OUT),
+						   .sRST(network_status$OUT_RST),
 						   .sD_IN(init_state_msgFIFO$sD_IN),
 						   .sENQ(init_state_msgFIFO$sENQ),
 						   .dDEQ(init_state_msgFIFO$dDEQ),
@@ -4416,60 +4323,18 @@ module mkSVF_Bridge(CLK_user_clk,
   SyncReset0 rq_gearbox_sCrosseddReset(.IN_RST(user_reset_n$RESET_OUT),
 				       .OUT_RST(rq_gearbox_sCrosseddReset$OUT_RST));
 
-  // submodule rstgen_final_reset
-  ResetEither rstgen_final_reset(.A_RST(rstgen_inv_rstgen$OUT_RST),
-				 .B_RST(rstgen_rstgen$OUT_RST),
-				 .RST_OUT(rstgen_final_reset$RST_OUT));
-
-  // submodule rstgen_inv_clk
-  ClockInverter rstgen_inv_clk(.CLK_IN(CLK_aclk),
-			       .PREEDGE(),
-			       .CLK_OUT(rstgen_inv_clk$CLK_OUT));
-
-  // submodule rstgen_inv_rstgen
-  MakeResetA #(.RSTDELAY(32'd1),
-	       .init(1'd0)) rstgen_inv_rstgen(.CLK(rstgen_inv_clk$CLK_OUT),
-					      .RST(rstgen_inv_rstn$OUT_RST),
-					      .DST_CLK(uclkgen$CLK_OUT),
-					      .ASSERT_IN(rstgen_inv_rstgen$ASSERT_IN),
-					      .ASSERT_OUT(),
-					      .OUT_RST(rstgen_inv_rstgen$OUT_RST));
-
-  // submodule rstgen_inv_rstn
-  SyncReset0 rstgen_inv_rstn(.IN_RST(network_status$OUT_RST),
-			     .OUT_RST(rstgen_inv_rstn$OUT_RST));
-
-  // submodule rstgen_rstgen
-  MakeReset0 #(.init(1'd0)) rstgen_rstgen(.CLK(CLK_aclk),
-					  .RST(network_status$OUT_RST),
-					  .ASSERT_IN(rstgen_rstgen$ASSERT_IN),
-					  .ASSERT_OUT(),
-					  .OUT_RST(rstgen_rstgen$OUT_RST));
-
-  // submodule uclkgen
-  MakeClock #(.initVal(1'd0), .initGate(1'd1)) uclkgen(.CLK(CLK_aclk),
-						       .RST(network_status$OUT_RST),
-						       .CLK_IN(uclkgen$CLK_IN),
-						       .COND_IN(uclkgen$COND_IN),
-						       .CLK_IN_EN(uclkgen$CLK_IN_EN),
-						       .COND_IN_EN(uclkgen$COND_IN_EN),
-						       .CLK_VAL_OUT(uclkgen$CLK_VAL_OUT),
-						       .COND_OUT(),
-						       .CLK_GATE_OUT(),
-						       .CLK_OUT(uclkgen$CLK_OUT));
-
   // submodule user_reset_n
   ResetInverter user_reset_n(.RESET_IN(RST_N_user_reset),
 			     .RESET_OUT(user_reset_n$RESET_OUT));
 
   // submodule wIsOutOfReset
-  SyncWire #(.width(32'd1)) wIsOutOfReset(.DIN(1'd1),
+  SyncWire #(.width(32'd1)) wIsOutOfReset(.DIN(NOT_isInReset_isInReset_716___d2732),
 					  .DOUT(wIsOutOfReset$DOUT));
 
   // submodule xcomms_rx_inpipe_consume_timer
   Counter #(.width(32'd4),
-	    .init(4'd15)) xcomms_rx_inpipe_consume_timer(.CLK(uclkgen$CLK_OUT),
-							 .RST(rstgen_final_reset$RST_OUT),
+	    .init(4'd15)) xcomms_rx_inpipe_consume_timer(.CLK(CLK_aclk),
+							 .RST(network_status$OUT_RST),
 							 .DATA_A(xcomms_rx_inpipe_consume_timer$DATA_A),
 							 .DATA_B(xcomms_rx_inpipe_consume_timer$DATA_B),
 							 .DATA_C(xcomms_rx_inpipe_consume_timer$DATA_C),
@@ -4481,9 +4346,9 @@ module mkSVF_Bridge(CLK_user_clk,
 							 .Q_OUT(xcomms_rx_inpipe_consume_timer$Q_OUT));
 
   // submodule xcomms_rx_inpipe_credit_fifo
-  SyncFIFO1 #(.dataWidth(32'd17)) xcomms_rx_inpipe_credit_fifo(.sCLK(uclkgen$CLK_OUT),
+  SyncFIFO1 #(.dataWidth(32'd17)) xcomms_rx_inpipe_credit_fifo(.sCLK(CLK_aclk),
 							       .dCLK(CLK_user_clk_half),
-							       .sRST(rstgen_final_reset$RST_OUT),
+							       .sRST(network_status$OUT_RST),
 							       .sD_IN(xcomms_rx_inpipe_credit_fifo$sD_IN),
 							       .sENQ(xcomms_rx_inpipe_credit_fifo$sENQ),
 							       .dDEQ(xcomms_rx_inpipe_credit_fifo$dDEQ),
@@ -4493,8 +4358,8 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // submodule xcomms_rx_inpipe_credits
   Counter #(.width(32'd16),
-	    .init(16'd0)) xcomms_rx_inpipe_credits(.CLK(uclkgen$CLK_OUT),
-						   .RST(rstgen_final_reset$RST_OUT),
+	    .init(16'd0)) xcomms_rx_inpipe_credits(.CLK(CLK_aclk),
+						   .RST(network_status$OUT_RST),
 						   .DATA_A(xcomms_rx_inpipe_credits$DATA_A),
 						   .DATA_B(xcomms_rx_inpipe_credits$DATA_B),
 						   .DATA_C(xcomms_rx_inpipe_credits$DATA_C),
@@ -4509,7 +4374,7 @@ module mkSVF_Bridge(CLK_user_clk,
   SyncFIFO #(.dataWidth(32'd18),
 	     .depth(32'd2),
 	     .indxWidth(32'd1)) xcomms_rx_inpipe_data_info_fifo(.sCLK(CLK_user_clk_half),
-								.dCLK(uclkgen$CLK_OUT),
+								.dCLK(CLK_aclk),
 								.sRST(epReset125$OUT_RST),
 								.sD_IN(xcomms_rx_inpipe_data_info_fifo$sD_IN),
 								.sENQ(xcomms_rx_inpipe_data_info_fifo$sENQ),
@@ -4519,7 +4384,7 @@ module mkSVF_Bridge(CLK_user_clk,
 								.dD_OUT(xcomms_rx_inpipe_data_info_fifo$dD_OUT));
 
   // submodule xcomms_rx_inpipe_ending_reset
-  SyncPulse xcomms_rx_inpipe_ending_reset(.sCLK(uclkgen$CLK_OUT),
+  SyncPulse xcomms_rx_inpipe_ending_reset(.sCLK(CLK_aclk),
 					  .dCLK(CLK_user_clk_half),
 					  .sRST(xcomms_rx_inpipe_nocResetUClock$OUT_RST),
 					  .sEN(xcomms_rx_inpipe_ending_reset$sEN),
@@ -4529,7 +4394,7 @@ module mkSVF_Bridge(CLK_user_clk,
   SyncFIFO #(.dataWidth(32'd177),
 	     .depth(32'd1024),
 	     .indxWidth(32'd10)) xcomms_rx_inpipe_in_fifo(.sCLK(CLK_user_clk_half),
-							  .dCLK(uclkgen$CLK_OUT),
+							  .dCLK(CLK_aclk),
 							  .sRST(epReset125$OUT_RST),
 							  .sD_IN(xcomms_rx_inpipe_in_fifo$sD_IN),
 							  .sENQ(xcomms_rx_inpipe_in_fifo$sENQ),
@@ -4555,7 +4420,7 @@ module mkSVF_Bridge(CLK_user_clk,
   mkSceMiStringParameter #(.n("Fifo")) xcomms_rx_inpipe_param_visibility(.not_used());
 
   // submodule xcomms_rx_inpipe_starting_reset
-  SyncPulse xcomms_rx_inpipe_starting_reset(.sCLK(uclkgen$CLK_OUT),
+  SyncPulse xcomms_rx_inpipe_starting_reset(.sCLK(CLK_aclk),
 					    .dCLK(CLK_user_clk_half),
 					    .sRST(xcomms_rx_inpipe_nocResetUClock$OUT_RST),
 					    .sEN(xcomms_rx_inpipe_starting_reset$sEN),
@@ -4565,8 +4430,8 @@ module mkSVF_Bridge(CLK_user_clk,
   SizedFIFO #(.p1width(32'd176),
 	      .p2depth(32'd4),
 	      .p3cntr_width(32'd2),
-	      .guarded(32'd1)) xcomms_rx_res_fifo_ff(.RST(rstgen_final_reset$RST_OUT),
-						     .CLK(uclkgen$CLK_OUT),
+	      .guarded(32'd1)) xcomms_rx_res_fifo_ff(.RST(network_status$OUT_RST),
+						     .CLK(CLK_aclk),
 						     .D_IN(xcomms_rx_res_fifo_ff$D_IN),
 						     .ENQ(xcomms_rx_res_fifo_ff$ENQ),
 						     .DEQ(xcomms_rx_res_fifo_ff$DEQ),
@@ -4577,8 +4442,8 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // submodule xcomms_tx_outpipe_accumulateTimer
   Counter #(.width(32'd5),
-	    .init(5'd31)) xcomms_tx_outpipe_accumulateTimer(.CLK(uclkgen$CLK_OUT),
-							    .RST(rstgen_final_reset$RST_OUT),
+	    .init(5'd31)) xcomms_tx_outpipe_accumulateTimer(.CLK(CLK_aclk),
+							    .RST(network_status$OUT_RST),
 							    .DATA_A(xcomms_tx_outpipe_accumulateTimer$DATA_A),
 							    .DATA_B(xcomms_tx_outpipe_accumulateTimer$DATA_B),
 							    .DATA_C(xcomms_tx_outpipe_accumulateTimer$DATA_C),
@@ -4605,7 +4470,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // submodule xcomms_tx_outpipe_credit_fifo
   SyncFIFO1 #(.dataWidth(32'd18)) xcomms_tx_outpipe_credit_fifo(.sCLK(CLK_user_clk_half),
-								.dCLK(uclkgen$CLK_OUT),
+								.dCLK(CLK_aclk),
 								.sRST(epReset125$OUT_RST),
 								.sD_IN(xcomms_tx_outpipe_credit_fifo$sD_IN),
 								.sENQ(xcomms_tx_outpipe_credit_fifo$sENQ),
@@ -4617,9 +4482,9 @@ module mkSVF_Bridge(CLK_user_clk,
   // submodule xcomms_tx_outpipe_data_info_fifo
   SyncFIFO #(.dataWidth(32'd35),
 	     .depth(32'd2),
-	     .indxWidth(32'd1)) xcomms_tx_outpipe_data_info_fifo(.sCLK(uclkgen$CLK_OUT),
+	     .indxWidth(32'd1)) xcomms_tx_outpipe_data_info_fifo(.sCLK(CLK_aclk),
 								 .dCLK(CLK_user_clk_half),
-								 .sRST(rstgen_final_reset$RST_OUT),
+								 .sRST(network_status$OUT_RST),
 								 .sD_IN(xcomms_tx_outpipe_data_info_fifo$sD_IN),
 								 .sENQ(xcomms_tx_outpipe_data_info_fifo$sENQ),
 								 .dDEQ(xcomms_tx_outpipe_data_info_fifo$dDEQ),
@@ -4628,7 +4493,7 @@ module mkSVF_Bridge(CLK_user_clk,
 								 .dD_OUT(xcomms_tx_outpipe_data_info_fifo$dD_OUT));
 
   // submodule xcomms_tx_outpipe_ending_reset
-  SyncPulse xcomms_tx_outpipe_ending_reset(.sCLK(uclkgen$CLK_OUT),
+  SyncPulse xcomms_tx_outpipe_ending_reset(.sCLK(CLK_aclk),
 					   .dCLK(CLK_user_clk_half),
 					   .sRST(xcomms_tx_outpipe_nocResetUClock$OUT_RST),
 					   .sEN(xcomms_tx_outpipe_ending_reset$sEN),
@@ -4641,9 +4506,9 @@ module mkSVF_Bridge(CLK_user_clk,
   // submodule xcomms_tx_outpipe_out_fifo
   SyncFIFO #(.dataWidth(32'd656),
 	     .depth(32'd1024),
-	     .indxWidth(32'd10)) xcomms_tx_outpipe_out_fifo(.sCLK(uclkgen$CLK_OUT),
+	     .indxWidth(32'd10)) xcomms_tx_outpipe_out_fifo(.sCLK(CLK_aclk),
 							    .dCLK(CLK_user_clk_half),
-							    .sRST(rstgen_final_reset$RST_OUT),
+							    .sRST(network_status$OUT_RST),
 							    .sD_IN(xcomms_tx_outpipe_out_fifo$sD_IN),
 							    .sENQ(xcomms_tx_outpipe_out_fifo$sENQ),
 							    .dDEQ(xcomms_tx_outpipe_out_fifo$dDEQ),
@@ -4664,7 +4529,7 @@ module mkSVF_Bridge(CLK_user_clk,
   mkSceMiStringParameter #(.n("Fifo")) xcomms_tx_outpipe_param_visibility(.not_used());
 
   // submodule xcomms_tx_outpipe_starting_reset
-  SyncPulse xcomms_tx_outpipe_starting_reset(.sCLK(uclkgen$CLK_OUT),
+  SyncPulse xcomms_tx_outpipe_starting_reset(.sCLK(CLK_aclk),
 					     .dCLK(CLK_user_clk_half),
 					     .sRST(xcomms_tx_outpipe_nocResetUClock$OUT_RST),
 					     .sEN(xcomms_tx_outpipe_starting_reset$sEN),
@@ -4674,8 +4539,8 @@ module mkSVF_Bridge(CLK_user_clk,
   SizedFIFO #(.p1width(32'd656),
 	      .p2depth(32'd4),
 	      .p3cntr_width(32'd2),
-	      .guarded(32'd1)) xcomms_tx_res_fifo_ff(.RST(rstgen_final_reset$RST_OUT),
-						     .CLK(uclkgen$CLK_OUT),
+	      .guarded(32'd1)) xcomms_tx_res_fifo_ff(.RST(network_status$OUT_RST),
+						     .CLK(CLK_aclk),
 						     .D_IN(xcomms_tx_res_fifo_ff$D_IN),
 						     .ENQ(xcomms_tx_res_fifo_ff$ENQ),
 						     .DEQ(xcomms_tx_res_fifo_ff$DEQ),
@@ -4707,10 +4572,6 @@ module mkSVF_Bridge(CLK_user_clk,
   assign WILL_FIRE_RL_reset_scemi_if_network_is_inactive =
 	     CAN_FIRE_RL_reset_scemi_if_network_is_inactive ;
 
-  // rule RL_toggle_uclock
-  assign CAN_FIRE_RL_toggle_uclock = 1'd1 ;
-  assign WILL_FIRE_RL_toggle_uclock = 1'd1 ;
-
   // rule RL_rl_commsOut
   assign CAN_FIRE_RL_rl_commsOut =
 	     dut_dutIfc$RDY_comms_link_request_get &&
@@ -4728,9 +4589,9 @@ module mkSVF_Bridge(CLK_user_clk,
 	     fFromBridgeBeat_ifc_rDataCount != 6'd0 &&
 	     (fFromBridgeBeat_ifc_rStorage[31:26] == 6'b101010 ||
 	      fFromBridgeBeat_ifc_rStorage[31:26] == 6'b101011 ||
-	      fToContinueBeat_ifc_rDataCount_877_ULT_32___d1955) &&
+	      fToContinueBeat_ifc_rDataCount_857_ULT_32___d1935) &&
 	     bridge$is_activated &&
-	     NOT_fFromBridgeBeat_ifc_rDataCount_840_ULT_4_959___d1960 &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_820_ULT_4_939___d1940 &&
 	     rInMsgBytes == 8'd0 ;
   assign WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb =
 	     CAN_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb ;
@@ -4739,16 +4600,16 @@ module mkSVF_Bridge(CLK_user_clk,
   assign CAN_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header =
 	     fFromBridgeBeat_ifc_rDataCount != 6'd0 &&
 	     (fFromBridgeBeat_ifc_rStorage[31:30] != 2'd3 ||
-	      fS1OutPortAcks_ifc_rDataCount_916_ULT_16___d1976) &&
-	     bridge_is_activated__16_AND_rSceMi1MsgIn_979_A_ETC___d2000 ;
+	      fS1OutPortAcks_ifc_rDataCount_896_ULT_16___d1956) &&
+	     bridge_is_activated__16_AND_rSceMi1MsgIn_959_A_ETC___d1980 ;
   assign WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header =
 	     CAN_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header ;
 
   // rule RL_msg_sink_noc_active_scemi1_process_inport_data
   assign CAN_FIRE_RL_msg_sink_noc_active_scemi1_process_inport_data =
 	     fFromBridgeBeat_ifc_rDataCount != 6'd0 && bridge$is_activated &&
-	     rSceMi1MsgIn_979_AND_NOT_rSceMi2MsgIn_980_981__ETC___d1987 &&
-	     NOT_fFromBridgeBeat_ifc_rDataCount_840_ULT_4_959___d1960 &&
+	     rSceMi1MsgIn_959_AND_NOT_rSceMi2MsgIn_960_961__ETC___d1967 &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_820_ULT_4_939___d1940 &&
 	     rS1MsgInIsData &&
 	     !rS1MsgInIsAck &&
 	     dut_prb_control_control_in_remaining ;
@@ -4757,22 +4618,22 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // rule RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb
   assign CAN_FIRE_RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb =
-	     fS1OutPortAcks_ifc_rDataCount_916_ULT_16___d1976 &&
+	     fS1OutPortAcks_ifc_rDataCount_896_ULT_16___d1956 &&
 	     fFromBridgeBeat_ifc_rDataCount != 6'd0 &&
 	     bridge$is_activated &&
-	     rSceMi1MsgIn_979_AND_NOT_rSceMi2MsgIn_980_981__ETC___d1987 &&
-	     NOT_fFromBridgeBeat_ifc_rDataCount_840_ULT_4_959___d1960 &&
+	     rSceMi1MsgIn_959_AND_NOT_rSceMi2MsgIn_960_961__ETC___d1967 &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_820_ULT_4_939___d1940 &&
 	     !rS1MsgInIsData &&
 	     rS1MsgInIsAck &&
-	     NOT_fS1OutPortAcks_ifc_rDataAvail_937_ULT_2_996___d1997 ;
+	     NOT_fS1OutPortAcks_ifc_rDataAvail_917_ULT_2_976___d1977 ;
   assign WILL_FIRE_RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb =
 	     CAN_FIRE_RL_msg_sink_noc_active_scemi1_process_outport_ack_4bpb ;
 
   // rule RL_msg_sink_noc_active_scemi1_disregard_packet
   assign CAN_FIRE_RL_msg_sink_noc_active_scemi1_disregard_packet =
 	     fFromBridgeBeat_ifc_rDataCount != 6'd0 && bridge$is_activated &&
-	     rSceMi1MsgIn_979_AND_NOT_rSceMi2MsgIn_980_981__ETC___d1987 &&
-	     NOT_fFromBridgeBeat_ifc_rDataCount_840_ULT_4_959___d1960 &&
+	     rSceMi1MsgIn_959_AND_NOT_rSceMi2MsgIn_960_961__ETC___d1967 &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_820_ULT_4_939___d1940 &&
 	     !rS1MsgInIsAck &&
 	     !rS1MsgInIsData &&
 	     !rDecodeSceMi ;
@@ -4792,10 +4653,10 @@ module mkSVF_Bridge(CLK_user_clk,
   assign CAN_FIRE_RL_msg_sink_noc_active_scemi2_decode_scemi_header_4bpb =
 	     fFromBridgeBeat_ifc_rDataCount != 6'd0 &&
 	     (!fFromBridgeBeat_ifc_rStorage[31] ||
-	      NOT_fFromBridgeBeat_ifc_rStorage_827_BITS_27_T_ETC___d2106) &&
+	      NOT_fFromBridgeBeat_ifc_rStorage_807_BITS_27_T_ETC___d2086) &&
 	     bridge$is_activated &&
-	     rSceMi2MsgIn_980_AND_NOT_rSceMi1MsgIn_979_109__ETC___d2112 &&
-	     NOT_fFromBridgeBeat_ifc_rDataCount_840_ULT_4_959___d1960 &&
+	     rSceMi2MsgIn_960_AND_NOT_rSceMi1MsgIn_959_089__ETC___d2092 &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_820_ULT_4_939___d1940 &&
 	     rDecodeSceMi &&
 	     !rS2MsgInIsData &&
 	     !rS2MsgInIsCred ;
@@ -4805,8 +4666,8 @@ module mkSVF_Bridge(CLK_user_clk,
   // rule RL_msg_sink_noc_active_scemi2_disregard_packet
   assign CAN_FIRE_RL_msg_sink_noc_active_scemi2_disregard_packet =
 	     fFromBridgeBeat_ifc_rDataCount != 6'd0 && bridge$is_activated &&
-	     rSceMi2MsgIn_980_AND_NOT_rSceMi1MsgIn_979_109__ETC___d2112 &&
-	     NOT_fFromBridgeBeat_ifc_rDataCount_840_ULT_4_959___d1960 &&
+	     rSceMi2MsgIn_960_AND_NOT_rSceMi1MsgIn_959_089__ETC___d2092 &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_820_ULT_4_939___d1940 &&
 	     !rS2MsgInIsData &&
 	     !rS2MsgInIsCred &&
 	     !rDecodeSceMi ;
@@ -4815,9 +4676,9 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // rule RL_msg_sink_noc_active_other_process_other_data
   assign CAN_FIRE_RL_msg_sink_noc_active_other_process_other_data =
-	     fToContinueBeat_ifc_rDataCount_877_ULT_32___d1955 &&
+	     fToContinueBeat_ifc_rDataCount_857_ULT_32___d1935 &&
 	     fFromBridgeBeat_ifc_rDataCount != 6'd0 &&
-	     bridge_is_activated__16_AND_rOtherMsgIn_983_AN_ETC___d2143 ;
+	     bridge_is_activated__16_AND_rOtherMsgIn_963_AN_ETC___d2123 ;
   assign WILL_FIRE_RL_msg_sink_noc_active_other_process_other_data =
 	     CAN_FIRE_RL_msg_sink_noc_active_other_process_other_data ;
 
@@ -4826,7 +4687,7 @@ module mkSVF_Bridge(CLK_user_clk,
 	     fFromBridgeBeat_ifc_rDataCount != 6'd0 &&
 	     !xcomms_rx_inpipe_in_reset_noc &&
 	     xcomms_rx_inpipe_mimo_rDataCount <= 5'd22 &&
-	     bridge_is_activated__16_AND_rSceMi2MsgIn_980_1_ETC___d2156 &&
+	     bridge_is_activated__16_AND_rSceMi2MsgIn_960_1_ETC___d2136 &&
 	     rS2InPipeNum == 12'd0 ;
   assign WILL_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data =
 	     CAN_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ;
@@ -4863,7 +4724,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // rule RL_msg_source_noc_active_inports_send_request_message
   assign CAN_FIRE_RL_msg_source_noc_active_inports_send_request_message =
-	     fS1MsgOut_ifc_rDataCount_215_ULT_32___d2504 &&
+	     fS1MsgOut_ifc_rDataCount_195_ULT_32___d2484 &&
 	     bridge$is_activated &&
 	     rS1MsgOutReqReq &&
 	     rS1MsgOutReqGrant &&
@@ -4879,7 +4740,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // rule RL_msg_source_noc_active_outports_send_data_message_header
   assign CAN_FIRE_RL_msg_source_noc_active_outports_send_data_message_header =
-	     fS1MsgOut_ifc_rDataCount_215_ULT_32___d2504 &&
+	     fS1MsgOut_ifc_rDataCount_195_ULT_32___d2484 &&
 	     bridge$is_activated &&
 	     rS1MsgOutDataReq &&
 	     !rS1MsgOutReqGrant &&
@@ -4890,7 +4751,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // rule RL_msg_source_noc_active_outports_send_data_message_data
   assign CAN_FIRE_RL_msg_source_noc_active_outports_send_data_message_data =
-	     fS1MsgOut_ifc_rDataCount_215_ULT_32___d2504 &&
+	     fS1MsgOut_ifc_rDataCount_195_ULT_32___d2484 &&
 	     bridge$is_activated &&
 	     rS1MsgOutDataReq &&
 	     !rS1MsgOutReqGrant &&
@@ -4932,13 +4793,13 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // rule RL_start_inpipe_credit_request
   assign CAN_FIRE_RL_start_inpipe_credit_request =
-	     fS2MsgOut_ifc_rDataCount_252_ULT_32___d2600 &&
+	     fS2MsgOut_ifc_rDataCount_232_ULT_32___d2580 &&
 	     !xcomms_rx_inpipe_in_reset_noc &&
 	     xcomms_rx_inpipe_credit_fifo$dEMPTY_N &&
 	     rS2InCreditIndex == 12'd0 &&
 	     rS2MsgOutCredGrant &&
 	     !CAN_FIRE_RL_start_outpipe_data_message &&
-	     NOT_fS2MsgOut_ifc_rDataAvail_271_ULT_8_612___d2613 &&
+	     NOT_fS2MsgOut_ifc_rDataAvail_251_ULT_8_592___d2593 &&
 	     bridge$is_activated ;
   assign WILL_FIRE_RL_start_inpipe_credit_request =
 	     CAN_FIRE_RL_start_inpipe_credit_request &&
@@ -4946,9 +4807,9 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // rule RL_scan_inpipe_credit_index
   assign CAN_FIRE_RL_scan_inpipe_credit_index =
-	     NOT_fS2MsgOut_ifc_rDataAvail_271_ULT_8_612___d2613 ;
+	     NOT_fS2MsgOut_ifc_rDataAvail_251_ULT_8_592___d2593 ;
   assign WILL_FIRE_RL_scan_inpipe_credit_index =
-	     NOT_fS2MsgOut_ifc_rDataAvail_271_ULT_8_612___d2613 ;
+	     NOT_fS2MsgOut_ifc_rDataAvail_251_ULT_8_592___d2593 ;
 
   // rule RL_reset_inpipe_when_noc_is_inactive
   assign CAN_FIRE_RL_reset_inpipe_when_noc_is_inactive =
@@ -4959,24 +4820,24 @@ module mkSVF_Bridge(CLK_user_clk,
   // rule RL_scan_outpipe_data_index
   assign CAN_FIRE_RL_scan_outpipe_data_index =
 	     !rS2SendOutDataMsg &&
-	     NOT_fS2MsgOut_ifc_rDataAvail_271_ULT_8_612___d2613 ;
+	     NOT_fS2MsgOut_ifc_rDataAvail_251_ULT_8_592___d2593 ;
   assign WILL_FIRE_RL_scan_outpipe_data_index =
 	     CAN_FIRE_RL_scan_outpipe_data_index &&
 	     !WILL_FIRE_RL_start_outpipe_data_message ;
 
   // rule RL_send_outpipe_data_header
   assign CAN_FIRE_RL_send_outpipe_data_header =
-	     fS2MsgOut_ifc_rDataCount_252_ULT_32___d2600 &&
+	     fS2MsgOut_ifc_rDataCount_232_ULT_32___d2580 &&
 	     rS2SendOutDataMsg &&
 	     rS2SendOutDataHdr &&
 	     !rS2MsgOutCredGrant &&
-	     NOT_fS2MsgOut_ifc_rDataAvail_271_ULT_8_612___d2613 ;
+	     NOT_fS2MsgOut_ifc_rDataAvail_251_ULT_8_592___d2593 ;
   assign WILL_FIRE_RL_send_outpipe_data_header =
 	     CAN_FIRE_RL_send_outpipe_data_header ;
 
   // rule RL_send_outpipe_data_message
   assign CAN_FIRE_RL_send_outpipe_data_message =
-	     NOT_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677__ETC___d2694 &&
+	     NOT_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657__ETC___d2674 &&
 	     rS2SendOutDataMsg &&
 	     !rS2SendOutDataHdr &&
 	     rS2OutDataIndex == 12'd0 &&
@@ -5006,7 +4867,7 @@ module mkSVF_Bridge(CLK_user_clk,
   // rule RL_msg_sink_noc_active_receive_beat_from_bridge
   assign CAN_FIRE_RL_msg_sink_noc_active_receive_beat_from_bridge =
 	     fFromBridgeBeat_ifc_rDataCount < 6'd32 && bridge$is_activated &&
-	     NOT_fFromBridgeBeat_ifc_rDataAvail_859_ULT_4_942___d1943 &&
+	     NOT_fFromBridgeBeat_ifc_rDataAvail_839_ULT_4_922___d1923 &&
 	     bridge$noc_out_src_rdy ;
   assign WILL_FIRE_RL_msg_sink_noc_active_receive_beat_from_bridge =
 	     CAN_FIRE_RL_msg_sink_noc_active_receive_beat_from_bridge ;
@@ -5039,8 +4900,8 @@ module mkSVF_Bridge(CLK_user_clk,
 	     bridge$is_activated &&
 	     CAN_FIRE_RL_msg_source_noc_active_arbitrate_transmit_messages &&
 	     rOutMsgBytes == 8'd0 &&
-	     b__h268364 == 2'd0 &&
-	     !fFromContinueBeat_ifc_rDataCount_178_ULT_4___d2284 ;
+	     b__h267060 == 2'd0 &&
+	     !fFromContinueBeat_ifc_rDataCount_158_ULT_4___d2264 ;
   assign WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other =
 	     CAN_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other ;
 
@@ -5050,8 +4911,8 @@ module mkSVF_Bridge(CLK_user_clk,
 	     bridge$is_activated &&
 	     CAN_FIRE_RL_msg_source_noc_active_arbitrate_transmit_messages &&
 	     rOutMsgBytes == 8'd0 &&
-	     b__h268364 == 2'd1 &&
-	     !fS1MsgOut_ifc_rDataCount_215_ULT_4___d2286 ;
+	     b__h267060 == 2'd1 &&
+	     !fS1MsgOut_ifc_rDataCount_195_ULT_4___d2266 ;
   assign WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 =
 	     CAN_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 ;
 
@@ -5061,8 +4922,8 @@ module mkSVF_Bridge(CLK_user_clk,
 	     bridge$is_activated &&
 	     CAN_FIRE_RL_msg_source_noc_active_arbitrate_transmit_messages &&
 	     rOutMsgBytes == 8'd0 &&
-	     b__h268364 == 2'd2 &&
-	     !fS2MsgOut_ifc_rDataCount_252_ULT_4___d2289 ;
+	     b__h267060 == 2'd2 &&
+	     !fS2MsgOut_ifc_rDataCount_232_ULT_4___d2269 ;
   assign WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 =
 	     CAN_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 ;
 
@@ -5075,7 +4936,7 @@ module mkSVF_Bridge(CLK_user_clk,
 	     !rSceMi1MsgOut &&
 	     !rSceMi2MsgOut &&
 	     rOutMsgBytes != 8'd0 &&
-	     !fFromContinueBeat_ifc_rDataCount_178_ULT_4___d2284 ;
+	     !fFromContinueBeat_ifc_rDataCount_158_ULT_4___d2264 ;
   assign WILL_FIRE_RL_msg_source_noc_active_continue_other =
 	     CAN_FIRE_RL_msg_source_noc_active_continue_other ;
 
@@ -5087,7 +4948,7 @@ module mkSVF_Bridge(CLK_user_clk,
 	     !rSceMi2MsgOut &&
 	     !rOtherMsgOut &&
 	     rOutMsgBytes != 8'd0 &&
-	     !fS1MsgOut_ifc_rDataCount_215_ULT_4___d2286 ;
+	     !fS1MsgOut_ifc_rDataCount_195_ULT_4___d2266 ;
   assign WILL_FIRE_RL_msg_source_noc_active_continue_scemi1 =
 	     CAN_FIRE_RL_msg_source_noc_active_continue_scemi1 ;
 
@@ -5099,7 +4960,7 @@ module mkSVF_Bridge(CLK_user_clk,
 	     !rSceMi1MsgOut &&
 	     !rOtherMsgOut &&
 	     rOutMsgBytes != 8'd0 &&
-	     !fS2MsgOut_ifc_rDataCount_252_ULT_4___d2289 ;
+	     !fS2MsgOut_ifc_rDataCount_232_ULT_4___d2269 ;
   assign WILL_FIRE_RL_msg_source_noc_active_continue_scemi2 =
 	     CAN_FIRE_RL_msg_source_noc_active_continue_scemi2 ;
 
@@ -5381,10 +5242,6 @@ module mkSVF_Bridge(CLK_user_clk,
   assign WILL_FIRE_RL_rc_gearbox_dInReset_pre_isResetAssertedUpdate =
 	     rc_gearbox_dInReset_pre_isInReset ;
 
-  // rule RL_rstgen_trigger
-  assign CAN_FIRE_RL_rstgen_trigger = !rstgen_init ;
-  assign WILL_FIRE_RL_rstgen_trigger = CAN_FIRE_RL_rstgen_trigger ;
-
   // rule RL_init_state_track_reset
   assign CAN_FIRE_RL_init_state_track_reset = 1'd1 ;
   assign WILL_FIRE_RL_init_state_track_reset = 1'd1 ;
@@ -5392,14 +5249,14 @@ module mkSVF_Bridge(CLK_user_clk,
   // rule RL_dut_prb_control_setSample
   assign CAN_FIRE_RL_dut_prb_control_setSample =
 	     dut_prb_control_enff$FULL_N &&
-	     NOT_dut_prb_control_sampleIntervalV_3_030_CONC_ETC___d1041 ;
+	     NOT_dut_prb_control_sampleIntervalV_3_026_CONC_ETC___d1037 ;
   assign WILL_FIRE_RL_dut_prb_control_setSample =
 	     CAN_FIRE_RL_dut_prb_control_setSample ;
 
   // rule RL_dut_prb_control_flagSample
   assign CAN_FIRE_RL_dut_prb_control_flagSample =
-	     NOT_dut_prb_control_flag_045_046_AND_NOT_dut_p_ETC___d1047 &&
-	     init_state_cycle_stamp_crossed__038_EQ_dut_prb_ETC___d1040 ;
+	     NOT_dut_prb_control_flag_041_042_AND_NOT_dut_p_ETC___d1043 &&
+	     init_state_cycle_stamp_crossed__034_EQ_dut_prb_ETC___d1036 ;
   assign WILL_FIRE_RL_dut_prb_control_flagSample =
 	     CAN_FIRE_RL_dut_prb_control_flagSample &&
 	     !WILL_FIRE_RL_dut_prb_control_setSample ;
@@ -5473,7 +5330,7 @@ module mkSVF_Bridge(CLK_user_clk,
   assign CAN_FIRE_RL_dut_prb_control_respondToPing =
 	     dut_prb_control_data_out_next$sRDY &&
 	     init_state_msgFIFO$sFULL_N &&
-	     dut_prb_control_data_out_ok_43_AND_NOT_init_st_ETC___d951 &&
+	     dut_prb_control_data_out_ok_39_AND_NOT_init_st_ETC___d947 &&
 	     dut_prb_control_count == 16'd0 &&
 	     dut_prb_control_pinged ;
   assign WILL_FIRE_RL_dut_prb_control_respondToPing =
@@ -5484,7 +5341,7 @@ module mkSVF_Bridge(CLK_user_clk,
   assign CAN_FIRE_RL_dut_prb_control_sendAck =
 	     dut_prb_control_data_out_next$sRDY &&
 	     init_state_msgFIFO$sFULL_N &&
-	     dut_prb_control_data_out_ok_43_AND_NOT_init_st_ETC___d951 &&
+	     dut_prb_control_data_out_ok_39_AND_NOT_init_st_ETC___d947 &&
 	     dut_prb_control_ackFifo$EMPTY_N &&
 	     dut_prb_control_count == 16'd0 &&
 	     !dut_prb_control_pinged ;
@@ -5540,7 +5397,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // rule RL_dut_prb_control_control_in_update_remaining
   assign CAN_FIRE_RL_dut_prb_control_control_in_update_remaining =
-	     IF_dut_prb_control_control_in_got_beat_pw_whas_ETC___d990 &&
+	     IF_dut_prb_control_control_in_got_beat_pw_whas_ETC___d986 &&
 	     !dut_prb_control_control_in_in_reset_noc &&
 	     (dut_prb_control_control_in_got_beat_pw$whas ||
 	      dut_prb_control_control_in_next_sp$dPulse ||
@@ -5604,7 +5461,7 @@ module mkSVF_Bridge(CLK_user_clk,
 	      3'd6 &&
 	      dut_prb_control_control_in_dataF_rv$port1__read[12:0] ==
 	      13'h1FFF ||
-	      dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1118) ;
+	      dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1114) ;
   assign WILL_FIRE_RL_dut_prb_control_receiveControl =
 	     CAN_FIRE_RL_dut_prb_control_receiveControl &&
 	     !WILL_FIRE_RL_dut_prb_control_receiveTrigger &&
@@ -5647,7 +5504,7 @@ module mkSVF_Bridge(CLK_user_clk,
   assign CAN_FIRE_RL_dut_prb_control_receiveTrigger =
 	     dut_prb_control_data_out_next$sRDY &&
 	     init_state_msgFIFO$sFULL_N &&
-	     dut_prb_control_data_out_ok_43_AND_NOT_init_st_ETC___d951 &&
+	     dut_prb_control_data_out_ok_39_AND_NOT_init_st_ETC___d947 &&
 	     dut_prb_control_enff$FULL_N &&
 	     dut_prb_control_prb_str$EMPTY_N &&
 	     dut_prb_control_count == 16'd0 &&
@@ -5659,7 +5516,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // rule RL_dut_prb_control_receiveFirstData
   assign CAN_FIRE_RL_dut_prb_control_receiveFirstData =
-	     dut_prb_control_data_out_next_RDY_send__174_AN_ETC___d1211 &&
+	     dut_prb_control_data_out_next_RDY_send__170_AN_ETC___d1207 &&
 	     dut_prb_control_count == 16'd0 ;
   assign WILL_FIRE_RL_dut_prb_control_receiveFirstData =
 	     CAN_FIRE_RL_dut_prb_control_receiveFirstData &&
@@ -5669,7 +5526,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // rule RL_dut_prb_control_receiveMoreData
   assign CAN_FIRE_RL_dut_prb_control_receiveMoreData =
-	     dut_prb_control_data_out_next_RDY_send__174_AN_ETC___d1211 &&
+	     dut_prb_control_data_out_next_RDY_send__170_AN_ETC___d1207 &&
 	     dut_prb_control_count != 16'd0 ;
   assign WILL_FIRE_RL_dut_prb_control_receiveMoreData =
 	     CAN_FIRE_RL_dut_prb_control_receiveMoreData ;
@@ -5692,15 +5549,15 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // rule RL_xcomms_rx_inpipe_detect_scemi_reset
   assign CAN_FIRE_RL_xcomms_rx_inpipe_detect_scemi_reset =
-	     CAN_FIRE_RL_xcomms_rx_inpipe_passReset ;
+	     !xcomms_rx_inpipe_reset_uclk_done1 ;
   assign WILL_FIRE_RL_xcomms_rx_inpipe_detect_scemi_reset =
-	     CAN_FIRE_RL_xcomms_rx_inpipe_passReset ;
+	     CAN_FIRE_RL_xcomms_rx_inpipe_detect_scemi_reset ;
 
   // rule RL_xcomms_rx_inpipe_passReset
   assign CAN_FIRE_RL_xcomms_rx_inpipe_passReset =
-	     !xcomms_rx_inpipe_reset_uclk_done1 ;
+	     CAN_FIRE_RL_xcomms_rx_inpipe_detect_scemi_reset ;
   assign WILL_FIRE_RL_xcomms_rx_inpipe_passReset =
-	     CAN_FIRE_RL_xcomms_rx_inpipe_passReset ;
+	     CAN_FIRE_RL_xcomms_rx_inpipe_detect_scemi_reset ;
 
   // rule RL_xcomms_rx_inpipe_consumer_handle_msg
   assign CAN_FIRE_RL_xcomms_rx_inpipe_consumer_handle_msg =
@@ -5782,13 +5639,13 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // rule RL_xcomms_rx_inpipe_mimo_update
   assign CAN_FIRE_RL_xcomms_rx_inpipe_mimo_update =
-	     b__h83695 != 5'd0 || value__h108852 != 5'd0 ;
+	     b__h83146 != 5'd0 || value__h108303 != 5'd0 ;
   assign WILL_FIRE_RL_xcomms_rx_inpipe_mimo_update =
 	     CAN_FIRE_RL_xcomms_rx_inpipe_mimo_update ;
 
   // rule RL_xcomms_rx_connect_res_mkConnectionGetPut
   assign CAN_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut =
-	     IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_273_4_ETC___d1442 !=
+	     IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_269_4_ETC___d1438 !=
 	     32'd0 &&
 	     xcomms_rx_res_fifo_ff$FULL_N ;
   assign WILL_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut =
@@ -5932,7 +5789,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // rule RL_xcomms_tx_connect_res_mkConnectionGetPut
   assign CAN_FIRE_RL_xcomms_tx_connect_res_mkConnectionGetPut =
-	     ((xcomms_tx_outpipe_in_reset_uclk_483_OR_xcomms__ETC___d1775 ||
+	     ((xcomms_tx_outpipe_in_reset_uclk_479_OR_xcomms__ETC___d1771 ||
 	       !xcomms_tx_outpipe_data_info_fifo$sFULL_N) ?
 		32'd0 :
 		{ 16'd0, xcomms_tx_outpipe_credits }) !=
@@ -5943,7 +5800,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // rule RL_xcomms_tx_outpipe_update_output_buffer
   assign CAN_FIRE_RL_xcomms_tx_outpipe_update_output_buffer =
-	     (IF_xcomms_tx_outpipe_add_to_output_buffer_whas_ETC___d1545 ==
+	     (IF_xcomms_tx_outpipe_add_to_output_buffer_whas_ETC___d1541 ==
 	      16'd0 ||
 	      xcomms_tx_outpipe_indata_mimo_rDataCount < 2'd2) &&
 	     !xcomms_tx_outpipe_in_reset_uclk ;
@@ -5952,7 +5809,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // rule RL_xcomms_tx_outpipe_update_producer_state
   assign CAN_FIRE_RL_xcomms_tx_outpipe_update_producer_state =
-	     IF_xcomms_tx_outpipe_updates_from_msg_whas__60_ETC___d1646 &&
+	     IF_xcomms_tx_outpipe_updates_from_msg_whas__59_ETC___d1642 &&
 	     !xcomms_tx_outpipe_in_reset_uclk ;
   assign WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state =
 	     CAN_FIRE_RL_xcomms_tx_outpipe_update_producer_state ;
@@ -5966,27 +5823,10 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // rule RL_xcomms_tx_outpipe_indata_mimo_update
   assign CAN_FIRE_RL_xcomms_tx_outpipe_indata_mimo_update =
-	     b__h120371 != 2'd0 || value__h123310 != 2'd0 ||
+	     b__h119822 != 2'd0 || value__h122761 != 2'd0 ||
 	     CAN_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side ;
   assign WILL_FIRE_RL_xcomms_tx_outpipe_indata_mimo_update =
 	     CAN_FIRE_RL_xcomms_tx_outpipe_indata_mimo_update ;
-
-  // rule RL_clockGenerators_track_reset
-  assign CAN_FIRE_RL_clockGenerators_track_reset = !x1__h61611 ;
-  assign WILL_FIRE_RL_clockGenerators_track_reset =
-	     CAN_FIRE_RL_clockGenerators_track_reset ;
-
-  // rule RL_clockGenerators_stall_one_to_one_cclock
-  assign CAN_FIRE_RL_clockGenerators_stall_one_to_one_cclock = 1'd1 ;
-  assign WILL_FIRE_RL_clockGenerators_stall_one_to_one_cclock = 1'd1 ;
-
-  // rule RL_clockGenerators_incr_cycle_stamp
-  assign CAN_FIRE_RL_clockGenerators_incr_cycle_stamp = 1'b0 ;
-  assign WILL_FIRE_RL_clockGenerators_incr_cycle_stamp = 1'b0 ;
-
-  // rule RL_clockGenerators_one_to_one_cclock_incr
-  assign CAN_FIRE_RL_clockGenerators_one_to_one_cclock_incr = 1'b0 ;
-  assign WILL_FIRE_RL_clockGenerators_one_to_one_cclock_incr = 1'b0 ;
 
   // rule RL_fFromBridgeBeat_ifc_update
   assign CAN_FIRE_RL_fFromBridgeBeat_ifc_update = 1'd1 ;
@@ -6011,6 +5851,10 @@ module mkSVF_Bridge(CLK_user_clk,
   // rule RL_fS2MsgOut_ifc_update
   assign CAN_FIRE_RL_fS2MsgOut_ifc_update = 1'd1 ;
   assign WILL_FIRE_RL_fS2MsgOut_ifc_update = 1'd1 ;
+
+  // rule RL_isInReset_isResetAssertedUpdate
+  assign CAN_FIRE_RL_isInReset_isResetAssertedUpdate = isInReset_isInReset ;
+  assign WILL_FIRE_RL_isInReset_isResetAssertedUpdate = isInReset_isInReset ;
 
   // inputs to muxes for submodule ports
   assign MUX_cc_gearbox_block0$_write_1__SEL_1 =
@@ -6065,7 +5909,7 @@ module mkSVF_Bridge(CLK_user_clk,
 	     32'd0 ;
   assign MUX_dut_prb_control_nextSample$write_1__SEL_2 =
 	     WILL_FIRE_RL_dut_prb_control_receiveControl &&
-	     dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1141 ;
+	     dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1137 ;
   assign MUX_dut_prb_control_pinged$write_1__SEL_3 =
 	     WILL_FIRE_RL_dut_prb_control_receiveControl &&
 	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] != 3'd0 &&
@@ -6082,7 +5926,7 @@ module mkSVF_Bridge(CLK_user_clk,
 	     fFromBridgeBeat_ifc_rStorage[31:30] == 2'd3 ;
   assign MUX_fS2MsgOut_ifc_rwEnqCount$wset_1__SEL_1 =
 	     WILL_FIRE_RL_send_outpipe_data_message &&
-	     !IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692 ;
+	     !IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672 ;
   assign MUX_fToBridgeBeat$enq_1__SEL_1 =
 	     WILL_FIRE_RL_msg_source_noc_active_continue_other ||
 	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other ;
@@ -6119,38 +5963,38 @@ module mkSVF_Bridge(CLK_user_clk,
 	     WILL_FIRE_RL_msg_source_noc_active_continue_other ;
   assign MUX_rS1BitsRem$write_1__SEL_1 =
 	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
-	     (!rS1BitsRem_547_ULE_32___d2580 ||
-	      !rS1OutMsgSize_542_ULE_4___d2582) ;
+	     (!rS1BitsRem_527_ULE_32___d2560 ||
+	      !rS1OutMsgSize_522_ULE_4___d2562) ;
   assign MUX_rS1MsgInIsAck$write_1__SEL_1 =
 	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header &&
 	     (fFromBridgeBeat_ifc_rStorage[31:30] == 2'd0 ||
 	      fFromBridgeBeat_ifc_rStorage[31:30] == 2'd3) ;
   assign MUX_rS1MsgOutDataReq$write_1__SEL_1 =
 	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
-	     rS1OutMsgSize_542_ULE_4___d2582 &&
-	     rS1BitsRem_547_ULE_32___d2580 ;
+	     rS1OutMsgSize_522_ULE_4___d2562 &&
+	     rS1BitsRem_527_ULE_32___d2560 ;
   assign MUX_rS1MsgOutReqReq$write_1__SEL_1 =
 	     WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message ||
 	     WILL_FIRE_RL_msg_source_noc_inactive ;
   assign MUX_rS1OutDataHeader$write_1__SEL_1 =
 	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
-	     rS1OutMsgSize_542_ULE_4___d2582 &&
-	     !rS1BitsRem_547_ULE_32___d2580 ;
+	     rS1OutMsgSize_522_ULE_4___d2562 &&
+	     !rS1BitsRem_527_ULE_32___d2560 ;
   assign MUX_rS2MsgOutCredGrant$write_1__SEL_2 =
 	     WILL_FIRE_RL_send_outpipe_data_message &&
-	     !IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692 &&
-	     _0_CONCAT_IF_rS2OutMsgBytes_677_ULE_4_678_THEN__ETC___d2684 &&
+	     !IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672 &&
+	     _0_CONCAT_IF_rS2OutMsgBytes_657_ULE_4_658_THEN__ETC___d2664 &&
 	     rS2OutBytes == 32'd0 ;
   assign MUX_rS2MsgOutCredGrant$write_1__SEL_3 =
 	     WILL_FIRE_RL_send_outpipe_data_header &&
-	     value__h319339[7:0] == 8'd0 ;
+	     value__h318035[7:0] == 8'd0 ;
   assign MUX_rS2OutBytes$write_1__SEL_2 =
 	     WILL_FIRE_RL_send_outpipe_data_header &&
-	     value__h319339[7:0] != 8'd0 ;
+	     value__h318035[7:0] != 8'd0 ;
   assign MUX_rS2SendOutDataHdr$write_1__SEL_2 =
 	     WILL_FIRE_RL_send_outpipe_data_message &&
-	     !IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692 &&
-	     _0_CONCAT_IF_rS2OutMsgBytes_677_ULE_4_678_THEN__ETC___d2684 &&
+	     !IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672 &&
+	     _0_CONCAT_IF_rS2OutMsgBytes_657_ULE_4_658_THEN__ETC___d2664 &&
 	     rS2OutBytes != 32'd0 ;
   assign MUX_rSceMi1MsgIn$write_1__SEL_2 =
 	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_disregard_packet ||
@@ -6169,7 +6013,7 @@ module mkSVF_Bridge(CLK_user_clk,
 	     WILL_FIRE_RL_msg_source_noc_inactive ||
 	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 ||
 	     WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other ;
-  assign MUX_rc_gearbox_elem0_status_0$_write_1__SEL_1 =
+  assign MUX_rc_gearbox_elem0_status_1$_write_1__SEL_1 =
 	     WILL_FIRE_RL_rc_rl_g_to_gearbox_pad_odd_tail &&
 	     !rc_gearbox_write_block ;
   assign MUX_rc_gearbox_elem1_status_0$_write_1__SEL_1 =
@@ -6211,7 +6055,7 @@ module mkSVF_Bridge(CLK_user_clk,
 	     WILL_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut &&
 	     xcomms_rx_inpipe_reset_uclk_done2 &&
 	     (xcomms_rx_inpipe_elem_count == 16'd1 ||
-	      !xcomms_rx_inpipe_elem_count_407_ULT_xcomms_rx__ETC___d1438) ;
+	      !xcomms_rx_inpipe_elem_count_403_ULT_xcomms_rx__ETC___d1434) ;
   assign MUX_xcomms_rx_inpipe_send_credit_request$write_1__SEL_1 =
 	     xcomms_rx_inpipe_reset_uclk_done2 &&
 	     (CAN_FIRE_RL_xcomms_rx_inpipe_consumer_handle_msg &&
@@ -6226,10 +6070,10 @@ module mkSVF_Bridge(CLK_user_clk,
 	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state &&
 	     (CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits &&
 	      xcomms_tx_outpipe_updates_from_msg$wget[1] ||
-	      xcomms_tx_outpipe_updates_from_ifc_whas__606_A_ETC___d1622 ||
+	      xcomms_tx_outpipe_updates_from_ifc_whas__602_A_ETC___d1618 ||
 	      xcomms_tx_outpipe_add_to_output_buffer$whas &&
 	      xcomms_tx_outpipe_updates_from_ifc$wget[0] ||
-	      NOT_xcomms_tx_outpipe_elem_count_632_EQ_0_633__ETC___d1675) ;
+	      NOT_xcomms_tx_outpipe_elem_count_628_EQ_0_629__ETC___d1671) ;
   assign MUX_xcomms_tx_outpipe_nocAutoFlush$write_1__SEL_1 =
 	     WILL_FIRE_RL_xcomms_tx_outpipe_nocHandleCreditMsg &&
 	     xcomms_tx_outpipe_creditMsg$wget[0] ;
@@ -6367,14 +6211,14 @@ module mkSVF_Bridge(CLK_user_clk,
 	      dut_prb_control_control_in_dataF_rv$port1__read[9:0] ==
 	      10'd1023) ?
 	       19'd221178 :
-	       { IF_dut_prb_control_control_in_dataF_rv_port1___ETC___d1137,
+	       { IF_dut_prb_control_control_in_dataF_rv_port1___ETC___d1133,
 		 dut_prb_control_control_in_dataF_rv$port1__read[16] ?
 		   3'd2 :
 		   3'd1 } ;
   assign MUX_dut_prb_control_enff$enq_1__VAL_2 =
 	     { CASE_dut_prb_control_prb_strD_OUT_BITS_31_TO__ETC__q5,
 	       dut_prb_control_prb_str$D_OUT[2:0] } ;
-  assign MUX_dut_prb_control_nextSample$write_1__VAL_2 =
+  assign MUX_dut_prb_control_nextSample$write_1__VAL_1 =
 	     init_state_cycle_stamp +
 	     { 32'd0,
 	       dut_prb_control_sampleIntervalV_3,
@@ -6388,7 +6232,7 @@ module mkSVF_Bridge(CLK_user_clk,
   assign MUX_fS1MsgOut_ifc_rwEnqData$wset_1__VAL_2 =
 	     { 96'd0, dut_prb_control_data_out_beats } ;
   assign MUX_fS1MsgOut_ifc_rwEnqData$wset_1__VAL_3 =
-	     { IF_rS1OutMsgIsCont_541_THEN_2_CONCAT_rS1BitsRe_ETC___d2558,
+	     { IF_rS1OutMsgIsCont_521_THEN_2_CONCAT_rS1BitsRe_ETC___d2538,
 	       rS1BitsRem[5:0],
 	       rS1OutPort,
 	       8'd168,
@@ -6398,55 +6242,55 @@ module mkSVF_Bridge(CLK_user_clk,
 	     rS1OutMsgIsCont ?
 	       128'h0000000000000000FFFFFFFFFFFFFFFF :
 	       128'hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF ;
-  assign MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__VAL_1 =
-	     { 1'd0, value__h213281 } ;
+  assign MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__VAL_2 =
+	     { 1'd0, value__h211977 } ;
   assign MUX_fS1OutPortAcks_ifc_rwEnqData$wset_1__VAL_1 =
-	     { 120'd0, value__h214510 } ;
+	     { 120'd0, value__h213206 } ;
   assign MUX_fS1OutPortAcks_ifc_rwEnqMask$wset_1__VAL_1 =
-	     { _1_SL_IF_fFromBridgeBeat_ifc_rStorage_827_BIT_1_ETC___d2026[13] ?
+	     { _1_SL_IF_fFromBridgeBeat_ifc_rStorage_807_BIT_1_ETC___d2006[13] ?
 		 10'd1023 :
 		 10'd0,
-	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_827_BIT_1_ETC___d2026[12] ?
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_807_BIT_1_ETC___d2006[12] ?
 		 10'd1023 :
 		 10'd0,
-	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_827_BIT_1_ETC___d2026[11] ?
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_807_BIT_1_ETC___d2006[11] ?
 		 10'd1023 :
 		 10'd0,
-	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_827_BIT_1_ETC___d2026[10] ?
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_807_BIT_1_ETC___d2006[10] ?
 		 10'd1023 :
 		 10'd0,
-	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_827_BIT_1_ETC___d2026[9] ?
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_807_BIT_1_ETC___d2006[9] ?
 		 10'd1023 :
 		 10'd0,
-	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_827_BIT_1_ETC___d2026[8] ?
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_807_BIT_1_ETC___d2006[8] ?
 		 10'd1023 :
 		 10'd0,
-	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_827_BIT_1_ETC___d2026[7] ?
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_807_BIT_1_ETC___d2006[7] ?
 		 10'd1023 :
 		 10'd0,
-	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_827_BIT_1_ETC___d2026[6] ?
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_807_BIT_1_ETC___d2006[6] ?
 		 10'd1023 :
 		 10'd0,
-	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_827_BIT_1_ETC___d2026[5] ?
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_807_BIT_1_ETC___d2006[5] ?
 		 10'd1023 :
 		 10'd0,
-	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_827_BIT_1_ETC___d2026[4] ?
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_807_BIT_1_ETC___d2006[4] ?
 		 10'd1023 :
 		 10'd0,
-	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_827_BIT_1_ETC___d2026[3] ?
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_807_BIT_1_ETC___d2006[3] ?
 		 10'd1023 :
 		 10'd0,
-	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_827_BIT_1_ETC___d2026[2] ?
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_807_BIT_1_ETC___d2006[2] ?
 		 10'd1023 :
 		 10'd0,
-	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_827_BIT_1_ETC___d2026[1] ?
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_807_BIT_1_ETC___d2006[1] ?
 		 10'd1023 :
 		 10'd0,
-	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_827_BIT_1_ETC___d2026[0] ?
+	       _1_SL_IF_fFromBridgeBeat_ifc_rStorage_807_BIT_1_ETC___d2006[0] ?
 		 10'd1023 :
 		 10'd0 } ;
   assign MUX_fS2MsgOut_ifc_rwEnqData$wset_1__VAL_1 =
-	     { 96'd0, value__h331819[31:0] } ;
+	     { 96'd0, value__h330515[31:0] } ;
   assign MUX_fS2MsgOut_ifc_rwEnqData$wset_1__VAL_2 =
 	     { 65'd0,
 	       xcomms_rx_inpipe_credit_fifo$dD_OUT[0],
@@ -6456,15 +6300,15 @@ module mkSVF_Bridge(CLK_user_clk,
 	       32'hAC040100 } ;
   assign MUX_fS2MsgOut_ifc_rwEnqData$wset_1__VAL_3 =
 	     { 65'd1,
-	       _0_CONCAT_IF_rS2OutBytes_652_ULE_248_653_THEN_r_ETC___d2657 &&
+	       _0_CONCAT_IF_rS2OutBytes_632_ULE_248_633_THEN_r_ETC___d2637 &&
 	       rS2OutDataOverflow,
-	       _0_CONCAT_IF_rS2OutBytes_652_ULE_248_653_THEN_r_ETC___d2657 &&
+	       _0_CONCAT_IF_rS2OutBytes_632_ULE_248_633_THEN_r_ETC___d2637 &&
 	       rS2OutDataFlush,
-	       _0_CONCAT_IF_rS2OutBytes_652_ULE_248_653_THEN_r_ETC___d2657 &&
+	       _0_CONCAT_IF_rS2OutBytes_632_ULE_248_633_THEN_r_ETC___d2637 &&
 	       rS2OutDataEOM,
 	       rS2OutDataIndex,
 	       24'd172,
-	       value_BITS_23_TO_16___h320632,
+	       value_BITS_23_TO_16___h319328,
 	       16'd256 } ;
   assign MUX_fToContinueBeat_ifc_rwEnqData$wset_1__VAL_1 =
 	     { 96'd0, fFromBridgeBeat_ifc_rStorage[31:0] } ;
@@ -6472,28 +6316,28 @@ module mkSVF_Bridge(CLK_user_clk,
 	     lrS1PendingRequests ||
 	     dut_prb_control_control_in_next_sp$dPulse ;
   assign MUX_rInMsgBytes$write_1__VAL_2 =
-	     rInMsgBytes_961_ULE_4___d2004 ? 8'd0 : rInMsgBytes - 8'd4 ;
+	     rInMsgBytes_941_ULE_4___d1984 ? 8'd0 : rInMsgBytes - 8'd4 ;
   assign MUX_rOtherMsgIn$write_1__VAL_2 =
 	     fFromBridgeBeat_ifc_rStorage[31:26] != 6'b101010 &&
 	     fFromBridgeBeat_ifc_rStorage[31:26] != 6'b101011 ;
   assign MUX_rOutMsgBytes$write_1__VAL_4 =
-	     rOutMsgBytes_281_ULE_4___d2475 ? 8'd0 : rOutMsgBytes - 8'd4 ;
+	     rOutMsgBytes_261_ULE_4___d2455 ? 8'd0 : rOutMsgBytes - 8'd4 ;
   assign MUX_rS1BitsRem$write_1__VAL_1 = rS1BitsRem - 19'd32 ;
   assign MUX_rS1MsgInIsAck$write_1__VAL_1 =
 	     fFromBridgeBeat_ifc_rStorage[31:30] != 2'd0 &&
-	     !rInMsgBytes_961_ULE_4___d2004 ;
+	     !rInMsgBytes_941_ULE_4___d1984 ;
   assign MUX_rS1MsgInIsData$write_1__VAL_1 =
 	     fFromBridgeBeat_ifc_rStorage[31:30] == 2'd0 &&
-	     !rInMsgBytes_961_ULE_4___d2004 ;
+	     !rInMsgBytes_941_ULE_4___d1984 ;
   assign MUX_rS1OutMsgSize$write_1__VAL_1 =
-	     rS1OutMsgSize_542_ULE_4___d2582 ?
+	     rS1OutMsgSize_522_ULE_4___d2562 ?
 	       ((rS1BitsRem < 19'd2016) ?
 		  8'd4 + rS1BitsRem_MINUS_25_SRL_3__q6[7:0] :
 		  8'd252) :
-	       rS1OutMsgSize_542_MINUS_4___d2543 ;
+	       rS1OutMsgSize_522_MINUS_4___d2523 ;
   assign MUX_rS1OutMsgSize$write_1__VAL_2 =
 	     rS1OutMsgIsCont ?
-	       rS1OutMsgSize_542_MINUS_4___d2543 :
+	       rS1OutMsgSize_522_MINUS_4___d2523 :
 	       rS1OutMsgSize - 8'd12 ;
   assign MUX_rS2InCreditIndex$write_1__VAL_2 =
 	     (rS2InCreditIndex == 12'd0) ?
@@ -6501,21 +6345,21 @@ module mkSVF_Bridge(CLK_user_clk,
 	       rS2InCreditIndex + 12'd1 ;
   assign MUX_rS2MsgInIsData$write_1__VAL_2 =
 	     fFromBridgeBeat_ifc_rStorage[31] &&
-	     !rInMsgBytes_961_ULE_4___d2004 ;
+	     !rInMsgBytes_941_ULE_4___d1984 ;
   assign MUX_rS2NumSaved$write_1__VAL_2 =
-	     IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692 ?
-	       IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2691 :
-	       b__h330583 ;
-  assign MUX_rS2OutBytes$write_1__VAL_2 = rS2OutBytes - b__h323321 ;
+	     IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672 ?
+	       IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2671 :
+	       b__h329279 ;
+  assign MUX_rS2OutBytes$write_1__VAL_2 = rS2OutBytes - b__h322017 ;
   assign MUX_rS2OutDataIndex$write_1__VAL_3 =
 	     (rS2OutDataIndex == 12'd0) ?
 	       rS2OutDataIndex :
 	       rS2OutDataIndex + 12'd1 ;
-  assign MUX_rS2OutMsgBytes$write_1__VAL_2 = rS2OutMsgBytes - b__h323529 ;
+  assign MUX_rS2OutMsgBytes$write_1__VAL_2 = rS2OutMsgBytes - b__h322225 ;
   assign MUX_rS2SavedBytes$write_1__VAL_2 =
-	     IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692 ?
-	       bs__h323645[31:0] :
-	       value__h323766[31:0] ;
+	     IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672 ?
+	       bs__h322341[31:0] :
+	       value__h322462[31:0] ;
   assign MUX_rc_gearbox_elem_0$_write_1__VAL_1 =
 	     rc_gearbox_write_block ?
 	       rc_gearbox_elem_0 :
@@ -6650,55 +6494,55 @@ module mkSVF_Bridge(CLK_user_clk,
 	       rq_f_tlps_rv[23:16],
 	       rq_f_tlps_rv[31:24] } ;
   assign MUX_rvPrevMsgGrant$write_1__VAL_1 =
-	     (IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291 !=
+	     (IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271 !=
 	      2'd0 &&
-	      IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2342) ?
+	      IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2322) ?
 	       3'd1 :
-	       IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_178_ETC___d2395 ;
+	       IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_158_ETC___d2375 ;
   assign MUX_xcomms_rx_inpipe_ecount$write_1__VAL_1 =
 	     xcomms_rx_inpipe_ecount - 16'd1 ;
   assign MUX_xcomms_rx_inpipe_elem_count$write_1__VAL_1 =
 	     (xcomms_rx_inpipe_elem_count -
 	      (MUX_xcomms_rx_inpipe_elems$write_1__SEL_2 ?
-		 b__h115478 :
+		 b__h114929 :
 		 16'd0)) +
 	     (CAN_FIRE_RL_xcomms_rx_inpipe_move_elem ? 16'd1 : 16'd0) ;
   assign MUX_xcomms_rx_inpipe_elems$write_1__VAL_2 =
-	     { b__h115478 <= 16'd1 &&
-	       CASE_b15478_0_xcomms_rx_inpipe_elems_BIT_176_1_ETC__q7,
-	       CASE_b15478_0_xcomms_rx_inpipe_elems_BITS_175__ETC__q8,
-	       CASE_b15478_0_xcomms_rx_inpipe_elems_BITS_31_T_ETC__q9 } ;
+	     { b__h114929 <= 16'd1 &&
+	       CASE_b14929_0_xcomms_rx_inpipe_elems_BIT_176_1_ETC__q7,
+	       CASE_b14929_0_xcomms_rx_inpipe_elems_BITS_175__ETC__q8,
+	       CASE_b14929_0_xcomms_rx_inpipe_elems_BITS_31_T_ETC__q9 } ;
   assign MUX_xcomms_rx_inpipe_elems_recvd$write_1__VAL_1 =
-	     xcomms_rx_inpipe_elems_recvd_297_PLUS_IF_xcomm_ETC___d1302 -
-	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__303_ETC___d1306 ;
+	     xcomms_rx_inpipe_elems_recvd_293_PLUS_IF_xcomm_ETC___d1298 -
+	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__299_ETC___d1302 ;
   assign MUX_xcomms_rx_inpipe_underflow$write_1__VAL_1 =
 	     xcomms_rx_inpipe_underflow &&
-	     IF_xcomms_rx_inpipe_updates_from_msg_whas__298_ETC___d1301 ==
+	     IF_xcomms_rx_inpipe_updates_from_msg_whas__294_ETC___d1297 ==
 	     16'd0 &&
-	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__303_ETC___d1312 ==
+	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__299_ETC___d1308 ==
 	     16'd0 ||
-	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__303_ETC___d1306 !=
-	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__303_ETC___d1312 &&
-	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__303_ETC___d1306 ==
-	     xcomms_rx_inpipe_elems_recvd_297_PLUS_IF_xcomm_ETC___d1302 ;
+	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__299_ETC___d1302 !=
+	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__299_ETC___d1308 &&
+	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__299_ETC___d1302 ==
+	     xcomms_rx_inpipe_elems_recvd_293_PLUS_IF_xcomm_ETC___d1298 ;
   assign MUX_xcomms_tx_outpipe_active$write_1__VAL_1 =
 	     (xcomms_tx_outpipe_active ||
-	      IF_xcomms_tx_outpipe_updates_from_msg_whas__60_ETC___d1614 !=
+	      IF_xcomms_tx_outpipe_updates_from_msg_whas__59_ETC___d1610 !=
 	      16'd0) &&
 	     (!xcomms_tx_outpipe_add_to_output_buffer$whas ||
 	      !xcomms_tx_outpipe_updates_from_ifc$wget[3]) ;
   assign MUX_xcomms_tx_outpipe_credits$write_1__VAL_1 =
-	     xcomms_tx_outpipe_credits_591_PLUS_IF_xcomms_t_ETC___d1615 -
-	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1629 ;
+	     xcomms_tx_outpipe_credits_587_PLUS_IF_xcomms_t_ETC___d1611 -
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1625 ;
   assign MUX_xcomms_tx_outpipe_elem_count$write_1__VAL_1 =
 	     (CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits &&
 	      xcomms_tx_outpipe_updates_from_msg$wget[1]) ?
-	       IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1629 :
-	       IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1679 ;
+	       IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1625 :
+	       IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1675 ;
   assign MUX_xcomms_tx_outpipe_flushing$write_1__VAL_1 =
-	     xcomms_tx_outpipe_flushing_619_AND_NOT_xcomms__ETC___d1737 ||
+	     xcomms_tx_outpipe_flushing_615_AND_NOT_xcomms__ETC___d1733 ||
 	     xcomms_tx_outpipe_flush_requested &&
-	     xcomms_tx_outpipe_credits_591_PLUS_IF_xcomms_t_ETC___d1615 !=
+	     xcomms_tx_outpipe_credits_587_PLUS_IF_xcomms_t_ETC___d1611 !=
 	     16'd1024 &&
 	     !xcomms_tx_outpipe_flushing ;
   assign MUX_xcomms_tx_outpipe_nocCredits$write_1__VAL_1 =
@@ -6714,10 +6558,10 @@ module mkSVF_Bridge(CLK_user_clk,
 	     xcomms_tx_outpipe_overflow &&
 	     (!CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits ||
 	      !xcomms_tx_outpipe_updates_from_msg$wget[0]) ||
-	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1721 !=
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1717 !=
 	     16'd0 &&
-	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1629 !=
-	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1721 ;
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1625 !=
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1717 ;
   assign MUX_xcomms_tx_outpipe_pending_recv$write_1__VAL_1 =
 	     (xcomms_tx_outpipe_pending_recv ||
 	      CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits &&
@@ -6727,7 +6571,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // probes
   assign dut_prb_control_data_out_okToSend$PROBE =
-	     dut_prb_control_data_out_ok_43_AND_NOT_init_st_ETC___d951 ;
+	     dut_prb_control_data_out_ok_39_AND_NOT_init_st_ETC___d947 ;
   assign dut_prb_control_data_out_okToSend$PROBE_VALID = 1'd1 ;
   assign dut_prb_control_dutclkctrl_allowNeg$PROBE =
 	     !dut_probeHook$DELAY && !dut_prb_control_prb_str$EMPTY_N ;
@@ -6742,24 +6586,24 @@ module mkSVF_Bridge(CLK_user_clk,
 	       1'd0,
 	       xcomms_rx_inpipe_data_info_fifo$dD_OUT[1:0] } ;
   assign xcomms_rx_inpipe_updates_from_ifc$wget =
-	     { b__h115478, 16'd1, b__h115478 != 16'd0, 1'd0 } ;
-  assign xcomms_rx_inpipe_mimo_rwEnqCount$wget = { 2'd0, value__h241946 } ;
+	     { b__h114929, 16'd1, b__h114929 != 16'd0, 1'd0 } ;
+  assign xcomms_rx_inpipe_mimo_rwEnqCount$wget = { 2'd0, value__h240642 } ;
   assign xcomms_tx_outpipe_indata_mimo_rwEnqCount$wget =
 	     { 1'd0,
-	       IF_xcomms_tx_outpipe_add_to_output_buffer_whas_ETC___d1545[0] } ;
+	       IF_xcomms_tx_outpipe_add_to_output_buffer_whas_ETC___d1541[0] } ;
   assign xcomms_tx_outpipe_indata_mimo_rwEnqCount$whas =
 	     WILL_FIRE_RL_xcomms_tx_outpipe_update_output_buffer &&
-	     IF_xcomms_tx_outpipe_add_to_output_buffer_whas_ETC___d1545 !=
+	     IF_xcomms_tx_outpipe_add_to_output_buffer_whas_ETC___d1541 !=
 	     16'd0 ;
   assign xcomms_tx_outpipe_add_to_output_buffer$wget =
 	     { xcomms_tx_res_fifo_ff$D_OUT,
-	       IF_xcomms_tx_outpipe_credits_591_ULE_1_789_THE_ETC___d1790 } ;
+	       IF_xcomms_tx_outpipe_credits_587_ULE_1_785_THE_ETC___d1786 } ;
   assign xcomms_tx_outpipe_add_to_output_buffer$whas =
 	     WILL_FIRE_RL_xcomms_tx_connect_res_mkConnectionGetPut &&
 	     !xcomms_tx_outpipe_in_reset_uclk &&
 	     !xcomms_tx_outpipe_flushing &&
 	     !xcomms_tx_outpipe_flush_requested &&
-	     xcomms_tx_outpipe_indata_mimo_rDataCount_507_U_ETC___d1773 &&
+	     xcomms_tx_outpipe_indata_mimo_rDataCount_503_U_ETC___d1769 &&
 	     xcomms_tx_outpipe_data_info_fifo$sFULL_N ;
   assign xcomms_tx_outpipe_updates_from_msg$wget =
 	     { xcomms_tx_outpipe_credit_fifo$dD_OUT[17:1],
@@ -6770,8 +6614,8 @@ module mkSVF_Bridge(CLK_user_clk,
 	       16'd0 } ;
   assign xcomms_tx_outpipe_updates_from_ifc$wget =
 	     { 16'd1,
-	       IF_xcomms_tx_outpipe_credits_591_ULE_1_789_THE_ETC___d1790,
-	       IF_xcomms_tx_outpipe_credits_591_ULE_1_789_THE_ETC___d1790 !=
+	       IF_xcomms_tx_outpipe_credits_587_ULE_1_785_THE_ETC___d1786,
+	       IF_xcomms_tx_outpipe_credits_587_ULE_1_785_THE_ETC___d1786 !=
 	       16'd0,
 	       3'd0 } ;
   assign xcomms_tx_outpipe_creditMsg$wget =
@@ -6799,8 +6643,8 @@ module mkSVF_Bridge(CLK_user_clk,
 	       fFromBridgeBeat_ifc_rStorage[127:0] ;
   assign fS1OutPortAcks_ifc_rwEnqCount$wget =
 	     MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__SEL_1 ?
-	       MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__VAL_1 :
-	       MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__VAL_1 ;
+	       MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__VAL_2 :
+	       MUX_fS1OutPortAcks_ifc_rwEnqCount$wset_1__VAL_2 ;
   assign fS1OutPortAcks_ifc_rwEnqCount$whas =
 	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header &&
 	     fFromBridgeBeat_ifc_rStorage[31:30] == 2'd3 ||
@@ -6882,7 +6726,7 @@ module mkSVF_Bridge(CLK_user_clk,
 	     MUX_fS2MsgOut_ifc_rwEnqCount$wset_1__SEL_1 ? 6'd4 : 6'd8 ;
   assign fS2MsgOut_ifc_rwEnqCount$whas =
 	     WILL_FIRE_RL_send_outpipe_data_message &&
-	     !IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692 ||
+	     !IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672 ||
 	     WILL_FIRE_RL_send_outpipe_data_header ||
 	     WILL_FIRE_RL_start_inpipe_credit_request ;
   always@(MUX_fS2MsgOut_ifc_rwEnqCount$wset_1__SEL_1 or
@@ -6908,7 +6752,7 @@ module mkSVF_Bridge(CLK_user_clk,
   end
   assign fS2MsgOut_ifc_rwEnqData$whas =
 	     WILL_FIRE_RL_send_outpipe_data_message &&
-	     !IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692 ||
+	     !IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672 ||
 	     WILL_FIRE_RL_start_inpipe_credit_request ||
 	     WILL_FIRE_RL_send_outpipe_data_header ;
   assign fS2MsgOut_ifc_rwEnqMask$wget =
@@ -6931,12 +6775,12 @@ module mkSVF_Bridge(CLK_user_clk,
 	     dut_prb_control_control_in_remaining ;
   assign xcomms_tx_outpipe_data_beat_taken$whas =
 	     WILL_FIRE_RL_send_outpipe_data_message &&
-	     (rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_ULE__ETC___d2681 ||
-	      !_0_CONCAT_IF_rS2OutMsgBytes_677_ULE_4_678_THEN__ETC___d2684) &&
+	     (rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_ULE__ETC___d2661 ||
+	      !_0_CONCAT_IF_rS2OutMsgBytes_657_ULE_4_658_THEN__ETC___d2664) &&
 	     xcomms_tx_outpipe_noc_buf_bytes != 16'd0 ;
   assign xcomms_tx_outpipe_flush_done$whas =
 	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state &&
-	     xcomms_tx_outpipe_updates_from_ifc_whas__606_A_ETC___d1669 ;
+	     xcomms_tx_outpipe_updates_from_ifc_whas__602_A_ETC___d1665 ;
   assign cq_f_cq_rv$EN_port0__write =
 	     WILL_FIRE_RL_cq_rl_data_4 || WILL_FIRE_RL_cq_rl_data_1_to_3 ||
 	     WILL_FIRE_RL_cq_rl_data_0 ||
@@ -7077,16 +6921,6 @@ module mkSVF_Bridge(CLK_user_clk,
 	       MUX_cc_rg_dwcount$write_1__VAL_2 ;
   assign cc_rg_dwcount$EN =
 	     WILL_FIRE_RL_cc_rl_header || WILL_FIRE_RL_cc_rl_data ;
-
-  // register clockGenerators_free_stamp
-  assign clockGenerators_free_stamp$D_IN = 1'd1 ;
-  assign clockGenerators_free_stamp$EN =
-	     CAN_FIRE_RL_clockGenerators_track_reset ;
-
-  // register clockGenerators_one_to_one_cclock_count
-  assign clockGenerators_one_to_one_cclock_count$D_IN =
-	     IF_clockGenerators_one_to_one_cclock_count_812_ETC___d1815 ;
-  assign clockGenerators_one_to_one_cclock_count$EN = 1'b0 ;
 
   // register cq_f_cq_rv
   assign cq_f_cq_rv$D_IN = cq_f_cq_rv$port2__read ;
@@ -7362,20 +7196,20 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // register dut_prb_control_nextSample
   always@(MUX_dut_prb_control_nextSample$write_1__SEL_1 or
-	  MUX_dut_prb_control_nextSample$write_1__VAL_2 or
+	  MUX_dut_prb_control_nextSample$write_1__VAL_1 or
 	  MUX_dut_prb_control_nextSample$write_1__SEL_2 or
 	  WILL_FIRE_RL_dut_prb_control_setSample)
   begin
     case (1'b1) // synopsys parallel_case
       MUX_dut_prb_control_nextSample$write_1__SEL_1:
 	  dut_prb_control_nextSample$D_IN =
-	      MUX_dut_prb_control_nextSample$write_1__VAL_2;
+	      MUX_dut_prb_control_nextSample$write_1__VAL_1;
       MUX_dut_prb_control_nextSample$write_1__SEL_2:
 	  dut_prb_control_nextSample$D_IN =
-	      MUX_dut_prb_control_nextSample$write_1__VAL_2;
+	      MUX_dut_prb_control_nextSample$write_1__VAL_1;
       WILL_FIRE_RL_dut_prb_control_setSample:
 	  dut_prb_control_nextSample$D_IN =
-	      MUX_dut_prb_control_nextSample$write_1__VAL_2;
+	      MUX_dut_prb_control_nextSample$write_1__VAL_1;
       default: dut_prb_control_nextSample$D_IN =
 		   64'hAAAAAAAAAAAAAAAA /* unspecified value */ ;
     endcase
@@ -7383,7 +7217,7 @@ module mkSVF_Bridge(CLK_user_clk,
   assign dut_prb_control_nextSample$EN =
 	     MUX_dut_prb_control_nextSample$write_1__SEL_1 ||
 	     WILL_FIRE_RL_dut_prb_control_receiveControl &&
-	     dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1141 ||
+	     dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1137 ||
 	     WILL_FIRE_RL_dut_prb_control_setSample ;
 
   // register dut_prb_control_pinged
@@ -7532,132 +7366,132 @@ module mkSVF_Bridge(CLK_user_clk,
   assign fFromBridgeBeat_ifc_rDataAvail$D_IN =
 	     (!bridge$is_activated) ?
 	       6'd32 :
-	       fFromBridgeBeat_ifc_rDataAvail + b__h174732 - b__h175063 ;
+	       fFromBridgeBeat_ifc_rDataAvail + b__h173371 - b__h173702 ;
   assign fFromBridgeBeat_ifc_rDataAvail$EN = 1'd1 ;
 
   // register fFromBridgeBeat_ifc_rDataCount
   assign fFromBridgeBeat_ifc_rDataCount$D_IN =
-	     (!bridge$is_activated) ? 6'd0 : value__h174891 + b__h175063 ;
+	     (!bridge$is_activated) ? 6'd0 : value__h173530 + b__h173702 ;
   assign fFromBridgeBeat_ifc_rDataCount$EN = 1'd1 ;
 
   // register fFromBridgeBeat_ifc_rStorage
   assign fFromBridgeBeat_ifc_rStorage$D_IN =
-	     (!bridge$is_activated) ? 256'd0 : nextStorage__h174620 ;
+	     (!bridge$is_activated) ? 256'd0 : nextStorage__h173259 ;
   assign fFromBridgeBeat_ifc_rStorage$EN = 1'd1 ;
 
   // register fFromBridgeBeat_ifc_rStorageMask
   assign fFromBridgeBeat_ifc_rStorageMask$D_IN =
-	     (!bridge$is_activated) ? 256'd0 : nextMask__h174621 ;
+	     (!bridge$is_activated) ? 256'd0 : nextMask__h173260 ;
   assign fFromBridgeBeat_ifc_rStorageMask$EN = 1'd1 ;
 
   // register fFromContinueBeat_ifc_rDataAvail
   assign fFromContinueBeat_ifc_rDataAvail$D_IN =
 	     (!bridge$is_activated) ?
 	       6'd32 :
-	       fFromContinueBeat_ifc_rDataAvail + b__h245216 - 6'd0 ;
+	       fFromContinueBeat_ifc_rDataAvail + b__h243912 - 6'd0 ;
   assign fFromContinueBeat_ifc_rDataAvail$EN = 1'd1 ;
 
   // register fFromContinueBeat_ifc_rDataCount
   assign fFromContinueBeat_ifc_rDataCount$D_IN =
-	     (!bridge$is_activated) ? 6'd0 : value__h245375 + 6'd0 ;
+	     (!bridge$is_activated) ? 6'd0 : value__h244071 + 6'd0 ;
   assign fFromContinueBeat_ifc_rDataCount$EN = 1'd1 ;
 
   // register fFromContinueBeat_ifc_rStorage
   assign fFromContinueBeat_ifc_rStorage$D_IN =
-	     (!bridge$is_activated) ? 256'd0 : nextStorage__h245104 ;
+	     (!bridge$is_activated) ? 256'd0 : nextStorage__h243800 ;
   assign fFromContinueBeat_ifc_rStorage$EN = 1'd1 ;
 
   // register fFromContinueBeat_ifc_rStorageMask
   assign fFromContinueBeat_ifc_rStorageMask$D_IN =
-	     (!bridge$is_activated) ? 256'd0 : nextMask__h245105 ;
+	     (!bridge$is_activated) ? 256'd0 : nextMask__h243801 ;
   assign fFromContinueBeat_ifc_rStorageMask$EN = 1'd1 ;
 
   // register fS1MsgOut_ifc_rDataAvail
   assign fS1MsgOut_ifc_rDataAvail$D_IN =
 	     (!bridge$is_activated) ?
 	       6'd32 :
-	       fS1MsgOut_ifc_rDataAvail + b__h247175 - b__h247506 ;
+	       fS1MsgOut_ifc_rDataAvail + b__h245871 - b__h246202 ;
   assign fS1MsgOut_ifc_rDataAvail$EN = 1'd1 ;
 
   // register fS1MsgOut_ifc_rDataCount
   assign fS1MsgOut_ifc_rDataCount$D_IN =
-	     (!bridge$is_activated) ? 6'd0 : value__h247334 + b__h247506 ;
+	     (!bridge$is_activated) ? 6'd0 : value__h246030 + b__h246202 ;
   assign fS1MsgOut_ifc_rDataCount$EN = 1'd1 ;
 
   // register fS1MsgOut_ifc_rStorage
   assign fS1MsgOut_ifc_rStorage$D_IN =
-	     (!bridge$is_activated) ? 256'd0 : nextStorage__h247063 ;
+	     (!bridge$is_activated) ? 256'd0 : nextStorage__h245759 ;
   assign fS1MsgOut_ifc_rStorage$EN = 1'd1 ;
 
   // register fS1MsgOut_ifc_rStorageMask
   assign fS1MsgOut_ifc_rStorageMask$D_IN =
-	     (!bridge$is_activated) ? 256'd0 : nextMask__h247064 ;
+	     (!bridge$is_activated) ? 256'd0 : nextMask__h245760 ;
   assign fS1MsgOut_ifc_rStorageMask$EN = 1'd1 ;
 
   // register fS1OutPortAcks_ifc_rDataAvail
   assign fS1OutPortAcks_ifc_rDataAvail$D_IN =
 	     (!bridge$is_activated) ?
 	       5'd16 :
-	       fS1OutPortAcks_ifc_rDataAvail + b__h177199 - b__h177528 ;
+	       fS1OutPortAcks_ifc_rDataAvail + b__h175838 - b__h176167 ;
   assign fS1OutPortAcks_ifc_rDataAvail$EN = 1'd1 ;
 
   // register fS1OutPortAcks_ifc_rDataCount
   assign fS1OutPortAcks_ifc_rDataCount$D_IN =
-	     (!bridge$is_activated) ? 5'd0 : value__h177357 + b__h177528 ;
+	     (!bridge$is_activated) ? 5'd0 : value__h175996 + b__h176167 ;
   assign fS1OutPortAcks_ifc_rDataCount$EN = 1'd1 ;
 
   // register fS1OutPortAcks_ifc_rStorage
   assign fS1OutPortAcks_ifc_rStorage$D_IN =
-	     (!bridge$is_activated) ? 160'd0 : nextStorage__h177087 ;
+	     (!bridge$is_activated) ? 160'd0 : nextStorage__h175726 ;
   assign fS1OutPortAcks_ifc_rStorage$EN = 1'd1 ;
 
   // register fS1OutPortAcks_ifc_rStorageMask
   assign fS1OutPortAcks_ifc_rStorageMask$D_IN =
-	     (!bridge$is_activated) ? 160'd0 : nextMask__h177088 ;
+	     (!bridge$is_activated) ? 160'd0 : nextMask__h175727 ;
   assign fS1OutPortAcks_ifc_rStorageMask$EN = 1'd1 ;
 
   // register fS2MsgOut_ifc_rDataAvail
   assign fS2MsgOut_ifc_rDataAvail$D_IN =
 	     (!bridge$is_activated) ?
 	       6'd32 :
-	       fS2MsgOut_ifc_rDataAvail + b__h248299 - b__h248630 ;
+	       fS2MsgOut_ifc_rDataAvail + b__h246995 - b__h247326 ;
   assign fS2MsgOut_ifc_rDataAvail$EN = 1'd1 ;
 
   // register fS2MsgOut_ifc_rDataCount
   assign fS2MsgOut_ifc_rDataCount$D_IN =
-	     (!bridge$is_activated) ? 6'd0 : value__h248458 + b__h248630 ;
+	     (!bridge$is_activated) ? 6'd0 : value__h247154 + b__h247326 ;
   assign fS2MsgOut_ifc_rDataCount$EN = 1'd1 ;
 
   // register fS2MsgOut_ifc_rStorage
   assign fS2MsgOut_ifc_rStorage$D_IN =
-	     (!bridge$is_activated) ? 256'd0 : nextStorage__h248187 ;
+	     (!bridge$is_activated) ? 256'd0 : nextStorage__h246883 ;
   assign fS2MsgOut_ifc_rStorage$EN = 1'd1 ;
 
   // register fS2MsgOut_ifc_rStorageMask
   assign fS2MsgOut_ifc_rStorageMask$D_IN =
-	     (!bridge$is_activated) ? 256'd0 : nextMask__h248188 ;
+	     (!bridge$is_activated) ? 256'd0 : nextMask__h246884 ;
   assign fS2MsgOut_ifc_rStorageMask$EN = 1'd1 ;
 
   // register fToContinueBeat_ifc_rDataAvail
   assign fToContinueBeat_ifc_rDataAvail$D_IN =
 	     (!bridge$is_activated) ?
 	       6'd32 :
-	       fToContinueBeat_ifc_rDataAvail + 6'd0 - b__h176064 ;
+	       fToContinueBeat_ifc_rDataAvail + 6'd0 - b__h174703 ;
   assign fToContinueBeat_ifc_rDataAvail$EN = 1'd1 ;
 
   // register fToContinueBeat_ifc_rDataCount
   assign fToContinueBeat_ifc_rDataCount$D_IN =
-	     (!bridge$is_activated) ? 6'd0 : value__h175892 + b__h176064 ;
+	     (!bridge$is_activated) ? 6'd0 : value__h174531 + b__h174703 ;
   assign fToContinueBeat_ifc_rDataCount$EN = 1'd1 ;
 
   // register fToContinueBeat_ifc_rStorage
   assign fToContinueBeat_ifc_rStorage$D_IN =
-	     (!bridge$is_activated) ? 256'd0 : nextStorage__h175621 ;
+	     (!bridge$is_activated) ? 256'd0 : nextStorage__h174260 ;
   assign fToContinueBeat_ifc_rStorage$EN = 1'd1 ;
 
   // register fToContinueBeat_ifc_rStorageMask
   assign fToContinueBeat_ifc_rStorageMask$D_IN =
-	     (!bridge$is_activated) ? 256'd0 : nextMask__h175622 ;
+	     (!bridge$is_activated) ? 256'd0 : nextMask__h174261 ;
   assign fToContinueBeat_ifc_rStorageMask$EN = 1'd1 ;
 
   // register init_state_any_in_reset_uclk
@@ -7665,7 +7499,7 @@ module mkSVF_Bridge(CLK_user_clk,
   assign init_state_any_in_reset_uclk$EN = 1'd1 ;
 
   // register init_state_cycle_stamp
-  assign init_state_cycle_stamp$D_IN = init_state_cycle_stamp + 64'd1 ;
+  assign init_state_cycle_stamp$D_IN = 64'h0 ;
   assign init_state_cycle_stamp$EN = 1'b0 ;
 
   // register init_state_out_port
@@ -7679,6 +7513,10 @@ module mkSVF_Bridge(CLK_user_clk,
   assign intr_on$D_IN =
 	     msix_enable_cr && _unnamed_$status_function_status[2] ;
   assign intr_on$EN = 1'd1 ;
+
+  // register isInReset_isInReset
+  assign isInReset_isInReset$D_IN = 1'd0 ;
+  assign isInReset_isInReset$EN = isInReset_isInReset ;
 
   // register lnk_up_cr
   assign lnk_up_cr$D_IN = _unnamed_$status_lnk_up ;
@@ -7788,14 +7626,14 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // register rOtherMsgIn
   always@(WILL_FIRE_RL_msg_sink_noc_active_other_process_other_data or
-	  rInMsgBytes_961_ULE_4___d2004 or
+	  rInMsgBytes_941_ULE_4___d1984 or
 	  WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb or
 	  MUX_rOtherMsgIn$write_1__VAL_2 or
 	  WILL_FIRE_RL_msg_sink_noc_inactive)
   begin
     case (1'b1) // synopsys parallel_case
       WILL_FIRE_RL_msg_sink_noc_active_other_process_other_data:
-	  rOtherMsgIn$D_IN = !rInMsgBytes_961_ULE_4___d2004;
+	  rOtherMsgIn$D_IN = !rInMsgBytes_941_ULE_4___d1984;
       WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb:
 	  rOtherMsgIn$D_IN = MUX_rOtherMsgIn$write_1__VAL_2;
       WILL_FIRE_RL_msg_sink_noc_inactive: rOtherMsgIn$D_IN = 1'd0;
@@ -7809,15 +7647,15 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // register rOtherMsgOut
   always@(WILL_FIRE_RL_msg_source_noc_active_continue_other or
-	  rOutMsgBytes_281_ULE_4___d2475 or
+	  rOutMsgBytes_261_ULE_4___d2455 or
 	  WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other or
-	  value__h270636 or MUX_rOtherMsgOut$write_1__SEL_3)
+	  value__h269332 or MUX_rOtherMsgOut$write_1__SEL_3)
   begin
     case (1'b1) // synopsys parallel_case
       WILL_FIRE_RL_msg_source_noc_active_continue_other:
-	  rOtherMsgOut$D_IN = !rOutMsgBytes_281_ULE_4___d2475;
+	  rOtherMsgOut$D_IN = !rOutMsgBytes_261_ULE_4___d2455;
       WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other:
-	  rOtherMsgOut$D_IN = value__h270636 != 9'd0;
+	  rOtherMsgOut$D_IN = value__h269332 != 9'd0;
       MUX_rOtherMsgOut$write_1__SEL_3: rOtherMsgOut$D_IN = 1'd0;
       default: rOtherMsgOut$D_IN = 1'b0 /* unspecified value */ ;
     endcase
@@ -7831,22 +7669,22 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // register rOutMsgBytes
   always@(WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other or
-	  value__h270636 or
+	  value__h269332 or
 	  WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 or
-	  value__h274558 or
+	  value__h273254 or
 	  WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 or
-	  value__h278469 or
+	  value__h277165 or
 	  MUX_rOutMsgBytes$write_1__SEL_4 or
 	  MUX_rOutMsgBytes$write_1__VAL_4 or
 	  WILL_FIRE_RL_msg_source_noc_inactive)
   begin
     case (1'b1) // synopsys parallel_case
       WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_other:
-	  rOutMsgBytes$D_IN = value__h270636[7:0];
+	  rOutMsgBytes$D_IN = value__h269332[7:0];
       WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1:
-	  rOutMsgBytes$D_IN = value__h274558[7:0];
+	  rOutMsgBytes$D_IN = value__h273254[7:0];
       WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2:
-	  rOutMsgBytes$D_IN = value__h278469[7:0];
+	  rOutMsgBytes$D_IN = value__h277165[7:0];
       MUX_rOutMsgBytes$write_1__SEL_4:
 	  rOutMsgBytes$D_IN = MUX_rOutMsgBytes$write_1__VAL_4;
       WILL_FIRE_RL_msg_source_noc_inactive: rOutMsgBytes$D_IN = 8'd0;
@@ -7869,8 +7707,8 @@ module mkSVF_Bridge(CLK_user_clk,
 	       19'd32 ;
   assign rS1BitsRem$EN =
 	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
-	     (!rS1BitsRem_547_ULE_32___d2580 ||
-	      !rS1OutMsgSize_542_ULE_4___d2582) ||
+	     (!rS1BitsRem_527_ULE_32___d2560 ||
+	      !rS1OutMsgSize_522_ULE_4___d2562) ||
 	     WILL_FIRE_RL_msg_source_noc_active_outports_start_data_message ;
 
   // register rS1CycleStamp
@@ -7888,7 +7726,7 @@ module mkSVF_Bridge(CLK_user_clk,
   assign rS1MsgInIsAck$D_IN =
 	     MUX_rS1MsgInIsAck$write_1__SEL_1 ?
 	       MUX_rS1MsgInIsAck$write_1__VAL_1 :
-	       !rInMsgBytes_961_ULE_4___d2004 ;
+	       !rInMsgBytes_941_ULE_4___d1984 ;
   assign rS1MsgInIsAck$EN =
 	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header &&
 	     (fFromBridgeBeat_ifc_rStorage[31:30] == 2'd0 ||
@@ -7899,7 +7737,7 @@ module mkSVF_Bridge(CLK_user_clk,
   assign rS1MsgInIsData$D_IN =
 	     MUX_rS1MsgInIsAck$write_1__SEL_1 ?
 	       MUX_rS1MsgInIsData$write_1__VAL_1 :
-	       !rInMsgBytes_961_ULE_4___d2004 ;
+	       !rInMsgBytes_941_ULE_4___d1984 ;
   assign rS1MsgInIsData$EN =
 	     WILL_FIRE_RL_msg_sink_noc_active_scemi1_decode_scemi_header &&
 	     (fFromBridgeBeat_ifc_rStorage[31:30] == 2'd0 ||
@@ -7912,8 +7750,8 @@ module mkSVF_Bridge(CLK_user_clk,
 	     !WILL_FIRE_RL_msg_source_noc_inactive ;
   assign rS1MsgOutDataReq$EN =
 	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
-	     rS1OutMsgSize_542_ULE_4___d2582 &&
-	     rS1BitsRem_547_ULE_32___d2580 ||
+	     rS1OutMsgSize_522_ULE_4___d2562 &&
+	     rS1BitsRem_527_ULE_32___d2560 ||
 	     WILL_FIRE_RL_msg_source_noc_inactive ||
 	     WILL_FIRE_RL_msg_source_noc_active_outports_start_data_message ;
 
@@ -7934,8 +7772,8 @@ module mkSVF_Bridge(CLK_user_clk,
   endcase
   assign rS1MsgOutReqGrant$EN =
 	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
-	     rS1OutMsgSize_542_ULE_4___d2582 &&
-	     rS1BitsRem_547_ULE_32___d2580 ||
+	     rS1OutMsgSize_522_ULE_4___d2562 &&
+	     rS1BitsRem_527_ULE_32___d2560 ||
 	     WILL_FIRE_RL_swap_scemi1_outport_grant ||
 	     WILL_FIRE_RL_msg_source_noc_active_inports_send_request_message ||
 	     WILL_FIRE_RL_msg_source_noc_inactive ;
@@ -7952,8 +7790,8 @@ module mkSVF_Bridge(CLK_user_clk,
 	     !WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header ;
   assign rS1OutDataHeader$EN =
 	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
-	     rS1OutMsgSize_542_ULE_4___d2582 &&
-	     !rS1BitsRem_547_ULE_32___d2580 ||
+	     rS1OutMsgSize_522_ULE_4___d2562 &&
+	     !rS1BitsRem_527_ULE_32___d2560 ||
 	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header ||
 	     WILL_FIRE_RL_msg_source_noc_active_outports_start_data_message ;
 
@@ -7961,8 +7799,8 @@ module mkSVF_Bridge(CLK_user_clk,
   assign rS1OutMsgIsCont$D_IN = MUX_rS1OutDataHeader$write_1__SEL_1 ;
   assign rS1OutMsgIsCont$EN =
 	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
-	     rS1OutMsgSize_542_ULE_4___d2582 &&
-	     !rS1BitsRem_547_ULE_32___d2580 ||
+	     rS1OutMsgSize_522_ULE_4___d2562 &&
+	     !rS1BitsRem_527_ULE_32___d2560 ||
 	     WILL_FIRE_RL_msg_source_noc_active_outports_start_data_message ;
 
   // register rS1OutMsgSize
@@ -7984,8 +7822,8 @@ module mkSVF_Bridge(CLK_user_clk,
   end
   assign rS1OutMsgSize$EN =
 	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_data &&
-	     (!rS1BitsRem_547_ULE_32___d2580 ||
-	      !rS1OutMsgSize_542_ULE_4___d2582) ||
+	     (!rS1BitsRem_527_ULE_32___d2560 ||
+	      !rS1OutMsgSize_522_ULE_4___d2562) ||
 	     WILL_FIRE_RL_msg_source_noc_active_outports_send_data_message_header ||
 	     WILL_FIRE_RL_msg_source_noc_active_outports_start_data_message ;
 
@@ -8023,7 +7861,7 @@ module mkSVF_Bridge(CLK_user_clk,
   // register rS2MsgInIsData
   assign rS2MsgInIsData$D_IN =
 	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ?
-	       !rInMsgBytes_961_ULE_4___d2004 :
+	       !rInMsgBytes_941_ULE_4___d1984 :
 	       MUX_rS2MsgInIsData$write_1__VAL_2 ;
   assign rS2MsgInIsData$EN =
 	     WILL_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ||
@@ -8036,10 +7874,10 @@ module mkSVF_Bridge(CLK_user_clk,
 	     MUX_rS2MsgOutCredGrant$write_1__SEL_3 ;
   assign rS2MsgOutCredGrant$EN =
 	     WILL_FIRE_RL_send_outpipe_data_header &&
-	     value__h319339[7:0] == 8'd0 ||
+	     value__h318035[7:0] == 8'd0 ||
 	     WILL_FIRE_RL_send_outpipe_data_message &&
-	     !IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692 &&
-	     _0_CONCAT_IF_rS2OutMsgBytes_677_ULE_4_678_THEN__ETC___d2684 &&
+	     !IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672 &&
+	     _0_CONCAT_IF_rS2OutMsgBytes_657_ULE_4_658_THEN__ETC___d2664 &&
 	     rS2OutBytes == 32'd0 ||
 	     WILL_FIRE_RL_start_outpipe_data_message ||
 	     WILL_FIRE_RL_msg_source_noc_inactive ;
@@ -8056,8 +7894,8 @@ module mkSVF_Bridge(CLK_user_clk,
 	       MUX_rS2NumSaved$write_1__VAL_2 ;
   assign rS2NumSaved$EN =
 	     WILL_FIRE_RL_send_outpipe_data_message &&
-	     (b__h323654 != 3'd0 ||
-	      !IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692) ||
+	     (b__h322350 != 3'd0 ||
+	      !IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672) ||
 	     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ;
 
   // register rS2OutBytes
@@ -8076,7 +7914,7 @@ module mkSVF_Bridge(CLK_user_clk,
   endcase
   assign rS2OutBytes$EN =
 	     WILL_FIRE_RL_send_outpipe_data_header &&
-	     value__h319339[7:0] != 8'd0 ||
+	     value__h318035[7:0] != 8'd0 ||
 	     WILL_FIRE_RL_start_outpipe_data_message ||
 	     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ;
 
@@ -8106,10 +7944,10 @@ module mkSVF_Bridge(CLK_user_clk,
   endcase
   assign rS2OutDataIndex$EN =
 	     WILL_FIRE_RL_send_outpipe_data_header &&
-	     value__h319339[7:0] == 8'd0 ||
+	     value__h318035[7:0] == 8'd0 ||
 	     WILL_FIRE_RL_send_outpipe_data_message &&
-	     !IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692 &&
-	     _0_CONCAT_IF_rS2OutMsgBytes_677_ULE_4_678_THEN__ETC___d2684 &&
+	     !IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672 &&
+	     _0_CONCAT_IF_rS2OutMsgBytes_657_ULE_4_658_THEN__ETC___d2664 &&
 	     rS2OutBytes == 32'd0 ||
 	     WILL_FIRE_RL_scan_outpipe_data_index ||
 	     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ;
@@ -8123,20 +7961,20 @@ module mkSVF_Bridge(CLK_user_clk,
   always@(WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive or
 	  MUX_fS2MsgOut_ifc_rwEnqCount$wset_1__SEL_1 or
 	  MUX_rS2OutMsgBytes$write_1__VAL_2 or
-	  MUX_rS2OutBytes$write_1__SEL_2 or value__h319339)
+	  MUX_rS2OutBytes$write_1__SEL_2 or value__h318035)
   case (1'b1)
     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive:
 	rS2OutMsgBytes$D_IN = 8'd0;
     MUX_fS2MsgOut_ifc_rwEnqCount$wset_1__SEL_1:
 	rS2OutMsgBytes$D_IN = MUX_rS2OutMsgBytes$write_1__VAL_2;
-    MUX_rS2OutBytes$write_1__SEL_2: rS2OutMsgBytes$D_IN = value__h319339[7:0];
+    MUX_rS2OutBytes$write_1__SEL_2: rS2OutMsgBytes$D_IN = value__h318035[7:0];
     default: rS2OutMsgBytes$D_IN = 8'b10101010 /* unspecified value */ ;
   endcase
   assign rS2OutMsgBytes$EN =
 	     WILL_FIRE_RL_send_outpipe_data_message &&
-	     !IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692 ||
+	     !IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672 ||
 	     WILL_FIRE_RL_send_outpipe_data_header &&
-	     value__h319339[7:0] != 8'd0 ||
+	     value__h318035[7:0] != 8'd0 ||
 	     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ;
 
   // register rS2SavedBytes
@@ -8146,8 +7984,8 @@ module mkSVF_Bridge(CLK_user_clk,
 	       MUX_rS2SavedBytes$write_1__VAL_2 ;
   assign rS2SavedBytes$EN =
 	     WILL_FIRE_RL_send_outpipe_data_message &&
-	     (b__h323654 != 3'd0 ||
-	      !IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692) ||
+	     (b__h322350 != 3'd0 ||
+	      !IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672) ||
 	     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ;
 
   // register rS2SendOutDataHdr
@@ -8165,10 +8003,10 @@ module mkSVF_Bridge(CLK_user_clk,
   endcase
   assign rS2SendOutDataHdr$EN =
 	     WILL_FIRE_RL_send_outpipe_data_header &&
-	     value__h319339[7:0] != 8'd0 ||
+	     value__h318035[7:0] != 8'd0 ||
 	     WILL_FIRE_RL_send_outpipe_data_message &&
-	     !IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692 &&
-	     _0_CONCAT_IF_rS2OutMsgBytes_677_ULE_4_678_THEN__ETC___d2684 &&
+	     !IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672 &&
+	     _0_CONCAT_IF_rS2OutMsgBytes_657_ULE_4_658_THEN__ETC___d2664 &&
 	     rS2OutBytes != 32'd0 ||
 	     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ||
 	     WILL_FIRE_RL_start_outpipe_data_message ;
@@ -8180,10 +8018,10 @@ module mkSVF_Bridge(CLK_user_clk,
 	     !MUX_rS2MsgOutCredGrant$write_1__SEL_3 ;
   assign rS2SendOutDataMsg$EN =
 	     WILL_FIRE_RL_send_outpipe_data_header &&
-	     value__h319339[7:0] == 8'd0 ||
+	     value__h318035[7:0] == 8'd0 ||
 	     WILL_FIRE_RL_send_outpipe_data_message &&
-	     !IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692 &&
-	     _0_CONCAT_IF_rS2OutMsgBytes_677_ULE_4_678_THEN__ETC___d2684 &&
+	     !IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672 &&
+	     _0_CONCAT_IF_rS2OutMsgBytes_657_ULE_4_658_THEN__ETC___d2664 &&
 	     rS2OutBytes == 32'd0 ||
 	     WILL_FIRE_RL_reset_outpipe_when_noc_is_inactive ||
 	     WILL_FIRE_RL_start_outpipe_data_message ;
@@ -8192,14 +8030,14 @@ module mkSVF_Bridge(CLK_user_clk,
   always@(WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb or
 	  fFromBridgeBeat_ifc_rStorage or
 	  MUX_rSceMi1MsgIn$write_1__SEL_2 or
-	  rInMsgBytes_961_ULE_4___d2004 or WILL_FIRE_RL_msg_sink_noc_inactive)
+	  rInMsgBytes_941_ULE_4___d1984 or WILL_FIRE_RL_msg_sink_noc_inactive)
   begin
     case (1'b1) // synopsys parallel_case
       WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb:
 	  rSceMi1MsgIn$D_IN =
 	      fFromBridgeBeat_ifc_rStorage[31:26] == 6'b101010;
       MUX_rSceMi1MsgIn$write_1__SEL_2:
-	  rSceMi1MsgIn$D_IN = !rInMsgBytes_961_ULE_4___d2004;
+	  rSceMi1MsgIn$D_IN = !rInMsgBytes_941_ULE_4___d1984;
       WILL_FIRE_RL_msg_sink_noc_inactive: rSceMi1MsgIn$D_IN = 1'd0;
       default: rSceMi1MsgIn$D_IN = 1'b0 /* unspecified value */ ;
     endcase
@@ -8214,15 +8052,15 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // register rSceMi1MsgOut
   always@(WILL_FIRE_RL_msg_source_noc_active_continue_scemi1 or
-	  rOutMsgBytes_281_ULE_4___d2475 or
+	  rOutMsgBytes_261_ULE_4___d2455 or
 	  WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1 or
-	  value__h274558 or MUX_rSceMi1MsgOut$write_1__SEL_3)
+	  value__h273254 or MUX_rSceMi1MsgOut$write_1__SEL_3)
   begin
     case (1'b1) // synopsys parallel_case
       WILL_FIRE_RL_msg_source_noc_active_continue_scemi1:
-	  rSceMi1MsgOut$D_IN = !rOutMsgBytes_281_ULE_4___d2475;
+	  rSceMi1MsgOut$D_IN = !rOutMsgBytes_261_ULE_4___d2455;
       WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi1:
-	  rSceMi1MsgOut$D_IN = value__h274558 != 9'd0;
+	  rSceMi1MsgOut$D_IN = value__h273254 != 9'd0;
       MUX_rSceMi1MsgOut$write_1__SEL_3: rSceMi1MsgOut$D_IN = 1'd0;
       default: rSceMi1MsgOut$D_IN = 1'b0 /* unspecified value */ ;
     endcase
@@ -8238,14 +8076,14 @@ module mkSVF_Bridge(CLK_user_clk,
   always@(WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb or
 	  fFromBridgeBeat_ifc_rStorage or
 	  MUX_rSceMi2MsgIn$write_1__SEL_2 or
-	  rInMsgBytes_961_ULE_4___d2004 or WILL_FIRE_RL_msg_sink_noc_inactive)
+	  rInMsgBytes_941_ULE_4___d1984 or WILL_FIRE_RL_msg_sink_noc_inactive)
   begin
     case (1'b1) // synopsys parallel_case
       WILL_FIRE_RL_msg_sink_noc_active_decode_noc_header_4bpb:
 	  rSceMi2MsgIn$D_IN =
 	      fFromBridgeBeat_ifc_rStorage[31:26] == 6'b101011;
       MUX_rSceMi2MsgIn$write_1__SEL_2:
-	  rSceMi2MsgIn$D_IN = !rInMsgBytes_961_ULE_4___d2004;
+	  rSceMi2MsgIn$D_IN = !rInMsgBytes_941_ULE_4___d1984;
       WILL_FIRE_RL_msg_sink_noc_inactive: rSceMi2MsgIn$D_IN = 1'd0;
       default: rSceMi2MsgIn$D_IN = 1'b0 /* unspecified value */ ;
     endcase
@@ -8259,15 +8097,15 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // register rSceMi2MsgOut
   always@(WILL_FIRE_RL_msg_source_noc_active_continue_scemi2 or
-	  rOutMsgBytes_281_ULE_4___d2475 or
+	  rOutMsgBytes_261_ULE_4___d2455 or
 	  WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2 or
-	  value__h278469 or MUX_rSceMi2MsgOut$write_1__SEL_3)
+	  value__h277165 or MUX_rSceMi2MsgOut$write_1__SEL_3)
   begin
     case (1'b1) // synopsys parallel_case
       WILL_FIRE_RL_msg_source_noc_active_continue_scemi2:
-	  rSceMi2MsgOut$D_IN = !rOutMsgBytes_281_ULE_4___d2475;
+	  rSceMi2MsgOut$D_IN = !rOutMsgBytes_261_ULE_4___d2455;
       WILL_FIRE_RL_msg_source_noc_active_dispatch_next_granted_scemi2:
-	  rSceMi2MsgOut$D_IN = value__h278469 != 9'd0;
+	  rSceMi2MsgOut$D_IN = value__h277165 != 9'd0;
       MUX_rSceMi2MsgOut$write_1__SEL_3: rSceMi2MsgOut$D_IN = 1'd0;
       default: rSceMi2MsgOut$D_IN = 1'b0 /* unspecified value */ ;
     endcase
@@ -8298,7 +8136,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // register rc_gearbox_elem0_status_0
   assign rc_gearbox_elem0_status_0$D_IN =
-	     MUX_rc_gearbox_elem0_status_0$_write_1__SEL_1 ?
+	     MUX_rc_gearbox_elem0_status_1$_write_1__SEL_1 ?
 	       !rc_gearbox_block0_status :
 	       !rc_gearbox_block0_status ;
   assign rc_gearbox_elem0_status_0$EN =
@@ -8587,10 +8425,6 @@ module mkSVF_Bridge(CLK_user_clk,
 	     WILL_FIRE_RL_rq_rl_header || WILL_FIRE_RL_rq_rl_data_a ||
 	     WILL_FIRE_RL_rq_rl_data_b ;
 
-  // register rstgen_init
-  assign rstgen_init$D_IN = 1'd1 ;
-  assign rstgen_init$EN = CAN_FIRE_RL_rstgen_trigger ;
-
   // register rvPrevMsgGrant
   assign rvPrevMsgGrant$D_IN =
 	     WILL_FIRE_RL_msg_source_noc_active_arbitrate_transmit_messages ?
@@ -8658,7 +8492,7 @@ module mkSVF_Bridge(CLK_user_clk,
 	     WILL_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut &&
 	     xcomms_rx_inpipe_reset_uclk_done2 &&
 	     (xcomms_rx_inpipe_elem_count == 16'd1 ||
-	      !xcomms_rx_inpipe_elem_count_407_ULT_xcomms_rx__ETC___d1438) ||
+	      !xcomms_rx_inpipe_elem_count_403_ULT_xcomms_rx__ETC___d1434) ||
 	     WILL_FIRE_RL_xcomms_rx_inpipe_reset_uclock_side ;
 
   // register xcomms_rx_inpipe_elems_recvd
@@ -8685,14 +8519,14 @@ module mkSVF_Bridge(CLK_user_clk,
   // register xcomms_rx_inpipe_mimo_rDataCount
   assign xcomms_rx_inpipe_mimo_rDataCount$D_IN =
 	     CAN_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ?
-	       value__h92750 + b__h83695 :
-	       value__h92750 ;
+	       value__h92201 + b__h83146 :
+	       value__h92201 ;
   assign xcomms_rx_inpipe_mimo_rDataCount$EN =
 	     CAN_FIRE_RL_xcomms_rx_inpipe_mimo_update ;
 
   // register xcomms_rx_inpipe_mimo_rvData
   assign xcomms_rx_inpipe_mimo_rvData$D_IN =
-	     IF_xcomms_rx_inpipe_mimo_rwvEnqData_whas__342__ETC___d1383 ;
+	     IF_xcomms_rx_inpipe_mimo_rwvEnqData_whas__338__ETC___d1379 ;
   assign xcomms_rx_inpipe_mimo_rvData$EN =
 	     CAN_FIRE_RL_xcomms_rx_inpipe_mimo_update ;
 
@@ -8811,8 +8645,8 @@ module mkSVF_Bridge(CLK_user_clk,
 	     CAN_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side ?
 	       2'd0 :
 	       (xcomms_tx_outpipe_indata_mimo_rwEnqCount$whas ?
-		  value__h121692 + b__h120371 :
-		  value__h121692) ;
+		  value__h121143 + b__h119822 :
+		  value__h121143) ;
   assign xcomms_tx_outpipe_indata_mimo_rDataCount$EN =
 	     CAN_FIRE_RL_xcomms_tx_outpipe_indata_mimo_update ;
 
@@ -8820,7 +8654,7 @@ module mkSVF_Bridge(CLK_user_clk,
   assign xcomms_tx_outpipe_indata_mimo_rvData$D_IN =
 	     CAN_FIRE_RL_xcomms_tx_outpipe_reset_uclock_side ?
 	       1312'd0 :
-	       IF_xcomms_tx_outpipe_indata_mimo_rwvEnqData_wh_ETC___d1537 ;
+	       IF_xcomms_tx_outpipe_indata_mimo_rwvEnqData_wh_ETC___d1533 ;
   assign xcomms_tx_outpipe_indata_mimo_rvData$EN =
 	     CAN_FIRE_RL_xcomms_tx_outpipe_indata_mimo_update ;
 
@@ -8906,10 +8740,10 @@ module mkSVF_Bridge(CLK_user_clk,
   assign xcomms_tx_outpipe_sendDataOK$D_IN =
 	     (!CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits ||
 	      !xcomms_tx_outpipe_updates_from_msg$wget[1]) &&
-	     NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1706 &&
+	     NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1702 &&
 	     (!xcomms_tx_outpipe_add_to_output_buffer$whas ||
 	      !xcomms_tx_outpipe_updates_from_ifc$wget[0]) &&
-	     IF_IF_xcomms_tx_outpipe_updates_from_ifc_whas__ETC___d1712 ;
+	     IF_IF_xcomms_tx_outpipe_updates_from_ifc_whas__ETC___d1708 ;
   assign xcomms_tx_outpipe_sendDataOK$EN =
 	     CAN_FIRE_RL_xcomms_tx_outpipe_update_producer_state ;
 
@@ -9103,7 +8937,7 @@ module mkSVF_Bridge(CLK_user_clk,
   assign bridge$noc_in_beat_v = fToBridgeBeat$D_OUT ;
   assign bridge$noc_in_src_rdy_b = fToBridgeBeat$EMPTY_N ;
   assign bridge$noc_out_dst_rdy_b =
-	     NOT_fFromBridgeBeat_ifc_rDataAvail_859_ULT_4_942___d1943 ;
+	     NOT_fFromBridgeBeat_ifc_rDataAvail_839_ULT_4_922___d1923 ;
   assign bridge$rc_tlps_put =
 	     WILL_FIRE_RL_rc_rl_header ?
 	       MUX_bridge$rc_tlps_put_1__VAL_1 :
@@ -9125,18 +8959,6 @@ module mkSVF_Bridge(CLK_user_clk,
   assign bridge$EN_clocks_request_get = CAN_FIRE_RL_field_clock_request ;
   assign bridge$EN_clocks_response_put = CAN_FIRE_RL_field_clock_request ;
 
-  // submodule clockGenerators_one_to_one_cclock_pre_negedge_uclk
-  assign clockGenerators_one_to_one_cclock_pre_negedge_uclk$sD_IN =
-	     IF_clockGenerators_one_to_one_cclock_count_812_ETC___d1815 ==
-	     32'd1 ;
-  assign clockGenerators_one_to_one_cclock_pre_negedge_uclk$sEN = 1'b0 ;
-
-  // submodule clockGenerators_one_to_one_cclock_pre_posedge_uclk
-  assign clockGenerators_one_to_one_cclock_pre_posedge_uclk$sD_IN =
-	     IF_clockGenerators_one_to_one_cclock_count_812_ETC___d1815 ==
-	     32'd0 ;
-  assign clockGenerators_one_to_one_cclock_pre_posedge_uclk$sEN = 1'b0 ;
-
   // submodule cq_in_buf
   assign cq_in_buf$D_IN = _unnamed_$cq_recv_get ;
   assign cq_in_buf$ENQ = CAN_FIRE_RL_cq_mkConnectionGetPut ;
@@ -9155,7 +8977,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // submodule dut_prb_control_ackFifo
   assign dut_prb_control_ackFifo$D_IN =
-	     { IF_dut_prb_control_control_in_dataF_rv_port1___ETC___d1137,
+	     { IF_dut_prb_control_control_in_dataF_rv_port1___ETC___d1133,
 	       16'hFFF9 } ;
   assign dut_prb_control_ackFifo$ENQ =
 	     WILL_FIRE_RL_dut_prb_control_receiveControl &&
@@ -9350,18 +9172,6 @@ module mkSVF_Bridge(CLK_user_clk,
   assign rc_in_buf$DEQ = CAN_FIRE_RL_rc_rl_g_to_gearbox ;
   assign rc_in_buf$CLR = 1'b0 ;
 
-  // submodule rstgen_inv_rstgen
-  assign rstgen_inv_rstgen$ASSERT_IN = CAN_FIRE_RL_rstgen_trigger ;
-
-  // submodule rstgen_rstgen
-  assign rstgen_rstgen$ASSERT_IN = 1'b0 ;
-
-  // submodule uclkgen
-  assign uclkgen$CLK_IN = x1__h61611 ;
-  assign uclkgen$COND_IN = 1'b0 ;
-  assign uclkgen$CLK_IN_EN = 1'd1 ;
-  assign uclkgen$COND_IN_EN = 1'b0 ;
-
   // submodule xcomms_rx_inpipe_consume_timer
   assign xcomms_rx_inpipe_consume_timer$DATA_A = 4'h0 ;
   assign xcomms_rx_inpipe_consume_timer$DATA_B = 4'd15 ;
@@ -9373,7 +9183,7 @@ module mkSVF_Bridge(CLK_user_clk,
   assign xcomms_rx_inpipe_consume_timer$SETC = 1'b0 ;
   assign xcomms_rx_inpipe_consume_timer$SETF =
 	     xcomms_rx_inpipe_reset_uclk_done2 &&
-	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__303_ETC___d1306 !=
+	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__299_ETC___d1302 !=
 	     16'd0 ;
 
   // submodule xcomms_rx_inpipe_credit_fifo
@@ -9388,7 +9198,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // submodule xcomms_rx_inpipe_credits
   assign xcomms_rx_inpipe_credits$DATA_A =
-	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__303_ETC___d1306 ;
+	     IF_xcomms_rx_inpipe_updates_from_ifc_whas__299_ETC___d1302 ;
   assign xcomms_rx_inpipe_credits$DATA_B = -xcomms_rx_inpipe_credits$Q_OUT ;
   assign xcomms_rx_inpipe_credits$DATA_C = 16'h0 ;
   assign xcomms_rx_inpipe_credits$DATA_F = 16'd0 ;
@@ -9424,7 +9234,7 @@ module mkSVF_Bridge(CLK_user_clk,
 
   // submodule xcomms_rx_inpipe_starting_reset
   assign xcomms_rx_inpipe_starting_reset$sEN =
-	     CAN_FIRE_RL_xcomms_rx_inpipe_passReset ;
+	     CAN_FIRE_RL_xcomms_rx_inpipe_detect_scemi_reset ;
 
   // submodule xcomms_rx_res_fifo_ff
   assign xcomms_rx_res_fifo_ff$D_IN = xcomms_rx_inpipe_elems[175:0] ;
@@ -9443,16 +9253,16 @@ module mkSVF_Bridge(CLK_user_clk,
 	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state &&
 	     (!CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits ||
 	      !xcomms_tx_outpipe_updates_from_msg$wget[1]) &&
-	     NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1699 ;
+	     NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1695 ;
   assign xcomms_tx_outpipe_accumulateTimer$SETC = 1'b0 ;
   assign xcomms_tx_outpipe_accumulateTimer$SETF =
 	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state &&
 	     (!CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits ||
 	      !xcomms_tx_outpipe_updates_from_msg$wget[1]) &&
-	     NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1692 &&
+	     NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1688 &&
 	     (!xcomms_tx_outpipe_add_to_output_buffer$whas ||
 	      !xcomms_tx_outpipe_updates_from_ifc$wget[0]) &&
-	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1629 !=
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1625 !=
 	     16'd0 ;
 
   // submodule xcomms_tx_outpipe_creditTimer
@@ -9482,19 +9292,19 @@ module mkSVF_Bridge(CLK_user_clk,
   assign xcomms_tx_outpipe_data_info_fifo$sD_IN =
 	     (CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits &&
 	      xcomms_tx_outpipe_updates_from_msg$wget[1]) ?
-	       { _0_CONCAT_xcomms_tx_outpipe_elem_count_632_BITS_ETC___d1657[31:0],
+	       { _0_CONCAT_xcomms_tx_outpipe_elem_count_628_BITS_ETC___d1653[31:0],
 		 2'd0,
 		 xcomms_tx_outpipe_add_to_output_buffer$whas &&
 		 xcomms_tx_outpipe_updates_from_ifc$wget[0] } :
-	       IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1673 ;
+	       IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1669 ;
   assign xcomms_tx_outpipe_data_info_fifo$sENQ =
 	     WILL_FIRE_RL_xcomms_tx_outpipe_update_producer_state &&
 	     (CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits &&
 	      xcomms_tx_outpipe_updates_from_msg$wget[1] ||
-	      xcomms_tx_outpipe_updates_from_ifc_whas__606_A_ETC___d1622 ||
+	      xcomms_tx_outpipe_updates_from_ifc_whas__602_A_ETC___d1618 ||
 	      xcomms_tx_outpipe_add_to_output_buffer$whas &&
 	      xcomms_tx_outpipe_updates_from_ifc$wget[0] ||
-	      IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1652) ;
+	      IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1648) ;
   assign xcomms_tx_outpipe_data_info_fifo$dDEQ =
 	     WILL_FIRE_RL_xcomms_tx_outpipe_drain_data_info_fifo ||
 	     WILL_FIRE_RL_start_outpipe_data_message ;
@@ -9525,52 +9335,48 @@ module mkSVF_Bridge(CLK_user_clk,
   assign xcomms_tx_res_fifo_ff$CLR = 1'b0 ;
 
   // remaining internal signals
-  assign IF_IF_xcomms_tx_outpipe_updates_from_ifc_whas__ETC___d1712 =
-	     (IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1629 ==
+  assign IF_IF_xcomms_tx_outpipe_updates_from_ifc_whas__ETC___d1708 =
+	     (IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1625 ==
 	      16'd0) ?
-	       xcomms_tx_outpipe_elem_count_632_EQ_0_633_OR_N_ETC___d1711 :
+	       xcomms_tx_outpipe_elem_count_628_EQ_0_629_OR_N_ETC___d1707 :
 	       xcomms_tx_outpipe_sendDataOK ||
 	       xcomms_tx_outpipe_add_to_output_buffer$whas &&
 	       xcomms_tx_outpipe_updates_from_ifc$wget[3] ;
-  assign IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_178_ETC___d2392 =
-	     (IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291 !=
+  assign IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_158_ETC___d2372 =
+	     (IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271 !=
 	      2'd0 &&
-	      IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2362) ?
+	      IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2342) ?
 	       2'd1 :
-	       ((IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291 !=
+	       ((IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271 !=
 		 2'd0 &&
-		 IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2389) ?
+		 IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2369) ?
 		  2'd2 :
 		  2'd3) ;
-  assign IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_178_ETC___d2395 =
-	     (IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291 !=
+  assign IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_158_ETC___d2375 =
+	     (IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271 !=
 	      2'd0 &&
-	      IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2362) ?
+	      IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2342) ?
 	       3'd2 :
-	       ((IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291 !=
+	       ((IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271 !=
 		 2'd0 &&
-		 IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2389) ?
+		 IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2369) ?
 		  3'd4 :
 		  3'd0) ;
-  assign IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_273_4_ETC___d1442 =
+  assign IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_269_4_ETC___d1438 =
 	     (!xcomms_rx_inpipe_reset_uclk_done2 ||
 	      xcomms_rx_inpipe_elem_count != 16'd1 &&
-	      xcomms_rx_inpipe_elem_count_407_ULT_xcomms_rx__ETC___d1438) ?
+	      xcomms_rx_inpipe_elem_count_403_ULT_xcomms_rx__ETC___d1434) ?
 	       32'd0 :
 	       { 16'd0, xcomms_rx_inpipe_elem_count } ;
-  assign IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_273_4_ETC___d1475 =
+  assign IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_269_4_ETC___d1471 =
 	     (!xcomms_rx_inpipe_reset_uclk_done2 ||
 	      xcomms_rx_inpipe_elem_count != 16'd1 &&
-	      xcomms_rx_inpipe_elem_count_407_ULT_xcomms_rx__ETC___d1438) ?
+	      xcomms_rx_inpipe_elem_count_403_ULT_xcomms_rx__ETC___d1434) ?
 	       32'd0 :
-	       { 16'd0, b__h115478 } ;
+	       { 16'd0, b__h114929 } ;
   assign IF_cc_gearbox_read_block_04_THEN_IF_NOT_cc_gea_ETC___d445 =
 	     (cc_gearbox_read_block ? keep__h32029 : keep__h31934) == 2'd0 ||
 	     _unnamed_$RDY_cc_xmit_put ;
-  assign IF_clockGenerators_one_to_one_cclock_count_812_ETC___d1815 =
-	     (clockGenerators_one_to_one_cclock_count == 32'd1) ?
-	       32'd0 :
-	       clockGenerators_one_to_one_cclock_count + 32'd1 ;
   assign IF_cq_f_cq_rv_port0__read__78_BITS_98_TO_88_93_ETC___d211 =
 	     (cq_f_cq_rv[98:88] == 11'd1024) ? 10'd0 : cq_f_cq_rv[97:88] ;
   assign IF_cq_gearbox_elem0_status_1__read__5_EQ_cq_ge_ETC___d72 =
@@ -9591,31 +9397,31 @@ module mkSVF_Bridge(CLK_user_clk,
 	     cq_gearbox_read_block ?
 	       cq_gearbox_elem_2[75:12] :
 	       cq_gearbox_elem_0[75:12] ;
-  assign IF_dut_prb_control_control_in_got_beat_pw_whas_ETC___d990 =
+  assign IF_dut_prb_control_control_in_got_beat_pw_whas_ETC___d986 =
 	     dut_prb_control_control_in_got_beat_pw$whas ?
 	       !dut_prb_control_control_in_remaining ||
 	       dut_prb_control_control_in_buffer_full_sp$sRDY :
 	       !dut_prb_control_control_in_next_sp$dPulse ||
 	       dut_prb_control_control_in_buffer_empty_sp$sRDY ;
-  assign IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291 =
-	     (fFromContinueBeat_ifc_rDataCount_178_ULT_4___d2284 ?
+  assign IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271 =
+	     (fFromContinueBeat_ifc_rDataCount_158_ULT_4___d2264 ?
 		2'd0 :
 		2'd1) +
-	     (fS1MsgOut_ifc_rDataCount_215_ULT_4___d2286 ? 2'd0 : 2'd1) +
-	     (fS2MsgOut_ifc_rDataCount_252_ULT_4___d2289 ? 2'd0 : 2'd1) ;
-  assign IF_rS1OutMsgIsCont_541_THEN_2_CONCAT_rS1BitsRe_ETC___d2558 =
+	     (fS1MsgOut_ifc_rDataCount_195_ULT_4___d2266 ? 2'd0 : 2'd1) +
+	     (fS2MsgOut_ifc_rDataCount_232_ULT_4___d2269 ? 2'd0 : 2'd1) ;
+  assign IF_rS1OutMsgIsCont_521_THEN_2_CONCAT_rS1BitsRe_ETC___d2538 =
 	     { rS1OutMsgIsCont ?
 		 { 66'd2,
-		   rS1BitsRem_547_PLUS_IF_rS1OutMsgIsCont_541_THE_ETC___d2552 } :
+		   rS1BitsRem_527_PLUS_IF_rS1OutMsgIsCont_521_THE_ETC___d2532 } :
 		 { rS1CycleStamp,
 		   2'd2,
-		   rS1BitsRem_547_PLUS_IF_rS1OutMsgIsCont_541_THE_ETC___d2552 },
+		   rS1BitsRem_527_PLUS_IF_rS1OutMsgIsCont_521_THE_ETC___d2532 },
 	       rS1BitsRem[13:6] } ;
-  assign IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2691 =
-	     b__h323654 + rS2NumSaved ;
-  assign IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692 =
-	     IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2691 <
-	     value__h323487[2:0] ;
+  assign IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2671 =
+	     b__h322350 + rS2NumSaved ;
+  assign IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672 =
+	     IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2671 <
+	     value__h322183[2:0] ;
   assign IF_rc_gearbox_elem0_status_1__read__90_EQ_rc_g_ETC___d727 =
 	     (rc_gearbox_elem0_status_1__read__90_EQ_rc_gear_ETC___d692 &&
 	      !rc_gearbox_elem0_status_0__read__94_EQ_rc_gear_ETC___d695) ?
@@ -9642,104 +9448,104 @@ module mkSVF_Bridge(CLK_user_clk,
   assign IF_rq_gearbox_read_block_19_THEN_IF_NOT_rq_gea_ETC___d660 =
 	     (rq_gearbox_read_block ? keep__h47225 : keep__h47116) == 2'd0 ||
 	     _unnamed_$RDY_rq_xmit_put ;
-  assign IF_xcomms_rx_inpipe_mimo_rwvEnqData_whas__342__ETC___d1383 =
+  assign IF_xcomms_rx_inpipe_mimo_rwvEnqData_whas__338__ETC___d1379 =
 	     CAN_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ?
-	       { _1766847064367008190252995990204176220188146270_ETC___d1349[207:8] &
-		 xcomms_rx_inpipe_mimo_rwvEnqData_wget__351_CON_ETC___d1365[207:8] |
-		 ~_1766847064367008190252995990204176220188146270_ETC___d1349[207:8] &
-		 xcomms_rx_inpipe_mimo_rvData_369_SRL_0_CONCAT__ETC___d1371[207:8],
-		 _1766847064367008190252995990204176220188146270_ETC___d1349[7:0] &
-		 xcomms_rx_inpipe_mimo_rwvEnqData_wget__351_CON_ETC___d1365[7:0] |
-		 ~_1766847064367008190252995990204176220188146270_ETC___d1349[7:0] &
-		 xcomms_rx_inpipe_mimo_rvData_369_SRL_0_CONCAT__ETC___d1371[7:0] } :
-	       xcomms_rx_inpipe_mimo_rvData_369_SRL_0_CONCAT__ETC___d1371 ;
-  assign IF_xcomms_rx_inpipe_updates_from_ifc_whas__303_ETC___d1306 =
+	       { _1766847064367008190252995990204176220188146270_ETC___d1345[207:8] &
+		 xcomms_rx_inpipe_mimo_rwvEnqData_wget__347_CON_ETC___d1361[207:8] |
+		 ~_1766847064367008190252995990204176220188146270_ETC___d1345[207:8] &
+		 xcomms_rx_inpipe_mimo_rvData_365_SRL_0_CONCAT__ETC___d1367[207:8],
+		 _1766847064367008190252995990204176220188146270_ETC___d1345[7:0] &
+		 xcomms_rx_inpipe_mimo_rwvEnqData_wget__347_CON_ETC___d1361[7:0] |
+		 ~_1766847064367008190252995990204176220188146270_ETC___d1345[7:0] &
+		 xcomms_rx_inpipe_mimo_rvData_365_SRL_0_CONCAT__ETC___d1367[7:0] } :
+	       xcomms_rx_inpipe_mimo_rvData_365_SRL_0_CONCAT__ETC___d1367 ;
+  assign IF_xcomms_rx_inpipe_updates_from_ifc_whas__299_ETC___d1302 =
 	     MUX_xcomms_rx_inpipe_elems$write_1__SEL_2 ?
 	       xcomms_rx_inpipe_updates_from_ifc$wget[33:18] :
 	       16'd0 ;
-  assign IF_xcomms_rx_inpipe_updates_from_ifc_whas__303_ETC___d1312 =
+  assign IF_xcomms_rx_inpipe_updates_from_ifc_whas__299_ETC___d1308 =
 	     MUX_xcomms_rx_inpipe_elems$write_1__SEL_2 ?
 	       xcomms_rx_inpipe_updates_from_ifc$wget[17:2] :
 	       16'd0 ;
-  assign IF_xcomms_rx_inpipe_updates_from_msg_whas__298_ETC___d1301 =
+  assign IF_xcomms_rx_inpipe_updates_from_msg_whas__294_ETC___d1297 =
 	     CAN_FIRE_RL_xcomms_rx_inpipe_consumer_handle_msg ?
 	       xcomms_rx_inpipe_updates_from_msg$wget[18:3] :
 	       16'd0 ;
-  assign IF_xcomms_tx_outpipe_add_to_output_buffer_whas_ETC___d1545 =
+  assign IF_xcomms_tx_outpipe_add_to_output_buffer_whas_ETC___d1541 =
 	     xcomms_tx_outpipe_add_to_output_buffer$whas ?
 	       xcomms_tx_outpipe_add_to_output_buffer$wget[15:0] :
 	       16'd0 ;
-  assign IF_xcomms_tx_outpipe_credits_591_ULE_1_789_THE_ETC___d1790 =
+  assign IF_xcomms_tx_outpipe_credits_587_ULE_1_785_THE_ETC___d1786 =
 	     (xcomms_tx_outpipe_credits <= 16'd1) ?
 	       xcomms_tx_outpipe_credits :
 	       16'd1 ;
-  assign IF_xcomms_tx_outpipe_in_reset_uclk_483_OR_xcom_ETC___d1797 =
-	     (xcomms_tx_outpipe_in_reset_uclk_483_OR_xcomms__ETC___d1775 ||
+  assign IF_xcomms_tx_outpipe_in_reset_uclk_479_OR_xcom_ETC___d1793 =
+	     (xcomms_tx_outpipe_in_reset_uclk_479_OR_xcomms__ETC___d1771 ||
 	      !xcomms_tx_outpipe_data_info_fifo$sFULL_N) ?
 	       32'd0 :
 	       { 16'd0,
-		 IF_xcomms_tx_outpipe_credits_591_ULE_1_789_THE_ETC___d1790 } ;
-  assign IF_xcomms_tx_outpipe_indata_mimo_rwvEnqData_wh_ETC___d1537 =
+		 IF_xcomms_tx_outpipe_credits_587_ULE_1_785_THE_ETC___d1786 } ;
+  assign IF_xcomms_tx_outpipe_indata_mimo_rwvEnqData_wh_ETC___d1533 =
 	     xcomms_tx_outpipe_indata_mimo_rwEnqCount$whas ?
-	       { _2673200087794695338776412422716808468155371262_ETC___d1513[1311:656] &
-		 xcomms_tx_outpipe_indata_mimo_rwvEnqData_wget__ETC___d1517[1311:656] |
-		 ~_2673200087794695338776412422716808468155371262_ETC___d1513[1311:656] &
-		 xcomms_tx_outpipe_indata_mimo_rvData_521_SRL_0_ETC___d1525[1311:656],
-		 _2673200087794695338776412422716808468155371262_ETC___d1513[655:0] &
-		 xcomms_tx_outpipe_indata_mimo_rwvEnqData_wget__ETC___d1517[655:0] |
-		 ~_2673200087794695338776412422716808468155371262_ETC___d1513[655:0] &
-		 xcomms_tx_outpipe_indata_mimo_rvData_521_SRL_0_ETC___d1525[655:0] } :
-	       xcomms_tx_outpipe_indata_mimo_rvData_521_SRL_0_ETC___d1525 ;
+	       { _2673200087794695338776412422716808468155371262_ETC___d1509[1311:656] &
+		 xcomms_tx_outpipe_indata_mimo_rwvEnqData_wget__ETC___d1513[1311:656] |
+		 ~_2673200087794695338776412422716808468155371262_ETC___d1509[1311:656] &
+		 xcomms_tx_outpipe_indata_mimo_rvData_517_SRL_0_ETC___d1521[1311:656],
+		 _2673200087794695338776412422716808468155371262_ETC___d1509[655:0] &
+		 xcomms_tx_outpipe_indata_mimo_rwvEnqData_wget__ETC___d1513[655:0] |
+		 ~_2673200087794695338776412422716808468155371262_ETC___d1509[655:0] &
+		 xcomms_tx_outpipe_indata_mimo_rvData_517_SRL_0_ETC___d1521[655:0] } :
+	       xcomms_tx_outpipe_indata_mimo_rvData_517_SRL_0_ETC___d1521 ;
   assign IF_xcomms_tx_outpipe_noc_buf_bytes_ULT_4_THEN__ETC__q2 =
 	     (xcomms_tx_outpipe_noc_buf_bytes < 16'd4) ?
 	       xcomms_tx_outpipe_noc_buf_bytes :
 	       16'd4 ;
-  assign IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1629 =
+  assign IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1625 =
 	     xcomms_tx_outpipe_add_to_output_buffer$whas ?
 	       xcomms_tx_outpipe_updates_from_ifc$wget[19:4] :
 	       16'd0 ;
-  assign IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1652 =
-	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1629 ==
+  assign IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1648 =
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1625 ==
 	     16'd0 &&
 	     xcomms_tx_outpipe_elem_count != 16'd0 &&
 	     xcomms_tx_outpipe_sendDataOK &&
 	     (xcomms_tx_outpipe_accumulateTimer$Q_OUT == 5'd0 ||
 	      xcomms_tx_outpipe_credits == 16'd0) ;
-  assign IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1673 =
-	     (xcomms_tx_outpipe_updates_from_ifc_whas__606_A_ETC___d1622 ||
+  assign IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1669 =
+	     (xcomms_tx_outpipe_updates_from_ifc_whas__602_A_ETC___d1618 ||
 	      xcomms_tx_outpipe_add_to_output_buffer$whas &&
 	      xcomms_tx_outpipe_updates_from_ifc$wget[0]) ?
-	       { _0_CONCAT_xcomms_tx_outpipe_elem_count_632_PLUS_ETC___d1663[31:0],
+	       { _0_CONCAT_xcomms_tx_outpipe_elem_count_628_PLUS_ETC___d1659[31:0],
 		 xcomms_tx_outpipe_add_to_output_buffer$whas &&
 		 xcomms_tx_outpipe_updates_from_ifc$wget[2],
-		 xcomms_tx_outpipe_updates_from_ifc_whas__606_A_ETC___d1669,
+		 xcomms_tx_outpipe_updates_from_ifc_whas__602_A_ETC___d1665,
 		 xcomms_tx_outpipe_add_to_output_buffer$whas &&
 		 xcomms_tx_outpipe_updates_from_ifc$wget[0] } :
-	       { _0_CONCAT_xcomms_tx_outpipe_elem_count_632_BITS_ETC___d1657[31:0],
+	       { _0_CONCAT_xcomms_tx_outpipe_elem_count_628_BITS_ETC___d1653[31:0],
 		 3'd0 } ;
-  assign IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1679 =
-	     (xcomms_tx_outpipe_updates_from_ifc_whas__606_A_ETC___d1622 ||
+  assign IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1675 =
+	     (xcomms_tx_outpipe_updates_from_ifc_whas__602_A_ETC___d1618 ||
 	      xcomms_tx_outpipe_add_to_output_buffer$whas &&
 	      xcomms_tx_outpipe_updates_from_ifc$wget[0]) ?
 	       16'd0 :
-	       ((IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1629 ==
+	       ((IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1625 ==
 		 16'd0) ?
-		  IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1629 :
-		  xcomms_tx_outpipe_elem_count_632_PLUS_IF_xcomm_ETC___d1660) ;
-  assign IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1721 =
+		  IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1625 :
+		  xcomms_tx_outpipe_elem_count_628_PLUS_IF_xcomm_ETC___d1656) ;
+  assign IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1717 =
 	     xcomms_tx_outpipe_add_to_output_buffer$whas ?
 	       xcomms_tx_outpipe_updates_from_ifc$wget[35:20] :
 	       16'd0 ;
-  assign IF_xcomms_tx_outpipe_updates_from_msg_whas__60_ETC___d1614 =
+  assign IF_xcomms_tx_outpipe_updates_from_msg_whas__59_ETC___d1610 =
 	     CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits ?
 	       xcomms_tx_outpipe_updates_from_msg$wget[18:3] :
 	       16'd0 ;
-  assign IF_xcomms_tx_outpipe_updates_from_msg_whas__60_ETC___d1646 =
-	     xcomms_tx_outpipe_updates_from_msg_whas__602_A_ETC___d1626 ?
+  assign IF_xcomms_tx_outpipe_updates_from_msg_whas__59_ETC___d1642 =
+	     xcomms_tx_outpipe_updates_from_msg_whas__598_A_ETC___d1622 ?
 	       xcomms_tx_outpipe_data_info_fifo$sFULL_N :
-	       IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1629 !=
+	       IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1625 !=
 	       16'd0 ||
-	       xcomms_tx_outpipe_elem_count_632_EQ_0_633_OR_N_ETC___d1644 ;
+	       xcomms_tx_outpipe_elem_count_628_EQ_0_629_OR_N_ETC___d1640 ;
   assign NOT_cc_gearbox_read_block_04_05_AND_NOT_cc_gea_ETC___d427 =
 	     (!cc_gearbox_read_block && x__h29795 != 2'd3 ||
 	      cc_gearbox_read_block && x__h30143 != 2'd3) &&
@@ -9772,40 +9578,41 @@ module mkSVF_Bridge(CLK_user_clk,
 	     (!cq_gearbox_write_block && x__h5030 != 2'd3 ||
 	      cq_gearbox_write_block && x__h5462 != 2'd3) &&
 	     !cq_gearbox_sInReset_pre_isInReset ;
-  assign NOT_dut_prb_control_flag_045_046_AND_NOT_dut_p_ETC___d1047 =
+  assign NOT_dut_prb_control_flag_041_042_AND_NOT_dut_p_ETC___d1043 =
 	     !dut_prb_control_flag &&
 	     { dut_prb_control_sampleIntervalV_3,
 	       dut_prb_control_sampleIntervalV_2,
 	       dut_prb_control_sampleIntervalV_1,
 	       dut_prb_control_sampleIntervalV } !=
 	     32'd0 ;
-  assign NOT_dut_prb_control_sampleIntervalV_3_030_CONC_ETC___d1041 =
+  assign NOT_dut_prb_control_sampleIntervalV_3_026_CONC_ETC___d1037 =
 	     { dut_prb_control_sampleIntervalV_3,
 	       dut_prb_control_sampleIntervalV_2,
 	       dut_prb_control_sampleIntervalV_1,
 	       dut_prb_control_sampleIntervalV } !=
 	     32'd0 &&
-	     init_state_cycle_stamp_crossed__038_EQ_dut_prb_ETC___d1040 ;
-  assign NOT_fFromBridgeBeat_ifc_rDataAvail_859_ULT_4_942___d1943 =
+	     init_state_cycle_stamp_crossed__034_EQ_dut_prb_ETC___d1036 ;
+  assign NOT_fFromBridgeBeat_ifc_rDataAvail_839_ULT_4_922___d1923 =
 	     fFromBridgeBeat_ifc_rDataAvail >= 6'd4 ;
-  assign NOT_fFromBridgeBeat_ifc_rDataCount_840_ULT_4_959___d1960 =
+  assign NOT_fFromBridgeBeat_ifc_rDataCount_820_ULT_4_939___d1940 =
 	     fFromBridgeBeat_ifc_rDataCount >= 6'd4 ;
-  assign NOT_fFromBridgeBeat_ifc_rStorage_827_BITS_27_T_ETC___d2106 =
+  assign NOT_fFromBridgeBeat_ifc_rStorage_807_BITS_27_T_ETC___d2086 =
 	     (fFromBridgeBeat_ifc_rStorage[27:16] != 12'd0 ||
 	      !xcomms_rx_inpipe_in_reset_noc &&
 	      xcomms_rx_inpipe_ecount == 16'd0) &&
 	     (fFromBridgeBeat_ifc_rStorage[27:16] != 12'd0 ||
 	      xcomms_rx_inpipe_data_info_fifo$sFULL_N) ;
-  assign NOT_fS1OutPortAcks_ifc_rDataAvail_937_ULT_2_996___d1997 =
+  assign NOT_fS1OutPortAcks_ifc_rDataAvail_917_ULT_2_976___d1977 =
 	     fS1OutPortAcks_ifc_rDataAvail >= 5'd2 ;
-  assign NOT_fS2MsgOut_ifc_rDataAvail_271_ULT_8_612___d2613 =
+  assign NOT_fS2MsgOut_ifc_rDataAvail_251_ULT_8_592___d2593 =
 	     fS2MsgOut_ifc_rDataAvail >= 6'd8 ;
-  assign NOT_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677__ETC___d2694 =
-	     (!rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_ULE__ETC___d2681 &&
-	      _0_CONCAT_IF_rS2OutMsgBytes_677_ULE_4_678_THEN__ETC___d2684 ||
+  assign NOT_isInReset_isInReset_716___d2732 = !isInReset_isInReset ;
+  assign NOT_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657__ETC___d2674 =
+	     (!rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_ULE__ETC___d2661 &&
+	      _0_CONCAT_IF_rS2OutMsgBytes_657_ULE_4_658_THEN__ETC___d2664 ||
 	      !xcomms_tx_outpipe_in_reset_noc) &&
-	     (IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2692 ||
-	      fS2MsgOut_ifc_rDataCount_252_ULT_32___d2600) ;
+	     (IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2672 ||
+	      fS2MsgOut_ifc_rDataCount_232_ULT_32___d2580) ;
   assign NOT_rc_gearbox_elem0_status_1__read__90_EQ_rc__ETC___d770 =
 	     { (!rc_gearbox_elem0_status_1__read__90_EQ_rc_gear_ETC___d692 ||
 		rc_gearbox_elem0_status_0__read__94_EQ_rc_gear_ETC___d695) &&
@@ -9838,67 +9645,67 @@ module mkSVF_Bridge(CLK_user_clk,
 	     (!rq_gearbox_write_block && x__h35905 == 2'd3 ||
 	      rq_gearbox_write_block && x__h36326 == 2'd3) &&
 	     !rq_gearbox_sInReset_pre_isInReset ;
-  assign NOT_xcomms_tx_outpipe_elem_count_632_EQ_0_633__ETC___d1675 =
+  assign NOT_xcomms_tx_outpipe_elem_count_628_EQ_0_629__ETC___d1671 =
 	     xcomms_tx_outpipe_elem_count != 16'd0 &&
 	     xcomms_tx_outpipe_sendDataOK &&
 	     (xcomms_tx_outpipe_accumulateTimer$Q_OUT == 5'd0 ||
 	      xcomms_tx_outpipe_credits == 16'd0) ||
-	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1629 !=
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1625 !=
 	     16'd0 ;
-  assign NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1692 =
+  assign NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1688 =
 	     (!xcomms_tx_outpipe_add_to_output_buffer$whas ||
 	      !xcomms_tx_outpipe_updates_from_ifc$wget[2] &&
 	      !xcomms_tx_outpipe_updates_from_ifc$wget[1]) &&
 	     (!xcomms_tx_outpipe_flush_requested ||
-	      xcomms_tx_outpipe_credits_591_PLUS_IF_xcomms_t_ETC___d1615 ==
+	      xcomms_tx_outpipe_credits_587_PLUS_IF_xcomms_t_ETC___d1611 ==
 	      16'd1024 ||
 	      xcomms_tx_outpipe_flushing) ;
-  assign NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1699 =
-	     NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1692 &&
+  assign NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1695 =
+	     NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1688 &&
 	     (!xcomms_tx_outpipe_add_to_output_buffer$whas ||
 	      !xcomms_tx_outpipe_updates_from_ifc$wget[0]) &&
-	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1629 ==
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1625 ==
 	     16'd0 &&
 	     (xcomms_tx_outpipe_elem_count == 16'd0 ||
 	      !xcomms_tx_outpipe_sendDataOK ||
 	      xcomms_tx_outpipe_credits != 16'd0) &&
 	     xcomms_tx_outpipe_accumulateTimer$Q_OUT != 5'd0 ;
-  assign NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1706 =
+  assign NOT_xcomms_tx_outpipe_updates_from_ifc_whas__6_ETC___d1702 =
 	     (!xcomms_tx_outpipe_add_to_output_buffer$whas ||
 	      !xcomms_tx_outpipe_updates_from_ifc$wget[2]) &&
 	     (!xcomms_tx_outpipe_add_to_output_buffer$whas ||
 	      !xcomms_tx_outpipe_updates_from_ifc$wget[1]) &&
 	     (!xcomms_tx_outpipe_flush_requested ||
-	      xcomms_tx_outpipe_credits_591_PLUS_IF_xcomms_t_ETC___d1615 ==
+	      xcomms_tx_outpipe_credits_587_PLUS_IF_xcomms_t_ETC___d1611 ==
 	      16'd1024 ||
 	      xcomms_tx_outpipe_flushing) ;
-  assign _0_CONCAT_IF_fS1OutPortAcks_ifc_rwDeqCount_whas_ETC___d1906 =
-	     b__h177166 * 32'd10 ;
-  assign _0_CONCAT_IF_rS2OutBytes_652_ULE_248_653_THEN_r_ETC___d2657 =
-	     b__h323321 == rS2OutBytes ;
-  assign _0_CONCAT_IF_rS2OutMsgBytes_677_ULE_4_678_THEN__ETC___d2684 =
-	     b__h323529 == rS2OutMsgBytes ;
-  assign _0_CONCAT_IF_xcomms_tx_outpipe_indata_mimo_rwDe_ETC___d1523 =
-	     b__h123308 * 32'd656 ;
-  assign _0_CONCAT_fS1OutPortAcks_ifc_rDataCount_916_MIN_ETC___d1919 =
-	     b__h177355 * 32'd10 ;
-  assign _0_CONCAT_xcomms_tx_outpipe_elem_count_632_BITS_ETC___d1657 =
+  assign _0_CONCAT_IF_fS1OutPortAcks_ifc_rwDeqCount_whas_ETC___d1886 =
+	     b__h175805 * 32'd10 ;
+  assign _0_CONCAT_IF_rS2OutBytes_632_ULE_248_633_THEN_r_ETC___d2637 =
+	     b__h322017 == rS2OutBytes ;
+  assign _0_CONCAT_IF_rS2OutMsgBytes_657_ULE_4_658_THEN__ETC___d2664 =
+	     b__h322225 == rS2OutMsgBytes ;
+  assign _0_CONCAT_IF_xcomms_tx_outpipe_indata_mimo_rwDe_ETC___d1519 =
+	     b__h122759 * 32'd656 ;
+  assign _0_CONCAT_fS1OutPortAcks_ifc_rDataCount_896_MIN_ETC___d1899 =
+	     b__h175994 * 32'd10 ;
+  assign _0_CONCAT_xcomms_tx_outpipe_elem_count_628_BITS_ETC___d1653 =
 	     { 21'd0, xcomms_tx_outpipe_elem_count[10:0] } * 32'd82 ;
-  assign _0_CONCAT_xcomms_tx_outpipe_elem_count_632_PLUS_ETC___d1663 =
+  assign _0_CONCAT_xcomms_tx_outpipe_elem_count_628_PLUS_ETC___d1659 =
 	     { 21'd0,
-	       xcomms_tx_outpipe_elem_count_632_PLUS_IF_xcomm_ETC___d1660[10:0] } *
+	       xcomms_tx_outpipe_elem_count_628_PLUS_IF_xcomm_ETC___d1656[10:0] } *
 	     32'd82 ;
-  assign _1766847064367008190252995990204176220188146270_ETC___d1349 =
+  assign _1766847064367008190252995990204176220188146270_ETC___d1345 =
 	     240'hFFFFFFFF0000000000000000000000000000000000000000000000000000 >>
-	     x__h92793 ;
-  assign _1_SL_IF_fFromBridgeBeat_ifc_rStorage_827_BIT_1_ETC___d2026 =
-	     (14'd1 << value__h213281) - 14'd1 ;
-  assign _2673200087794695338776412422716808468155371262_ETC___d1513 =
+	     x__h92244 ;
+  assign _1_SL_IF_fFromBridgeBeat_ifc_rStorage_807_BIT_1_ETC___d2006 =
+	     (14'd1 << value__h211977) - 14'd1 ;
+  assign _2673200087794695338776412422716808468155371262_ETC___d1509 =
 	     1968'hFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 >>
-	     _656_MUL_2_MINUS_0_CONCAT_xcomms_tx_outpipe_ind_ETC___d1511[31:0] ;
-  assign _26_MINUS_b2749__q3 = 32'd26 - b__h92749 ;
-  assign _656_MUL_2_MINUS_0_CONCAT_xcomms_tx_outpipe_ind_ETC___d1511 =
-	     32'd656 * (32'd2 - b__h121691) ;
+	     _656_MUL_2_MINUS_0_CONCAT_xcomms_tx_outpipe_ind_ETC___d1507[31:0] ;
+  assign _26_MINUS_b2200__q3 = 32'd26 - b__h92200 ;
+  assign _656_MUL_2_MINUS_0_CONCAT_xcomms_tx_outpipe_ind_ETC___d1507 =
+	     32'd656 * (32'd2 - b__h121142) ;
   assign _dor1cc_gearbox_block0_status$EN__write =
 	     WILL_FIRE_RL_cc_rl_data || WILL_FIRE_RL_cc_rl_header ;
   assign _dor1cc_gearbox_block1_status$EN__write =
@@ -9939,32 +9746,32 @@ module mkSVF_Bridge(CLK_user_clk,
 	     (cc_f_tlps_rv[75:64] == 12'd0) ?
 	       13'd4096 :
 	       { 1'd0, cc_f_tlps_rv[75:64] } ;
-  assign b__h115478 =
+  assign b__h114929 =
 	     ((xcomms_rx_inpipe_elems[176] ?
 		 16'd1 :
 		 xcomms_rx_inpipe_elem_count) !=
 	      16'd0) ?
 	       16'd1 :
 	       xcomms_rx_inpipe_elem_count ;
-  assign b__h120371 =
+  assign b__h119822 =
 	     xcomms_tx_outpipe_indata_mimo_rwEnqCount$whas ?
 	       xcomms_tx_outpipe_indata_mimo_rwEnqCount$wget :
 	       2'd0 ;
-  assign b__h121691 = { 30'd0, value__h121692 } ;
-  assign b__h123308 = { 30'd0, value__h123310 } ;
-  assign b__h174732 = fFromBridgeBeat_ifc_rwDeqCount$whas ? 6'd4 : 6'd0 ;
-  assign b__h175063 =
+  assign b__h121142 = { 30'd0, value__h121143 } ;
+  assign b__h122759 = { 30'd0, value__h122761 } ;
+  assign b__h173371 = fFromBridgeBeat_ifc_rwDeqCount$whas ? 6'd4 : 6'd0 ;
+  assign b__h173702 =
 	     CAN_FIRE_RL_msg_sink_noc_active_receive_beat_from_bridge ?
 	       6'd4 :
 	       6'd0 ;
-  assign b__h176064 = fToContinueBeat_ifc_rwEnqCount$whas ? 6'd4 : 6'd0 ;
-  assign b__h177166 = { 27'd0, b__h177199 } ;
-  assign b__h177199 =
+  assign b__h174703 = fToContinueBeat_ifc_rwEnqCount$whas ? 6'd4 : 6'd0 ;
+  assign b__h175805 = { 27'd0, b__h175838 } ;
+  assign b__h175838 =
 	     CAN_FIRE_RL_msg_sink_noc_active_execute_outport_acks ?
 	       5'd1 :
 	       5'd0 ;
-  assign b__h177355 = { 27'd0, value__h177357 } ;
-  assign b__h177528 =
+  assign b__h175994 = { 27'd0, value__h175996 } ;
+  assign b__h176167 =
 	     fS1OutPortAcks_ifc_rwEnqCount$whas ?
 	       fS1OutPortAcks_ifc_rwEnqCount$wget :
 	       5'd0 ;
@@ -9973,64 +9780,64 @@ module mkSVF_Bridge(CLK_user_clk,
 	       cc_f_tlps_rv[15:8],
 	       cc_f_tlps_rv[23:16],
 	       cc_f_tlps_rv[31:24] } ;
-  assign b__h245216 = MUX_fToBridgeBeat$enq_1__SEL_1 ? 6'd4 : 6'd0 ;
-  assign b__h247175 = MUX_fToBridgeBeat$enq_1__SEL_2 ? 6'd4 : 6'd0 ;
-  assign b__h247506 =
+  assign b__h243912 = MUX_fToBridgeBeat$enq_1__SEL_1 ? 6'd4 : 6'd0 ;
+  assign b__h245871 = MUX_fToBridgeBeat$enq_1__SEL_2 ? 6'd4 : 6'd0 ;
+  assign b__h246202 =
 	     fS1MsgOut_ifc_rwEnqCount$whas ?
 	       fS1MsgOut_ifc_rwEnqCount$wget :
 	       6'd0 ;
-  assign b__h248299 = MUX_fToBridgeBeat$enq_1__SEL_3 ? 6'd4 : 6'd0 ;
-  assign b__h248630 =
+  assign b__h246995 = MUX_fToBridgeBeat$enq_1__SEL_3 ? 6'd4 : 6'd0 ;
+  assign b__h247326 =
 	     fS2MsgOut_ifc_rwEnqCount$whas ?
 	       fS2MsgOut_ifc_rwEnqCount$wget :
 	       6'd0 ;
-  assign b__h268364 =
-	     (IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291 !=
+  assign b__h267060 =
+	     (IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271 !=
 	      2'd0 &&
-	      IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2342) ?
+	      IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2322) ?
 	       2'd0 :
-	       IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_178_ETC___d2392 ;
-  assign b__h272179 = { 1'd0, fFromContinueBeat_ifc_rStorage[23:16] } ;
-  assign b__h276099 = { 1'd0, fS1MsgOut_ifc_rStorage[23:16] } ;
-  assign b__h280010 = { 1'd0, fS2MsgOut_ifc_rStorage[23:16] } ;
-  assign b__h323321 = { 24'd0, value__h319339[7:0] } ;
-  assign b__h323529 = { 5'd0, value__h323487[2:0] } ;
-  assign b__h323654 =
-	     (rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_ULE__ETC___d2681 ||
-	      !_0_CONCAT_IF_rS2OutMsgBytes_677_ULE_4_678_THEN__ETC___d2684) ?
+	       IF_NOT_IF_fFromContinueBeat_ifc_rDataCount_158_ETC___d2372 ;
+  assign b__h270875 = { 1'd0, fFromContinueBeat_ifc_rStorage[23:16] } ;
+  assign b__h274795 = { 1'd0, fS1MsgOut_ifc_rStorage[23:16] } ;
+  assign b__h278706 = { 1'd0, fS2MsgOut_ifc_rStorage[23:16] } ;
+  assign b__h322017 = { 24'd0, value__h318035[7:0] } ;
+  assign b__h322225 = { 5'd0, value__h322183[2:0] } ;
+  assign b__h322350 =
+	     (rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_ULE__ETC___d2661 ||
+	      !_0_CONCAT_IF_rS2OutMsgBytes_657_ULE_4_658_THEN__ETC___d2664) ?
 	       ((xcomms_tx_outpipe_noc_buf_bytes == 16'd0) ?
 		  3'd0 :
 		  IF_xcomms_tx_outpipe_noc_buf_bytes_ULT_4_THEN__ETC__q2[2:0]) :
 	       3'd0 ;
-  assign b__h330583 =
-	     IF_rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_U_ETC___d2691 -
-	     value__h323487[2:0] ;
-  assign b__h83695 =
+  assign b__h329279 =
+	     IF_rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_U_ETC___d2671 -
+	     value__h322183[2:0] ;
+  assign b__h83146 =
 	     CAN_FIRE_RL_msg_sink_noc_active_scemi2_process_inpipe_data ?
 	       xcomms_rx_inpipe_mimo_rwEnqCount$wget :
 	       5'd0 ;
-  assign b__h92749 = { 27'd0, value__h92750 } ;
-  assign bridge_is_activated__16_AND_rOtherMsgIn_983_AN_ETC___d2143 =
+  assign b__h92200 = { 27'd0, value__h92201 } ;
+  assign bridge_is_activated__16_AND_rOtherMsgIn_963_AN_ETC___d2123 =
 	     bridge$is_activated && rOtherMsgIn && !rSceMi1MsgIn &&
 	     !rSceMi2MsgIn &&
 	     rInMsgBytes != 8'd0 &&
-	     NOT_fFromBridgeBeat_ifc_rDataCount_840_ULT_4_959___d1960 &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_820_ULT_4_939___d1940 &&
 	     fToContinueBeat_ifc_rDataAvail >= 6'd4 ;
-  assign bridge_is_activated__16_AND_rSceMi1MsgIn_979_A_ETC___d2000 =
+  assign bridge_is_activated__16_AND_rSceMi1MsgIn_959_A_ETC___d1980 =
 	     bridge$is_activated &&
-	     rSceMi1MsgIn_979_AND_NOT_rSceMi2MsgIn_980_981__ETC___d1987 &&
-	     NOT_fFromBridgeBeat_ifc_rDataCount_840_ULT_4_959___d1960 &&
+	     rSceMi1MsgIn_959_AND_NOT_rSceMi2MsgIn_960_961__ETC___d1967 &&
+	     NOT_fFromBridgeBeat_ifc_rDataCount_820_ULT_4_939___d1940 &&
 	     rDecodeSceMi &&
 	     !rS1MsgInIsAck &&
 	     !rS1MsgInIsData &&
-	     NOT_fS1OutPortAcks_ifc_rDataAvail_937_ULT_2_996___d1997 ;
-  assign bridge_is_activated__16_AND_rSceMi2MsgIn_980_1_ETC___d2156 =
+	     NOT_fS1OutPortAcks_ifc_rDataAvail_917_ULT_2_976___d1977 ;
+  assign bridge_is_activated__16_AND_rSceMi2MsgIn_960_1_ETC___d2136 =
 	     bridge$is_activated && rSceMi2MsgIn && !rSceMi1MsgIn &&
 	     !rOtherMsgIn &&
 	     rInMsgBytes != 8'd0 &&
 	     rS2MsgInIsData &&
-	     NOT_fFromBridgeBeat_ifc_rDataCount_840_ULT_4_959___d1960 ;
-  assign bs__h323645 = x__h323804 | y__h323805 ;
+	     NOT_fFromBridgeBeat_ifc_rDataCount_820_ULT_4_939___d1940 ;
+  assign bs__h322341 = x__h322500 | y__h322501 ;
   assign cc_gearbox_elem0_status_0__read__09_EQ_cc_gear_ETC___d410 =
 	     cc_gearbox_elem0_status_0 == cc_gearbox_block0_status ;
   assign cc_gearbox_elem0_status_1__read__06_EQ_cc_gear_ETC___d408 =
@@ -10084,7 +9891,7 @@ module mkSVF_Bridge(CLK_user_clk,
 	      !cq_gearbox_elem0_status_0__read__9_EQ_cq_gearb_ETC___d40) ?
 	       64'd0 :
 	       cq_gearbox_elem_1[75:12] ;
-  assign dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1118 =
+  assign dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1114 =
 	     (dut_prb_control_control_in_dataF_rv$port1__read[15:13] ==
 	      3'd3 &&
 	      !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
@@ -10106,7 +9913,7 @@ module mkSVF_Bridge(CLK_user_clk,
 		dut_prb_control_control_in_dataF_rv$port1__read[11:10] ==
 		2'd2 ||
 		dut_prb_control_enff$FULL_N) ;
-  assign dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1141 =
+  assign dut_prb_control_control_in_dataF_rv_port1__rea_ETC___d1137 =
 	     dut_prb_control_control_in_dataF_rv$port1__read[15:13] == 3'd3 &&
 	     !dut_prb_control_control_in_dataF_rv$port1__read[12] &&
 	     dut_prb_control_control_in_dataF_rv$port1__read[11:10] == 2'd2 &&
@@ -10117,46 +9924,46 @@ module mkSVF_Bridge(CLK_user_clk,
 	       dut_prb_control_sampleIntervalV_1,
 	       dut_prb_control_sampleIntervalV } !=
 	     32'd0 ;
-  assign dut_prb_control_data_out_next_RDY_send__174_AN_ETC___d1211 =
+  assign dut_prb_control_data_out_next_RDY_send__170_AN_ETC___d1207 =
 	     dut_prb_control_data_out_next$sRDY &&
 	     init_state_msgFIFO$sFULL_N &&
-	     dut_prb_control_data_out_ok_43_AND_NOT_init_st_ETC___d951 &&
+	     dut_prb_control_data_out_ok_39_AND_NOT_init_st_ETC___d947 &&
 	     dut_prb_control_prb_str$EMPTY_N ;
-  assign dut_prb_control_data_out_ok_43_AND_NOT_init_st_ETC___d951 =
+  assign dut_prb_control_data_out_ok_39_AND_NOT_init_st_ETC___d947 =
 	     dut_prb_control_data_out_ok && !init_state_any_in_reset_uclk &&
 	     init_state_out_port == 10'd0 &&
 	     init_state_msgFIFO$sFULL_N ;
-  assign enqData__h174618 = x__h174828 << x__h174935 ;
-  assign enqData__h175619 = x__h175829 << x__h175936 ;
-  assign enqData__h177085 =
-	     x__h177294 <<
-	     _0_CONCAT_fS1OutPortAcks_ifc_rDataCount_916_MIN_ETC___d1919[31:0] ;
-  assign enqData__h245102 = 256'd0 << x__h245419 ;
-  assign enqData__h247061 = x__h247271 << x__h247378 ;
-  assign enqData__h248185 = x__h248395 << x__h248502 ;
-  assign enqMask__h174619 = x__h174943 << x__h174935 ;
-  assign enqMask__h175620 = x__h175944 << x__h175936 ;
-  assign enqMask__h177086 =
-	     x__h177408 <<
-	     _0_CONCAT_fS1OutPortAcks_ifc_rDataCount_916_MIN_ETC___d1919[31:0] ;
-  assign enqMask__h245103 = enqData__h245102 ;
-  assign enqMask__h247062 = x__h247386 << x__h247378 ;
-  assign enqMask__h248186 = x__h248510 << x__h248502 ;
-  assign fFromContinueBeat_ifc_rDataCount_178_ULT_4___d2284 =
+  assign enqData__h173257 = x__h173467 << x__h173574 ;
+  assign enqData__h174258 = x__h174468 << x__h174575 ;
+  assign enqData__h175724 =
+	     x__h175933 <<
+	     _0_CONCAT_fS1OutPortAcks_ifc_rDataCount_896_MIN_ETC___d1899[31:0] ;
+  assign enqData__h243798 = 256'd0 << x__h244115 ;
+  assign enqData__h245757 = x__h245967 << x__h246074 ;
+  assign enqData__h246881 = x__h247091 << x__h247198 ;
+  assign enqMask__h173258 = x__h173582 << x__h173574 ;
+  assign enqMask__h174259 = x__h174583 << x__h174575 ;
+  assign enqMask__h175725 =
+	     x__h176047 <<
+	     _0_CONCAT_fS1OutPortAcks_ifc_rDataCount_896_MIN_ETC___d1899[31:0] ;
+  assign enqMask__h243799 = enqData__h243798 ;
+  assign enqMask__h245758 = x__h246082 << x__h246074 ;
+  assign enqMask__h246882 = x__h247206 << x__h247198 ;
+  assign fFromContinueBeat_ifc_rDataCount_158_ULT_4___d2264 =
 	     fFromContinueBeat_ifc_rDataCount < 6'd4 ;
-  assign fS1MsgOut_ifc_rDataCount_215_ULT_32___d2504 =
+  assign fS1MsgOut_ifc_rDataCount_195_ULT_32___d2484 =
 	     fS1MsgOut_ifc_rDataCount < 6'd32 ;
-  assign fS1MsgOut_ifc_rDataCount_215_ULT_4___d2286 =
+  assign fS1MsgOut_ifc_rDataCount_195_ULT_4___d2266 =
 	     fS1MsgOut_ifc_rDataCount < 6'd4 ;
-  assign fS1OutPortAcks_ifc_rDataCount_916_ULT_16___d1976 =
+  assign fS1OutPortAcks_ifc_rDataCount_896_ULT_16___d1956 =
 	     fS1OutPortAcks_ifc_rDataCount < 5'd16 ;
-  assign fS2MsgOut_ifc_rDataCount_252_ULT_32___d2600 =
+  assign fS2MsgOut_ifc_rDataCount_232_ULT_32___d2580 =
 	     fS2MsgOut_ifc_rDataCount < 6'd32 ;
-  assign fS2MsgOut_ifc_rDataCount_252_ULT_4___d2289 =
+  assign fS2MsgOut_ifc_rDataCount_232_ULT_4___d2269 =
 	     fS2MsgOut_ifc_rDataCount < 6'd4 ;
-  assign fToContinueBeat_ifc_rDataCount_877_ULT_32___d1955 =
+  assign fToContinueBeat_ifc_rDataCount_857_ULT_32___d1935 =
 	     fToContinueBeat_ifc_rDataCount < 6'd32 ;
-  assign init_state_cycle_stamp_crossed__038_EQ_dut_prb_ETC___d1040 =
+  assign init_state_cycle_stamp_crossed__034_EQ_dut_prb_ETC___d1036 =
 	     init_state_cycle_stamp == dut_prb_control_nextSample ;
   assign keep__h31934 =
 	     (!cc_gearbox_elem0_status_1__read__06_EQ_cc_gear_ETC___d408 &&
@@ -10266,50 +10073,50 @@ module mkSVF_Bridge(CLK_user_clk,
 	       2'b0 :
 	       ((rq_rg_dwcount == 11'd3) ? 2'b01 : 2'b11) ;
   assign n_keep__h43301 = (rq_rg_dwcount == 11'd1) ? 2'b01 : 2'b11 ;
-  assign nextMask__h174613 = fFromBridgeBeat_ifc_rStorageMask >> x__h174792 ;
-  assign nextMask__h174621 = nextMask__h174613 | enqMask__h174619 ;
-  assign nextMask__h175614 = fToContinueBeat_ifc_rStorageMask >> 0 ;
-  assign nextMask__h175622 = nextMask__h175614 | enqMask__h175620 ;
-  assign nextMask__h177080 =
+  assign nextMask__h173252 = fFromBridgeBeat_ifc_rStorageMask >> x__h173431 ;
+  assign nextMask__h173260 = nextMask__h173252 | enqMask__h173258 ;
+  assign nextMask__h174253 = fToContinueBeat_ifc_rStorageMask >> 0 ;
+  assign nextMask__h174261 = nextMask__h174253 | enqMask__h174259 ;
+  assign nextMask__h175719 =
 	     fS1OutPortAcks_ifc_rStorageMask >>
-	     _0_CONCAT_IF_fS1OutPortAcks_ifc_rwDeqCount_whas_ETC___d1906[31:0] ;
-  assign nextMask__h177088 = nextMask__h177080 | enqMask__h177086 ;
-  assign nextMask__h245097 =
-	     fFromContinueBeat_ifc_rStorageMask >> x__h245276 ;
-  assign nextMask__h245105 = nextMask__h245097 | enqMask__h245103 ;
-  assign nextMask__h247056 = fS1MsgOut_ifc_rStorageMask >> x__h247235 ;
-  assign nextMask__h247064 = nextMask__h247056 | enqMask__h247062 ;
-  assign nextMask__h248180 = fS2MsgOut_ifc_rStorageMask >> x__h248359 ;
-  assign nextMask__h248188 = nextMask__h248180 | enqMask__h248186 ;
-  assign nextStorage__h174612 = fFromBridgeBeat_ifc_rStorage >> x__h174792 ;
-  assign nextStorage__h174620 = x__h174677 | y__h174678 ;
-  assign nextStorage__h175613 = fToContinueBeat_ifc_rStorage >> 0 ;
-  assign nextStorage__h175621 = x__h175678 | y__h175679 ;
-  assign nextStorage__h177079 =
+	     _0_CONCAT_IF_fS1OutPortAcks_ifc_rwDeqCount_whas_ETC___d1886[31:0] ;
+  assign nextMask__h175727 = nextMask__h175719 | enqMask__h175725 ;
+  assign nextMask__h243793 =
+	     fFromContinueBeat_ifc_rStorageMask >> x__h243972 ;
+  assign nextMask__h243801 = nextMask__h243793 | enqMask__h243799 ;
+  assign nextMask__h245752 = fS1MsgOut_ifc_rStorageMask >> x__h245931 ;
+  assign nextMask__h245760 = nextMask__h245752 | enqMask__h245758 ;
+  assign nextMask__h246876 = fS2MsgOut_ifc_rStorageMask >> x__h247055 ;
+  assign nextMask__h246884 = nextMask__h246876 | enqMask__h246882 ;
+  assign nextStorage__h173251 = fFromBridgeBeat_ifc_rStorage >> x__h173431 ;
+  assign nextStorage__h173259 = x__h173316 | y__h173317 ;
+  assign nextStorage__h174252 = fToContinueBeat_ifc_rStorage >> 0 ;
+  assign nextStorage__h174260 = x__h174317 | y__h174318 ;
+  assign nextStorage__h175718 =
 	     fS1OutPortAcks_ifc_rStorage >>
-	     _0_CONCAT_IF_fS1OutPortAcks_ifc_rwDeqCount_whas_ETC___d1906[31:0] ;
-  assign nextStorage__h177087 = x__h177144 | y__h177145 ;
-  assign nextStorage__h245096 = fFromContinueBeat_ifc_rStorage >> x__h245276 ;
-  assign nextStorage__h245104 = x__h245161 | y__h245162 ;
-  assign nextStorage__h247055 = fS1MsgOut_ifc_rStorage >> x__h247235 ;
-  assign nextStorage__h247063 = x__h247120 | y__h247121 ;
-  assign nextStorage__h248179 = fS2MsgOut_ifc_rStorage >> x__h248359 ;
-  assign nextStorage__h248187 = x__h248244 | y__h248245 ;
-  assign rInMsgBytes_961_ULE_4___d2004 = rInMsgBytes <= 8'd4 ;
-  assign rOutMsgBytes_281_ULE_4___d2475 = rOutMsgBytes <= 8'd4 ;
-  assign rS1BitsRem_547_PLUS_IF_rS1OutMsgIsCont_541_THE_ETC___d2552 =
+	     _0_CONCAT_IF_fS1OutPortAcks_ifc_rwDeqCount_whas_ETC___d1886[31:0] ;
+  assign nextStorage__h175726 = x__h175783 | y__h175784 ;
+  assign nextStorage__h243792 = fFromContinueBeat_ifc_rStorage >> x__h243972 ;
+  assign nextStorage__h243800 = x__h243857 | y__h243858 ;
+  assign nextStorage__h245751 = fS1MsgOut_ifc_rStorage >> x__h245931 ;
+  assign nextStorage__h245759 = x__h245816 | y__h245817 ;
+  assign nextStorage__h246875 = fS2MsgOut_ifc_rStorage >> x__h247055 ;
+  assign nextStorage__h246883 = x__h246940 | y__h246941 ;
+  assign rInMsgBytes_941_ULE_4___d1984 = rInMsgBytes <= 8'd4 ;
+  assign rOutMsgBytes_261_ULE_4___d2455 = rOutMsgBytes <= 8'd4 ;
+  assign rS1BitsRem_527_PLUS_IF_rS1OutMsgIsCont_521_THE_ETC___d2532 =
 	     { rS1BitsRem + (rS1OutMsgIsCont ? 19'd32 : 19'd96) <= 19'd2016,
 	       rS1BitsRem[18:14] } ;
-  assign rS1BitsRem_547_ULE_32___d2580 = rS1BitsRem <= 19'd32 ;
+  assign rS1BitsRem_527_ULE_32___d2560 = rS1BitsRem <= 19'd32 ;
   assign rS1BitsRem_MINUS_25_SRL_3__q6 = (rS1BitsRem - 19'd25) >> 3 ;
-  assign rS1OutMsgSize_542_MINUS_4___d2543 = rS1OutMsgSize - 8'd4 ;
-  assign rS1OutMsgSize_542_ULE_4___d2582 = rS1OutMsgSize <= 8'd4 ;
-  assign rS2NumSaved_676_ULT_IF_rS2OutMsgBytes_677_ULE__ETC___d2681 =
-	     rS2NumSaved < value__h323487[2:0] ;
-  assign rSceMi1MsgIn_979_AND_NOT_rSceMi2MsgIn_980_981__ETC___d1987 =
+  assign rS1OutMsgSize_522_MINUS_4___d2523 = rS1OutMsgSize - 8'd4 ;
+  assign rS1OutMsgSize_522_ULE_4___d2562 = rS1OutMsgSize <= 8'd4 ;
+  assign rS2NumSaved_656_ULT_IF_rS2OutMsgBytes_657_ULE__ETC___d2661 =
+	     rS2NumSaved < value__h322183[2:0] ;
+  assign rSceMi1MsgIn_959_AND_NOT_rSceMi2MsgIn_960_961__ETC___d1967 =
 	     rSceMi1MsgIn && !rSceMi2MsgIn && !rOtherMsgIn &&
 	     rInMsgBytes != 8'd0 ;
-  assign rSceMi2MsgIn_980_AND_NOT_rSceMi1MsgIn_979_109__ETC___d2112 =
+  assign rSceMi2MsgIn_960_AND_NOT_rSceMi1MsgIn_959_089__ETC___d2092 =
 	     rSceMi2MsgIn && !rSceMi1MsgIn && !rOtherMsgIn &&
 	     rInMsgBytes != 8'd0 ;
   assign rc_gearbox_elem0_status_0__read__94_EQ_rc_gear_ETC___d695 =
@@ -10457,113 +10264,112 @@ module mkSVF_Bridge(CLK_user_clk,
 	       IF_rc_gearbox_read_block_96_THEN_rc_gearbox_el_ETC___d842[55:48],
 	       IF_rc_gearbox_read_block_96_THEN_rc_gearbox_el_ETC___d842[63:56] } ;
   assign tlp16_hit__h12860 = 7'd1 << cq_f_cq_rv[138:136] ;
-  assign value_BITS_23_TO_16___h320632 = value__h319339[7:0] + 8'd4 ;
-  assign value__h108852 =
+  assign value_BITS_23_TO_16___h319328 = value__h318035[7:0] + 8'd4 ;
+  assign value__h108303 =
 	     CAN_FIRE_RL_xcomms_rx_inpipe_take_completed_element ?
 	       5'd22 :
 	       5'd0 ;
-  assign value__h121692 =
-	     xcomms_tx_outpipe_indata_mimo_rDataCount - value__h123310 ;
-  assign value__h123310 =
+  assign value__h121143 =
+	     xcomms_tx_outpipe_indata_mimo_rDataCount - value__h122761 ;
+  assign value__h122761 =
 	     CAN_FIRE_RL_xcomms_tx_outpipe_shift_elements_out_of_buffer ?
 	       2'd1 :
 	       2'd0 ;
-  assign value__h174829 =
+  assign value__h173468 =
 	     CAN_FIRE_RL_msg_sink_noc_active_receive_beat_from_bridge ?
 	       fFromBridgeBeat_ifc_rwEnqData$wget :
 	       128'd0 ;
-  assign value__h174891 = fFromBridgeBeat_ifc_rDataCount - b__h174732 ;
-  assign value__h174944 =
+  assign value__h173530 = fFromBridgeBeat_ifc_rDataCount - b__h173371 ;
+  assign value__h173583 =
 	     CAN_FIRE_RL_msg_sink_noc_active_receive_beat_from_bridge ?
 	       128'h000000000000000000000000FFFFFFFF :
 	       128'd0 ;
-  assign value__h175830 =
+  assign value__h174469 =
 	     fToContinueBeat_ifc_rwEnqCount$whas ?
 	       fToContinueBeat_ifc_rwEnqData$wget :
 	       128'd0 ;
-  assign value__h175892 = fToContinueBeat_ifc_rDataCount - 6'd0 ;
-  assign value__h175945 =
+  assign value__h174531 = fToContinueBeat_ifc_rDataCount - 6'd0 ;
+  assign value__h174584 =
 	     fToContinueBeat_ifc_rwEnqCount$whas ?
 	       128'h000000000000000000000000FFFFFFFF :
 	       128'd0 ;
-  assign value__h177295 =
+  assign value__h175934 =
 	     fS1OutPortAcks_ifc_rwEnqCount$whas ?
 	       fS1OutPortAcks_ifc_rwEnqData$wget :
 	       140'd0 ;
-  assign value__h177357 = fS1OutPortAcks_ifc_rDataCount - b__h177199 ;
-  assign value__h177409 =
+  assign value__h175996 = fS1OutPortAcks_ifc_rDataCount - b__h175838 ;
+  assign value__h176048 =
 	     fS1OutPortAcks_ifc_rwEnqCount$whas ?
 	       fS1OutPortAcks_ifc_rwEnqMask$wget :
 	       140'd0 ;
-  assign value__h213281 =
+  assign value__h211977 =
 	     fFromBridgeBeat_ifc_rStorage[10] ?
 	       (fFromBridgeBeat_ifc_rStorage[26] ? 4'd2 : 4'd1) :
 	       (fFromBridgeBeat_ifc_rStorage[26] ? 4'd1 : 4'd0) ;
-  assign value__h214510 =
+  assign value__h213206 =
 	     fFromBridgeBeat_ifc_rStorage[10] ?
 	       (fFromBridgeBeat_ifc_rStorage[26] ?
 		  { fFromBridgeBeat_ifc_rStorage[9:0],
 		    fFromBridgeBeat_ifc_rStorage[25:16] } :
 		  { 10'h2AA, fFromBridgeBeat_ifc_rStorage[9:0] }) :
 	       { 10'h2AA, fFromBridgeBeat_ifc_rStorage[25:16] } ;
-  assign value__h241946 =
-	     rInMsgBytes_961_ULE_4___d2004 ? rInMsgBytes[2:0] : 3'd4 ;
-  assign value__h245375 = fFromContinueBeat_ifc_rDataCount - b__h245216 ;
-  assign value__h247272 =
+  assign value__h240642 =
+	     rInMsgBytes_941_ULE_4___d1984 ? rInMsgBytes[2:0] : 3'd4 ;
+  assign value__h244071 = fFromContinueBeat_ifc_rDataCount - b__h243912 ;
+  assign value__h245968 =
 	     fS1MsgOut_ifc_rwEnqData$whas ?
 	       fS1MsgOut_ifc_rwEnqData$wget :
 	       128'd0 ;
-  assign value__h247334 = fS1MsgOut_ifc_rDataCount - b__h247175 ;
-  assign value__h247387 =
+  assign value__h246030 = fS1MsgOut_ifc_rDataCount - b__h245871 ;
+  assign value__h246083 =
 	     fS1MsgOut_ifc_rwEnqCount$whas ?
 	       fS1MsgOut_ifc_rwEnqMask$wget :
 	       128'd0 ;
-  assign value__h248396 =
+  assign value__h247092 =
 	     fS2MsgOut_ifc_rwEnqData$whas ?
 	       fS2MsgOut_ifc_rwEnqData$wget :
 	       128'd0 ;
-  assign value__h248458 = fS2MsgOut_ifc_rDataCount - b__h248299 ;
-  assign value__h248511 =
+  assign value__h247154 = fS2MsgOut_ifc_rDataCount - b__h246995 ;
+  assign value__h247207 =
 	     fS2MsgOut_ifc_rwEnqCount$whas ?
 	       fS2MsgOut_ifc_rwEnqMask$wget :
 	       128'd0 ;
-  assign value__h270636 =
-	     (x__h270671 + 32'd4 <= 32'd4) ?
+  assign value__h269332 =
+	     (x__h269367 + 32'd4 <= 32'd4) ?
 	       9'd0 :
-	       (b__h272179 - 9'd4) + 9'd4 ;
-  assign value__h274558 =
-	     (x__h274591 + 32'd4 <= 32'd4) ?
+	       (b__h270875 - 9'd4) + 9'd4 ;
+  assign value__h273254 =
+	     (x__h273287 + 32'd4 <= 32'd4) ?
 	       9'd0 :
-	       (b__h276099 - 9'd4) + 9'd4 ;
-  assign value__h278469 =
-	     (x__h278502 + 32'd4 <= 32'd4) ?
+	       (b__h274795 - 9'd4) + 9'd4 ;
+  assign value__h277165 =
+	     (x__h277198 + 32'd4 <= 32'd4) ?
 	       9'd0 :
-	       (b__h280010 - 9'd4) + 9'd4 ;
-  assign value__h319339 = (rS2OutBytes <= 32'd248) ? rS2OutBytes : 32'd248 ;
-  assign value__h323487 = (rS2OutMsgBytes <= 8'd4) ? rS2OutMsgBytes : 8'd4 ;
-  assign value__h323766 = bs__h323645 >> x__h330461 ;
-  assign value__h331819 = bs__h323645 & y__h331854 ;
-  assign value__h92750 = xcomms_rx_inpipe_mimo_rDataCount - value__h108852 ;
-  assign x1__h61611 = ~uclkgen$CLK_VAL_OUT ;
+	       (b__h278706 - 9'd4) + 9'd4 ;
+  assign value__h318035 = (rS2OutBytes <= 32'd248) ? rS2OutBytes : 32'd248 ;
+  assign value__h322183 = (rS2OutMsgBytes <= 8'd4) ? rS2OutMsgBytes : 8'd4 ;
+  assign value__h322462 = bs__h322341 >> x__h329157 ;
+  assign value__h330515 = bs__h322341 & y__h330550 ;
+  assign value__h92201 = xcomms_rx_inpipe_mimo_rDataCount - value__h108303 ;
+  assign x__h108345 = { 24'd0, value__h108303, 3'd0 } ;
   assign x__h10836 =
 	     { cq_gearbox_elem0_status_1 != cq_gearbox_block0_status,
 	       cq_gearbox_elem0_status_0 != cq_gearbox_block0_status } ;
-  assign x__h108894 = { 24'd0, value__h108852, 3'd0 } ;
   assign x__h11189 =
 	     { cq_gearbox_elem1_status_1 != cq_gearbox_block1_status,
 	       cq_gearbox_elem1_status_0 != cq_gearbox_block1_status } ;
-  assign x__h174677 = nextStorage__h174612 & nextMask__h174613 ;
-  assign x__h174792 = { 23'd0, b__h174732, 3'd0 } ;
-  assign x__h174828 = { 128'd0, value__h174829 } ;
-  assign x__h174935 = { 23'd0, value__h174891, 3'd0 } ;
-  assign x__h174943 = { 128'd0, value__h174944 } ;
-  assign x__h175678 = nextStorage__h175613 & nextMask__h175614 ;
-  assign x__h175829 = { 128'd0, value__h175830 } ;
-  assign x__h175936 = { 23'd0, value__h175892, 3'd0 } ;
-  assign x__h175944 = { 128'd0, value__h175945 } ;
-  assign x__h177144 = nextStorage__h177079 & nextMask__h177080 ;
-  assign x__h177294 = { 20'd0, value__h177295 } ;
-  assign x__h177408 = { 20'd0, value__h177409 } ;
+  assign x__h173316 = nextStorage__h173251 & nextMask__h173252 ;
+  assign x__h173431 = { 23'd0, b__h173371, 3'd0 } ;
+  assign x__h173467 = { 128'd0, value__h173468 } ;
+  assign x__h173574 = { 23'd0, value__h173530, 3'd0 } ;
+  assign x__h173582 = { 128'd0, value__h173583 } ;
+  assign x__h174317 = nextStorage__h174252 & nextMask__h174253 ;
+  assign x__h174468 = { 128'd0, value__h174469 } ;
+  assign x__h174575 = { 23'd0, value__h174531, 3'd0 } ;
+  assign x__h174583 = { 128'd0, value__h174584 } ;
+  assign x__h175783 = nextStorage__h175718 & nextMask__h175719 ;
+  assign x__h175933 = { 20'd0, value__h175934 } ;
+  assign x__h176047 = { 20'd0, value__h176048 } ;
   assign x__h23855 =
 	     (cc_f_tlps_rv[105:96] == 10'd0) ?
 	       11'd1024 :
@@ -10571,41 +10377,41 @@ module mkSVF_Bridge(CLK_user_clk,
   assign x__h24057 =
 	     { cc_gearbox_elem0_status_1 == cc_gearbox_block0_status,
 	       cc_gearbox_elem0_status_0 == cc_gearbox_block0_status } ;
+  assign x__h243857 = nextStorage__h243792 & nextMask__h243793 ;
+  assign x__h243972 = { 23'd0, b__h243912, 3'd0 } ;
+  assign x__h244115 = { 23'd0, value__h244071, 3'd0 } ;
   assign x__h24478 =
 	     { cc_gearbox_elem1_status_1 == cc_gearbox_block1_status,
 	       cc_gearbox_elem1_status_0 == cc_gearbox_block1_status } ;
-  assign x__h245161 = nextStorage__h245096 & nextMask__h245097 ;
-  assign x__h245276 = { 23'd0, b__h245216, 3'd0 } ;
-  assign x__h245419 = { 23'd0, value__h245375, 3'd0 } ;
-  assign x__h247120 = nextStorage__h247055 & nextMask__h247056 ;
-  assign x__h247235 = { 23'd0, b__h247175, 3'd0 } ;
-  assign x__h247271 = { 128'd0, value__h247272 } ;
-  assign x__h247378 = { 23'd0, value__h247334, 3'd0 } ;
-  assign x__h247386 = { 128'd0, value__h247387 } ;
-  assign x__h248244 = nextStorage__h248179 & nextMask__h248180 ;
-  assign x__h248359 = { 23'd0, b__h248299, 3'd0 } ;
-  assign x__h248395 = { 128'd0, value__h248396 } ;
-  assign x__h248502 = { 23'd0, value__h248458, 3'd0 } ;
-  assign x__h248510 = { 128'd0, value__h248511 } ;
-  assign x__h250043 =
-	     { !fS2MsgOut_ifc_rDataCount_252_ULT_4___d2289,
-	       !fS1MsgOut_ifc_rDataCount_215_ULT_4___d2286,
-	       !fFromContinueBeat_ifc_rDataCount_178_ULT_4___d2284,
+  assign x__h245816 = nextStorage__h245751 & nextMask__h245752 ;
+  assign x__h245931 = { 23'd0, b__h245871, 3'd0 } ;
+  assign x__h245967 = { 128'd0, value__h245968 } ;
+  assign x__h246074 = { 23'd0, value__h246030, 3'd0 } ;
+  assign x__h246082 = { 128'd0, value__h246083 } ;
+  assign x__h246940 = nextStorage__h246875 & nextMask__h246876 ;
+  assign x__h247055 = { 23'd0, b__h246995, 3'd0 } ;
+  assign x__h247091 = { 128'd0, value__h247092 } ;
+  assign x__h247198 = { 23'd0, value__h247154, 3'd0 } ;
+  assign x__h247206 = { 128'd0, value__h247207 } ;
+  assign x__h248739 =
+	     { !fS2MsgOut_ifc_rDataCount_232_ULT_4___d2269,
+	       !fS1MsgOut_ifc_rDataCount_195_ULT_4___d2266,
+	       !fFromContinueBeat_ifc_rDataCount_158_ULT_4___d2264,
 	       rvPrevMsgGrant } ;
-  assign x__h256575 = { rvPrevMsgGrant, rvPrevPrevMsgGrant } ;
-  assign x__h270671 = { 24'd0, fFromContinueBeat_ifc_rStorage[23:16] } ;
-  assign x__h274591 = { 24'd0, fS1MsgOut_ifc_rStorage[23:16] } ;
-  assign x__h278502 = { 24'd0, fS2MsgOut_ifc_rStorage[23:16] } ;
+  assign x__h255271 = { rvPrevMsgGrant, rvPrevPrevMsgGrant } ;
+  assign x__h269367 = { 24'd0, fFromContinueBeat_ifc_rStorage[23:16] } ;
+  assign x__h273287 = { 24'd0, fS1MsgOut_ifc_rStorage[23:16] } ;
+  assign x__h277198 = { 24'd0, fS2MsgOut_ifc_rStorage[23:16] } ;
   assign x__h29795 =
 	     { cc_gearbox_elem0_status_1__read__06_EQ_cc_gear_ETC___d408,
 	       cc_gearbox_elem0_status_0__read__09_EQ_cc_gear_ETC___d410 } ;
   assign x__h30143 =
 	     { cc_gearbox_elem1_status_1__read__15_EQ_cc_gear_ETC___d417,
 	       cc_gearbox_elem1_status_0__read__18_EQ_cc_gear_ETC___d419 } ;
-  assign x__h323804 = { 32'd0, rS2SavedBytes } ;
-  assign x__h323839 = { 32'd0, xcomms_tx_outpipe_noc_buf[31:0] } ;
-  assign x__h330461 = { 26'd0, value__h323487[2:0], 3'd0 } ;
-  assign x__h331855 = 64'hFFFFFFFFFFFFFFFF << x__h330461 ;
+  assign x__h322500 = { 32'd0, rS2SavedBytes } ;
+  assign x__h322535 = { 32'd0, xcomms_tx_outpipe_noc_buf[31:0] } ;
+  assign x__h329157 = { 26'd0, value__h322183[2:0], 3'd0 } ;
+  assign x__h330551 = 64'hFFFFFFFFFFFFFFFF << x__h329157 ;
   assign x__h35905 =
 	     { rq_gearbox_elem0_status_1 == rq_gearbox_block0_status,
 	       rq_gearbox_elem0_status_0 == rq_gearbox_block0_status } ;
@@ -10636,26 +10442,26 @@ module mkSVF_Bridge(CLK_user_clk,
   assign x__h55694 =
 	     { rc_gearbox_elem1_status_1 != rc_gearbox_block1_status,
 	       rc_gearbox_elem1_status_0 != rc_gearbox_block1_status } ;
-  assign x__h92793 = { _26_MINUS_b2749__q3[28:0], 3'd0 } ;
-  assign xcomms_rx_inpipe_elem_count_407_ULT_xcomms_rx__ETC___d1438 =
+  assign x__h92244 = { _26_MINUS_b2200__q3[28:0], 3'd0 } ;
+  assign xcomms_rx_inpipe_elem_count_403_ULT_xcomms_rx__ETC___d1434 =
 	     xcomms_rx_inpipe_elem_count < xcomms_rx_inpipe_elems_recvd ;
-  assign xcomms_rx_inpipe_elems_recvd_297_PLUS_IF_xcomm_ETC___d1302 =
+  assign xcomms_rx_inpipe_elems_recvd_293_PLUS_IF_xcomm_ETC___d1298 =
 	     xcomms_rx_inpipe_elems_recvd +
-	     IF_xcomms_rx_inpipe_updates_from_msg_whas__298_ETC___d1301 ;
-  assign xcomms_rx_inpipe_mimo_rvData_369_SRL_0_CONCAT__ETC___d1371 =
-	     xcomms_rx_inpipe_mimo_rvData >> x__h108894 ;
-  assign xcomms_rx_inpipe_mimo_rwvEnqData_wget__351_CON_ETC___d1365 =
-	     { fFromBridgeBeat_ifc_rStorage[31:0], 208'd0 } >> x__h92793 ;
-  assign xcomms_tx_outpipe_credits_591_PLUS_IF_xcomms_t_ETC___d1615 =
+	     IF_xcomms_rx_inpipe_updates_from_msg_whas__294_ETC___d1297 ;
+  assign xcomms_rx_inpipe_mimo_rvData_365_SRL_0_CONCAT__ETC___d1367 =
+	     xcomms_rx_inpipe_mimo_rvData >> x__h108345 ;
+  assign xcomms_rx_inpipe_mimo_rwvEnqData_wget__347_CON_ETC___d1361 =
+	     { fFromBridgeBeat_ifc_rStorage[31:0], 208'd0 } >> x__h92244 ;
+  assign xcomms_tx_outpipe_credits_587_PLUS_IF_xcomms_t_ETC___d1611 =
 	     xcomms_tx_outpipe_credits +
-	     IF_xcomms_tx_outpipe_updates_from_msg_whas__60_ETC___d1614 ;
-  assign xcomms_tx_outpipe_elem_count_632_EQ_0_633_OR_N_ETC___d1644 =
+	     IF_xcomms_tx_outpipe_updates_from_msg_whas__59_ETC___d1610 ;
+  assign xcomms_tx_outpipe_elem_count_628_EQ_0_629_OR_N_ETC___d1640 =
 	     xcomms_tx_outpipe_elem_count == 16'd0 ||
 	     !xcomms_tx_outpipe_sendDataOK ||
 	     xcomms_tx_outpipe_accumulateTimer$Q_OUT != 5'd0 &&
 	     xcomms_tx_outpipe_credits != 16'd0 ||
 	     xcomms_tx_outpipe_data_info_fifo$sFULL_N ;
-  assign xcomms_tx_outpipe_elem_count_632_EQ_0_633_OR_N_ETC___d1711 =
+  assign xcomms_tx_outpipe_elem_count_628_EQ_0_629_OR_N_ETC___d1707 =
 	     (xcomms_tx_outpipe_elem_count == 16'd0 ||
 	      !xcomms_tx_outpipe_sendDataOK ||
 	      xcomms_tx_outpipe_accumulateTimer$Q_OUT != 5'd0 &&
@@ -10663,60 +10469,60 @@ module mkSVF_Bridge(CLK_user_clk,
 	     (xcomms_tx_outpipe_sendDataOK ||
 	      xcomms_tx_outpipe_add_to_output_buffer$whas &&
 	      xcomms_tx_outpipe_updates_from_ifc$wget[3]) ;
-  assign xcomms_tx_outpipe_elem_count_632_PLUS_IF_xcomm_ETC___d1660 =
+  assign xcomms_tx_outpipe_elem_count_628_PLUS_IF_xcomm_ETC___d1656 =
 	     xcomms_tx_outpipe_elem_count +
-	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1629 ;
-  assign xcomms_tx_outpipe_flushing_619_AND_NOT_xcomms__ETC___d1737 =
+	     IF_xcomms_tx_outpipe_updates_from_ifc_whas__60_ETC___d1625 ;
+  assign xcomms_tx_outpipe_flushing_615_AND_NOT_xcomms__ETC___d1733 =
 	     xcomms_tx_outpipe_flushing &&
-	     (xcomms_tx_outpipe_credits_591_PLUS_IF_xcomms_t_ETC___d1615 !=
+	     (xcomms_tx_outpipe_credits_587_PLUS_IF_xcomms_t_ETC___d1611 !=
 	      16'd1024 ||
-	      IF_xcomms_tx_outpipe_updates_from_msg_whas__60_ETC___d1614 ==
+	      IF_xcomms_tx_outpipe_updates_from_msg_whas__59_ETC___d1610 ==
 	      16'd0) ||
 	     xcomms_tx_outpipe_add_to_output_buffer$whas &&
 	     xcomms_tx_outpipe_updates_from_ifc$wget[1] ;
-  assign xcomms_tx_outpipe_in_reset_uclk_483_OR_xcomms__ETC___d1775 =
+  assign xcomms_tx_outpipe_in_reset_uclk_479_OR_xcomms__ETC___d1771 =
 	     xcomms_tx_outpipe_in_reset_uclk || xcomms_tx_outpipe_flushing ||
 	     xcomms_tx_outpipe_flush_requested ||
-	     !xcomms_tx_outpipe_indata_mimo_rDataCount_507_U_ETC___d1773 ;
-  assign xcomms_tx_outpipe_indata_mimo_rDataCount_507_U_ETC___d1773 =
+	     !xcomms_tx_outpipe_indata_mimo_rDataCount_503_U_ETC___d1769 ;
+  assign xcomms_tx_outpipe_indata_mimo_rDataCount_503_U_ETC___d1769 =
 	     xcomms_tx_outpipe_indata_mimo_rDataCount <= 2'd1 ;
-  assign xcomms_tx_outpipe_indata_mimo_rvData_521_SRL_0_ETC___d1525 =
+  assign xcomms_tx_outpipe_indata_mimo_rvData_517_SRL_0_ETC___d1521 =
 	     xcomms_tx_outpipe_indata_mimo_rvData >>
-	     _0_CONCAT_IF_xcomms_tx_outpipe_indata_mimo_rwDe_ETC___d1523[31:0] ;
-  assign xcomms_tx_outpipe_indata_mimo_rwvEnqData_wget__ETC___d1517 =
+	     _0_CONCAT_IF_xcomms_tx_outpipe_indata_mimo_rwDe_ETC___d1519[31:0] ;
+  assign xcomms_tx_outpipe_indata_mimo_rwvEnqData_wget__ETC___d1513 =
 	     { xcomms_tx_outpipe_add_to_output_buffer$wget[671:16],
 	       1312'd0 } >>
-	     _656_MUL_2_MINUS_0_CONCAT_xcomms_tx_outpipe_ind_ETC___d1511[31:0] ;
-  assign xcomms_tx_outpipe_updates_from_ifc_whas__606_A_ETC___d1622 =
+	     _656_MUL_2_MINUS_0_CONCAT_xcomms_tx_outpipe_ind_ETC___d1507[31:0] ;
+  assign xcomms_tx_outpipe_updates_from_ifc_whas__602_A_ETC___d1618 =
 	     xcomms_tx_outpipe_add_to_output_buffer$whas &&
 	     (xcomms_tx_outpipe_updates_from_ifc$wget[2] ||
 	      xcomms_tx_outpipe_updates_from_ifc$wget[1]) ||
 	     xcomms_tx_outpipe_flush_requested &&
-	     xcomms_tx_outpipe_credits_591_PLUS_IF_xcomms_t_ETC___d1615 !=
+	     xcomms_tx_outpipe_credits_587_PLUS_IF_xcomms_t_ETC___d1611 !=
 	     16'd1024 &&
 	     !xcomms_tx_outpipe_flushing ;
-  assign xcomms_tx_outpipe_updates_from_ifc_whas__606_A_ETC___d1669 =
+  assign xcomms_tx_outpipe_updates_from_ifc_whas__602_A_ETC___d1665 =
 	     xcomms_tx_outpipe_add_to_output_buffer$whas &&
 	     xcomms_tx_outpipe_updates_from_ifc$wget[1] ||
 	     xcomms_tx_outpipe_flush_requested &&
-	     xcomms_tx_outpipe_credits_591_PLUS_IF_xcomms_t_ETC___d1615 !=
+	     xcomms_tx_outpipe_credits_587_PLUS_IF_xcomms_t_ETC___d1611 !=
 	     16'd1024 &&
 	     !xcomms_tx_outpipe_flushing ;
-  assign xcomms_tx_outpipe_updates_from_msg_whas__602_A_ETC___d1626 =
+  assign xcomms_tx_outpipe_updates_from_msg_whas__598_A_ETC___d1622 =
 	     CAN_FIRE_RL_xcomms_tx_outpipe_handle_returned_credits &&
 	     xcomms_tx_outpipe_updates_from_msg$wget[1] ||
-	     xcomms_tx_outpipe_updates_from_ifc_whas__606_A_ETC___d1622 ||
+	     xcomms_tx_outpipe_updates_from_ifc_whas__602_A_ETC___d1618 ||
 	     xcomms_tx_outpipe_add_to_output_buffer$whas &&
 	     xcomms_tx_outpipe_updates_from_ifc$wget[0] ;
-  assign y__h174678 = enqData__h174618 & enqMask__h174619 ;
-  assign y__h175679 = enqData__h175619 & enqMask__h175620 ;
-  assign y__h177145 = enqData__h177085 & enqMask__h177086 ;
-  assign y__h245162 = enqData__h245102 & enqMask__h245103 ;
-  assign y__h247121 = enqData__h247061 & enqMask__h247062 ;
-  assign y__h248245 = enqData__h248185 & enqMask__h248186 ;
-  assign y__h323805 = x__h323839 << y__h323840 ;
-  assign y__h323840 = { 26'd0, rS2NumSaved, 3'd0 } ;
-  assign y__h331854 = ~x__h331855 ;
+  assign y__h173317 = enqData__h173257 & enqMask__h173258 ;
+  assign y__h174318 = enqData__h174258 & enqMask__h174259 ;
+  assign y__h175784 = enqData__h175724 & enqMask__h175725 ;
+  assign y__h243858 = enqData__h243798 & enqMask__h243799 ;
+  assign y__h245817 = enqData__h245757 & enqMask__h245758 ;
+  assign y__h246941 = enqData__h246881 & enqMask__h246882 ;
+  assign y__h322501 = x__h322535 << y__h322536 ;
+  assign y__h322536 = { 26'd0, rS2NumSaved, 3'd0 } ;
+  assign y__h330550 = ~x__h330551 ;
   always@(cq_rg_dwcount)
   begin
     case (cq_rg_dwcount)
@@ -10786,72 +10592,72 @@ module mkSVF_Bridge(CLK_user_clk,
 		   2'd2;
     endcase
   end
-  always@(IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291 or
-	  x__h256575 or
-	  fS1MsgOut_ifc_rDataCount_215_ULT_4___d2286 or x__h250043)
+  always@(IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271 or
+	  x__h255271 or
+	  fS1MsgOut_ifc_rDataCount_195_ULT_4___d2266 or x__h248739)
   begin
-    case (IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291)
+    case (IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271)
       2'd1:
-	  IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2362 =
-	      !fS1MsgOut_ifc_rDataCount_215_ULT_4___d2286;
+	  IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2342 =
+	      !fS1MsgOut_ifc_rDataCount_195_ULT_4___d2266;
       2'd2:
-	  IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2362 =
-	      x__h250043 == 6'd25 || x__h250043 == 6'd48 ||
-	      x__h250043 == 6'd49 ||
-	      x__h250043 == 6'd52;
-      default: IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2362 =
-		   IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291 ==
+	  IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2342 =
+	      x__h248739 == 6'd25 || x__h248739 == 6'd48 ||
+	      x__h248739 == 6'd49 ||
+	      x__h248739 == 6'd52;
+      default: IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2342 =
+		   IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271 ==
 		   2'd3 &&
-		   (x__h256575 == 6'd8 || x__h256575 == 6'd9 ||
-		    x__h256575 == 6'd12 ||
-		    x__h256575 == 6'd33);
+		   (x__h255271 == 6'd8 || x__h255271 == 6'd9 ||
+		    x__h255271 == 6'd12 ||
+		    x__h255271 == 6'd33);
     endcase
   end
-  always@(IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291 or
-	  x__h256575 or
-	  fFromContinueBeat_ifc_rDataCount_178_ULT_4___d2284 or x__h250043)
+  always@(IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271 or
+	  x__h255271 or
+	  fFromContinueBeat_ifc_rDataCount_158_ULT_4___d2264 or x__h248739)
   begin
-    case (IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291)
+    case (IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271)
       2'd1:
-	  IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2342 =
-	      !fFromContinueBeat_ifc_rDataCount_178_ULT_4___d2284;
+	  IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2322 =
+	      !fFromContinueBeat_ifc_rDataCount_158_ULT_4___d2264;
       2'd2:
-	  IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2342 =
-	      x__h250043 == 6'd24 || x__h250043 == 6'd26 ||
-	      x__h250043 == 6'd28 ||
-	      x__h250043 == 6'd44;
-      default: IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2342 =
-		   IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291 ==
+	  IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2322 =
+	      x__h248739 == 6'd24 || x__h248739 == 6'd26 ||
+	      x__h248739 == 6'd28 ||
+	      x__h248739 == 6'd44;
+      default: IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2322 =
+		   IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271 ==
 		   2'd3 &&
-		   x__h256575 != 6'd8 &&
-		   x__h256575 != 6'd9 &&
-		   x__h256575 != 6'd10 &&
-		   x__h256575 != 6'd12 &&
-		   x__h256575 != 6'd16 &&
-		   x__h256575 != 6'd17 &&
-		   x__h256575 != 6'd18 &&
-		   x__h256575 != 6'd33;
+		   x__h255271 != 6'd8 &&
+		   x__h255271 != 6'd9 &&
+		   x__h255271 != 6'd10 &&
+		   x__h255271 != 6'd12 &&
+		   x__h255271 != 6'd16 &&
+		   x__h255271 != 6'd17 &&
+		   x__h255271 != 6'd18 &&
+		   x__h255271 != 6'd33;
     endcase
   end
-  always@(IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291 or
-	  x__h256575 or
-	  fS2MsgOut_ifc_rDataCount_252_ULT_4___d2289 or x__h250043)
+  always@(IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271 or
+	  x__h255271 or
+	  fS2MsgOut_ifc_rDataCount_232_ULT_4___d2269 or x__h248739)
   begin
-    case (IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291)
+    case (IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271)
       2'd1:
-	  IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2389 =
-	      !fS2MsgOut_ifc_rDataCount_252_ULT_4___d2289;
+	  IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2369 =
+	      !fS2MsgOut_ifc_rDataCount_232_ULT_4___d2269;
       2'd2:
-	  IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2389 =
-	      x__h250043 == 6'd50 || x__h250043 == 6'd40 ||
-	      x__h250043 == 6'd41 ||
-	      x__h250043 == 6'd42;
-      default: IF_IF_fFromContinueBeat_ifc_rDataCount_178_ULT_ETC___d2389 =
-		   IF_fFromContinueBeat_ifc_rDataCount_178_ULT_4__ETC___d2291 ==
+	  IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2369 =
+	      x__h248739 == 6'd50 || x__h248739 == 6'd40 ||
+	      x__h248739 == 6'd41 ||
+	      x__h248739 == 6'd42;
+      default: IF_IF_fFromContinueBeat_ifc_rDataCount_158_ULT_ETC___d2369 =
+		   IF_fFromContinueBeat_ifc_rDataCount_158_ULT_4__ETC___d2271 ==
 		   2'd3 &&
-		   (x__h256575 == 6'd10 || x__h256575 == 6'd16 ||
-		    x__h256575 == 6'd17 ||
-		    x__h256575 == 6'd18);
+		   (x__h255271 == 6'd10 || x__h255271 == 6'd16 ||
+		    x__h255271 == 6'd17 ||
+		    x__h255271 == 6'd18);
     endcase
   end
   always@(dut_prb_control_ackFifo$D_OUT)
@@ -10876,40 +10682,40 @@ module mkSVF_Bridge(CLK_user_clk,
 	      { 3'd7, dut_prb_control_prb_str$D_OUT[28:16] };
     endcase
   end
-  always@(b__h115478 or xcomms_rx_inpipe_elems)
+  always@(b__h114929 or xcomms_rx_inpipe_elems)
   begin
-    case (b__h115478)
+    case (b__h114929)
       16'd0:
-	  CASE_b15478_0_xcomms_rx_inpipe_elems_BIT_176_1_ETC__q7 =
+	  CASE_b14929_0_xcomms_rx_inpipe_elems_BIT_176_1_ETC__q7 =
 	      xcomms_rx_inpipe_elems[176];
-      16'd1: CASE_b15478_0_xcomms_rx_inpipe_elems_BIT_176_1_ETC__q7 = 1'd0;
-      default: CASE_b15478_0_xcomms_rx_inpipe_elems_BIT_176_1_ETC__q7 =
+      16'd1: CASE_b14929_0_xcomms_rx_inpipe_elems_BIT_176_1_ETC__q7 = 1'd0;
+      default: CASE_b14929_0_xcomms_rx_inpipe_elems_BIT_176_1_ETC__q7 =
 		   1'b0 /* unspecified value */ ;
     endcase
   end
-  always@(b__h115478 or xcomms_rx_inpipe_elems)
+  always@(b__h114929 or xcomms_rx_inpipe_elems)
   begin
-    case (b__h115478)
+    case (b__h114929)
       16'd0:
-	  CASE_b15478_0_xcomms_rx_inpipe_elems_BITS_175__ETC__q8 =
+	  CASE_b14929_0_xcomms_rx_inpipe_elems_BITS_175__ETC__q8 =
 	      xcomms_rx_inpipe_elems[175:32];
       16'd1:
-	  CASE_b15478_0_xcomms_rx_inpipe_elems_BITS_175__ETC__q8 =
+	  CASE_b14929_0_xcomms_rx_inpipe_elems_BITS_175__ETC__q8 =
 	      144'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
-      default: CASE_b15478_0_xcomms_rx_inpipe_elems_BITS_175__ETC__q8 =
+      default: CASE_b14929_0_xcomms_rx_inpipe_elems_BITS_175__ETC__q8 =
 		   144'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA /* unspecified value */ ;
     endcase
   end
-  always@(b__h115478 or xcomms_rx_inpipe_elems)
+  always@(b__h114929 or xcomms_rx_inpipe_elems)
   begin
-    case (b__h115478)
+    case (b__h114929)
       16'd0:
-	  CASE_b15478_0_xcomms_rx_inpipe_elems_BITS_31_T_ETC__q9 =
+	  CASE_b14929_0_xcomms_rx_inpipe_elems_BITS_31_T_ETC__q9 =
 	      xcomms_rx_inpipe_elems[31:0];
       16'd1:
-	  CASE_b15478_0_xcomms_rx_inpipe_elems_BITS_31_T_ETC__q9 =
+	  CASE_b14929_0_xcomms_rx_inpipe_elems_BITS_31_T_ETC__q9 =
 	      32'hAAAAAAAA;
-      default: CASE_b15478_0_xcomms_rx_inpipe_elems_BITS_31_T_ETC__q9 =
+      default: CASE_b14929_0_xcomms_rx_inpipe_elems_BITS_31_T_ETC__q9 =
 		   32'hAAAAAAAA /* unspecified value */ ;
     endcase
   end
@@ -10928,10 +10734,10 @@ module mkSVF_Bridge(CLK_user_clk,
   begin
     case (dut_prb_control_control_in_dataF_rv$port1__read[15:13])
       3'd0, 3'd1, 3'd2, 3'd3, 3'd4, 3'd5, 3'd6:
-	  IF_dut_prb_control_control_in_dataF_rv_port1___ETC___d1137 =
+	  IF_dut_prb_control_control_in_dataF_rv_port1___ETC___d1133 =
 	      dut_prb_control_control_in_dataF_rv$port1__read[15:0];
       3'd7:
-	  IF_dut_prb_control_control_in_dataF_rv_port1___ETC___d1137 =
+	  IF_dut_prb_control_control_in_dataF_rv_port1___ETC___d1133 =
 	      { 3'd7, dut_prb_control_control_in_dataF_rv$port1__read[12:0] };
     endcase
   end
@@ -11484,33 +11290,6 @@ module mkSVF_Bridge(CLK_user_clk,
   begin
     if (network_status$OUT_RST == `BSV_RESET_VALUE)
       begin
-        clockGenerators_free_stamp <= `BSV_ASSIGNMENT_DELAY 1'd0;
-	clockGenerators_one_to_one_cclock_count <= `BSV_ASSIGNMENT_DELAY
-	    32'd0;
-	init_state_any_in_reset_uclk <= `BSV_ASSIGNMENT_DELAY 1'd0;
-	init_state_cycle_stamp <= `BSV_ASSIGNMENT_DELAY 64'd0;
-      end
-    else
-      begin
-        if (clockGenerators_free_stamp$EN)
-	  clockGenerators_free_stamp <= `BSV_ASSIGNMENT_DELAY
-	      clockGenerators_free_stamp$D_IN;
-	if (clockGenerators_one_to_one_cclock_count$EN)
-	  clockGenerators_one_to_one_cclock_count <= `BSV_ASSIGNMENT_DELAY
-	      clockGenerators_one_to_one_cclock_count$D_IN;
-	if (init_state_any_in_reset_uclk$EN)
-	  init_state_any_in_reset_uclk <= `BSV_ASSIGNMENT_DELAY
-	      init_state_any_in_reset_uclk$D_IN;
-	if (init_state_cycle_stamp$EN)
-	  init_state_cycle_stamp <= `BSV_ASSIGNMENT_DELAY
-	      init_state_cycle_stamp$D_IN;
-      end
-  end
-
-  always@(posedge uclkgen$CLK_OUT)
-  begin
-    if (rstgen_final_reset$RST_OUT == `BSV_RESET_VALUE)
-      begin
         dut_prb_control_control_in_dataF_rv <= `BSV_ASSIGNMENT_DELAY
 	    18'd43690;
 	dut_prb_control_control_in_in_reset_uclk <= `BSV_ASSIGNMENT_DELAY
@@ -11531,6 +11310,8 @@ module mkSVF_Bridge(CLK_user_clk,
 	dut_prb_control_sampleIntervalV_1 <= `BSV_ASSIGNMENT_DELAY 8'd0;
 	dut_prb_control_sampleIntervalV_2 <= `BSV_ASSIGNMENT_DELAY 8'd0;
 	dut_prb_control_sampleIntervalV_3 <= `BSV_ASSIGNMENT_DELAY 8'd0;
+	init_state_any_in_reset_uclk <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	init_state_cycle_stamp <= `BSV_ASSIGNMENT_DELAY 64'd0;
 	init_state_out_port <= `BSV_ASSIGNMENT_DELAY 10'd0;
 	xcomms_rx_inpipe_pending_flush <= `BSV_ASSIGNMENT_DELAY 1'd0;
 	xcomms_tx_outpipe_active <= `BSV_ASSIGNMENT_DELAY 1'd1;
@@ -11598,6 +11379,12 @@ module mkSVF_Bridge(CLK_user_clk,
 	if (dut_prb_control_sampleIntervalV_3$EN)
 	  dut_prb_control_sampleIntervalV_3 <= `BSV_ASSIGNMENT_DELAY
 	      dut_prb_control_sampleIntervalV_3$D_IN;
+	if (init_state_any_in_reset_uclk$EN)
+	  init_state_any_in_reset_uclk <= `BSV_ASSIGNMENT_DELAY
+	      init_state_any_in_reset_uclk$D_IN;
+	if (init_state_cycle_stamp$EN)
+	  init_state_cycle_stamp <= `BSV_ASSIGNMENT_DELAY
+	      init_state_cycle_stamp$D_IN;
 	if (init_state_out_port$EN)
 	  init_state_out_port <= `BSV_ASSIGNMENT_DELAY
 	      init_state_out_port$D_IN;
@@ -11792,33 +11579,23 @@ module mkSVF_Bridge(CLK_user_clk,
 	    xcomms_rx_inpipe_in_reset_noc$D_IN;
     end
 
-  always@(posedge uclkgen$CLK_OUT or
-	  `BSV_RESET_EDGE rstgen_final_reset$RST_OUT)
-  if (rstgen_final_reset$RST_OUT == `BSV_RESET_VALUE)
+  always@(posedge CLK_aclk or `BSV_RESET_EDGE network_status$OUT_RST)
+  if (network_status$OUT_RST == `BSV_RESET_VALUE)
     begin
+      isInReset_isInReset <= `BSV_ASSIGNMENT_DELAY 1'd1;
       xcomms_rx_inpipe_reset_uclk_done1 <= `BSV_ASSIGNMENT_DELAY 1'd0;
       xcomms_rx_inpipe_reset_uclk_done2 <= `BSV_ASSIGNMENT_DELAY 1'd0;
     end
   else
     begin
+      if (isInReset_isInReset$EN)
+	isInReset_isInReset <= `BSV_ASSIGNMENT_DELAY isInReset_isInReset$D_IN;
       if (xcomms_rx_inpipe_reset_uclk_done1$EN)
 	xcomms_rx_inpipe_reset_uclk_done1 <= `BSV_ASSIGNMENT_DELAY
 	    xcomms_rx_inpipe_reset_uclk_done1$D_IN;
       if (xcomms_rx_inpipe_reset_uclk_done2$EN)
 	xcomms_rx_inpipe_reset_uclk_done2 <= `BSV_ASSIGNMENT_DELAY
 	    xcomms_rx_inpipe_reset_uclk_done2$D_IN;
-    end
-
-  always@(posedge rstgen_inv_clk$CLK_OUT or
-	  `BSV_RESET_EDGE rstgen_inv_rstn$OUT_RST)
-  if (rstgen_inv_rstn$OUT_RST == `BSV_RESET_VALUE)
-    begin
-      rstgen_init <= `BSV_ASSIGNMENT_DELAY 1'd0;
-    end
-  else
-    begin
-      if (rstgen_init$EN)
-	rstgen_init <= `BSV_ASSIGNMENT_DELAY rstgen_init$D_IN;
     end
 
   // synopsys translate_off
@@ -11840,8 +11617,6 @@ module mkSVF_Bridge(CLK_user_clk,
     cc_gearbox_sInReset_pre_isInReset = 1'h0;
     cc_gearbox_write_block = 1'h0;
     cc_rg_dwcount = 11'h2AA;
-    clockGenerators_free_stamp = 1'h0;
-    clockGenerators_one_to_one_cclock_count = 32'hAAAAAAAA;
     cq_f_cq_rv = 153'h0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
     cq_gearbox_block0_status = 1'h0;
     cq_gearbox_block1_status = 1'h0;
@@ -11922,6 +11697,7 @@ module mkSVF_Bridge(CLK_user_clk,
     init_state_cycle_stamp = 64'hAAAAAAAAAAAAAAAA;
     init_state_out_port = 10'h2AA;
     intr_on = 1'h0;
+    isInReset_isInReset = 1'h0;
     lnk_up_cr = 1'h0;
     lrS1ActiveRequests = 1'h0;
     lrS1PendingRequests = 1'h0;
@@ -12008,7 +11784,6 @@ module mkSVF_Bridge(CLK_user_clk,
     rq_rg_first_be = 4'hA;
     rq_rg_last_be = 4'hA;
     rq_rg_mdw = 33'h0AAAAAAAA;
-    rstgen_init = 1'h0;
     rvPrevMsgGrant = 3'h2;
     rvPrevPrevMsgGrant = 3'h2;
     xcomms_rx_inpipe_active = 1'h0;
@@ -12059,37 +11834,37 @@ module mkSVF_Bridge(CLK_user_clk,
   // handling of system tasks
 
   // synopsys translate_off
-  always@(negedge dut_dutIfc$CLK_uclk or negedge uclkgen$CLK_OUT)
+  always@(negedge dut_dutIfc$CLK_uclk or negedge CLK_aclk)
   begin
     #0;
-    if (rstgen_final_reset$RST_OUT != `BSV_RESET_VALUE)
+    if (network_status$OUT_RST != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut &&
-	  IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_273_4_ETC___d1475 != 32'd1)
+	  IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_269_4_ETC___d1471 != 32'd1)
 	begin
-	  v___2__h117697 = $time;
+	  v___2__h117148 = $time;
 	  #0;
 	end
-    if (rstgen_final_reset$RST_OUT != `BSV_RESET_VALUE)
+    if (network_status$OUT_RST != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_xcomms_rx_connect_res_mkConnectionGetPut &&
-	  IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_273_4_ETC___d1475 != 32'd1)
+	  IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_269_4_ETC___d1471 != 32'd1)
 	$display("Time %0d: ERROR: incomplete pipe receive: expected %0d, got %0d",
-		 v___2__h117697,
+		 v___2__h117148,
 		 $signed(32'd1),
-		 $unsigned(IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_273_4_ETC___d1475));
-    if (rstgen_final_reset$RST_OUT != `BSV_RESET_VALUE)
+		 $unsigned(IF_NOT_xcomms_rx_inpipe_reset_uclk_done2_269_4_ETC___d1471));
+    if (network_status$OUT_RST != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_xcomms_tx_connect_res_mkConnectionGetPut &&
-	  IF_xcomms_tx_outpipe_in_reset_uclk_483_OR_xcom_ETC___d1797 != 32'd1)
+	  IF_xcomms_tx_outpipe_in_reset_uclk_479_OR_xcom_ETC___d1793 != 32'd1)
 	begin
-	  v__h160642 = $time;
+	  v__h160093 = $time;
 	  #0;
 	end
-    if (rstgen_final_reset$RST_OUT != `BSV_RESET_VALUE)
+    if (network_status$OUT_RST != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_xcomms_tx_connect_res_mkConnectionGetPut &&
-	  IF_xcomms_tx_outpipe_in_reset_uclk_483_OR_xcom_ETC___d1797 != 32'd1)
+	  IF_xcomms_tx_outpipe_in_reset_uclk_479_OR_xcom_ETC___d1793 != 32'd1)
 	$display("Time %0d: ERROR: incomplete pipe send: attempted %0d, got %0d",
-		 v__h160642,
+		 v__h160093,
 		 $signed(32'd1),
-		 $unsigned(IF_xcomms_tx_outpipe_in_reset_uclk_483_OR_xcom_ETC___d1797));
+		 $unsigned(IF_xcomms_tx_outpipe_in_reset_uclk_479_OR_xcom_ETC___d1793));
   end
   // synopsys translate_on
 endmodule  // mkSVF_Bridge
