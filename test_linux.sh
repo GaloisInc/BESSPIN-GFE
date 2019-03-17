@@ -16,7 +16,7 @@ function linux_test {
 
 	cd $BASE_DIR/testing/scripts
 	python $python_unittest_script TestLinux.$1
-	err_msg $? "One or more FreeRTOS Tests failed"
+	err_msg $? "One or more Linux Tests failed"
 }
 
 linux_test test_boot

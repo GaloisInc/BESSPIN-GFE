@@ -286,7 +286,7 @@ class TestLinux(BaseGfeTest):
 
     def test_boot(self):
         linux_elf = self.getBootImage()
-        linux_boot_timeout = 25 # Wait 25 seconds for linux to boot
+        linux_boot_timeout = 35 # Wait 35 seconds for linux to boot
         self.setupUart()
 
         print("Loading Linux Elf {}".format(linux_elf))
