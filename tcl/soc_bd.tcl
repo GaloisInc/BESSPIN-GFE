@@ -300,6 +300,7 @@ proc create_hier_cell_svf_pcie_bridge { parentCell nameHier } {
   connect_bd_intf_net -intf_net ssith_processor_0_tv_verifier_info_tx [get_bd_intf_pins axi_in] [get_bd_intf_pins mkSVF_Bridge_0/axi_in]
 
   # Create port connections
+  connect_bd_net -net CLK_1 [get_bd_pins CLK] [get_bd_pins mkSVF_Bridge_0/CLK_aclk]
   connect_bd_net -net clk_wiz_1_clk_out1 [get_bd_pins clk_wiz_1/clk_out1] [get_bd_pins mkSVF_Bridge_0/CLK_user_clk_half]
   connect_bd_net -net ibufds_gte4_0_o [get_bd_pins ibufds_gte4_0/o] [get_bd_pins pcie4_uscale_plus_0/sys_clk_gt]
   connect_bd_net -net ibufds_gte4_0_odiv2 [get_bd_pins ibufds_gte4_0/odiv2] [get_bd_pins pcie4_uscale_plus_0/sys_clk]
@@ -716,7 +717,6 @@ proc create_root_design { parentCell } {
   # Create ports
   set mdio_io [ create_bd_port -dir IO mdio_io ]
   set mdio_mdc [ create_bd_port -dir O -type clk mdio_mdc ]
-
   set pcie_perstn [ create_bd_port -dir I -type rst pcie_perstn ]
   set_property -dict [ list \
    CONFIG.POLARITY {ACTIVE_LOW} \
@@ -773,7 +773,7 @@ proc create_root_design { parentCell } {
 
   # Create port connections
   connect_bd_net -net Net [get_bd_ports mdio_io] [get_bd_pins iobuf_0/io]
-  connect_bd_net -net ddr4_0_addn_ui_clkout1 [get_bd_pins gfe_subsystem/ACLK] [get_bd_pins ssith_processor_0/CLK] [get_bd_pins xilinx_jtag_0/clk]
+  connect_bd_net -net ddr4_0_addn_ui_clkout1 [get_bd_pins gfe_subsystem/ACLK] [get_bd_pins ssith_processor_0/CLK] [get_bd_pins svf_pcie_bridge/CLK] [get_bd_pins xilinx_jtag_0/clk]
   connect_bd_net -net eth_mdio_mdio_i_1 [get_bd_pins gfe_subsystem/eth_mdio_mdio_i] [get_bd_pins iobuf_0/data_o]
   connect_bd_net -net gfe_subsystem_eth_mdio_mdc [get_bd_ports mdio_mdc] [get_bd_pins gfe_subsystem/eth_mdio_mdc]
   connect_bd_net -net gfe_subsystem_eth_mdio_mdio_o [get_bd_pins gfe_subsystem/eth_mdio_mdio_o] [get_bd_pins iobuf_0/data_i]

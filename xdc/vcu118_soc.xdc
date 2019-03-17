@@ -212,6 +212,7 @@ set_clock_groups -name async2 -asynchronous -group [get_clocks -of_objects [get_
 #
 set_clock_groups -name async24 -asynchronous -group [get_clocks -of_objects [get_pins pcie4_uscale_plus_0_i/inst/gt_top_i/diablo_gt.diablo_gt_phy_wrapper/phy_clk_i/bufg_gt_intclk/O]] -group [get_clocks {pcie_refclk_clk}]
 
-set_clock_groups -name async30 -asynchronous -group [get_clocks {pcie_refclk_clk}] -group [get_clocks {mmcm_clkout5}]
+set_clock_groups -name async30 -asynchronous -group [get_clocks pcie_refclk_clk] -group [get_clocks mmcm_clkout5]
 
-set_clock_groups -name async31 -asynchronous -group [get_clocks {svf_pcie_bridge/pcie4_uscale_plus_0/inst/gt_top_i/diablo_gt.diablo_gt_phy_wrapper/gt_wizard.gtwizard_top_i/design_1_pcie4_uscale_plus_0_0_gt_i/inst/gen_gtwizard_gtye4_top.design_1_pcie4_uscale_plus_0_0_gt_gtwizard_gtye4_inst/gen_gtwizard_gtye4.gen_channel_container[31].gen_enabled_channel.gtye4_channel_wrapper_inst/channel_inst/gtye4_channel_gen.gen_gtye4_channel_inst[0].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}] -group [get_clocks {mmcm_clkout5}]
+set_clock_groups -name async31 -asynchronous -group [get_clocks {svf_pcie_bridge/pcie4_uscale_plus_0/inst/gt_top_i/diablo_gt.diablo_gt_phy_wrapper/gt_wizard.gtwizard_top_i/design_1_pcie4_uscale_plus_0_0_gt_i/inst/gen_gtwizard_gtye4_top.design_1_pcie4_uscale_plus_0_0_gt_gtwizard_gtye4_inst/gen_gtwizard_gtye4.gen_channel_container[31].gen_enabled_channel.gtye4_channel_wrapper_inst/channel_inst/gtye4_channel_gen.gen_gtye4_channel_inst[0].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}] -group [get_clocks mmcm_clkout5]
+
