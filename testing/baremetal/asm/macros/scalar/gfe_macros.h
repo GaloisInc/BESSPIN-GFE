@@ -64,6 +64,7 @@
 
 #define UART_LCR_DLAB   0x80    /* Divisor latch access bit     */
 #define UART_LCR_8N1    0x03    /* 8 bits, no parity, 1 stop        */
+#define UART_LCR_8E2    0x1F    /* 8 bits, even parity, 2 stop        */
 
 /* Modem control bits */
 
@@ -88,5 +89,41 @@
 ===============================*/
 
 #define BOOTROM_BASE 0x70000000
+
+/*=============================
+=            RESET            =
+=============================*/
+
+#define RESET_LOCATION  0x6FFF0000
+#define RESET_VAL       0x1
+
+#define GFE_SOFT_RESET \
+    li t0, RESET_LOCATION; \
+    li t1, RESET_VAL; \
+    sw t1, (t0);
+
+/*============================
+=            PLIC            =
+============================*/
+
+#define PLIC_BASE 0xc000000
+// 32 bits per source
+#define PLIC_PRIORITY_OFFSET            0x0000
+// 1 bit per source (1 address)
+#define PLIC_PENDING_OFFSET             0x1000
+
+//0x80 per target
+#define PLIC_ENABLE_OFFSET              0x2000
+
+#define PLIC_THRESHOLD_OFFSET           0x200000
+#define PLIC_CLAIM_OFFSET               0x200004
+
+#define PLIC_MAX_SOURCE                 1023
+#define PLIC_SOURCE_MASK                0x3FF
+
+#define PLIC_MAX_TARGET                 15871
+#define PLIC_TARGET_MASK                0x3FFF
+
+#define PLIC_NUM_INTERRUPTS 16
 
 #endif

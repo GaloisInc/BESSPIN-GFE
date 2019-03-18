@@ -57,6 +57,7 @@ tests += $$($(1)_tests)
 
 endef
 
+ifeq ($(XLEN),32)
 $(eval $(call compile_template,rv32ui,-march=rv32g -mabi=ilp32))
 $(eval $(call compile_template,rv32uc,-march=rv32g -mabi=ilp32))
 $(eval $(call compile_template,rv32um,-march=rv32g -mabi=ilp32))
@@ -65,6 +66,7 @@ $(eval $(call compile_template,rv32uf,-march=rv32g -mabi=ilp32))
 $(eval $(call compile_template,rv32ud,-march=rv32g -mabi=ilp32))
 $(eval $(call compile_template,rv32si,-march=rv32g -mabi=ilp32))
 $(eval $(call compile_template,rv32mi,-march=rv32g -mabi=ilp32))
+endif
 ifeq ($(XLEN),64)
 $(eval $(call compile_template,rv64ui,-march=rv64g -mabi=lp64))
 $(eval $(call compile_template,rv64uc,-march=rv64g -mabi=lp64))
