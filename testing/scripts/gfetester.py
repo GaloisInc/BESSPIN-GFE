@@ -67,7 +67,7 @@ class gfetester(object):
         del self.openocd_session
         del self.gdb_session
 
-    def launchElf(self, binary, gdb_log=False, openocd_log=False):
+    def launchElf(self, binary, gdb_log=False, openocd_log=False, verify=True):
         """Launch a binary on the GFE using GDB
         
         Args:
@@ -85,7 +85,7 @@ class gfetester(object):
         binary = os.path.abspath(binary)
         try:
             self.gdb_session.command("file {}".format(binary))
-            self.gdb_session.load()
+            self.gdb_session.load(verify)
             self.gdb_session.c(wait=False)
         except Exception as e:
             if gdb_log:
