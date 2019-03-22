@@ -170,6 +170,103 @@ If you see error messages, then something went wrong.
 
 To run any `.elf` file on the GFE, you can use the `run_elf.py` script in `$GFE_REPO/testing/scripts/`. It can be run using `python run_elf.py path_to_elf/file.elf`. By default the program waits 0.5 seconds before printing what it has received from UART, but this can be changed by using the `--runtime X` argument where X is the number of seconds to wait.
 
+#### Running FreeRTOS + TCP/IP stack ####
+Details about the FreeRTOS TCP/IP stack can be found [here](https://www.freertos.org/FreeRTOS-Plus/FreeRTOS_Plus_TCP/index.html). We provide a small example, demonstrating 
+the DHCP, ICMP (ping), UDP and TCP functionality. The setup is little bit involved, hence it is not automated yet. The demo can also be modified to better suit your use-case.
+
+Our setup is below:
+```
+----------------------------------                                 ---------------------------------------
+|    HOST COMPUTER               |                                 |      FPGA Board                     |
+|    DHCP server                 |              Ethernet cable     |      DHCP On                        |
+|    IP: 10.88.88.2              |<===============================>|      IP: assumed to be 10.88.88.3   |
+|    Netmask: 255.255.255.0      |                                 |      MAC: 00:0A:35:04:DB:77         |
+----------------------------------                                 ---------------------------------------
+```
+
+If you want to replicate our setup you should:
+1) Install and start a DHCP server on your host machine (make sure you configure it to service the interface that is connected to the FPGA).
+A howto guide is for example [here](https://www.tecmint.com/install-dhcp-server-in-ubuntu-debian/)
+2) If you have only one FPGA on the network, then you can leave the MAC address as is,
+otherwise [change it](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L325) 
+to the MAC address of the particular board (there is a sticker).
+3) If you change the host IP, reflect the changes accordingly in [FreeRTOSIPConfig](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L315)
+
+**Scenario 1: DHCP**
+
+Follow the steps below:
+
+1) Program your FPGA with a P1 bitstream: `./program_fpga.sh chisel_p1` **NOTE:** If you have already programmed the FPGA, at least restart it before continuing to make sure it is in a good state. 
+2) Start openocd with `openocd -f $GFE_REPO/testing/targets/ssith_gfe.cfg`
+3) Connect the FPGA Ethernet port into a router/switch that provides a DHCP server. Our router has an adress/netmask of 10.88.88.1/255.255.255.0
+4) Connect your host computer to the same router.
+5) Go to the demo directory: `cd FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1`
+6) Generate `main_tcp.elf` binary: `export PROG=main_tcp; make clean; make`
+7) Start GDB: `riscv32-unknown-elf-gdb main_tcp.elf`
+8) in your GDB session type: `target remote localhost:3333`
+9) in your GDB session type: `load`
+10) start minicom: `minicom -D /dev/ttyUSB1 -b 115200` **NOTE:** The default baud rate for TCP example is 115200 baud.
+11) in your GDB session type: `continue`
+12) In minicom, you will see a bunch of debug prints. The interesting piece is when you get:
+```
+IP Address: 10.88.88.3
+Subnet Mask: 255.255.255.0
+Gateway Address: 10.88.88.1
+DNS Server Address: 10.88.88.1
+```
+which means the FreeRTOS got assigned an IP address and is ready to communicate.
+
+13) Open a new terminal, and type `ping 10.88.88.3` (or whatever is the FPGA's IP address) - you should see something like this:
+```
+$ ping 10.88.88.3
+PING 10.88.88.3 (10.88.88.3) 56(84) bytes of data.
+64 bytes from 10.88.88.3: icmp_seq=1 ttl=64 time=14.1 ms
+64 bytes from 10.88.88.3: icmp_seq=2 ttl=64 time=9.22 ms
+64 bytes from 10.88.88.3: icmp_seq=3 ttl=64 time=8.85 ms
+64 bytes from 10.88.88.3: icmp_seq=4 ttl=64 time=8.84 ms
+64 bytes from 10.88.88.3: icmp_seq=5 ttl=64 time=8.85 ms
+64 bytes from 10.88.88.3: icmp_seq=6 ttl=64 time=8.83 ms
+64 bytes from 10.88.88.3: icmp_seq=7 ttl=64 time=8.83 ms
+^C
+--- 10.88.88.3 ping statistics ---
+7 packets transmitted, 7 received, 0% packet loss, time 6007ms
+rtt min/avg/max/mdev = 8.838/9.663/14.183/1.851 ms
+```
+That means ping is working and your FPGA is responding.
+
+14) Now open another terminal and run TCP Echo server at port 9999: `ncat -l 9999 --keep-open --exec "/bin/cat" -v`
+Note that this will work only if your TCP Echo server is at 10.88.88.2 (or you [updated the config file](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L315)
+). After a few seconds, you will see something like this:
+```
+$ ncat -l 9999 --keep-open --exec "/bin/cat" -v
+Ncat: Version 7.60 ( https://nmap.org/ncat )
+Ncat: Generating a temporary 1024-bit RSA key. Use --ssl-key and --ssl-cert to use a permanent one.
+Ncat: SHA-1 fingerprint: 2EDF 34C4 1F16 FF89 0AE1 6B1B F236 D933 A4DD 030E
+Ncat: Listening on :::9999
+Ncat: Listening on 0.0.0.0:9999
+Ncat: Connection from 10.88.88.3.
+Ncat: Connection from 10.88.88.3:25816.
+Ncat: Connection from 10.88.88.3.
+Ncat: Connection from 10.88.88.3:2334.
+Ncat: Connection from 10.88.88.3.
+Ncat: Connection from 10.88.88.3:14588.
+```
+
+
+15) [Optional] start `wireshark` and inspect the interface that is at the same network as the FPGA. You sould clearly see the ICMP ping requests and responses, as well as the TCP packets
+to and from the echo server.
+16) [Optional] Send a UDP packet with `socat stdio udp4-connect:10.88.88.3:5006 <<< "Hello there"`. In the minicom output, you should see `prvSimpleZeroCopyServerTask: received $N bytes` depending 
+on how much data you send. **Hint:** instead of minicom, you can use `cat /dev/ttyUSB1 > log.txt` to redirect the serial output into a log file for later inspection.
+
+
+**Troubleshooting**
+
+If something doesn't work, then:
+1) check that your connection is correct (e.g. if you have a DHCP server, it is enabled in the FreeRTOS config, or that your static IP is correct)
+2) sometimes restarting the FPGA with `CPU_RESET` button (or typing `reset` in GDB) will help
+3) Check out our [Issue](https://gitlab-ext.galois.com/ssith/gfe/issues) - maybe you have a problem we already know about.
+
+
 #### Running Linux and Busybox ####
 
 The following instructions describe how to boot Linux with Busybox.
@@ -196,6 +293,77 @@ Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `
 6. When you've finished running Linux, make sure to reset the SoC before running other tests or programs.
 
 In the serial terminal you should expect to see Linux boot messages.  The final message says ```Please press Enter to activate this console.```.  If you do as instructed (press enter), you will be presented with a shell running on the GFE system.
+
+##### Using Ethernet on Linux
+
+The GFE-configured Linux kernel includes the Xilinx AXI Ethernet driver. You should see the following messages in the boot log:
+```
+[    4.320000] xilinx_axienet 62100000.ethernet: assigned reserved memory node ethernet@62100000
+[    4.330000] xilinx_axienet 62100000.ethernet: TX_CSUM 2
+[    4.330000] xilinx_axienet 62100000.ethernet: RX_CSUM 2
+[    4.340000] xilinx_axienet 62100000.ethernet: enabling VCU118-specific quirk fixes
+[    4.350000] libphy: Xilinx Axi Ethernet MDIO: probed
+```
+
+The provided configuration of busybox includes some basic networking utilities (ifconfig, udhcpc, ping, telnet, telnetd) to get you started. Additional utilities can be compiled into busybox or loaded into the filesystem image (add them to `$GFE_REPO/bootmem/_rootfs/`).
+
+***Note*** Due to a bug when statically linking glibc into busybox, DNS resolution does not work. This will be fixed in a future GFE release either in busybox or by switching to a full Linux distro.
+
+**DHCP IP Example**
+
+If the VCU118 is connected to a network that has a DHCP server, you can configure networking using the following commands:
+```
+/ # ifconfig eth0 up
+...
+xilinx_axienet 62100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx
+...
+/ # udhcpc -i eth0
+udhcpc: started, v1.30.1
+Setting IP address 0.0.0.0 on eth0
+udhcpc: sending discover
+udhcpc: sending select for 10.0.0.11
+udhcpc: lease of 10.0.0.11 obtained, lease time 259200
+Setting IP address 10.0.0.11 on eth0
+Deleting routers
+route: SIOCDELRT: No such process
+Adding router 10.0.0.2
+Recreating /etc/resolv.conf
+ Adding DNS server 10.0.0.2
+/ # ping 4.2.2.1
+PING 4.2.2.1 (4.2.2.1): 56 data bytes
+64 bytes from 4.2.2.1: seq=0 ttl=57 time=22.107 ms
+64 bytes from 4.2.2.1: seq=1 ttl=57 time=20.754 ms
+64 bytes from 4.2.2.1: seq=2 ttl=57 time=20.908 ms
+64 bytes from 4.2.2.1: seq=3 ttl=57 time=20.778 ms
+^C
+--- 4.2.2.1 ping statistics ---
+4 packets transmitted, 4 packets received, 0% packet loss
+round-trip min/avg/max = 20.754/21.136/22.107 ms
+
+/ # 
+```
+
+**Static IP Example**
+
+Use the commands below to enable networking when a DHCP server is not available. Replace the IP and router addresses as necessary for your setup:
+```
+/ # ifconfig eth0 10.0.0.3
+...
+xilinx_axienet 62100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx
+...
+/ # route add -net 0.0.0.0 gw 10.0.0.2
+/ # ping 4.2.2.1
+PING 4.2.2.1 (4.2.2.1): 56 data bytes
+64 bytes from 4.2.2.1: seq=0 ttl=57 time=23.320 ms
+64 bytes from 4.2.2.1: seq=1 ttl=57 time=20.738 ms
+...
+^C
+--- 4.2.2.1 ping statistics ---
+20 packets transmitted, 20 packets received, 0% packet loss
+round-trip min/avg/max = 20.536/20.913/23.320 ms
+
+/ # 
+```
 
 ### Simulation ###
 
