@@ -8,13 +8,27 @@ source $BASE_DIR/init_submodules.sh
 
 proc_name=""
 proc_path=""
+# Clock frequency is in MHz
+clock_freq_mhz=83
 
 # Parse the processor selection
 proc_picker $1 
 
-# Compile the bootrom
+# Compile the bootrom and set the clock frequency
 cd $BASE_DIR/bootrom
-make
+case "$proc_name" in
+    *p1)
+	make
+	clock_freq_mhz=83
+	;;
+    *p2)
+	make CROSS_COMPILE=riscv64-unknown-elf-
+	clock_freq_mhz=50
+	;;
+    *)
+	echo "WARNING: don't know how to make a boot ROM for processor $proc_name"
+	;;
+esac
 
 err_msg $? "Making the bootrom failed"
 
@@ -28,7 +42,8 @@ cd $BASE_DIR/vivado
 # See soc.tcl for detailed options
 vivado -mode batch -source $BASE_DIR/tcl/soc.tcl \
 -tclargs --origin_dir $BASE_DIR/tcl \
---proc_name $proc_name
+--proc_name $proc_name \
+--clock_freq_mhz $clock_freq_mhz
 
 err_msg $? "Creating the vivado project failed"
 

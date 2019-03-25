@@ -27,14 +27,32 @@ After setting up an ssh key, clone this repo by running
 git clone git@gitlab-ext.galois.com:ssith/gfe.git
 ```
 
+### Install RISCV Toolchain ###
+
+Install the standard RISCV toolchain for compiling Linux and other tests for the SSITH processors.
+```bash
+git clone https://github.com/riscv/riscv-gnu-toolchain.git
+cd riscv-gnu-toolchain
+git submodule update --init --recursive
+./configure --prefix=$RISCV_INSTALL --with-arch=rv32gc --with-abi=ilp32
+make       # Install the 32 bit newlib toolchain for testing the P1
+./configure --prefix=$RISCV_INSTALL
+make       # Install the 64 bit newlib toochain for testing the P2
+make linux # Install the 64 bit linux toolchain
+```
+Follow the instructions [here](https://github.com/riscv/riscv-gnu-toolchain) for more information.
+
 ### Install RISCV Tools ###
 
 This GFE has been tested with a particular fork of riscv-tools that includes an upstream change to riscv-openocd that allows for JTAG debugging over the  same Xilinx JTAG connection used to program the VCU118.
-Please use the version of riscv-tools submoduled in this repo under `$GFE_REPO/riscv-tools.`
+It also submodules Galois forks of riscv-tests and riscv-pk customized for the reference processors.
+Please use the version of OpenOCD included in riscv-tools submoduled in this repo under `$GFE_REPO/riscv-tools.`
 
-To install, first set the RISCV path with `export RISCV=$GFE_REPO/riscv-tools` and initialize the riscv-tools and other submodules with `cd $GFE_REPO && ./init_submodules.sh`.
-This will place the riscv binaries in `$GFE_REPO/riscv-tools/bin`, where the testing scripts expect them.
-Next, install the 32-bit RISCV toolchain using the directions in `$GFE_REPO/riscv-tools/README.md`. Please make sure to build the 32 bit version using `build-rv32ima.sh`.
+A convenient way to install this custom version of OpenOCD is to build the riscv toolchain from riscv-tools.
+To install, first set the RISCV path with `export RISCV=$GFE_REPO/riscv-tools` and initialize riscv-tools and other submodules with `cd $GFE_REPO && ./init_submodules.sh`.
+This will place the openocd binary in `$GFE_REPO/riscv-tools/bin` where the testing scripts expect it.
+Next, install the RISCV toolchain using the directions in `$GFE_REPO/riscv-tools/README.md` (i.e. run `build.sh`).
+After installing openocd, be sure to set the RISCV variable back to point to your standard riscv-gnu-toolchain installation by running `export RISCV=$RISCV_INSTALL`.
 
 ### Install Vivado ###
 
@@ -61,6 +79,12 @@ vivado soc_chisel_p1/soc_chisel_p1.xpr
 
 `setup_soc_project.sh` should only be run once. We also recommend running `build.sh` for the initial build then performing future builds using the Vivado GUI to take advantage of convenient error reporting and visibility into the build process. The Vivado project will be generated in the `$GFE_REPO/vivado/soc_$proc_name` folder of the repository and can be re-opened there. Note that all the same commands can be run with the argument `bluespec_p1` to generate the bluespec P1 bitstream and corresponding Vivado project (i.e. `./setup_soc_project.sh bluespec`).
 
+### Storing a Bitstream in Flash ###
+
+See [flash-scripts/README](flash-scripts/README) for directions on how to write a bitstream to flash on the VCU118. 
+This allows the FPGA to be programmed from flash on power-up.
+Currently, this flow does not support storing boot images or other user data in flash.
+
 ### Testing ###
 
 1. Install the following python packages: `pexpect, pyserial`. 
@@ -75,8 +99,8 @@ sudo reboot
 5. Program the FPGA with the bit file (i.e. [bitstreams/soc_chisel_p1.bit](bitstreams/soc_chisel_p1.bit)) using the Vivado hardware manager.
 6. Close the Vivado hardware manager (or just close Vivado).
 This prevents USB permissions errors (i.e. LIBUSB_ERROR_BUSY) 
-7. Run `./rel_1_test.sh` from the top level of the gfe repo.
-8. Run `./rel_1_test_freertos.sh` to run FreeRTOS tests.
+7. Run `./test.sh 32` from the top level of the gfe repo. Run `./test.sh 64` if you are testing P2 bitfiles.
+8. Run `./test_freertos.sh 32` to run FreeRTOS tests.
 
 A passing test will not display any error messages. All failing tests will report errors and stop early.
 
@@ -105,7 +129,7 @@ We expect to see warnings about memory alignment and timer demo functions when c
 Follow these steps to run freeRTOS with an interactive GDB session:
 
 1. Reset the SoC by pressing the CPU_RESET button (SW5) on the VCU118 before running FreeRTOS.
-2. Run OpenOCD to connect to the riscv core `openocd -f $GFE_REPO/testing/targets/p1_hs2.cfg`.
+2. Run OpenOCD to connect to the riscv core `openocd -f $GFE_REPO/testing/targets/ssith_gfe.cfg`.
 3. In a new terminal, run minicom with `minicom -D /dev/ttyUSB1 -b 9600`. `ttyUSB1` should be replaced with whichever USB port is connected to the VCU118's USB-to-UART bridge.
 Settings can be configured by running `minicom -s` and selecting `Serial Port Setup` and then `Bps/Par/Bits`. 
 The UART is configured to have 8 data bits, 2 stop bits, no parity bits, and a baud rate of 9600.
@@ -144,19 +168,119 @@ Pass....
 
 If you see error messages, then something went wrong.
 
+To run any `.elf` file on the GFE, you can use the `run_elf.py` script in `$GFE_REPO/testing/scripts/`. It can be run using `python run_elf.py path_to_elf/file.elf`. By default the program waits 0.5 seconds before printing what it has received from UART, but this can be changed by using the `--runtime X` argument where X is the number of seconds to wait.
+
+#### Running Linux and Busybox ####
+
+The following instructions describe how to boot Linux with Busybox.
+
+##### Build the memory image
+
+```bash
+cd $GFE_REPO/bootmem/
+make
+```
+
+##### Load and run the memory image
+
+Follow these steps to run Linux and Busybox with an interactive GDB session:
+
+1. Reset the SoC by pressing the CPU_RESET button (SW5) on the VCU118 before running FreeRTOS.
+2. Run OpenOCD to connect to the riscv core `openocd -f $GFE_REPO/testing/targets/ssith_gfe.cfg`.
+3. In a new terminal, run minicom with `minicom -D /dev/ttyUSB1 -b 115200`. `ttyUSB1` should be replaced with whichever USB port is connected to the VCU118's USB-to-UART bridge.
+Settings can be configured by running `minicom -s` and selecting `Serial Port Setup` and then `Bps/Par/Bits`. 
+The UART is configured to have 8 data bits, 2 stop bits, no parity bits, and a baud rate of 115200.
+4. In a new terminal, run gdb with `riscv64-unknown-elf-gdb $GFE_REPO/bootmem/build-bbl/bbl`.
+5. Once gdb is open, type `target remote localhost:3333` to connect to OpenOCD. OpenOCD should give a message that it has accepted a gdb connection.
+Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `continue`.
+6. When you've finished running Linux, make sure to reset the SoC before running other tests or programs.
+
+In the serial terminal you should expect to see Linux boot messages.  The final message says ```Please press Enter to activate this console.```.  If you do as instructed (press enter), you will be presented with a shell running on the GFE system.
+
+##### Using Ethernet on Linux
+
+The GFE-configured Linux kernel includes the Xilinx AXI Ethernet driver. You should see the following messages in the boot log:
+```
+[    4.320000] xilinx_axienet 62100000.ethernet: assigned reserved memory node ethernet@62100000
+[    4.330000] xilinx_axienet 62100000.ethernet: TX_CSUM 2
+[    4.330000] xilinx_axienet 62100000.ethernet: RX_CSUM 2
+[    4.340000] xilinx_axienet 62100000.ethernet: enabling VCU118-specific quirk fixes
+[    4.350000] libphy: Xilinx Axi Ethernet MDIO: probed
+```
+
+The provided configuration of busybox includes some basic networking utilities (ifconfig, udhcpc, ping, telnet, telnetd) to get you started. Additional utilities can be compiled into busybox or loaded into the filesystem image (add them to `$GFE_REPO/bootmem/_rootfs/`).
+
+***Note*** Due to a bug when statically linking glibc into busybox, DNS resolution does not work. This will be fixed in a future GFE release either in busybox or by switching to a full Linux distro.
+
+**DHCP IP Example**
+
+If the VCU118 is connected to a network that has a DHCP server, you can configure networking using the following commands:
+```
+/ # ifconfig eth0 up
+...
+xilinx_axienet 62100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx
+...
+/ # udhcpc -i eth0
+udhcpc: started, v1.30.1
+Setting IP address 0.0.0.0 on eth0
+udhcpc: sending discover
+udhcpc: sending select for 10.0.0.11
+udhcpc: lease of 10.0.0.11 obtained, lease time 259200
+Setting IP address 10.0.0.11 on eth0
+Deleting routers
+route: SIOCDELRT: No such process
+Adding router 10.0.0.2
+Recreating /etc/resolv.conf
+ Adding DNS server 10.0.0.2
+/ # ping 4.2.2.1
+PING 4.2.2.1 (4.2.2.1): 56 data bytes
+64 bytes from 4.2.2.1: seq=0 ttl=57 time=22.107 ms
+64 bytes from 4.2.2.1: seq=1 ttl=57 time=20.754 ms
+64 bytes from 4.2.2.1: seq=2 ttl=57 time=20.908 ms
+64 bytes from 4.2.2.1: seq=3 ttl=57 time=20.778 ms
+^C
+--- 4.2.2.1 ping statistics ---
+4 packets transmitted, 4 packets received, 0% packet loss
+round-trip min/avg/max = 20.754/21.136/22.107 ms
+
+/ # 
+```
+
+**Static IP Example**
+
+Use the commands below to enable networking when a DHCP server is not available. Replace the IP and router addresses as necessary for your setup:
+```
+/ # ifconfig eth0 10.0.0.3
+...
+xilinx_axienet 62100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx
+...
+/ # route add -net 0.0.0.0 gw 10.0.0.2
+/ # ping 4.2.2.1
+PING 4.2.2.1 (4.2.2.1): 56 data bytes
+64 bytes from 4.2.2.1: seq=0 ttl=57 time=23.320 ms
+64 bytes from 4.2.2.1: seq=1 ttl=57 time=20.738 ms
+...
+^C
+--- 4.2.2.1 ping statistics ---
+20 packets transmitted, 20 packets received, 0% packet loss
+round-trip min/avg/max = 20.536/20.913/23.320 ms
+
+/ # 
+```
+
 ### Simulation ###
 
 Click `Run Simulation` in the Vivado GUI and refer to the Vivado documentation for using XSIM in a project flow, such as [UG937](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug937-vivado-design-suite-simulation-tutorial.pdf). If necessary, create a testbench around the top level project to generate stimulus for components outside the GFE (i.e. DDR memories, UART, JTAG).
 
 ### Adding in Your Processor ###
 
-We recommend using the Vivado IP integrator flow to add a new processor into the GFE. This should require minimal effort to integrate the processor and this flow is already demonstrated for the Chisel and Bluespec P1 processors. Using the integrator flow requires wrapping the processor in a Xilinx User IP block and updating the necessary IP search paths to find the new IP. The Chisel and Bluespec Vivado projects are created by sourcing the same tcl for the block diagram (`soc_bd.tcl`). The only difference is the location from which it pulls in the ssith_processor IP block.
+We recommend using the Vivado IP integrator flow to add a new processor into the GFE. This should require minimal effort to integrate the processor and this flow is already demonstrated for the Chisel and Bluespec processors. Using the integrator flow requires wrapping the processor in a Xilinx User IP block and updating the necessary IP search paths to find the new IP. The Chisel and Bluespec Vivado projects are created by sourcing the same tcl for the block diagram (`soc_bd.tcl`). The only difference is the location from which it pulls in the ssith_processor IP block.
 
 The steps to add in a new processor are as follows:
 
-1. Duplicate the top level verilog file `mkCore_P1.v` from the Chisel or Bluespec designs and modify it to instantiate the new processor. See `$GFE_REPO/chisel_processors/xilinx_ip/hdl/mkP1_Core.v` and `$GFE_REPO/bluespec-processors/P1/Piccolo/src_SSITH_P1/xilinx_ip/hdl/mkP1_Core.v` for examples.
-2. Copy the component.xml file from one of the two processors and modify it to include all the paths to the RTL files for your design. See `$GFE_REPO/bluespec-processors/P1/Piccolo/src_SSITH_P1/xilinx_ip/component.xml` and `$GFE_REPO/chisel_processors/xilinx_ip/component.xml`. This is the most clunky part of the process, but is relatively straight forward.
-    *  Copy a reference component.xml file to a new folder (i.e. `cp $GFE_REPO/chisel_processors/xilinx_ip/component.xml new_processor/`)
+1. Duplicate the top level verilog file `mkCore_P1.v` from the Chisel or Bluespec designs and modify it to instantiate the new processor. See `$GFE_REPO/chisel_processors/P1/xilinx_ip/hdl/mkP1_Core.v` and `$GFE_REPO/bluespec-processors/P1/Piccolo/src_SSITH_P1/xilinx_ip/hdl/mkP1_Core.v` for examples.
+2. Copy the component.xml file from one of the two processors and modify it to include all the paths to the RTL files for your design. See `$GFE_REPO/bluespec-processors/P1/Piccolo/src_SSITH_P1/xilinx_ip/component.xml` and `$GFE_REPO/chisel_processors/P1/xilinx_ip/component.xml`. This is the most clunky part of the process, but is relatively straight forward.
+    *  Copy a reference component.xml file to a new folder (i.e. `cp $GFE_REPO/chisel_processors/P1/xilinx_ip/component.xml new_processor/`)
     *  Replace references to old verilog files within component.xml. Replace `spirit:file` entries such as 
     ```xml
     <spirit:file>
@@ -171,7 +295,7 @@ The steps to add in a new processor are as follows:
         <spirit:fileType>verilogSource</spirit:fileType>
     </spirit:file>
     ```
-    The paths in component.xml are relative to its parent directory (i.e. `$GFE_REPO/chisel_processors/xilinx_ip/`).
+    The paths in component.xml are relative to its parent directory (i.e. `$GFE_REPO/chisel_processors/P1/xilinx_ip/`).
     * Note that the component.xml file contains a set of files used for simulation (xilinx_anylanguagebehavioralsimulation_view_fileset) and another set used for synthesis. Make sure to replace or remove file entries as necessary in each of these sections.
     * Vivado discovers user IP by searching all it's IP repository paths looking for component.xml files. This is the reason for the specific name. This file fully describes the new processor's IP block and can be modified through a gui if desired using the IP packager flow. It is easier to start with an example component.xml file to ensure the port naming and external interfaces match those used by the block diagram.
 
@@ -191,13 +315,12 @@ The steps to add in a new processor are as follows:
 
 5. Synthesize and build the design using the normal flow. Note that users will have to update the User IP as prompted in the gui after each modification to the component.xml file or reference Verilog files.
 
-Fortunately, we have provided two examples of wrapped processors, one for the Chisel P1 processor and another for the Bluespec processor, and we have provided a common top level Verilog file for P1 processors to limit user effort in wrapping their processor.
-
 All that is required (and therefore tracked by git) to create a Xilinx User IP block is a component.xml file and the corresponding verilog source files.
+If using the Vivado GUI IP packager, the additional project collateral does not need to be tracked by git.
 
 ### Modifying the GFE ###
 
-To save changes to the block diagram in git (everything outside the P1 IP block), please open the block diagram in Vivado and run `write_bd_tcl -force ../tcl/soc_bd.tcl`. Additionally, update `tcl/soc.tcl` to add any project settings.
+To save changes to the block diagram in git (everything outside the SSITH Processor IP block), please open the block diagram in Vivado and run `write_bd_tcl -force ../tcl/soc_bd.tcl`. Additionally, update `tcl/soc.tcl` to add any project settings.
 
 ### Rebuilding the Chisel and Bluespec Processors ###
 

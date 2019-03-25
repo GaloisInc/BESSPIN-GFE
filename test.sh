@@ -3,6 +3,7 @@
 # Get the path to the script folder of the git repository
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 source $BASE_DIR/setup_env.sh
+err_msg $SETUP_ENV_ERR "Sourcing setup_env.sh failed"
 cd $BASE_DIR/testing/scripts
 
 xlen_picker $1
@@ -12,7 +13,7 @@ cd $BASE_DIR/testing/baremetal/asm
 make XLEN=${XLEN}
 err_msg $? "Making the assembly tests failed"
 
-# compile riscv-tests
+# Compile riscv-tests
 cd $BASE_DIR/riscv-tools/riscv-tests
 CC=riscv${XLEN}-unknown-elf-gcc ./configure --with-xlen=${XLEN} --target=riscv${XLEN}-unknown-elf
 make
@@ -24,16 +25,22 @@ cd $BASE_DIR/testing/scripts
 python test_gfe_unittest.py TestGfe${XLEN}
 err_msg $? "GFE unittests failed. Run python test_gfe_unittest.py"
 
-cd $BASE_DIR
 # Generate gdb isa test script
+cd $BASE_DIR/testing/scripts
+python softReset.py
+cd $BASE_DIR
 if [ ${XLEN} == 64 ]
 then
-  ./testing/scripts/gen-test-all rv${XLEN}imacu > test_${XLEN}.gdb
+  ./testing/scripts/gen-test-all rv64gcsu > test_64.gdb
 else
-  ./testing/scripts/gen-test-all rv${XLEN}imafcu > test_${XLEN}.gdb
+  ./testing/scripts/gen-test-all rv32imacu > test_32.gdb
 fi
+
+# Run the isa tests
 riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/test_${XLEN}.gdb
-# riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/testing/scripts/test
-# riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/testing/scripts/rel_1_isa_tests.gdb
 echo "riscv-tests summary:"
-grep -E "(PASS|FAIL)" gdb-client.log | uniq -c
+grep -E "(PASS|FAIL)" gdb-client.log | uniq -c 
+# Return a non-zero exit code on failure
+if grep -q "FAIL" gdb-client.log; then
+	err_msg 1 "ISA tests failed"
+fi

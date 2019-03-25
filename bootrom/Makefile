@@ -3,7 +3,7 @@ bootrom_rev_mem = bootrom.bytereversed.mem
 bootrom_mem = bootrom.mem
 bootrom_coe = bootrom.coe
 
-CROSS_COMPILE?=riscv32-unknown-elf-
+CROSS_COMPILE?=riscv64-unknown-elf-
 CPP=$(CROSS_COMPILE)cpp
 GCC=$(CROSS_COMPILE)gcc
 OBJCOPY=$(CROSS_COMPILE)objcopy
@@ -23,7 +23,7 @@ all: $(bootrom_img) $(bootrom_mem) $(bootrom_coe) $(bootrom_rev_mem)
 	python genCoe.py > $@
 
 %.img: %.bin
-	dd if=$< of=$@ bs=128 count=1
+	dd if=$< of=$@ bs=1440 count=1
 
 %.bin: %.elf
 	$(OBJCOPY) -O binary $< $@
@@ -32,7 +32,7 @@ all: $(bootrom_img) $(bootrom_mem) $(bootrom_coe) $(bootrom_rev_mem)
 	$(OBJDUMP) -d $< > $@
 
 %.dtb: %.dts
-	$(CPP) -x assembler-with-cpp $< | $(DTC) -o $@
+	$(CPP) -x assembler-with-cpp $< | $(DTC) -O dtb -o $@
 
 %.elf: %.S linker.ld devicetree.dtb
 	$(GCC) -Tlinker.ld $< -nostdlib -static -Wl,--no-gc-sections -o $@
