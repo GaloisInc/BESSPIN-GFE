@@ -1,4 +1,4 @@
-#define FLASH_BASE 0x40000000
+#define BOOT_START 0x44000000
 
 	.text
 	.globl _start
@@ -6,8 +6,8 @@ _start:
 	csrr a0, mhartid
 	la a1, _dtb
 
-1:
-	j 1b
+	li t0, BOOT_START
+	jr t0
 
 	.data
 	.globl _dtb
