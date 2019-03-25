@@ -83,7 +83,6 @@ vivado soc_chisel_p1/soc_chisel_p1.xpr
 
 See [flash-scripts/README](flash-scripts/README) for directions on how to write a bitstream to flash on the VCU118. 
 This allows the FPGA to be programmed from flash on power-up.
-Currently, this flow does not support storing boot images or other user data in flash.
 
 ### Testing ###
 
@@ -361,6 +360,12 @@ round-trip min/avg/max = 20.536/20.913/23.320 ms
 
 / # 
 ```
+
+### Storing a boot image in Flash ###
+
+1. Prepare the image with Linux and Busybox as described above.
+2. Write to flash memory on the board with the command `tcl/program_flash datafile bootmem/bootmem.bin`.
+3. If a suitable bitfile is also stored in flash, upon board power up or reset, the device will automatically boot into Linux and Busybox.
 
 ## Simulation ##
 
