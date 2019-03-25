@@ -10,5 +10,6 @@ git submodule update --init chisel_processors
 
 cd chisel_processors
 git submodule update --init rocket-chip
+git submodule update --init P3/boom-template
 cd rocket-chip
 git submodule update --init firrtl chisel3 hardfloat
