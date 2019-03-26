@@ -19,7 +19,7 @@ class BaseGfeTest(unittest.TestCase):
 
     def getFreq(self):
         """Return the processor frequency in Hz"""
-        return 83000000
+        return gfeparameters.GFE_P1_DEFAULT_HZ
 
     def getGdbPath(self):
         if '32' in self.getXlen():
@@ -180,7 +180,7 @@ class TestGfe32(TestGfe):
         return '32'
 
     def getFreq(self):
-        return 83000000
+        return gfeparameters.GFE_P1_DEFAULT_HZ
 
 class TestGfe64(TestGfe):
 
@@ -188,12 +188,12 @@ class TestGfe64(TestGfe):
         return '64'
 
     def getFreq(self):
-        return 50000000
+        return gfeparameters.GFE_P2_DEFAULT_HZ
 
 class TestFreeRTOS(BaseGfeTest):
 
     def getFreq(self):
-        return 83000000
+        return gfeparameters.GFE_P1_DEFAULT_HZ
 
     def setUp(self):
         # Reset the GFE
