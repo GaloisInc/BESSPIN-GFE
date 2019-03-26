@@ -427,3 +427,73 @@ cd chisel_processors/P1
 ./build.sh
 ```
 
+## Tandem Verification ##
+
+### Installing Bluespec ###
+A full Bluespec installation is required for the current version of the write_tvtrace program. It has been tested with Bluespec-2017.07.A. The following paths should to be set:
+
+```bash
+$ export BLUESPECDIR=/opt/Bluespec-2017.07.A/lib
+$ export PATH=$BLUESPECDIR/../bin:$PATH
+```
+
+### Licensing ###
+For the license to work, Debian must be reconfigured to use old-style naming of the Ethernet devices.
+
+Open `/etc/default/grub` and modify:
+
+```
+GRUB_CMDLINE_LINUX=""
+```
+
+to contain:
+
+```
+GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"
+```
+
+Rebuild the grub configuration:
+
+```
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+```
+
+After a reboot, check that there is now a `eth0` networking device:
+
+```bash
+$ ip link
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
+    link/ether 30:9c:23:a5:f2:40 brd ff:ff:ff:ff:ff:ff
+```
+
+If you have more than one network device, be sure the MAC address for eth0 is used to request a license, even if it is not your active connection.
+
+Send the MAC address to ??? to request a license if you do not already have one.
+
+Once the license is obtained, set the following variable (replacing the path with the proper location):
+
+```bash
+$ export LM_LICENSE_FILE=/opt/Bluespec.lic
+```
+
+### Capturing a Trace ###
+Use the `exe_write_tvtrace_RV64` program to capture a trace:
+
+```bash
+$ cd $GFE_DIR/TV-hostside
+$ ./exe_write_tvtrace_RV64
+----------------------------------------------------------------
+Bluespec SSITH Support, TV Trace Dumper v1.0
+Copyright (c) 2016-2019 Bluespec, Inc. All Rights Reserved.
+----------------------------------------------------------------
+
+---------------- debug start
+Starting verifier thread
+Writing trace to 'trace_data.dat'
+Receiving traces ...
+^C
+```
+
+Use `Ctrl-C` to stop capturing trace data after your program has finished executing.
