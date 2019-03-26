@@ -332,6 +332,54 @@ cd chisel_processors/P1
 
 ## Tandem Verification ##
 
+### Establishing the PCIe Link ###
+
+Begin by compiling the provided version of the bluenoc executable and kernel module:
+
+```bash
+$ cd bluenoc/drivers
+$ make
+$ sudo make install
+$ cd ../bluenoc
+$ make
+```
+
+Next, program the FPGA with a tandem-verification enabled bitstream: `./program_fpga.sh bluespec_p2`
+
+**Note: This process is motherboard-dependent.**
+
+If using the prescribed MSI motherboard in your host machine, you will need to 
+power the VCU118 externally using the supplied power brick. You must be able to 
+fully shut down the computer while maintaining power to the FPGA. Turn off your
+host machine and then turn it back on.
+
+On computers with Asus motherboards (and potentially others), a warm rebooot may be
+all that is necessary.
+
+After the cold or warm reboot, run the bluenoc utility to determine if the PCIe link has been established:
+```bash
+$ cd bluenoc/bluenoc
+$ ./bluenoc
+Found BlueNoC device at /dev/bluenoc_1
+  Board number:     1
+  Board:            Xilinx VCU118 (A118)
+  BlueNoC revision: 1.0
+  Build number:     34908
+  Timestamp:        Wed Dec 21 13:41:31 2016
+  SceMi Clock:      41.67 MHz
+  Network width:    4 bytes per beat
+  Content ID:       5ce000600080000
+  Debug level:      OFF
+  Profiling:        OFF
+  PCIe Link:        ENABLED
+  BlueNoC Link:     ENABLED
+  BlueNoC I/F:      READY
+  Memory Sub-Sys:   ENABLED
+```
+
+After the link has been established, you may reprogram the FPGA with other TV-enabled bitstreams and re-establish the PCIe link with just a warm reboot.
+If you program a bitstream that does not include the tandem verification hardware, you will need to follow the cold reboot procedure to re-establish the link later on.
+
 ### Installing Bluespec ###
 A full Bluespec installation is required for the current version of the write_tvtrace program. It has been tested with Bluespec-2017.07.A. The following paths should to be set:
 
