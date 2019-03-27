@@ -96,17 +96,14 @@ sudo reboot
 ```
 3. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
 4. Make sure the VCU118 is powered on (fan should be running) 
-5. Program the FPGA with the bit file (i.e. [bitstreams/soc_chisel_p1.bit](bitstreams/soc_chisel_p1.bit)) using the Vivado hardware manager.
-6. Close the Vivado hardware manager (or just close Vivado).
-This prevents USB permissions errors (i.e. LIBUSB_ERROR_BUSY) 
-7. Run `./test.sh 32` from the top level of the gfe repo. Run `./test.sh 64` if you are testing P2 bitfiles.
-8. Run `./test_freertos.sh 32` to run FreeRTOS tests.
+5. Add Vivado or Vivado Lab to your path (i.e. `source source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh`).
+6. Run `./test_processor.sh chisel_p1` from the top level of the gfe repo. Replace `chisel_p1` with your processor of choice. This command will program the FPGA and run the appropriate tests for that processor.
 
 A passing test will not display any error messages. All failing tests will report errors and stop early.
 
 The python unit testing infrastructure reuses scripts from riscv-tests to help automate GDB and OpenOCD scripting. The primary python unittests are stored in [test_gfe_unittest.py](testing/scripts/test_gfe_unittest.py). These unit tests rely on a convenience class for interacting with the gfe defined in [gfetester.py](testing/scripts/gfetester.py)
 
-#### Running FreeRTOS ####
+## Running FreeRTOS ##
 
 To run FreeRTOS on the GFE, you'll need to run OpenOCD, connect to gdb, and view the UART output in minicom. First, install minicom and build the FreeRTOS demo. Also, source `setup_env.sh` to make sure the proper OpenOCD and GDB versions are on your path.
 
@@ -170,7 +167,7 @@ If you see error messages, then something went wrong.
 
 To run any `.elf` file on the GFE, you can use the `run_elf.py` script in `$GFE_REPO/testing/scripts/`. It can be run using `python run_elf.py path_to_elf/file.elf`. By default the program waits 0.5 seconds before printing what it has received from UART, but this can be changed by using the `--runtime X` argument where X is the number of seconds to wait.
 
-#### Running FreeRTOS + TCP/IP stack ####
+### Running FreeRTOS + TCP/IP stack ###
 Details about the FreeRTOS TCP/IP stack can be found [here](https://www.freertos.org/FreeRTOS-Plus/FreeRTOS_Plus_TCP/index.html). We provide a small example, demonstrating 
 the DHCP, ICMP (ping), UDP and TCP functionality. The setup is little bit involved, hence it is not automated yet. The demo can also be modified to better suit your use-case.
 
@@ -267,18 +264,18 @@ If something doesn't work, then:
 3) Check out our [Issue](https://gitlab-ext.galois.com/ssith/gfe/issues) - maybe you have a problem we already know about.
 
 
-#### Running Linux and Busybox ####
+## Running Linux and Busybox ##
 
 The following instructions describe how to boot Linux with Busybox.
 
-##### Build the memory image
+### Build the memory image
 
 ```bash
 cd $GFE_REPO/bootmem/
 make
 ```
 
-##### Load and run the memory image
+### Load and run the memory image
 
 Follow these steps to run Linux and Busybox with an interactive GDB session:
 
@@ -294,7 +291,7 @@ Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `
 
 In the serial terminal you should expect to see Linux boot messages.  The final message says ```Please press Enter to activate this console.```.  If you do as instructed (press enter), you will be presented with a shell running on the GFE system.
 
-##### Using Ethernet on Linux
+### Using Ethernet on Linux
 
 The GFE-configured Linux kernel includes the Xilinx AXI Ethernet driver. You should see the following messages in the boot log:
 ```
@@ -365,11 +362,11 @@ round-trip min/avg/max = 20.536/20.913/23.320 ms
 / # 
 ```
 
-### Simulation ###
+## Simulation ##
 
 Click `Run Simulation` in the Vivado GUI and refer to the Vivado documentation for using XSIM in a project flow, such as [UG937](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug937-vivado-design-suite-simulation-tutorial.pdf). If necessary, create a testbench around the top level project to generate stimulus for components outside the GFE (i.e. DDR memories, UART, JTAG).
 
-### Adding in Your Processor ###
+## Adding in Your Processor ##
 
 We recommend using the Vivado IP integrator flow to add a new processor into the GFE. This should require minimal effort to integrate the processor and this flow is already demonstrated for the Chisel and Bluespec processors. Using the integrator flow requires wrapping the processor in a Xilinx User IP block and updating the necessary IP search paths to find the new IP. The Chisel and Bluespec Vivado projects are created by sourcing the same tcl for the block diagram (`soc_bd.tcl`). The only difference is the location from which it pulls in the ssith_processor IP block.
 
