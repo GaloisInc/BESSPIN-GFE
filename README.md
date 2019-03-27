@@ -268,14 +268,14 @@ If something doesn't work, then:
 
 The following instructions describe how to boot Linux with Busybox.
 
-### Build the memory image
+### Build the memory image ###
 
 ```bash
 cd $GFE_REPO/bootmem/
 make
 ```
 
-### Load and run the memory image
+### Load and run the memory image ###
 
 Follow these steps to run Linux and Busybox with an interactive GDB session:
 
@@ -291,7 +291,7 @@ Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `
 
 In the serial terminal you should expect to see Linux boot messages.  The final message says ```Please press Enter to activate this console.```.  If you do as instructed (press enter), you will be presented with a shell running on the GFE system.
 
-### Using Ethernet on Linux
+### Using Ethernet on Linux ###
 
 The GFE-configured Linux kernel includes the Xilinx AXI Ethernet driver. You should see the following messages in the boot log:
 ```
@@ -425,6 +425,8 @@ cd chisel_processors/P1
 ```
 
 ## Tandem Verification ##
+
+Below are instructions for running Tandem verification on the GFE. For more information on the trace collected by Tandem Verification see [trace-protocol.pdf](trace-protocol.pdf).
 
 ### Establishing the PCIe Link ###
 
