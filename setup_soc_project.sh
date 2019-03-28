@@ -9,7 +9,7 @@ source $BASE_DIR/init_submodules.sh
 proc_name=""
 proc_path=""
 # Clock frequency is in MHz
-clock_freq_mhz=83
+clock_freq_mhz=50
 
 # Parse the processor selection
 proc_picker $1 
@@ -19,7 +19,7 @@ cd $BASE_DIR/bootrom
 case "$proc_name" in
     *p1)
 	make
-	clock_freq_mhz=83
+	clock_freq_mhz=50
 	;;
     *p2)
 	make CROSS_COMPILE=riscv64-unknown-elf-
