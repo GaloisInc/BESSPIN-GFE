@@ -433,6 +433,8 @@ Below are instructions for running Tandem verification on the GFE. For more info
 Begin by compiling the provided version of the bluenoc executable and kernel module:
 
 ```bash
+$ # Install Kernel Headers
+$ sudo apt-get install linux-headers-$(uname -r)
 $ cd bluenoc/drivers
 $ make
 $ sudo make install
