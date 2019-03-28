@@ -519,7 +519,7 @@ $ ip link
 
 If you have more than one network device, be sure the MAC address for eth0 is used to request a license, even if it is not your active connection.
 
-Send the MAC address to ??? to request a license if you do not already have one.
+Send the MAC address to support@bluespec.com to request a license if you do not already have one.
 
 Once the license is obtained, set the following variable (replacing the path with the proper location):
 
