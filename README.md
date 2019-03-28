@@ -279,15 +279,15 @@ make
 
 Follow these steps to run Linux and Busybox with an interactive GDB session:
 
-1. Reset the SoC by pressing the CPU_RESET button (SW5) on the VCU118 before running FreeRTOS.
+1. Reset the SoC by pressing the CPU_RESET button (SW5) on the VCU118 before running Linux.
 2. Run OpenOCD to connect to the riscv core `openocd -f $GFE_REPO/testing/targets/ssith_gfe.cfg`.
-3. In a new terminal, run minicom with `minicom -D /dev/ttyUSB1 -b 115200`. `ttyUSB1` should be replaced with whichever USB port is connected to the VCU118's USB-to-UART bridge.
-Settings can be configured by running `minicom -s` and selecting `Serial Port Setup` and then `Bps/Par/Bits`. 
-The UART is configured to have 8 data bits, 2 stop bits, no parity bits, and a baud rate of 115200.
+3. In a new terminal, run minicom with `minicom -D /dev/ttyUSB1 -b 115200`. `ttyUSB1` should be replaced with whichever USB port is connected to the VCU118's USB-to-UART bridge. Settings can be configured by running `minicom -s` and selecting `Serial Port Setup` and then `Bps/Par/Bits`. 
+The UART is configured to have 8 data bits, 2 stop bits, no parity bits, and a baud rate of 115200. In the minicom settings, make sure hardware flow control is turned off. Otherwise, the Linux terminal may not be responsive.
 4. In a new terminal, run gdb with `riscv64-unknown-elf-gdb $GFE_REPO/bootmem/build-bbl/bbl`.
 5. Once gdb is open, type `target remote localhost:3333` to connect to OpenOCD. OpenOCD should give a message that it has accepted a gdb connection.
-Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `continue`.
-6. When you've finished running Linux, make sure to reset the SoC before running other tests or programs.
+6. On Bluespec processors, run `stepi` then interrupt the processor with `Ctl-C`. The Bluespec processors start in a halted state, and need to run the first few bootrom instructions to setup a0 and a1 before booting Linux. See #40 for more details.
+7. Load the Linux image onto the processor with `load`. To run, type `c` or `continue`.
+8. When you've finished running Linux, make sure to reset the SoC before running other tests or programs.
 
 In the serial terminal you should expect to see Linux boot messages.  The final message says ```Please press Enter to activate this console.```.  If you do as instructed (press enter), you will be presented with a shell running on the GFE system.
 
