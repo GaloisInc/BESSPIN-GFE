@@ -285,7 +285,7 @@ Follow these steps to run Linux and Busybox with an interactive GDB session:
 The UART is configured to have 8 data bits, 2 stop bits, no parity bits, and a baud rate of 115200. In the minicom settings, make sure hardware flow control is turned off. Otherwise, the Linux terminal may not be responsive.
 4. In a new terminal, run gdb with `riscv64-unknown-elf-gdb $GFE_REPO/bootmem/build-bbl/bbl`.
 5. Once gdb is open, type `target remote localhost:3333` to connect to OpenOCD. OpenOCD should give a message that it has accepted a gdb connection.
-6. On Bluespec processors, run `stepi` then interrupt the processor with `Ctl-C`. The Bluespec processors start in a halted state, and need to run the first few bootrom instructions to setup a0 and a1 before booting Linux. See #40 for more details.
+6. On Bluespec processors, run `continue` then interrupt the processor with `Ctl-C`. The Bluespec processors start in a halted state, and need to run the first few bootrom instructions to setup a0 and a1 before booting Linux. See #40 for more details.
 7. Load the Linux image onto the processor with `load`. To run, type `c` or `continue`.
 8. When you've finished running Linux, make sure to reset the SoC before running other tests or programs.
 
