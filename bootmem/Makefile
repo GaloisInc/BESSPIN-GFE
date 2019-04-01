@@ -19,6 +19,8 @@ LINUX_SRC=../riscv-linux
 BBL_SRC=../../riscv-tools/riscv-pk
 
 default: build-busybox/busybox_unstripped.text build-linux/vmlinux.text build-bbl/bbl.text bootmem.bin
+debian: export KCONFIG_CONFIG=$(CURDIR)/debian-linux.config
+debian: debian.cpio.gz build-linux/vmlinux.text build-bbl/bbl.text bootmem.bin
 
 %.text: %
 	$(OBJDUMP) -dS $< > $@
@@ -37,12 +39,15 @@ build-linux/.config: $(KCONFIG_CONFIG)
 	$(MAKE) -C $(LINUX_SRC) ARCH=riscv O=$(CURDIR)/build-linux olddefconfig
 
 build-linux/vmlinux: build-linux/.config build-busybox/busybox_unstripped
+	echo $$KCONFIG_CONFIG
 	$(MAKE) -C $(@D) ARCH=riscv O=$(CURDIR)/build-linux $(@F)
 
 build-bbl/bbl: build-linux/vmlinux
 	$(MKDIR) -p $(@D)
 	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-linux/vmlinux
 	$(MAKE) -C $(@D)
+
+debian.cpio.gz:
 
 bbl.bin: build-bbl/bbl
 	$(OBJCOPY) -O binary $< $@
