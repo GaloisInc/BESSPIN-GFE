@@ -330,7 +330,6 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   set_property -dict [ list \
    CONFIG.C_AUX_RESET_HIGH {1} \
    CONFIG.C_AUX_RST_WIDTH {4} \
-   CONFIG.C_EXT_RESET_HIGH {1} \
    CONFIG.C_EXT_RST_WIDTH {4} \
    CONFIG.C_NUM_BUS_RST {1} \
  ] $proc_sys_reset_0
@@ -340,7 +339,6 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   set_property -dict [ list \
    CONFIG.C_AUX_RESET_HIGH {1} \
    CONFIG.C_AUX_RST_WIDTH {4} \
-   CONFIG.C_EXT_RESET_HIGH {1} \
    CONFIG.C_EXT_RST_WIDTH {4} \
    CONFIG.C_NUM_BUS_RST {1} \
  ] $proc_sys_reset_1
@@ -477,10 +475,7 @@ proc create_root_design { parentCell } {
    ] $sgmii_phyclk
 
   # Create ports
-  set jtag_TCK [ create_bd_port -dir I jtag_TCK ]
-  set jtag_TDI [ create_bd_port -dir I jtag_TDI ]
   set jtag_TDO [ create_bd_port -dir O jtag_TDO ]
-  set jtag_TMS [ create_bd_port -dir I jtag_TMS ]
   set phy_reset_out [ create_bd_port -dir O -from 0 -to 0 -type rst phy_reset_out ]
   set reset [ create_bd_port -dir I -type rst reset ]
   set_property -dict [ list \
@@ -528,14 +523,14 @@ proc create_root_design { parentCell } {
   connect_bd_net -net gfe_subsystem_phy_reset_out [get_bd_ports phy_reset_out] [get_bd_pins gfe_subsystem/phy_reset_out]
   connect_bd_net -net gfe_subsystem_rs232_uart_rts [get_bd_ports rs232_uart_rts] [get_bd_pins gfe_subsystem/rs232_uart_rts]
   connect_bd_net -net gfe_subsystem_rs232_uart_txd [get_bd_ports rs232_uart_txd] [get_bd_pins gfe_subsystem/rs232_uart_txd]
-  connect_bd_net -net jtag_TCK_1 [get_bd_ports jtag_TCK] [get_bd_pins ssith_processor_0/jtag_tclk]
-  connect_bd_net -net jtag_TDI_1 [get_bd_ports jtag_TDI] [get_bd_pins ssith_processor_0/jtag_tdi]
-  connect_bd_net -net jtag_TMS_1 [get_bd_ports jtag_TMS] [get_bd_pins ssith_processor_0/jtag_tms]
   connect_bd_net -net reset_1 [get_bd_ports reset] [get_bd_pins gfe_subsystem/reset]
   connect_bd_net -net rs232_uart_cts_1 [get_bd_ports rs232_uart_cts] [get_bd_pins gfe_subsystem/rs232_uart_cts]
   connect_bd_net -net rs232_uart_rxd_1 [get_bd_ports rs232_uart_rxd] [get_bd_pins gfe_subsystem/rs232_uart_rxd]
   connect_bd_net -net ssith_processor_0_jtag_tdo [get_bd_ports jtag_TDO] [get_bd_pins ssith_processor_0/jtag_tdo] [get_bd_pins xilinx_jtag_0/tdo]
   connect_bd_net -net util_vector_logic_0_Res [get_bd_pins gfe_subsystem/ARESETN] [get_bd_pins ssith_processor_0/RST_N] [get_bd_pins xilinx_jtag_0/rst_n]
+  connect_bd_net -net xilinx_jtag_0_tck [get_bd_pins ssith_processor_0/jtag_tclk] [get_bd_pins xilinx_jtag_0/tck]
+  connect_bd_net -net xilinx_jtag_0_tdi [get_bd_pins ssith_processor_0/jtag_tdi] [get_bd_pins xilinx_jtag_0/tdi]
+  connect_bd_net -net xilinx_jtag_0_tms [get_bd_pins ssith_processor_0/jtag_tms] [get_bd_pins xilinx_jtag_0/tms]
 
   # Create address segments
   create_bd_addr_seg -range 0x00001000 -offset 0x70000000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
@@ -621,4 +616,6 @@ proc create_root_design { parentCell } {
 
 create_root_design ""
 
+
+common::send_msg_id "BD_TCL-1000" "WARNING" "This Tcl script was generated from a block design that has not been validated. It is possible that design <$design_name> may result in errors during validation."
 
