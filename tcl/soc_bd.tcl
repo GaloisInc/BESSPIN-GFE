@@ -218,7 +218,7 @@ proc create_hier_cell_gfe_subsystem { parentCell nameHier } {
   create_bd_pin -dir O -from 0 -to 0 -type rst ARESETN
   create_bd_pin -dir O -type rst c0_ddr4_ui_clk_sync_rst
   create_bd_pin -dir O -from 7 -to 0 gpio_led
-  create_bd_pin -dir O -from 1 -to 0 gpio_out
+  create_bd_pin -dir O -from 3 -to 0 gpio_out
   create_bd_pin -dir IO iic0_scl
   create_bd_pin -dir IO iic0_sda
   create_bd_pin -dir IO iic1_scl
@@ -299,7 +299,7 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
    CONFIG.C_ALL_OUTPUTS {1} \
    CONFIG.C_ALL_OUTPUTS_2 {1} \
    CONFIG.C_GPIO2_WIDTH {8} \
-   CONFIG.C_GPIO_WIDTH {2} \
+   CONFIG.C_GPIO_WIDTH {4} \
    CONFIG.C_IS_DUAL {1} \
    CONFIG.GPIO2_BOARD_INTERFACE {led_8bits} \
  ] $axi_gpio_1
@@ -353,7 +353,7 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   set axi_quad_spi_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_quad_spi_1 ]
   set_property -dict [ list \
    CONFIG.C_FIFO_DEPTH {256} \
-   CONFIG.Multiples16 {52} \
+   CONFIG.Multiples16 {31} \
  ] $axi_quad_spi_1
 
   # Create instance: axi_uart16550_0, and set properties
@@ -375,7 +375,7 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   # Create instance: ddr4_0, and set properties
   set ddr4_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:ddr4:2.2 ddr4_0 ]
   set_property -dict [ list \
-   CONFIG.ADDN_UI_CLKOUT1_FREQ_HZ {83} \
+   CONFIG.ADDN_UI_CLKOUT1_FREQ_HZ {50} \
    CONFIG.C0_CLOCK_BOARD_INTERFACE {default_250mhz_clk1} \
    CONFIG.C0_DDR4_BOARD_INTERFACE {ddr4_sdram_c1} \
    CONFIG.RESET_BOARD_INTERFACE {reset} \
@@ -598,7 +598,7 @@ proc create_root_design { parentCell } {
 
   # Create ports
   set gpio_led [ create_bd_port -dir O -from 7 -to 0 gpio_led ]
-  set gpio_out [ create_bd_port -dir O -from 1 -to 0 gpio_out ]
+  set gpio_out [ create_bd_port -dir O -from 3 -to 0 gpio_out ]
   set iic0_scl [ create_bd_port -dir IO iic0_scl ]
   set iic0_sda [ create_bd_port -dir IO iic0_sda ]
   set iic1_scl [ create_bd_port -dir IO iic1_scl ]

@@ -24,6 +24,10 @@ set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[0]]
 set_property PACKAGE_PIN AY14 [get_ports gpio_out[0]]; # PMOD_0_0
 set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[1]]
 set_property PACKAGE_PIN AY15 [get_ports gpio_out[1]]; # PMOD_0_1
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[2]]
+set_property PACKAGE_PIN AW15 [get_ports gpio_out[2]]; # PMOD_0_2
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[3]]
+set_property PACKAGE_PIN AV14 [get_ports gpio_out[3]]; # PMOD_0_3
 
 # ----- PMOD1 Pins (J53 on VCU118) -----
 # ----- IIC0 -----
