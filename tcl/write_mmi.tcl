@@ -36,7 +36,6 @@ proc write_mmi {cell_name} {
 	set new_inst [string range $inst 0 $new_inst-1]
 	puts $fileout "  <Processor Endianness=\"Little\" InstPath=\"$inst_path\">"
 	set bram_range 0
-	puts "cell_name_bram $cell_name_bram"
 	for {set i 0} {$i < [llength $cell_name_bram]} {incr i} {
 		set bram_type [get_property REF_NAME [get_cells [lindex $cell_name_bram $i]]]
 		if {$bram_type == "RAMB36E2"} {
@@ -53,17 +52,27 @@ proc write_mmi {cell_name} {
 		set sequence "7,5,3,1,15,13,11,9,23,21,19,17,31,29,27,25"
 		set bus_blocks 1
 	} elseif {$bram >= 8 && $bram < 16} {
-		set sequence "7,3,15,11,23,19,31,27"
+		# This has been set for the Ultrascale architecture in Vivado 2017.4. See note below
+		# These sequences are hard coded and specific to the Vivado tool and FPGA architecture
+		# It is unclear to me if these sequences are permanent, but this script was originally
+		# written with that expectation.
+		# If preloading the bootrom is not working, check the generated mmi file against the
+		# BRAMS implemented in the design. The mmi file should include all the BRAMs you
+		# expect to preload. If not, this sequence may be wrong.
+		#
+		# WARNING: Updatemem only works on mmi files with equal width bitlanes.
+		# updatemem is not compatible with the sequences below (bram >= 4)
+		set sequence "1,5,14,23,31"
 		set bus_blocks 1
 	} elseif {$bram >= 4 && $bram < 8} {
-		set sequence "7,15,23,31"
+		set sequence "8,17,26,31"
 		set bus_blocks 1
 	} else {
+		# This has been set for the Ultrascale architecture in Vivado 2017.4. See note above
 		set sequence "15,31"
 		set bus_blocks 1
 	}
 	set sequence [split $sequence ","]
-	
 	
 	for {set b 0} {$b < $bus_blocks} {incr b} {
 		puts $fileout "      <BusBlock>"
@@ -77,7 +86,9 @@ proc write_mmi {cell_name} {
 				set bmm_range [bram_info [lindex $cell_name_bram $j] "range"]
 				set split_ranges [split $bmm_range ":"]
 				set MSB [lindex $sequence $i]
+
 				if {$MSB == $bmm_msb && $block_start == [lindex $split_ranges 0]} {
+					
 					set bram_type [get_property REF_NAME [get_cells [lindex $cell_name_bram $j]]]
 					set status [get_property STATUS [get_cells [lindex $cell_name_bram $j]]]
 																							
@@ -91,6 +102,9 @@ proc write_mmi {cell_name} {
 					set bram_type [get_property REF_NAME [get_cells [lindex $cell_name_bram $j]]]			
 					if {$bram_type == "RAMB36E2"} {
 						set bram_type "RAMB32"
+					}
+					if {$bram_type == "RAMB18E2"} {
+						set bram_type "RAMB18"
 					}
 															
 					puts $fileout "        <BitLane MemType=\"$bram_type\" Placement=\"$placed\">"

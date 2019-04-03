@@ -14,7 +14,8 @@ proc_picker $1
 project_name=soc_${proc_name}
 vivado_project=$BASE_DIR/vivado/${project_name}/${project_name}.xpr
 check_file $vivado_project "$vivado_project does not exist. Cannot build project.
-Please specify a valid proc_name For example, run ./build.sh chisel"
+Please run setup_soc_project.sh first and/or specify a valid proc_name For example,
+run ./build.sh chisel_p1"
 
 # Run vivado to build a top level project
 cd $BASE_DIR/vivado

@@ -64,6 +64,7 @@
 
 #define UART_LCR_DLAB   0x80    /* Divisor latch access bit     */
 #define UART_LCR_8N1    0x03    /* 8 bits, no parity, 1 stop        */
+#define UART_LCR_8E2    0x1F    /* 8 bits, even parity, 2 stop        */
 
 /* Modem control bits */
 
