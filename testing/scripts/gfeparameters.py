@@ -34,6 +34,9 @@ UART_BASE = 0x62300000
 UART_SCR = 0x1C # offset of UART scratch register
 UART_LSR = 0x14
 UART_IIR = 0x8
+UART_LCR = 0xc # line control register
+UART_DLL = 0x0 # Divisor Latch LSB
+UART_DLM = 0x4 # Divisor Latch MSB
 
 ########### RESET ###########
 RESET_BASE = 0x6FFF0000
@@ -52,3 +55,8 @@ PLIC_SOURCE_MASK = 0x3FF
 PLIC_MAX_TARGET = 15871
 PLIC_TARGET_MASK = 0x3FFF
 PLIC_NUM_INTERRUPTS = 16
+
+########### Clocking ###########
+
+GFE_P1_DEFAULT_HZ = 50e6
+GFE_P2_DEFAULT_HZ = 50e6

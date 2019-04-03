@@ -6,4 +6,7 @@ import gfetester
 
 gfe = gfetester.gfetester()
 gfe.startGdb()
-gfe.softReset()
+try:
+	gfe.softReset()
+except Exception as e:
+	print(gfe.getGdbLog())

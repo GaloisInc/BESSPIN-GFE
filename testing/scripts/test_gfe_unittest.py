@@ -10,11 +10,16 @@ import os
 import time
 import struct
 import glob
+import sys
 
 class BaseGfeTest(unittest.TestCase):
     """GFE base testing class. All GFE Python unittests inherit from this class"""
     def getXlen(self):
         return '32'
+
+    def getFreq(self):
+        """Return the processor frequency in Hz"""
+        return gfeparameters.GFE_P1_DEFAULT_HZ
 
     def getGdbPath(self):
         if '32' in self.getXlen():
@@ -80,17 +85,33 @@ class TestGfe(BaseGfeTest):
         else:
             uart_elf = 'rv32ui-p-uart'
 
+        uart_baud_rate = 9600
         uart_elf_path = os.path.abspath(
             os.path.join(self.path_to_asm, uart_elf))
         print("Using: " + uart_elf_path)
+
         self.gfe.setupUart(
             timeout=1,
-            baud=9600,
+            baud=uart_baud_rate,
             parity="EVEN",
             stopbits=2,
             bytesize=8)
 
-        self.gfe.launchElf(uart_elf_path)
+        # Setup the UART devisor bits to account for GFEs at
+        # different frequencies
+        divisor = int(self.getFreq()/(16 * uart_baud_rate))
+        # Get the upper and lower divisor bytes into dlm and dll respectively
+        uart_dll_val = struct.unpack("B", struct.pack(">I", divisor)[-1])[0]
+        uart_dlm_val = struct.unpack("B", struct.pack(">I", divisor)[-2])[0]
+        uart_base = gfeparameters.UART_BASE
+        print("Uart baud rate {} Clock Freq {}\nSetting divisor to {}. dlm = {}, dll = {}".format(
+            uart_baud_rate, self.getFreq(),
+            divisor, hex(uart_dlm_val), hex(uart_dll_val)))
+        self.gfe.riscvWrite32(uart_base + gfeparameters.UART_LCR, 0x80)
+        self.gfe.riscvWrite32(uart_base + gfeparameters.UART_DLL, uart_dll_val)
+        self.gfe.riscvWrite32(uart_base + gfeparameters.UART_DLM, uart_dlm_val)
+        print("Launching UART assembly test {}".format(uart_elf_path))      
+        self.gfe.launchElf(uart_elf_path, openocd_log=True, gdb_log=True)
 
         # Allow the riscv program to get started and configure UART
         time.sleep(0.2)
@@ -158,12 +179,21 @@ class TestGfe32(TestGfe):
     def getXlen(self):
         return '32'
 
+    def getFreq(self):
+        return gfeparameters.GFE_P1_DEFAULT_HZ
+
 class TestGfe64(TestGfe):
 
     def getXlen(self):
         return '64'
 
+    def getFreq(self):
+        return gfeparameters.GFE_P2_DEFAULT_HZ
+
 class TestFreeRTOS(BaseGfeTest):
+
+    def getFreq(self):
+        return gfeparameters.GFE_P1_DEFAULT_HZ
 
     def setUp(self):
         # Reset the GFE
@@ -177,7 +207,7 @@ class TestFreeRTOS(BaseGfeTest):
         # Setup pySerial UART
         self.gfe.setupUart(
             timeout = 1,
-            baud=9600,
+            baud=115200,
             parity="NONE",
             stopbits=2,
             bytesize=8)
@@ -234,15 +264,56 @@ class TestFreeRTOS(BaseGfeTest):
         # No auto-checking
         return
 
-class TestFreeRTOS32(TestGfe):
+class TestLinux(BaseGfeTest):
 
-    def getXlen(self):
-        return '32'
+    def getBootImage(self):
+        return os.path.join(
+            os.path.dirname(os.path.dirname(os.getcwd())),
+            'bootmem', 'build-bbl', 'bbl')
 
-class TestFreeRTOS64(TestGfe):
+    def setupUart(self):
+        # Setup pySerial UART
+        self.gfe.setupUart(
+            timeout = 1,
+            baud=115200,
+            parity="NONE",
+            stopbits=2,
+            bytesize=8)
+        print("Setup pySerial UART") 
 
     def getXlen(self):
         return '64'
+
+    def test_boot(self):
+        linux_elf = self.getBootImage()
+        linux_boot_timeout = 35 # Wait 35 seconds for linux to boot
+        self.setupUart()
+
+        print("Loading Linux Elf {}".format(linux_elf))
+        print("This may take some time...")
+        self.gfe.gdb_session.c(wait=False)
+        time.sleep(0.5)	
+        self.gfe.gdb_session.interrupt()
+        self.gfe.launchElf(linux_elf, verify=False)
+        print("Booting Linux with a timeout of {}s".format(linux_boot_timeout))
+        print("Linux launched")
+
+        # Store all UART output while linux is booting
+        rx_buf = [] # Try reading a large chunk of data, blocking for timeout secs.
+        print("First read")
+        start_time = time.time()
+        while time.time() < (start_time + linux_boot_timeout):
+            pending = self.gfe.uart_session.in_waiting
+            if pending:
+                data = self.gfe.uart_session.read(pending)
+                rx_buf.append(data) # Append read chunks to the list.
+                sys.stdout.write(data)
+        print("Timeout reached")
+
+        rx = ''.join(rx_buf)
+
+        self.assertIn("Xilinx Axi Ethernet MDIO: probed", rx)
+        self.assertIn("Please press Enter to activate this console", rx)
 
 class BaseTestIsaGfe(BaseGfeTest):
     """ISA unittest base class for P1 and P2 processors.

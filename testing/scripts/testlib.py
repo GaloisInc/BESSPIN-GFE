@@ -569,12 +569,13 @@ class Gdb(object):
         output = self.command("stepi", ops=10)
         return output
 
-    def load(self):
+    def load(self, verify=True):
         output = self.command("load", ops=1000)
         assert "failed" not in  output
         assert "Transfer rate" in output
-        output = self.command("compare-sections", ops=1000)
-        assert "MIS" not in output
+        if verify:
+            output = self.command("compare-sections", ops=1000)
+            assert "MIS" not in output
 
     def b(self, location):
         output = self.command("b %s" % location, ops=5)
