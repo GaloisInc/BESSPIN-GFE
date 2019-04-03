@@ -267,6 +267,35 @@ If something doesn't work, then:
 3) Check out our [Issue](https://gitlab-ext.galois.com/ssith/gfe/issues) - maybe you have a problem we already know about.
 
 
+#### Creating Debian Image ####
+(Temporary README for using Debian scripts)
+The debian directory includes several scripts for creating a Debian image. From that directory:
+```
+# Create chroot
+sudo ./create_chroot.sh
+
+# Create bbl image
+./create_debian_image.sh  
+```
+If you want to install more packages than what is included, run `sudo ./create_chroot.sh package1 package2` and subsitute `package1` and `package2` with all the packages you want to install. 
+If you want to do this manually, do the following:
+```
+# Enter chroot
+sudo chroot riscv64-chroot/
+
+# Use apt-get to install whatever you want
+
+# Remove apt-cache and list files
+./clean_chroot.sh
+
+exit
+
+sudo ./create_cpio_archive.sh
+```
+Then the bbl image can be created with `./create_debian_image.sh`.
+
+The bbl image is located at `$GFE_REO/riscv-tools/riscv-pk/build/bbl` can be loaded and run using gdb.
+
 #### Running Linux and Busybox ####
 
 The following instructions describe how to boot Linux with Busybox.
@@ -305,31 +334,14 @@ The GFE-configured Linux kernel includes the Xilinx AXI Ethernet driver. You sho
 [    4.350000] libphy: Xilinx Axi Ethernet MDIO: probed
 ```
 
-The provided configuration of busybox includes some basic networking utilities (ifconfig, udhcpc, ping, telnet, telnetd) to get you started. Additional utilities can be compiled into busybox or loaded into the filesystem image (add them to `$GFE_REPO/bootmem/_rootfs/`).
-
-***Note*** Due to a bug when statically linking glibc into busybox, DNS resolution does not work. This will be fixed in a future GFE release either in busybox or by switching to a full Linux distro.
+The Debian image provided has the iproute2 package already installed.
 
 **DHCP IP Example**
 
-If the VCU118 is connected to a network that has a DHCP server, you can configure networking using the following commands:
+If the VCU118 is connected to a network that has a DHCP server, the eth0 interface should automatically connect to the DHCP server.
+To test this, you can run `ping 4.2.2.1`. The expected output of this is: 
+you can configure networking using the following commands:
 ```
-/ # ifconfig eth0 up
-...
-xilinx_axienet 62100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx
-...
-/ # udhcpc -i eth0
-udhcpc: started, v1.30.1
-Setting IP address 0.0.0.0 on eth0
-udhcpc: sending discover
-udhcpc: sending select for 10.0.0.11
-udhcpc: lease of 10.0.0.11 obtained, lease time 259200
-Setting IP address 10.0.0.11 on eth0
-Deleting routers
-route: SIOCDELRT: No such process
-Adding router 10.0.0.2
-Recreating /etc/resolv.conf
- Adding DNS server 10.0.0.2
-/ # ping 4.2.2.1
 PING 4.2.2.1 (4.2.2.1): 56 data bytes
 64 bytes from 4.2.2.1: seq=0 ttl=57 time=22.107 ms
 64 bytes from 4.2.2.1: seq=1 ttl=57 time=20.754 ms
@@ -339,19 +351,20 @@ PING 4.2.2.1 (4.2.2.1): 56 data bytes
 --- 4.2.2.1 ping statistics ---
 4 packets transmitted, 4 packets received, 0% packet loss
 round-trip min/avg/max = 20.754/21.136/22.107 ms
-
 / # 
 ```
 
 **Static IP Example**
 
-Use the commands below to enable networking when a DHCP server is not available. Replace the IP and router addresses as necessary for your setup:
+Use the commands below to enable networking when a DHCP server is not available. Replace the IP and router addresses as necessary for your setup (have not tested this):
 ```
-/ # ifconfig eth0 10.0.0.3
+/ # ip addr add 10.0.0.3 dev eth0
 ...
 xilinx_axienet 62100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx
 ...
-/ # route add -net 0.0.0.0 gw 10.0.0.2
+/ # ip route add 10.0.0.0/24 dev eth0
+/ # ip route add 0.0.0.0 via 10.0.0.2
+/ # ip route add default via 10.0.0.2 
 / # ping 4.2.2.1
 PING 4.2.2.1 (4.2.2.1): 56 data bytes
 64 bytes from 4.2.2.1: seq=0 ttl=57 time=23.320 ms
