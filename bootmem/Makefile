@@ -18,7 +18,7 @@ BUSYBOX_SRC=../busybox
 LINUX_SRC=../riscv-linux
 BBL_SRC=../../riscv-tools/riscv-pk
 
-default: build-busybox/busybox_unstripped.text build-linux/vmlinux.text build-bbl/bbl.text
+default: build-busybox/busybox_unstripped.text build-linux/vmlinux.text build-bbl/bbl.text bootmem.bin
 
 %.text: %
 	$(OBJDUMP) -dS $< > $@
@@ -43,5 +43,14 @@ build-bbl/bbl: build-linux/vmlinux
 	$(MKDIR) -p $(@D)
 	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-linux/vmlinux
 	$(MAKE) -C $(@D)
+
+bbl.bin: build-bbl/bbl
+	$(OBJCOPY) -O binary $< $@
+
+bootmem: bootmem.S linker.ld bbl.bin
+	$(CC) -Tlinker.ld $< -nostdlib -static -Wl,--no-gc-sections -o $@
+
+bootmem.bin: bootmem
+	$(OBJCOPY) -O binary $< $@
 
 .PHONY: default
