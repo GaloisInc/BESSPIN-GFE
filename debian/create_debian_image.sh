@@ -2,7 +2,8 @@
 
 # Get the path to debian directory script is being run from 
 DEBIAN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-GFE_REPO=$DEBIAN_DIR/..
+GFE_REPO="$(dirname "$DEBIAN_DIR")"
+echo $GFE_REPO
 
 # Check for necessary commands 
 array=( "riscv64-unknown-linux-gnu-gcc" )
@@ -31,8 +32,8 @@ if [ -d $GFE_REPO/riscv-tools/riscv-pk/build ]; then
 fi
 mkdir build
 cd build
-../configure --prefix=/tmp --host=riscv64-unknown-linux-gnu --with-payload=../../../bootmem/build-linux/vmlinux
+../configure --prefix=/tmp --host=riscv64-unknown-linux-gnu --with-payload=$GFE_REPO/bootmem/build-linux/vmlinux
 echo "Building BBL..."
-make
+make || exit $?
 
 echo "BBL built"

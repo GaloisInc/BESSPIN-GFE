@@ -9,29 +9,17 @@ fi
 # Get the path to debian directory script is being run from 
 DEBIAN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 CHROOT_DIR=$DEBIAN_DIR/riscv64-chroot
-GFE_REPO=$DEBIAN_DIR/..
+GFE_REPO="$(dirname "$DEBIAN_DIR")"
 
 # Check for necessary packages
-array=( "libssl-dev" "debian-ports-archive-keyring" "binfmt-support" "qemu-system-misc")
+array=( "libssl-dev" "debian-ports-archive-keyring" "binfmt-support" "qemu-user-static" "mmdebstrap")
 for i in "${array[@]}"
 do
 	dpkg -s $i &> /dev/null
-	if [ $? -eq 0 ]; then
-		echo "$i installed"
-	else
+	if [ $? -ne 0 ]; then
 		echo "$i required"
 		exit 1;
 	fi
-done
-
-# Check for necessary commands 
-array=( "mmdebstrap" )
-for i in "${array[@]}"
-do
-    command -v $i >/dev/null 2>&1 || { 
-        echo >&2 "$i required"; 
-        exit 1; 
-    }
 done
 
 # Create chroot
