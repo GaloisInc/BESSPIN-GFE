@@ -330,3 +330,9 @@ cd chisel_processors/P1
 ./build.sh
 ```
 
+### A note on VCU118 GPIO ###
+There are two possible sets of GPIO on the VCU118: the User Pmod GPIO headers and an FMC debug card.
+
+The Pmod header pins are all supposed to be at 3.3V, but issues with the VCU118 board cause them to actually be around 1.3V (see this [Xilinx forum post](https://forums.xilinx.com/t5/Evaluation-Boards/VCU118-Rev-2-0-PMOD0-U41-board-bug-not-fixed/m-p/942392#M20819) for more information). This could (theoretically) be solved by programming the VADJ_1V8 power rail to be 1.2V using the VCU118 System Controller GUI. However this solution would likely impact the functionality of PCIe as this power rail also powers many of the FMC connector pins. When an FMC card is connected to the FMC HPC1, by default the VADJ_1V8 power rail is set by reading the card's IIC EEPROM to see which voltage(s) it supports. This means that this solution can work on all P1s since they don't have PCIe, but would make sharing the FPGAs for development among all processors more difficult. Also note that the System Controller GUI only runs on Windows.
+
+An FMC debug card can also be connected to the FMC HPC1 connector to provide additional GPIO. The [Xilinx FMC XM105 Debug Card](https://www.xilinx.com/products/boards-and-kits/hw-fmc-xm105-g.html#overview) provides access to many of the FMC pins on the VCU118, which can be whatever voltage the VADJ_1V8 power rail is set to (1.2V, 1.5V or 1.8V). This solution will not work for processors that have PCIe because the FMC HPC1 port will be in use.
