@@ -12,6 +12,16 @@ set_property PACKAGE_PIN AY25 [get_ports rs232_uart_rts]
 set_property DRIVE 12 [get_ports rs232_uart_rts]
 set_property SLEW SLOW [get_ports rs232_uart_rts]
 
+# ----- SPI_1 Pins (J52 on VCU118) ------
+set_property IOSTANDARD LVCMOS18 [get_ports spi1_mosi]
+set_property PACKAGE_PIN AY15 [get_ports spi1_mosi]; # PMOD_0_1
+set_property IOSTANDARD LVCMOS18 [get_ports spi1_miso]
+set_property PACKAGE_PIN AW15 [get_ports spi1_miso]; # PMOD_0_2
+set_property IOSTANDARD LVCMOS18 [get_ports spi1_sck]
+set_property PACKAGE_PIN AV15 [get_ports spi1_sck]; # PMOD_0_3
+set_property IOSTANDARD LVCMOS18 [get_ports spi1_ss]
+set_property PACKAGE_PIN AY14 [get_ports spi1_ss]; # PMOD_0_0
+
 # ----- PCIe Pins ------
 
 set_false_path -from [get_ports pcie_perstn]

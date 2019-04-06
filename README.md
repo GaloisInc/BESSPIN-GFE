@@ -269,6 +269,13 @@ apt-get install libssl-dev debian-ports-archive-keyring binfmt-support qemu-user
 ```
 The RISCV toolchain `riscv-gnu-toolchain` should also be installed, built, and added to your path. Instructions for this are at the top of this README.
 
+Finally, add the following lines to your `/etc/apt/sources.list` for access to the Debian-Ports respository:
+```
+deb http://deb.debian.org/debian-ports/ sid main
+deb http://deb.debian.org/debian-ports/ unreleased main
+deb-src http://deb.debian.org/debian-ports/ sid main
+```
+
 The debian directory includes several scripts for creating a Debian image. From that directory:
 ```
 # Create chroot and compress cpio archive
@@ -298,7 +305,7 @@ sudo ./create_cpio_archive.sh
 ```
 Then the bbl image can be created with `./create_debian_image.sh` as before.
 
-The bbl image is located at `$GFE_REO/riscv-tools/riscv-pk/build/bbl` and can be loaded and run using gdb.
+The bbl image is located at `$GFE_REO/riscv-tools/riscv-pk/build/bbl` and can be loaded and run using gdb. The default root password is `riscv`.
 
 ### Load and run the memory image ###
 
