@@ -25,6 +25,10 @@ case "$proc_name" in
 	make CROSS_COMPILE=riscv64-unknown-elf-
 	clock_freq_mhz=50
 	;;
+    *p3)
+	make CROSS_COMPILE=riscv64-unknown-elf-
+	clock_freq_mhz=25
+	;;
     *)
 	echo "WARNING: don't know how to make a boot ROM for processor $proc_name"
 	;;
