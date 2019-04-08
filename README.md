@@ -264,20 +264,20 @@ If something doesn't work, then:
 
 #### Creating Debian Image ####
 Before starting, there are several necessary packages to install. Run:
-```
+``` 
 apt-get install libssl-dev debian-ports-archive-keyring binfmt-support qemu-user-static mmdebstrap
 ```
 The RISCV toolchain `riscv-gnu-toolchain` should also be installed, built, and added to your path. Instructions for this are at the top of this README.
 
 Finally, add the following lines to your `/etc/apt/sources.list` for access to the Debian-Ports respository:
-```
+``` bash
 deb http://deb.debian.org/debian-ports/ sid main
 deb http://deb.debian.org/debian-ports/ unreleased main
 deb-src http://deb.debian.org/debian-ports/ sid main
 ```
 
 The debian directory includes several scripts for creating a Debian image. From that directory:
-```
+``` bash
 # Create chroot and compress cpio archive
 sudo ./create_chroot.sh
 
@@ -288,8 +288,8 @@ To decrease the size of the image, some language man pages, documentation, and l
 This results in warnings about locale settings and man files that are expected.
 
 If you want to install more packages than what is included, run `sudo ./create_chroot.sh package1 package2` and subsitute `package1` and `package2` with all the packages you want to install. 
-If you want to install or remove packages manually, do the following:
-```
+If you want to install or remove packages manually or change anything else inside the chroot, do the following:
+``` bash
 # Enter chroot
 sudo chroot riscv64-chroot/
 

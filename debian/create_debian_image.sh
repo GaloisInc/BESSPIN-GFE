@@ -3,7 +3,6 @@
 # Get the path to debian directory script is being run from 
 DEBIAN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 GFE_REPO="$(dirname "$DEBIAN_DIR")"
-echo $GFE_REPO
 
 # Check for necessary commands 
 array=( "riscv64-unknown-linux-gnu-gcc" )
