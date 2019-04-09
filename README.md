@@ -305,6 +305,8 @@ sudo ./create_cpio_archive.sh
 ```
 Then the bbl image can be created with `./create_debian_image.sh` as before.
 
+To modify the `linux.config` file, run `make ARCH=riscv menuconfig` from '`$GFE_REPO/bootmem/build-linux` and then load the existing `linux.config` file and modify as you wish.
+
 The bbl image is located at `$GFE_REO/riscv-tools/riscv-pk/build/bbl` and can be loaded and run using gdb. The default root password is `riscv`.
 
 ### Load and run the memory image ###
