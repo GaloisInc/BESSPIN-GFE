@@ -262,12 +262,62 @@ If something doesn't work, then:
 2) sometimes restarting the FPGA with `CPU_RESET` button (or typing `reset` in GDB) will help
 3) Check out our [Issue](https://gitlab-ext.galois.com/ssith/gfe/issues) - maybe you have a problem we already know about.
 
+## Running Linux - Debian or Busybox ##
+#### Creating Debian Image ####
+Before starting, there are several necessary packages to install. Run:
+``` 
+apt-get install libssl-dev debian-ports-archive-keyring binfmt-support qemu-user-static mmdebstrap
+```
+The RISCV toolchain `riscv-gnu-toolchain` should also be installed, built, and added to your path. Instructions for this are at the top of this README.
 
-## Running Linux and Busybox ##
+The debian directory includes several scripts for creating a Debian image and a simple Makefile to run them. You may either run the scripts manually or use make to build an image:
+
+``` bash
+# Using the scripts
+cd $GFE_REPO/debian
+
+# Create chroot and compress cpio archive
+sudo ./create_chroot.sh
+
+# ... Make modifications to the chroot ...
+# Recreate the cpio.gz image
+sudo ./create_cpio.sh
+
+# Build kernel and bbl
+cd $GFE_REPO/bootmem
+make debian
+```
+To decrease the size of the image, some language man pages, documentation, and locale files are removed.
+This results in warnings about locale settings and man files that are expected.
+
+If you want to install more packages than what is included, run `sudo ./create_chroot.sh package1 package2` and subsitute `package1` and `package2` with all the packages you want to install. 
+If you want to install or remove packages manually or change anything else inside the chroot, do the following:
+``` bash
+# Enter chroot
+sudo chroot riscv64-chroot/
+
+# Use apt-get to install whatever you want
+
+# Remove apt-cache and list files
+./clean_chroot.sh
+
+exit
+
+sudo ./create_cpio.sh
+```
+Then the bbl image can be created by running `make debian` inside the `$GFE_REPO/bootmem` directory
+
+The bbl image is located at `$GFE_REPO/bootmem/build-bbl/bbl` and can be loaded and run using gdb.
+
+A memory image is also created that can be loaded into the flash ROM on the FPGA at `$GFE_REPO/bootmem/bootmem.bin`
+
+#### Creating Busybox Image ####
 
 The following instructions describe how to boot Linux with Busybox.
 
 ### Build the memory image ###
+
+The default make target will build a simpler kernel with only a busybox boot environment:
 
 ```bash
 cd $GFE_REPO/bootmem/
@@ -300,14 +350,17 @@ The GFE-configured Linux kernel includes the Xilinx AXI Ethernet driver. You sho
 [    4.340000] xilinx_axienet 62100000.ethernet: enabling VCU118-specific quirk fixes
 [    4.350000] libphy: Xilinx Axi Ethernet MDIO: probed
 ```
-
 The provided configuration of busybox includes some basic networking utilities (ifconfig, udhcpc, ping, telnet, telnetd) to get you started. Additional utilities can be compiled into busybox or loaded into the filesystem image (add them to `$GFE_REPO/bootmem/_rootfs/`).
 
 ***Note*** Due to a bug when statically linking glibc into busybox, DNS resolution does not work. This will be fixed in a future GFE release either in busybox or by switching to a full Linux distro.
 
+The Debian image provided has the iproute2 package already installed and is ready for many network environments. 
+
 **DHCP IP Example**
 
-If the VCU118 is connected to a network that has a DHCP server, you can configure networking using the following commands:
+On Debian, the eth0 interface should automatically request an IP address via DHCP if available, and this section can be skipped.
+
+On busybox, you must manually run the DHCP client:
 ```
 / # ifconfig eth0 up
 ...
@@ -325,7 +378,10 @@ route: SIOCDELRT: No such process
 Adding router 10.0.0.2
 Recreating /etc/resolv.conf
  Adding DNS server 10.0.0.2
-/ # ping 4.2.2.1
+```
+
+On either OS, you can run `ping 4.2.2.1` to test network connectivity. The expected output of this is: 
+```
 PING 4.2.2.1 (4.2.2.1): 56 data bytes
 64 bytes from 4.2.2.1: seq=0 ttl=57 time=22.107 ms
 64 bytes from 4.2.2.1: seq=1 ttl=57 time=20.754 ms
@@ -335,19 +391,25 @@ PING 4.2.2.1 (4.2.2.1): 56 data bytes
 --- 4.2.2.1 ping statistics ---
 4 packets transmitted, 4 packets received, 0% packet loss
 round-trip min/avg/max = 20.754/21.136/22.107 ms
-
 / # 
 ```
 
 **Static IP Example**
 
 Use the commands below to enable networking when a DHCP server is not available. Replace the IP and router addresses as necessary for your setup:
+
+On busybox:
 ```
 / # ifconfig eth0 10.0.0.3
-...
-xilinx_axienet 62100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx
-...
-/ # route add -net 0.0.0.0 gw 10.0.0.2
+/ # route add 10.0.0.0/24 dev eth0
+/ # route add default gw 10.0.0.1
+```
+
+On Debian:
+```
+/ # ip addr add 10.0.0.3 dev eth0
+/ # ip route add 10.0.0.0/24 dev eth0
+/ # ip route add default via 10.0.0.1
 / # ping 4.2.2.1
 PING 4.2.2.1 (4.2.2.1): 56 data bytes
 64 bytes from 4.2.2.1: seq=0 ttl=57 time=23.320 ms
@@ -536,7 +598,7 @@ $ export LM_LICENSE_FILE=/opt/Bluespec.lic
 Use the `exe_write_tvtrace_RV64` program to capture a trace:
 
 ```bash
-$ cd $GFE_DIR/TV-hostside
+$ cd $GFE_REPO/TV-hostside
 $ ./exe_write_tvtrace_RV64
 ----------------------------------------------------------------
 Bluespec SSITH Support, TV Trace Dumper v1.0
