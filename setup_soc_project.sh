@@ -23,7 +23,7 @@ case "$proc_name" in
 	;;
     *p2)
 	make CROSS_COMPILE=riscv64-unknown-elf-
-	clock_freq_mhz=50
+	clock_freq_mhz=25
 	;;
     *p3)
 	make CROSS_COMPILE=riscv64-unknown-elf-
