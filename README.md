@@ -270,21 +270,22 @@ apt-get install libssl-dev debian-ports-archive-keyring binfmt-support qemu-user
 ```
 The RISCV toolchain `riscv-gnu-toolchain` should also be installed, built, and added to your path. Instructions for this are at the top of this README.
 
-Finally, add the following lines to your `/etc/apt/sources.list` for access to the Debian-Ports respository:
-``` bash
-deb http://deb.debian.org/debian-ports/ sid main
-deb http://deb.debian.org/debian-ports/ unreleased main
-deb-src http://deb.debian.org/debian-ports/ sid main
-```
-
-The debian directory includes several scripts for creating a Debian image. From that directory:
+The debian directory includes several scripts for creating a Debian image and a simple Makefile to run them. You may either run the scripts manually or use make to build an image:
 
 ``` bash
+# Using the scripts
+cd $GFE_REPO/debian
+
 # Create chroot and compress cpio archive
 sudo ./create_chroot.sh
 
+# ... Make modifications to the chroot ...
+# Recreate the cpio.gz image
+sudo ./create_cpio.sh
+
 # Build kernel and bbl
-./create_debian_image.sh  
+cd $GFE_REPO/bootmem
+make debian
 ```
 To decrease the size of the image, some language man pages, documentation, and locale files are removed.
 This results in warnings about locale settings and man files that are expected.
@@ -302,17 +303,21 @@ sudo chroot riscv64-chroot/
 
 exit
 
-sudo ./create_cpio_archive.sh
+sudo ./create_cpio.sh
 ```
-Then the bbl image can be created with `./create_debian_image.sh`.
+Then the bbl image can be created by running `make debian` inside the `$GFE_REPO/bootmem` directory
 
-The bbl image is located at `$GFE_REO/riscv-tools/riscv-pk/build/bbl` can be loaded and run using gdb.
+The bbl image is located at `$GFE_REPO/bootmem/build-bbl/bbl` and can be loaded and run using gdb.
+
+A memory image is also created that can be loaded into the flash ROM on the FPGA at `$GFE_REPO/bootmem/bootmem.bin`
 
 #### Creating Busybox Image ####
 
 The following instructions describe how to boot Linux with Busybox.
 
 ### Build the memory image ###
+
+The default make target will build a simpler kernel with only a busybox boot environment:
 
 ```bash
 cd $GFE_REPO/bootmem/
@@ -565,7 +570,7 @@ $ export LM_LICENSE_FILE=/opt/Bluespec.lic
 Use the `exe_write_tvtrace_RV64` program to capture a trace:
 
 ```bash
-$ cd $GFE_DIR/TV-hostside
+$ cd $GFE_REPO/TV-hostside
 $ ./exe_write_tvtrace_RV64
 ----------------------------------------------------------------
 Bluespec SSITH Support, TV Trace Dumper v1.0
