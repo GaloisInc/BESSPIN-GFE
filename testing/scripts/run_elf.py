@@ -33,7 +33,7 @@ gfe.softReset()
 # Setup pySerial UART
 gfe.setupUart(
     timeout = 1,
-    baud=9600,
+    baud=115200,
     parity="NONE",
     stopbits=2,
     bytesize=8)
@@ -46,3 +46,4 @@ time.sleep(args.runtime)
 num_rxed =  gfe.uart_session.in_waiting
 rx = gfe.uart_session.read( num_rxed ) 
 print("\nReceived: {}".format(rx))
+gfe.gdb_session.interrupt()
