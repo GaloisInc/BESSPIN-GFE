@@ -40,7 +40,7 @@ build-linux/.config: $(KCONFIG_CONFIG)
 	$(MAKE) -C $(LINUX_SRC) ARCH=riscv O=$(CURDIR)/build-linux olddefconfig
 
 build-linux/vmlinux: build-linux/.config build-busybox/busybox_unstripped
-	echo $$KCONFIG_CONFIG
+	@echo "Building Linux with config: $$KCONFIG_CONFIG"
 	$(MAKE) -C $(@D) ARCH=riscv O=$(CURDIR)/build-linux $(@F)
 
 build-bbl/bbl: build-linux/vmlinux
