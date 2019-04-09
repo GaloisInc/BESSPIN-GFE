@@ -17,10 +17,11 @@ export CROSS_COMPILE KCONFIG_CONFIG
 BUSYBOX_SRC=../busybox
 LINUX_SRC=../riscv-linux
 BBL_SRC=../../riscv-tools/riscv-pk
+DEBIAN_DIR=../debian
 
 default: build-busybox/busybox_unstripped.text build-linux/vmlinux.text build-bbl/bbl.text bootmem.bin
 debian: export KCONFIG_CONFIG=$(CURDIR)/debian-linux.config
-debian: debian.cpio.gz build-linux/vmlinux.text build-bbl/bbl.text bootmem.bin
+debian: check-cpio debian.cpio.gz build-linux/vmlinux.text build-bbl/bbl.text bootmem.bin
 
 %.text: %
 	$(OBJDUMP) -dS $< > $@
@@ -47,7 +48,11 @@ build-bbl/bbl: build-linux/vmlinux
 	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-linux/vmlinux
 	$(MAKE) -C $(@D)
 
+check-cpio:
+	$(MAKE) -C $(DEBIAN_DIR)
+
 debian.cpio.gz:
+	$(MAKE) -C $(DEBIAN_DIR)
 
 bbl.bin: build-bbl/bbl
 	$(OBJCOPY) -O binary $< $@
@@ -58,4 +63,4 @@ bootmem: bootmem.S linker.ld bbl.bin
 bootmem.bin: bootmem
 	$(OBJCOPY) -O binary $< $@
 
-.PHONY: default
+.PHONY: default debian check-cpio

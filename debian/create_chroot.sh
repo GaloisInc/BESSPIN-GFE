@@ -49,6 +49,7 @@ echo "Configured chroot"
 
 # Create compressed cpio archive
 echo "Creating cpio archive..."
+echo "This may ask for your password to use sudo!"
 
 cd $CHROOT_DIR
 sudo find . -print0 | sudo cpio --null --create --format=newc | gzip --best > $GFE_REPO/bootmem/debian.cpio.gz
