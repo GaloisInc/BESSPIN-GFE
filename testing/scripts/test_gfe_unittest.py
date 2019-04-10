@@ -293,24 +293,6 @@ class TestLinux(BaseGfeTest):
         time.sleep(0.5)	
         self.gfe.gdb_session.interrupt()
 
-        # Run Bootrom - Hack for Chisel P3. P3 will jump to this bootrom directly in the future
-        print(self.gfe.gdb_session.command("set $pc = 0x70000000"))
-        self.gfe.gdb_session.c(wait=False)
-        time.sleep(0.1) 
-        self.gfe.gdb_session.interrupt()
-        print(self.gfe.gdb_session.command("x/10i $pc"))
-        # End Hack
-
-        # DEBUG
-        print(self.gfe.gdb_session.command("file {}".format(linux_elf)))
-        self.gfe.gdb_session.load()
-
-        # Single step
-        for x in xrange(1,50):
-            print(self.gfe.gdb_session.command("stepi"))
-        return
-        # END DEBUG
-
         print("Loading Linux Elf {}".format(linux_elf))
         print("This may take some time...")
         self.gfe.launchElf(linux_elf, verify=False)
