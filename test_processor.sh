@@ -21,8 +21,8 @@ if [ "$proc_name" == "chisel_p1" ] || [ "$proc_name" == "bluespec_p1" ]; then
 	err_msg $? "test_freertos.sh failed"
 fi
 
-# Run all P2 processor tests
-if [ "$proc_name" == "chisel_p2" ] || [ "$proc_name" == "bluespec_p2" ]; then
+# Run all P2/P3 processor tests
+if [ "$proc_name" == "chisel_p2" ] || [ "$proc_name" == "bluespec_p2" ] || [ "$proc_name" == "chisel_p3" ] || [ "$proc_name" == "bluespec_p3" ]; then
 	./test.sh 64
 	err_msg $? "test.sh 64 failed"
 	./test_linux.sh
