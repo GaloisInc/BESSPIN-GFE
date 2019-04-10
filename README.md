@@ -592,7 +592,7 @@ $ export LM_LICENSE_FILE=/opt/Bluespec.lic
 ```
 
 ### Capturing a Trace ###
-Use the `exe_write_tvtrace_RV64` program to capture a trace:
+Use the `exe_write_tvtrace_RV64` program to capture a trace (works for both 32-bit and 64-bit processors):
 
 ```bash
 $ cd $GFE_REPO/TV-hostside
@@ -610,3 +610,30 @@ Receiving traces ...
 ```
 
 Use `Ctrl-C` to stop capturing trace data after your program has finished executing.
+
+### Comparing a Trace ###
+To compare the captured trace against the Cissr simulation model, use the `exe_tvchecker_RV*` programs. There are separate binaries for comparing 32-bit and 64-bit traces:
+
+```bash
+$ cd $GFE_REPO/TV-hostside
+$ ./exe_tvchecker_RV64 trace_data.dat
+Opened file 'test.trace' for reading trace_data.
+Loading BOOT ROM from file 'boot_ROM_RV64.memhex'
+ISA = RV64IMAFDCUS
+Cissr: v2018-01-31 (RV64)
+------
+Cissr: reset
+Tandem verifier is: Cissr
+Trace configation: XLEN=64, MLEN=64, FLEN=0
+{ STATE_INIT[mem_req addr 0x6fff0000 STORE 32b data 0x1] }
+ERROR: cissr_write_mem32: STORE_AMO_ACCESS_FAULT at address 0x6fff0000
+{ RESET }
+------
+Cissr: reset
+...
+{ [pc c000000c][instr 00800f93][t6(x31) 8] } inum 497
+{ [pc c0000040][instr 03ff0a63] } inum 498
+{ STATE_INIT[mem_req addr 0xc0000040 STORE 32b data 0x0] }
+```
+
+Note that some early mismatches are expected as the simulation model is updated with the correct PC and initial status registers.
