@@ -14,6 +14,10 @@ yes riscv | passwd
 #allow-hotplug eth0
 #iface eth0 inet dhcp" >> /etc/network/interfaces
 
+# Fixup serial service for slower processors
+sed -i 's/getty-pre.target/getty-pre.target systemd-udevd.service/' /etc/systemd/system/getty.target.wants/getty\@tty1.service 
+sed -i 's/SendSIGHUP=yes/SendSIGHUP=yes\nTimeoutSec=240/' /etc/systemd/system/getty.target.wants/getty\@tty1.service
+
 # Remove debconf internationalization for debconf
 dpkg --remove debconf-i18n
 
