@@ -270,7 +270,7 @@ apt-get install libssl-dev debian-ports-archive-keyring binfmt-support qemu-user
 ```
 The RISCV toolchain `riscv-gnu-toolchain` should also be installed, built, and added to your path. Instructions for this are at the top of this README.
 
-The debian directory includes several scripts for creating a Debian image and a simple Makefile to run them. You may either run the scripts manually or use make to build an image:
+The debian directory includes several scripts for creating a Debian image and a simple Makefile to run them. Running `make debian` from `$GFE_REPO/bootmem` will perform all the steps of creating the image. If you want to make modifications to the chroot and then build the image, you can do the following:
 
 ``` bash
 # Using the scripts
@@ -279,7 +279,17 @@ cd $GFE_REPO/debian
 # Create chroot and compress cpio archive
 sudo ./create_chroot.sh
 
+# Enter chroot
+sudo chroot riscv64-chroot/
+
 # ... Make modifications to the chroot ...
+
+# Remove apt-cache and list files to decrease image size if desired
+./clean_chroot
+
+# Exit chroot
+exit
+
 # Recreate the cpio.gz image
 sudo ./create_cpio.sh
 
@@ -290,22 +300,7 @@ make debian
 To decrease the size of the image, some language man pages, documentation, and locale files are removed.
 This results in warnings about locale settings and man files that are expected.
 
-If you want to install more packages than what is included, run `sudo ./create_chroot.sh package1 package2` and subsitute `package1` and `package2` with all the packages you want to install. 
-If you want to install or remove packages manually or change anything else inside the chroot, do the following:
-``` bash
-# Enter chroot
-sudo chroot riscv64-chroot/
-
-# Use apt-get to install whatever you want
-
-# Remove apt-cache and list files
-./clean_chroot.sh
-
-exit
-
-sudo ./create_cpio.sh
-```
-Then the bbl image can be created by running `make debian` inside the `$GFE_REPO/bootmem` directory
+If you want to install more packages than what is included, run `sudo ./create_chroot.sh package1 package2` and subsitute `package1` and `package2` with all the packages you want to install. Then recreate the cpio.gz image and run `make debian` as described above. If installing or removing packages manually rather than with the script, use `apt-get` to install or remove any packages from within the chroot and run `./clean_chroot` from within the chroot afterwards.
 
 The bbl image is located at `$GFE_REPO/bootmem/build-bbl/bbl` and can be loaded and run using gdb.
 
