@@ -349,12 +349,13 @@ The GFE-configured Linux kernel includes the Xilinx AXI Ethernet driver. You sho
 The provided configuration of busybox includes some basic networking utilities (ifconfig, udhcpc, ping, telnet, telnetd) to get you started. Additional utilities can be compiled into busybox or loaded into the filesystem image (add them to `$GFE_REPO/bootmem/_rootfs/`).
 
 ***Note*** Due to a bug when statically linking glibc into busybox, DNS resolution does not work. This will be fixed in a future GFE release either in busybox or by switching to a full Linux distro.
+***Note*** There is currently a bug in the Chisel P3 that may result in a kernel panic when using the provided Ethernet driver. A fix will be released shortly.
 
 The Debian image provided has the iproute2 package already installed and is ready for many network environments. 
 
 **DHCP IP Example**
 
-On Debian, the eth0 interface should automatically request an IP address via DHCP if available, and this section can be skipped.
+On Debian, the eth0 interface can be configured using the `/etc/network/interfaces` file followed by restarting the network service using `systemctl`.
 
 On busybox, you must manually run the DHCP client:
 ```
