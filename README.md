@@ -88,9 +88,10 @@ This allows the FPGA to be programmed from flash on power-up.
 
 1. Install the following python packages: `pexpect, pyserial`. 
 These are required for running python unittests on the GFE.
-2. Give the current user access to the serial devices.
+2. Give the current user access to the serial and JTAG devices.
 ```bash
 sudo usermod -aG dialout $USER
+sudo usermod -aG plugdev $USER
 sudo reboot
 ```
 3. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
@@ -270,7 +271,7 @@ apt-get install libssl-dev debian-ports-archive-keyring binfmt-support qemu-user
 ```
 The RISCV toolchain `riscv-gnu-toolchain` should also be installed, built, and added to your path. Instructions for this are at the top of this README.
 
-The debian directory includes several scripts for creating a Debian image and a simple Makefile to run them. You may either run the scripts manually or use make to build an image:
+The debian directory includes several scripts for creating a Debian image and a simple Makefile to run them. Running `make debian` from `$GFE_REPO/bootmem` will perform all the steps of creating the image. If you want to make modifications to the chroot and then build the image, you can do the following:
 
 ``` bash
 # Using the scripts
@@ -279,7 +280,17 @@ cd $GFE_REPO/debian
 # Create chroot and compress cpio archive
 sudo ./create_chroot.sh
 
+# Enter chroot
+sudo chroot riscv64-chroot/
+
 # ... Make modifications to the chroot ...
+
+# Remove apt-cache and list files to decrease image size if desired
+./clean_chroot
+
+# Exit chroot
+exit
+
 # Recreate the cpio.gz image
 sudo ./create_cpio.sh
 
@@ -290,22 +301,7 @@ make debian
 To decrease the size of the image, some language man pages, documentation, and locale files are removed.
 This results in warnings about locale settings and man files that are expected.
 
-If you want to install more packages than what is included, run `sudo ./create_chroot.sh package1 package2` and subsitute `package1` and `package2` with all the packages you want to install. 
-If you want to install or remove packages manually or change anything else inside the chroot, do the following:
-``` bash
-# Enter chroot
-sudo chroot riscv64-chroot/
-
-# Use apt-get to install whatever you want
-
-# Remove apt-cache and list files
-./clean_chroot.sh
-
-exit
-
-sudo ./create_cpio.sh
-```
-Then the bbl image can be created by running `make debian` inside the `$GFE_REPO/bootmem` directory
+If you want to install more packages than what is included, run `sudo ./create_chroot.sh package1 package2` and subsitute `package1` and `package2` with all the packages you want to install. Then recreate the cpio.gz image and run `make debian` as described above. If installing or removing packages manually rather than with the script, use `apt-get` to install or remove any packages from within the chroot and run `./clean_chroot` from within the chroot afterwards.
 
 The bbl image is located at `$GFE_REPO/bootmem/build-bbl/bbl` and can be loaded and run using gdb.
 
@@ -353,12 +349,13 @@ The GFE-configured Linux kernel includes the Xilinx AXI Ethernet driver. You sho
 The provided configuration of busybox includes some basic networking utilities (ifconfig, udhcpc, ping, telnet, telnetd) to get you started. Additional utilities can be compiled into busybox or loaded into the filesystem image (add them to `$GFE_REPO/bootmem/_rootfs/`).
 
 ***Note*** Due to a bug when statically linking glibc into busybox, DNS resolution does not work. This will be fixed in a future GFE release either in busybox or by switching to a full Linux distro.
+***Note*** There is currently a bug in the Chisel P3 that may result in a kernel panic when using the provided Ethernet driver. A fix will be released shortly.
 
 The Debian image provided has the iproute2 package already installed and is ready for many network environments. 
 
 **DHCP IP Example**
 
-On Debian, the eth0 interface should automatically request an IP address via DHCP if available, and this section can be skipped.
+On Debian, the eth0 interface can be configured using the `/etc/network/interfaces` file followed by restarting the network service using `systemctl`.
 
 On busybox, you must manually run the DHCP client:
 ```
@@ -597,7 +594,7 @@ $ export LM_LICENSE_FILE=/opt/Bluespec.lic
 ```
 
 ### Capturing a Trace ###
-Use the `exe_write_tvtrace_RV64` program to capture a trace:
+Use the `exe_write_tvtrace_RV64` program to capture a trace (works for both 32-bit and 64-bit processors):
 
 ```bash
 $ cd $GFE_REPO/TV-hostside
@@ -615,3 +612,30 @@ Receiving traces ...
 ```
 
 Use `Ctrl-C` to stop capturing trace data after your program has finished executing.
+
+### Comparing a Trace ###
+To compare the captured trace against the Cissr simulation model, use the `exe_tvchecker_RV*` programs. There are separate binaries for comparing 32-bit and 64-bit traces:
+
+```bash
+$ cd $GFE_REPO/TV-hostside
+$ ./exe_tvchecker_RV64 trace_data.dat
+Opened file 'test.trace' for reading trace_data.
+Loading BOOT ROM from file 'boot_ROM_RV64.memhex'
+ISA = RV64IMAFDCUS
+Cissr: v2018-01-31 (RV64)
+------
+Cissr: reset
+Tandem verifier is: Cissr
+Trace configation: XLEN=64, MLEN=64, FLEN=0
+{ STATE_INIT[mem_req addr 0x6fff0000 STORE 32b data 0x1] }
+ERROR: cissr_write_mem32: STORE_AMO_ACCESS_FAULT at address 0x6fff0000
+{ RESET }
+------
+Cissr: reset
+...
+{ [pc c000000c][instr 00800f93][t6(x31) 8] } inum 497
+{ [pc c0000040][instr 03ff0a63] } inum 498
+{ STATE_INIT[mem_req addr 0xc0000040 STORE 32b data 0x0] }
+```
+
+Note that some early mismatches are expected as the simulation model is updated with the correct PC and initial status registers.
