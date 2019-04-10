@@ -1,7 +1,16 @@
-bootrom_img = bootrom.img
-bootrom_rev_mem = bootrom.bytereversed.mem
-bootrom_mem = bootrom.mem
-bootrom_coe = bootrom.coe
+
+TARGET ?=
+SEP_TARGET ?=
+
+ifneq ($(TARGET),)
+	DEF_TARGET = -D_$(shell echo $(TARGET) | tr a-z A-Z)_
+	SEP_TARGET = -$(TARGET)
+endif
+
+bootrom_img = bootrom$(SEP_TARGET).img
+bootrom_rev_mem = bootrom$(SEP_TARGET).bytereversed.mem
+bootrom_mem = bootrom$(SEP_TARGET).mem
+bootrom_coe = bootrom$(SEP_TARGET).coe
 
 CROSS_COMPILE?=riscv64-unknown-elf-
 CPP=$(CROSS_COMPILE)cpp
@@ -20,7 +29,7 @@ all: $(bootrom_img) $(bootrom_mem) $(bootrom_coe) $(bootrom_rev_mem)
 
 %.coe: %.bin
 	hexdump -e '16/4 "%02x " "\n"' $*.bin > $*.hex
-	python genCoe.py > $@
+	python genCoe.py $*.hex > $@
 
 %.img: %.bin
 	dd if=$< of=$@ bs=1440 count=1
@@ -34,8 +43,8 @@ all: $(bootrom_img) $(bootrom_mem) $(bootrom_coe) $(bootrom_rev_mem)
 %.dtb: %.dts
 	$(CPP) -x assembler-with-cpp $< | $(DTC) -O dtb -o $@
 
-%.elf: %.S linker.ld devicetree.dtb
-	$(GCC) -Tlinker.ld $< -nostdlib -static -Wl,--no-gc-sections -o $@
+%.elf: bootrom.S linker.ld devicetree.dtb
+	$(GCC) $(DEF_TARGET) -Tlinker.ld $< -nostdlib -static -Wl,--no-gc-sections -o $@
 
 clean:
 	rm -f *.coe *.img *.bin *.dump *.elf *.mem.bytereversed *.mem

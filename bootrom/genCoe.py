@@ -1,8 +1,9 @@
 #!/usr/local/bin/python
 import codecs
+import sys
 codecs.getencoder('hex')(b'foo')[0]
 
-fin = "bootrom.hex"
+fin = sys.argv[1]
 fout = "bootrom.coe"
 
 mem_header = """memory_initialization_radix=16;
