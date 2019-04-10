@@ -23,4 +23,4 @@
 	url = https://git.busybox.net/busybox
 [submodule "bluespec-processors/P3/Tuba"]
 	path = bluespec-processors/P3/Tuba
-	url = git@github.com:bluespec/Tuba
+	url = https://github.com/bluespec/Tuba.git
