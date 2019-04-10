@@ -88,9 +88,10 @@ This allows the FPGA to be programmed from flash on power-up.
 
 1. Install the following python packages: `pexpect, pyserial`. 
 These are required for running python unittests on the GFE.
-2. Give the current user access to the serial devices.
+2. Give the current user access to the serial and JTAG devices.
 ```bash
 sudo usermod -aG dialout $USER
+sudo usermod -aG plugdev $USER
 sudo reboot
 ```
 3. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
