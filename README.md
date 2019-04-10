@@ -425,9 +425,11 @@ round-trip min/avg/max = 20.536/20.913/23.320 ms
 
 ### Storing a boot image in Flash ###
 
-1. Prepare the image with Linux and Busybox as described above.
-2. Write to flash memory on the board with the command `tcl/program_flash datafile bootmem/bootmem.bin`.
+1. Prepare the Linux image with either Debian or Busybox as described above.
+2. Write to flash memory on the board with the command `tcl/program_flash datafile bootmem/bootmem.bin`. Note that this command is run from the shell (not inside vivado).
 3. If a suitable bitfile is also stored in flash, upon board power up or reset, the device will automatically boot into Linux and Busybox.
+
+There will not be any console messages while the boot image is read from flash, which could take some time for the full Debian OS.
 
 ## Simulation ##
 

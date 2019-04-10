@@ -1,6 +1,6 @@
 #!/bin/sh
 # A Tcl comment, whose contents don't matter \
-exec vivado -mode batch -source "$0" -tclargs "$@"
+if command -v vivado; then CMD=vivado ; else CMD=vivado_lab ;fi && exec $CMD -mode batch -source "$0" -tclargs "$@"
 
 if { [expr $argc < 2] } {
     error "usage: program_flash.tcl bitfile|datafile <file>"
