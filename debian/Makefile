@@ -4,7 +4,7 @@ BOOTMEM_DIR=../bootmem
 
 default: riscv64-chroot $(BOOTMEM_DIR)/debian.cpio.gz
 
-riscv64-chroot:
+riscv64-chroot: config_chroot.sh
 	@echo "Building chroot environment"
 	@echo "Your password may be requested for superuser privileges"
 	sudo ./create_chroot.sh

@@ -7,11 +7,12 @@ ln -s /lib/systemd/systemd /init
 yes riscv | passwd
 
 # Modify network configuration
-echo "
-# Use DHCP to automatically configure eth0
-auto eth0
-allow-hotplug eth0
-iface eth0 inet dhcp" >> /etc/network/interfaces
+# Temporarily disable networking on boot
+#echo "
+## Use DHCP to automatically configure eth0
+#auto eth0
+#allow-hotplug eth0
+#iface eth0 inet dhcp" >> /etc/network/interfaces
 
 # Remove debconf internationalization for debconf
 dpkg --remove debconf-i18n
