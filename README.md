@@ -13,6 +13,13 @@ versions of P1 connected by an AXI interconnect to UART, DDR, and Bootrom.
 
 Prebuilt images are available in the bitstreams folder. Use these, if you want to quickly get started. This documentation walks through the process of building a bitstream and testing the output. It suggests how to modify the GFE with your own processor.
 
+## Updating to a New Release ##
+
+Run the following to make sure all submodules are up to date. Then proceed with the regular steps for building and testing the GFE.
+```bash
+init_submodules.sh
+```
+
 ### Setup OS (Debian Buster) ###
 
 Please perform a clean install of Debian Buster on the development and testing hosts. This is the supported OS for building and testing the GFE. At the time of release 1 (Feb 1), Debian Buster Alpha 4 is the latest version, but we expect to upgrade Buster versions as it becomes stable (sometime soon). Please install the latest version of Debian Buster (Debian 10.X).
