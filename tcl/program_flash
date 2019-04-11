@@ -1,24 +1,26 @@
 #!/bin/sh
 # A Tcl comment, whose contents don't matter \
-if command -v vivado; then CMD=vivado ; else CMD=vivado_lab ;fi && exec $CMD -mode batch -source "$0" -tclargs "$@"
+if command -v vivado; then CMD=vivado ; else CMD=vivado_lab ;fi && exec $CMD -mode batch -source "$0" -tclargs $USER "$@"
 
 if { [expr $argc < 2] } {
     error "usage: program_flash.tcl bitfile|datafile <file>"
 }
 
-set t [lindex $argv 0]
-set f [lindex $argv 1]
+set u [lindex $argv 0]
+set t [lindex $argv 1]
+set f [lindex $argv 2]
 
 # index of board, if there are more than one
 set index {0}
+set tmpfile "/tmp/flash_${u}.mcs"
 
 if {[string equal "$t" "bitfile"] } {
-    write_cfgmem -force -format MCS -size 256 -interface SPIx8 -loadbit "up 0x00000000 $f" /tmp/flash.mcs
+    write_cfgmem -force -format MCS -size 256 -interface SPIx8 -loadbit "up 0x00000000 $f" ${tmpfile}
     set files [list "/tmp/flash_primary.mcs" "/tmp/flash_secondary.mcs" ]
     #set prmfiles [list "/tmp/flash_primary.prm" "/tmp/flash_secondary.prm" ]
 } {
-    write_cfgmem -force -format MCS -size 128 -interface SPIx4 -loaddata "up 0x04000000 $f" /tmp/flash.mcs
-    set files [list "/tmp/flash.mcs" ]
+    write_cfgmem -force -format MCS -size 128 -interface SPIx4 -loaddata "up 0x04000000 $f" ${tmpfile}
+    set files [list ${tmpfile} ]
     #set prmfiles [list "/tmp/flash.prm" ]
 }
 
