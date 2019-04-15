@@ -26,6 +26,50 @@ class BaseGfeTest(unittest.TestCase):
             return gfeparameters.gdb_path32
         return gfeparameters.gdb_path64   
 
+    def setupUart(self, timeout=1, baud=115200, parity="NONE",
+        stopbits=2, bytesize=8):
+        # Setup pySerial UART
+        self.gfe.setupUart(
+            timeout=timeout,
+            baud=baud,
+            parity=parity,
+            stopbits=stopbits,
+            bytesize=bytesize)
+        print(
+            "Setup pySerial UART. {} baud, {} {} {}".format(
+                baud, bytesize, parity, stopbits))
+
+    def check_in_output(self, elf, timeout, expected_contents,
+        baud=115200, parity="NONE", stopbits=2, bytesize=8, uart_timeout=1):
+
+        self.setupUart(
+            baud=baud,
+            parity=parity,
+            stopbits=stopbits,
+            bytesize=bytesize,
+            timeout=uart_timeout)
+
+        print("Loading Elf {}".format(elf))
+        print("This may take some time...")
+        self.gfe.launchElf(elf, verify=False)
+        print("Running elf with a timeout of {}s".format(timeout))
+
+        # Store all UART output while linux is booting
+        rx_buf = [] # Try reading a large chunk of data, blocking for timeout secs.
+        start_time = time.time()
+        while time.time() < (start_time + timeout):
+            pending = self.gfe.uart_session.in_waiting
+            if pending:
+                data = self.gfe.uart_session.read(pending)
+                rx_buf.append(data) # Append read chunks to the list.
+                sys.stdout.write(data)
+        print("Timeout reached")
+
+        rx = ''.join(rx_buf)
+
+        for text in expected_contents:
+            self.assertIn(text, rx)
+
     def setUp(self):
         # Reset the GFE
         self.gfe = gfetester.gfetester(gdb_path=self.getGdbPath())
@@ -204,14 +248,6 @@ class TestFreeRTOS(BaseGfeTest):
                 os.path.dirname(os.path.dirname(os.getcwd())),
                 'FreeRTOS-mirror', 'FreeRTOS', 'Demo',
                 'RISC-V_Galois_P1')
-        # Setup pySerial UART
-        self.gfe.setupUart(
-            timeout = 1,
-            baud=115200,
-            parity="NONE",
-            stopbits=2,
-            bytesize=8)
-        print("Setup pySerial UART")     
 
     def test_full(self):
         # Load FreeRTOS binary
@@ -219,18 +255,10 @@ class TestFreeRTOS(BaseGfeTest):
            os.path.join( self.path_to_freertos, 'main_full.elf'))
         print(freertos_elf)
         
-        # Run elf in gdb
-        self.gfe.launchElf(freertos_elf)
-
-        time.sleep(3)
-
-        # Receive print statements
-        num_rxed =  self.gfe.uart_session.in_waiting
-        rx = self.gfe.uart_session.read( num_rxed ) 
-        print("received {}".format(rx))
-
-        self.assertIn("main_full", rx)
-        self.assertIn("Pass", rx)
+        self.check_in_output(
+            elf=freertos_elf,
+            timeout=10,
+            expected_contents=["main_full", "Pass"])
 
         return
         
@@ -239,29 +267,20 @@ class TestFreeRTOS(BaseGfeTest):
         freertos_elf = os.path.abspath(
            os.path.join( self.path_to_freertos, 'main_blinky.elf'))
         print(freertos_elf)
+
+        expected_contents = [
+            "Blink",
+            "RX: received value",
+            "TX: sent",
+            "Hello from RX",
+            "Hello from TX",
+        ]
         
-        # Run elf in gdb
-        self.gfe.launchElf(freertos_elf, True, False)
-        print( "Launched FreeRTOS")
+        self.check_in_output(
+            elf=freertos_elf,
+            timeout=3,
+            expected_contents=expected_contents)
 
-        # Wait for FreeRTOS tasks to start and run
-        # Making this sleep time longer will allow the timer callback
-        # function in FreeRTOS main.c to run the demo tasks more times
-        time.sleep(3)
-
-        # Receive print statements
-        num_rxed =  self.gfe.uart_session.in_waiting
-        rx = self.gfe.uart_session.read( num_rxed ) 
-        print("received {}".format(rx))
-
-        # Check that important print statements were received
-        self.assertIn("Blink", rx)
-        self.assertIn("RX: received value", rx)
-        self.assertIn("TX: sent", rx)
-        self.assertIn("Hello from RX", rx)
-        self.assertIn("Hello from TX", rx)
-
-        # No auto-checking
         return
 
 class TestLinux(BaseGfeTest):
@@ -271,50 +290,46 @@ class TestLinux(BaseGfeTest):
             os.path.dirname(os.path.dirname(os.getcwd())),
             'bootmem', 'build-bbl', 'bbl')
 
-    def setupUart(self):
-        # Setup pySerial UART
-        self.gfe.setupUart(
-            timeout = 1,
-            baud=115200,
-            parity="NONE",
-            stopbits=2,
-            bytesize=8)
-        print("Setup pySerial UART") 
-
     def getXlen(self):
         return '64'
 
-    def test_boot(self):
+    def test_busybox_boot(self):
         linux_elf = self.getBootImage()
         linux_boot_timeout = 50 # Wait this number of seconds for linux to boot
-        self.setupUart()
 
         self.gfe.gdb_session.c(wait=False)
         time.sleep(0.5)	
         self.gfe.gdb_session.interrupt()
 
-        print("Loading Linux Elf {}".format(linux_elf))
-        print("This may take some time...")
-        self.gfe.launchElf(linux_elf, verify=False)
-        print("Booting Linux with a timeout of {}s".format(linux_boot_timeout))
-        print("Linux launched")
+        expected_contents = [
+            "Xilinx Axi Ethernet MDIO: probed",
+            "Please press Enter to activate this console"
+        ]
 
-        # Store all UART output while linux is booting
-        rx_buf = [] # Try reading a large chunk of data, blocking for timeout secs.
-        print("First read")
-        start_time = time.time()
-        while time.time() < (start_time + linux_boot_timeout):
-            pending = self.gfe.uart_session.in_waiting
-            if pending:
-                data = self.gfe.uart_session.read(pending)
-                rx_buf.append(data) # Append read chunks to the list.
-                sys.stdout.write(data)
-        print("Timeout reached")
+        self.check_in_output(
+            elf=linux_elf,
+            timeout=linux_boot_timeout,
+            expected_contents=expected_contents)
+        return
 
-        rx = ''.join(rx_buf)
+    def test_debian_boot(self):
+        linux_elf = self.getBootImage()
+        linux_boot_timeout = 50 # Wait this number of seconds for linux to boot
 
-        self.assertIn("Xilinx Axi Ethernet MDIO: probed", rx)
-        self.assertIn("Please press Enter to activate this console", rx)
+        self.gfe.gdb_session.c(wait=False)
+        time.sleep(0.5) 
+        self.gfe.gdb_session.interrupt()
+
+        expected_contents = [
+            "Please press Enter to activate this console"
+        ]
+
+        self.check_in_output(
+            elf=linux_elf,
+            timeout=linux_boot_timeout,
+            expected_contents=expected_contents)
+        return
+
 
 class BaseTestIsaGfe(BaseGfeTest):
     """ISA unittest base class for P1 and P2 processors.
