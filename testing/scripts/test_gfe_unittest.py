@@ -13,22 +13,48 @@ import glob
 import sys
 
 class BaseGfeTest(unittest.TestCase):
-    """GFE base testing class. All GFE Python unittests inherit from this class"""
+    """GFE base testing class. All GFE Python unittests inherit from this class
+    
+    Attributes:
+        gfe (gfetester): GFE handler with functions to interact with the VCU118
+        path_to_asm (string): Path to custom GFE assembly tests
+        path_to_freertos (string): Path to FreeRTOS folder in the GFE repo
+    """
+
     def getXlen(self):
         return '32'
 
     def getFreq(self):
-        """Return the processor frequency in Hz"""
+        """Return the processor frequency in Hz.
+        Child classes can override this function for tests on different processors
+        
+        Returns:
+            int: Processor frequency in Hz
+        """
         return gfeparameters.GFE_P1_DEFAULT_HZ
 
     def getGdbPath(self):
+        """Get the proper riscv gdb executable depending on the architecture of the GFE
+        (32 vs 64 bit processor).
+        
+        Returns:
+            string: Executable name for riscv gdb (i.e. riscv32-unkown-elf-gdb)
+        """
         if '32' in self.getXlen():
             return gfeparameters.gdb_path32
         return gfeparameters.gdb_path64   
 
     def setupUart(self, timeout=1, baud=115200, parity="NONE",
         stopbits=2, bytesize=8):
-        # Setup pySerial UART
+        """Setup a pyserial UART connection with the GFE
+        
+        Args:
+            timeout (int, optional): Timeout seconds used by pySerial
+            baud (int, optional): UART baud rate
+            parity (str, optional): UART parity: EVEN, ODD, or NONE
+            stopbits (int, optional): Number of UART stop bits
+            bytesize (int, optional): UART byte size
+        """
         self.gfe.setupUart(
             timeout=timeout,
             baud=baud,
@@ -40,8 +66,25 @@ class BaseGfeTest(unittest.TestCase):
                 baud, bytesize, parity, stopbits))
 
     def check_in_output(self, elf, timeout, expected_contents,
-        baud=115200, parity="NONE", stopbits=2, bytesize=8, uart_timeout=1):
+        baud=115200, parity="NONE", stopbits=2, bytesize=8,
+        uart_timeout=1, run_from_flash=True):
+        """Run a program and check UART output for some expected contents
+        
+        Args:
+            elf (string): Path to the test program
+            timeout (int): Number of seconds for which test program will be run
+            expected_contents (list(string)): List of expected strings in the UART output
+            baud (int, optional): UART baud rate
+            parity (str, optional): UART parity
+            stopbits (int, optional): UART stopbits
+            bytesize (int, optional): UART byte size
+            uart_timeout (int, optional): UART timeout for pySerial
+            run_from_flash (bool, optional): Run the elf currently stored in flash by
+                resetting the GFE. Do not load a new program onto the GFE.
+        """
 
+        # Halt the processor before setting up the UART connection
+        self.gfe.gdb_session.interrupt()
         self.setupUart(
             baud=baud,
             parity=parity,
@@ -49,13 +92,20 @@ class BaseGfeTest(unittest.TestCase):
             bytesize=bytesize,
             timeout=uart_timeout)
 
-        print("Loading Elf {}".format(elf))
-        print("This may take some time...")
-        self.gfe.launchElf(elf, verify=False)
-        print("Running elf with a timeout of {}s".format(timeout))
+        # Run the program of interest (from flash or using "gdb load")
+        if run_from_flash:
+            self.gfe.softReset()
+            self.gfe.gdb_session.c(wait=False)
+        else:
+            print("Loading Elf {}".format(elf))
+            print("This may take some time...")
+            self.gfe.launchElf(elf, verify=False)
+            print("Running elf with a timeout of {}s".format(timeout))
 
-        # Store all UART output while linux is booting
-        rx_buf = [] # Try reading a large chunk of data, blocking for timeout secs.
+
+        # Store and print all UART output while the elf is running
+        print("Printing all UART output from the GFE...")
+        rx_buf = []
         start_time = time.time()
         while time.time() < (start_time + timeout):
             pending = self.gfe.uart_session.in_waiting
@@ -67,6 +117,7 @@ class BaseGfeTest(unittest.TestCase):
 
         rx = ''.join(rx_buf)
 
+        # Check that the output contains the expected text
         for text in expected_contents:
             self.assertIn(text, rx)
 
@@ -96,8 +147,9 @@ class TestGfe(BaseGfeTest):
     and P2/3 processors respectively."""
 
     def test_soft_reset(self):
-        """Write to the UART scratch register, then reset and check the value
-        has been reset"""
+        """Test the soft reset mechanism of the GFE.
+        Write to a UART register and ensure the value is reset after calling softReset.
+        """
         UART_SCRATCH_ADDR = gfeparameters.UART_BASE + gfeparameters.UART_SCR
         test_value = 0xef
 
@@ -121,8 +173,9 @@ class TestGfe(BaseGfeTest):
         self.assertEqual(scr_value, 0x0)
 
     def test_uart(self):
-        """Run a test UART program. Send the RISCV core characters using pyserial
-        and receive them back"""
+        """Run a test UART program.
+        Send the RISCV core characters using pyserial and receive them back
+        """
         print("xlen = " + self.getXlen())
         if '64' in self.getXlen():
             uart_elf = 'rv64ui-p-uart'
@@ -237,7 +290,7 @@ class TestGfe64(TestGfe):
 class TestFreeRTOS(BaseGfeTest):
 
     def getFreq(self):
-        return gfeparameters.GFE_P1_DEFAULT_HZ
+        return gfeparameters.GFE_P1_DEFAULT_HZ # FreeRTOS only runs on the P1
 
     def setUp(self):
         # Reset the GFE
@@ -314,7 +367,7 @@ class TestLinux(BaseGfeTest):
 
     def test_debian_boot(self):
         linux_elf = self.getBootImage()
-        linux_boot_timeout = 50 # Wait this number of seconds for linux to boot
+        linux_boot_timeout = 80 # Wait this number of seconds for linux to boot
 
         self.gfe.gdb_session.c(wait=False)
         time.sleep(0.5) 

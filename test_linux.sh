@@ -36,8 +36,8 @@ function linux_test {
 	err_msg $? "Building Linux failed"
 
 	if [ "$linux_image" == "debian" ]; then
-		# PROGRAM FPGA FLASH
 		cd $BASE_DIR
+		echo "Programming flash with debain image"
 		$BASE_DIR/tcl/program_flash datafile bootmem/bootmem.bin
 		err_msg $? "Programming flash failed"
 	fi
