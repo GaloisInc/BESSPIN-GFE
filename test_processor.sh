@@ -25,6 +25,8 @@ fi
 if [ "$proc_name" == "chisel_p2" ] || [ "$proc_name" == "bluespec_p2" ] || [ "$proc_name" == "chisel_p3" ] || [ "$proc_name" == "bluespec_p3" ]; then
 	./test.sh 64
 	err_msg $? "test.sh 64 failed"
-	./test_linux.sh
-	err_msg $? "test_linux.sh failed"
+	./test_linux.sh busybox
+	err_msg $? "test_linux.sh busybox failed"
+	./test_linux.sh debian 
+	err_msg $? "test_linux.sh debian failed"
 fi
