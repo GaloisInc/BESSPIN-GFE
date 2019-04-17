@@ -11,7 +11,9 @@ python_unittest_script=test_gfe_unittest.py
 
 function proc_linux_usage {
     echo "Usage: $0 [busybox|debian]"
+    echo "Usage: $0 [busybox|debian] --flash"
     echo "Please specify busybox or debian!"
+    echo "Add --flash if you want to program the image into flash and boot from it"
 }
 
 function linux_picker {
@@ -35,9 +37,9 @@ function linux_test {
 	fi
 	err_msg $? "Building Linux failed"
 
-	if [ "$linux_image" == "debian" ]; then
+	if [ "$2" = true ]; then
 		cd $BASE_DIR
-		echo "Programming flash with debain image"
+		echo "Programming flash with Linux image"
 		$BASE_DIR/tcl/program_flash datafile bootmem/bootmem.bin
 		err_msg $? "Programming flash failed"
 	fi
@@ -48,6 +50,11 @@ function linux_test {
 }
 
 linux_picker $1
-linux_test test_busybox_boot
+if [[ $2 == "--flash" ]]; then
+	use_flash=true
+else
+	use_flash=false
+fi
+linux_test test_busybox_boot $use_flash
 
 
