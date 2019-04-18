@@ -364,41 +364,44 @@ class TestLinux(BaseGfeTest):
             self.assertIn(text, rx)
         return
 
-    def test_busybox_boot(self):
+    def boot_image(self, expected_contents, image=None,
+        run_from_flash=False, timeout=60):
+
+        if not image:
+            image = self.getBootImage()
+
         linux_elf = self.getBootImage()
-        linux_boot_timeout = 50 # Wait this number of seconds for linux to boot
 
-        self.gfe.gdb_session.c(wait=False)
-        time.sleep(0.5)	
-        self.gfe.gdb_session.interrupt()
+        self.gfe.gdb_session.command("set $a0 = 0")
+        self.gfe.gdb_session.command("set $a1 = 0x70000020")
 
+        self.check_in_output(
+            elf=linux_elf,
+            timeout=timeout,
+            expected_contents=expected_contents)
+        return
+
+    def test_busybox_boot(self):
         expected_contents = [
             "Xilinx Axi Ethernet MDIO: probed",
             "Please press Enter to activate this console"
         ]
+        self.boot_image(expected_contents=expected_contents, timeout=60)
 
-        self.check_in_output(
-            elf=linux_elf,
-            timeout=linux_boot_timeout,
-            expected_contents=expected_contents)
-        return
-
-    def test_debian_boot(self):
-        linux_elf = self.getBootImage()
-        linux_boot_timeout = 80 # Wait this number of seconds for linux to boot
-
-        self.gfe.gdb_session.c(wait=False)
-        time.sleep(0.5) 
-        self.gfe.gdb_session.interrupt()
-
+    def test_busybox_flash_boot(self):
         expected_contents = [
+            "Xilinx Axi Ethernet MDIO: probed",
             "Please press Enter to activate this console"
         ]
+        self.boot_image(expected_contents=expected_contents, timeout=100)
 
-        self.check_in_output(
-            elf=linux_elf,
-            timeout=linux_boot_timeout,
-            expected_contents=expected_contents)
+    def test_debian_boot(self):
+        expected_contents = [
+            "Run /init as init process",
+            "A start job is running for /dev/ttyS0"
+        ]
+        print("test debian boot timeout = 600")
+        self.boot_image(expected_contents=expected_contents, timeout=600)
         return
 
     def test_busybox_ethernet(self):
@@ -462,6 +465,12 @@ class TestLinux(BaseGfeTest):
         return
 
 
+    def test_debian_flash_boot(self):
+        expected_contents = [
+            "Run /init as init process",
+            "A start job is running for /dev/ttyS0"
+        ]
+        self.boot_image(expected_contents=expected_contents, timeout=600)
 
 class BaseTestIsaGfe(BaseGfeTest):
     """ISA unittest base class for P1 and P2 processors.
