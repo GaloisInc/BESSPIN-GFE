@@ -346,6 +346,18 @@ class TestLinux(BaseGfeTest):
     def getXlen(self):
         return '64'
 
+    def getDebianExpected(self):
+        return [
+            "Run /init as init process",
+            "A start job is running for /dev/ttyS0"
+        ]
+    def getBusyBoxExpected(self):
+        return [
+            "Xilinx Axi Ethernet MDIO: probed",
+            "Please press Enter to activate this console"
+        ]
+
+
     def boot_image(self, expected_contents, image=None,
         run_from_flash=False, timeout=60):
 
@@ -364,34 +376,17 @@ class TestLinux(BaseGfeTest):
         return
 
     def test_busybox_boot(self):
-        expected_contents = [
-            "Xilinx Axi Ethernet MDIO: probed",
-            "Please press Enter to activate this console"
-        ]
-        self.boot_image(expected_contents=expected_contents, timeout=60)
+        self.boot_image(expected_contents=self.getBusyBoxExpected(), timeout=60)
 
     def test_busybox_flash_boot(self):
-        expected_contents = [
-            "Xilinx Axi Ethernet MDIO: probed",
-            "Please press Enter to activate this console"
-        ]
-        self.boot_image(expected_contents=expected_contents, timeout=100)
+        self.boot_image(expected_contents=self.getBusyBoxExpected(), timeout=100)
 
     def test_debian_boot(self):
-        expected_contents = [
-            "Run /init as init process",
-            "A start job is running for /dev/ttyS0"
-        ]
-        print("test debian boot timeout = 600")
-        self.boot_image(expected_contents=expected_contents, timeout=600)
+        self.boot_image(expected_contents=self.getDebianExpected(), timeout=200)
         return
 
     def test_debian_flash_boot(self):
-        expected_contents = [
-            "Run /init as init process",
-            "A start job is running for /dev/ttyS0"
-        ]
-        self.boot_image(expected_contents=expected_contents, timeout=600)
+        self.boot_image(expected_contents=self.getDebianExpected(), timeout=240)
 
 class BaseTestIsaGfe(BaseGfeTest):
     """ISA unittest base class for P1 and P2 processors.
