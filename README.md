@@ -310,7 +310,7 @@ This results in warnings about locale settings and man files that are expected.
 
 If you want to install more packages than what is included, run `sudo ./create_chroot.sh package1 package2` and subsitute `package1` and `package2` with all the packages you want to install. Then recreate the cpio.gz image and run `make debian` as described above. If installing or removing packages manually rather than with the script, use `apt-get` to install or remove any packages from within the chroot and run `./clean_chroot` from within the chroot afterwards.
 
-The bbl image is located at `$GFE_REPO/bootmem/build-bbl/bbl` and can be loaded and run using gdb.
+The bbl image is located at `$GFE_REPO/bootmem/build-bbl/bbl` and can be loaded and run using gdb. The default root password is `riscv`.
 
 A memory image is also created that can be loaded into the flash ROM on the FPGA at `$GFE_REPO/bootmem/bootmem.bin`
 
