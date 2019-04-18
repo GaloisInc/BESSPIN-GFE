@@ -16,7 +16,7 @@ export CROSS_COMPILE KCONFIG_CONFIG
 
 BUSYBOX_SRC=../busybox
 LINUX_SRC=../riscv-linux
-BBL_SRC=../../riscv-tools/riscv-pk
+BBL_SRC=../../riscv-pk
 DEBIAN_DIR=../debian
 
 default: build-busybox/busybox_unstripped.text build-linux/vmlinux.text build-bbl/bbl.text bootmem.bin
