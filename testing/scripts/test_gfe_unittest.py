@@ -65,9 +65,27 @@ class BaseGfeTest(unittest.TestCase):
             "Setup pySerial UART. {} baud, {} {} {}".format(
                 baud, bytesize, parity, stopbits))
 
+    def check_uart_out(self, timeout, expected_contents):
+        # Store and print all UART output while the elf is running
+        rx_buf = []
+        start_time = time.time()
+        while time.time() < (start_time + timeout):
+            pending = self.gfe.uart_session.in_waiting
+            if pending:
+                data = self.gfe.uart_session.read(pending)
+                rx_buf.append(data) # Append read chunks to the list.
+                sys.stdout.write(data)
+
+        rx = ''.join(rx_buf)
+
+        # Check that the output contains the expected text
+        for text in expected_contents:
+            self.assertIn(text, rx)
+        return rx
+
     def check_in_output(self, elf, timeout, expected_contents,
         baud=115200, parity="NONE", stopbits=2, bytesize=8,
-        uart_timeout=1, run_from_flash=True):
+        uart_timeout=1, run_from_flash=False):
         """Run a program and check UART output for some expected contents
         
         Args:
@@ -102,24 +120,9 @@ class BaseGfeTest(unittest.TestCase):
             self.gfe.launchElf(elf, verify=False)
             print("Running elf with a timeout of {}s".format(timeout))
 
-
         # Store and print all UART output while the elf is running
         print("Printing all UART output from the GFE...")
-        rx_buf = []
-        start_time = time.time()
-        while time.time() < (start_time + timeout):
-            pending = self.gfe.uart_session.in_waiting
-            if pending:
-                data = self.gfe.uart_session.read(pending)
-                rx_buf.append(data) # Append read chunks to the list.
-                sys.stdout.write(data)
-        print("Timeout reached")
-
-        rx = ''.join(rx_buf)
-
-        # Check that the output contains the expected text
-        for text in expected_contents:
-            self.assertIn(text, rx)
+        self.check_uart_out(timeout=timeout, expected_contents=expected_contents)
 
     def setUp(self):
         # Reset the GFE
@@ -381,23 +384,18 @@ class TestLinux(BaseGfeTest):
     def getXlen(self):
         return '64'
 
-    def check_uart_out(self, timeout, expected_contents):
-        # Store and print all UART output while the elf is running
-        rx_buf = []
-        start_time = time.time()
-        while time.time() < (start_time + timeout):
-            pending = self.gfe.uart_session.in_waiting
-            if pending:
-                data = self.gfe.uart_session.read(pending)
-                rx_buf.append(data) # Append read chunks to the list.
-                sys.stdout.write(data)
+    def getDebianExpected(self):
+        return [
+            "Run /init as init process",
+            "A start job is running for /dev/ttyS0"
+        ]
+    def getBusyBoxExpected(self):
+        return [
+            "Xilinx Axi Ethernet MDIO: probed",
+            "Please press Enter to activate this console"
+        ]
 
-        rx = ''.join(rx_buf)
 
-        # Check that the output contains the expected text
-        for text in expected_contents:
-            self.assertIn(text, rx)
-        return
 
     def boot_linux(self, image=None):
         if not image:
@@ -435,26 +433,19 @@ class TestLinux(BaseGfeTest):
         return
 
     def test_busybox_boot(self):
-        expected_contents = [
-            "Xilinx Axi Ethernet MDIO: probed",
-            "Please press Enter to activate this console"
-        ]
-        self.boot_image(expected_contents=expected_contents, timeout=60)
+        self.boot_image(expected_contents=self.getBusyBoxExpected(), timeout=60)
+        return
 
     def test_busybox_flash_boot(self):
-        expected_contents = [
-            "Xilinx Axi Ethernet MDIO: probed",
-            "Please press Enter to activate this console"
-        ]
-        self.boot_image(expected_contents=expected_contents, timeout=100)
+        self.boot_image(expected_contents=self.getBusyBoxExpected(), timeout=100)
+        return
 
     def test_debian_boot(self):
-        expected_contents = [
-            "Run /init as init process",
-            "A start job is running for /dev/ttyS0"
-        ]
-        print("test debian boot timeout = 300")
-        self.boot_image(expected_contents=expected_contents, timeout=300)
+        self.boot_image(expected_contents=self.getDebianExpected(), timeout=200)
+        return
+
+    def test_debian_flash_boot(self):
+        self.boot_image(expected_contents=self.getDebianExpected(), timeout=240)
         return
 
     def test_busybox_ethernet(self):
@@ -534,13 +525,6 @@ class TestLinux(BaseGfeTest):
                                 ])
         return
 
-
-    def test_debian_flash_boot(self):
-        expected_contents = [
-            "Run /init as init process",
-            "A start job is running for /dev/ttyS0"
-        ]
-        self.boot_image(expected_contents=expected_contents, timeout=600)
 
 
 class BaseTestIsaGfe(BaseGfeTest):
