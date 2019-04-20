@@ -49,6 +49,8 @@ make linux # Install the 64 bit linux toolchain
 ```
 Follow the instructions [here](https://github.com/riscv/riscv-gnu-toolchain) for more information.
 
+For Windows options check out the [Windows RISCV doc](windows.md)
+
 ### Install RISCV Tools ###
 
 This GFE has been tested with a particular fork of riscv-tools that includes an upstream change to riscv-openocd that allows for JTAG debugging over the  same Xilinx JTAG connection used to program the VCU118.
