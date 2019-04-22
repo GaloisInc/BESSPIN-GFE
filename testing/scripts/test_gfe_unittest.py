@@ -485,7 +485,7 @@ class TestLinux(BaseGfeTest):
                                 "64 bytes from 4.2.2.1: icmp_seq=1 ttl",
                                 "64 bytes from 4.2.2.1: icmp_seq=2 ttl"
                                 ])
-        return
+        
 
     def test_debian_ethernet(self):
         # Boot Debian
@@ -521,8 +521,6 @@ class TestLinux(BaseGfeTest):
                                 "64 bytes from 4.2.2.1: icmp_seq=1 ttl=",
                                 "64 bytes from 4.2.2.1: icmp_seq=2 ttl=",
                                 ])
-        return
-
 
 
 class BaseTestIsaGfe(BaseGfeTest):
