@@ -9,16 +9,16 @@ This repository contains source code and build scripts for generating SoC bitstr
 for the Xilinx VCU118. The resulting systems contain either Chisel or Bluespec 
 versions of P1 connected by an AXI interconnect to UART, DDR, and Bootrom. 
 
-## Getting Started ##
-
-Prebuilt images are available in the bitstreams folder. Use these, if you want to quickly get started. This documentation walks through the process of building a bitstream and testing the output. It suggests how to modify the GFE with your own processor.
-
 ## Updating to a New Release ##
 
 Run the following to make sure all submodules are up to date. Then proceed with the regular steps for building and testing the GFE.
 ```bash
 init_submodules.sh
 ```
+
+## Getting Started ##
+
+Prebuilt images are available in the bitstreams folder. Use these, if you want to quickly get started. This documentation walks through the process of building a bitstream and testing the output. It suggests how to modify the GFE with your own processor.
 
 ### Setup OS (Debian Buster) ###
 
@@ -34,38 +34,27 @@ After setting up an ssh key, clone this repo by running
 git clone git@gitlab-ext.galois.com:ssith/gfe.git
 ```
 
-### Install RISCV Toolchain ###
+### Clone and Install the Besspin Tool Suite ###
 
-Install the standard RISCV toolchain for compiling Linux and other tests for the SSITH processors.
+The Besspin tool suite contains an nix-shell environment that builds all the tools necessary for the GFE excluding Vivado.
+See the Besspin tool suite repo for installation instructions.
+
 ```bash
-git clone https://github.com/riscv/riscv-gnu-toolchain.git
-cd riscv-gnu-toolchain
-git submodule update --init --recursive
-./configure --prefix=$RISCV_INSTALL --with-arch=rv32gc --with-abi=ilp32
-make       # Install the 32 bit newlib toolchain for testing the P1
-./configure --prefix=$RISCV_INSTALL
-make       # Install the 64 bit newlib toochain for testing the P2
-make linux # Install the 64 bit linux toolchain
+git clone git@gitlab-ext.galois.com:ssith/tool-suite.git 
+cd tool-suite
+nix-shell
 ```
-Follow the instructions [here](https://github.com/riscv/riscv-gnu-toolchain) for more information.
 
-### Install RISCV Tools ###
-
-This GFE has been tested with a particular fork of riscv-tools that includes an upstream change to riscv-openocd that allows for JTAG debugging over the  same Xilinx JTAG connection used to program the VCU118.
-It also submodules Galois forks of riscv-tests and riscv-pk customized for the reference processors.
-Please use the version of OpenOCD included in riscv-tools submoduled in this repo under `$GFE_REPO/riscv-tools.`
-
-A convenient way to install this custom version of OpenOCD is to build the riscv toolchain from riscv-tools.
-To install, first set the RISCV path with `export RISCV=$GFE_REPO/riscv-tools` and initialize riscv-tools and other submodules with `cd $GFE_REPO && ./init_submodules.sh`.
-This will place the openocd binary in `$GFE_REPO/riscv-tools/bin` where the testing scripts expect it.
-Next, install the RISCV toolchain using the directions in `$GFE_REPO/riscv-tools/README.md` (i.e. run `build.sh`).
-After installing openocd, be sure to set the RISCV variable back to point to your standard riscv-gnu-toolchain installation by running `export RISCV=$RISCV_INSTALL`.
+Note that nix will install the upstream version of riscv-openocd required by the GFE. 
+No additional steps need to be taken to install the RISCV tools.
 
 ### Install Vivado ###
 
 Download and install Vivado 2017.4. A license key for the tool is included on a piece of paper in the box containing the VCU118. See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug973-vivado-release-notes-install-license.pdf) for download and installation instructions. We only need the Vivado tool, not the SDK, so download the `Vivado Design Suite - HLx 2017.4 ` from the [Vivado Download Page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2017-4.html). One must make an account with Vivado in order to register the tool and install the license. After installing Vivado, you must also install libtinfo5 for Debian to run the tool. Install this dependency by running `sudo apt-get install libtinfo5`.
 
 If using separate development and testing machines, only the development machine needs a license. We recommend installing Vivado Lab on the testing machine, because it does not require a license and can be used to program the FPGA.
+
+
 
 ### Building the Bitstream ###
 
