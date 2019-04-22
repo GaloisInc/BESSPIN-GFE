@@ -37,7 +37,6 @@ git clone git@gitlab-ext.galois.com:ssith/tool-suite.git
 cd tool-suite
 nix-shell
 ```
-
 Note that nix will install the upstream version of riscv-openocd required by the GFE.
 If you wish to use your own binaries for RISCV tools, then you should modify your PATH variable from inside the nix-shell before running tests on the GFE.
 
