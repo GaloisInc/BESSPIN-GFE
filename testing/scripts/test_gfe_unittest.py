@@ -349,12 +349,12 @@ class TestFreeRTOS(BaseGfeTest):
         self.setupUart()
 
         # Load and run elf
-        print("Loading Elf {}".format(linux_elf))
+        print("Loading Elf {}".format(freertos_elf))
         print("This may take some time...")
-        self.gfe.launchElf(linux_elf, verify=False)
-        return
+        self.gfe.launchElf(freertos_elf, verify=False)
 
          # Store and print all UART output while the elf is running
+        timeout = 25
         print("Printing all UART output from the GFE...")
         rx_buf = []
         start_time = time.time()
@@ -366,10 +366,24 @@ class TestFreeRTOS(BaseGfeTest):
                 sys.stdout.write(data)
         print("Timeout reached")
 
-        # Ping FPGA
-        import os
-        hostname = riscv_ip
+        # Get FPGA IP address
+        riscv_ip = 0
+        rx_buf_str = ''.join(rx_buf)
+        rx_buf_list = rx_buf_str.split('\n')
+        for line in rx_buf_list:
+            index = line.find('IP Address:')
+            if index != -1:
+                ip_str = line.split()
+                riscv_ip = ip_str[2]
+                print("RISCV IP address is: " + riscv_ip)
+                break
 
+        # Ping FPGA
+        if riscv_ip == 0:
+            print("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
+        ping_response = os.system("ping -c 1 " + riscv_ip)
+        self.assertEqual(ping_response, 0,
+                        "Ping doesn't work.")
         return
 
 class TestLinux(BaseGfeTest):
@@ -485,7 +499,7 @@ class TestLinux(BaseGfeTest):
                                 "64 bytes from 4.2.2.1: icmp_seq=1 ttl",
                                 "64 bytes from 4.2.2.1: icmp_seq=2 ttl"
                                 ])
-        
+
 
     def test_debian_ethernet(self):
         # Boot Debian

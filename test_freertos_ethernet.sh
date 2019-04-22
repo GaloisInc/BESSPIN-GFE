@@ -20,5 +20,3 @@ function freertos_test {
 }
 
 freertos_test main_tcp test_ethernet
-
-echo 
