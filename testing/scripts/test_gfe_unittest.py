@@ -339,6 +339,39 @@ class TestFreeRTOS(BaseGfeTest):
 
         return
 
+    def test_ethernet(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main_tcp.elf'))
+        print(freertos_elf)
+
+        # Setup UART
+        self.setupUart()
+
+        # Load and run elf
+        print("Loading Elf {}".format(linux_elf))
+        print("This may take some time...")
+        self.gfe.launchElf(linux_elf, verify=False)
+        return
+
+         # Store and print all UART output while the elf is running
+        print("Printing all UART output from the GFE...")
+        rx_buf = []
+        start_time = time.time()
+        while time.time() < (start_time + timeout):
+            pending = self.gfe.uart_session.in_waiting
+            if pending:
+                data = self.gfe.uart_session.read(pending)
+                rx_buf.append(data) # Append read chunks to the list.
+                sys.stdout.write(data)
+        print("Timeout reached")
+
+        # Ping FPGA
+        import os
+        hostname = riscv_ip
+
+        return
+
 class TestLinux(BaseGfeTest):
 
     def getBootImage(self):
@@ -361,6 +394,24 @@ class TestLinux(BaseGfeTest):
         ]
 
 
+
+    def boot_linux(self, image=None):
+        if not image:
+            image = self.getBootImage()
+
+        linux_elf = self.getBootImage()
+
+        self.gfe.gdb_session.command("set $a0 = 0")
+        self.gfe.gdb_session.command("set $a1 = 0x70000020")
+
+        # Setup UART
+        self.setupUart()
+
+        # Load and run elf
+        print("Loading Elf {}".format(linux_elf))
+        print("This may take some time...")
+        self.gfe.launchElf(linux_elf, verify=False)
+        return
 
     def boot_image(self, expected_contents, image=None,
         run_from_flash=False, timeout=60):
@@ -396,30 +447,17 @@ class TestLinux(BaseGfeTest):
         return
 
     def test_busybox_ethernet(self):
-        linux_elf = self.getBootImage()
-        linux_boot_timeout = 90 # Wait this number of seconds for linux to boot
+        # Boot busybox
+        self.boot_linux();
+        linux_boot_timeout=60
 
-        # Set necessary registers for Linux (a0, a1)
-        self.gfe.gdb_session.c(wait=False)
-        time.sleep(0.5) 
-        self.gfe.gdb_session.interrupt()
-
-        # Setup UART
-        self.setupUart()
-
-        # Load and run elf
-        print("Loading Elf {}".format(linux_elf))
-        print("This may take some time...")
-        self.gfe.launchElf(linux_elf, verify=False)
         print("Running elf with a timeout of {}s".format(linux_boot_timeout))
-
         # Check that busybox reached activation screen
         self.check_uart_out(
             timeout=linux_boot_timeout,
             expected_contents=["Please press Enter to activate this console"])
 
-        # Interrupt and send "Enter" to activate console
-        # ** Is interrupting necessary? **
+        # Send "Enter" to activate console
         self.gfe.uart_session.write(b'\r')
         time.sleep(1)
 
@@ -435,13 +473,7 @@ class TestLinux(BaseGfeTest):
             expected_contents=["udhcpc: started, v1.30.1",
                                 "Setting IP address",
                                 "udhcpc: sending discover",
-                                "udhcpc: sending select for",
-                                "udhcpc: lease of",
-                                "Setting IP address",
-                                "Deleting routers",
-                                "route: SIOCDELRT: No such process",
                                 "Adding router",
-                                "Recreating /etc/resolv.conf",
                                 "Adding DNS server"
                                 ])
 
@@ -449,11 +481,48 @@ class TestLinux(BaseGfeTest):
         self.gfe.uart_session.write(b'ping 4.2.2.1\r')
         self.check_uart_out(
             timeout=5,
-            expected_contents=["PING 4.2.2.1 (4.2.2.1): 56 data bytes", 
-                                "64 bytes from 4.2.2.1: seq=0 ttl",
-                                "64 bytes from 4.2.2.1: seq=1 ttl",
-                                "64 bytes from 4.2.2.1: seq=2 ttl"])
+            expected_contents=["PING 4.2.2.1 (4.2.2.1): 56(84) data bytes", 
+                                "64 bytes from 4.2.2.1: icmp_seq=1 ttl",
+                                "64 bytes from 4.2.2.1: icmp_seq=2 ttl"
+                                ])
         return
+
+    def test_debian_ethernet(self):
+        # Boot Debian
+        self.boot_linux()
+        linux_boot_timeout=800
+        print("Running elf with a timeout of {}s".format(linux_boot_timeout))
+        
+        # Check that Debian booted
+        self.check_uart_out(
+                timeout=linux_boot_timeout,
+                expected_contents=[ "Debian GNU/Linux buster/sid",
+                                    "login:"
+                                    ])
+
+        # Login to Debian
+        self.gfe.uart_session.write(b'root\r')
+        # Check for password prompt and enter password
+        self.check_uart_out(timeout=5, expected_contents=["Password"])
+        self.gfe.uart_session.write(b'riscv\r')
+    
+        # Check for command line prompt
+        self.check_uart_out(
+                timeout=15,
+                expected_contents=["The programs included with the Debian GNU/Linux system are free software;",
+                                    ":~#"
+                                    ])
+
+        # Test connectivity
+        self.gfe.uart_session.write(b'ping 4.2.2.1\r')
+        self.check_uart_out(
+            timeout=5,
+            expected_contents=["PING 4.2.2.1 (4.2.2.1) 56(84) bytes of data.", 
+                                "64 bytes from 4.2.2.1: icmp_seq=1 ttl=",
+                                "64 bytes from 4.2.2.1: icmp_seq=2 ttl=",
+                                ])
+        return
+
 
 
 class BaseTestIsaGfe(BaseGfeTest):
