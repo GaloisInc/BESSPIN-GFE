@@ -29,4 +29,6 @@ if [ "$proc_name" == "chisel_p2" ] || [ "$proc_name" == "bluespec_p2" ] || [ "$p
 	err_msg $? "test_linux.sh busybox failed"
 	./test_linux.sh debian 
 	err_msg $? "test_linux.sh debian failed"
+	./test_linux.sh debian --flash
+	err_msg $? "test_linux.sh debian boot from flash failed"
 fi

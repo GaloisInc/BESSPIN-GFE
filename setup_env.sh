@@ -7,7 +7,7 @@ SETUP_ENV_ERR=0
 # Check that the required tools are on the users path
 function check_command {
 	if ! [ -x "$(command -v $1)" ]; then
-		echo 'Error: ${1} is not found. Please add it to your path.' >&2
+		echo "Error: $1 is not found. Please add it to your path." >&2
 		SETUP_ENV_ERR=1
 	fi
 }
