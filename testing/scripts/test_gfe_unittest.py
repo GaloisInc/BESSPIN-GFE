@@ -388,11 +388,11 @@ class TestLinux(BaseGfeTest):
         return
 
     def test_debian_boot(self):
-        self.boot_image(expected_contents=self.getDebianExpected(), timeout=200)
+        self.boot_image(expected_contents=self.getDebianExpected(), timeout=500)
         return
 
     def test_debian_flash_boot(self):
-        self.boot_image(expected_contents=self.getDebianExpected(), timeout=240)
+        self.boot_image(expected_contents=self.getDebianExpected(), timeout=540)
         return
 
     def test_busybox_ethernet(self):
