@@ -2,13 +2,6 @@
 
 Source files and build scripts for generating and testing the GFE for SSITH.
 
-
-## Overview ##
-
-This repository contains source code and build scripts for generating SoC bitstreams
-for the Xilinx VCU118. The resulting systems contain either Chisel or Bluespec 
-versions of P1 connected by an AXI interconnect to UART, DDR, and Bootrom. 
-
 ## Updating to a New Release ##
 
 Run the following to make sure all submodules are up to date. Then proceed with the regular steps for building and testing the GFE.
@@ -36,7 +29,7 @@ git clone git@gitlab-ext.galois.com:ssith/gfe.git
 
 ### Clone and Install the Besspin Tool Suite ###
 
-The Besspin tool suite contains an nix-shell environment that builds all the tools necessary for the GFE excluding Vivado.
+The Besspin tool suite contains a nix-shell environment that builds all the tools necessary for the GFE excluding Vivado.
 See the Besspin tool suite repo for installation instructions.
 
 ```bash
@@ -45,8 +38,8 @@ cd tool-suite
 nix-shell
 ```
 
-Note that nix will install the upstream version of riscv-openocd required by the GFE. 
-No additional steps need to be taken to install the RISCV tools.
+Note that nix will install the upstream version of riscv-openocd required by the GFE.
+If you wish to use your own binaries for RISCV tools, then you should modify your PATH variable from inside the nix-shell before running tests on the GFE.
 
 ### Install Vivado ###
 
@@ -55,10 +48,9 @@ Download and install Vivado 2017.4. A license key for the tool is included on a 
 If using separate development and testing machines, only the development machine needs a license. We recommend installing Vivado Lab on the testing machine, because it does not require a license and can be used to program the FPGA.
 
 
-
 ### Building the Bitstream ###
 
-To build your own bitstream, make sure Vivado 2017.4 is on your path (`$ which vivado`) and run the following commands
+To build your own bitstream, make sure Vivado 2017.4 is on your path (`$ which vivado`) and run the following commands from within the nix-shell
 
 ```bash
 cd $GFE_REPO
@@ -91,7 +83,7 @@ sudo reboot
 2. Launch the nix-shell using the configuration from the Besspin Tool Suite
 ```bash
 cd $GFE_REPO
-nix-shell $TOOL_SUITE_REPO/nix.shell
+nix-shell $TOOL_SUITE_REPO/shell.nix
 ```
 This shell loads all the proper binaries and python packages for testing the GFE.
 Run the rest of the commands inside the nix-shell.
@@ -110,6 +102,7 @@ To run FreeRTOS on the GFE, you'll need to run OpenOCD, connect to gdb, and view
 
 ```bash
 sudo apt-get install minicom
+nix-shell $TOOL_SUITE_REPO/shell.nix
 
 cd $GFE_REPO/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1
 
@@ -131,7 +124,7 @@ Follow these steps to run freeRTOS with an interactive GDB session:
 3. In a new terminal, run minicom with `minicom -D /dev/ttyUSB1 -b 9600`. `ttyUSB1` should be replaced with whichever USB port is connected to the VCU118's USB-to-UART bridge.
 Settings can be configured by running `minicom -s` and selecting `Serial Port Setup` and then `Bps/Par/Bits`. 
 The UART is configured to have 8 data bits, 2 stop bits, no parity bits, and a baud rate of 9600.
-4. In a new terminal, run gdb with `riscv32-unknown-elf-gdb $GFE_REPO/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1/main_blinky.elf`, where `main_blinky` should be the name of the demo you have compiled and want to run.
+4. In a new nix-shell, run gdb with `riscv32-unknown-elf-gdb $GFE_REPO/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1/main_blinky.elf`, where `main_blinky` should be the name of the demo you have compiled and want to run.
 5. Once gdb is open, type `target remote localhost:3333` to connect to OpenOCD. OpenOCD should give a message that it has accepted a gdb connection.
 Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `continue`.
 6. When you've finished running FreeRTOS, make sure to reset the SoC before running other tests or programs.
@@ -270,7 +263,7 @@ Before starting, there are several necessary packages to install. Run:
 ``` 
 apt-get install libssl-dev debian-ports-archive-keyring binfmt-support qemu-user-static mmdebstrap
 ```
-The RISCV toolchain `riscv-gnu-toolchain` should also be installed, built, and added to your path. Instructions for this are at the top of this README.
+The RISCV toolchain `riscv-gnu-toolchain` should also be installed, built, and added to your path. Running inside the nix-shell provided by the besspin toolsuite will build the required tools for you. Instructions for this are in [tool suite install section](#clone-and-install-the-besspin-tool-suite) of this readme.
 
 The debian directory includes several scripts for creating a Debian image and a simple Makefile to run them. Running `make debian` from `$GFE_REPO/bootmem` will perform all the steps of creating the image. If you want to make modifications to the chroot and then build the image, you can do the following:
 

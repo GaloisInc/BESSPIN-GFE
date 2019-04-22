@@ -9,6 +9,12 @@ bootrom/bootrom.mem
 bootrom/bootrom.bytereversed.mem
 bootrom/bootrom.dump
 
+flash-scripts/*.mcs
+flash-scripts/*.log
+flash-scripts/*.jou
+*.jou
+*.log
+
 bluenoc/drivers/.bluenoc.*
 bluenoc/drivers/*.o
 bluenoc/bluenoc/bluenoc
