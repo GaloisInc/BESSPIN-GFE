@@ -93,14 +93,19 @@ This allows the FPGA to be programmed from flash on power-up.
 
 ### Testing ###
 
-1. Install the following python packages: `pexpect, pyserial`. 
-These are required for running python unittests on the GFE.
-2. Give the current user access to the serial and JTAG devices.
+1. Give the current user access to the serial and JTAG devices.
 ```bash
 sudo usermod -aG dialout $USER
 sudo usermod -aG plugdev $USER
 sudo reboot
 ```
+2. Launch the nix-shell using the configuration from the Besspin Tool Suite
+```bash
+cd $GFE_REPO
+nix-shell $TOOL_SUITE_REPO/nix.shell
+```
+This shell loads all the proper binaries and python packages for testing the GFE.
+Run the rest of the commands inside the nix-shell.
 3. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
 4. Make sure the VCU118 is powered on (fan should be running) 
 5. Add Vivado or Vivado Lab to your path (i.e. `source source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh`).
