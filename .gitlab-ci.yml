@@ -1,0 +1,17 @@
+before_script:
+    - "./init_submodules.sh"
+
+chisel_p1:
+  script:
+    - "nix-shell tool-suite/shell.nix --run './test_processor.sh chisel_p1'"
+  tags: ["fpga"]
+  except:
+    - schedules
+
+bluespec_p1:
+  script:
+    - "nix-shell tool-suite/shell.nix --run './test_processor.sh bluespec_p1'"
+  tags: ["fpga"]
+  except:
+    - schedules
+

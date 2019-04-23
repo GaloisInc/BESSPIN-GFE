@@ -26,3 +26,6 @@
 [submodule "riscv-tests"]
 	path = riscv-tests
 	url = git@gitlab-ext.galois.com:ssith/riscv-tests.git
+[submodule "tool-suite"]
+	path = tool-suite
+	url = git@gitlab-ext.galois.com:ssith/tool-suite.git
