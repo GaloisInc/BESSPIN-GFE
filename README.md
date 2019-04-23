@@ -1,5 +1,7 @@
 # Government Furnished Equipment (GFE) #
 
+[![pipeline status](https://gitlab-ext.galois.com/ssith/gfe/badges/develop/pipeline.svg)](https://gitlab-ext.galois.com/ssith/gfe/commits/develop)
+
 Source files and build scripts for generating and testing the GFE for SSITH.
 
 ## Updating to a New Release ##
