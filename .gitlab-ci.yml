@@ -8,11 +8,11 @@ before_script:
     - chmod 644 ~/.ssh/known_hosts
     - ssh git@gitlab-ext.galois.com
     - "./init_submodules.sh"
-    - source ~/.bashrc
-    - which vivado_lab
 
 chisel_p1:
   script:
+    - "source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh"
+    - "which vivado_lab"
     - "nix-shell tool-suite/shell.nix --run './test_processor.sh chisel_p1'"
   tags: ["fpga"]
   except:
