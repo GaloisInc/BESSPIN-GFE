@@ -1,4 +1,10 @@
 before_script:
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - ssh git@gitlab-ext.galois.com
     - "./init_submodules.sh"
 
 chisel_p1:
