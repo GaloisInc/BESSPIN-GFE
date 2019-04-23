@@ -26,7 +26,7 @@ check_file $bitfile "Could not locate bitstream at $bitfile"
 check_file $probfile "Could not locate probe file at $probfile"
 
 check_command vivado_lab
-err_msg $SETUP_ENV_ERR "Programming the FPGA failed"
+err_msg $SETUP_ENV_ERR "program_fpga.sh: Programming the FPGA failed"
 vivado_lab -nojournal -notrace -nolog -source ./tcl/prog_bit.tcl -mode batch -tclargs $bitfile $probfile
 
 # Clean up webtalk logs

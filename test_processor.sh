@@ -9,6 +9,7 @@ proc_picker $1
 
 # Program the FPGA with the appropriate bitstream
 ./program_fpga.sh $proc_name
+err_msg $? "test_processor.sh: Programming the FPGA failed"
 sleep 1
 
 echo "Testing $proc_name"
