@@ -59,6 +59,8 @@ bluespec_p2:
 #-----------------------------------------------------------------------------#
 bitstream_chisel_p1:
     script:
+      - "export XILINXD_LICENSE_FILE=/opt/Xilinx"
+      - "source /opt/Xilinx/Vivado/2017.4/settings64.sh"
       - "nix-shell tool-suite/shell.nix --run './setup_soc_project.sh chisel_p1'"
       - "nix-shell tool-suite/shell.nix --run './build.sh chisel_p1'"
     tags: ["bitstream"]
@@ -67,6 +69,8 @@ bitstream_chisel_p1:
 
 bitstream_bluespec_p1:
     script:
+      - "export XILINXD_LICENSE_FILE=/opt/Xilinx"
+      - "source /opt/Xilinx/Vivado/2017.4/settings64.sh"
       - "nix-shell tool-suite/shell.nix --run './setup_soc_project.sh bluespec_p1'"
       - "nix-shell tool-suite/shell.nix --run './build.sh bluespec_p1'"
     tags: ["bitstream"]
@@ -75,6 +79,8 @@ bitstream_bluespec_p1:
     
 bitstream_chisel_p2:
     script:
+      - "export XILINXD_LICENSE_FILE=/opt/Xilinx"
+      - "source /opt/Xilinx/Vivado/2017.4/settings64.sh"
       - "nix-shell tool-suite/shell.nix --run './setup_soc_project.sh chisel_p2'"
       - "nix-shell tool-suite/shell.nix --run './build.sh chisel_p2'"
     tags: ["bitstream"]
@@ -83,6 +89,8 @@ bitstream_chisel_p2:
 
 bitstream_bluespec_p2:
     script:
+      - "export XILINXD_LICENSE_FILE=/opt/Xilinx"
+      - "source /opt/Xilinx/Vivado/2017.4/settings64.sh"
       - "nix-shell tool-suite/shell.nix --run './setup_soc_project.sh bluespec_p2'"
       - "nix-shell tool-suite/shell.nix --run './build.sh bluespec_p2'"
     tags: ["bitstream"]
