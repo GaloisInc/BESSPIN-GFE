@@ -205,9 +205,9 @@ set_property -name "verilog_define" -value "RANDOMIZE_GARBAGE_ASSIGN RANDOMIZE_I
 
 # Create 'synth_1' run (if not found)
 if {[string equal [get_runs -quiet synth_1] ""]} {
-    create_run -name synth_1 -part xcvu9p-flga2104-2L-e -flow {Vivado Synthesis 2017} -strategy {Vivado Implementation Defaults} -report_strategy {No Reports} -constrset constrs_1
+    create_run -name synth_1 -part xcvu9p-flga2104-2L-e -flow {Vivado Synthesis 2017} -strategy {Vivado Synthesis Defaults} -report_strategy {No Reports} -constrset constrs_1
 } else {
-  set_property strategy {Vivado Implementation Defaults} [get_runs synth_1]
+  set_property strategy {Vivado Synthesis Defaults} [get_runs synth_1]
   set_property flow "Vivado Synthesis 2017" [get_runs synth_1]
 }
 
