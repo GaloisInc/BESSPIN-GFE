@@ -68,6 +68,9 @@ bitstream_chisel_p1:
         name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
         paths:
             - bitstreams/soc_chisel_p1.*
+            - vivado/soc_chisel_p1/soc_chisel_p1.runs/impl_1/design_1_timing_summary_routed.rpt 
+            - vivado/soc_chisel_p1/soc_chisel_p1.runs/impl_1/design_1_utilization_placed.rpt 
+            - vivado/soc_chisel_p1/soc_chisel_p1.runs/impl_1/design_1_power_routed.rpt 
     only:
     - schedules
 
@@ -82,6 +85,9 @@ bitstream_bluespec_p1:
         name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
         paths:
             - bitstreams/soc_bluespec_p1.*
+            - vivado/soc_bluespec_p1/soc_bluespec_p1.runs/impl_1/design_1_timing_summary_routed.rpt 
+            - vivado/soc_bluespec_p1/soc_bluespec_p1.runs/impl_1/design_1_utilization_placed.rpt 
+            - vivado/soc_bluespec_p1/soc_bluespec_p1.runs/impl_1/design_1_power_routed.rpt 
     only:
     - schedules
     
@@ -96,6 +102,9 @@ bitstream_chisel_p2:
         name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
         paths:
             - bitstreams/soc_chisel_p2.*
+            - vivado/soc_chisel_p2/soc_chisel_p2.runs/impl_1/design_1_timing_summary_routed.rpt 
+            - vivado/soc_chisel_p2/soc_chisel_p2.runs/impl_1/design_1_utilization_placed.rpt 
+            - vivado/soc_chisel_p2/soc_chisel_p2.runs/impl_1/design_1_power_routed.rpt 
     only:
     - schedules
 
@@ -110,5 +119,8 @@ bitstream_bluespec_p2:
         name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
         paths:
             - bitstreams/soc_bluespec_p2.*
+            - vivado/soc_bluespec_p2/soc_bluespec_p2.runs/impl_1/design_1_timing_summary_routed.rpt 
+            - vivado/soc_bluespec_p2/soc_bluespec_p2.runs/impl_1/design_1_utilization_placed.rpt 
+            - vivado/soc_bluespec_p2/soc_bluespec_p2.runs/impl_1/design_1_power_routed.rpt 
     only:
     - schedules
