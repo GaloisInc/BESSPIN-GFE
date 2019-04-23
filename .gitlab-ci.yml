@@ -1,6 +1,5 @@
 before_script:
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
-    - echo "$SSH_PRIVATE_KEY"
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
@@ -9,6 +8,7 @@ before_script:
     - chmod 644 ~/.ssh/known_hosts
     - ssh git@gitlab-ext.galois.com
     - "./init_submodules.sh"
+    - which vivado_lab
 
 chisel_p1:
   script:
