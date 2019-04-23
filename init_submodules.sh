@@ -12,7 +12,7 @@ git submodule sync
 cd ..
 
 git submodule update --init --recursive \
-FreeRTOS-mirror bluespec-processors/P1/Piccolo bluespec-processors/P2/Flute busybox \
+tool-suite FreeRTOS-mirror bluespec-processors/P1/Piccolo bluespec-processors/P2/Flute busybox \
 riscv-linux bluespec-processors/P3/Tuba riscv-tests riscv-pk
 git submodule update --init chisel_processors
 
