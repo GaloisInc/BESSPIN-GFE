@@ -8,6 +8,7 @@ before_script:
     - chmod 644 ~/.ssh/known_hosts
     - ssh git@gitlab-ext.galois.com
     - "./init_submodules.sh"
+    - source ~/.bashrc
     - which vivado_lab
 
 chisel_p1:
