@@ -380,7 +380,7 @@ class TestFreeRTOS(BaseGfeTest):
 
         # Ping FPGA
         if riscv_ip == 0:
-            print("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
+            raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
         ping_response = os.system("ping -c 1 " + riscv_ip)
         self.assertEqual(ping_response, 0,
                         "Ping doesn't work.")
