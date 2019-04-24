@@ -32,10 +32,13 @@ git clone git@gitlab-ext.galois.com:ssith/gfe.git
 ### Clone and Install the Besspin Tool Suite ###
 
 The Besspin tool suite contains a nix-shell environment that builds all the tools necessary for the GFE excluding Vivado.
+All commands that use tools once found in riscv-tools (i.e. openocd, gcc, gdb, etc), should be run within the nix-shell.
+This applies to scripts within the GFE such as `test_processor.sh`.
 See the Besspin tool suite repo for installation instructions.
+The following instructions describe how to enter the nix-shell.
 
 ```bash
-git clone git@gitlab-ext.galois.com:ssith/tool-suite.git 
+git clone git@gitlab-ext.galois.com:ssith/tool-suite.git
 cd tool-suite
 nix-shell
 ```
@@ -81,17 +84,10 @@ sudo usermod -aG dialout $USER
 sudo usermod -aG plugdev $USER
 sudo reboot
 ```
-2. Launch the nix-shell using the configuration from the Besspin Tool Suite
-```bash
-cd $GFE_REPO
-nix-shell $TOOL_SUITE_REPO/shell.nix
-```
-This shell loads all the proper binaries and python packages for testing the GFE.
-Run the rest of the commands inside the nix-shell.
-3. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
-4. Make sure the VCU118 is powered on (fan should be running) 
-5. Add Vivado or Vivado Lab to your path (i.e. `source source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh`).
-6. Run `./test_processor.sh chisel_p1` from the top level of the gfe repo. Replace `chisel_p1` with your processor of choice. This command will program the FPGA and run the appropriate tests for that processor.
+2. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
+3. Make sure the VCU118 is powered on (fan should be running) 
+4. Add Vivado or Vivado Lab to your path (i.e. `source source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh`).
+5. Run `./test_processor.sh chisel_p1` from the top level of the gfe repo. Replace `chisel_p1` with your processor of choice. This command will program the FPGA and run the appropriate tests for that processor.
 
 A passing test will not display any error messages. All failing tests will report errors and stop early.
 
