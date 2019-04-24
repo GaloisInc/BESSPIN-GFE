@@ -355,7 +355,7 @@ class TestFreeRTOS(BaseGfeTest):
         self.gfe.launchElf(freertos_elf, verify=False)
 
          # Store and print all UART output while the elf is running
-        timeout = 25
+        timeout = 150
         print("Printing all UART output from the GFE...")
         rx_buf = []
         start_time = time.time()
