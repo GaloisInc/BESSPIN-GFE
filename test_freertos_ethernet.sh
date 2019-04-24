@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Remember to change address of TCP echo server for test to pass
+
 # Get the path to the script folder of the git repository
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 source $BASE_DIR/setup_env.sh
