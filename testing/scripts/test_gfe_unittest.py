@@ -385,16 +385,19 @@ class TestFreeRTOS(BaseGfeTest):
         ping_response = os.system("ping -c 1 " + riscv_ip)
         self.assertEqual(ping_response, 0,
                         "Ping doesn't work.")
-        print('\n')
 
         # Run TCP echo server
-        print("Running TCP echo server")
+        print("\n Running TCP echo server")
         process = subprocess.Popen('timeout 10 ncat -l 9999 --exec "/bin/cat" -v', stderr=subprocess.PIPE, shell=True)
         out = process.stderr.read()
         time.sleep(11)
         process.kill()
         print(out)
         self.assertIn('Ncat: Connection from ' + riscv_ip, out)
+
+        # Send UDP packet
+        os.system('socat stdio udp4-connect:' + riscv_ip + ':5006 <<< "Hello there"')
+        self.check_uart_out(timeout=5, expected_contents='prvSimpleZeroCopyServerTask: received 13 bytes')        
         return
 
 class TestLinux(BaseGfeTest):
