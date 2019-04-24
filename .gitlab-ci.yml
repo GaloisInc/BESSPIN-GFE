@@ -48,17 +48,19 @@ bluespec_p1:
 #-----------------------------------------------------------------------------#
 bitstream_chisel_p1:
     script:
-      - "export XILINXD_LICENSE_FILE=/opt/Xilinx"
+      - "export XILINXD_LICENSE_FILE=/opt/Xilinx/Xilinx.lic"
       - "source /opt/Xilinx/Vivado/2017.4/settings64.sh"
       - "nix-shell tool-suite/shell.nix --run './setup_soc_project.sh chisel_p1'"
       - "nix-shell tool-suite/shell.nix --run './build.sh chisel_p1'"
     tags: ["bitstream"]
     artifacts:
         name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+        artifacts:
+            when: always
         paths:
             - bitstreams/soc_chisel_p1.*
             - vivado/soc_chisel_p1/soc_chisel_p1.runs/impl_1/design_1_timing_summary_routed.rpt 
             - vivado/soc_chisel_p1/soc_chisel_p1.runs/impl_1/design_1_utilization_placed.rpt 
             - vivado/soc_chisel_p1/soc_chisel_p1.runs/impl_1/design_1_power_routed.rpt 
-    only:
+    except:
     - schedules
