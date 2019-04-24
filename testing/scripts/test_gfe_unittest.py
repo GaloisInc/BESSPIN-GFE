@@ -11,6 +11,7 @@ import time
 import struct
 import glob
 import sys
+import subprocess
 
 class BaseGfeTest(unittest.TestCase):
     """GFE base testing class. All GFE Python unittests inherit from this class
@@ -380,10 +381,20 @@ class TestFreeRTOS(BaseGfeTest):
 
         # Ping FPGA
         if riscv_ip == 0:
-            print("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
+            raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
         ping_response = os.system("ping -c 1 " + riscv_ip)
         self.assertEqual(ping_response, 0,
                         "Ping doesn't work.")
+        print('\n')
+
+        # Run TCP echo server
+        print("Running TCP echo server")
+        process = subprocess.Popen('timeout 10 ncat -l 9999 --exec "/bin/cat" -v', stderr=subprocess.PIPE, shell=True)
+        out = process.stderr.read()
+        time.sleep(11)
+        process.kill()
+        print(out)
+        self.assertIn('Ncat: Connection from ' + riscv_ip, out)
         return
 
 class TestLinux(BaseGfeTest):
