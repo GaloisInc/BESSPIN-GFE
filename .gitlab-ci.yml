@@ -1,3 +1,9 @@
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - riscv-linux/
+    - busybox/
+
 #-----------------------------------------------------------------------------#
 #
 # General startup commands
@@ -25,6 +31,15 @@ chisel_p1:
   tags: ["fpga"]
   except:
     - schedules
+
+bluespec_p1:
+  script:
+    - "source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh"
+    - "nix-shell tool-suite/shell.nix --run './test_processor.sh bluespec_p1'"
+  tags: ["fpga"]
+  except:
+    - schedules
+
 
 #-----------------------------------------------------------------------------#
 #
