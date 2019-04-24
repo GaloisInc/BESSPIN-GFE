@@ -20,6 +20,8 @@ if [ "$proc_name" == "chisel_p1" ] || [ "$proc_name" == "bluespec_p1" ]; then
 	err_msg $? "test.sh 32 failed"
 	./test_freertos.sh
 	err_msg $? "test_freertos.sh failed"
+	./test_freertos_ethernet.sh
+	err_msg $? "test_freertos_ethernet.sh failed"
 fi
 
 # Run all P2/P3 processor tests
@@ -32,4 +34,8 @@ if [ "$proc_name" == "chisel_p2" ] || [ "$proc_name" == "bluespec_p2" ] || [ "$p
 	err_msg $? "test_linux.sh debian failed"
 	./test_linux.sh debian --flash
 	err_msg $? "test_linux.sh debian boot from flash failed"
+	./test_linux_ethernet.sh busybox
+	err_msg $? "test_linux_ethernet.sh busybox failed"
+	./test_linux_ethernet.sh debian
+	err_msg $? "test_linux_ethernet.sh debian failed"
 fi
