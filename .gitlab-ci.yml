@@ -77,7 +77,7 @@ bitstream_chisel_p1:
             - vivado/soc_chisel_p1/soc_chisel_p1.runs/impl_1/design_1_timing_summary_routed.rpt 
             - vivado/soc_chisel_p1/soc_chisel_p1.runs/impl_1/design_1_utilization_placed.rpt 
             - vivado/soc_chisel_p1/soc_chisel_p1.runs/impl_1/design_1_power_routed.rpt 
-    except:
+    only:
     - schedules
 
 bitstream_bluespec_p1:
