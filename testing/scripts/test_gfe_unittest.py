@@ -186,7 +186,7 @@ class TestGfe(BaseGfeTest):
         else:
             uart_elf = 'rv32ui-p-uart'
 
-        uart_baud_rate = 9600
+        uart_baud_rate = 115200
         uart_elf_path = os.path.abspath(
             os.path.join(self.path_to_asm, uart_elf))
         print("Using: " + uart_elf_path)
