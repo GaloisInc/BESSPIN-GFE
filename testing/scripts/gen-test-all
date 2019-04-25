@@ -19,7 +19,7 @@ else
     exit 1
 fi
 
-test_dir=`dirname $0`/../../riscv-tools/riscv-tests
+test_dir=`dirname $0`/../../riscv-tests
 
 cat <<EOF
 # -*- gdb-script -*-
@@ -118,6 +118,7 @@ end
 EOF
 
 for e in $env; do
+    echo "# for e = $e"
     for f in `ls $test_dir/isa/rv$xlen[m$priv][$isa]-$e-* | grep -vE ".dump$" | sort`; do
       if [[ $f == *rv64si-p-dirty* ]]; then
         echo "# Skipping *rv64si-p-dirty*, because it needs to updated to support new ddr address"
