@@ -40,6 +40,22 @@ bluespec_p1:
   except:
     - schedules
 
+chisel_p2:
+  script:
+    - "source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh"
+    - "nix-shell tool-suite/shell.nix --run './test_processor.sh chisel_p2'"
+  tags: ["fpga"]
+  except:
+    - schedules
+
+bluespec_p2:
+  script:
+    - "source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh"
+    - "nix-shell tool-suite/shell.nix --run './test_processor.sh bluespec_p2'"
+  tags: ["fpga"]
+  except:
+    - schedules
+
 
 #-----------------------------------------------------------------------------#
 #
