@@ -28,6 +28,7 @@ systemctl disable apt-daily-upgrade.timer
 systemctl disable apt-daily.timer
 systemctl disable e2scrub_all.timer
 systemctl disable logrotate.timer
+systemctl mask network-online.target
 systemctl mask sys-fs-fuse-connections.mount
 systemctl mask apt-daily-upgrade.service
 systemctl mask apt-daily.service
@@ -55,6 +56,9 @@ systemctl mask systemd-update-utmp.service
 systemctl mask systemd-fsckd.socket
 systemctl mask bluetooth.target
 systemctl mask time-sync.target
+systemctl mask systemd-tmpfiles-clean.timer
+systemctl mask sys-subsystem-net-devices-eth0.device
+systemctl set-default multi-user.target
 
 # Remove debconf internationalization for debconf
 dpkg --remove debconf-i18n
@@ -65,7 +69,11 @@ apt-get update
 # Install packages here
 apt-get install "$@" || exit $? 
 
-./clean_chroot.sh
+# Initialize random-seed
+dd if=/dev/urandom of=/var/lib/systemd/random-seed count=1 bs=512 
+chmod 600 /var/lib/systemd/random-seed
 
-# Remove chroot script
-rm config_chroot.sh
+/setup_scripts/clean_chroot.sh
+
+# Remove chroot scripts
+rm -rf /setup_scripts
