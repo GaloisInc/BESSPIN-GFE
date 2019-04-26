@@ -25,7 +25,15 @@ if [ -d $CHROOT_DIR ]; then
 fi
 
 echo "Creating chroot..."
-sudo mmdebstrap --architectures=riscv64 --include="debian-ports-archive-keyring" sid $CHROOT_DIR "deb $DEBIAN_URL sid main" "deb $DEBIAN_URL unreleased main" || exit
+sudo mmdebstrap --architectures=riscv64 \
+	--include="debian-ports-archive-keyring" \
+	--dpkgopt='path-exclude=/usr/share/man/*' \
+        --dpkgopt='path-exclude=/usr/share/locale/*' \
+        --dpkgopt='path-include=/usr/share/locale/locale.alias' \
+        --dpkgopt='path-exclude=/usr/share/doc/*' \
+        --dpkgopt='path-include=/usr/share/doc/*/copyright' \
+        --dpkgopt='path-exclude=/usr/share/dict/*' \
+	sid $CHROOT_DIR "deb $DEBIAN_URL sid main" "deb $DEBIAN_URL unreleased main" || exit
 
 echo "Created chroot"
 
