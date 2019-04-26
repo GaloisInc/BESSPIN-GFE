@@ -306,6 +306,17 @@ class TestFreeRTOS(BaseGfeTest):
                 'FreeRTOS-mirror', 'FreeRTOS', 'Demo',
                 'RISC-V_Galois_P1')
 
+    def runSubprocess(self, timeout, command, expected_contents):
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, 
+                                stderr=subprocess.PIPE, shell=True)
+        response_stdout = process.stdout.read()
+        time.sleep(timeout)
+        process.kill()
+        print(response_stdout)
+        self.assertEquals(expected_contents, response_stdout)
+        return
+
+
     def test_full(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
@@ -355,7 +366,7 @@ class TestFreeRTOS(BaseGfeTest):
         self.gfe.launchElf(freertos_elf, verify=False)
 
          # Store and print all UART output while the elf is running
-        timeout = 150
+        timeout = 25
         print("Printing all UART output from the GFE...")
         rx_buf = []
         start_time = time.time()
@@ -386,19 +397,21 @@ class TestFreeRTOS(BaseGfeTest):
         self.assertEqual(ping_response, 0,
                         "Ping doesn't work.")
 
-        # Run TCP echo server
-        print("\n Running TCP echo server")
-        process = subprocess.Popen('timeout 10 ncat -l 9999 --exec "/bin/cat" -v', stderr=subprocess.PIPE, shell=True)
-        out = process.stderr.read()
-        time.sleep(11)
-        process.kill()
-        print(out)
-        self.assertIn('Ncat: Connection from ' + riscv_ip, out)
+        # Run TCP echo client
+        print("\n Sending to RISC-V's TCP echo server")
+        self.runSubprocess(
+            timeout=4, 
+            command='timeout 5 socat stdio tcp4-connect:' + riscv_ip + ':7 <<<"TCP Success"',
+            expected_contents="TCP Success\n")
 
         # Send UDP packet
-        os.system('socat stdio udp4-connect:' + riscv_ip + ':5006 <<< "Hello there"')
-        self.check_uart_out(timeout=5, expected_contents='prvSimpleZeroCopyServerTask: received 13 bytes')        
+        print("\n Sending to RISC-V's UDP echo server")
+        self.runSubprocess(
+            timeout=4,
+            command='timeout 5 socat stdio udp4-connect:' + riscv_ip + ':5006 <<<"UDP Success"',
+            expected_contents='UDP Success\n')
         return
+
 
 class TestLinux(BaseGfeTest):
 
