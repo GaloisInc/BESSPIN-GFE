@@ -4,7 +4,7 @@ yes | apt-get autoremove
 
 apt-get clean
 
-rm /var/lib/apt/lists/deb.*
+rm /var/lib/apt/lists/*debian*
 
 # Remove foreign language man files
 rm -rf /usr/share/man/??
