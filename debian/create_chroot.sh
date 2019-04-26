@@ -40,13 +40,13 @@ echo "Created chroot"
 echo "Copying scripts to chroot... "
 
 # Use chroot to set proper permissions
-sudo chroot $CHROOT_DIR chmod 775 / || exit
-sudo chroot $CHROOT_DIR chown root:$UID / || exit
+sudo /usr/sbin/chroot $CHROOT_DIR chmod 775 / || exit
+sudo /usr/sbin/chroot $CHROOT_DIR chown root:$UID / || exit
 
 cp -R $DEBIAN_DIR/setup_scripts $CHROOT_DIR/ || exit
 
 # Enter chroot to configure and reduce size
-sudo chroot $CHROOT_DIR /setup_scripts/config_chroot.sh "$@" || exit 
+sudo /usr/sbin/chroot $CHROOT_DIR /setup_scripts/config_chroot.sh "$@" || exit 
 
 echo "Configured chroot"
 
