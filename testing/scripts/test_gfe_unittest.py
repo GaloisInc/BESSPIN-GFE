@@ -66,7 +66,7 @@ class BaseGfeTest(unittest.TestCase):
             "Setup pySerial UART. {} baud, {} {} {}".format(
                 baud, bytesize, parity, stopbits))
 
-    def check_uart_out(self, timeout, expected_contents):
+    def check_uart_out(self, timeout, expected_contents, absent_contents=None):
         # Store and print all UART output while the elf is running
         rx_buf = []
         start_time = time.time()
@@ -82,9 +82,13 @@ class BaseGfeTest(unittest.TestCase):
         # Check that the output contains the expected text
         for text in expected_contents:
             self.assertIn(text, rx)
+
+        if absent_contents != None:
+            self.assertNotIn(absent_contents, rx)
+
         return rx
 
-    def check_in_output(self, elf, timeout, expected_contents,
+    def check_in_output(self, elf, timeout, expected_contents, absent_contents=None,
         baud=115200, parity="NONE", stopbits=2, bytesize=8,
         uart_timeout=1, run_from_flash=False):
         """Run a program and check UART output for some expected contents
@@ -123,7 +127,7 @@ class BaseGfeTest(unittest.TestCase):
 
         # Store and print all UART output while the elf is running
         print("Printing all UART output from the GFE...")
-        self.check_uart_out(timeout=timeout, expected_contents=expected_contents)
+        self.check_uart_out(timeout=timeout, expected_contents=expected_contents, absent_contents=absent_contents)
 
     def setUp(self):
         # Reset the GFE
@@ -325,8 +329,9 @@ class TestFreeRTOS(BaseGfeTest):
         
         self.check_in_output(
             elf=freertos_elf,
-            timeout=10,
-            expected_contents=["main_full", "Pass"])
+            timeout=60,
+            expected_contents=["main_full", "Pass"],
+            absent_contents="ERROR")
 
         return
         
