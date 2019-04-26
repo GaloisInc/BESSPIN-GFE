@@ -64,6 +64,7 @@ systemctl mask systemd-fsckd.socket
 systemctl mask bluetooth.target
 systemctl mask time-sync.target
 systemctl mask systemd-tmpfiles-clean.timer
+systemctl mask sys-subsystem-net-devices-eth0.device
 systemctl set-default multi-user.target
 
 # Remove debconf internationalization for debconf
