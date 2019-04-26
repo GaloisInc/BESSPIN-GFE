@@ -1,12 +1,5 @@
 #!/bin/bash
 
-#GFE_USER=$1
-#shift
-#
-## Change permissions on / so we can modify chroot without root
-#chmod 775 /
-#chown root:$GFE_USER /
-
 # Create systemd symlink
 ln -s /lib/systemd/systemd /init
 
@@ -16,7 +9,7 @@ yes riscv | passwd
 # Modify network configuration
 echo "
 # Use DHCP to automatically configure eth0
-# auto eth0
+auto eth0
 allow-hotplug eth0
 iface eth0 inet dhcp" >> /etc/network/interfaces
 
