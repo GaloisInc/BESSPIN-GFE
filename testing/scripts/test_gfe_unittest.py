@@ -356,7 +356,7 @@ class TestFreeRTOS(BaseGfeTest):
 
         return
 
-    def test_ethernet(self):
+    def test_tcp(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
            os.path.join( self.path_to_freertos, 'main_tcp.elf'))
@@ -409,6 +409,54 @@ class TestFreeRTOS(BaseGfeTest):
             command='timeout 5 socat stdio tcp4-connect:' + riscv_ip + ':7 <<<"TCP Success"',
             expected_contents="TCP Success\n")
 
+        return
+
+ def test_udp(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main_udp.elf'))
+        print(freertos_elf)
+
+        # Setup UART
+        self.setupUart()
+
+        # Load and run elf
+        print("Loading Elf {}".format(freertos_elf))
+        print("This may take some time...")
+        self.gfe.launchElf(freertos_elf, verify=False)
+
+         # Store and print all UART output while the elf is running
+        timeout = 150
+        print("Printing all UART output from the GFE...")
+        rx_buf = []
+        start_time = time.time()
+        while time.time() < (start_time + timeout):
+            pending = self.gfe.uart_session.in_waiting
+            if pending:
+                data = self.gfe.uart_session.read(pending)
+                rx_buf.append(data) # Append read chunks to the list.
+                sys.stdout.write(data)
+        print("Timeout reached")
+
+        # Get FPGA IP address
+        riscv_ip = 0
+        rx_buf_str = ''.join(rx_buf)
+        rx_buf_list = rx_buf_str.split('\n')
+        for line in rx_buf_list:
+            index = line.find('IP Address:')
+            if index != -1:
+                ip_str = line.split()
+                riscv_ip = ip_str[2]
+                print("RISCV IP address is: " + riscv_ip)
+                break
+
+        # Ping FPGA
+        if riscv_ip == 0:
+            raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
+        ping_response = os.system("ping -c 1 " + riscv_ip)
+        self.assertEqual(ping_response, 0,
+                        "Ping doesn't work.")
+
         # Send UDP packet
         print("\n Sending to RISC-V's UDP echo server")
         self.runSubprocess(
@@ -416,7 +464,6 @@ class TestFreeRTOS(BaseGfeTest):
             command='timeout 5 socat stdio udp4-connect:' + riscv_ip + ':5006 <<<"UDP Success"',
             expected_contents='UDP Success\n')
         return
-
 
 class TestLinux(BaseGfeTest):
 
