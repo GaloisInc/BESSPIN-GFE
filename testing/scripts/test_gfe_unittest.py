@@ -411,7 +411,7 @@ class TestFreeRTOS(BaseGfeTest):
 
         return
 
- def test_udp(self):
+    def test_udp(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
            os.path.join( self.path_to_freertos, 'main_udp.elf'))
