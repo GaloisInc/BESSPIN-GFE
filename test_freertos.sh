@@ -19,14 +19,15 @@ function freertos_test {
 	err_msg $? "FreeRTOS test TestFreeRTOS.$2 failed"
 }
 
-if [[ $2 == "--ethernet" ]]; then
+if [[ $1 == "--ethernet" ]]; then
 	test_ethernet=true
 else
 	test_ethernet=false
 fi
 
-freertos_test main_blinky test_blink
-freertos_test main_full test_full
-if [ "$test_ethernet" = true]; then
+if [ "$test_ethernet" = true ]; then
 	freertos_test main_tcp test_ethernet
+else
+	freertos_test main_blinky test_blink
+	freertos_test main_full test_full
 fi
