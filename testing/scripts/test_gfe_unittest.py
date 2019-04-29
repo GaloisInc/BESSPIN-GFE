@@ -12,6 +12,7 @@ import struct
 import glob
 import sys
 import subprocess
+import socket
 
 class BaseGfeTest(unittest.TestCase):
     """GFE base testing class. All GFE Python unittests inherit from this class
@@ -313,11 +314,11 @@ class TestFreeRTOS(BaseGfeTest):
     def runSubprocess(self, timeout, command, expected_contents):
         process = subprocess.Popen(command, stdout=subprocess.PIPE, 
                                 stderr=subprocess.PIPE, shell=True)
-        response_stdout = process.stdout.read()
+        response_stdout = process.stderr.read()
         time.sleep(timeout)
         process.kill()
         print(response_stdout)
-        self.assertEquals(expected_contents, response_stdout)
+        self.assertIn(expected_contents, response_stdout)
         return
 
 
@@ -371,7 +372,7 @@ class TestFreeRTOS(BaseGfeTest):
         self.gfe.launchElf(freertos_elf, verify=False)
 
          # Store and print all UART output while the elf is running
-        timeout = 150
+        timeout = 20
         print("Printing all UART output from the GFE...")
         rx_buf = []
         start_time = time.time()
@@ -404,11 +405,35 @@ class TestFreeRTOS(BaseGfeTest):
 
         # Run TCP echo client
         print("\n Sending to RISC-V's TCP echo server")
-        self.runSubprocess(
-            timeout=4, 
-            command='timeout 5 socat stdio tcp4-connect:' + riscv_ip + ':7 <<<"TCP Success"',
-            expected_contents="TCP Success\n")
+        #self.runSubprocess(
+        #    timeout=4, 
+        #    command='timeout 5 socat stdio tcp4-connect:' + riscv_ip + ':7 <<<"TCP Success"',
+        #    expected_contents="TCP Success\n")
+        # Create a TCP/IP socket
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # Connect the socket to the port where the server is listening
+        server_address = (riscv_ip, 7)
+        print >>sys.stderr, 'connecting to %s port %s' % server_address
+        sock.connect(server_address)
+        try:
+            # Send data
+            message = 'This is the message.  It will be repeated.'
+            print >>sys.stderr, 'sending "%s"' % message
+            sock.sendall(message)
 
+            # Look for the response
+            amount_received = 0
+            amount_expected = len(message)
+
+            while amount_received < amount_expected:
+                data = sock.recv(128)
+                amount_received += len(data)
+                print >>sys.stderr, 'received "%s"' % data
+                self.assertEqual(message, data)
+
+        finally:
+            print >>sys.stderr, 'closing socket'
+            sock.close()
         return
 
     def test_udp(self):
@@ -426,7 +451,7 @@ class TestFreeRTOS(BaseGfeTest):
         self.gfe.launchElf(freertos_elf, verify=False)
 
          # Store and print all UART output while the elf is running
-        timeout = 150
+        timeout = 20
         print("Printing all UART output from the GFE...")
         rx_buf = []
         start_time = time.time()
@@ -459,10 +484,23 @@ class TestFreeRTOS(BaseGfeTest):
 
         # Send UDP packet
         print("\n Sending to RISC-V's UDP echo server")
-        self.runSubprocess(
-            timeout=4,
-            command='timeout 5 socat stdio udp4-connect:' + riscv_ip + ':5006 <<<"UDP Success"',
-            expected_contents='UDP Success\n')
+        # Create a UDP socket at client side
+        UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+        msgFromClient       = "Hello UDP Server"
+        bytesToSend         = str.encode(msgFromClient)
+        serverAddressPort   = (riscv_ip, 5006)
+        bufferSize          = 1024
+
+        # Send to server using created UDP socket
+        UDPClientSocket.sendto(bytesToSend, serverAddressPort)
+        msgFromServer = UDPClientSocket.recvfrom(bufferSize)
+        #msg = "Message from Server {}".format(msgFromServer[0])
+        print(msgFromServer)
+        self.assertIn(msgFromClient, msgFromServer)
+        #self.runSubprocess(
+        #    timeout=4,
+        #    command='timeout 5 socat stdio udp4-connect:' + riscv_ip + ':5006 <<<"UDP Success"',
+        #    expected_contents='UDP Success')
         return
 
 class TestLinux(BaseGfeTest):

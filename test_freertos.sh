@@ -26,8 +26,8 @@ else
 fi
 
 if [ "$test_ethernet" = true ]; then
+	freertos_test main_udp test_udp
 	freertos_test main_tcp test_tcp
-	freertos_test main_tcp test_udp
 else
 	freertos_test main_blinky test_blink
 	freertos_test main_full test_full
