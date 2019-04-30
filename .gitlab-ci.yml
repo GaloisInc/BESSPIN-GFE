@@ -27,7 +27,7 @@ before_script:
 chisel_p1:
   script:
     - "source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh"
-    - "nix-shell tool-suite/shell.nix --run './test_processor.sh chisel_p1'"
+    - "nix-shell tool-suite/nix/dev/gfe.nix --run './test_processor.sh chisel_p1'"
   tags: ["fpga"]
   except:
     - schedules
@@ -35,7 +35,7 @@ chisel_p1:
 bluespec_p1:
   script:
     - "source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh"
-    - "nix-shell tool-suite/shell.nix --run './test_processor.sh bluespec_p1'"
+    - "nix-shell tool-suite/nix/dev/gfe.nix --run './test_processor.sh bluespec_p1'"
   tags: ["fpga"]
   except:
     - schedules

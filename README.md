@@ -38,11 +38,10 @@ See the Besspin tool suite repo for installation instructions.
 The following instructions describe how to enter the nix-shell.
 
 ```bash
-git clone git@gitlab-ext.galois.com:ssith/tool-suite.git
-cd $GFE_REPO
-nix-shell $TOOL_SUITE_REPO/shell.nix
+git submodule update --init tool-suite
+nix-shell tool-suite/nix/dev/gfe.nix
 ```
-GFE_REPO is the top level directory for the gfe repo, and TOOL_SUITE_REPO is the top level of the besspin tool-suite repository.
+
 Note that nix will install the upstream version of riscv-openocd required by the GFE.
 If you wish to use your own binaries for RISCV tools, then you should modify your PATH variable from inside the nix-shell.
 
