@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-MAX_CORES = 24 # change if needed
+MAX_CORES=24 # change if needed
 # Get the path to the script folder of the git repository
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 source $BASE_DIR/setup_env.sh
@@ -46,9 +46,9 @@ fi
 # Build the Linux image
 cd $linux_folder
 if [ "$linux_image" == "debian" ]; then
-	make debian -j MAX_CORES
+	make debian -j $MAX_CORES
 else
-	make -j MAX_CORES
+	make -j $MAX_CORES
 fi
 err_msg $? "Building Linux failed"
 
