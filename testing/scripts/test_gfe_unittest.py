@@ -13,6 +13,7 @@ import glob
 import sys
 import subprocess
 import socket
+import re
 
 class BaseGfeTest(unittest.TestCase):
     """GFE base testing class. All GFE Python unittests inherit from this class
@@ -401,7 +402,7 @@ class TestFreeRTOS(BaseGfeTest):
             raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
         ping_response = os.system("ping -c 1 " + riscv_ip)
         self.assertEqual(ping_response, 0,
-                        "Ping doesn't work.")
+                        "Cannot pin FPGA.")
 
         # Run TCP echo client
         print("\n Sending to RISC-V's TCP echo server")
@@ -480,7 +481,7 @@ class TestFreeRTOS(BaseGfeTest):
             raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
         ping_response = os.system("ping -c 1 " + riscv_ip)
         self.assertEqual(ping_response, 0,
-                        "Ping doesn't work.")
+                        "Cannot ping FPGA")
 
         # Send UDP packet
         print("\n Sending to RISC-V's UDP echo server")
@@ -523,8 +524,6 @@ class TestLinux(BaseGfeTest):
             "Xilinx Axi Ethernet MDIO: probed",
             "Please press Enter to activate this console"
         ]
-
-
 
     def boot_linux(self, image=None):
         if not image:
@@ -599,24 +598,38 @@ class TestLinux(BaseGfeTest):
             expected_contents=["xilinx_axienet 62100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx"])
 
         self.gfe.uart_session.write(b'udhcpc -i eth0\r')
-        self.check_uart_out(
-            timeout=10,
-            expected_contents=["udhcpc: started, v1.30.1",
-                                "Setting IP address",
-                                "udhcpc: sending discover",
-                                "Adding router",
-                                "Adding DNS server"
-                                ])
+         # Store and print all UART output while the elf is running
+        timeout = 10
+        print("Printing all UART output from the GFE...")
+        rx_buf = []
+        start_time = time.time()
+        while time.time() < (start_time + timeout):
+            pending = self.gfe.uart_session.in_waiting
+            if pending:
+                data = self.gfe.uart_session.read(pending)
+                rx_buf.append(data) # Append read chunks to the list.
+                sys.stdout.write(data)
+        print("Timeout reached")
 
-        # Test connectivity
-        self.gfe.uart_session.write(b'ping 4.2.2.1\r')
-        self.check_uart_out(
-            timeout=5,
-            expected_contents=["PING 4.2.2.1 (4.2.2.1):", 
-                                "64 bytes from 4.2.2.1:",
-                                "seq=0",
-                                "seq=1"
-                                ])
+        # Get FPGA IP address
+        riscv_ip = 0
+        rx_buf_str = ''.join(rx_buf)
+        rx_buf_list = rx_buf_str.split('\n')
+        for line in rx_buf_list:
+            index = line.find('Setting IP address')
+            if index != -1:
+                ip_str = line.split()
+                riscv_ip = ip_str[3]
+                print("RISCV IP address is: " + riscv_ip)
+                break
+
+        # Ping FPGA
+        if riscv_ip == 0:
+            raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
+        ping_response = os.system("ping -c 1 " + riscv_ip)
+        self.assertEqual(ping_response, 0,
+                        "Cannot ping FPGA.")
+        return
 
 
     def test_debian_ethernet(self):
@@ -644,15 +657,42 @@ class TestLinux(BaseGfeTest):
                 expected_contents=["The programs included with the Debian GNU/Linux system are free software;",
                                     ":~#"
                                     ])
+        self.gfe.uart_session.write(b'ip addr\r')
 
-        # Test connectivity
-        self.gfe.uart_session.write(b'ping 4.2.2.1\r')
-        self.check_uart_out(
-            timeout=5,
-            expected_contents=["PING 4.2.2.1 (4.2.2.1) 56(84) bytes of data.", 
-                                "64 bytes from 4.2.2.1: icmp_seq=1 ttl=",
-                                "64 bytes from 4.2.2.1: icmp_seq=2 ttl=",
-                                ])
+        # Get RISC-V IP address and ping it from host
+        # Store and print all UART output while the elf is running
+        timeout = 10
+        print("Printing all UART output from the GFE...")
+        rx_buf = []
+        start_time = time.time()
+        while time.time() < (start_time + timeout):
+            pending = self.gfe.uart_session.in_waiting
+            if pending:
+                data = self.gfe.uart_session.read(pending)
+                rx_buf.append(data) # Append read chunks to the list.
+                sys.stdout.write(data)
+        print("Timeout reached")
+
+        # Get FPGA IP address
+        riscv_ip = 0
+        rx_buf_str = ''.join(rx_buf)
+        rx_buf_list = rx_buf_str.split('\n')
+        for line in rx_buf_list:
+            index1 = line.find('inet')
+            index2 = line.find('eth0')
+            if (index1 != -1) & (index2 != -1):
+                ip_str = re.split('[/\s]\s*', line)
+                riscv_ip = ip_str[2]
+                print("RISCV IP address is: " + riscv_ip)
+                break
+
+        # Ping FPGA
+        if riscv_ip == 0:
+            raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
+        ping_response = os.system("ping -c 1 " + riscv_ip)
+        self.assertEqual(ping_response, 0,
+                        "Cannot ping FPGA.")
+        return
 
 
 class BaseTestIsaGfe(BaseGfeTest):
