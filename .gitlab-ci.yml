@@ -72,6 +72,7 @@ bitstream_gen:
     artifacts:
         name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME-$CPU"
         when: always
+        expire_in: 1 week
         paths:
             - bitstreams/soc_$CPU.*
             - vivado/soc_$CPU/soc_$CPU.runs/impl_1/design_1_timing_summary_routed.rpt 
