@@ -612,9 +612,10 @@ class TestLinux(BaseGfeTest):
         self.gfe.uart_session.write(b'ping 4.2.2.1\r')
         self.check_uart_out(
             timeout=5,
-            expected_contents=["PING 4.2.2.1 (4.2.2.1): 56(84) data bytes", 
-                                "64 bytes from 4.2.2.1: icmp_seq=1 ttl",
-                                "64 bytes from 4.2.2.1: icmp_seq=2 ttl"
+            expected_contents=["PING 4.2.2.1 (4.2.2.1):", 
+                                "64 bytes from 4.2.2.1:",
+                                "seq=0",
+                                "seq=1"
                                 ])
 
 
