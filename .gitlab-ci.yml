@@ -19,7 +19,6 @@ before_script:
     - chmod 644 ~/.ssh/known_hosts
     - git submodule sync --recursive
     - git submodule update --init --recursive
-    - "./init_submodules.sh"
 
 #-----------------------------------------------------------------------------#
 #
