@@ -14,9 +14,6 @@
 [submodule "riscv-linux"]
 	path = riscv-linux
 	url = ../riscv-linux.git
-#[submodule "busybox"]
-#	path = busybox
-#	url = https://git.busybox.net/busybox
 [submodule "bluespec-processors/P3/Tuba"]
 	path = bluespec-processors/P3/Tuba
 	url = https://github.com/bluespec/Tuba.git
@@ -31,4 +28,4 @@
 	url = git@gitlab-ext.galois.com:ssith/tool-suite.git
 [submodule "busybox"]
 	path = busybox
-	url = https://git.busybox.net/busybox
+	url = git://git.busybox.net/busybox
