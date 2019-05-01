@@ -17,7 +17,6 @@ before_script:
     - chmod 700 ~/.ssh
     - ssh-keyscan gitlab-ext.galois.com >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    - ./init_submodules.sh
 
 #-----------------------------------------------------------------------------#
 #
@@ -27,6 +26,7 @@ before_script:
 chisel_p1:
   script:
     - "source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh"
+    - "nix-shell tool-suite/nix/dev/gfe.nix --run './init_submodules.sh'"
     - "nix-shell tool-suite/nix/dev/gfe.nix --run './test_processor.sh chisel_p1'"
   tags: ["fpga"]
   except:
