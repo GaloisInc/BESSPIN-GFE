@@ -43,6 +43,7 @@ bluespec_p1:
 chisel_p2:
   script:
     - "source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh"
+    - "export CFLAGS=-I/usr/include"
     - "nix-shell tool-suite/nix/dev/gfe.nix --run './test_processor.sh chisel_p2'"
   tags: ["fpga"]
   except:
