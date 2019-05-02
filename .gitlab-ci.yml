@@ -19,64 +19,73 @@ before_script:
     - chmod 644 ~/.ssh/known_hosts
     - ./init_submodules.sh
 
-#-----------------------------------------------------------------------------#
-#
-# FPGA tests
-#
-#-----------------------------------------------------------------------------#
 chisel_p1:
   script:
     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
-    - nix-shell tool-suite/shell.nix --run './test_processor.sh chisel_p1'
+    - nix-shell tool-suite/shell.nix --run 'echo $USER'
+    - nix-shell tool-suite/shell.nix --run './tcl/program_flash datafile bootmem/bootmem.bin'
   tags: ["fpga"]
   except:
     - schedules
 
-bluespec_p1:
-  script:
-    - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
-    - nix-shell tool-suite/shell.nix --run './test_processor.sh bluespec_p1'
-  tags: ["fpga"]
-  except:
-    - schedules
+# #-----------------------------------------------------------------------------#
+# #
+# # FPGA tests
+# #
+# #-----------------------------------------------------------------------------#
+# chisel_p1:
+#   script:
+#     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
+#     - nix-shell tool-suite/shell.nix --run './test_processor.sh chisel_p1'
+#   tags: ["fpga"]
+#   except:
+#     - schedules
 
-chisel_p2:
-  script:
-    - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
-    - nix-shell tool-suite/shell.nix --run './test_processor.sh chisel_p2'
-  tags: ["fpga"]
-  except:
-    - schedules
+# bluespec_p1:
+#   script:
+#     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
+#     - nix-shell tool-suite/shell.nix --run './test_processor.sh bluespec_p1'
+#   tags: ["fpga"]
+#   except:
+#     - schedules
 
-bluespec_p2:
-  script:
-    - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
-    - nix-shell tool-suite/shell.nix --run './test_processor.sh bluespec_p2'
-  tags: ["fpga"]
-  except:
-    - schedules
+# chisel_p2:
+#   script:
+#     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
+#     - nix-shell tool-suite/shell.nix --run './test_processor.sh chisel_p2'
+#   tags: ["fpga"]
+#   except:
+#     - schedules
+
+# bluespec_p2:
+#   script:
+#     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
+#     - nix-shell tool-suite/shell.nix --run './test_processor.sh bluespec_p2'
+#   tags: ["fpga"]
+#   except:
+#     - schedules
 
 
-#-----------------------------------------------------------------------------#
-#
-# Bitstream generation tests
-#
-#-----------------------------------------------------------------------------#
-bitstream_gen:
-    script:
-      - export XILINXD_LICENSE_FILE=/opt/Xilinx/Xilinx.lic
-      - source /opt/Xilinx/Vivado/2017.4/settings64.sh
-      - nix-shell tool-suite/nix/dev/gfe.nix --run './setup_soc_project.sh $CPU'
-      - nix-shell tool-suite/nix/dev/gfe.nix --run './build.sh $CPU'
-    tags: ["bitstream"]
-    artifacts:
-        name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME-$CPU"
-        when: always
-        expire_in: 1 week
-        paths:
-            - bitstreams/soc_$CPU.*
-            - vivado/soc_$CPU/soc_$CPU.runs/impl_1/design_1_timing_summary_routed.rpt 
-            - vivado/soc_$CPU/soc_$CPU.runs/impl_1/design_1_utilization_placed.rpt 
-            - vivado/soc_$CPU/soc_$CPU.runs/impl_1/design_1_power_routed.rpt 
-    only:
-    - schedules
+# #-----------------------------------------------------------------------------#
+# #
+# # Bitstream generation tests
+# #
+# #-----------------------------------------------------------------------------#
+# bitstream_gen:
+#     script:
+#       - export XILINXD_LICENSE_FILE=/opt/Xilinx/Xilinx.lic
+#       - source /opt/Xilinx/Vivado/2017.4/settings64.sh
+#       - nix-shell tool-suite/nix/dev/gfe.nix --run './setup_soc_project.sh $CPU'
+#       - nix-shell tool-suite/nix/dev/gfe.nix --run './build.sh $CPU'
+#     tags: ["bitstream"]
+#     artifacts:
+#         name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME-$CPU"
+#         when: always
+#         expire_in: 1 week
+#         paths:
+#             - bitstreams/soc_$CPU.*
+#             - vivado/soc_$CPU/soc_$CPU.runs/impl_1/design_1_timing_summary_routed.rpt 
+#             - vivado/soc_$CPU/soc_$CPU.runs/impl_1/design_1_utilization_placed.rpt 
+#             - vivado/soc_$CPU/soc_$CPU.runs/impl_1/design_1_power_routed.rpt 
+#     only:
+#     - schedules
