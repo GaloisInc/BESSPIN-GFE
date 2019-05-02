@@ -657,6 +657,7 @@ class TestLinux(BaseGfeTest):
                 expected_contents=["The programs included with the Debian GNU/Linux system are free software;",
                                     ":~#"
                                     ])
+        self.gfe.uart_session.write(b'ifup eth0\r')
         self.gfe.uart_session.write(b'ip addr\r')
 
         # Get RISC-V IP address and ping it from host
