@@ -18,7 +18,6 @@ before_script:
     - ssh-keyscan gitlab-ext.galois.com >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - ./init_submodules.sh
-    - export USER=gitlab-runner
 
 #-----------------------------------------------------------------------------#
 #
