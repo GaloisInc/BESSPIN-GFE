@@ -22,6 +22,7 @@ before_script:
 chisel_p1:
   script:
     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
+    - export USER=gitlab-runner
     - nix-shell tool-suite/shell.nix --run 'echo $USER'
     - nix-shell tool-suite/shell.nix --run './tcl/program_flash datafile bootmem/bootmem.bin'
   tags: ["fpga"]
