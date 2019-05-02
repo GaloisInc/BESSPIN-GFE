@@ -641,7 +641,7 @@ class TestLinux(BaseGfeTest):
         # Check that Debian booted
         self.check_uart_out(
                 timeout=linux_boot_timeout,
-                expected_contents=[ "Debian GNU/Linux buster/sid",
+                expected_contents=[ "Debian GNU/Linux 10",
                                     "login:"
                                     ])
 
