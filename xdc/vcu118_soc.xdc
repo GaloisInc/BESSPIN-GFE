@@ -16,8 +16,71 @@ set_property SLEW SLOW [get_ports rs232_uart_rts]
 
 set_false_path -from [get_ports pcie_perstn]
 
+# ----- PMOD0 Pins (J52 on VCU118) -----
+# ----- UART1 -----
+set_property IOSTANDARD LVCMOS12 [get_ports uart1_tx]
+set_property PACKAGE_PIN AV16 [get_ports uart1_tx]; # PMOD_0_4
+set_property IOSTANDARD LVCMOS12 [get_ports uart1_rx]
+set_property PACKAGE_PIN AU16 [get_ports uart1_rx]; # PMOD_0_5
 
+# ----- GPIO (output for motors) -----
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[0]]
+set_property PACKAGE_PIN AY14 [get_ports gpio_out[0]]; # PMOD_0_0
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[1]]
+set_property PACKAGE_PIN AY15 [get_ports gpio_out[1]]; # PMOD_0_1
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[2]]
+set_property PACKAGE_PIN AW15 [get_ports gpio_out[2]]; # PMOD_0_2
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[3]]
+set_property PACKAGE_PIN AV15 [get_ports gpio_out[3]]; # PMOD_0_3
 
+# ----- PMOD1 Pins (J53 on VCU118) -----
+# ----- IIC0 -----
+set_property IOSTANDARD LVCMOS12 [get_ports iic0_sda]
+set_property PACKAGE_PIN N28 [get_ports iic0_sda]; # PMOD_1_0
+set_property DRIVE 8 [get_ports iic0_sda]
+set_property IOSTANDARD LVCMOS12 [get_ports iic0_scl]
+set_property PACKAGE_PIN M30 [get_ports iic0_scl]; #PMOD_1_1
+set_property DRIVE 8 [get_ports iic0_scl]
+
+# ----- IIC1 -----
+set_property IOSTANDARD LVCMOS12 [get_ports iic1_sda]
+set_property PACKAGE_PIN N30 [get_ports iic1_sda]; # PMOD_1_2
+set_property DRIVE 8 [get_ports iic1_sda]
+set_property IOSTANDARD LVCMOS12 [get_ports iic1_scl]
+set_property PACKAGE_PIN P30 [get_ports iic1_scl]; #PMOD_1_3
+set_property DRIVE 8 [get_ports iic1_scl]
+
+# ----- SPI -----
+set_property IOSTANDARD LVCMOS12 [get_ports spi_ss]
+set_property PACKAGE_PIN P29 [get_ports spi_ss]; # PMOD_1_4
+set_property DRIVE 8 [get_ports spi_ss]
+set_property IOSTANDARD LVCMOS12 [get_ports spi_mosi]
+set_property PACKAGE_PIN L31 [get_ports spi_mosi]; # PMOD_1_5
+set_property DRIVE 8 [get_ports spi_mosi]
+set_property IOSTANDARD LVCMOS12 [get_ports spi_miso]
+set_property PACKAGE_PIN M31 [get_ports spi_miso]; # PMOD_1_6
+set_property DRIVE 8 [get_ports spi_miso]
+set_property IOSTANDARD LVCMOS12 [get_ports spi_sck]
+set_property PACKAGE_PIN R29 [get_ports spi_sck]; # PMOD_1_7
+set_property DRIVE 8 [get_ports spi_sck]
+
+# ----- User GPIO LEDs -----
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[7]]
+set_property PACKAGE_PIN BA37 [get_ports gpio_led[7]]; # GPIO_LED_7
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[6]]
+set_property PACKAGE_PIN AV36 [get_ports gpio_led[6]]; # GPIO_LED_6
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[5]]
+set_property PACKAGE_PIN AU37 [get_ports gpio_led[5]]; # GPIO_LED_5
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[4]]
+set_property PACKAGE_PIN BF32 [get_ports gpio_led[4]]; # GPIO_LED_4
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[3]]
+set_property PACKAGE_PIN BB32 [get_ports gpio_led[3]]; # GPIO_LED_3
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[2]]
+set_property PACKAGE_PIN AY30 [get_ports gpio_led[2]]; # GPIO_LED_2
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[1]]
+set_property PACKAGE_PIN AV34 [get_ports gpio_led[1]]; # GPIO_LED_1
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[0]]
+set_property PACKAGE_PIN AT32 [get_ports gpio_led[0]]; # GPIO_LED_0
 
 # ----- JTAG TAP constraints ------
 
@@ -32,35 +95,7 @@ set_property CONFIG_MODE SPIx8 [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 8 [current_design]
 set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-# ----- External JTAG Port (TODO: Remove this) ------
 
-# ----- PMOD0 Pins (J52 on VCU118) ------
-
-# External JTAG
-# -- PMOD0_0_LS
-set_property PACKAGE_PIN AY14 [get_ports jtag_TMS]
-# -- PMOD0_0_LS
-set_property IOSTANDARD LVCMOS18 [get_ports jtag_TMS]
-# -- PMOD0_1_LS
-set_property PACKAGE_PIN AY15 [get_ports jtag_TDI]
-# -- PMOD0_1_LS
-set_property IOSTANDARD LVCMOS18 [get_ports jtag_TDI]
-# -- PMOD0_2_LS
-set_property PACKAGE_PIN AW15 [get_ports jtag_TDO]
-# -- PMOD0_2_LS
-set_property IOSTANDARD LVCMOS18 [get_ports jtag_TDO]
-# -- PMOD0_3_LS
-set_property PACKAGE_PIN AV15 [get_ports jtag_TCK]
-# -- PMOD0_3_LS
-set_property IOSTANDARD LVCMOS18 [get_ports jtag_TCK]
-
-# Timing constraints
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets jtag_TCK]
-
-=======
 ##-----------------------------------------------------------------------------
 ##
 ## (c) Copyright 2012-2012 Xilinx, Inc. All rights reserved.
@@ -246,5 +281,3 @@ set_clock_groups -name async30 -asynchronous -group [get_clocks pcie_refclk_clk]
 set_clock_groups -name async31 -asynchronous -group [get_clocks {svf_pcie_bridge/pcie4_uscale_plus_0/inst/gt_top_i/diablo_gt.diablo_gt_phy_wrapper/gt_wizard.gtwizard_top_i/design_1_pcie4_uscale_plus_0_0_gt_i/inst/gen_gtwizard_gtye4_top.design_1_pcie4_uscale_plus_0_0_gt_gtwizard_gtye4_inst/gen_gtwizard_gtye4.gen_channel_container[31].gen_enabled_channel.gtye4_channel_wrapper_inst/channel_inst/gtye4_channel_gen.gen_gtye4_channel_inst[0].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}] -group [get_clocks mmcm_clkout5]
 
 set_clock_groups -name async90 -asynchronous -group [get_clocks mmcm_clkout1] -group [get_clocks clk_out1_design_1_clk_wiz_1_0]
->>>>>>> develop
->>>>>>> 0be637324874058826400ae244eac243c59efdd1

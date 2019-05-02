@@ -8,6 +8,7 @@
 [submodule "FreeRTOS-mirror"]
 	path = FreeRTOS-mirror
 	url = https://github.com/GaloisInc/FreeRTOS-mirror.git
+	branch = p1_test
 [submodule "bluespec-processors/P2/Flute"]
 	path = bluespec-processors/P2/Flute
 	url = https://github.com/bluespec/Flute.git
