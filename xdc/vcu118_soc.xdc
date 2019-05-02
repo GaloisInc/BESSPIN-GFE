@@ -32,35 +32,6 @@ set_property CONFIG_MODE SPIx8 [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 8 [current_design]
 set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-# ----- External JTAG Port (TODO: Remove this) ------
-
-# ----- PMOD0 Pins (J52 on VCU118) ------
-
-# External JTAG
-# -- PMOD0_0_LS
-set_property PACKAGE_PIN AY14 [get_ports jtag_TMS]
-# -- PMOD0_0_LS
-set_property IOSTANDARD LVCMOS18 [get_ports jtag_TMS]
-# -- PMOD0_1_LS
-set_property PACKAGE_PIN AY15 [get_ports jtag_TDI]
-# -- PMOD0_1_LS
-set_property IOSTANDARD LVCMOS18 [get_ports jtag_TDI]
-# -- PMOD0_2_LS
-set_property PACKAGE_PIN AW15 [get_ports jtag_TDO]
-# -- PMOD0_2_LS
-set_property IOSTANDARD LVCMOS18 [get_ports jtag_TDO]
-# -- PMOD0_3_LS
-set_property PACKAGE_PIN AV15 [get_ports jtag_TCK]
-# -- PMOD0_3_LS
-set_property IOSTANDARD LVCMOS18 [get_ports jtag_TCK]
-
-# Timing constraints
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets jtag_TCK]
-
-=======
 ##-----------------------------------------------------------------------------
 ##
 ## (c) Copyright 2012-2012 Xilinx, Inc. All rights reserved.
@@ -246,5 +217,4 @@ set_clock_groups -name async30 -asynchronous -group [get_clocks pcie_refclk_clk]
 set_clock_groups -name async31 -asynchronous -group [get_clocks {svf_pcie_bridge/pcie4_uscale_plus_0/inst/gt_top_i/diablo_gt.diablo_gt_phy_wrapper/gt_wizard.gtwizard_top_i/design_1_pcie4_uscale_plus_0_0_gt_i/inst/gen_gtwizard_gtye4_top.design_1_pcie4_uscale_plus_0_0_gt_gtwizard_gtye4_inst/gen_gtwizard_gtye4.gen_channel_container[31].gen_enabled_channel.gtye4_channel_wrapper_inst/channel_inst/gtye4_channel_gen.gen_gtye4_channel_inst[0].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}] -group [get_clocks mmcm_clkout5]
 
 set_clock_groups -name async90 -asynchronous -group [get_clocks mmcm_clkout1] -group [get_clocks clk_out1_design_1_clk_wiz_1_0]
->>>>>>> develop
->>>>>>> 0be637324874058826400ae244eac243c59efdd1
+
