@@ -17,10 +17,13 @@ check_command riscv64-unknown-elf-gcc
 check_command riscv64-unknown-linux-gnu-gcc
 check_command riscv32-unknown-elf-gcc
 
-function err_msg { 
-	if [[ $1 -ne 0 ]]; then
+function err_msg {
+	if [[ $1 -ne 0 ]]
+	then
 		echo $2
 		exit 1
+	else
+		echo $3
 	fi
 }
 

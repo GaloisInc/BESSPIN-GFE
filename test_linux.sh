@@ -54,9 +54,9 @@ err_msg $? "Building Linux failed"
 
 # Optionally, program the flash 
 if [ "$use_flash" = true ]; then
-	cd $BASE_DIR
+	cd $BASE_DIR/testing/scripts/
 	echo "Programming flash with Linux image"
-	$BASE_DIR/tcl/program_flash datafile bootmem/bootmem.bin
+	python $python_unittest_script TestFlashUpload.test_${linux_image}_upload_flash
 	err_msg $? "Programming flash failed"
 fi
 

@@ -151,6 +151,33 @@ class BaseGfeTest(unittest.TestCase):
         self.gfe.gdb_session.command("info threads", ops=100)
         del self.gfe  
 
+class TestFlashUpload(unittest.TestCase):
+    def setUp(self):
+        # do nothing
+        print("TestFlashUpload: Uploading flash...")
+
+    def tearDown(self):
+        # do nothing
+        print("TestFlashUpload: Tearing down...")
+
+    def test_debian_upload_flash(self):
+        try:
+            retval = subprocess.check_output(
+                ["../../tcl/program_flash", "datafile", "../../bootmem/bootmem.bin"],
+                stderr=subprocess.STDOUT)
+        except subprocess.CalledProcessError as e:
+            # exception happened
+            print(e.output)
+            print("TestFlashUpload: Script returned 1, checking output...")
+            self.assertIn("Program/Verify Operation successful.", e.output)
+            self.assertTrue(0) # just fail
+        else:
+            # script ended as expected
+            print(retval)
+            print("TestFlashUpload: Script returned 0, checking output...")
+            self.assertIn("Program/Verify Operation successful.",retval)
+        return
+
 class TestGfe(BaseGfeTest):
     """Collection of smoke tests to exercise the GFE peripherals.
     This class is inherited by TestGfe32 and TestGfe64 for testing P1
@@ -406,10 +433,6 @@ class TestFreeRTOS(BaseGfeTest):
 
         # Run TCP echo client
         print("\n Sending to RISC-V's TCP echo server")
-        #self.runSubprocess(
-        #    timeout=4, 
-        #    command='timeout 5 socat stdio tcp4-connect:' + riscv_ip + ':7 <<<"TCP Success"',
-        #    expected_contents="TCP Success\n")
         # Create a TCP/IP socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # Connect the socket to the port where the server is listening
@@ -495,13 +518,8 @@ class TestFreeRTOS(BaseGfeTest):
         # Send to server using created UDP socket
         UDPClientSocket.sendto(bytesToSend, serverAddressPort)
         msgFromServer = UDPClientSocket.recvfrom(bufferSize)
-        #msg = "Message from Server {}".format(msgFromServer[0])
         print(msgFromServer)
         self.assertIn(msgFromClient, msgFromServer)
-        #self.runSubprocess(
-        #    timeout=4,
-        #    command='timeout 5 socat stdio udp4-connect:' + riscv_ip + ':5006 <<<"UDP Success"',
-        #    expected_contents='UDP Success')
         return
 
 class TestLinux(BaseGfeTest):
@@ -621,7 +639,7 @@ class TestLinux(BaseGfeTest):
                 ip_str = line.split()
                 riscv_ip = ip_str[3]
                 print("RISCV IP address is: " + riscv_ip)
-                break
+                # break # keep reading till the end to get the latest IP asignemnt
 
         # Ping FPGA
         if riscv_ip == 0:
