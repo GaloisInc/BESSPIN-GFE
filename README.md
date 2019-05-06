@@ -71,6 +71,14 @@ vivado soc_chisel_p1/soc_chisel_p1.xpr
 
 `setup_soc_project.sh` should only be run once. We also recommend running `build.sh` for the initial build then performing future builds using the Vivado GUI to take advantage of convenient error reporting and visibility into the build process. The Vivado project will be generated in the `$GFE_REPO/vivado/soc_$proc_name` folder of the repository and can be re-opened there. Note that all the same commands can be run with the argument `bluespec_p1` to generate the bluespec P1 bitstream and corresponding Vivado project (i.e. `./setup_soc_project.sh bluespec`).
 
+The BESSPIN Tool Suite uses the `get_ppa.py` script to extract a small JSON summary of Vivado's CLB utilization, power estimates, and processor core clock rate from the .rpt files written during bitstream generation. It can be imported as a Python 3 module, or called directly from the command line. It takes a single argument, a path to a directory containing Vivado power, timing, and utilization reports.
+
+```bash
+cd $GFE_REPO
+./get_ppa.py vivado/soc_bluespec_p2/soc_bluespec_p2.runs/impl_1/
+```
+
+
 ### Storing a Bitstream in Flash ###
 
 See [flash-scripts/README](flash-scripts/README) for directions on how to write a bitstream to flash on the VCU118. 
