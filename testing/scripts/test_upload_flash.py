@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import subprocess
 import sys
+import time
 
 try:
     retval = subprocess.check_output(
@@ -15,6 +16,7 @@ else:
     print("TestFlashUpload: Script returned 0, checking output...")
 
 print(retval)
+time.sleep(10)
 if "Program/Verify Operation successful." in retval:
     # success
     sys.exit(0)
