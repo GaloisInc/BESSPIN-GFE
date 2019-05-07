@@ -55,6 +55,17 @@ chisel_p2:
   except:
     - schedules
 
+test_linux:
+  script:
+    - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
+    - nix-shell tool-suite/shell.nix --run 'cd testing/scripts/ && python test_gfe_unittest.py TestFlashUpload.test_debian_upload_flash'
+  tags: ["fpga"]
+  only:
+    - develop
+  except:
+    - schedules
+
+
 bluespec_p2:
   script:
     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
