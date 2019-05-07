@@ -7,7 +7,7 @@
 	url = https://github.com/bluespec/Piccolo.git
 [submodule "FreeRTOS-mirror"]
 	path = FreeRTOS-mirror
-	url = https://github.com/GaloisInc/FreeRTOS-mirror.git
+	url = git@gitlab-ext.galois.com:ssith/FreeRTOS-mirror.git
 [submodule "bluespec-processors/P2/Flute"]
 	path = bluespec-processors/P2/Flute
 	url = https://github.com/bluespec/Flute.git
