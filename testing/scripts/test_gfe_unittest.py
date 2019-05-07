@@ -170,7 +170,6 @@ class TestFlashUpload(unittest.TestCase):
             print(e.output)
             print("TestFlashUpload: Script returned 1, checking output...")
             self.assertIn("Program/Verify Operation successful.", e.output)
-            self.assertTrue(0) # just fail
         else:
             # script ended as expected
             print(retval)
