@@ -159,6 +159,8 @@ class TestFlashUpload(unittest.TestCase):
     def tearDown(self):
         # do nothing
         print("TestFlashUpload: Tearing down...")
+        # timeout to allow USB devices to be reclaimed
+        time.sleep(10)
 
     def test_debian_upload_flash(self):
         try:
@@ -586,11 +588,11 @@ class TestLinux(BaseGfeTest):
         return
 
     def test_debian_boot(self):
-        self.boot_image(expected_contents=self.getDebianExpected(), timeout=500)
+        self.boot_image(expected_contents=self.getDebianExpected(), timeout=1000)
         return
 
     def test_debian_flash_boot(self):
-        self.boot_image(expected_contents=self.getDebianExpected(), timeout=540)
+        self.boot_image(expected_contents=self.getDebianExpected(), timeout=1000)
         return
 
     def test_busybox_ethernet(self):
