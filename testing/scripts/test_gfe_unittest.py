@@ -149,35 +149,7 @@ class BaseGfeTest(unittest.TestCase):
         self.gfe.gdb_session.command("info registers all", ops=100)
         self.gfe.gdb_session.command("flush regs")
         self.gfe.gdb_session.command("info threads", ops=100)
-        del self.gfe  
-
-class TestFlashUpload(unittest.TestCase):
-    def setUp(self):
-        # do nothing
-        print("TestFlashUpload: Uploading flash...")
-
-    def tearDown(self):
-        # do nothing
-        print("TestFlashUpload: Tearing down...")
-        # timeout to allow USB devices to be reclaimed
-        time.sleep(10)
-
-    def test_debian_upload_flash(self):
-        try:
-            retval = subprocess.check_output(
-                ["../../tcl/program_flash", "datafile", "../../bootmem/bootmem.bin"],
-                stderr=subprocess.STDOUT)
-        except subprocess.CalledProcessError as e:
-            # exception happened
-            print(e.output)
-            print("TestFlashUpload: Script returned 1, checking output...")
-            self.assertIn("Program/Verify Operation successful.", e.output)
-        else:
-            # script ended as expected
-            print(retval)
-            print("TestFlashUpload: Script returned 0, checking output...")
-            self.assertIn("Program/Verify Operation successful.",retval)
-        return
+        del self.gfe
 
 class TestGfe(BaseGfeTest):
     """Collection of smoke tests to exercise the GFE peripherals.
@@ -422,11 +394,10 @@ class TestFreeRTOS(BaseGfeTest):
             if index != -1:
                 ip_str = line.split()
                 riscv_ip = ip_str[2]
-                print("RISCV IP address is: " + riscv_ip)
-                break
 
         # Ping FPGA
-        if riscv_ip == 0:
+        print("RISCV IP address is: " + riscv_ip)
+        if (riscv_ip == 0) or (riscv_ip == "0.0.0.0"):
             raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
         ping_response = os.system("ping -c 1 " + riscv_ip)
         self.assertEqual(ping_response, 0,
@@ -497,11 +468,10 @@ class TestFreeRTOS(BaseGfeTest):
             if index != -1:
                 ip_str = line.split()
                 riscv_ip = ip_str[2]
-                print("RISCV IP address is: " + riscv_ip)
-                break
 
         # Ping FPGA
-        if riscv_ip == 0:
+        print("RISCV IP address is: " + riscv_ip)
+        if (riscv_ip == 0) or (riscv_ip == "0.0.0.0"):
             raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
         ping_response = os.system("ping -c 1 " + riscv_ip)
         self.assertEqual(ping_response, 0,
@@ -703,11 +673,10 @@ class TestLinux(BaseGfeTest):
             if (index1 != -1) & (index2 != -1):
                 ip_str = re.split('[/\s]\s*', line)
                 riscv_ip = ip_str[2]
-                print("RISCV IP address is: " + riscv_ip)
-                break
 
         # Ping FPGA
-        if riscv_ip == 0:
+        print("RISCV IP address is: " + riscv_ip)
+        if (riscv_ip == 0) or (riscv_ip == "0.0.0.0"):
             raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
         ping_response = os.system("ping -c 1 " + riscv_ip)
         self.assertEqual(ping_response, 0,

@@ -56,7 +56,7 @@ err_msg $? "Building Linux failed"
 if [ "$use_flash" = true ]; then
 	cd $BASE_DIR/testing/scripts/
 	echo "Programming flash with Linux image"
-	python $python_unittest_script TestFlashUpload.test_${linux_image}_upload_flash
+	python test_upload_flash.py
 	err_msg $? "Programming flash failed"
 fi
 
