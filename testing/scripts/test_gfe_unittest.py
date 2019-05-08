@@ -554,7 +554,7 @@ class TestLinux(BaseGfeTest):
         return
 
     def test_busybox_flash_boot(self):
-        self.boot_image(expected_contents=self.getBusyBoxExpected(), timeout=100)
+        self.boot_image(expected_contents=self.getBusyBoxExpected(), timeout=100, run_from_flash=True)
         return
 
     def test_debian_boot(self):
@@ -562,7 +562,7 @@ class TestLinux(BaseGfeTest):
         return
 
     def test_debian_flash_boot(self):
-        self.boot_image(expected_contents=self.getDebianExpected(), timeout=1000)
+        self.boot_image(expected_contents=self.getDebianExpected(), timeout=1000, run_from_flash=True)
         return
 
     def test_busybox_ethernet(self):
