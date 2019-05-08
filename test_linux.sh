@@ -55,14 +55,19 @@ err_msg $? "Building Linux failed"
 # Optionally, program the flash 
 if [ "$use_flash" = true ]; then
 	cd $BASE_DIR/testing/scripts/
-	echo "Programming flash with Linux image"
+	echo "test_linux.sh: Programming flash with Linux image"
 	python test_upload_flash.py
-	err_msg $? "Programming flash failed"
+	err_msg $? "test_linux.sh: Programming flash failed" "test_linux.sh: Programming flash OK"
 fi
 
 # Run the appropriate Linux unittest
 cd $BASE_DIR/testing/scripts
 if [ "$use_flash" = true ]; then
+	cd $BASE_DIR
+	echo "test_linux.sh: Programming FPGA with a bitstream after a flash upload"
+	./program_fpga.sh $proc_name $3
+	err_msg $? "test_linux.sh: Programming the FPGA failed" "test_linux.sh: Programming the FPGA OK"
+	cd $BASE_DIR/testing/scripts
 	python $python_unittest_script TestLinux.test_${linux_image}_flash_boot
 elif [ "$test_ethernet" = true ]; then
 	python $python_unittest_script TestLinux.test_${linux_image}_ethernet

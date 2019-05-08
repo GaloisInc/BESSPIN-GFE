@@ -26,8 +26,9 @@ fi
 
 # Run all P2/P3 processor tests
 if [ "$proc_name" == "chisel_p2" ] || [ "$proc_name" == "bluespec_p2" ] || [ "$proc_name" == "chisel_p3" ] || [ "$proc_name" == "bluespec_p3" ]; then
-	./test_linux.sh debian --flash
+	./test_linux.sh debian --flash $proc_name
 	err_msg $? "test_linux.sh debian boot from flash failed" "test_linux.sh debian boot from flash OK"
+	'''
 	./test.sh 64
 	err_msg $? "test.sh 64 failed" "test.sh 64 OK"
 	./test_linux.sh busybox
@@ -38,4 +39,5 @@ if [ "$proc_name" == "chisel_p2" ] || [ "$proc_name" == "bluespec_p2" ] || [ "$p
 	err_msg $? "test_linux.sh busybox ethernet failed" "test_linux.sh busybox ethernet OK"
 	./test_linux.sh debian --ethernet
 	err_msg $? "test_linux.sh debian ethernet failed" "test_linux.sh debian ethernet OK"
+	'''
 fi
