@@ -548,7 +548,7 @@ class TestLinux(BaseGfeTest):
             elf=linux_elf,
             timeout=timeout,
             expected_contents=expected_contents,
-            run_from_flash)
+            run_from_flash=run_from_flash)
         return
 
     def test_busybox_boot(self):
