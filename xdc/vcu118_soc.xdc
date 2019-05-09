@@ -23,15 +23,19 @@ set_property PACKAGE_PIN AV16 [get_ports uart1_tx]; # PMOD_0_4
 set_property IOSTANDARD LVCMOS12 [get_ports uart1_rx]
 set_property PACKAGE_PIN AU16 [get_ports uart1_rx]; # PMOD_0_5
 
-# ----- GPIO (output for motors) -----
+# ----- GPIO -----
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_in[0]]
+set_property PACKAGE_PIN AY14 [get_ports gpio_in[0]]; # PMOD_0_0
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_in[1]]
+set_property PACKAGE_PIN AY15 [get_ports gpio_in[1]]; # PMOD_0_1
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_in[2]]
+set_property PACKAGE_PIN AW15 [get_ports gpio_in[2]]; # PMOD_0_2
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_in[3]]
+set_property PACKAGE_PIN AV15 [get_ports gpio_in[3]]; # PMOD_0_3
 set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[0]]
-set_property PACKAGE_PIN AY14 [get_ports gpio_out[0]]; # PMOD_0_0
+set_property PACKAGE_PIN AT15 [get_ports gpio_out[0]]; # PMOD_0_6
 set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[1]]
-set_property PACKAGE_PIN AY15 [get_ports gpio_out[1]]; # PMOD_0_1
-set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[2]]
-set_property PACKAGE_PIN AW15 [get_ports gpio_out[2]]; # PMOD_0_2
-set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[3]]
-set_property PACKAGE_PIN AV15 [get_ports gpio_out[3]]; # PMOD_0_3
+set_property PACKAGE_PIN AT16 [get_ports gpio_out[1]]; # PMOD_0_7
 
 # ----- PMOD1 Pins (J53 on VCU118) -----
 # ----- IIC0 -----
@@ -42,13 +46,11 @@ set_property IOSTANDARD LVCMOS12 [get_ports iic0_scl]
 set_property PACKAGE_PIN M30 [get_ports iic0_scl]; #PMOD_1_1
 set_property DRIVE 8 [get_ports iic0_scl]
 
-# ----- IIC1 -----
-set_property IOSTANDARD LVCMOS12 [get_ports iic1_sda]
-set_property PACKAGE_PIN N30 [get_ports iic1_sda]; # PMOD_1_2
-set_property DRIVE 8 [get_ports iic1_sda]
-set_property IOSTANDARD LVCMOS12 [get_ports iic1_scl]
-set_property PACKAGE_PIN P30 [get_ports iic1_scl]; #PMOD_1_3
-set_property DRIVE 8 [get_ports iic1_scl]
+# ----- UART2 -----
+set_property IOSTANDARD LVCMOS12 [get_ports uart2_tx]
+set_property PACKAGE_PIN N30 [get_ports uart2_tx]; # PMOD_1_2
+set_property IOSTANDARD LVCMOS12 [get_ports uart2_rx]
+set_property PACKAGE_PIN P30 [get_ports uart2_rx]; # PMOD_1_3
 
 # ----- SPI -----
 set_property IOSTANDARD LVCMOS12 [get_ports spi_ss]
