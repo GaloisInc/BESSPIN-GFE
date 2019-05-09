@@ -9,7 +9,7 @@ source $BASE_DIR/init_submodules.sh
 proc_name=""
 proc_path=""
 # Clock frequency is in MHz
-clock_freq_mhz=83
+clock_freq_mhz=50
 
 # Parse the processor selection
 proc_picker $1 
