@@ -119,6 +119,7 @@ class BaseGfeTest(unittest.TestCase):
 
         # Run the program of interest (from flash or using "gdb load")
         if run_from_flash:
+            print("Loading from flash")
             self.gfe.softReset()
             self.gfe.gdb_session.c(wait=False)
         else:
@@ -546,7 +547,8 @@ class TestLinux(BaseGfeTest):
         self.check_in_output(
             elf=linux_elf,
             timeout=timeout,
-            expected_contents=expected_contents)
+            expected_contents=expected_contents,
+            run_from_flash)
         return
 
     def test_busybox_boot(self):
