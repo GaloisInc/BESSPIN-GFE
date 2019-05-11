@@ -560,7 +560,7 @@ class TestLinux(BaseGfeTest):
         return
 
     def test_debian_boot(self):
-        self.boot_image(expected_contents=self.getDebianExpected(), timeout=3000)
+        self.boot_image(expected_contents=self.getDebianExpected(), timeout=6000)
         return
 
     def test_debian_flash_boot(self):
