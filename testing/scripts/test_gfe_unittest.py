@@ -359,6 +359,65 @@ class TestFreeRTOS(BaseGfeTest):
 
         return
 
+    def test_uart(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main_uart.elf'))
+        print(freertos_elf)
+
+        expected_contents = [
+            "UART2 RX: Hello from UART1",
+            "UART1 RX: Hello from UART2",
+        ]
+        
+        self.check_in_output(
+            elf=freertos_elf,
+            timeout=10,
+            expected_contents=expected_contents)
+
+        return
+    
+    def test_gpio(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main_gpio.elf'))
+        print(freertos_elf)
+
+        expected_contents = [
+            "#0 changed: 1 -> 0",
+            "#1 changed: 1 -> 0",
+            "#2 changed: 1 -> 0",
+            "#3 changed: 1 -> 0",
+            "#0 changed: 0 -> 1",
+            "#1 changed: 0 -> 1",
+            "#2 changed: 0 -> 1",
+            "#3 changed: 0 -> 1",
+        ]
+        
+        self.check_in_output(
+            elf=freertos_elf,
+            timeout=10,
+            expected_contents=expected_contents)
+
+        return
+
+    def test_iic(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main_iic.elf'))
+        print(freertos_elf)
+
+        expected_contents = [
+            "Whoami: 0x71",
+        ]
+        
+        self.check_in_output(
+            elf=freertos_elf,
+            timeout=3,
+            expected_contents=expected_contents)
+
+        return
+
     def test_tcp(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
