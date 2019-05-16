@@ -224,7 +224,8 @@ proc create_hier_cell_axi_quad_spi1 { parentCell nameHier } {
   set axi_quad_spi_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_quad_spi:3.2 axi_quad_spi_1 ]
   set_property -dict [ list \
    CONFIG.C_FIFO_DEPTH {256} \
-   CONFIG.C_SCK_RATIO {8} \
+   CONFIG.C_SCK_RATIO {16} \
+   CONFIG.Multiples16 {8} \
  ] $axi_quad_spi_1
 
   # Create instance: iobuf_0, and set properties
