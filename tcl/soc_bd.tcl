@@ -612,9 +612,9 @@ proc create_hier_cell_gfe_subsystem { parentCell nameHier } {
   create_bd_pin -dir O -type clk ACLK
   create_bd_pin -dir O -from 0 -to 0 -type rst ARESETN
   create_bd_pin -dir O -type rst c0_ddr4_ui_clk_sync_rst
-  create_bd_pin -dir I -from 3 -to 0 gpio_in
+  create_bd_pin -dir I -from 1 -to 0 gpio_in
   create_bd_pin -dir O -from 7 -to 0 gpio_led
-  create_bd_pin -dir O -from 1 -to 0 gpio_out
+  create_bd_pin -dir O -from 3 -to 0 gpio_out
   create_bd_pin -dir IO iic0_scl
   create_bd_pin -dir IO iic0_sda
   create_bd_pin -dir O -from 15 -to 0 interrupt
@@ -692,8 +692,8 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   # Create instance: axi_gpio_1, and set properties
   set axi_gpio_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_1 ]
   set_property -dict [ list \
-   CONFIG.C_ALL_INPUTS {1} \
-   CONFIG.C_ALL_OUTPUTS {0} \
+   CONFIG.C_ALL_INPUTS {0} \
+   CONFIG.C_ALL_OUTPUTS {1} \
    CONFIG.C_ALL_OUTPUTS_2 {1} \
    CONFIG.C_GPIO2_WIDTH {8} \
    CONFIG.C_GPIO_WIDTH {4} \
@@ -704,7 +704,8 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   # Create instance: axi_gpio_2, and set properties
   set axi_gpio_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_2 ]
   set_property -dict [ list \
-   CONFIG.C_ALL_OUTPUTS {1} \
+   CONFIG.C_ALL_INPUTS {1} \
+   CONFIG.C_ALL_OUTPUTS {0} \
    CONFIG.C_GPIO_WIDTH {2} \
  ] $axi_gpio_2
 
@@ -881,7 +882,7 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   connect_bd_net -net axi_ethernet_0_phy_rst_n [get_bd_pins phy_reset_out] [get_bd_pins axi_ethernet_0/phy_rst_n]
   connect_bd_net -net axi_gpio_0_gpio_io_o [get_bd_pins axi_gpio_0/gpio_io_o] [get_bd_pins xlslice_0/Din]
   connect_bd_net -net axi_gpio_1_gpio2_io_o [get_bd_pins gpio_led] [get_bd_pins axi_gpio_1/gpio2_io_o]
-  connect_bd_net -net axi_gpio_2_gpio_io_o [get_bd_pins gpio_out] [get_bd_pins axi_gpio_2/gpio_io_o]
+  connect_bd_net -net axi_gpio_1_gpio_io_o [get_bd_pins gpio_out] [get_bd_pins axi_gpio_1/gpio_io_o]
   connect_bd_net -net axi_iic0_iic2intc_irpt [get_bd_pins axi_iic0/iic2intc_irpt] [get_bd_pins xlconcat_0/In6]
   connect_bd_net -net axi_quad_spi1_ip2intc_irpt [get_bd_pins axi_quad_spi1/ip2intc_irpt] [get_bd_pins xlconcat_0/In7]
   connect_bd_net -net axi_quad_spi_0_ip2intc_irpt [get_bd_pins axi_quad_spi_0/ip2intc_irpt] [get_bd_pins xlconcat_0/In4]
@@ -894,7 +895,7 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   connect_bd_net -net axi_uart16550_2_sout [get_bd_pins uart2_tx] [get_bd_pins axi_uart16550_2/sout]
   connect_bd_net -net ddr4_0_addn_ui_clkout1 [get_bd_pins ACLK] [get_bd_pins axi_bram_ctrl_0/s_axi_aclk] [get_bd_pins axi_clock_converter_0/s_axi_aclk] [get_bd_pins axi_dma_0/m_axi_mm2s_aclk] [get_bd_pins axi_dma_0/m_axi_s2mm_aclk] [get_bd_pins axi_dma_0/m_axi_sg_aclk] [get_bd_pins axi_dma_0/s_axi_lite_aclk] [get_bd_pins axi_ethernet_0/axis_clk] [get_bd_pins axi_ethernet_0/s_axi_lite_clk] [get_bd_pins axi_gpio_0/s_axi_aclk] [get_bd_pins axi_gpio_1/s_axi_aclk] [get_bd_pins axi_gpio_2/s_axi_aclk] [get_bd_pins axi_iic0/ACLK] [get_bd_pins axi_interconnect_0/ACLK] [get_bd_pins axi_interconnect_0/M00_ACLK] [get_bd_pins axi_interconnect_0/M01_ACLK] [get_bd_pins axi_interconnect_0/M02_ACLK] [get_bd_pins axi_interconnect_0/M03_ACLK] [get_bd_pins axi_interconnect_0/M04_ACLK] [get_bd_pins axi_interconnect_0/M05_ACLK] [get_bd_pins axi_interconnect_0/M06_ACLK] [get_bd_pins axi_interconnect_0/M07_ACLK] [get_bd_pins axi_interconnect_0/M08_ACLK] [get_bd_pins axi_interconnect_0/M09_ACLK] [get_bd_pins axi_interconnect_0/M10_ACLK] [get_bd_pins axi_interconnect_0/M11_ACLK] [get_bd_pins axi_interconnect_0/M12_ACLK] [get_bd_pins axi_interconnect_0/M13_ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK] [get_bd_pins axi_interconnect_0/S01_ACLK] [get_bd_pins axi_interconnect_0/S02_ACLK] [get_bd_pins axi_interconnect_0/S03_ACLK] [get_bd_pins axi_interconnect_0/S04_ACLK] [get_bd_pins axi_quad_spi1/s_axi_aclk] [get_bd_pins axi_quad_spi_0/ext_spi_clk] [get_bd_pins axi_quad_spi_0/s_axi4_aclk] [get_bd_pins axi_quad_spi_0/s_axi_aclk] [get_bd_pins axi_uart16550_0/s_axi_aclk] [get_bd_pins axi_uart16550_1/s_axi_aclk] [get_bd_pins axi_uart16550_2/s_axi_aclk] [get_bd_pins ddr4_0/addn_ui_clkout1] [get_bd_pins proc_sys_reset_0/slowest_sync_clk]
   connect_bd_net -net ddr4_0_c0_ddr4_ui_clk_sync_rst [get_bd_pins c0_ddr4_ui_clk_sync_rst] [get_bd_pins ddr4_0/c0_ddr4_ui_clk_sync_rst]
-  connect_bd_net -net gpio_in_1 [get_bd_pins gpio_in] [get_bd_pins axi_gpio_1/gpio_io_i]
+  connect_bd_net -net gpio_in_1 [get_bd_pins gpio_in] [get_bd_pins axi_gpio_2/gpio_io_i]
   connect_bd_net -net proc_sys_reset_0_peripheral_reset [get_bd_pins proc_sys_reset_0/mb_reset] [get_bd_pins proc_sys_reset_1/aux_reset_in] [get_bd_pins proc_sys_reset_1/ext_reset_in]
   connect_bd_net -net reset_1 [get_bd_pins reset] [get_bd_pins ddr4_0/sys_rst] [get_bd_pins proc_sys_reset_0/ext_reset_in]
   connect_bd_net -net rs232_uart_cts_1 [get_bd_pins rs232_uart_cts] [get_bd_pins axi_uart16550_0/ctsn]
@@ -962,9 +963,9 @@ proc create_root_design { parentCell } {
    ] $sgmii_phyclk
 
   # Create ports
-  set gpio_in [ create_bd_port -dir I -from 3 -to 0 gpio_in ]
+  set gpio_in [ create_bd_port -dir I -from 1 -to 0 gpio_in ]
   set gpio_led [ create_bd_port -dir O -from 7 -to 0 gpio_led ]
-  set gpio_out [ create_bd_port -dir O -from 1 -to 0 gpio_out ]
+  set gpio_out [ create_bd_port -dir O -from 3 -to 0 gpio_out ]
   set iic0_scl [ create_bd_port -dir IO iic0_scl ]
   set iic0_sda [ create_bd_port -dir IO iic0_sda ]
   set mdio_io [ create_bd_port -dir IO mdio_io ]

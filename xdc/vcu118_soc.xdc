@@ -24,18 +24,18 @@ set_property IOSTANDARD LVCMOS12 [get_ports uart1_rx]
 set_property PACKAGE_PIN AU16 [get_ports uart1_rx]; # PMOD_0_5
 
 # ----- GPIO -----
-set_property IOSTANDARD LVCMOS12 [get_ports gpio_in[0]]
-set_property PACKAGE_PIN AY14 [get_ports gpio_in[0]]; # PMOD_0_0
-set_property IOSTANDARD LVCMOS12 [get_ports gpio_in[1]]
-set_property PACKAGE_PIN AY15 [get_ports gpio_in[1]]; # PMOD_0_1
-set_property IOSTANDARD LVCMOS12 [get_ports gpio_in[2]]
-set_property PACKAGE_PIN AW15 [get_ports gpio_in[2]]; # PMOD_0_2
-set_property IOSTANDARD LVCMOS12 [get_ports gpio_in[3]]
-set_property PACKAGE_PIN AV15 [get_ports gpio_in[3]]; # PMOD_0_3
 set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[0]]
-set_property PACKAGE_PIN AT15 [get_ports gpio_out[0]]; # PMOD_0_6
+set_property PACKAGE_PIN AY14 [get_ports gpio_out[0]]; # PMOD_0_0
 set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[1]]
-set_property PACKAGE_PIN AT16 [get_ports gpio_out[1]]; # PMOD_0_7
+set_property PACKAGE_PIN AY15 [get_ports gpio_out[1]]; # PMOD_0_1
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[2]]
+set_property PACKAGE_PIN AW15 [get_ports gpio_out[2]]; # PMOD_0_2
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_out[3]]
+set_property PACKAGE_PIN AV15 [get_ports gpio_out[3]]; # PMOD_0_3
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_in[0]]
+set_property PACKAGE_PIN AT15 [get_ports gpio_in[0]]; # PMOD_0_6
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_in[1]]
+set_property PACKAGE_PIN AT16 [get_ports gpio_in[1]]; # PMOD_0_7
 
 # ----- PMOD1 Pins (J53 on VCU118) -----
 # ----- IIC0 -----
