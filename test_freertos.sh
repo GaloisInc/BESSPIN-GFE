@@ -34,4 +34,5 @@ else
 	freertos_test main_gpio test_gpio
 	freertos_test main_uart test_uart
 	freertos_test main_iic test_iic
+	freertos_test main_sd test_sd
 fi
