@@ -55,7 +55,7 @@ bluespec_p1:
 #   except:
 #     - schedules
 
-# bluespec_p2:
+# bluespec_p2: # currently fails
 #   script:
 #     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
 #     - nix-shell tool-suite/shell.nix --run './test_processor.sh bluespec_p2'
