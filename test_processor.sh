@@ -20,8 +20,6 @@ if [ "$proc_name" == "chisel_p1" ] || [ "$proc_name" == "bluespec_p1" ]; then
 	err_msg $? "test.sh 32 failed" "test.sh 32 OK"
 	./test_freertos.sh
 	err_msg $? "test_freertos.sh failed" "test_freertos.sh OK"
-	./test_freertos.sh --ethernet
-	err_msg $? "test_freertos.sh ethernet failed" "test_freertos.sh ethernet OK"
 fi
 
 # Run all P2/P3 processor tests

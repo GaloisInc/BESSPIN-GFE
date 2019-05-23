@@ -418,6 +418,23 @@ class TestFreeRTOS(BaseGfeTest):
 
         return
 
+    def test_sd(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main_sd.elf'))
+        print(freertos_elf)
+
+        expected_contents = [
+            "prvSdTestTask0 terminating, exit code = 0",
+        ]
+        
+        self.check_in_output(
+            elf=freertos_elf,
+            timeout=5,
+            expected_contents=expected_contents)
+
+        return
+
     def test_tcp(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
