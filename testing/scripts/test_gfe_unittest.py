@@ -485,11 +485,11 @@ class TestFreeRTOS(BaseGfeTest):
         print("\n Sending to RISC-V's TCP echo server")
         # Create a TCP/IP socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.setblocking(0)
         # Connect the socket to the port where the server is listening
         server_address = (riscv_ip, 7)
         print >>sys.stderr, 'connecting to %s port %s' % server_address
         sock.connect(server_address)
+        sock.setblocking(0)
         try:
             # Send data
             message = 'This is the message.  It will be repeated.'
