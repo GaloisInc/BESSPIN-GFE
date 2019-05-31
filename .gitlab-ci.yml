@@ -19,6 +19,7 @@ before_script:
     - chmod 644 ~/.ssh/known_hosts
     - ./init_submodules.sh
     - export USER=gitlab-runner
+    - export CPATH=$CPATH:/usr/include/openssl/
 
 #-----------------------------------------------------------------------------#
 #
