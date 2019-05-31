@@ -19,7 +19,6 @@ before_script:
     - chmod 644 ~/.ssh/known_hosts
     - ./init_submodules.sh
     - export USER=gitlab-runner
-    - export CPATH=$CPATH:/usr/include/openssl/
 
 #-----------------------------------------------------------------------------#
 #
@@ -49,7 +48,7 @@ bluespec_p1:
 chisel_p2:
   script:
     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
-    - nix-shell tool-suite/nix/dev/gfe.nix --run './test_processor.sh chisel_p2'
+    - nix-shell tool-suite/shell.nix --run './test_processor.sh chisel_p2'
   tags: ["fpga"]
   only:
     - develop
@@ -60,7 +59,7 @@ chisel_p2:
 bluespec_p2: # currently fails
   script:
     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
-    - nix-shell tool-suite/nix/dev/gfe.nix --run './test_processor.sh bluespec_p2'
+    - nix-shell tool-suite/shell.nix --run './test_processor.sh bluespec_p2'
   tags: ["fpga"]
   only:
     - develop
