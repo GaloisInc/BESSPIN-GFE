@@ -14,6 +14,7 @@ import sys
 import subprocess
 import socket
 import re
+import select
 
 class BaseGfeTest(unittest.TestCase):
     """GFE base testing class. All GFE Python unittests inherit from this class
@@ -241,7 +242,7 @@ class TestGfe(BaseGfeTest):
 
         # Read the base address of ddr
         ddr_base = gfeparameters.DDR_BASE
-        base_val = self.gfe.riscvRead32(ddr_base)
+        _base_val = self.gfe.riscvRead32(ddr_base)
         # Perform enough writes to force a writeback to ddr
         addr_incr = 0x100000
         write_n = 10
@@ -488,6 +489,7 @@ class TestFreeRTOS(BaseGfeTest):
         server_address = (riscv_ip, 7)
         print >>sys.stderr, 'connecting to %s port %s' % server_address
         sock.connect(server_address)
+        sock.setblocking(0)
         try:
             # Send data
             message = 'This is the message.  It will be repeated.'
@@ -499,11 +501,14 @@ class TestFreeRTOS(BaseGfeTest):
             amount_expected = len(message)
 
             while amount_received < amount_expected:
-                data = sock.recv(128)
-                amount_received += len(data)
-                print >>sys.stderr, 'received "%s"' % data
-                self.assertEqual(message, data)
-
+                ready = select.select([sock], [], [], 10)
+                if ready[0]:
+                    data = sock.recv(128)
+                    amount_received += len(data)
+                    print >>sys.stderr, 'received "%s"' % data
+                    self.assertEqual(message, data)
+                else:
+                    raise Exception("TCP socket timeout")
         finally:
             print >>sys.stderr, 'closing socket'
             sock.close()
@@ -564,10 +569,15 @@ class TestFreeRTOS(BaseGfeTest):
         bufferSize          = 1024
 
         # Send to server using created UDP socket
+        UDPClientSocket.setblocking(0)
         UDPClientSocket.sendto(bytesToSend, serverAddressPort)
-        msgFromServer = UDPClientSocket.recvfrom(bufferSize)
-        print(msgFromServer)
-        self.assertIn(msgFromClient, msgFromServer)
+        ready = select.select([UDPClientSocket], [], [], 10)
+        if ready[0]:
+            msgFromServer = UDPClientSocket.recvfrom(bufferSize)
+            print(msgFromServer)
+            self.assertIn(msgFromClient, msgFromServer)
+        else:
+            raise Exception("UDP socket timeout")
         return
 
 class TestLinux(BaseGfeTest):

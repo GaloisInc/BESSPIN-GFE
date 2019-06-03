@@ -157,6 +157,7 @@ set_property "ip_repo_paths" [list \
  "[file normalize "$proc_path"]" \
  "[file normalize "../jtag"]" \
  "[file normalize "../iobuf"]" \
+ "[file normalize "../param_iobuf"]" \
  "[file normalize "../svf"]" \
  "[file normalize "../gte4"]" \
  ] $obj
