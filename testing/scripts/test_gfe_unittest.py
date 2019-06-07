@@ -368,7 +368,6 @@ class TestFreeRTOS(BaseGfeTest):
 
         expected_contents = [
             "UART2 RX: Hello from UART1",
-            "UART1 RX: Hello from UART2",
         ]
         
         self.check_in_output(
