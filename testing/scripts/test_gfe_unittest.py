@@ -384,9 +384,11 @@ class TestFreeRTOS(BaseGfeTest):
         print(freertos_elf)
 
         expected_contents = [
+            "#0 changed: 1 -> 0",
             "#1 changed: 1 -> 0",
             "#2 changed: 1 -> 0",
             "#3 changed: 1 -> 0",
+            "#0 changed: 0 -> 1",
             "#1 changed: 0 -> 1",
             "#2 changed: 0 -> 1",
             "#3 changed: 0 -> 1",
