@@ -26,6 +26,7 @@
 [submodule "tool-suite"]
 	path = tool-suite
 	url = git@gitlab-ext.galois.com:ssith/tool-suite.git
+	branch = develop
 [submodule "busybox"]
 	path = busybox
 	url = https://github.com/mirror/busybox.git
