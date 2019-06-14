@@ -120,11 +120,7 @@ EOF
 for e in $env; do
     echo "# for e = $e"
     for f in `ls $test_dir/isa/rv$xlen[m$priv][$isa]-$e-* | grep -vE ".dump$" | sort`; do
-      if [[ $f == *rv64si-p-dirty* ]]; then
-        echo "# Skipping *rv64si-p-dirty*, because it needs to updated to support new ddr address"
-      else
-        echo "run_test_$e $f"
-      fi
+       echo "run_test_$e $f"
     done
 
     echo
