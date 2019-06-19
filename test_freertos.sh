@@ -8,6 +8,17 @@ cd $BASE_DIR/testing/scripts
 
 freertos_folder=$BASE_DIR/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1/
 python_unittest_script=test_gfe_unittest.py
+bootmem_folder=$BASE_DIR/bootmem/
+
+function proc_freertos_usage {
+    echo "Usage: $0"
+    echo "Usage: $0 --ethernet"
+    echo "Usage: $0 --flash proc_name [full|blinky|path_to_elf]"
+    echo "Add --ethernet if you want to test ethernet on Linux"
+    echo "Add --flash if you want to program the image into flash and boot from it"
+    echo "	choose between main_full or main_blinky or provide a path to an elf file"
+    echo "	default is main_full if no option was provided"
+}
 
 function freertos_test {
 	cd $freertos_folder
@@ -19,15 +30,60 @@ function freertos_test {
 	err_msg $? "FreeRTOS test TestFreeRTOS.$2 failed"
 }
 
-if [[ $1 == "--ethernet" ]]; then
-	test_ethernet=true
+if [[ $1 == "--flash" ]]; then
+	use_flash=true
+	test_ethernet=false
+	proc_picker $2
+	if [ $# -lt 3 ]; then
+		echo "test_freertos.sh: No flash image was specified. Using \"main_full.elf\" by default."
+		flash_option="full"
+	elif [[ $3 == "full" ]]; then
+		echo "test_freertos.sh: Flash image \"main_full.elf\"."
+		flash_option="full"
+	elif [[ $3 == "blinky" ]]; then
+		echo "test_freertos.sh: Flash image \"main_full.elf\"."
+		flash_option="blinky"
+	elif [[ ! -f ${BASE_DIR}/$3 ]]; then
+		err_msg 1 "test_freertos.sh: Flash image $3 cannot be found."
+	else
+		flash_option=${BASE_DIR}/$3
+		echo "test_freertos.sh: Flash image \"$3\"."
+	fi
+elif [[ $1 == "--ethernet" ]]; then
+	use_flash=false
+	test_ethernet=true       
 else
 	test_ethernet=false
+	use_flash=false
 fi
+
 
 if [ "$test_ethernet" = true ]; then
 	freertos_test main_udp test_udp
 	freertos_test main_tcp test_tcp
+elif [ "$use_flash" = true ]; then
+	#Fetching the specified elf file
+	if [[ $flash_option == "full" ]] || [[ $flash_option == "blinky" ]]; then
+		cd $freertos_folder
+		make clean; PROG=main_$flash_option make
+		err_msg $? "Building FreeRTOS-RISCV PROG=main_$flash_option failed"
+		cp main_$flash_option.elf $bootmem_folder/freertos.elf
+	else
+		cp $3 $bootmem_folder/freertos.elf
+	fi
+	#Making the FreeRTOS binary image <bootmem.bin>
+	cd $bootmem_folder
+	make -f Makefile.freertos
+	#Programming the flash
+	cd $BASE_DIR/testing/scripts/
+	echo "test_freertos.sh: Programming flash with FreeRTOS image"
+	python test_upload_flash.py
+	err_msg $? "test_freertos.sh: Programming flash failed" "test_freertos.sh: Programming flash OK"
+	#[Re-]Programming the fpga
+	cd $BASE_DIR
+	echo "test_freertos.sh: Programming FPGA with a bitstream after a flash upload"
+	./program_fpga.sh $proc_name
+	err_msg $? "test_freertos.sh: Programming the FPGA failed" "test_freertos.sh: Programming the FPGA OK"
 else
 	freertos_test main_blinky test_blink
 	freertos_test main_full test_full
