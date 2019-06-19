@@ -6,6 +6,10 @@ CHROOT_DIR=$DEBIAN_DIR/riscv64-chroot
 GFE_REPO="$(dirname "$DEBIAN_DIR")"
 # Pointing to a particular snapshot of debian as the master repo can be unstable!
 DEBIAN_URL="https://snapshot.debian.org/archive/debian-ports/20190424T014031Z/"
+DEBIAN_URL="http://deb.debian.org/debian-ports/"
+
+# Init Type - Use either "systemd" or "sysv"
+INIT_TYPE="sysv"
 
 # Check for necessary packages
 array=( "libssl-dev" "debian-ports-archive-keyring" "binfmt-support" "qemu-user-static" "mmdebstrap")
@@ -24,8 +28,21 @@ if [ -d $CHROOT_DIR ]; then
 	exit 1;
 fi
 
-echo "Creating chroot..."
-sudo mmdebstrap --architectures=riscv64 \
+if [ "$INIT_TYPE" == "sysv" ]; then 
+	echo "Creating chroot with SysV..."
+	sudo mmdebstrap --architectures=riscv64 \
+	--include="sysvinit-core,apt-utils,netbase,busybox,ifupdown,isc-dhcp-client,debian-ports-archive-keyring" \
+	--dpkgopt='path-exclude=/usr/share/man/*' \
+        --dpkgopt='path-exclude=/usr/share/locale/*' \
+        --dpkgopt='path-include=/usr/share/locale/locale.alias' \
+        --dpkgopt='path-exclude=/usr/share/doc/*' \
+        --dpkgopt='path-include=/usr/share/doc/*/copyright' \
+        --dpkgopt='path-exclude=/usr/share/dict/*' \
+	--variant=minbase \
+	sid $CHROOT_DIR "deb $DEBIAN_URL sid main" "deb $DEBIAN_URL unreleased main" || exit
+else
+	echo "Creating chroot with systemd..."
+	sudo mmdebstrap --architectures=riscv64 \
 	--include="debian-ports-archive-keyring" \
 	--dpkgopt='path-exclude=/usr/share/man/*' \
         --dpkgopt='path-exclude=/usr/share/locale/*' \
@@ -34,6 +51,7 @@ sudo mmdebstrap --architectures=riscv64 \
         --dpkgopt='path-include=/usr/share/doc/*/copyright' \
         --dpkgopt='path-exclude=/usr/share/dict/*' \
 	sid $CHROOT_DIR "deb $DEBIAN_URL sid main" "deb $DEBIAN_URL unreleased main" || exit
+fi
 
 echo "Created chroot"
 
