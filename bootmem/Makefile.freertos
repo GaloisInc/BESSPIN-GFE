@@ -16,16 +16,14 @@ default: bootmem.bin
 freertos.bin: freertos.elf
 	$(OBJCOPY) -O binary $< $@
 
-bootmem: bootmem.S linker.ld freertos.bin
+bootmem: bootmem_freertos.S linker.ld freertos.bin
 	$(CC) -Tlinker.ld $< -nostdlib -static -Wl,--no-gc-sections -o $@
 
 bootmem.bin: bootmem
 	$(OBJCOPY) -O binary $< $@
 
 clean:
-	@rm -f bootmem bootmem.bin bbl.bin
+	@rm -f bootmem bootmem.bin freertos.bin
 	@rm -rf build-bbl
-	@make -f Makefile.deb clean
-	@make -f Makefile.bb clean
 	
 .PHONY: default
