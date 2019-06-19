@@ -9,7 +9,7 @@ DEBIAN_URL="https://snapshot.debian.org/archive/debian-ports/20190424T014031Z/"
 DEBIAN_URL="http://deb.debian.org/debian-ports/"
 
 # Init Type - Use either "systemd" or "sysv"
-INIT_TYPE="sysv"
+INIT_TYPE="systemd"
 
 # Check for necessary packages
 array=( "libssl-dev" "debian-ports-archive-keyring" "binfmt-support" "qemu-user-static" "mmdebstrap")
