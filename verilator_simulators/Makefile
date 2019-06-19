@@ -42,7 +42,10 @@ TOPMODULE ?= mkTop_HW_Side
 #    --x-initial fast   Optimize uninitialized value
 #    --noassert         Disable all assertions
 
-VERILATOR_FLAGS = --stats --LDFLAGS -static --x-assign fast --x-initial fast --noassert src_C/sim_socket.c
+VERILATOR_FLAGS = --stats --x-assign fast --x-initial fast --noassert src_C/sim_socket.c
+
+# Produce a static binary: (GLIBC_STATIC is set by Nix shell)
+VERILATOR_FLAGS += -LDFLAGS "-static -L ${GLIBC_STATIC}/lib"
 
 # Verilator flags: use the following to include code to generate VCDs
 # Select trace-depth according to your module hierarchy
