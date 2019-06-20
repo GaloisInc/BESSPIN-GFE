@@ -1,0 +1,527 @@
+
+lib/ns16550.o:     file format elf64-littleriscv
+lib/ns16550.o
+architecture: riscv:rv64, flags 0x00000011:
+HAS_RELOC, HAS_SYMS
+start address 0x0000000000000000
+
+Sections:
+Idx Name          Size      VMA               LMA               File off  Algn
+  0 .text         00000254  0000000000000000  0000000000000000  00000040  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .data         00000000  0000000000000000  0000000000000000  00000294  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000000  0000000000000000  0000000000000000  00000294  2**0
+                  ALLOC
+  3 .sdata        00000008  0000000000000000  0000000000000000  00000298  2**3
+                  CONTENTS, ALLOC, LOAD, DATA
+  4 .init_array   00000008  0000000000000000  0000000000000000  000002a0  2**3
+                  CONTENTS, ALLOC, LOAD, RELOC, DATA
+  5 .debug_info   0000040a  0000000000000000  0000000000000000  000002a8  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+  6 .debug_abbrev 0000015e  0000000000000000  0000000000000000  000006b2  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_aranges 00000030  0000000000000000  0000000000000000  00000810  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+  8 .debug_line   00000298  0000000000000000  0000000000000000  00000840  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+  9 .debug_str    0000033c  0000000000000000  0000000000000000  00000ad8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .comment      00000012  0000000000000000  0000000000000000  00000e14  2**0
+                  CONTENTS, READONLY
+ 11 .debug_frame  000000d8  0000000000000000  0000000000000000  00000e28  2**3
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+ 12 .riscv.attributes 0000002e  0000000000000000  0000000000000000  00000f00  2**0
+                  CONTENTS, READONLY
+SYMBOL TABLE:
+0000000000000000 l    df *ABS*	0000000000000000 ns16550.c
+0000000000000000 l    d  .text	0000000000000000 .text
+0000000000000000 l    d  .data	0000000000000000 .data
+0000000000000000 l    d  .bss	0000000000000000 .bss
+0000000000000000 l    d  .sdata	0000000000000000 .sdata
+0000000000000000 l     O .sdata	0000000000000008 pio
+0000000000000000 l     F .text	0000000000000104 ns16550_init
+0000000000000000 l       .text	0000000000000000 .L0 
+0000000000000000 l       .text	0000000000000000 .L0 
+000000000000000c l       .text	0000000000000000 .L0 
+000000000000000c l       .text	0000000000000000 .L0 
+0000000000000018 l       .text	0000000000000000 .L0 
+000000000000001c l       .text	0000000000000000 .L0 
+0000000000000024 l       .text	0000000000000000 .L0 
+0000000000000050 l       .text	0000000000000000 .L0 
+000000000000005c l       .text	0000000000000000 .L0 
+0000000000000068 l       .text	0000000000000000 .L0 
+0000000000000074 l       .text	0000000000000000 .L0 
+0000000000000080 l       .text	0000000000000000 .L0 
+0000000000000088 l       .text	0000000000000000 .L0 
+00000000000000b4 l       .text	0000000000000000 .L0 
+00000000000000c0 l       .text	0000000000000000 .L0 
+00000000000000c8 l       .text	0000000000000000 .L0 
+00000000000000d4 l       .text	0000000000000000 .L0 
+00000000000000dc l       .text	0000000000000000 .L0 
+00000000000000e8 l       .text	0000000000000000 .L0 
+00000000000000f0 l       .text	0000000000000000 .L0 
+00000000000000f4 l       .text	0000000000000000 .L0 
+00000000000000fc l       .text	0000000000000000 .L0 
+0000000000000104 l       .text	0000000000000000 .L0 
+0000000000000000 l    d  .init_array	0000000000000000 .init_array
+0000000000000104 l       .text	0000000000000000 .L0 
+0000000000000104 l       .text	0000000000000000 .L0 
+0000000000000110 l       .text	0000000000000000 .L0 
+0000000000000110 l       .text	0000000000000000 .L0 
+0000000000000124 l       .text	0000000000000000 .L0 
+0000000000000130 l       .text	0000000000000000 .L0 
+000000000000013c l       .text	0000000000000000 .L0 
+0000000000000144 l       .text	0000000000000000 .L0 
+000000000000014c l       .text	0000000000000000 .L0 
+000000000000014c l       .text	0000000000000000 .L0 
+000000000000014c l       .text	0000000000000000 .L0 
+0000000000000158 l       .text	0000000000000000 .L0 
+0000000000000158 l       .text	0000000000000000 .L0 
+000000000000015c l       .text	0000000000000000 .L0 
+0000000000000170 l       .text	0000000000000000 .L0 
+000000000000017c l       .text	0000000000000000 .L0 
+0000000000000180 l       .text	0000000000000000 .L0 
+0000000000000198 l       .text	0000000000000000 .L0 
+00000000000001a0 l       .text	0000000000000000 .L0 
+00000000000001a8 l       .text	0000000000000000 .L0 
+00000000000001a8 l       .text	0000000000000000 .L0 
+00000000000001a8 l       .text	0000000000000000 .L0 
+00000000000001b4 l       .text	0000000000000000 .L0 
+00000000000001bc l       .text	0000000000000000 .L0 
+00000000000001c0 l       .text	0000000000000000 .L0 
+00000000000001d4 l       .text	0000000000000000 .L0 
+00000000000001e0 l       .text	0000000000000000 .L0 
+00000000000001e4 l       .text	0000000000000000 .L0 
+00000000000001f0 l       .text	0000000000000000 .L0 
+00000000000001fc l       .text	0000000000000000 .L0 
+0000000000000200 l       .text	0000000000000000 .L0 
+0000000000000208 l       .text	0000000000000000 .L0 
+0000000000000210 l       .text	0000000000000000 .L0 
+0000000000000210 l       .text	0000000000000000 .L0 
+0000000000000210 l       .text	0000000000000000 .L0 
+000000000000021c l       .text	0000000000000000 .L0 
+000000000000021c l       .text	0000000000000000 .L0 
+0000000000000220 l       .text	0000000000000000 .L0 
+0000000000000234 l       .text	0000000000000000 .L0 
+0000000000000240 l       .text	0000000000000000 .L0 
+0000000000000244 l       .text	0000000000000000 .L0 
+000000000000024c l       .text	0000000000000000 .L0 
+0000000000000254 l       .text	0000000000000000 .L0 
+0000000000000000 l    d  .debug_info	0000000000000000 .debug_info
+0000000000000000 l    d  .debug_abbrev	0000000000000000 .debug_abbrev
+0000000000000000 l    d  .debug_aranges	0000000000000000 .debug_aranges
+0000000000000000 l    d  .debug_line	0000000000000000 .debug_line
+0000000000000000 l    d  .debug_str	0000000000000000 .debug_str
+0000000000000254 l       .text	0000000000000000 .L0 
+0000000000000000 l       .debug_frame	0000000000000000 .L0 
+000000000000000c l       .text	0000000000000000 .L0 
+0000000000000024 l       .text	0000000000000000 .L0 
+0000000000000038 l       .text	0000000000000000 .L0 
+0000000000000050 l       .text	0000000000000000 .L0 
+0000000000000074 l       .text	0000000000000000 .L0 
+0000000000000088 l       .text	0000000000000000 .L0 
+000000000000009c l       .text	0000000000000000 .L0 
+00000000000000b4 l       .text	0000000000000000 .L0 
+00000000000000c8 l       .text	0000000000000000 .L0 
+00000000000000dc l       .text	0000000000000000 .L0 
+0000000000000110 l       .text	0000000000000000 .L0 
+000000000000015c l       .text	0000000000000000 .L0 
+0000000000000180 l       .text	0000000000000000 .L0 
+00000000000001c0 l       .text	0000000000000000 .L0 
+00000000000001e4 l       .text	0000000000000000 .L0 
+0000000000000220 l       .text	0000000000000000 .L0 
+000000000000015c l       .text	0000000000000000 .L6
+00000000000001c0 l       .text	0000000000000000 .L9
+0000000000000220 l       .text	0000000000000000 .L12
+0000000000000000 l       .debug_abbrev	0000000000000000 .Ldebug_abbrev0
+0000000000000236 l       .debug_str	0000000000000000 .LASF70
+000000000000006e l       .debug_str	0000000000000000 .LASF71
+00000000000002fa l       .debug_str	0000000000000000 .LASF72
+0000000000000000 l       .text	0000000000000000 .Ltext0
+0000000000000254 l       .text	0000000000000000 .Letext0
+0000000000000000 l       .debug_line	0000000000000000 .Ldebug_line0
+0000000000000168 l       .debug_str	0000000000000000 .LASF0
+000000000000012f l       .debug_str	0000000000000000 .LASF4
+000000000000015a l       .debug_str	0000000000000000 .LASF1
+0000000000000064 l       .debug_str	0000000000000000 .LASF2
+00000000000001a5 l       .debug_str	0000000000000000 .LASF3
+000000000000009e l       .debug_str	0000000000000000 .LASF5
+0000000000000184 l       .debug_str	0000000000000000 .LASF6
+000000000000011a l       .debug_str	0000000000000000 .LASF7
+0000000000000293 l       .debug_str	0000000000000000 .LASF8
+00000000000000d9 l       .debug_str	0000000000000000 .LASF9
+000000000000017b l       .debug_str	0000000000000000 .LASF10
+00000000000001e2 l       .debug_str	0000000000000000 .LASF16
+00000000000000e1 l       .debug_str	0000000000000000 .LASF11
+00000000000002a5 l       .debug_str	0000000000000000 .LASF12
+00000000000001f1 l       .debug_str	0000000000000000 .LASF13
+0000000000000148 l       .debug_str	0000000000000000 .LASF14
+0000000000000110 l       .debug_str	0000000000000000 .LASF15
+00000000000001fa l       .debug_str	0000000000000000 .LASF17
+00000000000000f3 l       .debug_str	0000000000000000 .LASF18
+00000000000000ea l       .debug_str	0000000000000000 .LASF19
+0000000000000024 l       .debug_str	0000000000000000 .LASF20
+0000000000000085 l       .debug_str	0000000000000000 .LASF21
+000000000000008e l       .debug_str	0000000000000000 .LASF22
+00000000000002f1 l       .debug_str	0000000000000000 .LASF23
+00000000000001c7 l       .debug_str	0000000000000000 .LASF24
+00000000000000a9 l       .debug_str	0000000000000000 .LASF25
+000000000000019e l       .debug_str	0000000000000000 .LASF26
+0000000000000139 l       .debug_str	0000000000000000 .LASF27
+000000000000004d l       .debug_str	0000000000000000 .LASF28
+00000000000002c9 l       .debug_str	0000000000000000 .LASF29
+000000000000013f l       .debug_str	0000000000000000 .LASF30
+00000000000002d2 l       .debug_str	0000000000000000 .LASF31
+00000000000002c0 l       .debug_str	0000000000000000 .LASF32
+000000000000003d l       .debug_str	0000000000000000 .LASF33
+0000000000000045 l       .debug_str	0000000000000000 .LASF34
+0000000000000054 l       .debug_str	0000000000000000 .LASF35
+00000000000001d0 l       .debug_str	0000000000000000 .LASF36
+00000000000001d9 l       .debug_str	0000000000000000 .LASF37
+00000000000000bb l       .debug_str	0000000000000000 .LASF38
+00000000000002b7 l       .debug_str	0000000000000000 .LASF39
+00000000000000c4 l       .debug_str	0000000000000000 .LASF40
+0000000000000012 l       .debug_str	0000000000000000 .LASF41
+000000000000001b l       .debug_str	0000000000000000 .LASF42
+00000000000000b2 l       .debug_str	0000000000000000 .LASF43
+000000000000002d l       .debug_str	0000000000000000 .LASF44
+000000000000028b l       .debug_str	0000000000000000 .LASF45
+00000000000002e1 l       .debug_str	0000000000000000 .LASF46
+00000000000002af l       .debug_str	0000000000000000 .LASF47
+0000000000000174 l       .debug_str	0000000000000000 .LASF48
+00000000000002da l       .debug_str	0000000000000000 .LASF49
+0000000000000101 l       .debug_str	0000000000000000 .LASF50
+0000000000000191 l       .debug_str	0000000000000000 .LASF51
+000000000000005c l       .debug_str	0000000000000000 .LASF52
+0000000000000152 l       .debug_str	0000000000000000 .LASF53
+0000000000000000 l       .debug_str	0000000000000000 .LASF54
+0000000000000009 l       .debug_str	0000000000000000 .LASF55
+0000000000000200 l       .debug_str	0000000000000000 .LASF56
+00000000000001bf l       .debug_str	0000000000000000 .LASF57
+000000000000010a l       .debug_str	0000000000000000 .LASF58
+0000000000000097 l       .debug_str	0000000000000000 .LASF59
+0000000000000036 l       .debug_str	0000000000000000 .LASF60
+00000000000000fa l       .debug_str	0000000000000000 .LASF61
+00000000000001b8 l       .debug_str	0000000000000000 .LASF62
+0000000000000197 l       .debug_str	0000000000000000 .LASF63
+00000000000001e8 l       .debug_str	0000000000000000 .LASF64
+0000000000000282 l       .debug_str	0000000000000000 .LASF65
+000000000000007c l       .debug_str	0000000000000000 .LASF66
+0000000000000123 l       .debug_str	0000000000000000 .LASF73
+0000000000000209 l       .debug_str	0000000000000000 .LASF74
+0000000000000210 l       .text	0000000000000000 .LFB4
+0000000000000254 l       .text	0000000000000000 .LFE4
+0000000000000227 l       .debug_str	0000000000000000 .LASF75
+00000000000001a8 l       .text	0000000000000000 .LFB3
+0000000000000210 l       .text	0000000000000000 .LFE3
+00000000000000ca l       .debug_str	0000000000000000 .LASF67
+000000000000014c l       .text	0000000000000000 .LFB2
+00000000000001a8 l       .text	0000000000000000 .LFE2
+0000000000000217 l       .debug_str	0000000000000000 .LASF68
+0000000000000104 l       .text	0000000000000000 .LFB1
+000000000000014c l       .text	0000000000000000 .LFE1
+000000000000032f l       .debug_str	0000000000000000 .LASF76
+0000000000000000 l       .text	0000000000000000 .LFB0
+0000000000000104 l       .text	0000000000000000 .LFE0
+00000000000002e9 l       .debug_str	0000000000000000 .LASF69
+0000000000000000 l       .debug_info	0000000000000000 .Ldebug_info0
+0000000000000000 l    d  .comment	0000000000000000 .comment
+0000000000000000 l    d  .debug_frame	0000000000000000 .debug_frame
+0000000000000000 l    d  .riscv.attributes	0000000000000000 .riscv.attributes
+0000000000000104 g     F .text	0000000000000048 ns16550_rxready
+000000000000014c g     F .text	000000000000005c ns16550_rxchar
+00000000000001a8 g     F .text	0000000000000068 ns16550_txchar
+0000000000000210 g     F .text	0000000000000044 ns16550_flush
+
+
+
+Disassembly of section .text:
+
+0000000000000000 <ns16550_init>:
+static struct ns16550_pio * pio = (void*)NS16550_BASE;
+
+#ifdef CONSOLE_UART
+__attribute__ ((constructor))
+static int ns16550_init(void)
+{
+   0:	fe010113          	addi	sp,sp,-32
+   4:	00813c23          	sd	s0,24(sp)
+   8:	02010413          	addi	s0,sp,32
+  uint32_t divisor;
+
+  pio->ier = 0;
+   c:	00000797          	auipc	a5,0x0
+			c: R_RISCV_PCREL_HI20	pio
+			c: R_RISCV_RELAX	*ABS*
+  10:	00078793          	mv	a5,a5
+			10: R_RISCV_PCREL_LO12_I	.L0 
+			10: R_RISCV_RELAX	*ABS*
+  14:	0007b783          	ld	a5,0(a5) # c <ns16550_init+0xc>
+  18:	00078423          	sb	zero,8(a5)
+
+  divisor = NS16550_CLOCK_RATE / (16 * DEFAULT_BAUDRATE);
+  1c:	01a00793          	li	a5,26
+  20:	fef42623          	sw	a5,-20(s0)
+  pio->lcr |= LCR_DLAB;
+  24:	00000797          	auipc	a5,0x0
+			24: R_RISCV_PCREL_HI20	pio
+			24: R_RISCV_RELAX	*ABS*
+  28:	00078793          	mv	a5,a5
+			28: R_RISCV_PCREL_LO12_I	.L0 
+			28: R_RISCV_RELAX	*ABS*
+  2c:	0007b783          	ld	a5,0(a5) # 24 <ns16550_init+0x24>
+  30:	0187c783          	lbu	a5,24(a5)
+  34:	0ff7f713          	andi	a4,a5,255
+  38:	00000797          	auipc	a5,0x0
+			38: R_RISCV_PCREL_HI20	pio
+			38: R_RISCV_RELAX	*ABS*
+  3c:	00078793          	mv	a5,a5
+			3c: R_RISCV_PCREL_LO12_I	.L0 
+			3c: R_RISCV_RELAX	*ABS*
+  40:	0007b783          	ld	a5,0(a5) # 38 <ns16550_init+0x38>
+  44:	f8076713          	ori	a4,a4,-128
+  48:	0ff77713          	andi	a4,a4,255
+  4c:	00e78c23          	sb	a4,24(a5)
+  pio->dll = divisor & 0xff;
+  50:	00000797          	auipc	a5,0x0
+			50: R_RISCV_PCREL_HI20	pio
+			50: R_RISCV_RELAX	*ABS*
+  54:	00078793          	mv	a5,a5
+			54: R_RISCV_PCREL_LO12_I	.L0 
+			54: R_RISCV_RELAX	*ABS*
+  58:	0007b783          	ld	a5,0(a5) # 50 <ns16550_init+0x50>
+  5c:	fec42703          	lw	a4,-20(s0)
+  60:	0ff77713          	andi	a4,a4,255
+  64:	00e78023          	sb	a4,0(a5)
+  pio->dlm = (divisor >> 8) & 0xff;
+  68:	fec42783          	lw	a5,-20(s0)
+  6c:	0087d79b          	srliw	a5,a5,0x8
+  70:	0007871b          	sext.w	a4,a5
+  74:	00000797          	auipc	a5,0x0
+			74: R_RISCV_PCREL_HI20	pio
+			74: R_RISCV_RELAX	*ABS*
+  78:	00078793          	mv	a5,a5
+			78: R_RISCV_PCREL_LO12_I	.L0 
+			78: R_RISCV_RELAX	*ABS*
+  7c:	0007b783          	ld	a5,0(a5) # 74 <ns16550_init+0x74>
+  80:	0ff77713          	andi	a4,a4,255
+  84:	00e78423          	sb	a4,8(a5)
+  pio->lcr &= ~LCR_DLAB;
+  88:	00000797          	auipc	a5,0x0
+			88: R_RISCV_PCREL_HI20	pio
+			88: R_RISCV_RELAX	*ABS*
+  8c:	00078793          	mv	a5,a5
+			8c: R_RISCV_PCREL_LO12_I	.L0 
+			8c: R_RISCV_RELAX	*ABS*
+  90:	0007b783          	ld	a5,0(a5) # 88 <ns16550_init+0x88>
+  94:	0187c783          	lbu	a5,24(a5)
+  98:	0ff7f713          	andi	a4,a5,255
+  9c:	00000797          	auipc	a5,0x0
+			9c: R_RISCV_PCREL_HI20	pio
+			9c: R_RISCV_RELAX	*ABS*
+  a0:	00078793          	mv	a5,a5
+			a0: R_RISCV_PCREL_LO12_I	.L0 
+			a0: R_RISCV_RELAX	*ABS*
+  a4:	0007b783          	ld	a5,0(a5) # 9c <ns16550_init+0x9c>
+  a8:	07f77713          	andi	a4,a4,127
+  ac:	0ff77713          	andi	a4,a4,255
+  b0:	00e78c23          	sb	a4,24(a5)
+
+  pio->lcr = LCR_WLS8;
+  b4:	00000797          	auipc	a5,0x0
+			b4: R_RISCV_PCREL_HI20	pio
+			b4: R_RISCV_RELAX	*ABS*
+  b8:	00078793          	mv	a5,a5
+			b8: R_RISCV_PCREL_LO12_I	.L0 
+			b8: R_RISCV_RELAX	*ABS*
+  bc:	0007b783          	ld	a5,0(a5) # b4 <ns16550_init+0xb4>
+  c0:	00300713          	li	a4,3
+  c4:	00e78c23          	sb	a4,24(a5)
+  pio->fcr = FCR_FE;
+  c8:	00000797          	auipc	a5,0x0
+			c8: R_RISCV_PCREL_HI20	pio
+			c8: R_RISCV_RELAX	*ABS*
+  cc:	00078793          	mv	a5,a5
+			cc: R_RISCV_PCREL_LO12_I	.L0 
+			cc: R_RISCV_RELAX	*ABS*
+  d0:	0007b783          	ld	a5,0(a5) # c8 <ns16550_init+0xc8>
+  d4:	00100713          	li	a4,1
+  d8:	00e78823          	sb	a4,16(a5)
+  pio->mcr = MCR_RTS;
+  dc:	00000797          	auipc	a5,0x0
+			dc: R_RISCV_PCREL_HI20	pio
+			dc: R_RISCV_RELAX	*ABS*
+  e0:	00078793          	mv	a5,a5
+			e0: R_RISCV_PCREL_LO12_I	.L0 
+			e0: R_RISCV_RELAX	*ABS*
+  e4:	0007b783          	ld	a5,0(a5) # dc <ns16550_init+0xdc>
+  e8:	00200713          	li	a4,2
+  ec:	02e78023          	sb	a4,32(a5)
+
+  return 0;
+  f0:	00000793          	li	a5,0
+}
+  f4:	00078513          	mv	a0,a5
+  f8:	01813403          	ld	s0,24(sp)
+  fc:	02010113          	addi	sp,sp,32
+ 100:	00008067          	ret
+
+0000000000000104 <ns16550_rxready>:
+#endif
+
+
+int ns16550_rxready(void)
+{
+ 104:	ff010113          	addi	sp,sp,-16
+ 108:	00813423          	sd	s0,8(sp)
+ 10c:	01010413          	addi	s0,sp,16
+  return ((pio->lsr & LSR_DR) != 0);
+ 110:	00000797          	auipc	a5,0x0
+			110: R_RISCV_PCREL_HI20	pio
+			110: R_RISCV_RELAX	*ABS*
+ 114:	00078793          	mv	a5,a5
+			114: R_RISCV_PCREL_LO12_I	.L0 
+			114: R_RISCV_RELAX	*ABS*
+ 118:	0007b783          	ld	a5,0(a5) # 110 <ns16550_rxready+0xc>
+ 11c:	0287c783          	lbu	a5,40(a5)
+ 120:	0ff7f793          	andi	a5,a5,255
+ 124:	0007879b          	sext.w	a5,a5
+ 128:	0017f793          	andi	a5,a5,1
+ 12c:	0007879b          	sext.w	a5,a5
+ 130:	00f037b3          	snez	a5,a5
+ 134:	0ff7f793          	andi	a5,a5,255
+ 138:	0007879b          	sext.w	a5,a5
+}
+ 13c:	00078513          	mv	a0,a5
+ 140:	00813403          	ld	s0,8(sp)
+ 144:	01010113          	addi	sp,sp,16
+ 148:	00008067          	ret
+
+000000000000014c <ns16550_rxchar>:
+
+
+int ns16550_rxchar(void)
+{
+ 14c:	ff010113          	addi	sp,sp,-16
+ 150:	00813423          	sd	s0,8(sp)
+ 154:	01010413          	addi	s0,sp,16
+  while ((pio->lsr & LSR_DR) == 0)
+ 158:	00000013          	nop
+
+000000000000015c <.L6>:
+ 15c:	00000797          	auipc	a5,0x0
+			15c: R_RISCV_PCREL_HI20	pio
+			15c: R_RISCV_RELAX	*ABS*
+ 160:	00078793          	mv	a5,a5
+			160: R_RISCV_PCREL_LO12_I	.L0 
+			160: R_RISCV_RELAX	*ABS*
+ 164:	0007b783          	ld	a5,0(a5) # 15c <.L6>
+ 168:	0287c783          	lbu	a5,40(a5)
+ 16c:	0ff7f793          	andi	a5,a5,255
+ 170:	0007879b          	sext.w	a5,a5
+ 174:	0017f793          	andi	a5,a5,1
+ 178:	0007879b          	sext.w	a5,a5
+ 17c:	fe0780e3          	beqz	a5,15c <.L6>
+			17c: R_RISCV_BRANCH	.L6
+    ;  // nothing
+
+  return pio->rbr;
+ 180:	00000797          	auipc	a5,0x0
+			180: R_RISCV_PCREL_HI20	pio
+			180: R_RISCV_RELAX	*ABS*
+ 184:	00078793          	mv	a5,a5
+			184: R_RISCV_PCREL_LO12_I	.L0 
+			184: R_RISCV_RELAX	*ABS*
+ 188:	0007b783          	ld	a5,0(a5) # 180 <.L6+0x24>
+ 18c:	0007c783          	lbu	a5,0(a5)
+ 190:	0ff7f793          	andi	a5,a5,255
+ 194:	0007879b          	sext.w	a5,a5
+}
+ 198:	00078513          	mv	a0,a5
+ 19c:	00813403          	ld	s0,8(sp)
+ 1a0:	01010113          	addi	sp,sp,16
+ 1a4:	00008067          	ret
+
+00000000000001a8 <ns16550_txchar>:
+
+
+int ns16550_txchar(int c)
+{
+ 1a8:	fe010113          	addi	sp,sp,-32
+ 1ac:	00813c23          	sd	s0,24(sp)
+ 1b0:	02010413          	addi	s0,sp,32
+ 1b4:	00050793          	mv	a5,a0
+ 1b8:	fef42623          	sw	a5,-20(s0)
+  while ((pio->lsr & LSR_THRE) == 0)
+ 1bc:	00000013          	nop
+
+00000000000001c0 <.L9>:
+ 1c0:	00000797          	auipc	a5,0x0
+			1c0: R_RISCV_PCREL_HI20	pio
+			1c0: R_RISCV_RELAX	*ABS*
+ 1c4:	00078793          	mv	a5,a5
+			1c4: R_RISCV_PCREL_LO12_I	.L0 
+			1c4: R_RISCV_RELAX	*ABS*
+ 1c8:	0007b783          	ld	a5,0(a5) # 1c0 <.L9>
+ 1cc:	0287c783          	lbu	a5,40(a5)
+ 1d0:	0ff7f793          	andi	a5,a5,255
+ 1d4:	0007879b          	sext.w	a5,a5
+ 1d8:	0207f793          	andi	a5,a5,32
+ 1dc:	0007879b          	sext.w	a5,a5
+ 1e0:	fe0780e3          	beqz	a5,1c0 <.L9>
+			1e0: R_RISCV_BRANCH	.L9
+    ;  // nothing
+
+  pio->thr = c;
+ 1e4:	00000797          	auipc	a5,0x0
+			1e4: R_RISCV_PCREL_HI20	pio
+			1e4: R_RISCV_RELAX	*ABS*
+ 1e8:	00078793          	mv	a5,a5
+			1e8: R_RISCV_PCREL_LO12_I	.L0 
+			1e8: R_RISCV_RELAX	*ABS*
+ 1ec:	0007b783          	ld	a5,0(a5) # 1e4 <.L9+0x24>
+ 1f0:	fec42703          	lw	a4,-20(s0)
+ 1f4:	0ff77713          	andi	a4,a4,255
+ 1f8:	00e78023          	sb	a4,0(a5)
+
+  return c;
+ 1fc:	fec42783          	lw	a5,-20(s0)
+}
+ 200:	00078513          	mv	a0,a5
+ 204:	01813403          	ld	s0,24(sp)
+ 208:	02010113          	addi	sp,sp,32
+ 20c:	00008067          	ret
+
+0000000000000210 <ns16550_flush>:
+
+
+void ns16550_flush(void)
+{
+ 210:	ff010113          	addi	sp,sp,-16
+ 214:	00813423          	sd	s0,8(sp)
+ 218:	01010413          	addi	s0,sp,16
+  while ((pio->lsr & LSR_TEMT) == 0)
+ 21c:	00000013          	nop
+
+0000000000000220 <.L12>:
+ 220:	00000797          	auipc	a5,0x0
+			220: R_RISCV_PCREL_HI20	pio
+			220: R_RISCV_RELAX	*ABS*
+ 224:	00078793          	mv	a5,a5
+			224: R_RISCV_PCREL_LO12_I	.L0 
+			224: R_RISCV_RELAX	*ABS*
+ 228:	0007b783          	ld	a5,0(a5) # 220 <.L12>
+ 22c:	0287c783          	lbu	a5,40(a5)
+ 230:	0ff7f793          	andi	a5,a5,255
+ 234:	0007879b          	sext.w	a5,a5
+ 238:	0407f793          	andi	a5,a5,64
+ 23c:	0007879b          	sext.w	a5,a5
+ 240:	fe0780e3          	beqz	a5,220 <.L12>
+			240: R_RISCV_BRANCH	.L12
+    ;  // nothing
+}
+ 244:	00000013          	nop
+ 248:	00813403          	ld	s0,8(sp)
+ 24c:	01010113          	addi	sp,sp,16
+ 250:	00008067          	ret

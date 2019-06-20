@@ -16,7 +16,7 @@ set tmpfile "/tmp/flash_${u}.mcs"
 
 if {[string equal "$t" "bitfile"] } {
     write_cfgmem -force -format MCS -size 256 -interface SPIx8 -loadbit "up 0x00000000 $f" ${tmpfile}
-    set files [list "/tmp/flash_primary.mcs" "/tmp/flash_secondary.mcs" ]
+    set files [list "/tmp/flash_${u}_primary.mcs" "/tmp/flash_${u}_secondary.mcs" ]
     #set prmfiles [list "/tmp/flash_primary.prm" "/tmp/flash_secondary.prm" ]
 } {
     write_cfgmem -force -format MCS -size 128 -interface SPIx4 -loaddata "up 0x04000000 $f" ${tmpfile}

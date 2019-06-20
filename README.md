@@ -421,7 +421,9 @@ round-trip min/avg/max = 20.536/20.913/23.320 ms
 
 1. Prepare the Linux image with either Debian or Busybox as described above.
 2. Write to flash memory on the board with the command `tcl/program_flash datafile bootmem/bootmem.bin`. Note that this command is run from the shell (not inside vivado).
-3. If a suitable bitfile is also stored in flash, upon board power up or reset, the device will automatically boot into Linux and Busybox.
+3. The `program_flash` command overwrites the FPGA's configuration. Depending on your setup, follow the relevant instructions below:
+    * If a suitable P2 or P3 bitstream is also stored in flash, the board can be physically reset or cold rebooted to automatically boot into Linux. 
+    * Otherwise, you will have to reprogram the desired bit file using the `program_fpga.sh` script at this point. The processor will execute the flash image immediately.
 
 Occasionally, the `tcl/program_flash` command will end with an out of memory error. As long as `Program/Verify Operation successful.` was printed before existing, the flash operation was completed.
 

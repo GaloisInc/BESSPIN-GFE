@@ -1,0 +1,29 @@
+
+CROSS_COMPILE?=riscv32-unknown-elf-
+
+CP=cp
+MKDIR=mkdir
+
+CC=$(CROSS_COMPILE)gcc
+LD=$(CROSS_COMPILE)ld
+OBJCOPY=$(CROSS_COMPILE)objcopy
+OBJDUMP=$(CROSS_COMPILE)objdump
+
+export CROSS_COMPILE
+
+default: bootmem.bin
+
+freertos.bin: freertos.elf
+	$(OBJCOPY) -O binary $< $@
+
+bootmem: bootmem_freertos.S linker.ld freertos.bin
+	$(CC) -Tlinker.ld $< -nostdlib -static -Wl,--no-gc-sections -o $@
+
+bootmem.bin: bootmem
+	$(OBJCOPY) -O binary $< $@
+
+clean:
+	@rm -f bootmem bootmem.bin freertos.bin
+	@rm -rf build-bbl
+	
+.PHONY: default

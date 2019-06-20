@@ -1,0 +1,403 @@
+
+lib/interrupt_support.o:     file format elf64-littleriscv
+lib/interrupt_support.o
+architecture: riscv:rv64, flags 0x00000011:
+HAS_RELOC, HAS_SYMS
+start address 0x0000000000000000
+
+Sections:
+Idx Name          Size      VMA               LMA               File off  Algn
+  0 .text         00000168  0000000000000000  0000000000000000  00000040  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .data         00000100  0000000000000000  0000000000000000  00000200  2**8
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000000  0000000000000000  0000000000000000  00000300  2**0
+                  ALLOC
+  3 .debug_line   00000256  0000000000000000  0000000000000000  00000300  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+  4 .debug_info   0000002e  0000000000000000  0000000000000000  00000556  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+  5 .debug_abbrev 00000014  0000000000000000  0000000000000000  00000584  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_aranges 00000030  0000000000000000  0000000000000000  000005a0  2**4
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+  7 .debug_str    00000059  0000000000000000  0000000000000000  000005d0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .riscv.attributes 0000002e  0000000000000000  0000000000000000  00000629  2**0
+                  CONTENTS, READONLY
+SYMBOL TABLE:
+0000000000000000 l    d  .text	0000000000000000 .text
+0000000000000000 l    d  .data	0000000000000000 .data
+0000000000000000 l    d  .bss	0000000000000000 .bss
+0000000000000000 l       .text	0000000000000000 .L0 
+0000000000000004 l       .text	0000000000000000 .L0 
+0000000000000008 l       .text	0000000000000000 .L0 
+000000000000000c l       .text	0000000000000000 .L0 
+0000000000000010 l       .text	0000000000000000 .L0 
+0000000000000014 l       .text	0000000000000000 .L0 
+0000000000000018 l       .text	0000000000000000 .L0 
+000000000000001c l       .text	0000000000000000 .L0 
+0000000000000020 l       .text	0000000000000000 .L0 
+0000000000000024 l       .text	0000000000000000 .L0 
+0000000000000028 l       .text	0000000000000000 .L0 
+000000000000002c l       .text	0000000000000000 .L0 
+0000000000000030 l       .text	0000000000000000 .L0 
+0000000000000034 l       .text	0000000000000000 .L0 
+0000000000000038 l       .text	0000000000000000 .L0 
+000000000000003c l       .text	0000000000000000 .L0 
+0000000000000040 l       .text	0000000000000000 .L0 
+0000000000000000 l       .data	0000000000000000 reg_save_area
+0000000000000044 l       .text	0000000000000000 .L0 
+000000000000004c l       .text	0000000000000000 .L0 
+0000000000000050 l       .text	0000000000000000 .L0 
+0000000000000054 l       .text	0000000000000000 .L0 
+0000000000000058 l       .text	0000000000000000 .L0 
+000000000000005c l       .text	0000000000000000 .L0 
+0000000000000060 l       .text	0000000000000000 .L0 
+0000000000000064 l       .text	0000000000000000 .L0 
+0000000000000068 l       .text	0000000000000000 .L0 
+000000000000006c l       .text	0000000000000000 .L0 
+0000000000000070 l       .text	0000000000000000 .L0 
+0000000000000074 l       .text	0000000000000000 .L0 
+0000000000000078 l       .text	0000000000000000 .L0 
+000000000000007c l       .text	0000000000000000 .L0 
+0000000000000080 l       .text	0000000000000000 .L0 
+0000000000000084 l       .text	0000000000000000 .L0 
+0000000000000088 l       .text	0000000000000000 .L0 
+000000000000008c l       .text	0000000000000000 .L0 
+0000000000000090 l       .text	0000000000000000 .L0 
+0000000000000094 l       .text	0000000000000000 .L0 
+0000000000000098 l       .text	0000000000000000 .L0 
+000000000000009c l       .text	0000000000000000 .L0 
+00000000000000a0 l       .text	0000000000000000 .L0 
+00000000000000a4 l       .text	0000000000000000 .L0 
+00000000000000a8 l       .text	0000000000000000 .L0 
+00000000000000ac l       .text	0000000000000000 .L0 
+00000000000000b0 l       .text	0000000000000000 .L0 
+00000000000000b4 l       .text	0000000000000000 .L0 
+00000000000000b8 l       .text	0000000000000000 .L0 
+00000000000000bc l       .text	0000000000000000 .L0 
+00000000000000c0 l       .text	0000000000000000 .L0 
+00000000000000c4 l       .text	0000000000000000 .L0 
+00000000000000c8 l       .text	0000000000000000 .L0 
+00000000000000cc l       .text	0000000000000000 .L0 
+00000000000000d0 l       .text	0000000000000000 .L0 
+00000000000000d4 l       .text	0000000000000000 .L0 
+00000000000000d8 l       .text	0000000000000000 .L0 
+00000000000000dc l       .text	0000000000000000 .L0 
+00000000000000e0 l       .text	0000000000000000 .L0 
+00000000000000e8 l       .text	0000000000000000 .L0 
+00000000000000ec l       .text	0000000000000000 .L0 
+00000000000000f0 l       .text	0000000000000000 .L0 
+00000000000000f4 l       .text	0000000000000000 .L0 
+00000000000000f8 l       .text	0000000000000000 .L0 
+00000000000000fc l       .text	0000000000000000 .L0 
+0000000000000100 l       .text	0000000000000000 .L0 
+0000000000000104 l       .text	0000000000000000 .L0 
+0000000000000108 l       .text	0000000000000000 .L0 
+000000000000010c l       .text	0000000000000000 .L0 
+0000000000000110 l       .text	0000000000000000 .L0 
+0000000000000114 l       .text	0000000000000000 .L0 
+0000000000000118 l       .text	0000000000000000 .L0 
+000000000000011c l       .text	0000000000000000 .L0 
+0000000000000120 l       .text	0000000000000000 .L0 
+0000000000000124 l       .text	0000000000000000 .L0 
+0000000000000128 l       .text	0000000000000000 .L0 
+000000000000012c l       .text	0000000000000000 .L0 
+0000000000000130 l       .text	0000000000000000 .L0 
+0000000000000134 l       .text	0000000000000000 .L0 
+0000000000000138 l       .text	0000000000000000 .L0 
+000000000000013c l       .text	0000000000000000 .L0 
+0000000000000140 l       .text	0000000000000000 .L0 
+0000000000000144 l       .text	0000000000000000 .L0 
+0000000000000148 l       .text	0000000000000000 .L0 
+000000000000014c l       .text	0000000000000000 .L0 
+0000000000000150 l       .text	0000000000000000 .L0 
+0000000000000154 l       .text	0000000000000000 .L0 
+0000000000000158 l       .text	0000000000000000 .L0 
+000000000000015c l       .text	0000000000000000 .L0 
+0000000000000160 l       .text	0000000000000000 .L0 
+0000000000000164 l       .text	0000000000000000 .L0 
+0000000000000168 l       .text	0000000000000000 .L0 
+0000000000000000 l    d  .debug_info	0000000000000000 .debug_info
+0000000000000000 l       .text	0000000000000000 .L0 
+0000000000000168 l       .text	0000000000000000 .L0 
+0000000000000000 l       .debug_str	0000000000000000 .L0 
+0000000000000018 l       .debug_str	0000000000000000 .L0 
+000000000000004d l       .debug_str	0000000000000000 .L0 
+0000000000000000 l    d  .debug_abbrev	0000000000000000 .debug_abbrev
+0000000000000000 l    d  .debug_line	0000000000000000 .debug_line
+0000000000000044 l       .text	0000000000000000 .L0 
+00000000000000e0 l       .text	0000000000000000 .L0 
+0000000000000000 l    d  .debug_aranges	0000000000000000 .debug_aranges
+0000000000000000 l    d  .debug_str	0000000000000000 .debug_str
+0000000000000000 l    d  .riscv.attributes	0000000000000000 .riscv.attributes
+0000000000000000 g       .text	0000000000000000 csrr_mstatus
+0000000000000008 g       .text	0000000000000000 csrw_mstatus
+0000000000000010 g       .text	0000000000000000 csrs_mstatus
+0000000000000018 g       .text	0000000000000000 csrc_mstatus
+0000000000000020 g       .text	0000000000000000 csrr_mie
+0000000000000028 g       .text	0000000000000000 csrw_mie
+0000000000000030 g       .text	0000000000000000 csrs_mie
+0000000000000038 g       .text	0000000000000000 csrc_mie
+0000000000000040 g       .text	0000000000000000 mtvec_handler
+0000000000000000         *UND*	0000000000000000 exception_handler
+
+
+
+Disassembly of section .text:
+
+0000000000000000 <csrr_mstatus>:
+	// csrc_mstatus (uint32_t/uint64_t x)      clear bits
+
+	.text
+	.globl	csrr_mstatus
+csrr_mstatus:
+	csrr	a0, mstatus
+   0:	30002573          	csrr	a0,mstatus
+	ret
+   4:	00008067          	ret
+
+0000000000000008 <csrw_mstatus>:
+
+	.globl	csrw_mstatus
+csrw_mstatus:
+	csrw	mstatus, a0
+   8:	30051073          	csrw	mstatus,a0
+	ret
+   c:	00008067          	ret
+
+0000000000000010 <csrs_mstatus>:
+
+	.globl	csrs_mstatus
+csrs_mstatus:
+	csrs	mstatus, a0
+  10:	30052073          	csrs	mstatus,a0
+	ret
+  14:	00008067          	ret
+
+0000000000000018 <csrc_mstatus>:
+
+	.globl	csrc_mstatus
+csrc_mstatus:
+	csrc	mstatus, a0
+  18:	30053073          	csrc	mstatus,a0
+	ret
+  1c:	00008067          	ret
+
+0000000000000020 <csrr_mie>:
+	// csrc_mie (uint32_t/uint64_t x)    clear bits
+
+	.text
+	.globl	csrr_mie
+csrr_mie:
+	csrr	a0, mie
+  20:	30402573          	csrr	a0,mie
+	ret
+  24:	00008067          	ret
+
+0000000000000028 <csrw_mie>:
+
+	.globl	csrw_mie
+csrw_mie:
+	csrw	mie, a0
+  28:	30451073          	csrw	mie,a0
+	ret
+  2c:	00008067          	ret
+
+0000000000000030 <csrs_mie>:
+
+	.globl	csrs_mie
+csrs_mie:
+	csrs	mie, a0
+  30:	30452073          	csrs	mie,a0
+	ret
+  34:	00008067          	ret
+
+0000000000000038 <csrc_mie>:
+
+	.globl	csrc_mie
+csrc_mie:
+	csrc	mie, a0
+  38:	30453073          	csrc	mie,a0
+	ret
+  3c:	00008067          	ret
+
+0000000000000040 <mtvec_handler>:
+	.text
+	.globl	mtvec_handler
+mtvec_handler:
+	// Save all integer regs
+	// First save x31 in mscratch so we can use it as pointer to save area
+	csrw	mscratch, x31
+  40:	340f9073          	csrw	mscratch,t6
+	la	x31, reg_save_area
+  44:	00000f97          	auipc	t6,0x0
+			44: R_RISCV_PCREL_HI20	reg_save_area
+			44: R_RISCV_RELAX	*ABS*
+  48:	000f8f93          	mv	t6,t6
+			48: R_RISCV_PCREL_LO12_I	.L0 
+			48: R_RISCV_RELAX	*ABS*
+#if __riscv_xlen == 64
+	sd	x1,    8 (x31)
+  4c:	001fb423          	sd	ra,8(t6) # 4c <mtvec_handler+0xc>
+	sd	x2,   16 (x31)
+  50:	002fb823          	sd	sp,16(t6)
+	sd	x3,   24 (x31)
+  54:	003fbc23          	sd	gp,24(t6)
+	sd	x4,   32 (x31)
+  58:	024fb023          	sd	tp,32(t6)
+	sd	x5,   40 (x31)
+  5c:	025fb423          	sd	t0,40(t6)
+	sd	x6,   48 (x31)
+  60:	026fb823          	sd	t1,48(t6)
+	sd	x7,   56 (x31)
+  64:	027fbc23          	sd	t2,56(t6)
+	sd	x8,   64 (x31)
+  68:	048fb023          	sd	s0,64(t6)
+	sd	x9,   72 (x31)
+  6c:	049fb423          	sd	s1,72(t6)
+	sd	x10,  80 (x31)
+  70:	04afb823          	sd	a0,80(t6)
+	sd	x11,  88 (x31)
+  74:	04bfbc23          	sd	a1,88(t6)
+	sd	x12,  96 (x31)
+  78:	06cfb023          	sd	a2,96(t6)
+	sd	x13, 104 (x31)
+  7c:	06dfb423          	sd	a3,104(t6)
+	sd	x14, 112 (x31)
+  80:	06efb823          	sd	a4,112(t6)
+	sd	x15, 120 (x31)
+  84:	06ffbc23          	sd	a5,120(t6)
+	sd	x16, 128 (x31)
+  88:	090fb023          	sd	a6,128(t6)
+	sd	x17, 136 (x31)
+  8c:	091fb423          	sd	a7,136(t6)
+	sd	x18, 144 (x31)
+  90:	092fb823          	sd	s2,144(t6)
+	sd	x19, 152 (x31)
+  94:	093fbc23          	sd	s3,152(t6)
+	sd	x20, 160 (x31)
+  98:	0b4fb023          	sd	s4,160(t6)
+	sd	x21, 168 (x31)
+  9c:	0b5fb423          	sd	s5,168(t6)
+	sd	x22, 176 (x31)
+  a0:	0b6fb823          	sd	s6,176(t6)
+	sd	x23, 184 (x31)
+  a4:	0b7fbc23          	sd	s7,184(t6)
+	sd	x24, 192 (x31)
+  a8:	0d8fb023          	sd	s8,192(t6)
+	sd	x25, 200 (x31)
+  ac:	0d9fb423          	sd	s9,200(t6)
+	sd	x26, 208 (x31)
+  b0:	0dafb823          	sd	s10,208(t6)
+	sd	x27, 216 (x31)
+  b4:	0dbfbc23          	sd	s11,216(t6)
+	sd	x28, 224 (x31)
+  b8:	0fcfb023          	sd	t3,224(t6)
+	sd	x29, 232 (x31)
+  bc:	0fdfb423          	sd	t4,232(t6)
+	sd	x30, 240 (x31)
+  c0:	0fefb823          	sd	t5,240(t6)
+	// Finally save original value of x31 (saved earlier in mscratch)
+	csrr	x1, mscratch
+  c4:	340020f3          	csrr	ra,mscratch
+	sd	x1, 248 (x31)
+  c8:	0e1fbc23          	sd	ra,248(t6)
+	// Finally save original value of x31 (saved earlier in mscratch)
+	csrr	x1, mscratch    // original value of x1
+	sw	x1, 248 (x31)
+#endif
+	// Setup mstatus, mepc, mcause, mtval in argument regs
+	csrr	a0, mstatus
+  cc:	30002573          	csrr	a0,mstatus
+	csrr	a1, mepc
+  d0:	341025f3          	csrr	a1,mepc
+	csrr	a2, mcause
+  d4:	34202673          	csrr	a2,mcause
+	csrr	a3, mtval
+  d8:	343026f3          	csrr	a3,mtval
+	// Call handler (written in C)
+	.extern	exception_handler
+	jal	x1, exception_handler
+  dc:	f25ff0ef          	jal	ra,0 <csrr_mstatus>
+			dc: R_RISCV_JAL	exception_handler
+	
+	// Restore all integer registers
+	la	x31, reg_save_area
+  e0:	00000f97          	auipc	t6,0x0
+			e0: R_RISCV_PCREL_HI20	reg_save_area
+			e0: R_RISCV_RELAX	*ABS*
+  e4:	000f8f93          	mv	t6,t6
+			e4: R_RISCV_PCREL_LO12_I	.L0 
+			e4: R_RISCV_RELAX	*ABS*
+#if __riscv_xlen == 64
+	ld	x1,    8 (x31)
+  e8:	008fb083          	ld	ra,8(t6) # e8 <mtvec_handler+0xa8>
+	ld	x2,   16 (x31)
+  ec:	010fb103          	ld	sp,16(t6)
+	ld	x3,   24 (x31)
+  f0:	018fb183          	ld	gp,24(t6)
+	ld	x4,   32 (x31)
+  f4:	020fb203          	ld	tp,32(t6)
+	ld	x5,   40 (x31)
+  f8:	028fb283          	ld	t0,40(t6)
+	ld	x6,   48 (x31)
+  fc:	030fb303          	ld	t1,48(t6)
+	ld	x7,   56 (x31)
+ 100:	038fb383          	ld	t2,56(t6)
+	ld	x8,   64 (x31)
+ 104:	040fb403          	ld	s0,64(t6)
+	ld	x9,   72 (x31)
+ 108:	048fb483          	ld	s1,72(t6)
+	ld	x10,  80 (x31)
+ 10c:	050fb503          	ld	a0,80(t6)
+	ld	x11,  88 (x31)
+ 110:	058fb583          	ld	a1,88(t6)
+	ld	x12,  96 (x31)
+ 114:	060fb603          	ld	a2,96(t6)
+	ld	x13, 104 (x31)
+ 118:	068fb683          	ld	a3,104(t6)
+	ld	x14, 112 (x31)
+ 11c:	070fb703          	ld	a4,112(t6)
+	ld	x15, 120 (x31)
+ 120:	078fb783          	ld	a5,120(t6)
+	ld	x16, 128 (x31)
+ 124:	080fb803          	ld	a6,128(t6)
+	ld	x17, 136 (x31)
+ 128:	088fb883          	ld	a7,136(t6)
+	ld	x18, 144 (x31)
+ 12c:	090fb903          	ld	s2,144(t6)
+	ld	x19, 152 (x31)
+ 130:	098fb983          	ld	s3,152(t6)
+	ld	x20, 160 (x31)
+ 134:	0a0fba03          	ld	s4,160(t6)
+	ld	x21, 168 (x31)
+ 138:	0a8fba83          	ld	s5,168(t6)
+	ld	x22, 176 (x31)
+ 13c:	0b0fbb03          	ld	s6,176(t6)
+	ld	x23, 184 (x31)
+ 140:	0b8fbb83          	ld	s7,184(t6)
+	ld	x24, 192 (x31)
+ 144:	0c0fbc03          	ld	s8,192(t6)
+	ld	x25, 200 (x31)
+ 148:	0c8fbc83          	ld	s9,200(t6)
+	ld	x26, 208 (x31)
+ 14c:	0d0fbd03          	ld	s10,208(t6)
+	ld	x27, 216 (x31)
+ 150:	0d8fbd83          	ld	s11,216(t6)
+	ld	x28, 224 (x31)
+ 154:	0e0fbe03          	ld	t3,224(t6)
+	ld	x29, 232 (x31)
+ 158:	0e8fbe83          	ld	t4,232(t6)
+	ld	x30, 240 (x31)
+ 15c:	0f0fbf03          	ld	t5,240(t6)
+	ld	x31, 248 (x31)
+ 160:	0f8fbf83          	ld	t6,248(t6)
+	lw	x29, 116 (x31)
+	lw	x30, 120 (x31)
+	lw	x31, 124 (x31)
+#endif
+	// Return from trap/interrupt
+	mret
+ 164:	30200073          	mret
