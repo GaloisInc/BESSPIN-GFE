@@ -9,11 +9,13 @@ LD=$(CROSS_COMPILE)ld
 OBJCOPY=$(CROSS_COMPILE)objcopy
 OBJDUMP=$(CROSS_COMPILE)objdump
 
+PROG ?= freertos.elf
+
 export CROSS_COMPILE
 
 default: bootmem.bin
 
-freertos.bin: freertos.elf
+freertos.bin: $(PROG)
 	$(OBJCOPY) -O binary $< $@
 
 bootmem: bootmem_freertos.S linker.ld freertos.bin
@@ -23,7 +25,7 @@ bootmem.bin: bootmem
 	$(OBJCOPY) -O binary $< $@
 
 clean:
-	@rm -f bootmem bootmem.bin freertos.bin
+	@rm -f bootmem *.bin
 	@rm -rf build-bbl
 	
 .PHONY: default

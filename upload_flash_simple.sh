@@ -5,9 +5,18 @@
 
 if (( $# != 2 )); then
     echo "Illegal number of parameters"
-    echo "Usage: $0 path-to-bitfile path-to-datafile"
+    echo "Usage: $0 path-to-bitfile path-to-elf"
     exit -1
 fi
 
+prog=`basename $2`
+echo "Copying " $prog
+
+cp $2 bootmem/.
+cd bootmem
+PROG=$prog make -f Makefile.freertos
+
+echo "Uploading..."
 tcl/program_flash bitfile $1
-tcl/program_flash datafile $2
+tcl/program_flash datafile bootmem/bootmem.bin
+echo "Done! Power cycle your FPGA."
