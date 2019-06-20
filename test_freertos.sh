@@ -10,6 +10,7 @@ freertos_folder=$BASE_DIR/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1/
 python_unittest_script=test_gfe_unittest.py
 bootmem_folder=$BASE_DIR/bootmem/
 
+
 function proc_freertos_usage {
     echo "Usage: $0"
     echo "Usage: $0 --ethernet"
@@ -51,12 +52,16 @@ if [[ $1 == "--flash" ]]; then
 	fi
 elif [[ $1 == "--ethernet" ]]; then
 	use_flash=false
-	test_ethernet=true       
+	test_ethernet=true
+elif [[ $1 == "--full_ci" ]]; then
+	test_ethernet=false
+	use_flash=false
+	full_ci=true
 else
 	test_ethernet=false
 	use_flash=false
+	full_ci=false
 fi
-
 
 if [ "$test_ethernet" = true ]; then
 	freertos_test main_udp test_udp
@@ -84,12 +89,13 @@ elif [ "$use_flash" = true ]; then
 	echo "test_freertos.sh: Programming FPGA with a bitstream after a flash upload"
 	./program_fpga.sh $proc_name
 	err_msg $? "test_freertos.sh: Programming the FPGA failed" "test_freertos.sh: Programming the FPGA OK"
-else
-	freertos_test main_blinky test_blink
-	freertos_test main_full test_full
+elif [ "$full_ci" = true ]; then
 	# Disaling for now, the PMOD header has difficulty pulling the line down
 	#freertos_test main_gpio test_gpio
 	freertos_test main_uart test_uart
 	freertos_test main_iic test_iic
 	freertos_test main_sd test_sd
+else
+	freertos_test main_blinky test_blink
+	freertos_test main_full test_full
 fi
