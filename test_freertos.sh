@@ -84,6 +84,7 @@ elif [ "$use_flash" = true ]; then
 	echo "test_freertos.sh: Programming FPGA with a bitstream after a flash upload"
 	./program_fpga.sh $proc_name
 	err_msg $? "test_freertos.sh: Programming the FPGA failed" "test_freertos.sh: Programming the FPGA OK"
+	sleep 10
 	#The Test itself
 	if [[ $flash_option == "full" ]] || [[ $flash_option == "blinky" ]]; then
 		cd $BASE_DIR/testing/scripts
