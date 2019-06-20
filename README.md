@@ -36,7 +36,7 @@ git clone git@gitlab-ext.galois.com:ssith/gfe.git
 The Besspin tool suite contains a nix-shell environment that builds all the tools necessary for the GFE excluding Vivado.
 All commands that use tools once found in riscv-tools (i.e. openocd, gcc, gdb, etc) should be run within the nix-shell.
 This applies to scripts within the GFE such as `test_processor.sh`.
-See the Besspin tool suite repo for installation instructions.
+See the Besspin [tool suite repo](https://gitlab-ext.galois.com/ssith/tool-suite#setup) for installation instructions.
 The following instructions describe how to enter the nix-shell.
 
 ```bash
