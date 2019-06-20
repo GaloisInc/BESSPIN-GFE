@@ -16,11 +16,11 @@ echo "Testing $proc_name"
 
 # Run all P1 processor tests
 if [ "$proc_name" == "chisel_p1" ] || [ "$proc_name" == "bluespec_p1" ]; then
-	#./test.sh 32
+	./test.sh 32
 	err_msg $? "test.sh 32 failed" "test.sh 32 OK"
-	#./test_freertos.sh
+	./test_freertos.sh
 	err_msg $? "test_freertos.sh failed" "test_freertos.sh OK"
-	#./test_freertos.sh --ethernet
+	./test_freertos.sh --ethernet
 	err_msg $? "test_freertos.sh ethernet failed" "test_freertos.sh ethernet OK"
 	./test_freertos.sh --flash $proc_name blinky
 	err_msg $? "test_freertos.sh flash failed" "test_freertos.sh flash OK"

@@ -334,8 +334,8 @@ class TestFreeRTOS(BaseGfeTest):
         self.check_in_output(
             elf=freertos_elf,
             timeout=60,
-            expected_contents=["main_full", "pass"],
-            absent_contents="error")
+            expected_contents=["main_full", "Pass"],
+            absent_contents="ERROR")
 
         return
 
@@ -348,8 +348,8 @@ class TestFreeRTOS(BaseGfeTest):
         self.check_in_output(
             elf=freertos_elf,
             timeout=60,
-            expected_contents=["main_full", "pass"],
-            absent_contents="error",
+            expected_contents=["main_full", "Pass"],
+            absent_contents="ERROR",
             run_from_flash= True ) 
 
         return
