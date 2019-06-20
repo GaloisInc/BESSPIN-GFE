@@ -326,7 +326,7 @@ class TestFreeRTOS(BaseGfeTest):
 
 
     def test_full(self):
-        # Load FreeRTOS binary
+        # load freertos binary
         freertos_elf = os.path.abspath(
            os.path.join( self.path_to_freertos, 'main_full.elf'))
         print(freertos_elf)
@@ -338,6 +338,22 @@ class TestFreeRTOS(BaseGfeTest):
             absent_contents="ERROR")
 
         return
+
+    def test_flash_full(self):
+        # load freertos binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main_full.elf'))
+        print(freertos_elf)
+        
+        self.check_in_output(
+            elf=freertos_elf,
+            timeout=60,
+            expected_contents=["main_full", "Pass"],
+            absent_contents="ERROR",
+            run_from_flash= True ) 
+
+        return
+
         
     def test_blink(self):
         # Load FreeRTOS binary
@@ -359,6 +375,29 @@ class TestFreeRTOS(BaseGfeTest):
             expected_contents=expected_contents)
 
         return
+    
+    def test_flash_blinky(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main_blinky.elf'))
+        print(freertos_elf)
+
+        expected_contents = [
+            "Blink",
+            "RX: received value",
+            "TX: sent",
+            "Hello from RX",
+            "Hello from TX",
+        ]
+        
+        self.check_in_output(
+            elf=freertos_elf,
+            timeout=3,
+            expected_contents=expected_contents,
+            run_from_flash = True)
+
+        return
+
 
     def test_uart(self):
         # Load FreeRTOS binary

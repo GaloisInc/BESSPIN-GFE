@@ -34,7 +34,7 @@ if [ "$proc_name" == "chisel_p1" ] || [ "$proc_name" == "bluespec_p1" ]; then
 	./test_freertos.sh --ethernet
 	err_msg $? "test_freertos.sh ethernet failed" "test_freertos.sh ethernet OK"
 	./test_freertos.sh --flash $proc_name blinky
-	err_msg $? "test_freertos.sh flash failed" "test_freertos.sh flash [UPLOAD ONLY] OK"
+	err_msg $? "test_freertos.sh flash failed" "test_freertos.sh flash OK"
 fi
 
 # Run all P2/P3 processor tests
