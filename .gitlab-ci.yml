@@ -17,12 +17,6 @@ before_script:
     - chmod 700 ~/.ssh
     - ssh-keyscan gitlab-ext.galois.com >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    - git clone https://github.com/mirror/busybox.git tmp
-    - cd tmp
-    - git submodule init
-    - git submodule update
-    - cd ..
-    - ./init_submodules.sh
     - export USER=gitlab-runner
 
 #-----------------------------------------------------------------------------#
@@ -32,6 +26,12 @@ before_script:
 #-----------------------------------------------------------------------------#
 FreeRTOS:
   script:
+    - git clone https://github.com/mirror/busybox.git tmp
+    - cd tmp
+    - git submodule init
+    - git submodule update
+    - cd ..
+    - ./init_submodules.sh
     - nix-shell --run './compilation_test.sh'
   tags: ["fpga"]
   only:
