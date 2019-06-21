@@ -12,7 +12,7 @@ git submodule sync
 cd ..
 
 git submodule update --init tool-suite FreeRTOS-mirror
-git submodule update --init --recursive \ 
+git submodule update --init --recursive \
 busybox bluespec-processors/P1/Piccolo bluespec-processors/P2/Flute \
 riscv-linux bluespec-processors/P3/Tuba riscv-tests riscv-pk
 git submodule update --init chisel_processors
