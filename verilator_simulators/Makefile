@@ -19,16 +19,7 @@ SIM_EXE_FILE = run/exe_HW_$(PROC)_sim
 
 # ================================================================
 
-.PHONY: help
-help:
-	@echo '    make  simulator    Compiles and links RTL to create verilator executable'
-	@echo ''
-	@echo '    make  clean        Remove intermediate build-files unnecessary for execution'
-	@echo '    make  full_clean   Restore to pristine state (pre-building anything)'
-
-# ----------------
 # Top-level module
-
 TOPMODULE ?= mkTop_HW_Side
 
 # ================================================================
