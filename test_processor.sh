@@ -15,7 +15,7 @@ fi
 
 # Hack to get Bluespec_P1 start reliably
 if [ "$proc_name" == "bluespec_p1" ] ; then
-	tcl/program_flash datafile bootmem/bootmem_debian.bin
+	tcl/program_flash datafile bootmem/small.bin
 fi
 
 # Program the FPGA with the appropriate bitstream
