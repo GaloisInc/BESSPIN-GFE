@@ -13,6 +13,11 @@ else
 	full_ci=false
 fi
 
+# Hack to get Bluespec_P1 start reliably
+if [ "$proc_name" == "bluespec_p1" ] ; then
+	tcl/program_flash datafile bootmem/bootmem_debian.bin
+fi
+
 # Program the FPGA with the appropriate bitstream
 ./program_fpga.sh $proc_name
 err_msg $? "test_processor.sh: Programming the FPGA failed"
