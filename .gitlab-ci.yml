@@ -17,7 +17,8 @@ before_script:
     - chmod 700 ~/.ssh
     - ssh-keyscan gitlab-ext.galois.com >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    - git submodule update --init busybox
+    - git submodule init
+    - git submodule update
     - ./init_submodules.sh
     - export USER=gitlab-runner
 
