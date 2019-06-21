@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Get the path to the script folder of the git repository
-BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null && pwd)"
 source $BASE_DIR/setup_env.sh
 err_msg $SETUP_ENV_ERR "Sourcing setup_env.sh failed"
 
@@ -30,11 +30,11 @@ if [ "$proc_name" == "chisel_p1" ] || [ "$proc_name" == "bluespec_p1" ]; then
 		# Test the peripherals, assuming we have the right setup
 		./test_freertos.sh --full_ci
 		err_msg $? "test_freertos.sh full CI failed" "test_freertos.sh full CI OK"
+		./test_freertos.sh --ethernet
+		err_msg $? "test_freertos.sh ethernet failed" "test_freertos.sh ethernet OK"
+		./test_freertos.sh --flash $proc_name blinky
+		err_msg $? "test_freertos.sh flash failed" "test_freertos.sh flash OK"
 	fi
-	./test_freertos.sh --ethernet
-	err_msg $? "test_freertos.sh ethernet failed" "test_freertos.sh ethernet OK"
-	./test_freertos.sh --flash $proc_name blinky
-	err_msg $? "test_freertos.sh flash failed" "test_freertos.sh flash OK"
 fi
 
 # Run all P2/P3 processor tests
@@ -51,7 +51,7 @@ if [ "$proc_name" == "chisel_p2" ] || [ "$proc_name" == "bluespec_p2" ] || [ "$p
 		err_msg $? "test_linux.sh busybox ethernet failed" "test_linux.sh busybox ethernet OK"
 		./test_linux.sh debian --ethernet
 		err_msg $? "test_linux.sh debian ethernet failed" "test_linux.sh debian ethernet OK"
+		./test_linux.sh debian --flash $proc_name
+		err_msg $? "test_linux.sh debian boot from flash failed" "test_linux.sh debian boot from flash OK"
 	fi
-	./test_linux.sh debian --flash $proc_name	
-	err_msg $? "test_linux.sh debian boot from flash failed" "test_linux.sh debian boot from flash OK"
 fi
