@@ -1,10 +1,10 @@
 [submodule "chisel_processors"]
 	path = chisel_processors
-	url = ../chisel_processors.git
+	url = https://gitlab-ext.galois.com/ssith/chisel_processors.git
 	branch = update_p1_chisel
 [submodule "riscv-tools"]
 	path = riscv-tools
-	url = ../riscv-tools.git
+	url = https://gitlab-ext.galois.com/ssith/riscv-tools.git
 	branch = ssith-p1-tools
 [submodule "FreeRTOS-mirror"]
 	path = FreeRTOS-mirror
@@ -14,7 +14,7 @@
 	url = https://github.com/bluespec/Flute.git
 [submodule "riscv-linux"]
 	path = riscv-linux
-	url = ../riscv-linux.git
+	url = https://gitlab-ext.galois.com/ssith/riscv-linux.git
 [submodule "busybox"]
 	path = busybox
 	url = https://git.busybox.net/busybox
