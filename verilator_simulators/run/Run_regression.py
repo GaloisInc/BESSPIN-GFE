@@ -215,7 +215,9 @@ def main (argv = None):
     sys.stdout.write ("Executed:    {0} tests\n".format (num_executed))
     sys.stdout.write ("PASS:        {0} tests\n".format (num_passed))
     sys.stdout.write ("FAIL:        {0} tests\n".format (num_executed - num_passed))
-    return 0
+
+    # Set nonzero exit code unless all tests passed
+    return 0 if num_passed == n_tests else 1
 
 # ================================================================
 # Extract the architecture string (e.g., RV64AIMSU) from the string s

@@ -170,3 +170,37 @@ bitstream_gen:
     only:
       variables:
       - $JOB_TYPE == "bitstream"
+
+
+#-----------------------------------------------------------------------------#
+#
+# Verilator simulation tests
+#
+#-----------------------------------------------------------------------------#
+sim_chisel_p1:
+  script:
+    - nix-shell --run './test_simulator.sh chisel_p1'
+  tags: ["verilator"]
+  only:
+    - develop
+
+sim_bluespec_p1:
+  script:
+    - nix-shell --run './test_simulator.sh bluespec_p1'
+  tags: ["verilator"]
+  only:
+    - develop
+
+sim_chisel_p2:
+  script:
+    - nix-shell --run './test_simulator.sh chisel_p2'
+  tags: ["verilator"]
+  only:
+    - develop
+
+sim_bluespec_p2:
+  script:
+    - nix-shell --run './test_simulator.sh bluespec_p2'
+  tags: ["verilator"]
+  only:
+    - develop
