@@ -12,7 +12,7 @@
 	cpus {
 		#address-cells = <1>;
 		#size-cells = <0>;
-		timebase-frequency = <25000000>;
+		timebase-frequency = <68000000>;
 		CPU0: cpu@0 {
 			device_type = "cpu";
 			reg = <0>;
@@ -24,7 +24,7 @@
 			riscv,isa = "rv64imafdc";
 			mmu-type = "riscv,sv39";
 #endif
-			clock-frequency = <25000000>;
+			clock-frequency = <68000000>;
 			dmas = <&axi_dma 0>, <&axi_dma 1>;
 			dma-names = "tx", "rx";
 			CPU0_intc: interrupt-controller {
@@ -49,7 +49,7 @@
 			reg = <0x80000000 0x40000000>;
 			linux,dma-default;
 		};
-	};	
+	};
 	soc {
 		#address-cells = <1>;
 		#size-cells = <1>;
@@ -86,7 +86,7 @@
 			phy-handle = <&phy0>;
 			xlnx,vcu118;
 			local-mac-address = [00 0a 35 04 db 5a];
-			clock-frequency = <25000000>;
+			clock-frequency = <68000000>;
 			axi_ethernet_mdio: mdio {
 				#address-cells = <1>;
 				#size-cells = <0>;
@@ -110,7 +110,7 @@
 			compatible = "ns16550a";
 			interrupts-extended = <&plic 1>;
 			reg = <0x62300000 0x1000>;
-			clock-frequency = <25000000>;
+			clock-frequency = <68000000>;
 			reg-shift = <2>;
 		};
 	};

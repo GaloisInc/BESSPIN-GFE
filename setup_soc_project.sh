@@ -23,7 +23,7 @@ case "$proc_name" in
 	;;
     *p2)
 	make CROSS_COMPILE=riscv64-unknown-elf-
-	clock_freq_mhz=25
+	clock_freq_mhz=68
 	;;
     *p3)
 	make CROSS_COMPILE=riscv64-unknown-elf-
@@ -50,5 +50,4 @@ vivado -mode batch -source $BASE_DIR/tcl/soc.tcl \
 --clock_freq_mhz $clock_freq_mhz
 
 err_msg $? "Creating the vivado project failed"
-
 
