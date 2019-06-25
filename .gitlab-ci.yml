@@ -68,7 +68,7 @@ chisel_p2:
   only:
     variables:
       - $JOB_TYPE == "chisel_p2"
-      - CI_COMMIT_REF_NAME = "develop"
+      - $CI_COMMIT_REF_NAME = "develop"
 
 bluespec_p2: # currently fails
   stage: test
@@ -79,7 +79,7 @@ bluespec_p2: # currently fails
   only:
       variables:
       - $JOB_TYPE == "bluespec_p2"
-      - CI_COMMIT_REF_NAME = "develop"
+      - $CI_COMMIT_REF_NAME = "develop"
 
 chisel_p3: # currently fails
   stage: test
@@ -90,7 +90,7 @@ chisel_p3: # currently fails
   only:
       variables:
       - $JOB_TYPE == "chisel_p3"
-      - CI_COMMIT_REF_NAME = "develop"
+      - $CI_COMMIT_REF_NAME = "develop"
 
 bluespec_p3: # currently fails
   stage: test
@@ -101,7 +101,7 @@ bluespec_p3: # currently fails
   only:
       variables:
       - $JOB_TYPE == "bluespec_p3"
-      - CI_COMMIT_REF_NAME = "develop"
+      - $CI_COMMIT_REF_NAME = "develop"
 
 #-----------------------------------------------------------------------------#
 #
