@@ -4,6 +4,19 @@ cache:
     - riscv-linux/
     - busybox/
 
+# FYI: `stage` is defined per-job and relies on stages which is defined globally.
+# It allows to group jobs into different stages, 
+# and jobs of the same stage are executed in parallel 
+#
+# The intend here is to paralellize as many tests as possible,
+# while running at most one FPGA test at once
+# I.e. run the simulation tests in parallel, but the FPGA tests have
+# to run in sequence
+stages:
+ - test_fpga_chisel_p1
+ - test_fpga_bluespec_p1
+ - test # default
+
 #-----------------------------------------------------------------------------#
 #
 # General startup commands
@@ -21,26 +34,11 @@ before_script:
 
 #-----------------------------------------------------------------------------#
 #
-# FreeRTOS compilation test
-#
-#-----------------------------------------------------------------------------#
-FreeRTOS:
-  script:
-    - git clone https://github.com/mirror/busybox.git tmp
-    - nix-shell --run './compilation_test.sh'
-  tags: ["fpga"]
-  only:
-    - develop
-  except:
-    - schedules
-
-
-#-----------------------------------------------------------------------------#
-#
 # FPGA tests
 #
 #-----------------------------------------------------------------------------#
 chisel_p1:
+  stage: test_fpga_chisel_p1
   script:
     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
     - nix-shell --run './test_processor.sh chisel_p1 --full_ci'
@@ -51,6 +49,7 @@ chisel_p1:
     - schedules
 
 bluespec_p1:
+  stage: test_fpga_bluespec_p1
   script:
     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
     - nix-shell --run './test_processor.sh bluespec_p1 --full_ci'
@@ -61,48 +60,48 @@ bluespec_p1:
     - schedules
 
 chisel_p2:
+  stage: test
   script:
     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
     - nix-shell --run './test_processor.sh chisel_p2 --full_ci'
   tags: ["fpga"]
   only:
-    - develop
-  only:
-      variables:
+    variables:
       - $JOB_TYPE == "chisel_p2"
+      - $CI_COMMIT_REF_NAME = "develop"
 
 bluespec_p2: # currently fails
+  stage: test
   script:
     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
     - nix-shell --run './test_processor.sh bluespec_p2 --full_ci'
   tags: ["fpga"]
   only:
-    - develop
-  only:
       variables:
       - $JOB_TYPE == "bluespec_p2"
+      - $CI_COMMIT_REF_NAME = "develop"
 
 chisel_p3: # currently fails
+  stage: test
   script:
     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
     - nix-shell --run './test_processor.sh chisel_p3 --full_ci'
   tags: ["fpga"]
   only:
-    - develop
-  only:
       variables:
       - $JOB_TYPE == "chisel_p3"
+      - $CI_COMMIT_REF_NAME = "develop"
 
 bluespec_p3: # currently fails
+  stage: test
   script:
     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
     - nix-shell --run './test_processor.sh bluespec_p3 --full_ci'
   tags: ["fpga"]
   only:
-    - develop
-  only:
       variables:
       - $JOB_TYPE == "bluespec_p3"
+      - $CI_COMMIT_REF_NAME = "develop"
 
 #-----------------------------------------------------------------------------#
 #
@@ -110,6 +109,7 @@ bluespec_p3: # currently fails
 #
 #-----------------------------------------------------------------------------#
 bitstream_gen:
+    stage: test
     script:
       - export XILINXD_LICENSE_FILE=/opt/Xilinx/Xilinx.lic
       - source /opt/Xilinx/Vivado/2017.4/settings64.sh
@@ -178,29 +178,41 @@ bitstream_gen:
 #
 #-----------------------------------------------------------------------------#
 sim_chisel_p1:
+  stage: test
   script:
     - nix-shell --run './test_simulator.sh chisel_p1'
   tags: ["verilator"]
   only:
     - develop
+  except:
+    - schedules
 
 sim_bluespec_p1:
+  stage: test
   script:
     - nix-shell --run './test_simulator.sh bluespec_p1'
   tags: ["verilator"]
   only:
     - develop
+  except:
+    - schedules
 
 sim_chisel_p2:
+  stage: test
   script:
     - nix-shell --run './test_simulator.sh chisel_p2'
   tags: ["verilator"]
   only:
     - develop
+  except:
+    - schedules
 
 sim_bluespec_p2:
+  stage: test
   script:
     - nix-shell --run './test_simulator.sh bluespec_p2'
   tags: ["verilator"]
   only:
     - develop
+  except:
+    - schedules
