@@ -1,8 +1,3 @@
-[This is a first draft.  The material in square brackets is intended for the
-development team, and should probably be deleted before publication on the
-master branch.]
-
-
 INTRODUCTION
 
 This directory provides for the simulation and testing of the GFE processors
@@ -49,9 +44,6 @@ themselves, which are in separate directories).
 
 FACILITIES
 
-[Please feel free to revise the details here, and in the Makefiles etc., to
-accord better with the GFE conventions.]
-
 Note that many of the Makefile targets require an argument of the form (e.g.)
    PROC=bluespec_p1
 to specify the relevant processor.
@@ -72,11 +64,6 @@ This will, when required, use a serial jtag port (very slow) for connection to
 openocd.
 
 In the "run" directory:
-
-[Note: the contents of the Tests directory are currently fixed, for the sake
-of stability while developing.  Feel free to replace them by pointers (either
-symlinks or by modifying the Makefile) to the canonical versions (though see
-other notes below).]
 
 Running elf files in standalone mode
 
@@ -102,17 +89,6 @@ the Makefile itself.
 make smoke_test PROC=<proc>
 run a smoke-test by way of a single test.  The test is specified in the
 Makefile as rv{32,64}ui-p-add.
-
-[This test, and all the ISA tests mentioned next, terminates by the memory
-model's detecting a write to the "tohost" variable.  This works for the
-bluespec processors, but currently not for the chisel ones.  This is because
-"tohost" is in the cached part of the memory, so since the chisel processors'
-caches are writeback the write to "tohost" never reaches the memory model.
-The solution is to move "tohost" to the uncached area.  It is defined in
-   Tests/env/p/riscv_test.h
-but because I might not be aware of any ramifications I've not redefined it.
- The chisel processors also generate lots of debug output, which might or
-might not be desirable.]
 
 make isa_tests PROC=<proc>
 run all the ISA tests appropriate to the processor architecture, which is
@@ -152,19 +128,15 @@ line should be commented out, and the
 also be amended if necessary.  (Note: the "set INTERFACE xilinx" line is for
 use when connecting openocd to a FPGA.)
 
-[Note: the openocd symlink points to the latest version consistently working.
-When we have a later version which can be included in the PATH, all the
-versions in the "run" directory can disappear.]
-
 riscv32-unknown-elf-gdb --command test-all32.gdb
 riscv32-unknown-elf-gdb --command test-all.gdb
 Run a regression under control of the specified gdb script (test-all32.gdb for
 a P1 processor, test-all.gdb for a P2 one).  Note that the gdb program,
 despite its name, can handle both rv32 and rv64 processors.
 
-[These two scripts are pre-generated, and out of date.  This should all
+[TODO: These two scripts are pre-generated, and out of date.  This should all
 eventually be replaced by a mechanism which generates and runs the appropriate
-script.]
+script. See scripts/gen-test-all and targets/ssith_gfe.cfg in ../testing.]
 
 riscv32-unknown-elf-gdb --command init.gdb
 This will set up an interactive gdb session, within which an .elf file can be
