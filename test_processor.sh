@@ -13,6 +13,12 @@ else
 	full_ci=false
 fi
 
+# Make sure the Bluespec P1 is programmed with a valid flash content
+# This is a workaround for https://gitlab-ext.galois.com/ssith/gfe/issues/58
+if [ "$proc_name" == "bluespec_p1" ]; then
+	tcl/program_flash datafile bootmem/small.bin
+fi
+
 # Program the FPGA with the appropriate bitstream
 ./program_fpga.sh $proc_name
 err_msg $? "test_processor.sh: Programming the FPGA failed"
