@@ -13,6 +13,7 @@ for item in fitems:
         text = item.split('###')[1]
         foutput.write('- ')
     else:
+        foutput.write('\n')
         text = item.split('##')[1]
     foutput.write("[{}](#".format(text[1:-1]))
     foutput.write('-'.join(text.lower().split(' ')[1:-1]))
