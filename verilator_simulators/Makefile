@@ -26,14 +26,13 @@ TOPMODULE ?= mkTop_HW_Side
 # Compile and link Verilog RTL sources into an verilator executable
 
 # Verilator flags: notes
-#    stats              Dump stats on the design, in file {prefix}__stats.txt
-#    -O3                Verilator optimization level
-#    -CFLAGS -O3        C++ optimization level
+#    --stats            Dump stats on the design, in file {prefix}__stats.txt
 #    --x-assign fast    Optimize X value
 #    --x-initial fast   Optimize uninitialized value
 #    --noassert         Disable all assertions
+#    +define+PRINTF_COND=0 Disable debug messages (Chisel only)
 
-VERILATOR_FLAGS = --stats --x-assign fast --x-initial fast --noassert src_C/sim_socket.c
+VERILATOR_FLAGS = --stats --x-assign fast --x-initial fast --noassert src_C/sim_socket.c +define+PRINTF_COND=0
 
 # Produce a static binary: (GLIBC_STATIC is set by Nix shell)
 VERILATOR_FLAGS += -LDFLAGS "-static -L ${GLIBC_STATIC}/lib"
