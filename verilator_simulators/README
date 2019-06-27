@@ -134,15 +134,6 @@ Run a regression under control of the specified gdb script (test-all32.gdb for
 a P1 processor, test-all.gdb for a P2 one).  Note that the gdb program,
 despite its name, can handle both rv32 and rv64 processors.
 
-[TODO: These two scripts are pre-generated, and out of date.  This should all
-eventually be replaced by a mechanism which generates and runs the appropriate
-script. See scripts/gen-test-all and targets/ssith_gfe.cfg in ../testing.]
-
 riscv32-unknown-elf-gdb --command init.gdb
 This will set up an interactive gdb session, within which an .elf file can be
 specified, loaded and run (with breakpoints) in the usual way.
-
-[Note: for reasons I don't yet understand, this vpi_port set-up occasionally
-fails the first time it's tried.  Throwing off both sides of the connection
-and starting again usually succeeds. I'm guessing that the TCP/IP connection
-itself introduces some legacy garbage -- but it needs further investigation.]
