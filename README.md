@@ -16,9 +16,12 @@ Please refer to the [GFE System Description pdf](https://gitlab-ext.galois.com/s
 - [Building the Bitstream](#building-the-bitstream)
 - [Storing a Bitstream in Flash](#storing-a-bitstream-in-flash)
 - [Testing](#testing)
+
 [Simulation](#simulation)
+
 [Manually Running FreeRTOS](#manually-running-freertos)
 - [Running FreeRTOS + TCP/IP stack](#running-freertos-+-tcp/ip-stack)
+
 [Running Linux - Debian or Busybox](#running-linux---debian-or-busybox)
 - [Creating Debian Image](#creating-debian-image)
 - [Creating Busybox Image](#creating-busybox-image)
@@ -26,9 +29,11 @@ Please refer to the [GFE System Description pdf](https://gitlab-ext.galois.com/s
 - [ Load and run the memory image](#load-and-run-the-memory-image)
 - [Using Ethernet on Linux](#using-ethernet-on-linux)
 - [Storing a boot image in Flash](#storing-a-boot-image-in-flash)
+
 [Adding in Your Processor](#adding-in-your-processor)
 - [Modifying the GFE](#modifying-the-gfe)
 - [Rebuilding the Chisel and Bluespec Processors](#rebuilding-the-chisel-and-bluespec-processors)
+
 [Tandem Verification](#tandem-verification)
 - [Establishing the PCIe Link](#establishing-the-pcie-link)
 - [Installing Bluespec](#installing-bluespec)
