@@ -11,10 +11,10 @@ foutput = open("toc.txt","w")
 for item in fitems:
     if ('###' in item):
         text = item.split('###')[1]
-        foutput.write('<space>'*4)
+        foutput.write('- ')
     else:
         text = item.split('##')[1]
-    foutput.write("[{}](".format(text[1:-1]))
+    foutput.write("[{}](#".format(text[1:-1]))
     foutput.write('-'.join(text.lower().split(' ')[1:-1]))
     foutput.write(')\n')
 
