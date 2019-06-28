@@ -1,23 +1,24 @@
-#This is a very basic script
-#Generates a table of contents for Readme.md and dumps it into toc.txt
+#! /usr/bin/env python3
 
-import os
-os.system("grep \"##\" README.md > temptoc.txt")
-#os.system(["grep", "\"##\"", "Readme.md", ">", "temptoc.txt"])
-finput = open("temptoc.txt","r")
-fitems = finput.read().splitlines()
-finput.close()
-foutput = open("toc.txt","w")
-for item in fitems:
-    if ('###' in item):
-        text = item.split('###')[1]
-        foutput.write('- ')
-    else:
-        foutput.write('\n')
-        text = item.split('##')[1]
-    foutput.write("[{}](#".format(text[1:-1]))
-    foutput.write('-'.join(text.lower().split(' ')[1:-1]))
-    foutput.write(')\n')
+# Output a table of contents for the given Markdown file.
+# Doesn't do anything to ignore #-prefixed lines in ``` code blocks.
 
-foutput.close()
-os.system("rm temptoc.txt")
+from sys import argv
+
+md_file = open(argv[1])
+
+def sanitize(a_string):
+    for char in './+-()': # and other url-unfriendly chars...
+        a_string = a_string.replace(char, ' ')
+    a_string = a_string.lower()
+    return '-'.join(a_string.split()) 
+
+for line in md_file:
+    if line.startswith('#'):
+        level, headline = line.split(' ', 1)
+        level = level.count('#')
+        headline = headline.rstrip('# \n')
+        anchor = sanitize(headline)
+        anchor = '-'.join(anchor.split())
+        print('{}-[{}](#{})'.format(
+            '  ' * (level - 1), headline, anchor))

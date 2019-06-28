@@ -8,82 +8,111 @@ Please refer to the [GFE System Description pdf](https://gitlab-ext.galois.com/s
 
 ## Table of contents ##
 
-- [Getting Started](#getting-started)
-  - [Setup OS (Debian Buster)](#setup-os-debian-buster)
-  - [Clone this REPO](#clone-this-repo)
-  - [Clone and Install the Besspin Tool Suite](#clone-and-install-the-besspin-tool-suite)
-  - [Install Vivado](#install-vivado)
-  - [Building the Bitstream](#building-the-bitstream)
-  - [Storing a Bitstream in Flash](#storing-a-bitstream-in-flash)
-  - [Testing](#testing)
-- [Simulation](#simulation)
-- [Manually Running FreeRTOS](#manually-running-freertos)
-- [Running FreeRTOS + TCP/IP stack](#running-freertos-tcp-ip-stack)
-- [Running Linux - Debian or Busybox](#running-linux-debian-or-busybox)
-  - [Creating Debian Image](#creating-debian-image)
-  - [Creating Busybox Image](#creating-busybox-image)
-  - [ Build the memory image](#build-the-memory-image)
-  - [ Load and run the memory image](#load-and-run-the-memory-image)
-  - [Using Ethernet on Linux](#using-ethernet-on-linux)
-  - [Storing a boot image in Flash](#storing-a-boot-image-in-flash)
-- [Adding in Your Processor](#adding-in-your-processor)
-- [Modifying the GFE](#modifying-the-gfe)
-- [Rebuilding the Chisel and Bluespec Processors](#rebuilding-the-chisel-and-bluespec-processors)
-- [Tandem Verification](#tandem-verification)
-  - [Establishing the PCIe Link](#establishing-the-pcie-link)
-  - [Installing Bluespec](#installing-bluespec)
-  - [Licensing](#licensing)
-  - [Capturing a Trace](#capturing-a-trace)
-  - [Comparing a Trace](#comparing-a-trace)
+-[Getting Started](#getting-started)
+  -[Setup OS (Debian Buster)](#setup-os-debian-buster)
+  -[Install Vivado](#install-vivado)
+  -[Clone this Repo](#clone-this-repo)
+  -[Update Dependencies](#update-dependencies)
+  -[Building the Bitstream](#building-the-bitstream)
+  -[Storing a Bitstream in Flash](#storing-a-bitstream-in-flash)
+  -[Testing](#testing)
+-[Simulation](#simulation)
+-[Manually Running FreeRTOS](#manually-running-freertos)
+  -[Running FreeRTOS + TCP/IP stack](#running-freertos-tcp-ip-stack)
+-[Running Linux - Debian or Busybox](#running-linux-debian-or-busybox)
+  -[Creating Debian Image](#creating-debian-image)
+  -[Creating Busybox Image](#creating-busybox-image)
+    -[Build the memory image](#build-the-memory-image)
+    -[Load and run the memory image](#load-and-run-the-memory-image)
+  -[Using Ethernet on Linux](#using-ethernet-on-linux)
+  -[Storing a boot image in Flash](#storing-a-boot-image-in-flash)
+-[Adding in Your Processor](#adding-in-your-processor)
+  -[Modifying the GFE](#modifying-the-gfe)
+-[Rebuilding the Chisel and Bluespec Processors](#rebuilding-the-chisel-and-bluespec-processors)
+-[Tandem Verification](#tandem-verification)
+  -[Establishing the PCIe Link](#establishing-the-pcie-link)
+  -[Installing Bluespec](#installing-bluespec)
+  -[Licensing](#licensing)
+  -[Capturing a Trace](#capturing-a-trace)
+  -[Comparing a Trace](#comparing-a-trace)
 
 
 ## Getting Started ##
 
-To update from a previous release, please follow the instructions below starting with
-**Clone this repo**.
+To update from a previous release, please follow the instructions below,
+starting with [Update Dependencies](#update-dependencies).
 
-Prebuilt images are available in the bitstreams folder. Use these, if you want to quickly get started. This documentation walks through the process of building a bitstream and testing the output. It suggests how to modify the GFE with your own processor.
+Prebuilt images are available in the bitstreams folder.
+Use these, if you want to quickly get started.
+This documentation walks through the process of building and testing a bitstream.
+It suggests how to modify the GFE with your own processor.
+
 
 ### Setup OS (Debian Buster) ###
 
-Please perform a clean install of Debian Buster on the development and testing hosts. This is the supported OS for building and testing the GFE. At the time of release 1 (Feb 1), Debian Buster Alpha 4 was the latest version, but we expect to upgrade Buster to the stable release version when it is available.
+Before installing the GFE for the first time,
+please perform a clean install of [Debian 10 ("Buster")](https://www.debian.org/releases/buster/)
+on the development and testing hosts.
+This is the supported OS for building and testing the GFE.
+At the time of release 1 (Feb 1), Debian Buster Alpha 4 was the latest version,
+but we expect to upgrade Buster to the stable release version when it is available.
 
-### Clone this REPO ###
-
-Once the OS is installed, you will need to add your ssh key to Gitlab in order to clone this repo. Checkout these [instructions](https://docs.gitlab.com/ee/ssh/#adding-an-ssh-key-to-your-gitlab-account) for more details.
-
-After setting up an ssh key, clone this repo by running
-
-```bash
-git clone git@gitlab-ext.galois.com:ssith/gfe.git
-cd gfe
-./init_submodules.sh
-```
-
-### Clone and Install the Besspin Tool Suite ###
-
-The Besspin tool suite contains a nix-shell environment that builds all the tools necessary for the GFE excluding Vivado.
-All subsequent commands in this document should be run within the nix-shell.
-This applies to scripts within the GFE such as `test_processor.sh`.
-
-If you do not have Nix installed, first follow [these instructions](https://nixos.org/nix/manual/#sect-multi-user-installation).
-The following instructions describe how to enter the nix-shell.
-
-```bash
-git submodule update --init tool-suite
-nix-shell
-```
-
-Note that the argument-less `nix-shell` command relies on a configuration file in the tool-suite repo, which is the target of the `shell.nix` symlink.
-
-Nix will install a version of riscv-openocd required by the GFE.
-If you wish to use your own binaries for RISCV tools, then you should modify your PATH variable from inside the nix-shell.
 
 ### Install Vivado ###
 
 Download and install Vivado 2017.4. A license key for the tool is included on a piece of paper in the box containing the VCU118. See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug973-vivado-release-notes-install-license.pdf) for download and installation instructions. The GFE only requires the Vivado tool, not the SDK, so download the `Vivado Design Suite - HLx 2017.4 ` from the [Vivado Download Page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2017-4.html). You must make an account with Vivado in order to register the tool and install the license. After installing Vivado, you must also install libtinfo5 for Debian to run the tool. Install this dependency by running `sudo apt-get install libtinfo5`.
 
 If using separate development and testing machines, only the development machine needs a license. We recommend installing Vivado Lab on the testing machine, because it does not require a license and can be used to program the FPGA.
+
+
+### Clone this Repo ###
+
+Once the OS is installed, you will need to
+[add an ssh key](https://gitlab-ext.galois.com/profile/keys)
+to your Galois Gitlab account in order to clone the GFE repo.
+These [instructions](https://docs.gitlab.com/ee/ssh/#adding-an-ssh-key-to-your-gitlab-account) have more details.
+
+After setting up an ssh key, clone this repo by running
+```bash
+git clone git@gitlab-ext.galois.com:ssith/gfe.git
+cd gfe
+```
+
+
+### Update Dependencies ###
+
+If you are updating from an earlier release or development version of the GFE,
+first run
+```bash
+git pull origin master
+```
+in the GFE repo's root directory.
+
+The GFE relies on several nested Git submodules to provide processor sources
+and RISC-V development tools.
+Because some of these submodules contain redundant copies of the toolchain,
+we provide a script to initialize only those necessary for GFE development.
+
+The tool-suite submodule contains a [Nix](https://nixos.org/nix/) shell environment
+that builds all the tools necessary for the GFE excluding Vivado.
+The argument-less `nix-shell` command relies on a configuration file in the tool-suite repo,
+which is the target of the `shell.nix` symlink.
+**All subsequent commands in this document should be run within the Nix shell.**
+This applies to scripts within the GFE such as `test_processor.sh`.
+If you wish to use your own binaries for RISCV tools,
+then you should modify your PATH variable from inside the Nix shell.
+
+If you do not have Nix installed, first follow
+[these instructions](https://nixos.org/nix/manual/#sect-multi-user-installation).
+
+Then run the following command to get the current version of all GFE dependencies.
+```bash
+./init_submodules.sh && nix-shell
+```
+
+*This may take several hours to complete the first time it is run*,
+as it checks out several large repositories and builds an entire toolchain from source.
+Subsequent runs will be fast, using the locally cached Nix packages.
 
 
 ### Building the Bitstream ###
@@ -132,8 +161,12 @@ A passing test will not display any error messages. All failing tests will repor
 
 ## Simulation ##
 
-For Verilator simulation instructions, see [verilator_simulators/README](verilator_simulators/README).
-
+For Verilator simulation instructions,
+see [verilator_simulators/README](verilator_simulators/).
+To build and run ISA tests on a simulated GFE processor, run (e.g.)
+```bash
+./test_simulator.sh bluespec_p1
+```
 
 ## Manually Running FreeRTOS ##
 
