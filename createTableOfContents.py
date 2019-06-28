@@ -20,5 +20,5 @@ for line in md_file:
         headline = headline.rstrip('# \n')
         anchor = sanitize(headline)
         anchor = '-'.join(anchor.split())
-        print('{}-[{}](#{})'.format(
+        print('{}- [{}](#{})'.format(
             '  ' * (level - 1), headline, anchor))
