@@ -4,7 +4,8 @@
 
 Source files and build scripts for generating and testing the GFE for SSITH.
 
-Please refer to the [GFE System Description pdf](https://gitlab-ext.galois.com/ssith/gfe/blob/develop/GFESystem_Description.pdf) for a high-level overview of the system.
+Please refer to the [GFE System Description pdf](GFE_Rel4_System_Description.pdf)
+for a high-level overview of the system.
 
 ## Table of contents ##
 
