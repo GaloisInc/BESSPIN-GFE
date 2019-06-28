@@ -57,6 +57,7 @@ After setting up an ssh key, clone this repo by running
 ```bash
 git clone git@gitlab-ext.galois.com:ssith/gfe.git
 cd gfe
+./init_submodules.sh
 ```
 
 ### Clone and Install the Besspin Tool Suite ###
