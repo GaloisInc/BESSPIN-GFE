@@ -469,7 +469,7 @@ class TestFreeRTOS(BaseGfeTest):
         
         self.check_in_output(
             elf=freertos_elf,
-            timeout=15,
+            timeout=30,
             expected_contents=expected_contents)
 
         return
