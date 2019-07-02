@@ -411,7 +411,7 @@ class TestFreeRTOS(BaseGfeTest):
         
         self.check_in_output(
             elf=freertos_elf,
-            timeout=5,
+            timeout=15,
             expected_contents=expected_contents)
 
         return
@@ -435,7 +435,7 @@ class TestFreeRTOS(BaseGfeTest):
         
         self.check_in_output(
             elf=freertos_elf,
-            timeout=5,
+            timeout=15,
             expected_contents=expected_contents)
 
         return
@@ -452,7 +452,7 @@ class TestFreeRTOS(BaseGfeTest):
         
         self.check_in_output(
             elf=freertos_elf,
-            timeout=10,
+            timeout=15,
             expected_contents=expected_contents)
 
         return
@@ -469,7 +469,7 @@ class TestFreeRTOS(BaseGfeTest):
         
         self.check_in_output(
             elf=freertos_elf,
-            timeout=5,
+            timeout=15,
             expected_contents=expected_contents)
 
         return
