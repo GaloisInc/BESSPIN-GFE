@@ -4,7 +4,7 @@
 	branch = update_p1_chisel
 [submodule "bluespec-processors/P1/Piccolo"]
 	path = bluespec-processors/P1/Piccolo
-	url = git@github.com:CTSRD-CHERI/Piccolo.git
+	url = https://github.com/CTSRD-CHERI/Piccolo.git
 	branch = CHERI
 [submodule "FreeRTOS-mirror"]
 	path = FreeRTOS-mirror
