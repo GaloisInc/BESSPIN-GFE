@@ -5,7 +5,7 @@ DEBIAN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 CHROOT_DIR=$DEBIAN_DIR/riscv64-chroot/
 GFE_REPO=$DEBIAN_DIR/..
 
-cp -R $DEBIAN_DIR/setup_scripts $CHROOT_DIR/
+sudo cp -R $DEBIAN_DIR/setup_scripts $CHROOT_DIR/
 
 sudo /usr/sbin/chroot $CHROOT_DIR /setup_scripts/create_cpio.sh $UID || exit
 

@@ -61,7 +61,7 @@ echo "Copying scripts to chroot... "
 sudo /usr/sbin/chroot $CHROOT_DIR chmod 775 / || exit
 sudo /usr/sbin/chroot $CHROOT_DIR chown root:$UID / || exit
 
-cp -R $DEBIAN_DIR/setup_scripts $CHROOT_DIR/ || exit
+sudo cp -R $DEBIAN_DIR/setup_scripts $CHROOT_DIR/ || exit
 
 # Enter chroot to configure and reduce size
 sudo /usr/sbin/chroot $CHROOT_DIR /setup_scripts/config_chroot.sh "$@" || exit 
