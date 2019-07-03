@@ -61,9 +61,11 @@ smoke_test:
 
 .PHONY: isa_tests
 isa_tests:
-	@echo "Running regressions on ISA tests; saving logs in Logs/"
-	./Run_regression.py  $(SIM_EXE_FILE)  .  ./Logs  $(ARCH)
-	@echo "Finished running regressions; saved logs in Logs/"
+	mkdir -p Logs/$(PROC)
+	rm -rf Logs/$(PROC)/*
+	@echo "Running regressions on ISA tests; saving logs in Logs/$(PROC)/"
+	./Run_regression.py  $(SIM_EXE_FILE)  .  ./Logs/$(PROC)  $(ARCH)
+	@echo "Finished running regressions; saved logs in Logs/$(PROC)/"
 
 # ================================================================
 

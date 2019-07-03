@@ -91,9 +91,12 @@ def main (argv = None):
 
     # Logs directory
     logs_path = os.path.abspath (os.path.normpath (argv [3]))
-    if not (os.path.exists (logs_path) and os.path.isdir (logs_path)):
-        print ("Creating dir: " + logs_path)
-        os.mkdir (logs_path)
+    pass_path = logs_path + '/pass'
+    fail_path = logs_path + '/fail'
+    for path in (logs_path, pass_path, fail_path):
+        if not os.path.isdir (path):
+            print ("Creating dir: " + path)
+            os.mkdir (path)
     args_dict ['logs_path'] = logs_path
 
     # Architecture string and implied ISA test families
@@ -399,7 +402,8 @@ def do_isa_test (worker_no, args_dict, full_filename):
     passed = completed_process2.stdout.find ("PASS") != -1
 
     # Save stdouts in log file
-    log_filename = os.path.join (args_dict ['logs_path'], basename + ".log")
+    log_filename = os.path.join (
+        args_dict ['logs_path'], "pass" if passed else "fail", basename + ".log")
     message = message + ("    Writing log: {0}\n".format (log_filename))
 
     fd = open (log_filename, 'w')
@@ -409,7 +413,7 @@ def do_isa_test (worker_no, args_dict, full_filename):
 
     # If Tandem Verification trace file was created, save it as well
     if os.path.exists ("./trace_out.dat"):
-        trace_filename = os.path.join (args_dict ['logs_path'], basename + ".trace_data")
+        trace_filename = log_filename.rsplit('.', 1)[0] + ".trace_data"
         os.rename ("./trace_out.dat", trace_filename)
         message = message + ("    Trace output saved in: {0}\n".format (trace_filename))
 
