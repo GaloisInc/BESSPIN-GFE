@@ -54,3 +54,16 @@ bitstream_gen:
       variables:
       - $JOB_TYPE == "bitstream"
 
+#-----------------------------------------------------------------------------#
+#
+# Verilator simulation tests
+#
+#-----------------------------------------------------------------------------#
+sim_bluespec_p1:
+  script:
+    - nix-shell --run './test_simulator.sh bluespec_p1'
+  tags: ["verilator"]
+  only:
+    - ecats-develop
+  except:
+    - schedules
