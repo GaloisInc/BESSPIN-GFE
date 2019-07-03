@@ -15,6 +15,6 @@ then
 	exit -1
 fi
 
-mv $CHROOT_DIR/debian.cpio.gz $GFE_REPO/bootmem/debian.cpio.gz 
+sudo mv $CHROOT_DIR/debian.cpio.gz $GFE_REPO/bootmem/debian.cpio.gz 
 
 echo "Created cpio archive"
