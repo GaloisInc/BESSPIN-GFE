@@ -56,7 +56,7 @@ class gfetester(object):
         self.openocd_session = testlib.Openocd(
             server_cmd=server_cmd,
             config=config,
-            debug=True)
+            debug=False)
         self.gdb_session = testlib.Gdb(
             cmd=riscv_gdb_cmd,
             ports=self.openocd_session.gdb_ports,

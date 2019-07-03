@@ -11,20 +11,127 @@ import time
 import struct
 import glob
 import sys
+import subprocess
+import socket
+import re
+import select
 
 class BaseGfeTest(unittest.TestCase):
-    """GFE base testing class. All GFE Python unittests inherit from this class"""
+    """GFE base testing class. All GFE Python unittests inherit from this class
+    
+    Attributes:
+        gfe (gfetester): GFE handler with functions to interact with the VCU118
+        path_to_asm (string): Path to custom GFE assembly tests
+        path_to_freertos (string): Path to FreeRTOS folder in the GFE repo
+    """
+
     def getXlen(self):
         return '32'
 
     def getFreq(self):
-        """Return the processor frequency in Hz"""
+        """Return the processor frequency in Hz.
+        Child classes can override this function for tests on different processors
+        
+        Returns:
+            int: Processor frequency in Hz
+        """
         return gfeparameters.GFE_P1_DEFAULT_HZ
 
     def getGdbPath(self):
+        """Get the proper riscv gdb executable depending on the architecture of the GFE
+        (32 vs 64 bit processor).
+        
+        Returns:
+            string: Executable name for riscv gdb (i.e. riscv32-unkown-elf-gdb)
+        """
         if '32' in self.getXlen():
             return gfeparameters.gdb_path32
         return gfeparameters.gdb_path64   
+
+    def setupUart(self, timeout=1, baud=115200, parity="NONE",
+        stopbits=2, bytesize=8):
+        """Setup a pyserial UART connection with the GFE
+        
+        Args:
+            timeout (int, optional): Timeout seconds used by pySerial
+            baud (int, optional): UART baud rate
+            parity (str, optional): UART parity: EVEN, ODD, or NONE
+            stopbits (int, optional): Number of UART stop bits
+            bytesize (int, optional): UART byte size
+        """
+        self.gfe.setupUart(
+            timeout=timeout,
+            baud=baud,
+            parity=parity,
+            stopbits=stopbits,
+            bytesize=bytesize)
+        print(
+            "Setup pySerial UART. {} baud, {} {} {}".format(
+                baud, bytesize, parity, stopbits))
+
+    def check_uart_out(self, timeout, expected_contents, absent_contents=None):
+        # Store and print all UART output while the elf is running
+        rx_buf = []
+        start_time = time.time()
+        while time.time() < (start_time + timeout):
+            pending = self.gfe.uart_session.in_waiting
+            if pending:
+                data = self.gfe.uart_session.read(pending)
+                rx_buf.append(data) # Append read chunks to the list.
+                sys.stdout.write(data)
+
+        rx = ''.join(rx_buf)
+
+        # Check that the output contains the expected text
+        for text in expected_contents:
+            self.assertIn(text, rx)
+
+        if absent_contents != None:
+            self.assertNotIn(absent_contents, rx)
+
+        return rx
+
+    def check_in_output(self, elf, timeout, expected_contents, absent_contents=None,
+        baud=115200, parity="NONE", stopbits=2, bytesize=8,
+        uart_timeout=1, run_from_flash=False):
+        """Run a program and check UART output for some expected contents
+        
+        Args:
+            elf (string): Path to the test program
+            timeout (int): Number of seconds for which test program will be run
+            expected_contents (list(string)): List of expected strings in the UART output
+            baud (int, optional): UART baud rate
+            parity (str, optional): UART parity
+            stopbits (int, optional): UART stopbits
+            bytesize (int, optional): UART byte size
+            uart_timeout (int, optional): UART timeout for pySerial
+            run_from_flash (bool, optional): Run the elf currently stored in flash by
+                resetting the GFE. Do not load a new program onto the GFE.
+        """
+
+        # Halt the processor before setting up the UART connection
+        self.gfe.gdb_session.interrupt()
+        self.setupUart(
+            baud=baud,
+            parity=parity,
+            stopbits=stopbits,
+            bytesize=bytesize,
+            timeout=uart_timeout)
+
+        # Run the program of interest (from flash or using "gdb load")
+        if run_from_flash:
+            print("Loading from flash")
+            self.gfe.softReset()
+            self.gfe.gdb_session.c(wait=False)
+        else:
+            print("Loading Elf {}".format(elf))
+            print("This may take some time...")
+            self.gfe.launchElf(elf, verify=False)
+            print("Running elf with a timeout of {}s".format(timeout))
+
+        # Store and print all UART output while the elf is running
+        print("Printing all UART output from the GFE...")
+        self.check_uart_out(timeout=timeout, expected_contents=expected_contents, absent_contents=absent_contents)
 
     def setUp(self):
         # Reset the GFE
@@ -44,7 +151,7 @@ class BaseGfeTest(unittest.TestCase):
         self.gfe.gdb_session.command("info registers all", ops=100)
         self.gfe.gdb_session.command("flush regs")
         self.gfe.gdb_session.command("info threads", ops=100)
-        del self.gfe  
+        del self.gfe
 
 class TestGfe(BaseGfeTest):
     """Collection of smoke tests to exercise the GFE peripherals.
@@ -52,8 +159,9 @@ class TestGfe(BaseGfeTest):
     and P2/3 processors respectively."""
 
     def test_soft_reset(self):
-        """Write to the UART scratch register, then reset and check the value
-        has been reset"""
+        """Test the soft reset mechanism of the GFE.
+        Write to a UART register and ensure the value is reset after calling softReset.
+        """
         UART_SCRATCH_ADDR = gfeparameters.UART_BASE + gfeparameters.UART_SCR
         test_value = 0xef
 
@@ -77,15 +185,16 @@ class TestGfe(BaseGfeTest):
         self.assertEqual(scr_value, 0x0)
 
     def test_uart(self):
-        """Run a test UART program. Send the RISCV core characters using pyserial
-        and receive them back"""
+        """Run a test UART program.
+        Send the RISCV core characters using pyserial and receive them back
+        """
         print("xlen = " + self.getXlen())
         if '64' in self.getXlen():
             uart_elf = 'rv64ui-p-uart'
         else:
             uart_elf = 'rv32ui-p-uart'
 
-        uart_baud_rate = 9600
+        uart_baud_rate = 115200
         uart_elf_path = os.path.abspath(
             os.path.join(self.path_to_asm, uart_elf))
         print("Using: " + uart_elf_path)
@@ -133,7 +242,7 @@ class TestGfe(BaseGfeTest):
 
         # Read the base address of ddr
         ddr_base = gfeparameters.DDR_BASE
-        base_val = self.gfe.riscvRead32(ddr_base)
+        _base_val = self.gfe.riscvRead32(ddr_base)
         # Perform enough writes to force a writeback to ddr
         addr_incr = 0x100000
         write_n = 10
@@ -193,7 +302,7 @@ class TestGfe64(TestGfe):
 class TestFreeRTOS(BaseGfeTest):
 
     def getFreq(self):
-        return gfeparameters.GFE_P1_DEFAULT_HZ
+        return gfeparameters.GFE_P1_DEFAULT_HZ # FreeRTOS only runs on the P1
 
     def setUp(self):
         # Reset the GFE
@@ -204,64 +313,309 @@ class TestFreeRTOS(BaseGfeTest):
                 os.path.dirname(os.path.dirname(os.getcwd())),
                 'FreeRTOS-mirror', 'FreeRTOS', 'Demo',
                 'RISC-V_Galois_P1')
-        # Setup pySerial UART
-        self.gfe.setupUart(
-            timeout = 1,
-            baud=115200,
-            parity="NONE",
-            stopbits=2,
-            bytesize=8)
-        print("Setup pySerial UART")     
+
+    def runSubprocess(self, timeout, command, expected_contents):
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, 
+                                stderr=subprocess.PIPE, shell=True)
+        response_stdout = process.stderr.read()
+        time.sleep(timeout)
+        process.kill()
+        print(response_stdout)
+        self.assertIn(expected_contents, response_stdout)
+        return
+
 
     def test_full(self):
-        # Load FreeRTOS binary
+        # load freertos binary
         freertos_elf = os.path.abspath(
            os.path.join( self.path_to_freertos, 'main_full.elf'))
         print(freertos_elf)
         
-        # Run elf in gdb
-        self.gfe.launchElf(freertos_elf)
-
-        time.sleep(3)
-
-        # Receive print statements
-        num_rxed =  self.gfe.uart_session.in_waiting
-        rx = self.gfe.uart_session.read( num_rxed ) 
-        print("received {}".format(rx))
-
-        self.assertIn("main_full", rx)
-        self.assertIn("Pass", rx)
+        self.check_in_output(
+            elf=freertos_elf,
+            timeout=60,
+            expected_contents=["main_full", "Pass"],
+            absent_contents="ERROR")
 
         return
+
+    def test_flash_full(self):
+        # load freertos binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main_full.elf'))
+        print(freertos_elf)
+        
+        self.check_in_output(
+            elf=freertos_elf,
+            timeout=60,
+            expected_contents=["main_full", "Pass"],
+            absent_contents="ERROR",
+            run_from_flash= True ) 
+
+        return
+
         
     def test_blink(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
            os.path.join( self.path_to_freertos, 'main_blinky.elf'))
         print(freertos_elf)
+
+        expected_contents = [
+            "Blink",
+            "RX: received value",
+            "TX: sent",
+            "Hello from RX",
+            "Hello from TX",
+        ]
         
-        # Run elf in gdb
-        self.gfe.launchElf(freertos_elf, True, False)
-        print( "Launched FreeRTOS")
+        self.check_in_output(
+            elf=freertos_elf,
+            timeout=3,
+            expected_contents=expected_contents)
 
-        # Wait for FreeRTOS tasks to start and run
-        # Making this sleep time longer will allow the timer callback
-        # function in FreeRTOS main.c to run the demo tasks more times
-        time.sleep(3)
+        return
+    
+    def test_flash_blinky(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main_blinky.elf'))
+        print(freertos_elf)
 
-        # Receive print statements
-        num_rxed =  self.gfe.uart_session.in_waiting
-        rx = self.gfe.uart_session.read( num_rxed ) 
-        print("received {}".format(rx))
+        expected_contents = [
+            "Blink",
+            "RX: received value",
+            "TX: sent",
+            "Hello from RX",
+            "Hello from TX",
+        ]
+        
+        self.check_in_output(
+            elf=freertos_elf,
+            timeout=3,
+            expected_contents=expected_contents,
+            run_from_flash = True)
 
-        # Check that important print statements were received
-        self.assertIn("Blink", rx)
-        self.assertIn("RX: received value", rx)
-        self.assertIn("TX: sent", rx)
-        self.assertIn("Hello from RX", rx)
-        self.assertIn("Hello from TX", rx)
+        return
 
-        # No auto-checking
+
+    def test_uart(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main_uart.elf'))
+        print(freertos_elf)
+
+        expected_contents = [
+            "UART1 RX: Hello from UART1",
+        ]
+        
+        self.check_in_output(
+            elf=freertos_elf,
+            timeout=5,
+            expected_contents=expected_contents)
+
+        return
+    
+    def test_gpio(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main_gpio.elf'))
+        print(freertos_elf)
+
+        expected_contents = [
+            "#0 changed: 1 -> 0",
+            "#1 changed: 1 -> 0",
+            "#2 changed: 1 -> 0",
+            "#3 changed: 1 -> 0",
+            "#0 changed: 0 -> 1",
+            "#1 changed: 0 -> 1",
+            "#2 changed: 0 -> 1",
+            "#3 changed: 0 -> 1",
+        ]
+        
+        self.check_in_output(
+            elf=freertos_elf,
+            timeout=5,
+            expected_contents=expected_contents)
+
+        return
+
+    def test_iic(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main_iic.elf'))
+        print(freertos_elf)
+
+        expected_contents = [
+            "Whoami: 0x71",
+        ]
+        
+        self.check_in_output(
+            elf=freertos_elf,
+            timeout=10,
+            expected_contents=expected_contents)
+
+        return
+
+    def test_sd(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main_sd.elf'))
+        print(freertos_elf)
+
+        expected_contents = [
+            "prvSdTestTask0 terminating, exit code = 0",
+        ]
+        
+        self.check_in_output(
+            elf=freertos_elf,
+            timeout=5,
+            expected_contents=expected_contents)
+
+        return
+
+    def test_tcp(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main_tcp.elf'))
+        print(freertos_elf)
+
+        # Setup UART
+        self.setupUart()
+
+        # Load and run elf
+        print("Loading Elf {}".format(freertos_elf))
+        print("This may take some time...")
+        self.gfe.launchElf(freertos_elf, verify=False)
+
+         # Store and print all UART output while the elf is running
+        timeout = 20
+        print("Printing all UART output from the GFE...")
+        rx_buf = []
+        start_time = time.time()
+        while time.time() < (start_time + timeout):
+            pending = self.gfe.uart_session.in_waiting
+            if pending:
+                data = self.gfe.uart_session.read(pending)
+                rx_buf.append(data) # Append read chunks to the list.
+                sys.stdout.write(data)
+        print("Timeout reached")
+
+        # Get FPGA IP address
+        riscv_ip = 0
+        rx_buf_str = ''.join(rx_buf)
+        rx_buf_list = rx_buf_str.split('\n')
+        for line in rx_buf_list:
+            index = line.find('IP Address:')
+            if index != -1:
+                ip_str = line.split()
+                riscv_ip = ip_str[2]
+
+        # Ping FPGA
+        print("RISCV IP address is: " + riscv_ip)
+        if (riscv_ip == 0) or (riscv_ip == "0.0.0.0"):
+            raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
+        ping_response = os.system("ping -c 1 " + riscv_ip)
+        self.assertEqual(ping_response, 0,
+                        "Cannot pin FPGA.")
+
+        # Run TCP echo client
+        print("\n Sending to RISC-V's TCP echo server")
+        # Create a TCP/IP socket
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # Connect the socket to the port where the server is listening
+        server_address = (riscv_ip, 7)
+        print >>sys.stderr, 'connecting to %s port %s' % server_address
+        sock.connect(server_address)
+        sock.setblocking(0)
+        try:
+            # Send data
+            message = 'This is the message.  It will be repeated.'
+            print >>sys.stderr, 'sending "%s"' % message
+            sock.sendall(message)
+
+            # Look for the response
+            amount_received = 0
+            amount_expected = len(message)
+
+            while amount_received < amount_expected:
+                ready = select.select([sock], [], [], 10)
+                if ready[0]:
+                    data = sock.recv(128)
+                    amount_received += len(data)
+                    print >>sys.stderr, 'received "%s"' % data
+                    self.assertEqual(message, data)
+                else:
+                    raise Exception("TCP socket timeout")
+        finally:
+            print >>sys.stderr, 'closing socket'
+            sock.close()
+        return
+
+    def test_udp(self):
+        # Load FreeRTOS binary
+        freertos_elf = os.path.abspath(
+           os.path.join( self.path_to_freertos, 'main_udp.elf'))
+        print(freertos_elf)
+
+        # Setup UART
+        self.setupUart()
+
+        # Load and run elf
+        print("Loading Elf {}".format(freertos_elf))
+        print("This may take some time...")
+        self.gfe.launchElf(freertos_elf, verify=False)
+
+         # Store and print all UART output while the elf is running
+        timeout = 20
+        print("Printing all UART output from the GFE...")
+        rx_buf = []
+        start_time = time.time()
+        while time.time() < (start_time + timeout):
+            pending = self.gfe.uart_session.in_waiting
+            if pending:
+                data = self.gfe.uart_session.read(pending)
+                rx_buf.append(data) # Append read chunks to the list.
+                sys.stdout.write(data)
+        print("Timeout reached")
+
+        # Get FPGA IP address
+        riscv_ip = 0
+        rx_buf_str = ''.join(rx_buf)
+        rx_buf_list = rx_buf_str.split('\n')
+        for line in rx_buf_list:
+            index = line.find('IP Address:')
+            if index != -1:
+                ip_str = line.split()
+                riscv_ip = ip_str[2]
+
+        # Ping FPGA
+        print("RISCV IP address is: " + riscv_ip)
+        if (riscv_ip == 0) or (riscv_ip == "0.0.0.0"):
+            raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
+        ping_response = os.system("ping -c 1 " + riscv_ip)
+        self.assertEqual(ping_response, 0,
+                        "Cannot ping FPGA")
+
+        # Send UDP packet
+        print("\n Sending to RISC-V's UDP echo server")
+        # Create a UDP socket at client side
+        UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+        msgFromClient       = "Hello UDP Server"
+        bytesToSend         = str.encode(msgFromClient)
+        serverAddressPort   = (riscv_ip, 5006)
+        bufferSize          = 1024
+
+        # Send to server using created UDP socket
+        UDPClientSocket.setblocking(0)
+        UDPClientSocket.sendto(bytesToSend, serverAddressPort)
+        ready = select.select([UDPClientSocket], [], [], 10)
+        if ready[0]:
+            msgFromServer = UDPClientSocket.recvfrom(bufferSize)
+            print(msgFromServer)
+            self.assertIn(msgFromClient, msgFromServer)
+        else:
+            raise Exception("UDP socket timeout")
         return
 
 class TestLinux(BaseGfeTest):
@@ -271,39 +625,100 @@ class TestLinux(BaseGfeTest):
             os.path.dirname(os.path.dirname(os.getcwd())),
             'bootmem', 'build-bbl', 'bbl')
 
-    def setupUart(self):
-        # Setup pySerial UART
-        self.gfe.setupUart(
-            timeout = 1,
-            baud=115200,
-            parity="NONE",
-            stopbits=2,
-            bytesize=8)
-        print("Setup pySerial UART") 
-
     def getXlen(self):
         return '64'
 
-    def test_boot(self):
+    def getDebianExpected(self):
+        return [
+            "Run /init as init process",
+            "A start job is running for /dev/ttyS0"
+        ]
+    def getBusyBoxExpected(self):
+        return [
+            "Xilinx Axi Ethernet MDIO: probed",
+            "Please press Enter to activate this console"
+        ]
+
+    def boot_linux(self, image=None):
+        if not image:
+            image = self.getBootImage()
+
         linux_elf = self.getBootImage()
-        linux_boot_timeout = 50 # Wait this number of seconds for linux to boot
+
+        self.gfe.gdb_session.command("set $a0 = 0")
+        self.gfe.gdb_session.command("set $a1 = 0x70000020")
+
+        # Setup UART
         self.setupUart()
 
-        self.gfe.gdb_session.c(wait=False)
-        time.sleep(0.5)	
-        self.gfe.gdb_session.interrupt()
-
-        print("Loading Linux Elf {}".format(linux_elf))
+        # Load and run elf
+        print("Loading Elf {}".format(linux_elf))
         print("This may take some time...")
         self.gfe.launchElf(linux_elf, verify=False)
-        print("Booting Linux with a timeout of {}s".format(linux_boot_timeout))
-        print("Linux launched")
+        return
 
-        # Store all UART output while linux is booting
-        rx_buf = [] # Try reading a large chunk of data, blocking for timeout secs.
-        print("First read")
+    def boot_image(self, expected_contents, image=None,
+        run_from_flash=False, timeout=60):
+
+        if not image:
+            image = self.getBootImage()
+
+        linux_elf = self.getBootImage()
+
+        self.gfe.gdb_session.command("set $a0 = 0")
+        self.gfe.gdb_session.command("set $a1 = 0x70000020")
+
+        self.check_in_output(
+            elf=linux_elf,
+            timeout=timeout,
+            expected_contents=expected_contents,
+            run_from_flash=run_from_flash)
+        return
+
+    def test_busybox_boot(self):
+        self.boot_image(expected_contents=self.getBusyBoxExpected(), timeout=60)
+        return
+
+    def test_busybox_flash_boot(self):
+        self.boot_image(expected_contents=self.getBusyBoxExpected(), timeout=100, run_from_flash=True)
+        return
+
+    def test_debian_boot(self):
+        self.boot_image(expected_contents=self.getDebianExpected(), timeout=3000)
+        return
+
+    def test_debian_flash_boot(self):
+        self.boot_image(expected_contents=self.getDebianExpected(), timeout=2000, run_from_flash=True)
+        return
+
+    def test_busybox_ethernet(self):
+        # Boot busybox
+        self.boot_linux();
+        linux_boot_timeout=60
+
+        print("Running elf with a timeout of {}s".format(linux_boot_timeout))
+        # Check that busybox reached activation screen
+        self.check_uart_out(
+            timeout=linux_boot_timeout,
+            expected_contents=["Please press Enter to activate this console"])
+
+        # Send "Enter" to activate console
+        self.gfe.uart_session.write(b'\r')
+        time.sleep(1)
+
+        # Run DHCP client
+        self.gfe.uart_session.write(b'ifconfig eth0 up\r')
+        self.check_uart_out(
+            timeout=10,
+            expected_contents=["xilinx_axienet 62100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx"])
+
+        self.gfe.uart_session.write(b'udhcpc -i eth0\r')
+         # Store and print all UART output while the elf is running
+        timeout = 10
+        print("Printing all UART output from the GFE...")
+        rx_buf = []
         start_time = time.time()
-        while time.time() < (start_time + linux_boot_timeout):
+        while time.time() < (start_time + timeout):
             pending = self.gfe.uart_session.in_waiting
             if pending:
                 data = self.gfe.uart_session.read(pending)
@@ -311,10 +726,89 @@ class TestLinux(BaseGfeTest):
                 sys.stdout.write(data)
         print("Timeout reached")
 
-        rx = ''.join(rx_buf)
+        # Get FPGA IP address
+        riscv_ip = 0
+        rx_buf_str = ''.join(rx_buf)
+        rx_buf_list = rx_buf_str.split('\n')
+        for line in rx_buf_list:
+            index = line.find('Setting IP address')
+            if index != -1:
+                ip_str = line.split()
+                riscv_ip = ip_str[3]
+                print("RISCV IP address is: " + riscv_ip)
+                # break # keep reading till the end to get the latest IP asignemnt
 
-        self.assertIn("Xilinx Axi Ethernet MDIO: probed", rx)
-        self.assertIn("Please press Enter to activate this console", rx)
+        # Ping FPGA
+        if riscv_ip == 0:
+            raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
+        ping_response = os.system("ping -c 1 " + riscv_ip)
+        self.assertEqual(ping_response, 0,
+                        "Cannot ping FPGA.")
+        return
+
+
+    def test_debian_ethernet(self):
+        # Boot Debian
+        self.boot_linux()
+        linux_boot_timeout=800
+        print("Running elf with a timeout of {}s".format(linux_boot_timeout))
+        
+        # Check that Debian booted
+        self.check_uart_out(
+                timeout=linux_boot_timeout,
+                expected_contents=[ "Debian GNU/Linux 10",
+                                    "login:"
+                                    ])
+
+        # Login to Debian
+        self.gfe.uart_session.write(b'root\r')
+        # Check for password prompt and enter password
+        self.check_uart_out(timeout=5, expected_contents=["Password"])
+        self.gfe.uart_session.write(b'riscv\r')
+    
+        # Check for command line prompt
+        self.check_uart_out(
+                timeout=15,
+                expected_contents=["The programs included with the Debian GNU/Linux system are free software;",
+                                    ":~#"
+                                    ])
+        self.gfe.uart_session.write(b'ifup eth0\r')
+        self.gfe.uart_session.write(b'ip addr\r')
+
+        # Get RISC-V IP address and ping it from host
+        # Store and print all UART output while the elf is running
+        timeout = 60
+        print("Printing all UART output from the GFE...")
+        rx_buf = []
+        start_time = time.time()
+        while time.time() < (start_time + timeout):
+            pending = self.gfe.uart_session.in_waiting
+            if pending:
+                data = self.gfe.uart_session.read(pending)
+                rx_buf.append(data) # Append read chunks to the list.
+                sys.stdout.write(data)
+        print("Timeout reached")
+
+        # Get FPGA IP address
+        riscv_ip = 0
+        rx_buf_str = ''.join(rx_buf)
+        rx_buf_list = rx_buf_str.split('\n')
+        for line in rx_buf_list:
+            index1 = line.find('inet')
+            index2 = line.find('eth0')
+            if (index1 != -1) & (index2 != -1):
+                ip_str = re.split('[/\s]\s*', line)
+                riscv_ip = ip_str[2]
+
+        # Ping FPGA
+        print("RISCV IP address is: " + riscv_ip)
+        if (riscv_ip == 0) or (riscv_ip == "0.0.0.0"):
+            raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
+        ping_response = os.system("ping -c 1 " + riscv_ip)
+        self.assertEqual(ping_response, 0,
+                        "Cannot ping FPGA.")
+        return
+
 
 class BaseTestIsaGfe(BaseGfeTest):
     """ISA unittest base class for P1 and P2 processors.

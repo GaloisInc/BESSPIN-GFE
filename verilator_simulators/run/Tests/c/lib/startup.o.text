@@ -1,0 +1,152 @@
+
+lib/startup.o:     file format elf64-littleriscv
+lib/startup.o
+architecture: riscv:rv64, flags 0x00000011:
+HAS_RELOC, HAS_SYMS
+start address 0x0000000000000000
+
+Sections:
+Idx Name          Size      VMA               LMA               File off  Algn
+  0 .text         0000005c  0000000000000000  0000000000000000  00000040  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .data         00000000  0000000000000000  0000000000000000  0000009c  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000000  0000000000000000  0000000000000000  0000009c  2**0
+                  ALLOC
+  3 .debug_line   0000009a  0000000000000000  0000000000000000  0000009c  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+  4 .debug_info   0000002e  0000000000000000  0000000000000000  00000136  2**0
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+  5 .debug_abbrev 00000014  0000000000000000  0000000000000000  00000164  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_aranges 00000030  0000000000000000  0000000000000000  00000180  2**4
+                  CONTENTS, RELOC, READONLY, DEBUGGING
+  7 .debug_str    0000004f  0000000000000000  0000000000000000  000001b0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .riscv.attributes 0000002e  0000000000000000  0000000000000000  000001ff  2**0
+                  CONTENTS, READONLY
+SYMBOL TABLE:
+0000000000000000 l    d  .text	0000000000000000 .text
+0000000000000000 l    d  .data	0000000000000000 .data
+0000000000000000 l    d  .bss	0000000000000000 .bss
+0000000000000000 l       .text	0000000000000000 .L0 
+000000000000000c l       .text	0000000000000000 .L0 
+0000000000000010 l       .text	0000000000000000 .L0 
+0000000000000014 l       .text	0000000000000000 .L0 
+000000000000001c l       .text	0000000000000000 .L0 
+0000000000000020 l       .text	0000000000000000 .L0 
+000000000000002c l       .text	0000000000000000 .L0 
+0000000000000030 l       .text	0000000000000000 .L0 
+0000000000000034 l       .text	0000000000000000 .L0 
+0000000000000038 l       .text	0000000000000000 .L0 
+000000000000003c l       .text	0000000000000000 .L0 
+0000000000000044 l       .text	0000000000000000 .L0 
+000000000000004c l       .text	0000000000000000 zinit
+000000000000004c l       .text	0000000000000000 .L0 
+0000000000000050 l       .text	0000000000000000 .L0 
+0000000000000054 l       .text	0000000000000000 .L0 
+0000000000000058 l       .text	0000000000000000 .L0 
+000000000000005c l       .text	0000000000000000 .L0 
+0000000000000000 l    d  .debug_info	0000000000000000 .debug_info
+0000000000000000 l       .text	0000000000000000 .L0 
+000000000000005c l       .text	0000000000000000 .L0 
+0000000000000000 l       .debug_str	0000000000000000 .L0 
+000000000000000e l       .debug_str	0000000000000000 .L0 
+0000000000000043 l       .debug_str	0000000000000000 .L0 
+0000000000000000 l    d  .debug_abbrev	0000000000000000 .debug_abbrev
+0000000000000000 l    d  .debug_line	0000000000000000 .debug_line
+000000000000003c l       .text	0000000000000000 .L0 
+0000000000000044 l       .text	0000000000000000 .L0 
+0000000000000000 l    d  .debug_aranges	0000000000000000 .debug_aranges
+0000000000000000 l    d  .debug_str	0000000000000000 .debug_str
+0000000000000000 l    d  .riscv.attributes	0000000000000000 .riscv.attributes
+0000000000000000 g       .text	0000000000000000 _reset
+0000000000000000         *UND*	0000000000000000 __bss_start
+0000000000000000         *UND*	0000000000000000 _end
+0000000000000000         *UND*	0000000000000000 _start
+
+
+
+Disassembly of section .text:
+
+0000000000000000 <_reset>:
+	.text
+	.globl	_reset
+
+_reset:
+	li	sp, 0xC00f0000
+   0:	0000c137          	lui	sp,0xc
+   4:	00f1011b          	addiw	sp,sp,15
+   8:	01011113          	slli	sp,sp,0x10
+	// Place an illegal instruction (0) at the stack pointer
+	// so that the program ends if the value is used
+#if __riscv_xlen == 64
+	sd	zero, 0(sp)
+   c:	00013023          	sd	zero,0(sp) # c000 <zinit+0xbfb4>
+	sd	zero, -8(sp)
+  10:	fe013c23          	sd	zero,-8(sp)
+	sw	zero, -4(sp)
+#endif
+	// Set MSTATUS
+	// Enable MIE and SIE
+	// Set FS to 2 = Dirty
+	li      s0, 0x600a
+  14:	00006437          	lui	s0,0x6
+  18:	00a4041b          	addiw	s0,s0,10
+	csrw    mstatus, s0
+  1c:	30041073          	csrw	mstatus,s0
+	// Set MTVEC to an address (also to 0xC00f0000?)
+	// and place an illegal instruction (0) at that location
+	// so that the program ends if there is a trap
+	li	s0, 0xC00f0000
+  20:	0000c437          	lui	s0,0xc
+  24:	00f4041b          	addiw	s0,s0,15
+  28:	01041413          	slli	s0,s0,0x10
+#if __riscv_xlen == 64
+	sd	zero, 0xC0(s0)
+  2c:	0c043023          	sd	zero,192(s0) # c0c0 <zinit+0xc074>
+#else
+	sw	zero, 0xC0(s0)
+#endif
+	csrw	mtvec, s0
+  30:	30541073          	csrw	mtvec,s0
+#ifdef __riscv_float_abi_double
+	// Set MSTATUS
+	// Set FS to 1 = Initial
+	li	s0, 0x2000
+  34:	00002437          	lui	s0,0x2
+	csrs	mstatus, s0
+  38:	30042073          	csrs	mstatus,s0
+#endif
+
+	/* zero out the bss */
+	.option push
+	.option norelax
+        la      t1, __bss_start
+  3c:	00000317          	auipc	t1,0x0
+			3c: R_RISCV_PCREL_HI20	__bss_start
+  40:	00030313          	mv	t1,t1
+			40: R_RISCV_PCREL_LO12_I	.L0 
+        la      t2, _end
+  44:	00000397          	auipc	t2,0x0
+			44: R_RISCV_PCREL_HI20	_end
+  48:	00038393          	mv	t2,t2
+			48: R_RISCV_PCREL_LO12_I	.L0 
+
+000000000000004c <zinit>:
+#if __riscv_xlen == 64
+zinit:  sd      zero, 0(t1)
+  4c:	00033023          	sd	zero,0(t1) # 3c <_reset+0x3c>
+        add     t1, t1, 0x8
+  50:	00830313          	addi	t1,t1,8
+        bne     t1, t2, zinit
+  54:	fe731ce3          	bne	t1,t2,4c <zinit>
+			54: R_RISCV_BRANCH	zinit
+	.option pop
+
+	// TODO: Use xRET to switch to S or U mode?
+	// TODO: (Previous version for v1.7 priv spec set PRV to S
+	// TODO: when setting the MSTATUS above.)
+	j _start
+  58:	fa9ff06f          	j	0 <_reset>
+			58: R_RISCV_JAL	_start

@@ -2,26 +2,32 @@
 	path = chisel_processors
 	url = https://gitlab-ext.galois.com/ssith/chisel_processors.git
 	branch = update_p1_chisel
-[submodule "riscv-tools"]
-	path = riscv-tools
-	url = https://gitlab-ext.galois.com/ssith/riscv-tools.git
-	branch = ssith-p1-tools
+[submodule "bluespec-processors/P1/Piccolo"]
+	path = bluespec-processors/P1/Piccolo
+	url = git@github.com:CTSRD-CHERI/Piccolo.git
+	branch = CHERI
 [submodule "FreeRTOS-mirror"]
 	path = FreeRTOS-mirror
-	url = https://github.com/GaloisInc/FreeRTOS-mirror.git
+	url = git@gitlab-ext.galois.com:ssith/FreeRTOS-mirror.git
 [submodule "bluespec-processors/P2/Flute"]
 	path = bluespec-processors/P2/Flute
 	url = https://github.com/bluespec/Flute.git
 [submodule "riscv-linux"]
 	path = riscv-linux
 	url = https://gitlab-ext.galois.com/ssith/riscv-linux.git
-[submodule "busybox"]
-	path = busybox
-	url = https://git.busybox.net/busybox
 [submodule "bluespec-processors/P3/Tuba"]
 	path = bluespec-processors/P3/Tuba
 	url = https://github.com/bluespec/Tuba.git
-[submodule "bluespec-processors/P1/Piccolo"]
-	path = bluespec-processors/P1/Piccolo
-	url = git@github.com:CTSRD-CHERI/Piccolo.git
-	branch = CHERI
+[submodule "riscv-pk"]
+	path = riscv-pk
+	url = git@gitlab-ext.galois.com:ssith/riscv-pk.git
+[submodule "riscv-tests"]
+	path = riscv-tests
+	url = git@gitlab-ext.galois.com:ssith/riscv-tests.git
+[submodule "tool-suite"]
+	path = tool-suite
+	url = git@gitlab-ext.galois.com:ssith/tool-suite.git
+	branch = develop
+[submodule "busybox"]
+	path = busybox
+	url = https://github.com/mirror/busybox.git

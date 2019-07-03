@@ -59,4 +59,4 @@ PLIC_NUM_INTERRUPTS = 16
 ########### Clocking ###########
 
 GFE_P1_DEFAULT_HZ = 50e6
-GFE_P2_DEFAULT_HZ = 25e6
+GFE_P2_DEFAULT_HZ = 68e6

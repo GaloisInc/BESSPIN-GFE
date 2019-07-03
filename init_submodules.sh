@@ -6,16 +6,15 @@ home=$(pwd)
 # This reduces the runtime of git status and other git commands
 git submodule sync
 
-git submodule update --init riscv-tools
-cd riscv-tools
-git submodule sync
-git submodule update --init
+git submodule update --init riscv-tests
 cd riscv-tests
 git submodule sync
-cd ../..
+cd ..
 
-git submodule update --init --recursive riscv-tools \
-FreeRTOS-mirror bluespec-processors/P1/Piccolo bluespec-processors/P2/Flute busybox riscv-linux bluespec-processors/P3/Tuba
+git submodule update --init tool-suite FreeRTOS-mirror busybox
+git submodule update --init --recursive \
+bluespec-processors/P1/Piccolo bluespec-processors/P2/Flute \
+riscv-linux bluespec-processors/P3/Tuba riscv-tests riscv-pk
 git submodule update --init chisel_processors
 
 cd chisel_processors

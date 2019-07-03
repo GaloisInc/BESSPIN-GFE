@@ -4,14 +4,14 @@ BOOTMEM_DIR=../bootmem
 
 default: riscv64-chroot $(BOOTMEM_DIR)/debian.cpio.gz
 
-riscv64-chroot: config_chroot.sh
+riscv64-chroot:
 	@echo "Building chroot environment"
 	@echo "Your password may be requested for superuser privileges"
-	sudo ./create_chroot.sh
+	./create_chroot.sh
 
 $(BOOTMEM_DIR)/debian.cpio.gz: riscv64-chroot
 	@echo "Building cpio.gz image"
 	@echo "Your password may be requested for superuser privileges"
-	sudo ./create_cpio.sh
+	./create_cpio.sh
 
 .PHONY: default

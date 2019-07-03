@@ -2,70 +2,117 @@
 
 Source files and build scripts for generating and testing the GFE for SSITH.
 
+Please refer to the [GFE System Description pdf](GFE_Rel4_System_Description.pdf)
+for a high-level overview of the system.
 
-## Overview ##
+## Table of contents ##
 
-This repository contains source code and build scripts for generating SoC bitstreams
-for the Xilinx VCU118. The resulting systems contain either Chisel or Bluespec 
-versions of P1 connected by an AXI interconnect to UART, DDR, and Bootrom. 
+- [Getting Started](#getting-started)
+  - [Setup OS (Debian Buster)](#setup-os-debian-buster)
+  - [Install Vivado](#install-vivado)
+  - [Clone this Repo](#clone-this-repo)
+  - [Update Dependencies](#update-dependencies)
+  - [Building the Bitstream](#building-the-bitstream)
+  - [Storing a Bitstream in Flash](#storing-a-bitstream-in-flash)
+  - [Testing](#testing)
+- [Simulation](#simulation)
+- [Manually Running FreeRTOS](#manually-running-freertos)
+  - [Running FreeRTOS + TCP/IP stack](#running-freertos-tcp-ip-stack)
+- [Running Linux - Debian or Busybox](#running-linux-debian-or-busybox)
+  - [Creating Debian Image](#creating-debian-image)
+  - [Creating Busybox Image](#creating-busybox-image)
+    - [Build the memory image](#build-the-memory-image)
+    - [Load and run the memory image](#load-and-run-the-memory-image)
+  - [Using Ethernet on Linux](#using-ethernet-on-linux)
+  - [Storing a boot image in Flash](#storing-a-boot-image-in-flash)
+- [Adding in Your Processor](#adding-in-your-processor)
+  - [Modifying the GFE](#modifying-the-gfe)
+- [Rebuilding the Chisel and Bluespec Processors](#rebuilding-the-chisel-and-bluespec-processors)
+- [Tandem Verification](#tandem-verification)
+  - [Establishing the PCIe Link](#establishing-the-pcie-link)
+  - [Installing Bluespec](#installing-bluespec)
+  - [Licensing](#licensing)
+  - [Capturing a Trace](#capturing-a-trace)
+  - [Comparing a Trace](#comparing-a-trace)
+
 
 ## Getting Started ##
 
-Prebuilt images are available in the bitstreams folder. Use these, if you want to quickly get started. This documentation walks through the process of building a bitstream and testing the output. It suggests how to modify the GFE with your own processor.
+To update from a previous release, please follow the instructions below,
+starting with [Update Dependencies](#update-dependencies).
 
-## Updating to a New Release ##
+Prebuilt images are available in the bitstreams folder.
+Use these, if you want to quickly get started.
+This documentation walks through the process of building and testing a bitstream.
+It suggests how to modify the GFE with your own processor.
 
-Run the following to make sure all submodules are up to date. Then proceed with the regular steps for building and testing the GFE.
-```bash
-init_submodules.sh
-```
 
 ### Setup OS (Debian Buster) ###
 
-Please perform a clean install of Debian Buster on the development and testing hosts. This is the supported OS for building and testing the GFE. At the time of release 1 (Feb 1), Debian Buster Alpha 4 is the latest version, but we expect to upgrade Buster versions as it becomes stable (sometime soon). Please install the latest version of Debian Buster (Debian 10.X).
+Before installing the GFE for the first time,
+please perform a clean install of [Debian 10 ("Buster")](https://www.debian.org/releases/buster/)
+on the development and testing hosts.
+This is the supported OS for building and testing the GFE.
+At the time of release 1 (Feb 1), Debian Buster Alpha 4 was the latest version,
+but we expect to upgrade Buster to the stable release version when it is available.
 
-### Clone this REPO ###
-
-Once the OS is installed, you will need to add your ssh key to Gitlab in order to clone this repo. Checkout these [instructions](https://docs.gitlab.com/ee/ssh/#adding-an-ssh-key-to-your-gitlab-account) for more details.
-
-After setting up an ssh key, clone this repo by running
-
-```bash
-git clone git@gitlab-ext.galois.com:ssith/gfe.git
-```
-
-### Install RISCV Toolchain ###
-
-Install the standard RISCV toolchain for compiling Linux and other tests for the SSITH processors.
-```bash
-git clone https://github.com/riscv/riscv-gnu-toolchain.git
-cd riscv-gnu-toolchain
-git submodule update --init --recursive
-./configure --prefix=$RISCV_INSTALL --with-arch=rv32gc --with-abi=ilp32
-make       # Install the 32 bit newlib toolchain for testing the P1
-./configure --prefix=$RISCV_INSTALL
-make       # Install the 64 bit newlib toochain for testing the P2
-make linux # Install the 64 bit linux toolchain
-```
-Follow the instructions [here](https://github.com/riscv/riscv-gnu-toolchain) for more information.
-
-### Install RISCV Tools ###
-
-This GFE has been tested with a particular fork of riscv-tools that includes an upstream change to riscv-openocd that allows for JTAG debugging over the  same Xilinx JTAG connection used to program the VCU118.
-It also submodules Galois forks of riscv-tests and riscv-pk customized for the reference processors.
-Please use the version of OpenOCD included in riscv-tools submoduled in this repo under `$GFE_REPO/riscv-tools.`
-
-A convenient way to install this custom version of OpenOCD is to build the riscv toolchain from riscv-tools.
-To install, first set the RISCV path with `export RISCV=$GFE_REPO/riscv-tools` and initialize riscv-tools and other submodules with `cd $GFE_REPO && ./init_submodules.sh`.
-This will place the openocd binary in `$GFE_REPO/riscv-tools/bin` where the testing scripts expect it.
-Next, install the RISCV toolchain using the directions in `$GFE_REPO/riscv-tools/README.md` (i.e. run `build.sh`).
-After installing openocd, be sure to set the RISCV variable back to point to your standard riscv-gnu-toolchain installation by running `export RISCV=$RISCV_INSTALL`.
 
 ### Install Vivado ###
 
-Download and install Vivado 2017.4. A license key for the tool is included on a piece of paper in the box containing the VCU118. See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug973-vivado-release-notes-install-license.pdf) for download and installation instructions. We only need the Vivado tool, not the SDK, so download the `Vivado Design Suite - HLx 2017.4 ` from the [Vivado Download Page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2017-4.html). One must make an account with Vivado in order to register the tool and install the license. After installing Vivado, you must also install libtinfo5 for Debian to run the tool. Install this dependency by running `sudo apt-get install libtinfo5`.
+Download and install Vivado 2017.4. A license key for the tool is included on a piece of paper in the box containing the VCU118. See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug973-vivado-release-notes-install-license.pdf) for download and installation instructions. The GFE only requires the Vivado tool, not the SDK, so download the `Vivado Design Suite - HLx 2017.4 ` from the [Vivado Download Page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2017-4.html). You must make an account with Vivado in order to register the tool and install the license. After installing Vivado, you must also install libtinfo5 for Debian to run the tool. Install this dependency by running `sudo apt-get install libtinfo5`.
 
 If using separate development and testing machines, only the development machine needs a license. We recommend installing Vivado Lab on the testing machine, because it does not require a license and can be used to program the FPGA.
+
+
+### Clone this Repo ###
+
+Once the OS is installed, you will need to
+[add an ssh key](https://gitlab-ext.galois.com/profile/keys)
+to your Galois Gitlab account in order to clone the GFE repo.
+These [instructions](https://docs.gitlab.com/ee/ssh/#adding-an-ssh-key-to-your-gitlab-account) have more details.
+
+After setting up an ssh key, clone this repo by running
+```bash
+git clone git@gitlab-ext.galois.com:ssith/gfe.git
+cd gfe
+```
+
+
+### Update Dependencies ###
+
+If you are updating from an earlier release or development version of the GFE,
+first run
+```bash
+git pull origin master
+```
+in the GFE repo's root directory.
+
+The GFE relies on several nested Git submodules to provide processor sources
+and RISC-V development tools.
+Because some of these submodules contain redundant copies of the toolchain,
+we provide a script to initialize only those necessary for GFE development.
+
+The tool-suite submodule contains a [Nix](https://nixos.org/nix/) shell environment
+that builds all the tools necessary for the GFE excluding Vivado.
+The argument-less `nix-shell` command relies on a configuration file in the tool-suite repo,
+which is the target of the `shell.nix` symlink.
+**All subsequent commands in this document should be run within the Nix shell.**
+This applies to scripts within the GFE such as `test_processor.sh`.
+If you wish to use your own binaries for RISCV tools,
+then you should modify your PATH variable from inside the Nix shell.
+
+If you do not have Nix installed, first follow
+[these instructions](https://nixos.org/nix/manual/#sect-multi-user-installation).
+
+Then run the following command to get the current version of all GFE dependencies.
+```bash
+./init_submodules.sh && nix-shell
+```
+
+*This may take several hours to complete the first time it is run*,
+as it checks out several large repositories and builds an entire toolchain from source.
+Subsequent runs will be fast, using the locally cached Nix packages.
+
 
 ### Building the Bitstream ###
 
@@ -84,48 +131,56 @@ cd $GFE_REPO/vivado
 vivado soc_chisel_p1/soc_chisel_p1.xpr
 ```
 
-`setup_soc_project.sh` should only be run once. We also recommend running `build.sh` for the initial build then performing future builds using the Vivado GUI to take advantage of convenient error reporting and visibility into the build process. The Vivado project will be generated in the `$GFE_REPO/vivado/soc_$proc_name` folder of the repository and can be re-opened there. Note that all the same commands can be run with the argument `bluespec_p1` to generate the bluespec P1 bitstream and corresponding Vivado project (i.e. `./setup_soc_project.sh bluespec`).
+`setup_soc_project.sh` should only be run once. We also recommend running `build.sh` for the initial build then performing future builds using the Vivado GUI to take advantage of convenient error reporting and visibility into the build process. The Vivado project will be generated in the `$GFE_REPO/vivado/soc_$proc_name` folder of the repository and can be re-opened there. Note that all the same commands can be run with the argument `bluespec_p1` to generate the bluespec P1 bitstream and corresponding Vivado project (i.e. `./setup_soc_project.sh bluespec_p1`).
+
 
 ### Storing a Bitstream in Flash ###
 
 See [flash-scripts/README](flash-scripts/README) for directions on how to write a bitstream to flash on the VCU118. 
-This allows the FPGA to be programmed from flash on power-up.
+This is optional, and allows the FPGA to be programmed from flash on power-up.
 
 ### Testing ###
 
-1. Install the following python packages: `pexpect, pyserial`. 
-These are required for running python unittests on the GFE.
-2. Give the current user access to the serial and JTAG devices.
+We include some automated tests for the GFE.
+The `test_processor.sh` script programs the FPGA with an appropriate bitstream, tests the GDB connection to the FPGA then runs the appropriate ISA and operating system tests.
+To check that you have properly setup the GFE, or to test a version you have modified yourself, run the following steps:
+
+1. Give the current user access to the serial and JTAG devices.
 ```bash
 sudo usermod -aG dialout $USER
 sudo usermod -aG plugdev $USER
 sudo reboot
 ```
-3. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
-4. Make sure the VCU118 is powered on (fan should be running) 
-5. Add Vivado or Vivado Lab to your path (i.e. `source source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh`).
-6. Run `./test_processor.sh chisel_p1` from the top level of the gfe repo. Replace `chisel_p1` with your processor of choice. This command will program the FPGA and run the appropriate tests for that processor.
+2. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
+3. Make sure the VCU118 is powered on (fan should be running) 
+4. Add Vivado or Vivado Lab to your path (i.e. `source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh`).
+5. Run `./test_processor.sh chisel_p1` from the top level of the gfe repo. Replace `chisel_p1` with your processor of choice. This command will program the FPGA and run the appropriate tests for that processor.
 
 A passing test will not display any error messages. All failing tests will report errors and stop early.
 
-The python unit testing infrastructure reuses scripts from riscv-tests to help automate GDB and OpenOCD scripting. The primary python unittests are stored in [test_gfe_unittest.py](testing/scripts/test_gfe_unittest.py). These unit tests rely on a convenience class for interacting with the gfe defined in [gfetester.py](testing/scripts/gfetester.py)
+## Simulation ##
 
-## Running FreeRTOS ##
+For Verilator simulation instructions,
+see [verilator_simulators/README](verilator_simulators/).
+To build and run ISA tests on a simulated GFE processor, run (e.g.)
+```bash
+./test_simulator.sh bluespec_p1
+```
 
-To run FreeRTOS on the GFE, you'll need to run OpenOCD, connect to gdb, and view the UART output in minicom. First, install minicom and build the FreeRTOS demo. Also, source `setup_env.sh` to make sure the proper OpenOCD and GDB versions are on your path.
+## Manually Running FreeRTOS ##
+
+To run FreeRTOS on the GFE, you'll need to run OpenOCD, connect to gdb, and view the UART output in minicom. First, install minicom and build the FreeRTOS demo.
 
 ```bash
 sudo apt-get install minicom
 
-cd $GFE_REPO/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1
+cd FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1
 
 # for simple blinky demo
 make clean; PROG=main_blinky make
 
 # for full demo
 make clean; PROG=main_full make
-
-source $GFE_REPO/setup_env.sh
 ```
 
 We expect to see warnings about memory alignment and timer demo functions when compiling.
@@ -134,10 +189,10 @@ Follow these steps to run freeRTOS with an interactive GDB session:
 
 1. Reset the SoC by pressing the CPU_RESET button (SW5) on the VCU118 before running FreeRTOS.
 2. Run OpenOCD to connect to the riscv core `openocd -f $GFE_REPO/testing/targets/ssith_gfe.cfg`.
-3. In a new terminal, run minicom with `minicom -D /dev/ttyUSB1 -b 9600`. `ttyUSB1` should be replaced with whichever USB port is connected to the VCU118's USB-to-UART bridge.
+3. In a new terminal, run minicom with `minicom -D /dev/ttyUSB1 -b 115200`. `ttyUSB1` should be replaced with whichever USB port is connected to the VCU118's USB-to-UART bridge.
 Settings can be configured by running `minicom -s` and selecting `Serial Port Setup` and then `Bps/Par/Bits`. 
-The UART is configured to have 8 data bits, 2 stop bits, no parity bits, and a baud rate of 9600.
-4. In a new terminal, run gdb with `riscv32-unknown-elf-gdb $GFE_REPO/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1/main_blinky.elf`, where `main_blinky` should be the name of the demo you have compiled and want to run.
+The UART is configured to have 8 data bits, 2 stop bits, no parity bits, and a baud rate of 115200.
+4. In a new shell, run gdb with `riscv32-unknown-elf-gdb $GFE_REPO/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1/main_blinky.elf`, where `main_blinky` should be the name of the demo you have compiled and want to run.
 5. Once gdb is open, type `target remote localhost:3333` to connect to OpenOCD. OpenOCD should give a message that it has accepted a gdb connection.
 Load the FreeRTOS elf file onto the processor with `load`. To run, type `c` or `continue`.
 6. When you've finished running FreeRTOS, make sure to reset the SoC before running other tests or programs.
@@ -180,12 +235,12 @@ the DHCP, ICMP (ping), UDP and TCP functionality. The setup is little bit involv
 
 Our setup is below:
 ```
-----------------------------------                                 ---------------------------------------
-|    HOST COMPUTER               |                                 |      FPGA Board                     |
-|    DHCP server                 |              Ethernet cable     |      DHCP On                        |
-|    IP: 10.88.88.2              |<===============================>|      IP: assumed to be 10.88.88.3   |
-|    Netmask: 255.255.255.0      |                                 |      MAC: 00:0A:35:04:DB:77         |
-----------------------------------                                 ---------------------------------------
+----------------------------------                       ---------------------------------------
+|    HOST COMPUTER               |                       |      FPGA Board                     |
+|    DHCP server                 |    Ethernet cable     |      DHCP On                        |
+|    IP: 10.88.88.2              |<=====================>|      IP: assumed to be 10.88.88.3   |
+|    Netmask: 255.255.255.0      |                       |      MAC: 00:0A:35:04:DB:77         |
+----------------------------------                       ---------------------------------------
 ```
 
 If you want to replicate our setup you should:
@@ -262,7 +317,6 @@ to and from the echo server.
 16) [Optional] Send a UDP packet with `socat stdio udp4-connect:10.88.88.3:5006 <<< "Hello there"`. In the minicom output, you should see `prvSimpleZeroCopyServerTask: received $N bytes` depending 
 on how much data you send. **Hint:** instead of minicom, you can use `cat /dev/ttyUSB1 > log.txt` to redirect the serial output into a log file for later inspection.
 
-
 **Troubleshooting**
 
 If something doesn't work, then:
@@ -270,13 +324,13 @@ If something doesn't work, then:
 2) sometimes restarting the FPGA with `CPU_RESET` button (or typing `reset` in GDB) will help
 3) Check out our [Issue](https://gitlab-ext.galois.com/ssith/gfe/issues) - maybe you have a problem we already know about.
 
+
 ## Running Linux - Debian or Busybox ##
-#### Creating Debian Image ####
+### Creating Debian Image ###
 Before starting, there are several necessary packages to install. Run:
 ``` 
 apt-get install libssl-dev debian-ports-archive-keyring binfmt-support qemu-user-static mmdebstrap
 ```
-The RISCV toolchain `riscv-gnu-toolchain` should also be installed, built, and added to your path. Instructions for this are at the top of this README.
 
 The debian directory includes several scripts for creating a Debian image and a simple Makefile to run them. Running `make debian` from `$GFE_REPO/bootmem` will perform all the steps of creating the image. If you want to make modifications to the chroot and then build the image, you can do the following:
 
@@ -310,15 +364,15 @@ This results in warnings about locale settings and man files that are expected.
 
 If you want to install more packages than what is included, run `sudo ./create_chroot.sh package1 package2` and subsitute `package1` and `package2` with all the packages you want to install. Then recreate the cpio.gz image and run `make debian` as described above. If installing or removing packages manually rather than with the script, use `apt-get` to install or remove any packages from within the chroot and run `./clean_chroot` from within the chroot afterwards.
 
-The bbl image is located at `$GFE_REPO/bootmem/build-bbl/bbl` and can be loaded and run using gdb.
+The bbl image is located at `$GFE_REPO/bootmem/build-bbl/bbl` and can be loaded and run using gdb. The default root password is `riscv`.
 
 A memory image is also created that can be loaded into the flash ROM on the FPGA at `$GFE_REPO/bootmem/bootmem.bin`
 
-#### Creating Busybox Image ####
+### Creating Busybox Image ###
 
 The following instructions describe how to boot Linux with Busybox.
 
-### Build the memory image ###
+#### Build the memory image ####
 
 The default make target will build a simpler kernel with only a busybox boot environment:
 
@@ -327,7 +381,7 @@ cd $GFE_REPO/bootmem/
 make
 ```
 
-### Load and run the memory image ###
+#### Load and run the memory image ####
 
 Follow these steps to run Linux and Busybox with an interactive GDB session:
 
@@ -431,15 +485,14 @@ round-trip min/avg/max = 20.536/20.913/23.320 ms
 
 1. Prepare the Linux image with either Debian or Busybox as described above.
 2. Write to flash memory on the board with the command `tcl/program_flash datafile bootmem/bootmem.bin`. Note that this command is run from the shell (not inside vivado).
-3. If a suitable bitfile is also stored in flash, upon board power up or reset, the device will automatically boot into Linux and Busybox.
+3. The `program_flash` command overwrites the FPGA's configuration. Depending on your setup, follow the relevant instructions below:
+    * If a suitable P2 or P3 bitstream is also stored in flash, the board can be physically reset or cold rebooted to automatically boot into Linux. 
+    * Otherwise, you will have to reprogram the desired bit file using the `program_fpga.sh` script at this point. The processor will execute the flash image immediately.
 
 Occasionally, the `tcl/program_flash` command will end with an out of memory error. As long as `Program/Verify Operation successful.` was printed before existing, the flash operation was completed.
 
 There will not be any console messages while the boot image is read from flash, which could take some time for the full Debian OS.
 
-## Simulation ##
-
-Click `Run Simulation` in the Vivado GUI and refer to the Vivado documentation for using XSIM in a project flow, such as [UG937](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug937-vivado-design-suite-simulation-tutorial.pdf). If necessary, create a testbench around the top level project to generate stimulus for components outside the GFE (i.e. DDR memories, UART, JTAG).
 
 ## Adding in Your Processor ##
 
