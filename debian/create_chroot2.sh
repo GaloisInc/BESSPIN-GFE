@@ -41,9 +41,6 @@ debian_url="http://deb.debian.org/debian-ports/"
 
 : ${DEBIAN_PORTS_ARCHIVE_KEYRING:=/usr/share/keyrings/debian-ports-archive-keyring.gpg}
 
-# Init Type - Use either "systemd" or "sysv"
-init_type="systemd"
-
 
 edo() {
     echo $'\x1b[35;1m >>>' "$@" $'\x1b[0m'
@@ -131,6 +128,16 @@ in_chroot() {
     "${cmd[@]}"
 }
 
+# Run a subcommand of this script inside the chroot.
+as_fake_root_self() {
+    as_fake_root bash "$self" "$@"
+}
+
+# Run a subcommand of this script inside the chroot.
+in_chroot_self() {
+    in_chroot bash "/host-rootfs/$self" "$@"
+}
+
 # chroot setup, stage 0.  Runs as the normal user on the host machine.
 stage0() {
     # Create chroot
@@ -168,23 +175,32 @@ stage1_inner() {
 }
 
 stage1() {
-    as_fake_root bash "$self" stage1_inner
+    as_fake_root_self stage1_inner
 }
 
 # chroot setup, stage 2.  This runs inside the chroot, under proot + fakeroot
 stage2_inner() {
     edo /debootstrap/debootstrap --second-stage
-    edo apt-get remove -y fakeroot libfakeroot
+    edo apt-get remove -y --purge fakeroot libfakeroot
 }
 
 stage2() {
-    in_chroot bash "/host-rootfs/$self" stage2_inner
+    in_chroot_self stage2_inner
+}
+
+stage3() {
+    in_chroot "/host-rootfs/$debian_dir/setup_chroot.sh"
 }
 
 main() {
     edo stage0
     edo stage1
     edo stage2
+    edo stage3
+}
+
+create_cpio() {
+    in_chroot "/host-rootfs/$debian_dir/setup_scripts/create_cpio.sh"
 }
 
 
