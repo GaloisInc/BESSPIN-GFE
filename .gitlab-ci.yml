@@ -161,6 +161,7 @@ sim_chisel_p1:
   except:
     - schedules
   artifacts:
+      when: on_failure
       expire_in: 1 week
       paths:
           - verilator_simulators/run/Logs/chisel_p1/
@@ -174,6 +175,7 @@ sim_bluespec_p1:
   except:
     - schedules
   artifacts:
+      when: on_failure
       expire_in: 1 week
       paths:
           - verilator_simulators/run/Logs/bluespec_p1/
@@ -187,6 +189,7 @@ sim_chisel_p2:
   except:
     - schedules
   artifacts:
+      when: on_failure
       expire_in: 1 week
       paths:
           - verilator_simulators/run/Logs/chisel_p2/
@@ -200,6 +203,7 @@ sim_bluespec_p2:
   except:
     - schedules
   artifacts:
+      when: on_failure
       expire_in: 1 week
       paths:
           - verilator_simulators/run/Logs/bluespec_p2/
