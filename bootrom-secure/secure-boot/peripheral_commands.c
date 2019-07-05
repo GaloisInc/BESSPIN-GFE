@@ -1,6 +1,6 @@
 #include "peripheral_commands.h"
 
-void secure_boot_read32_command_failed(uint32_t *addr, uint32_t actual_value) {
+void secure_boot_read32_command_failed(volatile uint32_t *addr, uint32_t actual_value) {
     // Do nothing. This function is here only for GDB to break on.
     (void)addr;
     (void)actual_value;

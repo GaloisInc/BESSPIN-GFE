@@ -55,7 +55,7 @@ mkShell {
     dtc
     (let
        riscv-toolchain-ver = "7.2.0";
-       arch = "rv64imac";
+       arch = "rv32imac";
        bits =
          if builtins.substring 0 4 arch == "rv32" then "32"
          else if builtins.substring 0 4 arch == "rv64" then "64"

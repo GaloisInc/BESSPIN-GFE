@@ -2,7 +2,7 @@ bootrom_rev_mem = bootrom.bytereversed.mem
 bootrom_mem = bootrom.mem
 bootrom_coe = bootrom.coe
 
-CROSS_COMPILE?=riscv64-unknown-elf-
+CROSS_COMPILE?=riscv32-unknown-elf-
 CPP=$(CROSS_COMPILE)cpp
 CC=$(CROSS_COMPILE)gcc
 OBJCOPY=$(CROSS_COMPILE)objcopy

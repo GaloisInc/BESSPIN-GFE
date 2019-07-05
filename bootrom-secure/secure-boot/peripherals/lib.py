@@ -104,15 +104,8 @@ return world;
 
 void successful_secure_boot() {
     __asm__ volatile(
-        "csrr a0, mhartid\\n\\t"
-        "la a1, _dtb\\n\\t"
         "li t0, %(boot_address)s\\n\\t"
         "jr t0\\n\\t"
-        ".data\\n\\t"
-        ".globl _dtb\\n\\t"
-        ".align 5, 0\\n"
-        "_dtb:\\n\\t"
-        ".incbin \\"../devicetree.dtb\\""
         :::);
 }
 '''
