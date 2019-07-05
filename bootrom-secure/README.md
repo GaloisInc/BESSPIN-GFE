@@ -1,3 +1,25 @@
+# How to configure the BootROM for a new OS
+1. Build a binary dump of the OS you want to boot following whatever instructions you have for doing that. N.B. the file we want here is the raw bytes of the OS, not an ELF; if you only have instructions for build an ELF, you can get the raw bytes with `riscv32-unknown-elf-objcopy -O binary whatever.elf whatever.bin`.
+2. If you will be building a bitstream, skip to step 4.
+3. To avoid the default BootROM from immediately trying to boot into your OS without executing the secure boot checks first, prepend some invalid instructions to the binary.
+
+        cat $(dd if=/dev/zero count=1 bs=256) whatever.bin >whatever_with_zeros.bin
+
+4. Open `secure-boot/peripherals/config.py` and locate the `Flash_OS` initialization. The arguments have these meanings:
+
+    * `flash_base`: The memory-mapped address in flash to start copying the OS from. If you are building a bitstream, you want `0x44000000`; otherwise you want `0x44000100` to skip the zeros we inserted in step 3.
+    * `ram_base`: The memory-mapped address in RAM to copy the OS to. You should avoid the bottom `0x400000` bytes (the stack will live there) and whatever memory you may need to store the BootROM itself if you are not building a bitstream. The default value that's already there should be fine.
+    * `size`: The number of bytes to copy from flash to RAM; so the size in bytes of `whatever.bin` (not `whatever_with_zeros.bin`).
+    * `sha256sum`: The SHA256 hash of the bytes to be copied; so the output of `sha256sum whatever.bin`.
+    * `ram_device`: No change should be needed here.
+
+    You should also change `BOOT_ADDRESS` to point to the same place as the `ram_base` argument to the `Flash_OS` initialization stanza.
+5. Put the binary into flash memory; the gfe repo has a script in `tcl/program_flash` that will do this for you:
+
+        tcl/program_flash datafile whatever_with_zeros.bin
+
+    (Use `whatever.bin` instead if you are building a bitstream.)
+
 # How to Build a Bitstream with the BootROM
 1. Setup your machine to build the GFE, following the instructions in the GFE README.
 2. Replace the `bootrom` subdirectory of the GFE with the directory containing this README.
@@ -8,8 +30,7 @@
 # How to Test the BootROM (without first building a bitstream)
 1. Setup your machine to build the GFE, following the instructions in the GFE README.
 2. Program an FPGA with a bitstream. The bootrom on it doesn't matter.
-3. Modify the `linker.ld` file. Comment out the "FOR PRODUCTION" line and uncomment the "TESTING" line.
-4. Build the bootrom using `make`, setting the `CROSS_COMPILE` environment variable appropriately.
+4. Build the bootrom using `nix-shell --pure --run make`, setting the `CROSS_COMPILE` environment variable appropriately.
 5. Connect to the processor using gdb.
 6. Run in GDB:
     1. `add-symbol-file bootrom.elf 0x80400000`
