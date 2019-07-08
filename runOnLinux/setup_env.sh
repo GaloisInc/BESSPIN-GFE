@@ -2,6 +2,8 @@
 
 function runOnLinux_usage {
     echo "Usage: $0 proc_name linux_image prog_to_run"
+    echo "Usage: $0 proc_name linux_image prog_to_run --FastForward"
+    echo "Usage: $0 proc_name linux_image prog_to_run --SkipImage"
     echo "Usage: $0 --help"
 }
 
@@ -22,4 +24,17 @@ function linux_picker {
 	fi
 }
 
-source $BASE_DIR/../setup_env.sh
+function checkMode {
+    if [ "$1" == "--FastForward" ]; then
+        isFastForward=1
+        doSkipImage=0
+    elif [ "$1" == "--SkipImage" ]; then
+        isFastForward=0
+        doSkipImage=1
+    else
+        isFastForward=0
+        doSkipImage=0
+    fi
+}
+
+source ../setup_env.sh
