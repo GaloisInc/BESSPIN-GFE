@@ -12,7 +12,6 @@ set -eu
 
 echo "Compiling ISA tests"
 pushd $BASE_DIR/riscv-tests/isa/
-make clean
 make
 popd
 

@@ -22,7 +22,7 @@ usage_line = (
     "      Specifies the number of parallel processes used\n"
     "        (creates temporary separate working directories worker_0, worker_1, ...)\n"
     "      By default uses 1/2 the CPUs listed in /proc/cpuinfo.\n"
-    "      In any case, limits it to 8.\n"
+    "      In any case, limits it to 4.\n"
     "\n"
     "  Example:\n"
     "      $ <this_prog>  .exe_HW_sim  ~somebody/GitHub/Piccolo  ./Logs  RV32IMU  v1 4\n"
@@ -50,7 +50,7 @@ import multiprocessing
 
 exclude_list = []
 
-n_workers_max = 8
+n_workers_max = 4
 
 # ================================================================
 
