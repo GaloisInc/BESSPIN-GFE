@@ -2,7 +2,7 @@
 Use the script `runOnLinux.sh` to run a user-chosen C file above linux on FPGA. It shoud be used as follows:
 `./runOnLinux.sh proc_name linux_image path_to_file`
 
-## <UNDER CONSTRUCTION> ##
+## UNDER CONSTRUCTION ##
 
 Supported processors:
 - ...
