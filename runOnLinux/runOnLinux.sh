@@ -46,17 +46,10 @@ else
 fi
 
 #### Booting linux on the FPGA
+echo "$0: Booting $linux_image on the FPGA.."
 cd $BASE_DIR/../testing/scripts/
-if [ $isFastForward -ne 1 ]; then
-    echo "$0: Booting $linux_image on the FPGA.."
-    python test_gfe_unittest.py TestLinux.test_${linux_image}_boot
-    err_msg $? "$0: Testing the program failed."
-    echo "$0: The program ran successfully."
-else
-    echo "$0: FastForward mode is activated."
-    echo "$0: Skipping the initial boot test."
-fi
-
-python test_gfe_unittest.py TestLinux.test_run_prog_on_${linux_image}
+#python test_gfe_unittest.py TestLinux.test_${linux_image}_terminal
+echo "python test_runOnLinux.py TestRunOnLinux.test_${linux_image}_terminal"
+python runOnLinux.py RunOnLinux.test_${linux_image}_terminal
 err_msg $? "$0: Testing the program failed."
 echo "$0: The program ran successfully."
