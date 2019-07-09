@@ -25,7 +25,7 @@ bootmem.bin: bootmem
 	$(OBJCOPY) -O binary $< $@
 
 clean:
-	@rm -f bootmem *.bin
+	@rm -f bootmem bootmem.bin freertos.bin
 	@rm -rf build-bbl
 	
 .PHONY: default
