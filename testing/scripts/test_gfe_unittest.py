@@ -809,6 +809,69 @@ class TestLinux(BaseGfeTest):
                         "Cannot ping FPGA.")
         return
 
+    def test_run_prog_on_busybox (self):
+        # Boot busybox
+        self.boot_linux();
+        linux_boot_timeout=60
+
+        print("Running elf with a timeout of {}s".format(linux_boot_timeout))
+        # Check that busybox reached activation screen
+        self.check_uart_out(
+            timeout=linux_boot_timeout,
+            expected_contents=["Please press Enter to activate this console"])
+
+        # Send "Enter" to activate console
+        self.gfe.uart_session.write(b'\r')
+        time.sleep(1)
+
+        self.gfe.uart_session.write(b'pwd\r')
+
+        output = self.check_uart_out(timeout=10, expected_contents=[])
+
+        print "Here it comes:\n\n----------"
+        print output
+        print "\nEND-----------\n\n"
+
+        return
+
+    
+    def test_run_prog_on_debian(self):
+        # Boot Debian
+        self.boot_linux()
+        linux_boot_timeout=800
+        print("Running elf with a timeout of {}s".format(linux_boot_timeout))
+        
+        # Check that Debian booted
+        self.check_uart_out(
+                timeout=linux_boot_timeout,
+                expected_contents=[ "Debian GNU/Linux 10",
+                                    "login:"
+                                    ])
+
+        # Login to Debian
+        self.gfe.uart_session.write(b'root\r')
+        # Check for password prompt and enter password
+        self.check_uart_out(timeout=5, expected_contents=["Password"])
+        self.gfe.uart_session.write(b'riscv\r')
+    
+        # Check for command line prompt
+        self.check_uart_out(
+                timeout=15,
+                expected_contents=["The programs included with the Debian GNU/Linux system are free software;",
+                                    ":~#"
+                                    ])
+
+        self.gfe.uart_session.write(b'pwd\r')
+
+        output = self.check_uart_out(timeout=60, expected_contents=[])
+
+        print "Here it comes:\n\n----------"
+        print output
+        print "\nEND-----------\n\n"
+
+        return
+
+        
 
 class BaseTestIsaGfe(BaseGfeTest):
     """ISA unittest base class for P1 and P2 processors.

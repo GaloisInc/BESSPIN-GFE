@@ -24,21 +24,16 @@ make PROG=$3 XLEN=$XLEN
 err_msg $? "$0: Cross compiling $3 failed"
 
 #### Building linux and programming the FPGA
-if [ $isFastForward -ne 1 ]; then
-    if [ $doSkipImage -ne 1 ]; then
-        echo "$0: Building the linux [$2] image.."
-        linux_folder=$BASE_DIR/../bootmem/
-        cd $linux_folder
-        if [ "$linux_image" == "debian" ]; then
-            make debian
-        else
-            make
-        fi
-        err_msg $? "Building Linux failed."
+if [ $doSkipFPGA -ne 1 ]; then
+    echo "$0: Building the linux [$2] image.."
+    linux_folder=$BASE_DIR/../bootmem/
+    cd $linux_folder
+    if [ "$linux_image" == "debian" ]; then
+        make debian
     else
-        echo "$0: SkipImage mode is activated."
-        echo "$0: Assuming linux image is already built."
+        make
     fi
+    err_msg $? "Building Linux failed."
 
     echo "$0: Programming the FPGA.."
     cd ..
@@ -46,10 +41,22 @@ if [ $isFastForward -ne 1 ]; then
     err_msg $? "$0: Programming the FPGA failed"
     sleep 1
 else
-    echo "$0: FastForward mode is activated."
+    echo "$0: SkipFPGA mode is activated."
     echo "$0: Assuming linux is up on the FPGA."
 fi
 
 #### Booting linux on the FPGA
-echo "$0: Booting $2 on the FPGA.."
-cd $BASE_DIR
+cd $BASE_DIR/../testing/scripts/
+if [ $isFastForward -ne 1 ]; then
+    echo "$0: Booting $linux_image on the FPGA.."
+    python test_gfe_unittest.py TestLinux.test_${linux_image}_boot
+    err_msg $? "$0: Testing the program failed."
+    echo "$0: The program ran successfully."
+else
+    echo "$0: FastForward mode is activated."
+    echo "$0: Skipping the initial boot test."
+fi
+
+python test_gfe_unittest.py TestLinux.test_run_prog_on_${linux_image}
+err_msg $? "$0: Testing the program failed."
+echo "$0: The program ran successfully."

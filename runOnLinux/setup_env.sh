@@ -27,13 +27,13 @@ function linux_picker {
 function checkMode {
     if [ "$1" == "--FastForward" ]; then
         isFastForward=1
-        doSkipImage=0
-    elif [ "$1" == "--SkipImage" ]; then
+        doSkipFPGA=1
+    elif [ "$1" == "--SkipFPGA" ]; then
         isFastForward=0
-        doSkipImage=1
+        doSkipFPGA=1
     else
         isFastForward=0
-        doSkipImage=0
+        doSkipFPGA=0
     fi
 }
 
