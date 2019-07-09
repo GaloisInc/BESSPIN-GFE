@@ -15,7 +15,7 @@ set -e
 #   default command, `main`, simply runs each stage in order.
 #
 # - `as_fake_root CMD...`: Runs `CMD`, emulating root permissions.  For
-#   example, running `./create_chroot2.sh as_fake_root id -u` should print 0.
+#   example, running `./create_chroot.sh as_fake_root id -u` should print 0.
 #   This also permits running privileged filesystem operations, such as `chown`
 #   or `mknod`, though the effects of these operations will only be visible
 #   inside the emulated environment.
