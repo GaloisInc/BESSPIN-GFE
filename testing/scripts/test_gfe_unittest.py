@@ -121,7 +121,7 @@ class BaseGfeTest(unittest.TestCase):
         # Run the program of interest (from flash or using "gdb load")
         if run_from_flash:
             print("Loading from flash")
-            self.gfe.softReset()
+            #self.gfe.softReset()
             self.gfe.gdb_session.c(wait=False)
         else:
             print("Loading Elf {}".format(elf))
@@ -371,7 +371,7 @@ class TestFreeRTOS(BaseGfeTest):
         
         self.check_in_output(
             elf=freertos_elf,
-            timeout=10,
+            timeout=3,
             expected_contents=expected_contents)
 
         return
@@ -392,7 +392,7 @@ class TestFreeRTOS(BaseGfeTest):
         
         self.check_in_output(
             elf=freertos_elf,
-            timeout=3,
+            timeout=10,
             expected_contents=expected_contents,
             run_from_flash = True)
 
