@@ -50,8 +50,7 @@ edo() {
 # Run a command
 as_fake_root() {
     local fakeroot_state="$build_dir/fakeroot.state"
-    fakeroot --faked "$debian_dir/faked-debug" \
-        -s "$fakeroot_state" -i "$fakeroot_state" -- "$@"
+    fakeroot -s "$fakeroot_state" -i "$fakeroot_state" -- "$@"
 }
 
 in_chroot() {
