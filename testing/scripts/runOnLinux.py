@@ -20,6 +20,14 @@ class BaseGfeForLinux(BaseGfeTest):
                 sys.stdout.write(data)
             time.sleep(1)
         return
+
+    def flush_uart_out (self,timeout=1):
+        while (True):
+            time.sleep (timeout)
+            pending = self.gfe.uart_session.in_waiting
+            if (not pending):
+                return
+            dump = self.gfe.uart_session.read(pending)
     
     def interpreter_sput (self, sourceFilePath, destFilePath, isBinary=False):
         ###check sourceFileExist
@@ -38,6 +46,7 @@ class BaseGfeForLinux(BaseGfeTest):
         self.gfe.uart_session.write('touch ' + destFilePath + '\r')
         fileToPut = sourceFilePath
         fileFromPut = destFilePath
+        beginTime = time.time()
         if (isBinary):
             try:
                 subprocess.call("busybox uuencode -m {0} < {0} >{0}.enc.orig".format(sourceFilePath), shell=True)
@@ -67,25 +76,38 @@ class BaseGfeForLinux(BaseGfeTest):
         except:
             warnings.warn("%s: Cannot open or file does not exist. Press Enter to continue..." % (fileToPut), SyntaxWarning)
             return
+        ####MACROS
+        numLinesPerPacket = 50
+        waitBetweenLines = 0.1
+        flushTimeout = 0.2
+        #####
+        numPackets = ((len(lines)-1) //  numLinesPerPacket ) + 1 #ceil division
+        print ("\n%s will be divided into %d packets."%(sourceFilePath,numPackets))
         echoPrefix = "echo -n -e \""
-        echoSuffix = "\" >> " + fileFromPut
-        maxLimit = 255-len(echoPrefix)-len(echoSuffix)
-        for line in lines:
-            numChunks = ((len(line)-1) // maxLimit) + 1  #ceil division
-            for iChunk in range(0,len(line),maxLimit):
-                iLimit = min(iChunk+maxLimit, len(line))
-                self.gfe.uart_session.write(echoPrefix + line[iChunk:iLimit] + echoSuffix + '\r')
-                time.sleep(1)
+        for iPacket in range(numPackets):
+            iFileFromPut = fileFromPut + ".{0}".format(iPacket)
+            echoSuffix = "\" >> " + iFileFromPut
+            maxLimit = 255-len(echoPrefix)-len(echoSuffix)
+            iLinesLimit = min((iPacket+1)*numLinesPerPacket,len(lines))
+            for line in lines[iPacket*numLinesPerPacket:iLinesLimit]:
+                numChunks = ((len(line)-1) // maxLimit) + 1  #ceil division
+                for iChunk in range(0,len(line),maxLimit):
+                    iLimit = min(iChunk+maxLimit, len(line))
+                    self.gfe.uart_session.write(echoPrefix + line[iChunk:iLimit] + echoSuffix + '\r')
+                    time.sleep(waitBetweenLines)
+            self.flush_uart_out(flushTimeout)
+            print (">>> Packet %d/%d done."%(iPacket+1,numPackets))
 
-        time.sleep(3)
-        pending = self.gfe.uart_session.in_waiting
-        while (pending):
-            dump = self.gfe.uart_session.read(pending)
-            time.sleep (3)
-            pending = self.gfe.uart_session.in_waiting
+        print ("\nPutting complete. Now combining the packets...")
+        for iPacket in range(numPackets):
+            self.gfe.uart_session.write( "cat {0}.{1} >> {0}".format(fileFromPut,iPacket) + '\r')
+            time.sleep(flushTimeout)
+            self.gfe.uart_session.write( "rm {0}.{1}".format(fileFromPut,iPacket) + '\r')
+
+        self.flush_uart_out(flushTimeout)
 
         if (isBinary):
-            print ("\nPutting complete. Now decoding...")
+            print ("\nCombining complete. Now decoding...")
             subprocess.call("rm " + fileToPut ,shell=True)
             self.gfe.uart_session.write('uudecode <' + fileFromPut + '\r')
             time.sleep (1)
@@ -93,7 +115,8 @@ class BaseGfeForLinux(BaseGfeTest):
             time.sleep (1)
             print ("\nDecoding successful.")
         else:
-            print ("\nPutting complete.")
+            print ("\nCombining complete.")
+        print ("\n Transmission speed was %d bytes in %d seconds." %(os.path.getsize(sourceFilePath), time.time()-beginTime))
         return
 
     def interactive_terminal (self):
@@ -115,15 +138,15 @@ class BaseGfeForLinux(BaseGfeTest):
                 if (instruction[2:6] == 'exit'): #exit terminal and end test
                     exitTerminal = True
                 elif (instruction[2:6] == 'sput'): #copy a file from local to linux
-                    sputMatch = re.match(r'--sput (?P<sourceFilePath>[\w/.~-]+) (?P<destFilePath>[\w/.~-]+)\s*',instruction)
                     sputbMatch = re.match(r'--sput -b (?P<sourceFilePath>[\w/.~-]+) (?P<destFilePath>[\w/.~-]+)\s*',instruction)
-                    if (sputMatch != None):
-                        runReading.clear() #pause reading
-                        self.interpreter_sput(sputMatch.group('sourceFilePath'), sputMatch.group('destFilePath'))
-                        runReading.set()
-                    elif (sputbMatch != None):
+                    sputMatch = re.match(r'--sput (?P<sourceFilePath>[\w/.~-]+) (?P<destFilePath>[\w/.~-]+)\s*',instruction)
+                    if (sputbMatch != None):
                         runReading.clear() #pause reading
                         self.interpreter_sput(sputbMatch.group('sourceFilePath'), sputbMatch.group('destFilePath'), isBinary=True)
+                        runReading.set()
+                    elif (sputMatch != None):
+                        runReading.clear() #pause reading
+                        self.interpreter_sput(sputMatch.group('sourceFilePath'), sputMatch.group('destFilePath'))
                         runReading.set()
                     else:
                         warnings.warn("Please use \"--sput [-b] sourceFilePath destFilePath\". Press Enter to continue...", SyntaxWarning)
