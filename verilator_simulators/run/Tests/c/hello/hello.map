@@ -15,7 +15,7 @@ Archive member included to satisfy reference by file (symbol)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-memset.o)
                               /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/crt0.o (memset)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-puts.o)
-                              /tmp/ccAxUm1d.o (puts)
+                              /tmp/ccCQrBLg.o (puts)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-strlen.o)
                               /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-puts.o) (strlen)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-__atexit.o)
@@ -87,7 +87,7 @@ LOAD ./lib/syscalls.o
 LOAD ./lib/riscv_counters.o
 LOAD ./lib/ns16550.o
 Address of section .text-segment set to 0xc0000000
-LOAD /tmp/ccAxUm1d.o
+LOAD /tmp/ccCQrBLg.o
 LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a
 LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a
 LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libnosys.a
@@ -200,7 +200,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
                 0x00000000c00008c4                ns16550_rxchar
                 0x00000000c0000918                ns16550_txchar
                 0x00000000c0000978                ns16550_flush
- .text          0x00000000c00009b8       0x44 /tmp/ccAxUm1d.o
+ .text          0x00000000c00009b8       0x44 /tmp/ccCQrBLg.o
                 0x00000000c00009b8                main
  .text          0x00000000c00009fc        0xc /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-atexit.o)
                 0x00000000c00009fc                atexit
@@ -305,7 +305,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
 
 .rodata         0x00000000c0002d48       0x18
  *(.rodata .rodata.* .gnu.linkonce.r.*)
- .rodata        0x00000000c0002d48        0xd /tmp/ccAxUm1d.o
+ .rodata        0x00000000c0002d48        0xd /tmp/ccCQrBLg.o
  *fill*         0x00000000c0002d55        0x3 
  .rodata.str1.8
                 0x00000000c0002d58        0x8 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-puts.o)
@@ -415,7 +415,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .data          0x00000000c0003d80        0x0 ./lib/syscalls.o
  .data          0x00000000c0003d80        0x0 ./lib/riscv_counters.o
  .data          0x00000000c0003d80        0x0 ./lib/ns16550.o
- .data          0x00000000c0003d80        0x0 /tmp/ccAxUm1d.o
+ .data          0x00000000c0003d80        0x0 /tmp/ccCQrBLg.o
  .data          0x00000000c0003d80        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-atexit.o)
  .data          0x00000000c0003d80        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-errno.o)
  .data          0x00000000c0003d80        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-exit.o)
@@ -513,7 +513,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .bss           0x00000000c0004d70        0x0 ./lib/syscalls.o
  .bss           0x00000000c0004d70        0x0 ./lib/riscv_counters.o
  .bss           0x00000000c0004d70        0x0 ./lib/ns16550.o
- .bss           0x00000000c0004d70        0x0 /tmp/ccAxUm1d.o
+ .bss           0x00000000c0004d70        0x0 /tmp/ccCQrBLg.o
  .bss           0x00000000c0004d70        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-atexit.o)
  .bss           0x00000000c0004d70        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-errno.o)
  .bss           0x00000000c0004d70        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-exit.o)
@@ -599,7 +599,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .comment       0x0000000000000011       0x12 ./lib/syscalls.o
  .comment       0x0000000000000011       0x12 ./lib/riscv_counters.o
  .comment       0x0000000000000011       0x12 ./lib/ns16550.o
- .comment       0x0000000000000011       0x12 /tmp/ccAxUm1d.o
+ .comment       0x0000000000000011       0x12 /tmp/ccCQrBLg.o
  .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-atexit.o)
  .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-errno.o)
  .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-exit.o)
@@ -651,7 +651,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .riscv.attributes
                 0x00000000000000f0       0x2e ./lib/ns16550.o
  .riscv.attributes
-                0x000000000000011e       0x2e /tmp/ccAxUm1d.o
+                0x000000000000011e       0x2e /tmp/ccCQrBLg.o
  .riscv.attributes
                 0x000000000000014c       0x33 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-atexit.o)
  .riscv.attributes
@@ -751,7 +751,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .debug_aranges
                 0x0000000000000090       0x30 ./lib/ns16550.o
  .debug_aranges
-                0x00000000000000c0       0x30 /tmp/ccAxUm1d.o
+                0x00000000000000c0       0x30 /tmp/ccCQrBLg.o
 
 .debug_pubnames
  *(.debug_pubnames)
@@ -762,7 +762,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .debug_info    0x000000000000002e      0xd7e ./lib/syscalls.o
  .debug_info    0x0000000000000dac      0xb18 ./lib/riscv_counters.o
  .debug_info    0x00000000000018c4      0x40a ./lib/ns16550.o
- .debug_info    0x0000000000001cce      0x969 /tmp/ccAxUm1d.o
+ .debug_info    0x0000000000001cce      0x969 /tmp/ccCQrBLg.o
 
 .debug_abbrev   0x0000000000000000      0x843
  *(.debug_abbrev)
@@ -770,7 +770,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .debug_abbrev  0x0000000000000014      0x28c ./lib/syscalls.o
  .debug_abbrev  0x00000000000002a0      0x265 ./lib/riscv_counters.o
  .debug_abbrev  0x0000000000000505      0x15e ./lib/ns16550.o
- .debug_abbrev  0x0000000000000663      0x1e0 /tmp/ccAxUm1d.o
+ .debug_abbrev  0x0000000000000663      0x1e0 /tmp/ccCQrBLg.o
 
 .debug_line     0x0000000000000000      0xb6d
  *(.debug_line .debug_line.* .debug_line_end)
@@ -778,26 +778,26 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .debug_line    0x000000000000009a      0x48b ./lib/syscalls.o
  .debug_line    0x0000000000000525      0x279 ./lib/riscv_counters.o
  .debug_line    0x000000000000079e      0x298 ./lib/ns16550.o
- .debug_line    0x0000000000000a36      0x137 /tmp/ccAxUm1d.o
+ .debug_line    0x0000000000000a36      0x137 /tmp/ccCQrBLg.o
 
 .debug_frame    0x0000000000000000      0x4d8
  *(.debug_frame)
  .debug_frame   0x0000000000000000      0x270 ./lib/syscalls.o
  .debug_frame   0x0000000000000270      0x150 ./lib/riscv_counters.o
  .debug_frame   0x00000000000003c0       0xd8 ./lib/ns16550.o
- .debug_frame   0x0000000000000498       0x40 /tmp/ccAxUm1d.o
+ .debug_frame   0x0000000000000498       0x40 /tmp/ccCQrBLg.o
 
-.debug_str      0x0000000000000000      0x883
+.debug_str      0x0000000000000000      0x87e
  *(.debug_str)
- .debug_str     0x0000000000000000       0x4f ./lib/startup.o
- .debug_str     0x000000000000004f      0x555 ./lib/syscalls.o
-                                        0x60d (size before relaxing)
- .debug_str     0x00000000000005a4       0x82 ./lib/riscv_counters.o
-                                        0x599 (size before relaxing)
- .debug_str     0x0000000000000626      0x240 ./lib/ns16550.o
-                                        0x33c (size before relaxing)
- .debug_str     0x0000000000000866       0x1d /tmp/ccAxUm1d.o
-                                        0x51b (size before relaxing)
+ .debug_str     0x0000000000000000       0x4a ./lib/startup.o
+ .debug_str     0x000000000000004a      0x555 ./lib/syscalls.o
+                                        0x608 (size before relaxing)
+ .debug_str     0x000000000000059f       0x82 ./lib/riscv_counters.o
+                                        0x594 (size before relaxing)
+ .debug_str     0x0000000000000621      0x240 ./lib/ns16550.o
+                                        0x337 (size before relaxing)
+ .debug_str     0x0000000000000861       0x1d /tmp/ccCQrBLg.o
+                                        0x516 (size before relaxing)
 
 .debug_loc
  *(.debug_loc)

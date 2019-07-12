@@ -1,13 +1,13 @@
 Archive member included to satisfy reference by file (symbol)
 
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-s_floor.o)
-                              /tmp/ccLlN0jo.o (floor)
+                              /tmp/cc8f9Ybn.o (floor)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-w_log.o)
-                              /tmp/ccLlN0jo.o (log)
+                              /tmp/cc8f9Ybn.o (log)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-w_pow.o)
-                              /tmp/ccLlN0jo.o (pow)
+                              /tmp/cc8f9Ybn.o (pow)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-w_sqrt.o)
-                              /tmp/ccLlN0jo.o (sqrt)
+                              /tmp/cc8f9Ybn.o (sqrt)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-e_log.o)
                               /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-w_log.o) (__ieee754_log)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-e_pow.o)
@@ -37,7 +37,7 @@ Archive member included to satisfy reference by file (symbol)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-exit.o)
                               /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/crt0.o (exit)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-fflush.o)
-                              /tmp/ccLlN0jo.o (fflush)
+                              /tmp/cc8f9Ybn.o (fflush)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-findfp.o)
                               /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-fflush.o) (__sinit)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-fini.o)
@@ -57,19 +57,19 @@ Archive member included to satisfy reference by file (symbol)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-mlock.o)
                               /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-freer.o) (__malloc_lock)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-printf.o)
-                              /tmp/ccLlN0jo.o (printf)
+                              /tmp/cc8f9Ybn.o (printf)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-putchar.o)
-                              /tmp/ccLlN0jo.o (putchar)
+                              /tmp/cc8f9Ybn.o (putchar)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-putc.o)
                               /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-putchar.o) (_putc_r)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-puts.o)
-                              /tmp/ccLlN0jo.o (puts)
+                              /tmp/cc8f9Ybn.o (puts)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-sbrkr.o)
                               /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-freer.o) (_sbrk_r)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-setjmp.o)
-                              /tmp/ccLlN0jo.o (setjmp)
+                              /tmp/cc8f9Ybn.o (setjmp)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-signal.o)
-                              /tmp/ccLlN0jo.o (signal)
+                              /tmp/cc8f9Ybn.o (signal)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-signalr.o)
                               /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-signal.o) (_kill_r)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-stdio.o)
@@ -178,90 +178,90 @@ Archive member included to satisfy reference by file (symbol)
 Allocating common symbols
 Common symbol       size              file
 
-D                   0x8               /tmp/ccLlN0jo.o
-N                   0x4               /tmp/ccLlN0jo.o
-E9                  0x8               /tmp/ccLlN0jo.o
-BInvrse             0x8               /tmp/ccLlN0jo.o
-U1                  0x8               /tmp/ccLlN0jo.o
-Random1             0x8               /tmp/ccLlN0jo.o
-Z2                  0x8               /tmp/ccLlN0jo.o
-GMult               0x4               /tmp/ccLlN0jo.o
+D                   0x8               /tmp/cc8f9Ybn.o
+N                   0x4               /tmp/cc8f9Ybn.o
+E9                  0x8               /tmp/cc8f9Ybn.o
+BInvrse             0x8               /tmp/cc8f9Ybn.o
+U1                  0x8               /tmp/cc8f9Ybn.o
+Random1             0x8               /tmp/cc8f9Ybn.o
+Z2                  0x8               /tmp/cc8f9Ybn.o
+GMult               0x4               /tmp/cc8f9Ybn.o
 errno               0x4               /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-reent.o)
-F9                  0x8               /tmp/ccLlN0jo.o
-SqRWrng             0x4               /tmp/ccLlN0jo.o
-E0                  0x8               /tmp/ccLlN0jo.o
-ErrCnt              0x10              /tmp/ccLlN0jo.o
-Break               0x4               /tmp/ccLlN0jo.o
-AInvrse             0x8               /tmp/ccLlN0jo.o
-U2                  0x8               /tmp/ccLlN0jo.o
-Q                   0x8               /tmp/ccLlN0jo.o
-Underflow           0x8               /tmp/ccLlN0jo.o
-Y2                  0x8               /tmp/ccLlN0jo.o
-Third               0x8               /tmp/ccLlN0jo.o
-X2                  0x8               /tmp/ccLlN0jo.o
-BMinusU2            0x8               /tmp/ccLlN0jo.o
-N1                  0x4               /tmp/ccLlN0jo.o
-sigsave             0x8               /tmp/ccLlN0jo.o
-RAddSub             0x4               /tmp/ccLlN0jo.o
-Y                   0x8               /tmp/ccLlN0jo.o
-Q9                  0x8               /tmp/ccLlN0jo.o
-Indx                0x4               /tmp/ccLlN0jo.o
-GDiv                0x4               /tmp/ccLlN0jo.o
-MyZero              0x8               /tmp/ccLlN0jo.o
-FourD               0x8               /tmp/ccLlN0jo.o
-T                   0x8               /tmp/ccLlN0jo.o
-S                   0x8               /tmp/ccLlN0jo.o
-GAddSub             0x4               /tmp/ccLlN0jo.o
-V9                  0x8               /tmp/ccLlN0jo.o
-J                   0x8               /tmp/ccLlN0jo.o
-ovfl_buf            0xd0              /tmp/ccLlN0jo.o
-C                   0x8               /tmp/ccLlN0jo.o
-V                   0x8               /tmp/ccLlN0jo.o
-RadixD2             0x8               /tmp/ccLlN0jo.o
-MinSqEr             0x8               /tmp/ccLlN0jo.o
-CInvrse             0x8               /tmp/ccLlN0jo.o
-RMult               0x4               /tmp/ccLlN0jo.o
-X1                  0x8               /tmp/ccLlN0jo.o
-Milestone           0x4               /tmp/ccLlN0jo.o
-StickyBit           0x8               /tmp/ccLlN0jo.o
-Random9             0x8               /tmp/ccLlN0jo.o
-E1                  0x8               /tmp/ccLlN0jo.o
-W                   0x8               /tmp/ccLlN0jo.o
-Precision           0x8               /tmp/ccLlN0jo.o
-Monot               0x4               /tmp/ccLlN0jo.o
-OneUlp              0x8               /tmp/ccLlN0jo.o
-UfNGrad             0x4               /tmp/ccLlN0jo.o
-H                   0x8               /tmp/ccLlN0jo.o
-MaxSqEr             0x8               /tmp/ccLlN0jo.o
-Exp2                0x8               /tmp/ccLlN0jo.o
-Random2             0x8               /tmp/ccLlN0jo.o
-R                   0x8               /tmp/ccLlN0jo.o
-Z                   0x8               /tmp/ccLlN0jo.o
-RDiv                0x4               /tmp/ccLlN0jo.o
-Z1                  0x8               /tmp/ccLlN0jo.o
-Radix               0x8               /tmp/ccLlN0jo.o
-Done                0x4               /tmp/ccLlN0jo.o
-I                   0x4               /tmp/ccLlN0jo.o
-F6                  0x8               /tmp/ccLlN0jo.o
-RSqrt               0x4               /tmp/ccLlN0jo.o
-M                   0x4               /tmp/ccLlN0jo.o
-fpecount            0x4               /tmp/ccLlN0jo.o
-PageNo              0x4               /tmp/ccLlN0jo.o
-IEEE                0x4               /tmp/ccLlN0jo.o
-V0                  0x8               /tmp/ccLlN0jo.o
-HInvrse             0x8               /tmp/ccLlN0jo.o
-Y1                  0x8               /tmp/ccLlN0jo.o
-PseudoZero          0x8               /tmp/ccLlN0jo.o
-Anomaly             0x4               /tmp/ccLlN0jo.o
-NotMonot            0x4               /tmp/ccLlN0jo.o
-ch                  0x8               /tmp/ccLlN0jo.o
-X8                  0x8               /tmp/ccLlN0jo.o
-UfThold             0x8               /tmp/ccLlN0jo.o
-A1                  0x8               /tmp/ccLlN0jo.o
-SqEr                0x8               /tmp/ccLlN0jo.o
-Z9                  0x8               /tmp/ccLlN0jo.o
-X                   0x8               /tmp/ccLlN0jo.o
-E3                  0x8               /tmp/ccLlN0jo.o
+F9                  0x8               /tmp/cc8f9Ybn.o
+SqRWrng             0x4               /tmp/cc8f9Ybn.o
+E0                  0x8               /tmp/cc8f9Ybn.o
+ErrCnt              0x10              /tmp/cc8f9Ybn.o
+Break               0x4               /tmp/cc8f9Ybn.o
+AInvrse             0x8               /tmp/cc8f9Ybn.o
+U2                  0x8               /tmp/cc8f9Ybn.o
+Q                   0x8               /tmp/cc8f9Ybn.o
+Underflow           0x8               /tmp/cc8f9Ybn.o
+Y2                  0x8               /tmp/cc8f9Ybn.o
+Third               0x8               /tmp/cc8f9Ybn.o
+X2                  0x8               /tmp/cc8f9Ybn.o
+BMinusU2            0x8               /tmp/cc8f9Ybn.o
+N1                  0x4               /tmp/cc8f9Ybn.o
+sigsave             0x8               /tmp/cc8f9Ybn.o
+RAddSub             0x4               /tmp/cc8f9Ybn.o
+Y                   0x8               /tmp/cc8f9Ybn.o
+Q9                  0x8               /tmp/cc8f9Ybn.o
+Indx                0x4               /tmp/cc8f9Ybn.o
+GDiv                0x4               /tmp/cc8f9Ybn.o
+MyZero              0x8               /tmp/cc8f9Ybn.o
+FourD               0x8               /tmp/cc8f9Ybn.o
+T                   0x8               /tmp/cc8f9Ybn.o
+S                   0x8               /tmp/cc8f9Ybn.o
+GAddSub             0x4               /tmp/cc8f9Ybn.o
+V9                  0x8               /tmp/cc8f9Ybn.o
+J                   0x8               /tmp/cc8f9Ybn.o
+ovfl_buf            0xd0              /tmp/cc8f9Ybn.o
+C                   0x8               /tmp/cc8f9Ybn.o
+V                   0x8               /tmp/cc8f9Ybn.o
+RadixD2             0x8               /tmp/cc8f9Ybn.o
+MinSqEr             0x8               /tmp/cc8f9Ybn.o
+CInvrse             0x8               /tmp/cc8f9Ybn.o
+RMult               0x4               /tmp/cc8f9Ybn.o
+X1                  0x8               /tmp/cc8f9Ybn.o
+Milestone           0x4               /tmp/cc8f9Ybn.o
+StickyBit           0x8               /tmp/cc8f9Ybn.o
+Random9             0x8               /tmp/cc8f9Ybn.o
+E1                  0x8               /tmp/cc8f9Ybn.o
+W                   0x8               /tmp/cc8f9Ybn.o
+Precision           0x8               /tmp/cc8f9Ybn.o
+Monot               0x4               /tmp/cc8f9Ybn.o
+OneUlp              0x8               /tmp/cc8f9Ybn.o
+UfNGrad             0x4               /tmp/cc8f9Ybn.o
+H                   0x8               /tmp/cc8f9Ybn.o
+MaxSqEr             0x8               /tmp/cc8f9Ybn.o
+Exp2                0x8               /tmp/cc8f9Ybn.o
+Random2             0x8               /tmp/cc8f9Ybn.o
+R                   0x8               /tmp/cc8f9Ybn.o
+Z                   0x8               /tmp/cc8f9Ybn.o
+RDiv                0x4               /tmp/cc8f9Ybn.o
+Z1                  0x8               /tmp/cc8f9Ybn.o
+Radix               0x8               /tmp/cc8f9Ybn.o
+Done                0x4               /tmp/cc8f9Ybn.o
+I                   0x4               /tmp/cc8f9Ybn.o
+F6                  0x8               /tmp/cc8f9Ybn.o
+RSqrt               0x4               /tmp/cc8f9Ybn.o
+M                   0x4               /tmp/cc8f9Ybn.o
+fpecount            0x4               /tmp/cc8f9Ybn.o
+PageNo              0x4               /tmp/cc8f9Ybn.o
+IEEE                0x4               /tmp/cc8f9Ybn.o
+V0                  0x8               /tmp/cc8f9Ybn.o
+HInvrse             0x8               /tmp/cc8f9Ybn.o
+Y1                  0x8               /tmp/cc8f9Ybn.o
+PseudoZero          0x8               /tmp/cc8f9Ybn.o
+Anomaly             0x4               /tmp/cc8f9Ybn.o
+NotMonot            0x4               /tmp/cc8f9Ybn.o
+ch                  0x8               /tmp/cc8f9Ybn.o
+X8                  0x8               /tmp/cc8f9Ybn.o
+UfThold             0x8               /tmp/cc8f9Ybn.o
+A1                  0x8               /tmp/cc8f9Ybn.o
+SqEr                0x8               /tmp/cc8f9Ybn.o
+Z9                  0x8               /tmp/cc8f9Ybn.o
+X                   0x8               /tmp/cc8f9Ybn.o
+E3                  0x8               /tmp/cc8f9Ybn.o
 
 Memory Configuration
 
@@ -274,7 +274,7 @@ LOAD ./lib/syscalls.o
 LOAD ./lib/riscv_counters.o
 LOAD ./lib/ns16550.o
 Address of section .text-segment set to 0xc0000000
-LOAD /tmp/ccLlN0jo.o
+LOAD /tmp/cc8f9Ybn.o
 LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a
 LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a
 LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libnosys.a
@@ -387,7 +387,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
                 0x00000000c00008c4                ns16550_rxchar
                 0x00000000c0000918                ns16550_txchar
                 0x00000000c0000978                ns16550_flush
- .text          0x00000000c00009b8     0x9600 /tmp/ccLlN0jo.o
+ .text          0x00000000c00009b8     0x9600 /tmp/cc8f9Ybn.o
                 0x00000000c00009b8                main
                 0x00000000c0008fb8                sigfpe
                 0x00000000c000904c                Sign
@@ -663,7 +663,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
 
 .rodata         0x00000000c0017600     0x4078
  *(.rodata .rodata.* .gnu.linkonce.r.*)
- .rodata        0x00000000c0017600     0x3350 /tmp/ccLlN0jo.o
+ .rodata        0x00000000c0017600     0x3350 /tmp/cc8f9Ybn.o
  .rodata.str1.8
                 0x00000000c001a950        0x4 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-w_log.o)
                                           0x9 (size before relaxing)
@@ -819,7 +819,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .data          0x00000000c001c698        0x0 ./lib/syscalls.o
  .data          0x00000000c001c698        0x0 ./lib/riscv_counters.o
  .data          0x00000000c001c698        0x0 ./lib/ns16550.o
- .data          0x00000000c001c698      0x238 /tmp/ccLlN0jo.o
+ .data          0x00000000c001c698      0x238 /tmp/cc8f9Ybn.o
  .data          0x00000000c001c8d0        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-s_floor.o)
  .data          0x00000000c001c8d0        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-w_log.o)
  .data          0x00000000c001c8d0        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-w_pow.o)
@@ -959,7 +959,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .sdata         0x00000000c001db90        0x8 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/crtbegin.o
                 0x00000000c001db90                __dso_handle
  .sdata         0x00000000c001db98        0x8 ./lib/ns16550.o
- .sdata         0x00000000c001dba0       0x6c /tmp/ccLlN0jo.o
+ .sdata         0x00000000c001dba0       0x6c /tmp/cc8f9Ybn.o
                 0x00000000c001dba0                Half
                 0x00000000c001dba8                One
                 0x00000000c001dbb0                Two
@@ -989,7 +989,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
 .sbss           0x00000000c001dc28       0x28
  *(.dynsbss)
  *(.sbss .sbss.* .gnu.linkonce.sb.*)
- .sbss          0x00000000c001dc28        0x8 /tmp/ccLlN0jo.o
+ .sbss          0x00000000c001dc28        0x8 /tmp/cc8f9Ybn.o
                 0x00000000c001dc28                Zero
  .sbss          0x00000000c001dc30       0x18 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-mallocr.o)
                 0x00000000c001dc30                __malloc_max_total_mem
@@ -1008,7 +1008,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .bss           0x00000000c001dc88        0x0 ./lib/syscalls.o
  .bss           0x00000000c001dc88        0x0 ./lib/riscv_counters.o
  .bss           0x00000000c001dc88        0x0 ./lib/ns16550.o
- .bss           0x00000000c001dc88        0x0 /tmp/ccLlN0jo.o
+ .bss           0x00000000c001dc88        0x0 /tmp/cc8f9Ybn.o
  .bss           0x00000000c001dc88        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-s_floor.o)
  .bss           0x00000000c001dc88        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-w_log.o)
  .bss           0x00000000c001dc88        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-w_pow.o)
@@ -1099,7 +1099,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .bss           0x00000000c001dcb0        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(_clz.o)
  .bss           0x00000000c001dcb0        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/crtend.o
  *(COMMON)
- COMMON         0x00000000c001dcb0      0x340 /tmp/ccLlN0jo.o
+ COMMON         0x00000000c001dcb0      0x340 /tmp/cc8f9Ybn.o
                 0x00000000c001dcb0                D
                 0x00000000c001dcb8                N
                 0x00000000c001dcc0                E9
@@ -1230,7 +1230,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .comment       0x0000000000000011       0x12 ./lib/syscalls.o
  .comment       0x0000000000000011       0x12 ./lib/riscv_counters.o
  .comment       0x0000000000000011       0x12 ./lib/ns16550.o
- .comment       0x0000000000000011       0x12 /tmp/ccLlN0jo.o
+ .comment       0x0000000000000011       0x12 /tmp/cc8f9Ybn.o
  .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-s_floor.o)
  .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-w_log.o)
  .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-w_pow.o)
@@ -1332,7 +1332,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .riscv.attributes
                 0x00000000000000f0       0x2e ./lib/ns16550.o
  .riscv.attributes
-                0x000000000000011e       0x2e /tmp/ccLlN0jo.o
+                0x000000000000011e       0x2e /tmp/cc8f9Ybn.o
  .riscv.attributes
                 0x000000000000014c       0x33 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a(lib_a-s_floor.o)
  .riscv.attributes
@@ -1536,7 +1536,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .debug_aranges
                 0x0000000000000090       0x30 ./lib/ns16550.o
  .debug_aranges
-                0x00000000000000c0       0x30 /tmp/ccLlN0jo.o
+                0x00000000000000c0       0x30 /tmp/cc8f9Ybn.o
  .debug_aranges
                 0x00000000000000f0       0x30 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(eqtf2.o)
  .debug_aranges
@@ -1569,7 +1569,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .debug_info    0x000000000000002e      0xd7e ./lib/syscalls.o
  .debug_info    0x0000000000000dac      0xb18 ./lib/riscv_counters.o
  .debug_info    0x00000000000018c4      0x40a ./lib/ns16550.o
- .debug_info    0x0000000000001cce     0x1661 /tmp/ccLlN0jo.o
+ .debug_info    0x0000000000001cce     0x1661 /tmp/cc8f9Ybn.o
  .debug_info    0x000000000000332f      0x2eb /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(eqtf2.o)
  .debug_info    0x000000000000361a      0x2cb /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(getf2.o)
  .debug_info    0x00000000000038e5      0x2cb /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(letf2.o)
@@ -1588,7 +1588,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .debug_abbrev  0x0000000000000014      0x28c ./lib/syscalls.o
  .debug_abbrev  0x00000000000002a0      0x265 ./lib/riscv_counters.o
  .debug_abbrev  0x0000000000000505      0x15e ./lib/ns16550.o
- .debug_abbrev  0x0000000000000663      0x2fb /tmp/ccLlN0jo.o
+ .debug_abbrev  0x0000000000000663      0x2fb /tmp/cc8f9Ybn.o
  .debug_abbrev  0x000000000000095e      0x1a4 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(eqtf2.o)
  .debug_abbrev  0x0000000000000b02      0x1bb /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(getf2.o)
  .debug_abbrev  0x0000000000000cbd      0x1bb /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(letf2.o)
@@ -1607,7 +1607,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .debug_line    0x000000000000009a      0x48b ./lib/syscalls.o
  .debug_line    0x0000000000000525      0x279 ./lib/riscv_counters.o
  .debug_line    0x000000000000079e      0x298 ./lib/ns16550.o
- .debug_line    0x0000000000000a36     0x61d0 /tmp/ccLlN0jo.o
+ .debug_line    0x0000000000000a36     0x61d0 /tmp/cc8f9Ybn.o
  .debug_line    0x0000000000006c06      0x2ee /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(eqtf2.o)
  .debug_line    0x0000000000006ef4      0x2fd /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(getf2.o)
  .debug_line    0x00000000000071f1      0x2fd /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(letf2.o)
@@ -1625,7 +1625,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .debug_frame   0x0000000000000000      0x270 ./lib/syscalls.o
  .debug_frame   0x0000000000000270      0x150 ./lib/riscv_counters.o
  .debug_frame   0x00000000000003c0       0xd8 ./lib/ns16550.o
- .debug_frame   0x0000000000000498      0x3c8 /tmp/ccLlN0jo.o
+ .debug_frame   0x0000000000000498      0x3c8 /tmp/cc8f9Ybn.o
  .debug_frame   0x0000000000000860       0x28 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(eqtf2.o)
  .debug_frame   0x0000000000000888       0x28 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(getf2.o)
  .debug_frame   0x00000000000008b0       0x28 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(letf2.o)
@@ -1637,38 +1637,38 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .debug_frame   0x0000000000000a30       0x28 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(trunctfdf2.o)
  .debug_frame   0x0000000000000a58       0x28 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(_clzsi2.o)
 
-.debug_str      0x0000000000000000     0x1565
+.debug_str      0x0000000000000000     0x1560
  *(.debug_str)
- .debug_str     0x0000000000000000       0x4f ./lib/startup.o
- .debug_str     0x000000000000004f      0x549 ./lib/syscalls.o
-                                        0x60d (size before relaxing)
- .debug_str     0x0000000000000598       0x82 ./lib/riscv_counters.o
-                                        0x599 (size before relaxing)
- .debug_str     0x000000000000061a      0x240 ./lib/ns16550.o
-                                        0x33c (size before relaxing)
- .debug_str     0x000000000000085a      0x323 /tmp/ccLlN0jo.o
-                                        0x843 (size before relaxing)
- .debug_str     0x0000000000000b7d      0x1e4 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(eqtf2.o)
+ .debug_str     0x0000000000000000       0x4a ./lib/startup.o
+ .debug_str     0x000000000000004a      0x549 ./lib/syscalls.o
+                                        0x608 (size before relaxing)
+ .debug_str     0x0000000000000593       0x82 ./lib/riscv_counters.o
+                                        0x594 (size before relaxing)
+ .debug_str     0x0000000000000615      0x240 ./lib/ns16550.o
+                                        0x337 (size before relaxing)
+ .debug_str     0x0000000000000855      0x323 /tmp/cc8f9Ybn.o
+                                        0x83e (size before relaxing)
+ .debug_str     0x0000000000000b78      0x1e4 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(eqtf2.o)
                                         0x25c (size before relaxing)
- .debug_str     0x0000000000000d61       0x58 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(getf2.o)
+ .debug_str     0x0000000000000d5c       0x58 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(getf2.o)
                                         0x280 (size before relaxing)
- .debug_str     0x0000000000000db9       0x34 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(letf2.o)
+ .debug_str     0x0000000000000db4       0x34 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(letf2.o)
                                         0x280 (size before relaxing)
- .debug_str     0x0000000000000ded      0x32f /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(multf3.o)
+ .debug_str     0x0000000000000de8      0x32f /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(multf3.o)
                                         0x538 (size before relaxing)
- .debug_str     0x000000000000111c      0x11c /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(subtf3.o)
+ .debug_str     0x0000000000001117      0x11c /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(subtf3.o)
                                         0x342 (size before relaxing)
- .debug_str     0x0000000000001238       0x4b /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(fixtfsi.o)
+ .debug_str     0x0000000000001233       0x4b /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(fixtfsi.o)
                                         0x259 (size before relaxing)
- .debug_str     0x0000000000001283       0x69 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(floatsitf.o)
+ .debug_str     0x000000000000127e       0x69 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(floatsitf.o)
                                         0x2ef (size before relaxing)
- .debug_str     0x00000000000012ec       0x7a /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(extenddftf2.o)
+ .debug_str     0x00000000000012e7       0x7a /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(extenddftf2.o)
                                         0x27e (size before relaxing)
- .debug_str     0x0000000000001366       0x66 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(trunctfdf2.o)
+ .debug_str     0x0000000000001361       0x66 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(trunctfdf2.o)
                                         0x2dc (size before relaxing)
- .debug_str     0x00000000000013cc      0x199 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(_clzsi2.o)
+ .debug_str     0x00000000000013c7      0x199 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(_clzsi2.o)
                                         0x7a2 (size before relaxing)
- .debug_str     0x0000000000001565      0x785 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(_clz.o)
+ .debug_str     0x0000000000001560      0x785 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a(_clz.o)
 
 .debug_loc      0x0000000000000000     0x5a69
  *(.debug_loc)

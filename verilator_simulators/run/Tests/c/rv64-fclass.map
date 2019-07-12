@@ -1,7 +1,7 @@
 Archive member included to satisfy reference by file (symbol)
 
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-assert.o)
-                              /tmp/ccbkEiwL.o (__assert_func)
+                              /tmp/ccHhrY10.o (__assert_func)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-atexit.o)
                               /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/crt0.o (atexit)
 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-errno.o)
@@ -117,7 +117,7 @@ LOAD ./lib/syscalls.o
 LOAD ./lib/riscv_counters.o
 LOAD ./lib/ns16550.o
 Address of section .text-segment set to 0xc0000000
-LOAD /tmp/ccbkEiwL.o
+LOAD /tmp/ccHhrY10.o
 LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libm.a
 LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/libgcc.a
 LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libnosys.a
@@ -230,7 +230,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
                 0x00000000c00008c4                ns16550_rxchar
                 0x00000000c0000918                ns16550_txchar
                 0x00000000c0000978                ns16550_flush
- .text          0x00000000c00009b8      0x430 /tmp/ccbkEiwL.o
+ .text          0x00000000c00009b8      0x430 /tmp/ccHhrY10.o
                 0x00000000c0000a00                main
  .text          0x00000000c0000de8       0x4a /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-assert.o)
                 0x00000000c0000de8                __assert_func
@@ -387,7 +387,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
 
 .rodata         0x00000000c0004760      0x4a9
  *(.rodata .rodata.* .gnu.linkonce.r.*)
- .rodata        0x00000000c0004760      0x184 /tmp/ccbkEiwL.o
+ .rodata        0x00000000c0004760      0x184 /tmp/ccHhrY10.o
  *fill*         0x00000000c00048e4        0x4 
  .rodata.str1.8
                 0x00000000c00048e8       0x3f /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-assert.o)
@@ -507,7 +507,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .data          0x00000000c0005c28        0x0 ./lib/syscalls.o
  .data          0x00000000c0005c28        0x0 ./lib/riscv_counters.o
  .data          0x00000000c0005c28        0x0 ./lib/ns16550.o
- .data          0x00000000c0005c28        0x0 /tmp/ccbkEiwL.o
+ .data          0x00000000c0005c28        0x0 /tmp/ccHhrY10.o
  .data          0x00000000c0005c28        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-assert.o)
  .data          0x00000000c0005c28        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-atexit.o)
  .data          0x00000000c0005c28        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-errno.o)
@@ -589,7 +589,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  *(.srodata.cst4)
  *(.srodata.cst2)
  *(.srodata .srodata.*)
- .srodata       0x00000000c0006d40        0x5 /tmp/ccbkEiwL.o
+ .srodata       0x00000000c0006d40        0x5 /tmp/ccHhrY10.o
  *fill*         0x00000000c0006d45        0x3 
  .srodata       0x00000000c0006d48        0x8 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-impure.o)
                 0x00000000c0006d48                _global_impure_ptr
@@ -627,7 +627,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .bss           0x00000000c0006dd0        0x0 ./lib/syscalls.o
  .bss           0x00000000c0006dd0        0x0 ./lib/riscv_counters.o
  .bss           0x00000000c0006dd0        0x0 ./lib/ns16550.o
- .bss           0x00000000c0006dd0        0x0 /tmp/ccbkEiwL.o
+ .bss           0x00000000c0006dd0        0x0 /tmp/ccHhrY10.o
  .bss           0x00000000c0006dd0        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-assert.o)
  .bss           0x00000000c0006dd0        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-atexit.o)
  .bss           0x00000000c0006dd0        0x0 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-errno.o)
@@ -728,7 +728,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .comment       0x0000000000000011       0x12 ./lib/syscalls.o
  .comment       0x0000000000000011       0x12 ./lib/riscv_counters.o
  .comment       0x0000000000000011       0x12 ./lib/ns16550.o
- .comment       0x0000000000000011       0x12 /tmp/ccbkEiwL.o
+ .comment       0x0000000000000011       0x12 /tmp/ccHhrY10.o
  .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-assert.o)
  .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-atexit.o)
  .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-errno.o)
@@ -794,7 +794,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .riscv.attributes
                 0x00000000000000f0       0x2e ./lib/ns16550.o
  .riscv.attributes
-                0x000000000000011e       0x2e /tmp/ccbkEiwL.o
+                0x000000000000011e       0x2e /tmp/ccHhrY10.o
  .riscv.attributes
                 0x000000000000014c       0x33 /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/libc.a(lib_a-assert.o)
  .riscv.attributes
@@ -924,7 +924,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .debug_aranges
                 0x0000000000000090       0x30 ./lib/ns16550.o
  .debug_aranges
-                0x00000000000000c0       0x30 /tmp/ccbkEiwL.o
+                0x00000000000000c0       0x30 /tmp/ccHhrY10.o
 
 .debug_pubnames
  *(.debug_pubnames)
@@ -935,7 +935,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .debug_info    0x000000000000002e      0xd7e ./lib/syscalls.o
  .debug_info    0x0000000000000dac      0xb18 ./lib/riscv_counters.o
  .debug_info    0x00000000000018c4      0x40a ./lib/ns16550.o
- .debug_info    0x0000000000001cce      0xa6c /tmp/ccbkEiwL.o
+ .debug_info    0x0000000000001cce      0xa6c /tmp/ccHhrY10.o
 
 .debug_abbrev   0x0000000000000000      0x8cf
  *(.debug_abbrev)
@@ -943,7 +943,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .debug_abbrev  0x0000000000000014      0x28c ./lib/syscalls.o
  .debug_abbrev  0x00000000000002a0      0x265 ./lib/riscv_counters.o
  .debug_abbrev  0x0000000000000505      0x15e ./lib/ns16550.o
- .debug_abbrev  0x0000000000000663      0x26c /tmp/ccbkEiwL.o
+ .debug_abbrev  0x0000000000000663      0x26c /tmp/ccHhrY10.o
 
 .debug_line     0x0000000000000000      0xd71
  *(.debug_line .debug_line.* .debug_line_end)
@@ -951,26 +951,26 @@ LOAD /raid/tools/cross-compilers/riscv-rv64gc-medany/lib/gcc/riscv64-unknown-elf
  .debug_line    0x000000000000009a      0x48b ./lib/syscalls.o
  .debug_line    0x0000000000000525      0x279 ./lib/riscv_counters.o
  .debug_line    0x000000000000079e      0x298 ./lib/ns16550.o
- .debug_line    0x0000000000000a36      0x33b /tmp/ccbkEiwL.o
+ .debug_line    0x0000000000000a36      0x33b /tmp/ccHhrY10.o
 
 .debug_frame    0x0000000000000000      0x528
  *(.debug_frame)
  .debug_frame   0x0000000000000000      0x270 ./lib/syscalls.o
  .debug_frame   0x0000000000000270      0x150 ./lib/riscv_counters.o
  .debug_frame   0x00000000000003c0       0xd8 ./lib/ns16550.o
- .debug_frame   0x0000000000000498       0x90 /tmp/ccbkEiwL.o
+ .debug_frame   0x0000000000000498       0x90 /tmp/ccHhrY10.o
 
-.debug_str      0x0000000000000000      0x901
+.debug_str      0x0000000000000000      0x8fc
  *(.debug_str)
- .debug_str     0x0000000000000000       0x4f ./lib/startup.o
- .debug_str     0x000000000000004f      0x555 ./lib/syscalls.o
-                                        0x60d (size before relaxing)
- .debug_str     0x00000000000005a4       0x82 ./lib/riscv_counters.o
-                                        0x599 (size before relaxing)
- .debug_str     0x0000000000000626      0x240 ./lib/ns16550.o
-                                        0x33c (size before relaxing)
- .debug_str     0x0000000000000866       0x9b /tmp/ccbkEiwL.o
-                                        0x5a0 (size before relaxing)
+ .debug_str     0x0000000000000000       0x4a ./lib/startup.o
+ .debug_str     0x000000000000004a      0x555 ./lib/syscalls.o
+                                        0x608 (size before relaxing)
+ .debug_str     0x000000000000059f       0x82 ./lib/riscv_counters.o
+                                        0x594 (size before relaxing)
+ .debug_str     0x0000000000000621      0x240 ./lib/ns16550.o
+                                        0x337 (size before relaxing)
+ .debug_str     0x0000000000000861       0x9b /tmp/ccHhrY10.o
+                                        0x59b (size before relaxing)
 
 .debug_loc
  *(.debug_loc)

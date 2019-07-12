@@ -1,86 +1,86 @@
 Archive member included to satisfy reference by file (symbol)
 
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_divdi3.o)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_divdi3.o)
                               ./lib/syscalls.o (__divdi3)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_moddi3.o)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_moddi3.o)
                               ./lib/syscalls.o (__moddi3)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_clz.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_divdi3.o) (__clz_tab)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-atexit.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/crt0.o (atexit)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-errno.o)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_clz.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_divdi3.o) (__clz_tab)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-atexit.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/crt0.o (atexit)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-errno.o)
                               ./lib/syscalls.o (__errno)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/crt0.o (exit)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fini.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/crt0.o (__libc_fini_array)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-impure.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o) (_global_impure_ptr)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-init.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/crt0.o (__libc_init_array)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memset.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/crt0.o (memset)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o)
-                              /tmp/ccODmeiu.o (puts)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-strlen.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o) (strlen)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__atexit.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-atexit.o) (__register_exitproc)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__call_atexit.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o) (__call_exitprocs)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o) (__sinit)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o) (__sfvwrite_r)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fwalk.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o) (_fwalk)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o) (_malloc_r)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memchr.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o) (memchr)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memcpy.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o) (memcpy)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memmove.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o) (memmove)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mlock.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o) (__malloc_lock)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reallocr.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o) (_realloc_r)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-sbrkr.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o) (_sbrk_r)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o) (__sread)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-writer.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o) (_write_r)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-wsetup.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o) (__swsetup_r)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-closer.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o) (_close_r)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fclose.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o) (_fclose_r)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fflush.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fclose.o) (__sflush_r)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-freer.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o) (_free_r)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-lseekr.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o) (_lseek_r)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-makebuf.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-wsetup.o) (__smakebuf_r)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-readr.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o) (_read_r)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reent.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-sbrkr.o) (errno)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fstatr.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-makebuf.o) (_fstat_r)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-isattyr.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-makebuf.o) (_isatty_r)
-/raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libnosys.a(_exit.o)
-                              /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o) (_exit)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/crt0.o (exit)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fini.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/crt0.o (__libc_fini_array)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-impure.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o) (_global_impure_ptr)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-init.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/crt0.o (__libc_init_array)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memset.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/crt0.o (memset)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o)
+                              /run/user/1001/ccJg3lLG.o (puts)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-strlen.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o) (strlen)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__atexit.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-atexit.o) (__register_exitproc)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__call_atexit.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o) (__call_exitprocs)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o) (__sinit)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o) (__sfvwrite_r)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fwalk.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o) (_fwalk)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o) (_malloc_r)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memchr.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o) (memchr)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memcpy.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o) (memcpy)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memmove.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o) (memmove)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mlock.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o) (__malloc_lock)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reallocr.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o) (_realloc_r)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-sbrkr.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o) (_sbrk_r)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o) (__sread)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-writer.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o) (_write_r)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-wsetup.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o) (__swsetup_r)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-closer.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o) (_close_r)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fclose.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o) (_fclose_r)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fflush.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fclose.o) (__sflush_r)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-freer.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o) (_free_r)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-lseekr.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o) (_lseek_r)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-makebuf.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-wsetup.o) (__smakebuf_r)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-readr.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o) (_read_r)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reent.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-sbrkr.o) (errno)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fstatr.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-makebuf.o) (_fstat_r)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-isattyr.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-makebuf.o) (_isatty_r)
+/nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libnosys.a(_exit.o)
+                              /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o) (_exit)
 
 Allocating common symbols
 Common symbol       size              file
 
-errno               0x4               /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reent.o)
+errno               0x4               /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reent.o)
 
 Memory Configuration
 
@@ -93,18 +93,18 @@ LOAD ./lib/syscalls.o
 LOAD ./lib/riscv_counters.o
 LOAD ./lib/ns16550.o
 Address of section .text-segment set to 0xc0000000
-LOAD /tmp/ccODmeiu.o
-LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libm.a
-LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a
-LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libnosys.a
-LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a
+LOAD /run/user/1001/ccJg3lLG.o
+LOAD /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libm.a
+LOAD /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a
+LOAD /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libnosys.a
+LOAD /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a
 START GROUP
-LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a
-LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a
-LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libnosys.a
+LOAD /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a
+LOAD /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a
+LOAD /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libnosys.a
 END GROUP
-LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtend.o
-                [!provide]                        PROVIDE (__executable_start, SEGMENT_START ("text-segment", 0x10000))
+LOAD /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtend.o
+                [!provide]                        PROVIDE (__executable_start = SEGMENT_START ("text-segment", 0x10000))
                 0x00000000c0000074                . = (SEGMENT_START ("text-segment", 0x10000) + SIZEOF_HEADERS)
 
 .interp
@@ -137,7 +137,7 @@ LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/
 .rela.dyn       0x00000000c0000074        0x0
  *(.rela.init)
  *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
- .rela.text     0x00000000c0000074        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/crt0.o
+ .rela.text     0x00000000c0000074        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/crt0.o
  *(.rela.fini)
  *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
  *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
@@ -151,15 +151,15 @@ LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/
  *(.rela.sdata2 .rela.sdata2.* .rela.gnu.linkonce.s2.*)
  *(.rela.sbss2 .rela.sbss2.* .rela.gnu.linkonce.sb2.*)
  *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
-                [!provide]                        PROVIDE (__rela_iplt_start, .)
+                [!provide]                        PROVIDE (__rela_iplt_start = .)
  *(.rela.iplt)
-                [!provide]                        PROVIDE (__rela_iplt_end, .)
+                [!provide]                        PROVIDE (__rela_iplt_end = .)
 
 .rela.plt
  *(.rela.plt)
 
 .init
- *(SORT(.init))
+ *(SORT_NONE(.init))
 
 .plt
  *(.plt)
@@ -167,161 +167,162 @@ LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/
 .iplt
  *(.iplt)
 
-.text           0x00000000c0000074     0x3bd0
+.text           0x00000000c0000074     0x2c7a
  *(.text.unlikely .text.*_unlikely .text.unlikely.*)
  *(.text.exit .text.exit.*)
  *(.text.startup .text.startup.*)
  *(.text.hot .text.hot.*)
  *(.text .stub .text.* .gnu.linkonce.t.*)
- .text          0x00000000c0000074       0x44 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/crt0.o
+ .text          0x00000000c0000074       0x38 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/crt0.o
                 0x00000000c0000074                _start
-                0x00000000c00000b4                _init
-                0x00000000c00000b4                _fini
- .text          0x00000000c00000b8       0xf0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtbegin.o
- .text          0x00000000c00001a8      0x4b4 ./lib/syscalls.o
-                0x00000000c00001a8                read
-                0x00000000c0000234                write
-                0x00000000c00002a0                gettimeofday
-                0x00000000c000039c                sleep
-                0x00000000c0000410                _sbrk
-                0x00000000c000044c                _write
-                0x00000000c00004b8                _close
-                0x00000000c00004f4                _lseek
-                0x00000000c0000538                _read
-                0x00000000c000057c                _fstat
-                0x00000000c00005bc                _isatty
-                0x00000000c00005f8                _kill
-                0x00000000c0000638                _getpid
- .text          0x00000000c000065c      0x258 ./lib/riscv_counters.o
-                0x00000000c000065c                read_cycle
-                0x00000000c00006c8                read_time
-                0x00000000c0000734                read_instret
-                0x00000000c00007a0                fence
-                0x00000000c00007c0                io_read32
-                0x00000000c00007f4                io_write32
-                0x00000000c0000830                io_read64
-                0x00000000c000086c                io_write64
- .text          0x00000000c00008b4      0x224 ./lib/ns16550.o
-                0x00000000c00009b4                ns16550_rxready
-                0x00000000c00009f0                ns16550_rxchar
-                0x00000000c0000a40                ns16550_txchar
-                0x00000000c0000a9c                ns16550_flush
- .text          0x00000000c0000ad8       0x40 /tmp/ccODmeiu.o
-                0x00000000c0000ad8                main
- .text          0x00000000c0000b18      0x480 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_divdi3.o)
-                0x00000000c0000b18                __divdi3
- .text          0x00000000c0000f98      0x458 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_moddi3.o)
-                0x00000000c0000f98                __moddi3
- .text          0x00000000c00013f0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_clz.o)
- .text          0x00000000c00013f0       0x14 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-atexit.o)
-                0x00000000c00013f0                atexit
- .text          0x00000000c0001404        0x8 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-errno.o)
-                0x00000000c0001404                __errno
- .text          0x00000000c000140c       0x30 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o)
-                0x00000000c000140c                exit
- .text          0x00000000c000143c       0x74 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fini.o)
-                0x00000000c000143c                __libc_fini_array
- .text          0x00000000c00014b0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-impure.o)
- .text          0x00000000c00014b0       0xa0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-init.o)
-                0x00000000c00014b0                __libc_init_array
- .text          0x00000000c0001550       0xdc /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memset.o)
-                0x00000000c0001550                memset
- .text          0x00000000c000162c       0xd4 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o)
-                0x00000000c000162c                _puts_r
-                0x00000000c00016f4                puts
- .text          0x00000000c0001700       0x1c /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-strlen.o)
-                0x00000000c0001700                strlen
- .text          0x00000000c000171c       0x7c /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__atexit.o)
-                0x00000000c000171c                __register_exitproc
- .text          0x00000000c0001798      0x10c /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__call_atexit.o)
-                0x00000000c0001798                __call_exitprocs
- .text          0x00000000c00018a4      0x2b4 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o)
-                0x00000000c00018ac                _cleanup_r
-                0x00000000c0001948                __sfmoreglue
-                0x00000000c00019b4                _cleanup
-                0x00000000c00019bc                __sinit
-                0x00000000c0001a40                __sfp
-                0x00000000c0001b28                __sfp_lock_acquire
-                0x00000000c0001b2c                __sfp_lock_release
-                0x00000000c0001b30                __sinit_lock_acquire
-                0x00000000c0001b34                __sinit_lock_release
-                0x00000000c0001b38                __fp_lock_all
-                0x00000000c0001b48                __fp_unlock_all
- .text          0x00000000c0001b58      0x460 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o)
-                0x00000000c0001b58                __sfvwrite_r
- .text          0x00000000c0001fb8      0x154 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fwalk.o)
-                0x00000000c0001fb8                _fwalk
-                0x00000000c0002058                _fwalk_reent
- .text          0x00000000c000210c      0x644 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o)
-                0x00000000c000210c                _malloc_r
- .text          0x00000000c0002750       0x24 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memchr.o)
-                0x00000000c0002750                memchr
- .text          0x00000000c0002774       0xe8 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memcpy.o)
-                0x00000000c0002774                memcpy
- .text          0x00000000c000285c       0x54 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memmove.o)
-                0x00000000c000285c                memmove
- .text          0x00000000c00028b0        0x8 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mlock.o)
-                0x00000000c00028b0                __malloc_lock
-                0x00000000c00028b4                __malloc_unlock
- .text          0x00000000c00028b8      0x558 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reallocr.o)
-                0x00000000c00028b8                _realloc_r
- .text          0x00000000c0002e10       0x48 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-sbrkr.o)
-                0x00000000c0002e10                _sbrk_r
- .text          0x00000000c0002e58      0x13c /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o)
-                0x00000000c0002e58                __sread
-                0x00000000c0002ea8                __seofread
-                0x00000000c0002eb0                __swrite
-                0x00000000c0002f34                __sseek
-                0x00000000c0002f8c                __sclose
- .text          0x00000000c0002f94       0x50 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-writer.o)
-                0x00000000c0002f94                _write_r
- .text          0x00000000c0002fe4      0x134 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-wsetup.o)
-                0x00000000c0002fe4                __swsetup_r
- .text          0x00000000c0003118       0x48 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-closer.o)
-                0x00000000c0003118                _close_r
- .text          0x00000000c0003160       0xe8 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fclose.o)
-                0x00000000c0003160                _fclose_r
-                0x00000000c000323c                fclose
- .text          0x00000000c0003248      0x280 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fflush.o)
-                0x00000000c0003248                __sflush_r
-                0x00000000c0003450                _fflush_r
-                0x00000000c00034a8                fflush
- .text          0x00000000c00034c8      0x36c /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-freer.o)
-                0x00000000c00034c8                _malloc_trim_r
-                0x00000000c00035d8                _free_r
- .text          0x00000000c0003834       0x50 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-lseekr.o)
-                0x00000000c0003834                _lseek_r
- .text          0x00000000c0003884      0x18c /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-makebuf.o)
-                0x00000000c0003884                __swhatbuf_r
-                0x00000000c0003920                __smakebuf_r
- .text          0x00000000c0003a10       0x50 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-readr.o)
-                0x00000000c0003a10                _read_r
- .text          0x00000000c0003a60      0x14c /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reent.o)
-                0x00000000c0003a60                cleanup_glue
-                0x00000000c0003aa0                _reclaim_reent
- .text          0x00000000c0003bac       0x4c /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fstatr.o)
-                0x00000000c0003bac                _fstat_r
- .text          0x00000000c0003bf8       0x48 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-isattyr.o)
-                0x00000000c0003bf8                _isatty_r
- .text          0x00000000c0003c40        0x4 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libnosys.a(_exit.o)
-                0x00000000c0003c40                _exit
- .text          0x00000000c0003c44        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtend.o
+                0x00000000c00000aa                _init
+                0x00000000c00000aa                _fini
+ .text          0x00000000c00000ac       0xaa /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtbegin.o
+ *fill*         0x00000000c0000156        0x2 
+ .text          0x00000000c0000158      0x4ec ./lib/syscalls.o
+                0x00000000c0000158                read
+                0x00000000c00001e4                write
+                0x00000000c0000250                gettimeofday
+                0x00000000c000034c                sleep
+                0x00000000c00003f8                _sbrk
+                0x00000000c0000434                _write
+                0x00000000c00004a0                _close
+                0x00000000c00004dc                _lseek
+                0x00000000c0000520                _read
+                0x00000000c0000564                _fstat
+                0x00000000c00005a4                _isatty
+                0x00000000c00005e0                _kill
+                0x00000000c0000620                _getpid
+ .text          0x00000000c0000644      0x258 ./lib/riscv_counters.o
+                0x00000000c0000644                read_cycle
+                0x00000000c00006b0                read_time
+                0x00000000c000071c                read_instret
+                0x00000000c0000788                fence
+                0x00000000c00007a8                io_read32
+                0x00000000c00007dc                io_write32
+                0x00000000c0000818                io_read64
+                0x00000000c0000854                io_write64
+ .text          0x00000000c000089c      0x1e4 ./lib/ns16550.o
+                0x00000000c0000974                ns16550_rxready
+                0x00000000c00009ac                ns16550_rxchar
+                0x00000000c00009f4                ns16550_txchar
+                0x00000000c0000a48                ns16550_flush
+ .text          0x00000000c0000a80       0x40 /run/user/1001/ccJg3lLG.o
+                0x00000000c0000a80                main
+ .text          0x00000000c0000ac0      0x39c /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_divdi3.o)
+                0x00000000c0000ac0                __divdi3
+ .text          0x00000000c0000e5c      0x392 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_moddi3.o)
+                0x00000000c0000e5c                __moddi3
+ .text          0x00000000c00011ee        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_clz.o)
+ .text          0x00000000c00011ee        0xa /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-atexit.o)
+                0x00000000c00011ee                atexit
+ .text          0x00000000c00011f8        0x6 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-errno.o)
+                0x00000000c00011f8                __errno
+ .text          0x00000000c00011fe       0x1c /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o)
+                0x00000000c00011fe                exit
+ .text          0x00000000c000121a       0x3c /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fini.o)
+                0x00000000c000121a                __libc_fini_array
+ .text          0x00000000c0001256        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-impure.o)
+ .text          0x00000000c0001256       0x72 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-init.o)
+                0x00000000c0001256                __libc_init_array
+ .text          0x00000000c00012c8       0xa8 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memset.o)
+                0x00000000c00012c8                memset
+ .text          0x00000000c0001370       0x78 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o)
+                0x00000000c0001370                _puts_r
+                0x00000000c00013e0                puts
+ .text          0x00000000c00013e8       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-strlen.o)
+                0x00000000c00013e8                strlen
+ .text          0x00000000c00013fa       0x60 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__atexit.o)
+                0x00000000c00013fa                __register_exitproc
+ .text          0x00000000c000145a       0xaa /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__call_atexit.o)
+                0x00000000c000145a                __call_exitprocs
+ .text          0x00000000c0001504      0x1ce /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o)
+                0x00000000c0001570                _cleanup_r
+                0x00000000c000157e                __sfmoreglue
+                0x00000000c00015c2                _cleanup
+                0x00000000c00015c8                __sinit
+                0x00000000c0001616                __sfp
+                0x00000000c00016ae                __sfp_lock_acquire
+                0x00000000c00016b0                __sfp_lock_release
+                0x00000000c00016b2                __sinit_lock_acquire
+                0x00000000c00016b4                __sinit_lock_release
+                0x00000000c00016b6                __fp_lock_all
+                0x00000000c00016c4                __fp_unlock_all
+ .text          0x00000000c00016d2      0x2da /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o)
+                0x00000000c00016d2                __sfvwrite_r
+ .text          0x00000000c00019ac       0xce /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fwalk.o)
+                0x00000000c00019ac                _fwalk
+                0x00000000c0001a0e                _fwalk_reent
+ .text          0x00000000c0001a7a      0x4a4 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o)
+                0x00000000c0001a7a                _malloc_r
+ .text          0x00000000c0001f1e       0x1a /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memchr.o)
+                0x00000000c0001f1e                memchr
+ .text          0x00000000c0001f38       0xb6 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memcpy.o)
+                0x00000000c0001f38                memcpy
+ .text          0x00000000c0001fee       0x4a /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memmove.o)
+                0x00000000c0001fee                memmove
+ .text          0x00000000c0002038        0x4 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mlock.o)
+                0x00000000c0002038                __malloc_lock
+                0x00000000c000203a                __malloc_unlock
+ .text          0x00000000c000203c      0x388 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reallocr.o)
+                0x00000000c000203c                _realloc_r
+ .text          0x00000000c00023c4       0x2c /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-sbrkr.o)
+                0x00000000c00023c4                _sbrk_r
+ .text          0x00000000c00023f0       0xc0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o)
+                0x00000000c00023f0                __sread
+                0x00000000c0002422                __seofread
+                0x00000000c0002426                __swrite
+                0x00000000c0002474                __sseek
+                0x00000000c00024aa                __sclose
+ .text          0x00000000c00024b0       0x30 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-writer.o)
+                0x00000000c00024b0                _write_r
+ .text          0x00000000c00024e0       0xd6 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-wsetup.o)
+                0x00000000c00024e0                __swsetup_r
+ .text          0x00000000c00025b6       0x2c /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-closer.o)
+                0x00000000c00025b6                _close_r
+ .text          0x00000000c00025e2       0x8e /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fclose.o)
+                0x00000000c00025e2                _fclose_r
+                0x00000000c0002668                fclose
+ .text          0x00000000c0002670      0x1b4 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fflush.o)
+                0x00000000c0002670                __sflush_r
+                0x00000000c00027da                _fflush_r
+                0x00000000c000280a                fflush
+ .text          0x00000000c0002824      0x250 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-freer.o)
+                0x00000000c0002824                _malloc_trim_r
+                0x00000000c00028d6                _free_r
+ .text          0x00000000c0002a74       0x30 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-lseekr.o)
+                0x00000000c0002a74                _lseek_r
+ .text          0x00000000c0002aa4      0x102 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-makebuf.o)
+                0x00000000c0002aa4                __swhatbuf_r
+                0x00000000c0002b08                __smakebuf_r
+ .text          0x00000000c0002ba6       0x30 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-readr.o)
+                0x00000000c0002ba6                _read_r
+ .text          0x00000000c0002bd6       0xbc /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reent.o)
+                0x00000000c0002bd6                cleanup_glue
+                0x00000000c0002bf6                _reclaim_reent
+ .text          0x00000000c0002c92       0x2e /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fstatr.o)
+                0x00000000c0002c92                _fstat_r
+ .text          0x00000000c0002cc0       0x2c /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-isattyr.o)
+                0x00000000c0002cc0                _isatty_r
+ .text          0x00000000c0002cec        0x2 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libnosys.a(_exit.o)
+                0x00000000c0002cec                _exit
+ .text          0x00000000c0002cee        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtend.o
  *(.gnu.warning)
 
 .fini
- *(SORT(.fini))
-                [!provide]                        PROVIDE (__etext, .)
-                [!provide]                        PROVIDE (_etext, .)
-                [!provide]                        PROVIDE (etext, .)
+ *(SORT_NONE(.fini))
+                [!provide]                        PROVIDE (__etext = .)
+                [!provide]                        PROVIDE (_etext = .)
+                [!provide]                        PROVIDE (etext = .)
 
-.rodata         0x00000000c0003c44      0x114
+.rodata         0x00000000c0002cf0      0x114
  *(.rodata .rodata.* .gnu.linkonce.r.*)
- .rodata        0x00000000c0003c44        0xd /tmp/ccODmeiu.o
- *fill*         0x00000000c0003c51        0x3 
- .rodata        0x00000000c0003c54      0x100 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_clz.o)
-                0x00000000c0003c54                __clz_tab
+ .rodata        0x00000000c0002cf0        0xd /run/user/1001/ccJg3lLG.o
+ *fill*         0x00000000c0002cfd        0x3 
+ .rodata        0x00000000c0002d00      0x100 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_clz.o)
+                0x00000000c0002d00                __clz_tab
  .rodata.str1.4
-                0x00000000c0003d54        0x4 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o)
+                0x00000000c0002e00        0x4 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o)
                                           0x2 (size before relaxing)
 
 .rodata1
@@ -348,16 +349,16 @@ LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/
  *(.gnu_extab*)
 
 .exception_ranges
- *(.exception_ranges .exception_ranges*)
-                0x00000000c0004000                . = DATA_SEGMENT_ALIGN (CONSTANT (MAXPAGESIZE), CONSTANT (COMMONPAGESIZE))
+ *(.exception_ranges*)
+                0x00000000c0003000                . = DATA_SEGMENT_ALIGN (CONSTANT (MAXPAGESIZE), CONSTANT (COMMONPAGESIZE))
 
-.eh_frame       0x00000000c0004000       0x40
+.eh_frame       0x00000000c0003000       0x40
  *(.eh_frame)
- .eh_frame      0x00000000c0004000        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtbegin.o
- .eh_frame      0x00000000c0004000       0x28 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_divdi3.o)
- .eh_frame      0x00000000c0004028       0x14 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_moddi3.o)
+ .eh_frame      0x00000000c0003000        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtbegin.o
+ .eh_frame      0x00000000c0003000       0x28 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_divdi3.o)
+ .eh_frame      0x00000000c0003028       0x14 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_moddi3.o)
                                          0x28 (size before relaxing)
- .eh_frame      0x00000000c000403c        0x4 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtend.o
+ .eh_frame      0x00000000c000303c        0x4 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtend.o
  *(.eh_frame.*)
 
 .gnu_extab
@@ -367,47 +368,48 @@ LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/
  *(.gcc_except_table .gcc_except_table.*)
 
 .exception_ranges
- *(.exception_ranges .exception_ranges*)
+ *(.exception_ranges*)
 
-.tdata
+.tdata          0x00000000c0003040        0x0
+                [!provide]                        PROVIDE (__tdata_start = .)
  *(.tdata .tdata.* .gnu.linkonce.td.*)
 
 .tbss
  *(.tbss .tbss.* .gnu.linkonce.tb.*)
  *(.tcommon)
 
-.preinit_array  0x00000000c0004040        0x0
-                0x00000000c0004040                PROVIDE (__preinit_array_start, .)
+.preinit_array  0x00000000c0003040        0x0
+                0x00000000c0003040                PROVIDE (__preinit_array_start = .)
  *(.preinit_array)
-                0x00000000c0004040                PROVIDE (__preinit_array_end, .)
+                0x00000000c0003040                PROVIDE (__preinit_array_end = .)
 
-.init_array     0x00000000c0004040        0x8
-                0x00000000c0004040                PROVIDE (__init_array_start, .)
- *(SORT(.init_array.*) SORT(.ctors.*))
+.init_array     0x00000000c0003040        0x8
+                0x00000000c0003040                PROVIDE (__init_array_start = .)
+ *(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*))
  *(.init_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .ctors)
- .init_array    0x00000000c0004040        0x4 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtbegin.o
- .init_array    0x00000000c0004044        0x4 ./lib/ns16550.o
-                0x00000000c0004048                PROVIDE (__init_array_end, .)
+ .init_array    0x00000000c0003040        0x4 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtbegin.o
+ .init_array    0x00000000c0003044        0x4 ./lib/ns16550.o
+                0x00000000c0003048                PROVIDE (__init_array_end = .)
 
-.fini_array     0x00000000c0004048        0x4
-                0x00000000c0004048                PROVIDE (__fini_array_start, .)
- *(SORT(.fini_array.*) SORT(.dtors.*))
+.fini_array     0x00000000c0003048        0x4
+                0x00000000c0003048                PROVIDE (__fini_array_start = .)
+ *(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*))
  *(.fini_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .dtors)
- .fini_array    0x00000000c0004048        0x4 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtbegin.o
-                0x00000000c000404c                PROVIDE (__fini_array_end, .)
+ .fini_array    0x00000000c0003048        0x4 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtbegin.o
+                0x00000000c000304c                PROVIDE (__fini_array_end = .)
 
 .ctors
  *crtbegin.o(.ctors)
  *crtbegin?.o(.ctors)
  *(EXCLUDE_FILE(*crtend?.o *crtend.o) .ctors)
- *(SORT(.ctors.*))
+ *(SORT_BY_NAME(.ctors.*))
  *(.ctors)
 
 .dtors
  *crtbegin.o(.dtors)
  *crtbegin?.o(.dtors)
  *(EXCLUDE_FILE(*crtend?.o *crtend.o) .dtors)
- *(SORT(.dtors.*))
+ *(SORT_BY_NAME(.dtors.*))
  *(.dtors)
 
 .jcr
@@ -419,64 +421,65 @@ LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/
 
 .dynamic
  *(.dynamic)
-                0x00000000c000404c                . = DATA_SEGMENT_RELRO_END (., 0x0)
+                0x00000000c000304c                . = DATA_SEGMENT_RELRO_END (., 0x0)
 
-.data           0x00000000c0004050      0x830
+.data           0x00000000c0003050      0x830
+                0x00000000c0003050                __DATA_BEGIN__ = .
  *(.data .data.* .gnu.linkonce.d.*)
- .data          0x00000000c0004050        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/crt0.o
- .data          0x00000000c0004050        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtbegin.o
- .data          0x00000000c0004050        0x0 ./lib/startup.o
- .data          0x00000000c0004050        0x0 ./lib/syscalls.o
- .data          0x00000000c0004050        0x0 ./lib/riscv_counters.o
- .data          0x00000000c0004050        0x0 ./lib/ns16550.o
- .data          0x00000000c0004050        0x0 /tmp/ccODmeiu.o
- .data          0x00000000c0004050        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_divdi3.o)
- .data          0x00000000c0004050        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_moddi3.o)
- .data          0x00000000c0004050        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_clz.o)
- .data          0x00000000c0004050        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-atexit.o)
- .data          0x00000000c0004050        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-errno.o)
- .data          0x00000000c0004050        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o)
- .data          0x00000000c0004050        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fini.o)
- .data          0x00000000c0004050      0x428 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-impure.o)
- .data          0x00000000c0004478        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-init.o)
- .data          0x00000000c0004478        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memset.o)
- .data          0x00000000c0004478        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o)
- .data          0x00000000c0004478        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-strlen.o)
- .data          0x00000000c0004478        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__atexit.o)
- .data          0x00000000c0004478        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__call_atexit.o)
- .data          0x00000000c0004478        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o)
- .data          0x00000000c0004478        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o)
- .data          0x00000000c0004478        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fwalk.o)
- .data          0x00000000c0004478      0x408 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o)
-                0x00000000c0004478                __malloc_av_
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memchr.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memcpy.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memmove.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mlock.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reallocr.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-sbrkr.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-writer.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-wsetup.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-closer.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fclose.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fflush.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-freer.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-lseekr.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-makebuf.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-readr.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reent.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fstatr.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-isattyr.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libnosys.a(_exit.o)
- .data          0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtend.o
+ .data          0x00000000c0003050        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/crt0.o
+ .data          0x00000000c0003050        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtbegin.o
+ .data          0x00000000c0003050        0x0 ./lib/startup.o
+ .data          0x00000000c0003050        0x0 ./lib/syscalls.o
+ .data          0x00000000c0003050        0x0 ./lib/riscv_counters.o
+ .data          0x00000000c0003050        0x0 ./lib/ns16550.o
+ .data          0x00000000c0003050        0x0 /run/user/1001/ccJg3lLG.o
+ .data          0x00000000c0003050        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_divdi3.o)
+ .data          0x00000000c0003050        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_moddi3.o)
+ .data          0x00000000c0003050        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_clz.o)
+ .data          0x00000000c0003050        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-atexit.o)
+ .data          0x00000000c0003050        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-errno.o)
+ .data          0x00000000c0003050        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o)
+ .data          0x00000000c0003050        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fini.o)
+ .data          0x00000000c0003050      0x428 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-impure.o)
+ .data          0x00000000c0003478        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-init.o)
+ .data          0x00000000c0003478        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memset.o)
+ .data          0x00000000c0003478        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o)
+ .data          0x00000000c0003478        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-strlen.o)
+ .data          0x00000000c0003478        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__atexit.o)
+ .data          0x00000000c0003478        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__call_atexit.o)
+ .data          0x00000000c0003478        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o)
+ .data          0x00000000c0003478        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o)
+ .data          0x00000000c0003478        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fwalk.o)
+ .data          0x00000000c0003478      0x408 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o)
+                0x00000000c0003478                __malloc_av_
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memchr.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memcpy.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memmove.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mlock.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reallocr.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-sbrkr.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-writer.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-wsetup.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-closer.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fclose.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fflush.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-freer.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-lseekr.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-makebuf.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-readr.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reent.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fstatr.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-isattyr.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libnosys.a(_exit.o)
+ .data          0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtend.o
 
 .tm_clone_table
-                0x00000000c0004880        0x0
+                0x00000000c0003880        0x0
  .tm_clone_table
-                0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtbegin.o
+                0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtbegin.o
  .tm_clone_table
-                0x00000000c0004880        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtend.o
+                0x00000000c0003880        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtend.o
 
 .data1
  *(.data1)
@@ -487,106 +490,109 @@ LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/
  *(.got)
  *(.igot)
 
-.sdata          0x00000000c0004880       0x18
-                0x00000000c0005080                __global_pointer$ = (. + 0x800)
+.sdata          0x00000000c0003880       0x18
+                0x00000000c0003880                __SDATA_BEGIN__ = .
  *(.srodata.cst16)
  *(.srodata.cst8)
  *(.srodata.cst4)
  *(.srodata.cst2)
  *(.srodata .srodata.*)
+ .srodata       0x00000000c0003880        0x4 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-impure.o)
+                0x00000000c0003880                _global_impure_ptr
  *(.sdata .sdata.* .gnu.linkonce.s.*)
- .sdata         0x00000000c0004880        0x4 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtbegin.o
-                0x00000000c0004880                __dso_handle
- .sdata         0x00000000c0004884        0x4 ./lib/ns16550.o
- .sdata         0x00000000c0004888        0x8 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-impure.o)
-                0x00000000c0004888                _global_impure_ptr
-                0x00000000c000488c                _impure_ptr
- .sdata         0x00000000c0004890        0x8 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o)
-                0x00000000c0004890                __malloc_sbrk_base
-                0x00000000c0004894                __malloc_trim_threshold
-                0x00000000c0004898                _edata = .
-                [!provide]                        PROVIDE (edata, .)
-                0x00000000c0004898                . = .
-                0x00000000c0004898                __bss_start = .
+ .sdata         0x00000000c0003884        0x4 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtbegin.o
+                0x00000000c0003884                __dso_handle
+ .sdata         0x00000000c0003888        0x4 ./lib/ns16550.o
+ .sdata         0x00000000c000388c        0x4 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-impure.o)
+                0x00000000c000388c                _impure_ptr
+ .sdata         0x00000000c0003890        0x8 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o)
+                0x00000000c0003890                __malloc_sbrk_base
+                0x00000000c0003894                __malloc_trim_threshold
+                0x00000000c0003898                _edata = .
+                [!provide]                        PROVIDE (edata = .)
+                0x00000000c0003898                . = .
+                0x00000000c0003898                __bss_start = .
 
-.sbss           0x00000000c0004898        0xc
+.sbss           0x00000000c0003898        0xc
  *(.dynsbss)
  *(.sbss .sbss.* .gnu.linkonce.sb.*)
- .sbss          0x00000000c0004898        0xc /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o)
-                0x00000000c0004898                __malloc_max_total_mem
-                0x00000000c000489c                __malloc_max_sbrked_mem
-                0x00000000c00048a0                __malloc_top_pad
+ .sbss          0x00000000c0003898        0xc /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o)
+                0x00000000c0003898                __malloc_max_total_mem
+                0x00000000c000389c                __malloc_max_sbrked_mem
+                0x00000000c00038a0                __malloc_top_pad
  *(.scommon)
 
-.bss            0x00000000c00048a4       0x48
+.bss            0x00000000c00038a4       0x48
  *(.dynbss)
  *(.bss .bss.* .gnu.linkonce.b.*)
- .bss           0x00000000c00048a4        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/crt0.o
- .bss           0x00000000c00048a4       0x1c /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtbegin.o
- .bss           0x00000000c00048c0        0x0 ./lib/startup.o
- .bss           0x00000000c00048c0        0x0 ./lib/syscalls.o
- .bss           0x00000000c00048c0        0x0 ./lib/riscv_counters.o
- .bss           0x00000000c00048c0        0x0 ./lib/ns16550.o
- .bss           0x00000000c00048c0        0x0 /tmp/ccODmeiu.o
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_divdi3.o)
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_moddi3.o)
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_clz.o)
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-atexit.o)
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-errno.o)
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o)
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fini.o)
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-impure.o)
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-init.o)
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memset.o)
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o)
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-strlen.o)
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__atexit.o)
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__call_atexit.o)
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o)
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o)
- .bss           0x00000000c00048c0        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fwalk.o)
- .bss           0x00000000c00048c0       0x28 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o)
-                0x00000000c00048c0                __malloc_current_mallinfo
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memchr.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memcpy.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memmove.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mlock.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reallocr.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-sbrkr.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-writer.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-wsetup.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-closer.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fclose.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fflush.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-freer.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-lseekr.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-makebuf.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-readr.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reent.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fstatr.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-isattyr.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libnosys.a(_exit.o)
- .bss           0x00000000c00048e8        0x0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtend.o
+ .bss           0x00000000c00038a4        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/crt0.o
+ .bss           0x00000000c00038a4       0x1c /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtbegin.o
+ .bss           0x00000000c00038c0        0x0 ./lib/startup.o
+ .bss           0x00000000c00038c0        0x0 ./lib/syscalls.o
+ .bss           0x00000000c00038c0        0x0 ./lib/riscv_counters.o
+ .bss           0x00000000c00038c0        0x0 ./lib/ns16550.o
+ .bss           0x00000000c00038c0        0x0 /run/user/1001/ccJg3lLG.o
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_divdi3.o)
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_moddi3.o)
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_clz.o)
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-atexit.o)
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-errno.o)
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o)
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fini.o)
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-impure.o)
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-init.o)
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memset.o)
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o)
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-strlen.o)
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__atexit.o)
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__call_atexit.o)
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o)
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o)
+ .bss           0x00000000c00038c0        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fwalk.o)
+ .bss           0x00000000c00038c0       0x28 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o)
+                0x00000000c00038c0                __malloc_current_mallinfo
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memchr.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memcpy.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memmove.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mlock.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reallocr.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-sbrkr.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-writer.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-wsetup.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-closer.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fclose.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fflush.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-freer.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-lseekr.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-makebuf.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-readr.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reent.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fstatr.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-isattyr.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libnosys.a(_exit.o)
+ .bss           0x00000000c00038e8        0x0 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtend.o
  *(COMMON)
- COMMON         0x00000000c00048e8        0x4 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reent.o)
-                0x00000000c00048e8                errno
-                0x00000000c00048ec                . = ALIGN ((. != 0x0)?0x4:0x1)
-LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/crt0.o
-LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtbegin.o
-                0x00000000c00048ec                __startup_save = .
+ COMMON         0x00000000c00038e8        0x4 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reent.o)
+                0x00000000c00038e8                errno
+                0x00000000c00038ec                . = ALIGN ((. != 0x0)?0x4:0x1)
+LOAD /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/crt0.o
+LOAD /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtbegin.o
+                0x00000000c00038ec                __startup_save = .
 
 .startup        0x00000000c0000000       0x44
  startup.o(.text)
  .text          0x00000000c0000000       0x44 ./lib/startup.o
                 0x00000000c0000000                _reset
-                0x00000000c00048ec                . = __startup_save
-                0x00000000c00048ec                . = ALIGN (0x4)
-                0x00000000c00048ec                . = SEGMENT_START ("ldata-segment", .)
-                0x00000000c00048ec                . = ALIGN (0x4)
-                0x00000000c00048ec                _end = .
-                [!provide]                        PROVIDE (end, .)
-                0x00000000c00048ec                . = DATA_SEGMENT_END (.)
+                0x00000000c00038ec                . = __startup_save
+                0x00000000c00038ec                . = ALIGN (0x4)
+                0x00000000c00038ec                . = SEGMENT_START ("ldata-segment", .)
+                0x00000000c00038ec                . = ALIGN (0x4)
+                0x00000000c00038ec                __BSS_END__ = .
+                0x00000000c0003850                __global_pointer$ = MIN ((__SDATA_BEGIN__ + 0x800), MAX ((__DATA_BEGIN__ + 0x800), (__BSS_END__ - 0x800)))
+                0x00000000c00038ec                _end = .
+                [!provide]                        PROVIDE (end = .)
+                0x00000000c00038ec                . = DATA_SEGMENT_END (.)
 
 .stab
  *(.stab)
@@ -608,50 +614,148 @@ LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/
 
 .comment        0x0000000000000000       0x11
  *(.comment)
- .comment       0x0000000000000000       0x11 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtbegin.o
+ .comment       0x0000000000000000       0x11 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtbegin.o
                                          0x12 (size before relaxing)
  .comment       0x0000000000000011       0x12 ./lib/syscalls.o
  .comment       0x0000000000000011       0x12 ./lib/riscv_counters.o
  .comment       0x0000000000000011       0x12 ./lib/ns16550.o
- .comment       0x0000000000000011       0x12 /tmp/ccODmeiu.o
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_divdi3.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_moddi3.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_clz.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-atexit.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-errno.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fini.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-impure.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-init.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-strlen.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__atexit.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__call_atexit.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fwalk.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memchr.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memcpy.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memmove.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mlock.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reallocr.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-sbrkr.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-writer.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-wsetup.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-closer.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fclose.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fflush.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-freer.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-lseekr.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-makebuf.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-readr.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reent.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fstatr.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-isattyr.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/../../../../riscv32-unknown-elf/lib/libnosys.a(_exit.o)
- .comment       0x0000000000000011       0x12 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/crtend.o
+ .comment       0x0000000000000011       0x12 /run/user/1001/ccJg3lLG.o
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_divdi3.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_moddi3.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_clz.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-atexit.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-errno.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fini.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-impure.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-init.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-strlen.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__atexit.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__call_atexit.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fwalk.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memchr.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memcpy.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memmove.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mlock.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reallocr.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-sbrkr.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-writer.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-wsetup.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-closer.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fclose.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fflush.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-freer.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-lseekr.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-makebuf.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-readr.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reent.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fstatr.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-isattyr.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libnosys.a(_exit.o)
+ .comment       0x0000000000000011       0x12 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtend.o
+
+.riscv.attributes
+                0x0000000000000000       0x29
+ .riscv.attributes
+                0x0000000000000000       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/crt0.o
+ .riscv.attributes
+                0x0000000000000029       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtbegin.o
+ .riscv.attributes
+                0x0000000000000052       0x1f ./lib/startup.o
+ .riscv.attributes
+                0x0000000000000071       0x1f ./lib/syscalls.o
+ .riscv.attributes
+                0x0000000000000090       0x1f ./lib/riscv_counters.o
+ .riscv.attributes
+                0x00000000000000af       0x1f ./lib/ns16550.o
+ .riscv.attributes
+                0x00000000000000ce       0x1f /run/user/1001/ccJg3lLG.o
+ .riscv.attributes
+                0x00000000000000ed       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_divdi3.o)
+ .riscv.attributes
+                0x0000000000000116       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_moddi3.o)
+ .riscv.attributes
+                0x000000000000013f       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_clz.o)
+ .riscv.attributes
+                0x0000000000000168       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-atexit.o)
+ .riscv.attributes
+                0x0000000000000191       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-errno.o)
+ .riscv.attributes
+                0x00000000000001ba       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-exit.o)
+ .riscv.attributes
+                0x00000000000001e3       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fini.o)
+ .riscv.attributes
+                0x000000000000020c       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-impure.o)
+ .riscv.attributes
+                0x0000000000000235       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-init.o)
+ .riscv.attributes
+                0x000000000000025e       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memset.o)
+ .riscv.attributes
+                0x0000000000000287       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-puts.o)
+ .riscv.attributes
+                0x00000000000002b0       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-strlen.o)
+ .riscv.attributes
+                0x00000000000002d9       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__atexit.o)
+ .riscv.attributes
+                0x0000000000000302       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-__call_atexit.o)
+ .riscv.attributes
+                0x000000000000032b       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-findfp.o)
+ .riscv.attributes
+                0x0000000000000354       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fvwrite.o)
+ .riscv.attributes
+                0x000000000000037d       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fwalk.o)
+ .riscv.attributes
+                0x00000000000003a6       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mallocr.o)
+ .riscv.attributes
+                0x00000000000003cf       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memchr.o)
+ .riscv.attributes
+                0x00000000000003f8       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memcpy.o)
+ .riscv.attributes
+                0x0000000000000421       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-memmove.o)
+ .riscv.attributes
+                0x000000000000044a       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-mlock.o)
+ .riscv.attributes
+                0x0000000000000473       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reallocr.o)
+ .riscv.attributes
+                0x000000000000049c       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-sbrkr.o)
+ .riscv.attributes
+                0x00000000000004c5       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-stdio.o)
+ .riscv.attributes
+                0x00000000000004ee       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-writer.o)
+ .riscv.attributes
+                0x0000000000000517       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-wsetup.o)
+ .riscv.attributes
+                0x0000000000000540       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-closer.o)
+ .riscv.attributes
+                0x0000000000000569       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fclose.o)
+ .riscv.attributes
+                0x0000000000000592       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fflush.o)
+ .riscv.attributes
+                0x00000000000005bb       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-freer.o)
+ .riscv.attributes
+                0x00000000000005e4       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-lseekr.o)
+ .riscv.attributes
+                0x000000000000060d       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-makebuf.o)
+ .riscv.attributes
+                0x0000000000000636       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-readr.o)
+ .riscv.attributes
+                0x000000000000065f       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-reent.o)
+ .riscv.attributes
+                0x0000000000000688       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-fstatr.o)
+ .riscv.attributes
+                0x00000000000006b1       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a(lib_a-isattyr.o)
+ .riscv.attributes
+                0x00000000000006da       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libnosys.a(_exit.o)
+ .riscv.attributes
+                0x0000000000000703       0x29 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/crtend.o
+
+.gnu.build.attributes
+ *(.gnu.build.attributes .gnu.build.attributes.*)
 
 .debug
  *(.debug)
@@ -676,79 +780,79 @@ LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/
  .debug_aranges
                 0x0000000000000060       0x20 ./lib/ns16550.o
  .debug_aranges
-                0x0000000000000080       0x20 /tmp/ccODmeiu.o
+                0x0000000000000080       0x20 /run/user/1001/ccJg3lLG.o
  .debug_aranges
-                0x00000000000000a0       0x20 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_divdi3.o)
+                0x00000000000000a0       0x20 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_divdi3.o)
  .debug_aranges
-                0x00000000000000c0       0x20 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_moddi3.o)
+                0x00000000000000c0       0x20 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_moddi3.o)
  .debug_aranges
-                0x00000000000000e0       0x18 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_clz.o)
+                0x00000000000000e0       0x18 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_clz.o)
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x514b
+.debug_info     0x0000000000000000     0x55e1
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000       0x26 ./lib/startup.o
- .debug_info    0x0000000000000026      0xc66 ./lib/syscalls.o
- .debug_info    0x0000000000000c8c      0xa86 ./lib/riscv_counters.o
- .debug_info    0x0000000000001712      0x3c2 ./lib/ns16550.o
- .debug_info    0x0000000000001ad4      0x8d1 /tmp/ccODmeiu.o
- .debug_info    0x00000000000023a5     0x115c /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_divdi3.o)
- .debug_info    0x0000000000003501     0x11ad /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_moddi3.o)
- .debug_info    0x00000000000046ae      0xa9d /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_clz.o)
+ .debug_info    0x0000000000000026      0xd2c ./lib/syscalls.o
+ .debug_info    0x0000000000000d52      0xb26 ./lib/riscv_counters.o
+ .debug_info    0x0000000000001878      0x3e4 ./lib/ns16550.o
+ .debug_info    0x0000000000001c5c      0x955 /run/user/1001/ccJg3lLG.o
+ .debug_info    0x00000000000025b1     0x1250 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_divdi3.o)
+ .debug_info    0x0000000000003801     0x12a1 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_moddi3.o)
+ .debug_info    0x0000000000004aa2      0xb3f /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_clz.o)
 
-.debug_abbrev   0x0000000000000000      0xe83
+.debug_abbrev   0x0000000000000000      0xfd1
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000       0x14 ./lib/startup.o
- .debug_abbrev  0x0000000000000014      0x247 ./lib/syscalls.o
- .debug_abbrev  0x000000000000025b      0x222 ./lib/riscv_counters.o
- .debug_abbrev  0x000000000000047d      0x144 ./lib/ns16550.o
- .debug_abbrev  0x00000000000005c1      0x1a9 /tmp/ccODmeiu.o
- .debug_abbrev  0x000000000000076a      0x2a8 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_divdi3.o)
- .debug_abbrev  0x0000000000000a12      0x2b3 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_moddi3.o)
- .debug_abbrev  0x0000000000000cc5      0x1be /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_clz.o)
+ .debug_abbrev  0x0000000000000014      0x27d ./lib/syscalls.o
+ .debug_abbrev  0x0000000000000291      0x256 ./lib/riscv_counters.o
+ .debug_abbrev  0x00000000000004e7      0x15e ./lib/ns16550.o
+ .debug_abbrev  0x0000000000000645      0x1d1 /run/user/1001/ccJg3lLG.o
+ .debug_abbrev  0x0000000000000816      0x2e4 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_divdi3.o)
+ .debug_abbrev  0x0000000000000afa      0x2ef /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_moddi3.o)
+ .debug_abbrev  0x0000000000000de9      0x1e8 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_clz.o)
 
-.debug_line     0x0000000000000000     0x130f
+.debug_line     0x0000000000000000     0x2606
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x0000000000000000       0x8a ./lib/startup.o
- .debug_line    0x000000000000008a      0x344 ./lib/syscalls.o
- .debug_line    0x00000000000003ce      0x266 ./lib/riscv_counters.o
- .debug_line    0x0000000000000634      0x1c2 ./lib/ns16550.o
- .debug_line    0x00000000000007f6      0x11d /tmp/ccODmeiu.o
- .debug_line    0x0000000000000913      0x3fe /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_divdi3.o)
- .debug_line    0x0000000000000d11      0x3c6 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_moddi3.o)
- .debug_line    0x00000000000010d7      0x238 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_clz.o)
+ .debug_line    0x000000000000008a      0x5d3 ./lib/syscalls.o
+ .debug_line    0x000000000000065d      0x394 ./lib/riscv_counters.o
+ .debug_line    0x00000000000009f1      0x2f6 ./lib/ns16550.o
+ .debug_line    0x0000000000000ce7      0x195 /run/user/1001/ccJg3lLG.o
+ .debug_line    0x0000000000000e7c      0xa3b /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_divdi3.o)
+ .debug_line    0x00000000000018b7      0xa9b /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_moddi3.o)
+ .debug_line    0x0000000000002352      0x2b4 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_clz.o)
 
-.debug_frame    0x0000000000000000      0x3d4
+.debug_frame    0x0000000000000000      0x3dc
  *(.debug_frame)
- .debug_frame   0x0000000000000000      0x1e0 ./lib/syscalls.o
- .debug_frame   0x00000000000001e0      0x110 ./lib/riscv_counters.o
- .debug_frame   0x00000000000002f0       0xb0 ./lib/ns16550.o
- .debug_frame   0x00000000000003a0       0x34 /tmp/ccODmeiu.o
+ .debug_frame   0x0000000000000000      0x1e8 ./lib/syscalls.o
+ .debug_frame   0x00000000000001e8      0x110 ./lib/riscv_counters.o
+ .debug_frame   0x00000000000002f8       0xb0 ./lib/ns16550.o
+ .debug_frame   0x00000000000003a8       0x34 /run/user/1001/ccJg3lLG.o
 
-.debug_str      0x0000000000000000      0xc57
+.debug_str      0x0000000000000000      0xca9
  *(.debug_str)
- .debug_str     0x0000000000000000       0x4f ./lib/startup.o
- .debug_str     0x000000000000004f      0x538 ./lib/syscalls.o
-                                        0x5fc (size before relaxing)
- .debug_str     0x0000000000000587       0x92 ./lib/riscv_counters.o
-                                        0x598 (size before relaxing)
- .debug_str     0x0000000000000619      0x240 ./lib/ns16550.o
-                                        0x350 (size before relaxing)
- .debug_str     0x0000000000000859       0x1d /tmp/ccODmeiu.o
-                                        0x50a (size before relaxing)
- .debug_str     0x0000000000000876      0x346 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_divdi3.o)
-                                        0x818 (size before relaxing)
- .debug_str     0x0000000000000bbc        0x9 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_moddi3.o)
-                                        0x818 (size before relaxing)
- .debug_str     0x0000000000000bc5       0x92 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_clz.o)
-                                        0x760 (size before relaxing)
+ .debug_str     0x0000000000000000       0x4a ./lib/startup.o
+ .debug_str     0x000000000000004a      0x556 ./lib/syscalls.o
+                                        0x615 (size before relaxing)
+ .debug_str     0x00000000000005a0       0x92 ./lib/riscv_counters.o
+                                        0x5a1 (size before relaxing)
+ .debug_str     0x0000000000000632      0x240 ./lib/ns16550.o
+                                        0x359 (size before relaxing)
+ .debug_str     0x0000000000000872       0x1d /run/user/1001/ccJg3lLG.o
+                                        0x513 (size before relaxing)
+ .debug_str     0x000000000000088f      0x36f /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_divdi3.o)
+                                        0x841 (size before relaxing)
+ .debug_str     0x0000000000000bfe        0x9 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_moddi3.o)
+                                        0x841 (size before relaxing)
+ .debug_str     0x0000000000000c07       0xa2 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_clz.o)
+                                        0x789 (size before relaxing)
 
-.debug_loc      0x0000000000000000     0x1340
+.debug_loc      0x0000000000000000     0x13a6
  *(.debug_loc)
- .debug_loc     0x0000000000000000      0x97c /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_divdi3.o)
- .debug_loc     0x000000000000097c      0x9c4 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_moddi3.o)
+ .debug_loc     0x0000000000000000      0x971 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_divdi3.o)
+ .debug_loc     0x0000000000000971      0xa35 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_moddi3.o)
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -770,8 +874,8 @@ LOAD /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/
 
 .debug_ranges   0x0000000000000000      0x1c0
  *(.debug_ranges)
- .debug_ranges  0x0000000000000000      0x100 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_divdi3.o)
- .debug_ranges  0x0000000000000100       0xc0 /raid/tools/cross-compilers/riscv-rv32im/lib/gcc/riscv32-unknown-elf/7.2.0/libgcc.a(_moddi3.o)
+ .debug_ranges  0x0000000000000000      0x108 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_divdi3.o)
+ .debug_ranges  0x0000000000000108       0xb8 /nix/store/gbj4l2s4sjbxcgnqad1k61xnpb5acbz8-riscv32-unknown-elf-rv32imac-toolchain-8.3.0-afcc8bc/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a(_moddi3.o)
 
 .debug_macro
  *(.debug_macro)

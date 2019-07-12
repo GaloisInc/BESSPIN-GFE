@@ -47,11 +47,11 @@ Idx Name          Size      VMA               LMA               File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  16 .debug_frame  000007d8  0000000000000000  0000000000000000  0001de00  2**3
                   CONTENTS, READONLY, DEBUGGING
- 17 .debug_str    00001379  0000000000000000  0000000000000000  0001e5d8  2**0
+ 17 .debug_str    00001374  0000000000000000  0000000000000000  0001e5d8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 18 .debug_loc    00005a69  0000000000000000  0000000000000000  0001f951  2**0
+ 18 .debug_loc    00005a69  0000000000000000  0000000000000000  0001f94c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 19 .debug_ranges 00000fa0  0000000000000000  0000000000000000  000253ba  2**0
+ 19 .debug_ranges 00000fa0  0000000000000000  0000000000000000  000253b5  2**0
                   CONTENTS, READONLY, DEBUGGING
 SYMBOL TABLE:
 00000000c00000b0 l    d  .text	0000000000000000 .text
@@ -1148,21 +1148,21 @@ static int ns16550_init(void)
   pio->ier = 0;
     c00007b0:	75818793          	addi	a5,gp,1880 # c0010838 <pio>
     c00007b4:	0007b783          	ld	a5,0(a5)
-    c00007b8:	00078423          	sb	zero,8(a5)
+    c00007b8:	00078223          	sb	zero,4(a5)
 
   divisor = NS16550_CLOCK_RATE / (16 * DEFAULT_BAUDRATE);
-    c00007bc:	01a00793          	li	a5,26
+    c00007bc:	02400793          	li	a5,36
     c00007c0:	fef42623          	sw	a5,-20(s0)
   pio->lcr |= LCR_DLAB;
     c00007c4:	75818793          	addi	a5,gp,1880 # c0010838 <pio>
     c00007c8:	0007b783          	ld	a5,0(a5)
-    c00007cc:	0187c783          	lbu	a5,24(a5)
+    c00007cc:	00c7c783          	lbu	a5,12(a5)
     c00007d0:	0ff7f713          	andi	a4,a5,255
     c00007d4:	75818793          	addi	a5,gp,1880 # c0010838 <pio>
     c00007d8:	0007b783          	ld	a5,0(a5)
     c00007dc:	f8076713          	ori	a4,a4,-128
     c00007e0:	0ff77713          	andi	a4,a4,255
-    c00007e4:	00e78c23          	sb	a4,24(a5)
+    c00007e4:	00e78623          	sb	a4,12(a5)
   pio->dll = divisor & 0xff;
     c00007e8:	75818793          	addi	a5,gp,1880 # c0010838 <pio>
     c00007ec:	0007b783          	ld	a5,0(a5)
@@ -1176,33 +1176,33 @@ static int ns16550_init(void)
     c0000808:	75818793          	addi	a5,gp,1880 # c0010838 <pio>
     c000080c:	0007b783          	ld	a5,0(a5)
     c0000810:	0ff77713          	andi	a4,a4,255
-    c0000814:	00e78423          	sb	a4,8(a5)
+    c0000814:	00e78223          	sb	a4,4(a5)
   pio->lcr &= ~LCR_DLAB;
     c0000818:	75818793          	addi	a5,gp,1880 # c0010838 <pio>
     c000081c:	0007b783          	ld	a5,0(a5)
-    c0000820:	0187c783          	lbu	a5,24(a5)
+    c0000820:	00c7c783          	lbu	a5,12(a5)
     c0000824:	0ff7f713          	andi	a4,a5,255
     c0000828:	75818793          	addi	a5,gp,1880 # c0010838 <pio>
     c000082c:	0007b783          	ld	a5,0(a5)
     c0000830:	07f77713          	andi	a4,a4,127
     c0000834:	0ff77713          	andi	a4,a4,255
-    c0000838:	00e78c23          	sb	a4,24(a5)
+    c0000838:	00e78623          	sb	a4,12(a5)
 
   pio->lcr = LCR_WLS8;
     c000083c:	75818793          	addi	a5,gp,1880 # c0010838 <pio>
     c0000840:	0007b783          	ld	a5,0(a5)
     c0000844:	00300713          	li	a4,3
-    c0000848:	00e78c23          	sb	a4,24(a5)
+    c0000848:	00e78623          	sb	a4,12(a5)
   pio->fcr = FCR_FE;
     c000084c:	75818793          	addi	a5,gp,1880 # c0010838 <pio>
     c0000850:	0007b783          	ld	a5,0(a5)
     c0000854:	00100713          	li	a4,1
-    c0000858:	00e78823          	sb	a4,16(a5)
+    c0000858:	00e78423          	sb	a4,8(a5)
   pio->mcr = MCR_RTS;
     c000085c:	75818793          	addi	a5,gp,1880 # c0010838 <pio>
     c0000860:	0007b783          	ld	a5,0(a5)
     c0000864:	00200713          	li	a4,2
-    c0000868:	02e78023          	sb	a4,32(a5)
+    c0000868:	00e78823          	sb	a4,16(a5)
 
   return 0;
     c000086c:	00000793          	li	a5,0
@@ -1224,7 +1224,7 @@ int ns16550_rxready(void)
   return ((pio->lsr & LSR_DR) != 0);
     c000088c:	75818793          	addi	a5,gp,1880 # c0010838 <pio>
     c0000890:	0007b783          	ld	a5,0(a5)
-    c0000894:	0287c783          	lbu	a5,40(a5)
+    c0000894:	0147c783          	lbu	a5,20(a5)
     c0000898:	0ff7f793          	andi	a5,a5,255
     c000089c:	0007879b          	sext.w	a5,a5
     c00008a0:	0017f793          	andi	a5,a5,1
@@ -1250,7 +1250,7 @@ int ns16550_rxchar(void)
     c00008d0:	00000013          	nop
     c00008d4:	75818793          	addi	a5,gp,1880 # c0010838 <pio>
     c00008d8:	0007b783          	ld	a5,0(a5)
-    c00008dc:	0287c783          	lbu	a5,40(a5)
+    c00008dc:	0147c783          	lbu	a5,20(a5)
     c00008e0:	0ff7f793          	andi	a5,a5,255
     c00008e4:	0007879b          	sext.w	a5,a5
     c00008e8:	0017f793          	andi	a5,a5,1
@@ -1284,7 +1284,7 @@ int ns16550_txchar(int c)
     c000092c:	00000013          	nop
     c0000930:	75818793          	addi	a5,gp,1880 # c0010838 <pio>
     c0000934:	0007b783          	ld	a5,0(a5)
-    c0000938:	0287c783          	lbu	a5,40(a5)
+    c0000938:	0147c783          	lbu	a5,20(a5)
     c000093c:	0ff7f793          	andi	a5,a5,255
     c0000940:	0007879b          	sext.w	a5,a5
     c0000944:	0207f793          	andi	a5,a5,32
@@ -1319,7 +1319,7 @@ void ns16550_flush(void)
     c0000984:	00000013          	nop
     c0000988:	75818793          	addi	a5,gp,1880 # c0010838 <pio>
     c000098c:	0007b783          	ld	a5,0(a5)
-    c0000990:	0287c783          	lbu	a5,40(a5)
+    c0000990:	0147c783          	lbu	a5,20(a5)
     c0000994:	0ff7f793          	andi	a5,a5,255
     c0000998:	0007879b          	sext.w	a5,a5
     c000099c:	0407f793          	andi	a5,a5,64
