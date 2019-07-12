@@ -29,97 +29,27 @@ class BaseGfeForLinux(BaseGfeTest):
                 return
             dump = self.gfe.uart_session.read(pending)
     
-    def interpreter_sput (self, sourceFilePath, destFilePath, isBinary=False):
+    def interpreter_sput (self, sourceFilePath, destFilePath, riscv_ip):
         ###check sourceFileExist
         sourceFilePath = os.path.expanduser(sourceFilePath)
         if (not os.path.isfile(sourceFilePath)):
-            warnings.warn("%s: Cannot open or file does not exist. Press Enter to continue..." % (sourceFilePath), SyntaxWarning)
+            warnings.warn("%s: Cannot open or file does not exist. Press Enter to continue..." % (sourceFilePath), RuntimeWarning)
             return
-        ###Check destFileExist + delete and create file
-        self.gfe.uart_session.write('touch ' + destFilePath + '\r')
+
+        portNum = 1234 #arbitrarily chosen
+        self.gfe.uart_session.write('nc -u -l -p {0} > {1}\r'.format(portNum, destFilePath)) #use udp
+        time.sleep (1)
         try:
-            self.check_uart_out(5,expected_contents=[], absent_contents="No such file or directory")
+            subprocess.call('nc -u {0} {1} <{2}'.format(riscv_ip,portNum,sourceFilePath),shell=True)
         except:
-            warnings.warn("%s: Cannot open or file does not exist. Press Enter to continue..." % (destFilePath), SyntaxWarning)
+            warnings.warn("%s: Sending failed. Please use --ctrlc if terminal not responding" % (sourceFilePath), RuntimeWarning)
             return
-        self.gfe.uart_session.write('rm ' + destFilePath + '\r')
-        self.gfe.uart_session.write('touch ' + destFilePath + '\r')
-        fileToPut = sourceFilePath
-        fileFromPut = destFilePath
-        beginTime = time.time()
-        if (isBinary):
-            try:
-                subprocess.call("busybox uuencode -m {0} < {0} >{0}.enc.orig".format(sourceFilePath), shell=True)
-                #The encoded file has the wrong path which would cause issues when decoded. Also, using sed in-place will
-                #truncate the file because of flushing limits (binary file has a very very long single line)
-                #.enc.orig has the wrong path
-                subprocess.call ("sed \'s:{0}:{1}:w {0}.enc\' {0}.enc.orig > dump; rm dump".format(sourceFilePath, destFilePath) ,shell=True)
-                #.enc has the correct first line
-                subprocess.call ("sed -i 1d {0}.enc.orig".format(sourceFilePath) ,shell=True)
-                #.enc.orig now has the rest without the first line
-                subprocess.call ("cat {0}.enc.orig >> {0}.enc".format(sourceFilePath) ,shell=True)
-                #.enc now is ready. Should delete .enc.orig
-                subprocess.call ("rm {0}.enc.orig".format(sourceFilePath) ,shell=True)
-                print ("\n%s: Encoding successful. Now putting..." % (sourceFilePath))
-            except:
-                warnings.warn("%s: Failed to encode." % (sourceFilePath), RuntimeWarning)
-                return
-            fileToPut = sourceFilePath + '.enc'
-            fileFromPut = destFilePath + '.enc'
-
-        #Read source file
-        try:
-            time.sleep(0.1)
-            inFile = open(fileToPut, "r")
-            lines = inFile.readlines()
-            inFile.close()
-        except:
-            warnings.warn("%s: Cannot open or file does not exist. Press Enter to continue..." % (fileToPut), SyntaxWarning)
-            return
-        ####MACROS
-        numLinesPerPacket = 50
-        waitBetweenLines = 0.1
-        flushTimeout = 0.2
-        #####
-        numPackets = ((len(lines)-1) //  numLinesPerPacket ) + 1 #ceil division
-        print ("\n%s will be divided into %d packets."%(sourceFilePath,numPackets))
-        echoPrefix = "echo -n -e \""
-        for iPacket in range(numPackets):
-            iFileFromPut = fileFromPut + ".{0}".format(iPacket)
-            echoSuffix = "\" >> " + iFileFromPut
-            maxLimit = 255-len(echoPrefix)-len(echoSuffix)
-            iLinesLimit = min((iPacket+1)*numLinesPerPacket,len(lines))
-            for line in lines[iPacket*numLinesPerPacket:iLinesLimit]:
-                numChunks = ((len(line)-1) // maxLimit) + 1  #ceil division
-                for iChunk in range(0,len(line),maxLimit):
-                    iLimit = min(iChunk+maxLimit, len(line))
-                    self.gfe.uart_session.write(echoPrefix + line[iChunk:iLimit] + echoSuffix + '\r')
-                    time.sleep(waitBetweenLines)
-            self.flush_uart_out(flushTimeout)
-            print (">>> Packet %d/%d done."%(iPacket+1,numPackets))
-
-        print ("\nPutting complete. Now combining the packets...")
-        for iPacket in range(numPackets):
-            self.gfe.uart_session.write( "cat {0}.{1} >> {0}".format(fileFromPut,iPacket) + '\r')
-            time.sleep(flushTimeout)
-            self.gfe.uart_session.write( "rm {0}.{1}".format(fileFromPut,iPacket) + '\r')
-
-        self.flush_uart_out(flushTimeout)
-
-        if (isBinary):
-            print ("\nCombining complete. Now decoding...")
-            subprocess.call("rm " + fileToPut ,shell=True)
-            self.gfe.uart_session.write('uudecode <' + fileFromPut + '\r')
-            time.sleep (1)
-            self.gfe.uart_session.write('rm ' + fileFromPut + '\r')
-            time.sleep (1)
-            print ("\nDecoding successful.")
-        else:
-            print ("\nCombining complete.")
-        print ("\n Transmission speed was %d bytes in %d seconds." %(os.path.getsize(sourceFilePath), time.time()-beginTime))
+        time.sleep (1)
+        self.gfe.uart_session.write(b'\x03\r')
+        print ("\nSending successful.")
         return
 
-    def interactive_terminal (self):
+    def interactive_terminal (self,riscv_ip):
         print ("\nStarting interactive terminal...")
         stopReading = threading.Event() #event to stop the reading process in the end
         runReading = threading.Event() #event to run/pause the reading process
@@ -138,18 +68,13 @@ class BaseGfeForLinux(BaseGfeTest):
                 if (instruction[2:6] == 'exit'): #exit terminal and end test
                     exitTerminal = True
                 elif (instruction[2:6] == 'sput'): #copy a file from local to linux
-                    sputbMatch = re.match(r'--sput -b (?P<sourceFilePath>[\w/.~-]+) (?P<destFilePath>[\w/.~-]+)\s*',instruction)
                     sputMatch = re.match(r'--sput (?P<sourceFilePath>[\w/.~-]+) (?P<destFilePath>[\w/.~-]+)\s*',instruction)
-                    if (sputbMatch != None):
-                        runReading.clear() #pause reading
-                        self.interpreter_sput(sputbMatch.group('sourceFilePath'), sputbMatch.group('destFilePath'), isBinary=True)
-                        runReading.set()
-                    elif (sputMatch != None):
-                        runReading.clear() #pause reading
-                        self.interpreter_sput(sputMatch.group('sourceFilePath'), sputMatch.group('destFilePath'))
-                        runReading.set()
+                    if (sputMatch != None):
+                        self.interpreter_sput(sputMatch.group('sourceFilePath'), sputMatch.group('destFilePath'), riscv_ip)
                     else:
-                        warnings.warn("Please use \"--sput [-b] sourceFilePath destFilePath\". Press Enter to continue...", SyntaxWarning)
+                        warnings.warn("Please use \"--sput sourceFilePath destFilePath\". Press Enter to continue...", SyntaxWarning)
+                elif (instruction[2:7] == 'ctrlc'): #ctrlC
+                    self.gfe.uart_session.write(b'\x03\r')
                 else:
                     warnings.warn("Interpreter command not found. Press Enter to continue...", SyntaxWarning)
             else:
@@ -172,12 +97,51 @@ class RunOnLinux (TestLinux, BaseGfeForLinux):
             timeout=linux_boot_timeout,
             expected_contents=["Please press Enter to activate this console"])
 
-        # Send "Enter" to activate console
+        #self.gfe.uart_session.write(b'stty -echo\r')
         self.gfe.uart_session.write(b'\r')
         time.sleep(1)
 
+        # Run DHCP client
+        self.gfe.uart_session.write(b'ifconfig eth0 up\r')
+        self.check_uart_out(
+            timeout=10,
+            expected_contents=["xilinx_axienet 62100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx"])
+
+        self.gfe.uart_session.write(b'udhcpc -i eth0\r')
+         # Store and print all UART output while the elf is running
+        timeout = 10
+        print("Printing all UART output from the GFE...")
+        rx_buf = []
+        start_time = time.time()
+        while time.time() < (start_time + timeout):
+            pending = self.gfe.uart_session.in_waiting
+            if pending:
+                data = self.gfe.uart_session.read(pending)
+                rx_buf.append(data) # Append read chunks to the list.
+                sys.stdout.write(data)
+        print("Timeout reached")
+
+        # Get FPGA IP address
+        riscv_ip = 0
+        rx_buf_str = ''.join(rx_buf)
+        rx_buf_list = rx_buf_str.split('\n')
+        for line in rx_buf_list:
+            index = line.find('Setting IP address')
+            if index != -1:
+                ip_str = line.split()
+                riscv_ip = ip_str[3]
+                print("RISCV IP address is: " + riscv_ip)
+                # break # keep reading till the end to get the latest IP asignemnt
+
+        # Ping FPGA
+        if riscv_ip == 0:
+            raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
+        ping_response = os.system("ping -c 1 " + riscv_ip)
+        self.assertEqual(ping_response, 0,
+                        "Cannot ping FPGA.")
+
         #start interactive terminal
-        self.interactive_terminal()
+        self.interactive_terminal(riscv_ip)
         time.sleep(2)
         return
     
@@ -208,7 +172,7 @@ class RunOnLinux (TestLinux, BaseGfeForLinux):
                                     ])
 
         time.sleep(1)
-        self.interactive_terminal()
+        self.interactive_terminal(0)
         time.sleep(2)
 
         return
