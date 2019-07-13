@@ -11,6 +11,7 @@ endif
 
 TARGET=riscv${XLEN}-unknown-${RISCV_LIB}
 GCC		= $(TARGET)-gcc
+GCC_FLAGS = -DPREALLOCATE=1 -mcmodel=medany -static -std=gnu99 -O2 -ffast-math -fno-common -fno-builtin-printf
 OBJCOPY	= $(TARGET)-objcopy
 OBJDUMP	= $(TARGET)-objdump
 
@@ -20,7 +21,7 @@ OBJDUMP	= $(TARGET)-objdump
 default: binary.dump
 
 binary2run: $(PROG)
-	$(GCC) $< -o $@
+	$(GCC) $(GCC_FLAGS) $< -o $@
 
 binary.dump: binary2run
 	$(OBJDUMP) -dS $< > $@
