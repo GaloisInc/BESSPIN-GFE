@@ -37,16 +37,26 @@ class BaseGfeForLinux(BaseGfeTest):
             return
 
         portNum = 1234 #arbitrarily chosen
-        self.gfe.uart_session.write('nc -u -l -p {0} > {1}\r'.format(portNum, destFilePath)) #use udp
+        self.gfe.uart_session.write('nc -lp {0} > {1}\r'.format(portNum, destFilePath)) #use tcp
         time.sleep (1)
         try:
-            subprocess.call('nc -u {0} {1} <{2}'.format(riscv_ip,portNum,sourceFilePath),shell=True)
+            subprocess.Popen('busybox nc {0} {1} <{2}'.format(riscv_ip,portNum,sourceFilePath),shell=True) #use Popen to be non-blocking
         except:
-            warnings.warn("%s: Sending failed. Please use --ctrlc if terminal not responding" % (sourceFilePath), RuntimeWarning)
+            warnings.warn("%s: Sending failed. Please use --ctrlc if terminal not responding." % (sourceFilePath), RuntimeWarning)
             return
-        time.sleep (1)
+        
+        fileSize = os.path.getsize(sourceFilePath)
+        if (fileSize > 400e6):
+            warnings.warn("%s: File size is too big; this might cause a crash." % (sourceFilePath), RuntimeWarning)
+        #The busybox netcat does not end the connection automatically, so we have to interrupt it
+        #The ethernet theoretical speed is 1Gbps (=125MB/s), but the actual speed sometime is way slower than that
+        #So we'll wait 10X (1 sec for each 100MB) (seems reasonable)
+        MBtoWaitPerSec = 100
+        timeToWait = 10 * (((fileSize-1) // (MBtoWaitPerSec*1e6)) + 1) #ceil division
+        time.sleep (timeToWait)
+        #This Ctrl+C is enough to cut the connection and kill the Popen process called above
         self.gfe.uart_session.write(b'\x03\r')
-        print ("\nSending successful.")
+        print ("\nSending successful!")
         return
 
     def interactive_terminal (self,riscv_ip):
