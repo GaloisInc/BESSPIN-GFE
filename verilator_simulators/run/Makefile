@@ -42,6 +42,12 @@ run_example:
 	$(TESTS_DIR)/elf_to_hex/elf_to_hex  $(EXAMPLE)  Mem.hex
 	./$(SIM_EXE_FILE) $(VERBOSITY)  +exit
 
+.PHONY: run_example_waves
+run_example_waves:
+	make -C  $(TESTS_DIR)/elf_to_hex
+	$(TESTS_DIR)/elf_to_hex/elf_to_hex  $(EXAMPLE)  Mem.hex
+	./$(SIM_EXE_FILE) $(VERBOSITY)  +exit +trace
+
 # ================================================================
 # Test: run the executable on the standard RISCV ISA test specified in TEST
 
