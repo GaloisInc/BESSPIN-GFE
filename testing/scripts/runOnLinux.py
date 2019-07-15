@@ -37,29 +37,46 @@ class BaseGfeForLinux(BaseGfeTest):
             return
 
         portNum = 1234 #arbitrarily chosen
-        self.gfe.uart_session.write('nc -lp {0} > {1}\r'.format(portNum, destFilePath)) #use tcp
-        time.sleep (1)
-        try:
-            subprocess.Popen('busybox nc {0} {1} <{2}'.format(riscv_ip,portNum,sourceFilePath),shell=True) #use Popen to be non-blocking
-        except:
-            warnings.warn("%s: Sending failed. Please use --ctrlc if terminal not responding." % (sourceFilePath), RuntimeWarning)
-            return
-        
-        fileSize = os.path.getsize(sourceFilePath)
-        if (fileSize > 400e6):
-            warnings.warn("%s: File size is too big; this might cause a crash." % (sourceFilePath), RuntimeWarning)
-        #The busybox netcat does not end the connection automatically, so we have to interrupt it
-        #The ethernet theoretical speed is 1Gbps (=125MB/s), but the actual speed sometime is way slower than that
-        #So we'll wait 10X (1 sec for each 100MB) (seems reasonable) .. Or you can force it by using the -ft option
-        if (userTimeOut > 0):
-            timeToWait = userTimeOut
+        if (linuxImage == "busybox"):
+            self.gfe.uart_session.write('nc -lp {0} > {1}\r'.format(portNum, destFilePath)) #use tcp
+            time.sleep (1)
+            try:
+                subprocess.Popen('busybox nc {0} {1} <{2}'.format(riscv_ip,portNum,sourceFilePath),shell=True) #use Popen to be non-blocking
+            except:
+                warnings.warn("%s: Sending failed. Please use --ctrlc if terminal not responding." % (sourceFilePath), RuntimeWarning)
+                return
+            
+            fileSize = os.path.getsize(sourceFilePath)
+            if (fileSize > 400e6):
+                warnings.warn("%s: File size is too big; this might cause a crash." % (sourceFilePath), RuntimeWarning)
+            #The busybox netcat does not end the connection automatically, so we have to interrupt it
+            #The ethernet theoretical speed is 1Gbps (=125MB/s), but the actual speed sometime is way slower than that
+            #So we'll wait 10X (1 sec for each 100MB) (seems reasonable) .. Or you can force it by using the -ft option
+            if (userTimeOut > 0):
+                timeToWait = userTimeOut
+            else:
+                MBtoWaitPerSec = 100
+                timeToWait = 10 * (((fileSize-1) // (MBtoWaitPerSec*1e6)) + 1) #ceil division
+            time.sleep (timeToWait)
+            #This Ctrl+C is enough to cut the connection and kill the Popen process called above
+            self.gfe.uart_session.write(b'\x03\r')
+            print ("\nSending successful!")
+        elif (linuxImage == "debian"):
+            self.gfe.uart_session.write('nc -lp {0} > {1}\r'.format(portNum, destFilePath)) #use tcp
+            time.sleep (1)
+            try:
+                subprocess.call('nc {0} {1} <{2}'.format(riscv_ip,portNum,sourceFilePath),shell=True) #use blocking because it ends with new nc
+            except:
+                warnings.warn("%s: Sending failed. Please use --ctrlc if terminal not responding." % (sourceFilePath), RuntimeWarning)
+                return
+            
+            fileSize = os.path.getsize(sourceFilePath)
+            if (fileSize > 400e6):
+                warnings.warn("%s: File size is too big; this might cause a crash." % (sourceFilePath), RuntimeWarning)
+            self.gfe.uart_session.write(b'\r')
+            print ("\nSending successful!")
         else:
-            MBtoWaitPerSec = 100
-            timeToWait = 10 * (((fileSize-1) // (MBtoWaitPerSec*1e6)) + 1) #ceil division
-        time.sleep (timeToWait)
-        #This Ctrl+C is enough to cut the connection and kill the Popen process called above
-        self.gfe.uart_session.write(b'\x03\r')
-        print ("\nSending successful!")
+            warnings.warn("LinuxImage not supported. Only [busybox|debian] are.", RuntimeWarning)
         return
 
     def interactive_terminal (self,riscv_ip,linuxImage):
@@ -84,9 +101,9 @@ class BaseGfeForLinux(BaseGfeTest):
                     sputFTMatch = re.match(r'--sput -ft (?P<userTimeOut>[\d]+) (?P<sourceFilePath>[\w/.~-]+) (?P<destFilePath>[\w/.~-]+)\s*',instruction)
                     sputMatch = re.match(r'--sput (?P<sourceFilePath>[\w/.~-]+) (?P<destFilePath>[\w/.~-]+)\s*',instruction)
                     if (sputFTMatch != None):
-                        self.interpreter_sput(sputFTMatch.group('sourceFilePath'), sputFTMatch.group('destFilePath'), riscv_ip, sputFTMatch.group('userTimeOut'),linuxImage)
+                        self.interpreter_sput(sputFTMatch.group('sourceFilePath'), sputFTMatch.group('destFilePath'), riscv_ip, sputFTMatch.group('userTimeOut'),linuxImage=linuxImage)
                     elif (sputMatch != None):
-                        self.interpreter_sput(sputMatch.group('sourceFilePath'), sputMatch.group('destFilePath'), riscv_ip,linuxImage)
+                        self.interpreter_sput(sputMatch.group('sourceFilePath'), sputMatch.group('destFilePath'), riscv_ip,linuxImage=linuxImage)
                     else:
                         warnings.warn("Please use \"--sput [-ft SEC] sourceFilePath destFilePath\". Press Enter to continue...", SyntaxWarning)
                 elif (instruction[2:7] == 'ctrlc'): #ctrlC
@@ -168,7 +185,7 @@ class RunOnLinux (TestLinux, BaseGfeForLinux):
         return
 
     def test_busybox_runAprog (self,returnIP=False):
-
+        """ Boot busybox and run a program """
         #boot busybox and get ip
         riscv_ip = self.boot_busybox()
         
@@ -180,7 +197,7 @@ class RunOnLinux (TestLinux, BaseGfeForLinux):
         readThread.start() #start the reading
 
         #Transmitting the program
-        self.interpreter_sput("../../runOnLinux/binary2run", "binary2run", riscv_ip,"busybox")
+        self.interpreter_sput("../../runOnLinux/binary2run", "binary2run", riscv_ip,linuxImage="busybox")
         time.sleep(1)
         self.gfe.uart_session.write('chmod +x binary2run\r')
         time.sleep(1)
@@ -192,6 +209,7 @@ class RunOnLinux (TestLinux, BaseGfeForLinux):
         return
 
     def test_busybox_runANDterminal (self):
+        """ Boot busybox, run a program, then open the interactive terminal """
         #boot, get ip, and runAprog
         riscv_ip = self.test_busybox_runAprog()
         #start interactive terminal
@@ -199,7 +217,7 @@ class RunOnLinux (TestLinux, BaseGfeForLinux):
         return
 
     def boot_debian (self):
-        """ This function boots the busybox and returns its ip address """
+        """ This function boots the debian and returns its ip address """
         # Boot Debian
         self.boot_linux()
         linux_boot_timeout=800
@@ -270,6 +288,39 @@ class RunOnLinux (TestLinux, BaseGfeForLinux):
         #start interactive terminal
         self.interactive_terminal(riscv_ip,"debian")
         return
+
+    def test_debian_runAprog (self,returnIP=False):
+        """ Boot debian and run a program """
+        #boot debianand get ip
+        riscv_ip = self.boot_debian()
+        
+        stopReading = threading.Event() #event to stop the reading process in the end
+        runReading = threading.Event() #event to run/pause the reading process
+        readThread = threading.Thread(target=self.read_uart_out_until_stop, args=(runReading,stopReading))
+        stopReading.clear()
+        runReading.set()
+        readThread.start() #start the reading
+
+        #Transmitting the program
+        self.interpreter_sput("../../runOnLinux/binary2run", "binary2run", riscv_ip,linuxImage="debian")
+        time.sleep(1)
+        self.gfe.uart_session.write('chmod +x binary2run\r')
+        time.sleep(1)
+        self.gfe.uart_session.write('./binary2run\r')
+        time.sleep(3)
+        stopReading.set()
+        if (returnIP):
+            return riscv_ip
+        return
+
+    def test_debian_runANDterminal (self):
+        """ Boot debian, run a program, then open the interactive terminal """
+        #boot, get ip, and runAprog
+        riscv_ip = self.test_debian_runAprog()
+        #start interactive terminal
+        self.interactive_terminal(riscv_ip,"debian")
+        return
+    
 
 if __name__ == '__main__':
     unittest.main()
