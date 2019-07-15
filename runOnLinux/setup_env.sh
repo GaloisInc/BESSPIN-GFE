@@ -1,12 +1,39 @@
 #!/usr/bin/env bash
 
 function runOnLinux_usage {
-    echo "Usage: $0 proc_name linux_image prog_to_run"
-    echo "Usage: $0 proc_name linux_image prog_to_run --FastForward"
-    echo "Usage: $0 proc_name linux_image prog_to_run --SkipImage"
+    echo "Usage: $0 [--debug] proc_name linux_image prog_to_run [--FastForward]"
+    echo "Usage: $0 [--debugOnly] proc_name linux_image [--FastForward]"
     echo "Usage: $0 --help"
 }
 
+function runOnLinux_args {
+    if [ "$1" == "--debug" ] ; then
+        if [ $# -lt 4 ] || [ $# -gt 5 ] ; then runOnLinux_usage; exit; fi
+        isDebug=1
+        proc_picker $2
+        linux_picker $3
+        isProg=1
+        progToRun=$4
+        check_file $progToRun "$0: Error: $progToRun is not found."
+        checkMode $5
+    elif [ "$1" == "--debugOnly" ] ; then
+        if [ $# -lt 3 ] || [ $# -gt 4 ] ; then runOnLinux_usage; exit; fi
+        isDebug=1
+        proc_picker $2
+        linux_picker $3
+        isProg=0
+        checkMode $4
+    else
+        isDebug=0
+        isProg=1
+        if [ "$1" == "--help" ] || [ $# -lt 3 ] ; then runOnLinux_usage; exit; fi
+        proc_picker $1
+        linux_picker $2
+        progToRun=$3
+        check_file $progToRun "$0: Error: $progToRun is not found."
+        checkMode $4
+    fi
+}
 
 function proc_linux_usage {
     echo "Usage: $0 linux_image = [busybox|debian]"

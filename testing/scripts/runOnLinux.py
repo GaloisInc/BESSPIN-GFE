@@ -29,7 +29,7 @@ class BaseGfeForLinux(BaseGfeTest):
                 return
             dump = self.gfe.uart_session.read(pending)
     
-    def interpreter_sput (self, sourceFilePath, destFilePath, riscv_ip):
+    def interpreter_sput (self, sourceFilePath, destFilePath, riscv_ip, userTimeOut=0, linuxImage="busybox"):
         ###check sourceFileExist
         sourceFilePath = os.path.expanduser(sourceFilePath)
         if (not os.path.isfile(sourceFilePath)):
@@ -50,16 +50,19 @@ class BaseGfeForLinux(BaseGfeTest):
             warnings.warn("%s: File size is too big; this might cause a crash." % (sourceFilePath), RuntimeWarning)
         #The busybox netcat does not end the connection automatically, so we have to interrupt it
         #The ethernet theoretical speed is 1Gbps (=125MB/s), but the actual speed sometime is way slower than that
-        #So we'll wait 10X (1 sec for each 100MB) (seems reasonable)
-        MBtoWaitPerSec = 100
-        timeToWait = 10 * (((fileSize-1) // (MBtoWaitPerSec*1e6)) + 1) #ceil division
+        #So we'll wait 10X (1 sec for each 100MB) (seems reasonable) .. Or you can force it by using the -ft option
+        if (userTimeOut > 0):
+            timeToWait = userTimeOut
+        else:
+            MBtoWaitPerSec = 100
+            timeToWait = 10 * (((fileSize-1) // (MBtoWaitPerSec*1e6)) + 1) #ceil division
         time.sleep (timeToWait)
         #This Ctrl+C is enough to cut the connection and kill the Popen process called above
         self.gfe.uart_session.write(b'\x03\r')
         print ("\nSending successful!")
         return
 
-    def interactive_terminal (self,riscv_ip):
+    def interactive_terminal (self,riscv_ip,linuxImage):
         print ("\nStarting interactive terminal...")
         stopReading = threading.Event() #event to stop the reading process in the end
         runReading = threading.Event() #event to run/pause the reading process
@@ -78,11 +81,14 @@ class BaseGfeForLinux(BaseGfeTest):
                 if (instruction[2:6] == 'exit'): #exit terminal and end test
                     exitTerminal = True
                 elif (instruction[2:6] == 'sput'): #copy a file from local to linux
+                    sputFTMatch = re.match(r'--sput -ft (?P<userTimeOut>[\d]+) (?P<sourceFilePath>[\w/.~-]+) (?P<destFilePath>[\w/.~-]+)\s*',instruction)
                     sputMatch = re.match(r'--sput (?P<sourceFilePath>[\w/.~-]+) (?P<destFilePath>[\w/.~-]+)\s*',instruction)
-                    if (sputMatch != None):
-                        self.interpreter_sput(sputMatch.group('sourceFilePath'), sputMatch.group('destFilePath'), riscv_ip)
+                    if (sputFTMatch != None):
+                        self.interpreter_sput(sputFTMatch.group('sourceFilePath'), sputFTMatch.group('destFilePath'), riscv_ip, sputFTMatch.group('userTimeOut'),linuxImage)
+                    elif (sputMatch != None):
+                        self.interpreter_sput(sputMatch.group('sourceFilePath'), sputMatch.group('destFilePath'), riscv_ip,linuxImage)
                     else:
-                        warnings.warn("Please use \"--sput sourceFilePath destFilePath\". Press Enter to continue...", SyntaxWarning)
+                        warnings.warn("Please use \"--sput [-ft SEC] sourceFilePath destFilePath\". Press Enter to continue...", SyntaxWarning)
                 elif (instruction[2:7] == 'ctrlc'): #ctrlC
                     self.gfe.uart_session.write(b'\x03\r')
                 else:
@@ -96,7 +102,8 @@ class BaseGfeForLinux(BaseGfeTest):
 
 class RunOnLinux (TestLinux, BaseGfeForLinux):
 
-    def test_busybox_terminal (self):
+    def boot_busybox (self):
+        """ This function boots the busybox and returns its ip address """
         # Boot busybox
         self.boot_linux()
         linux_boot_timeout=60
@@ -149,13 +156,50 @@ class RunOnLinux (TestLinux, BaseGfeForLinux):
         ping_response = os.system("ping -c 1 " + riscv_ip)
         self.assertEqual(ping_response, 0,
                         "Cannot ping FPGA.")
+        
+        return riscv_ip
 
+    def test_busybox_terminal (self):
+        """ Boot busybox and start an interactive terminal """
+        #boot busybox and get ip
+        riscv_ip = self.boot_busybox()
         #start interactive terminal
-        self.interactive_terminal(riscv_ip)
-        time.sleep(2)
+        self.interactive_terminal(riscv_ip,"busybox")
         return
-    
-    def test_debian_terminal(self):
+
+    def test_busybox_runAprog (self,returnIP=False):
+
+        #boot busybox and get ip
+        riscv_ip = self.boot_busybox()
+        
+        stopReading = threading.Event() #event to stop the reading process in the end
+        runReading = threading.Event() #event to run/pause the reading process
+        readThread = threading.Thread(target=self.read_uart_out_until_stop, args=(runReading,stopReading))
+        stopReading.clear()
+        runReading.set()
+        readThread.start() #start the reading
+
+        #Transmitting the program
+        self.interpreter_sput("../../runOnLinux/binary2run", "binary2run", riscv_ip,"busybox")
+        time.sleep(1)
+        self.gfe.uart_session.write('chmod +x binary2run\r')
+        time.sleep(1)
+        self.gfe.uart_session.write('./binary2run\r')
+        time.sleep(3)
+        stopReading.set()
+        if (returnIP):
+            return riscv_ip
+        return
+
+    def test_busybox_runANDterminal (self):
+        #boot, get ip, and runAprog
+        riscv_ip = self.test_busybox_runAprog()
+        #start interactive terminal
+        self.interactive_terminal(riscv_ip,"busybox")
+        return
+
+    def boot_debian (self):
+        """ This function boots the busybox and returns its ip address """
         # Boot Debian
         self.boot_linux()
         linux_boot_timeout=800
@@ -180,11 +224,51 @@ class RunOnLinux (TestLinux, BaseGfeForLinux):
                 expected_contents=["The programs included with the Debian GNU/Linux system are free software;",
                                     ":~#"
                                     ])
+        
+        self.gfe.uart_session.write(b'ifup eth0\r')
+        self.gfe.uart_session.write(b'ip addr\r')
 
-        time.sleep(1)
-        self.interactive_terminal(0)
-        time.sleep(2)
+        # Get RISC-V IP address and ping it from host
+        # Store and print all UART output while the elf is running
+        timeout = 60
+        print("Printing all UART output from the GFE...")
+        rx_buf = []
+        start_time = time.time()
+        while time.time() < (start_time + timeout):
+            pending = self.gfe.uart_session.in_waiting
+            if pending:
+                data = self.gfe.uart_session.read(pending)
+                rx_buf.append(data) # Append read chunks to the list.
+                sys.stdout.write(data)
+        print("Timeout reached")
 
+        # Get FPGA IP address
+        riscv_ip = 0
+        rx_buf_str = ''.join(rx_buf)
+        rx_buf_list = rx_buf_str.split('\n')
+        for line in rx_buf_list:
+            index1 = line.find('inet')
+            index2 = line.find('eth0')
+            if (index1 != -1) & (index2 != -1):
+                ip_str = re.split('[/\s]\s*', line)
+                riscv_ip = ip_str[2]
+
+        # Ping FPGA
+        print("RISCV IP address is: " + riscv_ip)
+        if (riscv_ip == 0) or (riscv_ip == "0.0.0.0"):
+            raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
+        ping_response = os.system("ping -c 1 " + riscv_ip)
+        self.assertEqual(ping_response, 0,
+                        "Cannot ping FPGA.")
+        
+        return riscv_ip
+
+    def test_debian_terminal(self):
+        """ Boot debian and start an interactive terminal """
+        #boot debian and get ip
+        riscv_ip = self.boot_debian()
+        #start interactive terminal
+        self.interactive_terminal(riscv_ip,"debian")
         return
 
 if __name__ == '__main__':

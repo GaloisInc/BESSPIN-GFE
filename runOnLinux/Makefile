@@ -20,6 +20,7 @@ OBJDUMP	= $(TARGET)-objdump
 
 default: binary.dump
 
+#Note: If you change the name of "binary2run", then the name has to be changed in testing/scripts/runOnLinux.py
 binary2run: $(PROG)
 	$(GCC) $(GCC_FLAGS) $< -o $@
 
