@@ -116,4 +116,7 @@ endif
 	rm Verilog_RTL/mkP_Core.v
 	@echo "INFO: Created verilator executable:    $(SIM_EXE_FILE)"
 
+clean:
+	rm -rf obj_dir
+
 # ================================================================

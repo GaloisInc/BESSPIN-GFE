@@ -40,13 +40,13 @@ EXAMPLE ?= PLEASE_DEFINE_EXAMPLE_PATH_TO_ELF
 run_example:
 	make -C  $(TESTS_DIR)/elf_to_hex
 	$(TESTS_DIR)/elf_to_hex/elf_to_hex  $(EXAMPLE)  Mem.hex
-	./$(SIM_EXE_FILE) $(VERBOSITY)  +exit
+	./$(SIM_EXE_FILE) $(VERBOSITY)  +tohost
 
 .PHONY: run_example_waves
 run_example_waves:
 	make -C  $(TESTS_DIR)/elf_to_hex
 	$(TESTS_DIR)/elf_to_hex/elf_to_hex  $(EXAMPLE)  Mem.hex
-	./$(SIM_EXE_FILE) $(VERBOSITY)  +exit +trace
+	./$(SIM_EXE_FILE) $(VERBOSITY)  +tohost +trace
 
 # ================================================================
 # Test: run the executable on the standard RISCV ISA test specified in TEST
@@ -60,7 +60,7 @@ VERBOSITY ?= +v1
 smoke_test:
 	make -C  $(TESTS_DIR)/elf_to_hex
 	$(TESTS_DIR)/elf_to_hex/elf_to_hex  $(TESTS_DIR)/isa/$(TEST)  Mem.hex
-	./$(SIM_EXE_FILE)  $(VERBOSITY)  +tohost
+	./$(SIM_EXE_FILE)  $(VERBOSITY)  +tohost +trace
 
 # ================================================================
 # ISA Regression testing
