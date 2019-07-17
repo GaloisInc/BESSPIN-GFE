@@ -31,7 +31,9 @@ extern void      io_write64 (uint64_t addr, uint64_t x);
 // appropriate location under the env directory structure once we can converge
 // on a unified build environment for all tests
 
-#define TEST_PASS asm volatile ("li x28, 0x1");
-#define TEST_FAIL asm volatile ("li x28, 0x3");
+#define TEST_PASS asm volatile ("li a0, 0x1"); \
+                  asm volatile ("sw a0, tohost, t0");
+#define TEST_FAIL asm volatile ("li a0, 0x3"); \
+                  asm volatile ("sw a0, tohost, t0");
 
 // ================================================================
