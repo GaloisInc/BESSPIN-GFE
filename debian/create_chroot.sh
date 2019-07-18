@@ -93,10 +93,16 @@ in_chroot() {
     # Reset PATH and LD_LIBRARY_PATH.  proot will actually translate paths in
     # both variables, causing scripts to run the host versions of commands.
     # This step ensures they only see the target versions instead.
+    #
+    # Also set TMPDIR to /tmp, instead of inheriting the setting from the host
+    # environment.  Under some configurations (including the one on the CI
+    # runner), TMPDIR is set to /run/user/$UID/, which doesn't exist inside the
+    # chroot.
     cmd+=(
         /usr/bin/env
         -u LD_LIBRARY_PATH
         PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        TMPDIR=/tmp
     )
 
     # Path to riscv64 fakeroot files, as seen from inside `proot`
