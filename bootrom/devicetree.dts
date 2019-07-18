@@ -1,3 +1,11 @@
+#if CPU_SPEED == 0
+#if __riscv_xlen == 32
+#define CPU_SPEED 500000000
+#else
+#define CPU_SPEED 680000000
+#endif
+#endif
+
 /dts-v1/;
 
 / {
@@ -12,7 +20,7 @@
 	cpus {
 		#address-cells = <1>;
 		#size-cells = <0>;
-		timebase-frequency = <68000000>;
+		timebase-frequency = <CPU_SPEED>;
 		CPU0: cpu@0 {
 			device_type = "cpu";
 			reg = <0>;
@@ -24,7 +32,7 @@
 			riscv,isa = "rv64imafdc";
 			mmu-type = "riscv,sv39";
 #endif
-			clock-frequency = <68000000>;
+			clock-frequency = <CPU_SPEED>;
 			dmas = <&axi_dma 0>, <&axi_dma 1>;
 			dma-names = "tx", "rx";
 			CPU0_intc: interrupt-controller {
@@ -86,7 +94,7 @@
 			phy-handle = <&phy0>;
 			xlnx,vcu118;
 			local-mac-address = [00 0a 35 04 db 5a];
-			clock-frequency = <68000000>;
+			clock-frequency = <CPU_SPEED>;
 			axi_ethernet_mdio: mdio {
 				#address-cells = <1>;
 				#size-cells = <0>;
@@ -110,7 +118,7 @@
 			compatible = "ns16550a";
 			interrupts-extended = <&plic 1>;
 			reg = <0x62300000 0x1000>;
-			clock-frequency = <68000000>;
+			clock-frequency = <CPU_SPEED>;
 			reg-shift = <2>;
 		};
 	};

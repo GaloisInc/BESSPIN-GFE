@@ -18,15 +18,15 @@ proc_picker $1
 cd $BASE_DIR/bootrom
 case "$proc_name" in
     *p1)
-	make
+	make CROSS_COMPILE=riscv32-unknown-elf- CPU_SPEED=50000000
 	clock_freq_mhz=50
 	;;
     *p2)
-	make CROSS_COMPILE=riscv64-unknown-elf-
+	make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=68000000
 	clock_freq_mhz=68
 	;;
     *p3)
-	make CROSS_COMPILE=riscv64-unknown-elf-
+	make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=25000000
 	clock_freq_mhz=25
 	;;
     *)
