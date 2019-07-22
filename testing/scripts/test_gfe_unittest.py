@@ -776,7 +776,7 @@ class TestLinux(BaseGfeTest):
 
         # Get RISC-V IP address and ping it from host
         # Store and print all UART output while the elf is running
-        timeout = 60
+        timeout = 120
         print("Printing all UART output from the GFE...")
         rx_buf = []
         start_time = time.time()
