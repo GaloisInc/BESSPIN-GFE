@@ -2108,7 +2108,9 @@ module mkSoC_Top(CLK,
 									  .EMPTY_N(flash_axi4_deburster_xactor_to_slave_f_wr_resp$EMPTY_N));
 
   // submodule gpio
-  mkGpio gpio(.CLK(CLK),
+  // TODO: Add separate AXI port for AES accelerator
+  // mkGpio gpio(.CLK(CLK),
+  mkAES aes(.CLK(CLK), // Temporarily replace gpio with AES
 	      .RST_N(RST_N),
 	      .set_addr_map_addr_base(gpio$set_addr_map_addr_base),
 	      .set_addr_map_addr_lim(gpio$set_addr_map_addr_lim),
