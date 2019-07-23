@@ -30,3 +30,6 @@
 [submodule "busybox"]
 	path = busybox
 	url = https://github.com/mirror/busybox.git
+[submodule "cipher_cores"]
+	path = cipher_cores
+	url = git@gitlab-ext.galois.com:ssith/cipher_cores.git
