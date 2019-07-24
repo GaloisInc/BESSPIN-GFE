@@ -246,18 +246,18 @@ module mkAES(CLK,
     .s00_axi_awprot(slave_awprot), // input wire
     .s00_axi_awqos(slave_awqos), // input wire
     .s00_axi_awregion(slave_awregion), // input wire
-    .s00_axi_awuser(slave_awuser), // input wire
+    .s00_axi_awuser(), // input wire
     .s00_axi_awvalid(slave_awvalid), // input wire
     .s00_axi_awready(slave_awready), // output wire
     .s00_axi_wdata(slave_wdata), // input wire
     .s00_axi_wstrb(slave_wstrb), // input wire
     .s00_axi_wlast(slave_wlast), // input wire
-    .s00_axi_wuser(slave_wuser), // input wire
+    .s00_axi_wuser(), // input wire
     .s00_axi_wvalid(slave_wvalid), // input wire
     .s00_axi_wready(slave_wready), // output wire
     .s00_axi_bid(slave_bid), // output wire
     .s00_axi_bresp(slave_bresp), // output wire
-    .s00_axi_buser(slave_buser), // output wire
+    .s00_axi_buser(), // output wire
     .s00_axi_bvalid(slave_bvalid), // output wire
     .s00_axi_bready(slave_bready), // input wire
     .s00_axi_arid(slave_arid), // input wire
@@ -270,14 +270,14 @@ module mkAES(CLK,
     .s00_axi_arprot(slave_arprot), // input wire
     .s00_axi_arqos(slave_arqos), // input wire
     .s00_axi_arregion(slave_arregion), // input wire
-    .s00_axi_aruser(slave_aruser), // input wire
+    .s00_axi_aruser(), // input wire
     .s00_axi_arvalid(slave_arvalid), // input wire
     .s00_axi_arready(slave_arready), // output wire
     .s00_axi_rid(slave_rid), // output wire
     .s00_axi_rdata(slave_rdata), // output wire
     .s00_axi_rresp(slave_rresp), // output wire
     .s00_axi_rlast(slave_rlast), // output wire
-    .s00_axi_ruser(slave_ruser), // output wire
+    .s00_axi_ruser(), // output wire
     .s00_axi_rvalid(slave_rvalid), // output wire
     .s00_axi_rready(slave_rready) // input wire
   );

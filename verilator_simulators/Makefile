@@ -42,7 +42,7 @@ VERILATOR_FLAGS += -LDFLAGS "-static -L ${GLIBC_STATIC}/lib"
 
 # Verilator flags: use the following to include code to generate VCDs
 # Select trace-depth according to your module hierarchy
-VERILATOR_FLAGS += --trace -CFLAGS -DVM_TRACE
+VERILATOR_FLAGS += --trace -CFLAGS -DVM_TRACE -Wno-LITENDIAN
 
 VTOP                = V$(TOPMODULE)
 VERILATOR_RESOURCES = Resources
