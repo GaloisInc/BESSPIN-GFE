@@ -22,6 +22,9 @@ SIM_EXE_FILE = run/exe_HW_$(PROC)_sim
 # Top-level module
 TOPMODULE ?= mkTop_HW_Side
 
+# Additional System RTL
+CIPHER_RTL = ../cipher_cores/AES_AXI4/hdl
+
 # ================================================================
 # Compile and link Verilog RTL sources into an verilator executable
 
@@ -69,6 +72,8 @@ endif
 		-IVerilog_RTL \
 		-Iprocs/$(PROC) \
 		-I$(PROCESSOR_RTL) \
+		${CIPHER_RTL}/aes_cipher.sv \
+		-I$(CIPHER_RTL) \
 		--top-module mkTop_HW_Side \
 		$(VERILATOR_FLAGS) \
 		--cc  $(TOPMODULE).v \
