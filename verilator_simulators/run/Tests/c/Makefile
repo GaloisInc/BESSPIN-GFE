@@ -28,6 +28,7 @@ SUBDIRS             = cat \
                       sysuser \
                       intOpsTest \
                       wc \
+                      aes \
 		      accel_aes \
 		      accel_aes2 \
 		      accel_aes3 \
