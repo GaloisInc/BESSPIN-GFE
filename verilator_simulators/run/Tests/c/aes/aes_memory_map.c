@@ -4,7 +4,7 @@
 
 typedef uint64_t datum;     /* Set the data bus width to 64 bits. */
 
-#define AES_BASE_ADDRESS (volatile datum *) 0x6fff0000
+#define AES_BASE_ADDRESS 0x6fff0000
 
 #define AES_INBUF_0_ADDR 0x1000 + AES_BASE_ADDRESS
 #define AES_INBUF_1_ADDR 0x2000 + AES_BASE_ADDRESS
@@ -91,29 +91,42 @@ int main (int argc, char *argv[])
 {
 	// Perform read write checks on basic registers
 	pio->key_0 = 0xdeadbeef;
-	pio->key_1 = 0x00000001;
-	pio->key_2 = 0x00000002;
-	pio->key_3 = 0x00000003;
-	pio->key_4 = 0x00000004;
-	pio->key_5 = 0x00000005;
-	pio->key_6 = 0x00000006;
-	pio->key_7 = 0x00000007;
+	pio->key_2 = 0xaaaaaaaa;
+	pio->init_vector_0 = 0x00000001;
+	pio->init_vector_2 = 0x00000002;
+	pio->buffer_0_page_size = 0x0;
+	pio->buffer_1_page_size = 0x0;
+
+	// Load the input data
+	io_write32 (AES_INBUF_0_ADDR, 0xfeedbead);
+	io_write32 (AES_INBUF_0_ADDR + 0x8, 0xcccccccc);
+	io_write32 (AES_INBUF_1_ADDR, 0x12345678);
+	io_write32 (AES_INBUF_1_ADDR + 0x8, 0xdddddddd);
+
+	printf("%x @ AES_OUTBUF_0_ADDR\n", io_read32(AES_OUTBUF_0_ADDR));
 
 	fence();
 
-	// Read the accelerator state 
-	printf ("pio->cmd %x\n", pio->cmd);
+	// Start encrypting
+	pio->start_buf_0 = 1;
+	pio->start_buf_1 = 1;
+
 	printf ("pio->acc_state_lsw %x\n", pio->acc_state_lsw);
-	printf ("pio->acc_state_msw %x\n", pio->acc_state_msw);
-	printf ("pio->init_vector_0 %x\n", pio->init_vector_0);
-	printf ("pio->init_vector_1 %x\n", pio->init_vector_1);
-	printf ("pio->init_vector_2 %x\n", pio->init_vector_2);
-	printf ("pio->init_vector_3 %x\n", pio->init_vector_3);
-	printf ("pio->key_0 %x\n", pio->key_0);
-	printf ("pio->key_6 %x\n", pio->key_6);
+
+	uint32_t result_buf_0 = io_read32(AES_OUTBUF_0_ADDR);
+	uint32_t result_buf_1 = io_read32(AES_OUTBUF_1_ADDR);
+	printf("%x @ AES_OUTBUF_0_ADDR\n", result_buf_0);
+	printf("%x @ AES_OUTBUF_1_ADDR\n", result_buf_1);
 
 	// Check some of these values
 	if (pio->key_0 != 0xdeadbeef) {
+		printf ("read unexpected data from key_0\n");
+		TEST_FAIL
+	}
+
+	// Check the output
+	if (result_buf_0 == result_buf_1) {
+		printf("Unexpected collision\n");
 		TEST_FAIL
 	}
 
