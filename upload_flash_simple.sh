@@ -3,33 +3,38 @@
 # After finishes, you have to power-cycle the FPGA and then press CPU_RESET
 # button to start running the code
 
-if (($# != 2)); then
+if (($# < 2)); then
     echo "Illegal number of parameters"
-    echo "Usage: $0 path-to-bitfile path-to-elf"
+    echo "Usage: $0 path-to-bitfile path-to-elf FLAGS"
+    echo "FLAGS: --no-bitfile will upload only the elf"
     exit -1
 fi
 
 prog=$(basename $2)
-echo "Copying " $prog
+echo ">>> Copying " $prog
 
 # Make a flash-compatible binary
-echo "Copying " $2
-cp $2 bootmem/.
+cp $2 bootmem/freertos.elf
 cd bootmem
-PROG=$prog make -f Makefile.freertos
+make -f Makefile.freertos clean
+make -f Makefile.freertos
 rm -f bootmem/$prog
 cd ..
-
+exit 0
 
 bitfile_path=$1
-echo "Bitstream path: " $bitfile_path
+echo ">>> Bitstream path: " $bitfile_path
 
-echo "Uploading bitstream"
-tcl/program_flash bitfile $bitfile_path
-echo "Bitstream upload finished"
+if [[ $3 == "--no-bitfile" ]]; then
+    echo ">>> No bitstream will be uploaded"
+else
+    echo ">>> Uploading bitstream"
+    tcl/program_flash bitfile $bitfile_path
+    echo ">>> Bitstream upload finished"
+fi
 
-echo "Uploading binary"
+echo ">>> Uploading binary"
 tcl/program_flash datafile bootmem/bootmem.bin
-echo "Binary upload finished"
+echo ">>> Binary upload finished"
 
-echo "Done! Power cycle your FPGA."
+echo ">>> Done! Power cycle your FPGA."
