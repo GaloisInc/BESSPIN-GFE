@@ -20,7 +20,7 @@ before_script:
 bluespec_p1:
   script:
     - source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh
-    - nix-shell --run './test_processor.sh bluespec_p1 --full_ci'
+    - nix-shell --run './test_processor.sh bluespec_p1 --full_ci' --show-trace
   tags: ["fpga"]
   only:
     - develop
