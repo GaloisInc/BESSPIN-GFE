@@ -224,10 +224,33 @@ module mkAES(CLK,
   output assert_soft_reset;
   output RDY_assert_soft_reset;
 
+  // Limited capability AXI data width converter
+  // Assumptions: Only 32 bit, incrementing burst transactions are used
+  wire [31:0] slave_wdata_small;
+  wire [31:0] slave_rdata_small;
+  wire [3:0] slave_wstrb_small;
+
+  always_comb begin
+    // Write channel conversion
+    if(slave_awaddr[2] == 0) begin
+      slave_wdata_small = slave_wdata[31:0];
+      slave_wstrb_small = slave_wstrb[3:0];
+    end else begin
+      slave_wdata_small = slave_wdata[63:32];
+      slave_wstrb_small = slave_wstrb[7:4];
+    end
+
+    // Read channel conversion
+    assign slave_rdata = {slave_rdata_small, slave_rdata_small};
+  end
+
+  // end data width converter
 
   // Insert AES AXI component where the GPIO should be
   // TODO: Create a separate AXI port for the AES accelerator
-  AES_AXI_wrapper_v1_0 i_aex_axi (
+  AES_AXI_wrapper_v1_0 #(
+    .C_S00_AXI_DATA_WIDTH  (32)
+    ) i_aex_axi (
     // Users to add ports here
     .done_irq(),
     // User ports ends
@@ -249,8 +272,8 @@ module mkAES(CLK,
     .s00_axi_awuser(), // input wire
     .s00_axi_awvalid(slave_awvalid), // input wire
     .s00_axi_awready(slave_awready), // output wire
-    .s00_axi_wdata(slave_wdata), // input wire
-    .s00_axi_wstrb(slave_wstrb), // input wire
+    .s00_axi_wdata(slave_wdata_small), // input wire
+    .s00_axi_wstrb(slave_wstrb_small), // input wire
     .s00_axi_wlast(slave_wlast), // input wire
     .s00_axi_wuser(), // input wire
     .s00_axi_wvalid(slave_wvalid), // input wire
@@ -274,7 +297,7 @@ module mkAES(CLK,
     .s00_axi_arvalid(slave_arvalid), // input wire
     .s00_axi_arready(slave_arready), // output wire
     .s00_axi_rid(slave_rid), // output wire
-    .s00_axi_rdata(slave_rdata), // output wire
+    .s00_axi_rdata(slave_rdata_small), // output wire
     .s00_axi_rresp(slave_rresp), // output wire
     .s00_axi_rlast(slave_rlast), // output wire
     .s00_axi_ruser(), // output wire
