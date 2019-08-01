@@ -20,7 +20,6 @@ make -f Makefile.freertos clean
 make -f Makefile.freertos
 rm -f bootmem/$prog
 cd ..
-exit 0
 
 bitfile_path=$1
 echo ">>> Bitstream path: " $bitfile_path
