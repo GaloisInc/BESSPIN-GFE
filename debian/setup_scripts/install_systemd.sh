@@ -53,6 +53,7 @@ systemctl mask time-sync.target
 systemctl mask systemd-tmpfiles-clean.timer
 systemctl mask sys-subsystem-net-devices-eth0.device
 systemctl set-default multi-user.target
+ln -sf /dev/null /etc/systemd/system/serial-getty@hvc0.service
 
 # Initialize random-seed
 dd if=/dev/urandom of=/var/lib/systemd/random-seed count=1 bs=512 
