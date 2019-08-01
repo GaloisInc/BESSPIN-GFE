@@ -631,7 +631,8 @@ class TestLinux(BaseGfeTest):
     def getDebianExpected(self):
         return [
             "Run /init as init process",
-            "A start job is running for /dev/ttyS0"
+            "Debian GNU/Linux bullseye/sid",
+            "login:"
         ]
     def getBusyBoxExpected(self):
         return [
@@ -756,9 +757,7 @@ class TestLinux(BaseGfeTest):
         # Check that Debian booted
         self.check_uart_out(
                 timeout=linux_boot_timeout,
-                expected_contents=[ "Debian GNU/Linux 10",
-                                    "login:"
-                                    ])
+                expected_contents=self.getDebianExpected())
 
         # Login to Debian
         self.gfe.uart_session.write(b'root\r')
