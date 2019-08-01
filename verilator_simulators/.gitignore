@@ -3,3 +3,4 @@ run/Mem.hex
 run/symbol_table.txt
 run/worker_*/
 run/exe_HW_*_sim
+run/vcd
