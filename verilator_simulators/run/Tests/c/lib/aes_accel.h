@@ -2,7 +2,12 @@
 #ifndef __AES_ACCEL__
 #define __AES_ACCEL__
 
+#ifndef AES_BASE_ADDRESS
+// Replace soft reset in verilator simulation
 #define AES_BASE_ADDRESS 0x6fff0000
+// Real base address
+// #define AES_BASE_ADDRESS 0x62350000
+#endif
 
 #define AES_INBUF_0_ADDR (AES_BASE_ADDRESS + 0x1000)
 #define AES_INBUF_1_ADDR (AES_BASE_ADDRESS + 0x2000)

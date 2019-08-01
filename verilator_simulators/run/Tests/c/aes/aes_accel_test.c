@@ -115,7 +115,6 @@ void test_aes_128_single (uint32_t buffer) {
     }
     outbuf_addr += sizeof(uint32_t);
   }
-
 }
 
 int main (int argc, char *argv[])
