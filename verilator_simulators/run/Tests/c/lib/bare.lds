@@ -10,3 +10,4 @@ INSERT AFTER .bss;
 INPUT(syscalls.o)
 INPUT(riscv_counters.o)
 INPUT(ns16550.o)
+INPUT(aes_accel.o)

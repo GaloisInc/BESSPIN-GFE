@@ -60,7 +60,7 @@ CLEAN_EXTRA_EXT     = map
 
 TARGETS_SKIP        =
 
-TARGETS             = $(TOPDIR)/lib/startup.o $(TOPDIR)/lib/syscalls.o $(TOPDIR)/lib/riscv_counters.o $(TOPDIR)/lib/ns16550.o $(filter-out $(TARGETS_SKIP),$(foreach subdir,$(SUBDIRS),$(foreach srcext,$(SRC_EXT),$(patsubst %.$(srcext),%,$(wildcard $(subdir)/*.$(srcext))))))
+TARGETS             = $(TOPDIR)/lib/startup.o $(TOPDIR)/lib/syscalls.o $(TOPDIR)/lib/riscv_counters.o $(TOPDIR)/lib/ns16550.o $(TOPDIR)/lib/aes_accel.o $(filter-out $(TARGETS_SKIP),$(foreach subdir,$(SUBDIRS),$(foreach srcext,$(SRC_EXT),$(patsubst %.$(srcext),%,$(wildcard $(subdir)/*.$(srcext))))))
 TARGETS_EXTRA       = $(foreach ext,$(EXTRA_EXT), $(addsuffix .$(ext), $(TARGETS)))
 CLEAN_EXTRA         = $(foreach ext,$(CLEAN_EXTRA_EXT), $(addsuffix .$(ext), $(TARGETS)))
 
