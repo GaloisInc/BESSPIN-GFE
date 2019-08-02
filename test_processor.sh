@@ -13,12 +13,6 @@ else
 	full_ci=false
 fi
 
-if [[ $2 == "--debian" ]]; then
-	debian=true
-else
-	debian=false
-fi
-
 # Make sure the Bluespec P1 is programmed with a valid flash content
 # This is a workaround for https://gitlab-ext.galois.com/ssith/gfe/issues/58
 if [ "$proc_name" == "bluespec_p1" ]; then
@@ -55,12 +49,8 @@ if [ "$proc_name" == "chisel_p2" ] || [ "$proc_name" == "bluespec_p2" ] || [ "$p
 	err_msg $? "test.sh 64 failed" "test.sh 64 OK"
 	./test_linux.sh busybox
 	err_msg $? "test_linux.sh busybox failed" "test_linux.sh busybox OK"
-	if [ "$debian" = true ]; then
-		# Temporarily run Debian tests only if desired, until https://gitlab-ext.galois.com/ssith/gfe/merge_requests/23
-		# is finished
-		./test_linux.sh debian
-		err_msg $? "test_linux.sh debian failed" "test_linux.sh debian OK"
-	fi
+	./test_linux.sh debian
+	err_msg $? "test_linux.sh debian failed" "test_linux.sh debian OK"
 	if [ "$full_ci" = true ]; then
 		# Run ethernet test only if we have the proper hardware setup
 		./test_linux.sh busybox --ethernet

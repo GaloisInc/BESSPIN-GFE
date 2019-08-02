@@ -1105,18 +1105,14 @@ proc create_root_design { parentCell } {
   connect_bd_net -net xilinx_jtag_0_tms [get_bd_pins ssith_processor_0/jtag_tms] [get_bd_pins xilinx_jtag_0/tms]
 
   # Create address segments
-  create_bd_addr_seg -range 0x00001000 -offset 0x62351000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_INBUF] SEG_AES_AXI_wrapper_0_S00_INBUF
-  create_bd_addr_seg -range 0x00001000 -offset 0x62351000 [get_bd_addr_spaces ssith_processor_0/master1] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_INBUF] SEG_AES_AXI_wrapper_0_S00_INBUF
-  create_bd_addr_seg -range 0x00001000 -offset 0x62352000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_OUTBUF] SEG_AES_AXI_wrapper_0_S00_OUTBUF
-  create_bd_addr_seg -range 0x00001000 -offset 0x62352000 [get_bd_addr_spaces ssith_processor_0/master1] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_OUTBUF] SEG_AES_AXI_wrapper_0_S00_OUTBUF
-  create_bd_addr_seg -range 0x00001000 -offset 0x62350000 [get_bd_addr_spaces ssith_processor_0/master1] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_REG] SEG_AES_AXI_wrapper_0_S00_REG
-  create_bd_addr_seg -range 0x00001000 -offset 0x62350000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_REG] SEG_AES_AXI_wrapper_0_S00_REG
-  create_bd_addr_seg -range 0x00001000 -offset 0x70000000 [get_bd_addr_spaces ssith_processor_0/master1] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
+  create_bd_addr_seg -range 0x00010000 -offset 0x62350000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_REG] SEG_AES_AXI_wrapper_0_S00_REG
+  create_bd_addr_seg -range 0x00010000 -offset 0x62350000 [get_bd_addr_spaces ssith_processor_0/master1] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_REG] SEG_AES_AXI_wrapper_0_S00_REG
   create_bd_addr_seg -range 0x00001000 -offset 0x70000000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
-  create_bd_addr_seg -range 0x00010000 -offset 0x62200000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/axi_dma_0/S_AXI_LITE/Reg] SEG_axi_dma_0_Reg
+  create_bd_addr_seg -range 0x00001000 -offset 0x70000000 [get_bd_addr_spaces ssith_processor_0/master1] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
   create_bd_addr_seg -range 0x00010000 -offset 0x62200000 [get_bd_addr_spaces ssith_processor_0/master1] [get_bd_addr_segs gfe_subsystem/axi_dma_0/S_AXI_LITE/Reg] SEG_axi_dma_0_Reg
-  create_bd_addr_seg -range 0x00040000 -offset 0x62100000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/axi_ethernet_0/s_axi/Reg0] SEG_axi_ethernet_0_Reg0
+  create_bd_addr_seg -range 0x00010000 -offset 0x62200000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/axi_dma_0/S_AXI_LITE/Reg] SEG_axi_dma_0_Reg
   create_bd_addr_seg -range 0x00040000 -offset 0x62100000 [get_bd_addr_spaces ssith_processor_0/master1] [get_bd_addr_segs gfe_subsystem/axi_ethernet_0/s_axi/Reg0] SEG_axi_ethernet_0_Reg0
+  create_bd_addr_seg -range 0x00040000 -offset 0x62100000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/axi_ethernet_0/s_axi/Reg0] SEG_axi_ethernet_0_Reg0
   create_bd_addr_seg -range 0x00010000 -offset 0x6FFF0000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/axi_gpio_0/S_AXI/Reg] SEG_axi_gpio_0_Reg
   create_bd_addr_seg -range 0x00010000 -offset 0x6FFF0000 [get_bd_addr_spaces ssith_processor_0/master1] [get_bd_addr_segs gfe_subsystem/axi_gpio_0/S_AXI/Reg] SEG_axi_gpio_0_Reg
   create_bd_addr_seg -range 0x00001000 -offset 0x62330000 [get_bd_addr_spaces ssith_processor_0/master0] [get_bd_addr_segs gfe_subsystem/axi_gpio1/axi_gpio_1/S_AXI/Reg] SEG_axi_gpio_1_Reg
@@ -1140,13 +1136,7 @@ proc create_root_design { parentCell } {
   create_bd_addr_seg -range 0x80000000 -offset 0x80000000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_S2MM] [get_bd_addr_segs gfe_subsystem/ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_0_C0_DDR4_ADDRESS_BLOCK
 
   # Exclude Address Segments
-  create_bd_addr_seg -range 0x00001000 -offset 0x62351000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_MM2S] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_INBUF] SEG_AES_AXI_wrapper_0_S00_INBUF
-  exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_MM2S/SEG_AES_AXI_wrapper_0_S00_INBUF]
-
-  create_bd_addr_seg -range 0x00001000 -offset 0x62352000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_MM2S] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_OUTBUF] SEG_AES_AXI_wrapper_0_S00_OUTBUF
-  exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_MM2S/SEG_AES_AXI_wrapper_0_S00_OUTBUF]
-
-  create_bd_addr_seg -range 0x00001000 -offset 0x62350000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_MM2S] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_REG] SEG_AES_AXI_wrapper_0_S00_REG
+  create_bd_addr_seg -range 0x00010000 -offset 0x62350000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_MM2S] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_REG] SEG_AES_AXI_wrapper_0_S00_REG
   exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_MM2S/SEG_AES_AXI_wrapper_0_S00_REG]
 
   create_bd_addr_seg -range 0x00001000 -offset 0x70000000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_MM2S] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
@@ -1182,13 +1172,7 @@ proc create_root_design { parentCell } {
   create_bd_addr_seg -range 0x00001000 -offset 0x62340000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_MM2S] [get_bd_addr_segs gfe_subsystem/axi_uart16550_1/S_AXI/Reg] SEG_axi_uart16550_1_Reg
   exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_MM2S/SEG_axi_uart16550_1_Reg]
 
-  create_bd_addr_seg -range 0x00001000 -offset 0x62351000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_S2MM] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_INBUF] SEG_AES_AXI_wrapper_0_S00_INBUF
-  exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_S2MM/SEG_AES_AXI_wrapper_0_S00_INBUF]
-
-  create_bd_addr_seg -range 0x00001000 -offset 0x62352000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_S2MM] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_OUTBUF] SEG_AES_AXI_wrapper_0_S00_OUTBUF
-  exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_S2MM/SEG_AES_AXI_wrapper_0_S00_OUTBUF]
-
-  create_bd_addr_seg -range 0x00001000 -offset 0x62350000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_S2MM] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_REG] SEG_AES_AXI_wrapper_0_S00_REG
+  create_bd_addr_seg -range 0x00010000 -offset 0x62350000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_S2MM] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_REG] SEG_AES_AXI_wrapper_0_S00_REG
   exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_S2MM/SEG_AES_AXI_wrapper_0_S00_REG]
 
   create_bd_addr_seg -range 0x00001000 -offset 0x70000000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_S2MM] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
@@ -1224,13 +1208,7 @@ proc create_root_design { parentCell } {
   create_bd_addr_seg -range 0x00001000 -offset 0x62340000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_S2MM] [get_bd_addr_segs gfe_subsystem/axi_uart16550_1/S_AXI/Reg] SEG_axi_uart16550_1_Reg
   exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_S2MM/SEG_axi_uart16550_1_Reg]
 
-  create_bd_addr_seg -range 0x00001000 -offset 0x62351000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_SG] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_INBUF] SEG_AES_AXI_wrapper_0_S00_INBUF
-  exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_SG/SEG_AES_AXI_wrapper_0_S00_INBUF]
-
-  create_bd_addr_seg -range 0x00001000 -offset 0x62352000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_SG] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_OUTBUF] SEG_AES_AXI_wrapper_0_S00_OUTBUF
-  exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_SG/SEG_AES_AXI_wrapper_0_S00_OUTBUF]
-
-  create_bd_addr_seg -range 0x00001000 -offset 0x62350000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_SG] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_REG] SEG_AES_AXI_wrapper_0_S00_REG
+  create_bd_addr_seg -range 0x00010000 -offset 0x62350000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_SG] [get_bd_addr_segs gfe_subsystem/AES_AXI_wrapper_0/S00_AXI/S00_REG] SEG_AES_AXI_wrapper_0_S00_REG
   exclude_bd_addr_seg [get_bd_addr_segs gfe_subsystem/axi_dma_0/Data_SG/SEG_AES_AXI_wrapper_0_S00_REG]
 
   create_bd_addr_seg -range 0x00001000 -offset 0x70000000 [get_bd_addr_spaces gfe_subsystem/axi_dma_0/Data_SG] [get_bd_addr_segs gfe_subsystem/axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0

@@ -32,5 +32,6 @@ debian.cpio.gz:
 clean:
 	@rm -f debian.cpio.gz
 	@rm -rf build-linux
+	$(MAKE) -C $(DEBIAN_DIR) clean
 
 .PHONY: default clean
