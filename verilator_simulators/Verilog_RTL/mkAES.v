@@ -224,32 +224,29 @@ module mkAES(CLK,
   output assert_soft_reset;
   output RDY_assert_soft_reset;
 
+  localparam INTERNAL_DATA_WIDTH = 32;
+  localparam INTERNAL_WSTRB_WIDTH = INTERNAL_DATA_WIDTH / 8;
+
   // Limited capability AXI data width converter
   // Assumptions: Only 32 bit, incrementing burst transactions are used
-  wire [31:0] slave_wdata_small;
-  wire [31:0] slave_rdata_small;
-  wire [3:0] slave_wstrb_small;
+  wire [INTERNAL_DATA_WIDTH-1:0] slave_wdata_small;
+  wire [INTERNAL_DATA_WIDTH-1:0] slave_rdata_small;
+  wire [INTERNAL_WSTRB_WIDTH-1:0] slave_wstrb_small;
 
-  always_comb begin
-    // Write channel conversion
-    if(slave_awaddr[2] == 0) begin
-      slave_wdata_small = slave_wdata[31:0];
-      slave_wstrb_small = slave_wstrb[3:0];
-    end else begin
-      slave_wdata_small = slave_wdata[63:32];
-      slave_wstrb_small = slave_wstrb[7:4];
-    end
+  assign slave_wdata_small = slave_awaddr[$clog2(INTERNAL_DATA_WIDTH/8)] ?
+    slave_wdata[INTERNAL_DATA_WIDTH-1:0] : slave_wdata[63:INTERNAL_DATA_WIDTH];
+  assign slave_wstrb_small = slave_awaddr[$clog2(INTERNAL_DATA_WIDTH/8)] ?
+    slave_wstrb[INTERNAL_WSTRB_WIDTH-1:0] : slave_wstrb[7:INTERNAL_WSTRB_WIDTH];
 
-    // Read channel conversion
-    assign slave_rdata = {slave_rdata_small, slave_rdata_small};
-  end
+  // Read channel conversion
+  assign slave_rdata = {slave_rdata_small, slave_rdata_small};
 
   // end data width converter
 
   // Insert AES AXI component where the GPIO should be
   // TODO: Create a separate AXI port for the AES accelerator
   AES_AXI_wrapper_v1_0 #(
-    .C_S00_AXI_DATA_WIDTH  (32)
+    .C_S00_AXI_DATA_WIDTH  (INTERNAL_DATA_WIDTH)
     ) i_aex_axi (
     // Users to add ports here
     .done_irq(),
