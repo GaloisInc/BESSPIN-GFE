@@ -299,6 +299,45 @@ class TestGfe64(TestGfe):
     def getFreq(self):
         return gfeparameters.GFE_P2_DEFAULT_HZ
 
+class TestAES(BaseGfeTest):
+
+    def getFreq(self):
+        # AES driver currently only written for 32 bit processor
+        return gfeparameters.GFE_P1_DEFAULT_HZ
+
+    def check_memory(self, addr, value):
+        self.gfe.riscvWrite32(addr, value)
+        return_val = self.gfe.riscvRead32(addr)
+        if return_val != value:
+            print(hex(return_val) + " @ " + hex(addr) + " does not match expected " + hex(value))
+        self.assertEqual(value, return_val)
+    
+    def test_reg_wr(self):
+        # Check that certain memory locations can be written and read from
+        key_addr = gfeparameters.AES_BASE + gfeparameters.AES_KEY_OFFSET
+        outbuf_0_addr = gfeparameters.AES_BASE + gfeparameters.AES_OUTPUT_BUF_0_OFFSET
+        inbuf_0_addr = gfeparameters.AES_BASE + gfeparameters.AES_INPUT_BUF_0_OFFSET
+        self.check_memory(key_addr, 0xabcde)
+        self.check_memory(inbuf_0_addr, 0xabcde)
+        self.check_memory(inbuf_0_addr + 0xC, 0x12345)
+        self.check_memory(outbuf_0_addr, 0xdefb)
+        self.check_memory(outbuf_0_addr + 4, 0xdefb)
+        self.check_memory(outbuf_0_addr + 8, 0x183274c)
+        self.check_memory(outbuf_0_addr + 0xC, 0xcadd)
+        return
+
+    def test_AES_driver(self):
+        test_elf = os.path.join(
+                os.path.dirname(os.path.dirname(os.getcwd())),
+                'verilator_simulators', 'run', 'Tests', 'c',
+                'aes', 'aes_accel_test')
+        self.check_in_output(
+            elf=test_elf,
+            timeout=1,
+            expected_contents=["Testing reading and writing", "PASS"],
+            absent_contents="ERROR")
+        return
+
 class TestFreeRTOS(BaseGfeTest):
 
     def getFreq(self):

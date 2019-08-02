@@ -83,6 +83,8 @@ class gfetester(object):
         gdblog = open(self.gdb_session.logfiles[0].name, 'r')
         openocdlog = open(self.openocd_session.logfile.name, 'r')
         binary = os.path.abspath(binary)
+        if not os.path.exists(binary):
+            raise Exception("binary " + binary + " does not exist")
         try:
             self.gdb_session.command("file {}".format(binary))
             self.gdb_session.load(verify)
