@@ -31,3 +31,7 @@
 [submodule "busybox"]
 	path = busybox
 	url = https://github.com/mirror/busybox.git
+[submodule "newlib"]
+	path = newlib
+	url = https://github.com/CTSRD-CHERI/newlib
+	branch = p1_release
