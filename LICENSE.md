@@ -6,20 +6,20 @@ Submodules and subcomponents of this repository have their own respective licens
 | [bluespec-processors/P3/Tuba/LICENSE](https://github.com/bluespec/Toooba/blob/master/LICENSE) | Apache Version 2.0 and Others |
 | [bluespec-processors/P2/Flute/LICENSE](https://github.com/bluespec/Flute/blob/master/LICENSE) | Apache Version 2.0 |
 | [bluespec-processors/P1/Piccolo/LICENSE](https://github.com/bluespec/Piccolo/blob/master/LICENSE) | Apache Version 2.0 |
-| [riscv-pk/LICENSE](https://gitlab-ext.galois.com/ssith/riscv-pk/blob/master/LICENSE) | Berkeley |
-| [testing/baremetal/env/LICENSE](https://gitlab-ext.galois.com/ssith/gfe/blob/master/testing/baremetal/env/LICENSE) | Berkeley |
+| [riscv-pk/LICENSE](https://gitlab-ext.galois.com/ssith/riscv-pk/blob/master/LICENSE) | BSD |
+| [testing/baremetal/env/LICENSE](https://gitlab-ext.galois.com/ssith/gfe/blob/master/testing/baremetal/env/LICENSE) | BSD |
 | [busybox/LICENSE](https://github.com/mirror/busybox/blob/master/LICENSE) | GPLv2 |
-| [chisel_processors/rocket-chip/LICENSE.jtag](https://gitlab-ext.galois.com/ssith/rocket-chip/blob/ssith-p1/LICENSE.jtag) | Berkeley |
+| [chisel_processors/rocket-chip/LICENSE.jtag](https://gitlab-ext.galois.com/ssith/rocket-chip/blob/ssith-p1/LICENSE.jtag) | BSD |
 | [chisel_processors/rocket-chip/LICENSE.SiFive](https://gitlab-ext.galois.com/ssith/rocket-chip/blob/ssith-p1/LICENSE.SiFive) | Apache Version 2.0 |
-| [chisel_processors/rocket-chip/LICENSE.Berkeley](https://gitlab-ext.galois.com/ssith/rocket-chip/blob/ssith-p1/LICENSE.Berkeley) | Berkeley |
-| [chisel_processors/P3/boom-template/rocket-chip/LICENSE.jtag](https://github.com/chipsalliance/rocket-chip/blob/master/LICENSE.jtag) | Berkeley |
+| [chisel_processors/rocket-chip/LICENSE.Berkeley](https://gitlab-ext.galois.com/ssith/rocket-chip/blob/ssith-p1/LICENSE.Berkeley) | BSD |
+| [chisel_processors/P3/boom-template/rocket-chip/LICENSE.jtag](https://github.com/chipsalliance/rocket-chip/blob/master/LICENSE.jtag) | BSD |
 | [chisel_processors/P3/boom-template/rocket-chip/LICENSE.SiFive](https://github.com/chipsalliance/rocket-chip/blob/master/LICENSE.SiFive) | Apache Version 2.0 |
-| [chisel_processors/P3/boom-template/rocket-chip/LICENSE.Berkeley](https://github.com/chipsalliance/rocket-chip/blob/master/LICENSE.Berkeley) | Berkeley |
+| [chisel_processors/P3/boom-template/rocket-chip/LICENSE.Berkeley](https://github.com/chipsalliance/rocket-chip/blob/master/LICENSE.Berkeley) | BSD |
 | [chisel_processors/P3/boom-template/boom/LICENSE.SiFive](https://gitlab-ext.galois.com/ssith/riscv-boom/blob/master/LICENSE.SiFive) | Apache Version 2.0 |
-| [chisel_processors/P3/boom-template/boom/LICENSE](https://gitlab-ext.galois.com/ssith/riscv-boom/blob/master/LICENSE) | Berkeley |
-| [chisel_processors/P3/boom-template/LICENSE](https://gitlab-ext.galois.com/ssith/boom-template/blob/master/LICENSE) | Berkeley |
-| [riscv-tests/env/LICENSE](https://github.com/riscv/riscv-test-env/blob/master/LICENSE) | Berkeley |
-| [riscv-tests/LICENSE](https://gitlab-ext.galois.com/ssith/riscv-tests/blob/master/LICENSE) | Berkeley |
+| [chisel_processors/P3/boom-template/boom/LICENSE](https://gitlab-ext.galois.com/ssith/riscv-boom/blob/master/LICENSE) | BSD |
+| [chisel_processors/P3/boom-template/LICENSE](https://gitlab-ext.galois.com/ssith/boom-template/blob/master/LICENSE) | BSD |
+| [riscv-tests/env/LICENSE](https://github.com/riscv/riscv-test-env/blob/master/LICENSE) | BSD |
+| [riscv-tests/LICENSE](https://gitlab-ext.galois.com/ssith/riscv-tests/blob/master/LICENSE) | BSD |
 | [riscv-linux/LICENSES](https://gitlab-ext.galois.com/ssith/riscv-linux/tree/riscv-linux-4.20/LICENSES) | Multiple |
 | [riscv-linux/Documentation/process/license-rules.rst](https://gitlab-ext.galois.com/ssith/riscv-linux/blob/riscv-linux-4.20/Documentation/process/license-rules.rst) | N/A |
 
