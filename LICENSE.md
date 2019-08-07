@@ -1,6 +1,4 @@
-TODO: Insert top level license
-
-Submodules and subcomponents of this repository have their own respective licenses. Some of the top level license files and relevant directories are listed below:
+Submodules and subcomponents of this repository have their own respective licenses. Some of the top level license files and relevant directories are listed below. Follow the licensing rules for each submodule as directed in their respective repositories:
 
 | License | Type |
 | ------- | ---- |
@@ -22,8 +20,16 @@ Submodules and subcomponents of this repository have their own respective licens
 | [chisel_processors/P3/boom-template/LICENSE](https://gitlab-ext.galois.com/ssith/boom-template/blob/master/LICENSE) | Berkeley |
 | [riscv-tests/env/LICENSE](https://github.com/riscv/riscv-test-env/blob/master/LICENSE) | Berkeley |
 | [riscv-tests/LICENSE](https://gitlab-ext.galois.com/ssith/riscv-tests/blob/master/LICENSE) | Berkeley |
-| [riscv-linux/LICENSES](riscv-linux/LICENSES) | Multiple |
-| [riscv-linux/Documentation/process/license-rules.rst](riscv-linux/Documentation/process/license-rules.rst) | N/A |
+| [riscv-linux/LICENSES](https://gitlab-ext.galois.com/ssith/riscv-linux/tree/riscv-linux-4.20/LICENSES) | Multiple |
+| [riscv-linux/Documentation/process/license-rules.rst](https://gitlab-ext.galois.com/ssith/riscv-linux/blob/riscv-linux-4.20/Documentation/process/license-rules.rst) | N/A |
 
+The following license applies to work not already covered other licenses. This includes top level work in the GFE repository that exists outside of its submodules:
 
+Copyright 2019 Galois Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
