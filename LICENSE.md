@@ -23,7 +23,7 @@ Submodules and subcomponents of this repository have their own respective licens
 | [riscv-linux/LICENSES](https://gitlab-ext.galois.com/ssith/riscv-linux/tree/riscv-linux-4.20/LICENSES) | Multiple |
 | [riscv-linux/Documentation/process/license-rules.rst](https://gitlab-ext.galois.com/ssith/riscv-linux/blob/riscv-linux-4.20/Documentation/process/license-rules.rst) | N/A |
 
-The following license applies to work not already covered other licenses. This includes top level work in the GFE repository that exists outside of its submodules:
+The following license applies to work not already covered by other licenses. This includes top level work in the GFE repository that exists outside of its submodules:
 
 Copyright 2019 Galois Inc.
 
