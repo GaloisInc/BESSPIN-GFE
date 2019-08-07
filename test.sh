@@ -33,7 +33,8 @@ if [ ${XLEN} == 64 ]
 then
   ./testing/scripts/gen-test-all rv64gcsu > test_64.gdb
 else
-  ./testing/scripts/gen-test-all rv32imacu > test_32.gdb
+  # TODO: Re-enable a
+  ./testing/scripts/gen-test-all rv32imcu > test_32.gdb
 fi
 
 # Run the isa tests
