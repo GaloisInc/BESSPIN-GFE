@@ -14,7 +14,7 @@ cd ..
 git submodule update --init tool-suite FreeRTOS-mirror busybox
 git submodule update --init --recursive \
 bluespec-processors/P1/Piccolo bluespec-processors/P2/Flute \
-riscv-linux bluespec-processors/P3/Tuba riscv-tests riscv-pk
+riscv-linux bluespec-processors/P3/Toooba riscv-tests riscv-pk
 git submodule update --init chisel_processors
 
 cd chisel_processors
