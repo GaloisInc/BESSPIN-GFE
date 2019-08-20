@@ -12,7 +12,7 @@ proc_path=""
 clock_freq_mhz=50
 
 # Parse the processor selection
-proc_picker $1 
+proc_picker $1
 
 # Compile the bootrom and set the clock frequency
 cd $BASE_DIR/bootrom
@@ -22,8 +22,8 @@ case "$proc_name" in
 	clock_freq_mhz=50
 	;;
     *p2)
-	make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=68000000
-	clock_freq_mhz=68
+	make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=100000000
+	clock_freq_mhz=100
 	;;
     *p3)
 	make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=25000000
@@ -50,4 +50,3 @@ vivado -mode batch -source $BASE_DIR/tcl/soc.tcl \
 --clock_freq_mhz $clock_freq_mhz
 
 err_msg $? "Creating the vivado project failed"
-
