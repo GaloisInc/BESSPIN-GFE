@@ -644,8 +644,6 @@ class TestLinux(BaseGfeTest):
         if not image:
             image = self.getBootImage()
 
-        linux_elf = self.getBootImage()
-
         self.gfe.gdb_session.command("set $a0 = 0")
         self.gfe.gdb_session.command("set $a1 = 0x70000020")
 
@@ -653,9 +651,9 @@ class TestLinux(BaseGfeTest):
         self.setupUart()
 
         # Load and run elf
-        print("Loading Elf {}".format(linux_elf))
+        print("Loading Elf {}".format(image))
         print("This may take some time...")
-        self.gfe.launchElf(linux_elf, verify=False)
+        self.gfe.launchElf(image, verify=False)
         return
 
     def boot_image(self, expected_contents, image=None,
