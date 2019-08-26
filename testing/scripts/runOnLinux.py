@@ -211,7 +211,7 @@ class RunOnLinux (TestLinux, BaseGfeForLinux):
     def test_busybox_runANDterminal (self):
         """ Boot busybox, run a program, then open the interactive terminal """
         #boot, get ip, and runAprog
-        riscv_ip = self.test_busybox_runAprog()
+        riscv_ip = self.test_busybox_runAprog(returnIP=True)
         #start interactive terminal
         self.interactive_terminal(riscv_ip,"busybox")
         return
@@ -316,7 +316,7 @@ class RunOnLinux (TestLinux, BaseGfeForLinux):
     def test_debian_runANDterminal (self):
         """ Boot debian, run a program, then open the interactive terminal """
         #boot, get ip, and runAprog
-        riscv_ip = self.test_debian_runAprog()
+        riscv_ip = self.test_debian_runAprog(returnIP=True)
         #start interactive terminal
         self.interactive_terminal(riscv_ip,"debian")
         return
