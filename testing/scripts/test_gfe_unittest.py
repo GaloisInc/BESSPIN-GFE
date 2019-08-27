@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-"""Script to run a compiled elf on the GFE
-"""
+#!/usr/bin/env python3
 
 import unittest
 import argparse

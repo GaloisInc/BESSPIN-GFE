@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 """This script is used by ../../runOnLinux
 - It can be used for debugging by running a terminal-like interface with the FPGA
 - And it can be used for running a program (or more) above linux on FPGA
