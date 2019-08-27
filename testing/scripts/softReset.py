@@ -10,4 +10,4 @@ gfe.startGdb()
 try:
 	gfe.softReset()
 except Exception as e:
-	print((gfe.getGdbLog()))
+	print(gfe.getGdbLog())

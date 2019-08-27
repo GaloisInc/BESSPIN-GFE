@@ -41,6 +41,6 @@ gfe = gfetester.gfetester()
     tohost=args.tohost)
 
 # Print the result
-print((
+print(
     "Test {} {} after running for {} seconds".format(
-        args.binary, msg, args.runtime)))
+        args.binary, msg, args.runtime))

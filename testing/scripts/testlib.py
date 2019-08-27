@@ -385,7 +385,7 @@ class Gdb(object):
 
     def connect(self):
         for port, child in zip(self.ports, self.children):
-            print(("Connecting on {}".format(port)))
+            print("Connecting on {}".format(port))
             self.select_child(child)
             self.wait()
             self.command("set confirm off")

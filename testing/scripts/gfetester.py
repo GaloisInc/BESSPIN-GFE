@@ -90,10 +90,10 @@ class gfetester(object):
         except Exception as e:
             if gdb_log:
                 print("------- GDB Log -------")
-                print((gdblog.read()))
+                print(gdblog.read())
             if openocd_log:
                 print("------- OpenOCD Log -------")
-                print((openocdlog.read()))
+                print(openocdlog.read())
             openocdlog.close()
             gdblog.close()
             raise e
@@ -167,7 +167,7 @@ class gfetester(object):
         value = self.gdb_session.x(address=address, size="1w")
 
         if verbose:
-            print(("{} Read: {} from {}".format(dbg_txt, hex(value), hex(address))))
+            print("{} Read: {} from {}".format(dbg_txt, hex(value), hex(address)))
 
         return value
 
@@ -200,7 +200,7 @@ class gfetester(object):
                 size_options[size], address, value))
 
         if verbose:
-            print(("{} Write: {} to {}".format(dbg_txt, hex(value), hex(address))))
+            print("{} Write: {} to {}".format(dbg_txt, hex(value), hex(address)))
 
         # Check for an error message from gdb
         m = re.search("Cannot access memory", output)
