@@ -45,13 +45,13 @@ def compile(args, xlen=32): # pylint: disable=redefined-builtin
         else:
             cmd.append(arg)
     header("Compile")
-    print "+", " ".join(cmd)
+    print("+", " ".join(cmd))
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
     if process.returncode:
-        print stdout,
-        print stderr,
+        print(stdout, end=' ')
+        print(stderr, end=' ')
         header("")
         raise Exception("Compile failed!")
 
@@ -238,7 +238,7 @@ class Openocd(object):
         if config:
             f = find_file(config)
             if f is None:
-                print "Unable to read file " + config
+                print("Unable to read file " + config)
                 exit(1)
 
             cmd += ["-f", f]
@@ -288,7 +288,7 @@ class Openocd(object):
 
                 if not messaged and time.time() - start > 1:
                     messaged = True
-                    print "Waiting for OpenOCD to start..."
+                    print("Waiting for OpenOCD to start...")
                 if (time.time() - start) > self.timeout:
                     raise Exception("Timed out waiting for OpenOCD to "
                             "listen for gdb")
@@ -385,7 +385,7 @@ class Gdb(object):
 
     def connect(self):
         for port, child in zip(self.ports, self.children):
-            print("Connecting on {}".format(port))
+            print(("Connecting on {}".format(port)))
             self.select_child(child)
             self.wait()
             self.command("set confirm off")
@@ -419,7 +419,7 @@ class Gdb(object):
             del child
 
     def one_hart_per_gdb(self):
-        return all(h['solo'] for h in self.harts.itervalues())
+        return all(h['solo'] for h in self.harts.values())
 
     def lognames(self):
         return [logfile.name for logfile in self.logfiles]
@@ -638,9 +638,9 @@ def run_all_tests(module, target, parsed):
     for hart in target.harts:
         if parsed.misaval:
             hart.misa = int(parsed.misaval, 16)
-            print "Using $misa from command line: 0x%x" % hart.misa
+            print("Using $misa from command line: 0x%x" % hart.misa)
         elif hart.misa:
-            print "Using $misa from hart definition: 0x%x" % hart.misa
+            print("Using $misa from hart definition: 0x%x" % hart.misa)
         elif not examine_added:
             todo.append(("ExamineTarget", ExamineTarget, None))
             examine_added = True
@@ -667,7 +667,7 @@ def run_tests(parsed, target, todo):
         log_name = os.path.join(parsed.logs, "%s-%s-%s.log" %
                 (time.strftime("%Y%m%d-%H%M%S"), type(target).__name__, name))
         log_fd = open(log_name, 'w')
-        print "[%s] Starting > %s" % (name, log_name)
+        print("[%s] Starting > %s" % (name, log_name))
         instance = definition(target, hart)
         sys.stdout.flush()
         log_fd.write("Test: %s\n" % name)
@@ -686,7 +686,7 @@ def run_tests(parsed, target, todo):
             sys.stdout = real_stdout
             log_fd.write("Time elapsed: %.2fs\n" % (time.time() - start))
             log_fd.flush()
-        print "[%s] %s in %.2fs" % (name, result, time.time() - start)
+        print("[%s] %s in %.2fs" % (name, result, time.time() - start))
         if result not in good_results and parsed.print_failures:
             sys.stdout.write(open(log_name).read())
         sys.stdout.flush()
@@ -699,12 +699,12 @@ def run_tests(parsed, target, todo):
 
 def print_results(results):
     result = 0
-    for key, value in results.iteritems():
-        print "%d tests returned %s" % (len(value), key)
+    for key, value in results.items():
+        print("%d tests returned %s" % (len(value), key))
         if key not in good_results:
             result = 1
             for name, log_name in value:
-                print "   %s > %s" % (name, log_name)
+                print("   %s > %s" % (name, log_name))
 
     return result
 
@@ -731,15 +731,15 @@ def header(title, dash='-', length=78):
         dashes = dash * (length - 4 - len(title))
         before = dashes[:len(dashes)/2]
         after = dashes[len(dashes)/2:]
-        print "%s[ %s ]%s" % (before, title, after)
+        print("%s[ %s ]%s" % (before, title, after))
     else:
-        print dash * length
+        print(dash * length)
 
 def print_log_handle(name, handle):
     header(name)
     for l in handle:
         sys.stdout.write(l)
-    print
+    print()
 
 def print_log(path):
     print_log_handle(path, open(path, "r"))
@@ -827,14 +827,14 @@ class BaseTest(object):
                 result = "exception"
             if isinstance(e, TestFailed):
                 header("Message")
-                print e.message
+                print(e.message)
             header("Traceback")
             traceback.print_exc(file=sys.stdout)
             try:
                 self.postMortem()
             except Exception as e:  # pylint: disable=broad-except
                 header("postMortem Exception")
-                print e
+                print(e)
                 traceback.print_exc(file=sys.stdout)
             return result
 
@@ -939,7 +939,7 @@ class ExamineTarget(GdbTest):
             for i in range(26):
                 if hart.misa & (1<<i):
                     txt += chr(i + ord('A'))
-            print txt,
+            print(txt, end=' ')
 
 class TestFailed(Exception):
     def __init__(self, message):

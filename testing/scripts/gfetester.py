@@ -90,10 +90,10 @@ class gfetester(object):
         except Exception as e:
             if gdb_log:
                 print("------- GDB Log -------")
-                print(gdblog.read())
+                print((gdblog.read()))
             if openocd_log:
                 print("------- OpenOCD Log -------")
-                print(openocdlog.read())
+                print((openocdlog.read()))
             openocdlog.close()
             gdblog.close()
             raise e
@@ -167,7 +167,7 @@ class gfetester(object):
         value = self.gdb_session.x(address=address, size="1w")
 
         if verbose:
-            print("{} Read: {} from {}".format(dbg_txt, hex(value), hex(address)))
+            print(("{} Read: {} from {}".format(dbg_txt, hex(value), hex(address))))
 
         return value
 
@@ -189,7 +189,7 @@ class gfetester(object):
         if size not in size_options:
             raise Exception(
                 "Write size {} must be one of {}".format(
-                    size, size_options.keys()))
+                    size, list(size_options.keys())))
 
         if not self.gdb_session:
             self.startGdb()
@@ -200,7 +200,7 @@ class gfetester(object):
                 size_options[size], address, value))
 
         if verbose:
-            print("{} Write: {} to {}".format(dbg_txt, hex(value), hex(address)))
+            print(("{} Write: {} to {}".format(dbg_txt, hex(value), hex(address))))
 
         # Check for an error message from gdb
         m = re.search("Cannot access memory", output)
@@ -237,7 +237,7 @@ class gfetester(object):
             m = re.search('LOCATION=.*:1.(\d)', port.hwid)
             if m:
                 if m.group(1) == '1':
-                    print "Located UART device at %s with serial number %s" % (port.device, port.serial_number)
+                    print("Located UART device at %s with serial number %s" % (port.device, port.serial_number))
                     return port.device
         raise Exception(
                 "Could not find a UART port with expected VID:PID = %X:%X" % (search_vid, search_pid))

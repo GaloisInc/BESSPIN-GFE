@@ -45,5 +45,5 @@ time.sleep(args.runtime)
 # Receive from UART and print 
 num_rxed =  gfe.uart_session.in_waiting
 rx = gfe.uart_session.read( num_rxed ) 
-print("\nReceived: {}".format(rx))
+print(("\nReceived: {}".format(rx)))
 gfe.gdb_session.interrupt()

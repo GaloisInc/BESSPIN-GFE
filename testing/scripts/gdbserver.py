@@ -142,7 +142,7 @@ class CustomRegisterTest(SimpleRegisterTest):
         return self.target.implements_custom_test
 
     def check_custom(self, magic):
-        regs = {k: v for k, v in self.gdb.info_registers("all").iteritems()
+        regs = {k: v for k, v in self.gdb.info_registers("all").items()
                 if k.startswith("custom")}
         assertEqual(set(regs.keys()),
                 set(("custom1",
@@ -150,7 +150,7 @@ class CustomRegisterTest(SimpleRegisterTest):
                     "custom12346",
                     "custom12347",
                     "custom12348")))
-        for name, value in regs.iteritems():
+        for name, value in regs.items():
             number = int(name[6:])
             if number % 2:
                 expect = number + magic
@@ -249,7 +249,7 @@ class MemTestBlock(GdbTest):
         self.gdb.command("shell cat %s" % a.name)
         self.gdb.command("restore %s 0x%x" % (a.name, self.hart.ram))
         increment = 19 * 4
-        for offset in range(0, self.length, increment) + [self.length-4]:
+        for offset in list(range(0, self.length, increment)) + [self.length-4]:
             value = self.gdb.p("*((int*)0x%x)" % (self.hart.ram + offset))
             written = ord(data[offset]) | \
                     (ord(data[offset+1]) << 8) | \
@@ -261,7 +261,7 @@ class MemTestBlock(GdbTest):
         self.gdb.command("dump ihex memory %s 0x%x 0x%x" % (b.name,
             self.hart.ram, self.hart.ram + self.length))
         self.gdb.command("shell cat %s" % b.name)
-        for line in b.xreadlines():
+        for line in b:
             record_type, address, line_data = ihex_parse(line)
             if record_type == 0:
                 written_data = data[address:address+len(line_data)]

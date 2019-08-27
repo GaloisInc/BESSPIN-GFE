@@ -93,7 +93,7 @@ class BaseGfeForLinux(BaseGfeTest):
                             formatwarning_orig(message, category, filename, lineno, line='')
         exitTerminal = False
         while (not exitTerminal):
-            instruction = raw_input ("")
+            instruction = input ("")
             if (len(instruction)>2 and instruction[0:2]=='--'): #instruction to the interpreter
                 if (instruction[2:6] == 'exit'): #exit terminal and end test
                     exitTerminal = True
@@ -125,7 +125,7 @@ class RunOnLinux (TestLinux, BaseGfeForLinux):
         self.boot_linux()
         linux_boot_timeout=60
 
-        print("Running elf with a timeout of {}s".format(linux_boot_timeout))
+        print(("Running elf with a timeout of {}s".format(linux_boot_timeout)))
         # Check that busybox reached activation screen
         self.check_uart_out(
             timeout=linux_boot_timeout,
@@ -164,7 +164,7 @@ class RunOnLinux (TestLinux, BaseGfeForLinux):
             if index != -1:
                 ip_str = line.split()
                 riscv_ip = ip_str[3]
-                print("RISCV IP address is: " + riscv_ip)
+                print(("RISCV IP address is: " + riscv_ip))
                 # break # keep reading till the end to get the latest IP asignemnt
 
         # Ping FPGA
@@ -221,7 +221,7 @@ class RunOnLinux (TestLinux, BaseGfeForLinux):
         # Boot Debian
         self.boot_linux()
         linux_boot_timeout=800
-        print("Running elf with a timeout of {}s".format(linux_boot_timeout))
+        print(("Running elf with a timeout of {}s".format(linux_boot_timeout)))
         
         # Check that Debian booted
         self.check_uart_out(
@@ -272,7 +272,7 @@ class RunOnLinux (TestLinux, BaseGfeForLinux):
                 riscv_ip = ip_str[2]
 
         # Ping FPGA
-        print("RISCV IP address is: " + riscv_ip)
+        print(("RISCV IP address is: " + riscv_ip))
         if (riscv_ip == 0) or (riscv_ip == "0.0.0.0"):
             raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
         ping_response = os.system("ping -c 1 " + riscv_ip)
