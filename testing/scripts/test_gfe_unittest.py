@@ -738,7 +738,7 @@ class TestLinux(BaseGfeTest):
                 # break # keep reading till the end to get the latest IP asignemnt
 
         # Ping FPGA
-        if riscv_ip == 0:
+        if (riscv_ip == 0) or (riscv_ip == "0.0.0.0"):
             raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
         ping_response = os.system("ping -c 1 " + riscv_ip)
         self.assertEqual(ping_response, 0,
