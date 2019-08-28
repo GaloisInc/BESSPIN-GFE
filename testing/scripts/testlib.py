@@ -464,24 +464,24 @@ class Gdb(object):
                 self.select_child(child)
                 self.command(command)
 
-    def c(self, wait=True, async=False):
+    def c(self, wait=True, asynch=False):
         """
         Dumb c command.
         In RTOS mode, gdb will resume all harts.
         In multi-gdb mode, this command will just go to the current gdb, so
         will only resume one hart.
         """
-        if async:
-            async = "&"
+        if asynch:
+            asynch = "&"
         else:
-            async = ""
+            asynch = ""
         ops = 10
         if wait:
-            output = self.command("c%s" % async, ops=ops)
+            output = self.command("c" + asynch, ops=ops)
             assert "Continuing" in output
             return output
         else:
-            self.active_child.sendline("c%s" % async)
+            self.active_child.sendline("c" + asynch)
             self.active_child.expect("Continuing", timeout=ops * self.timeout)
 
     def c_all(self, wait=True):

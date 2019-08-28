@@ -195,7 +195,7 @@ class TestGfe(BaseGfeTest):
         uart_baud_rate = 115200
         uart_elf_path = os.path.abspath(
             os.path.join(self.path_to_asm, uart_elf))
-        print("Using: " + uart_elf_pat))
+        print("Using: " + uart_elf_pat)
 
         self.gfe.setupUart(
             timeout=1,
@@ -226,9 +226,9 @@ class TestGfe(BaseGfeTest):
         for test_char in [b'a', b'z', b'd']:
 
             self.gfe.uart_session.write(test_char)
-            print("host sent ", test_cha))
+            print("host sent ", test_char)
             b = self.gfe.uart_session.read()
-            print("riscv received ", ))
+            print("riscv received ", b)
             self.assertEqual(
                 b, test_char,
                 "Character received {} does not match test test_char {}".format(
@@ -510,7 +510,7 @@ class TestFreeRTOS(BaseGfeTest):
                 riscv_ip = ip_str[2]
 
         # Ping FPGA
-        print("RISCV IP address is: " + riscv_i))
+        print("RISCV IP address is: " + riscv_ip)
         if (riscv_ip == 0) or (riscv_ip == "0.0.0.0"):
             raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
         ping_response = os.system("ping -c 1 " + riscv_ip)
@@ -588,7 +588,7 @@ class TestFreeRTOS(BaseGfeTest):
                 riscv_ip = ip_str[2]
 
         # Ping FPGA
-        print("RISCV IP address is: " + riscv_i))
+        print("RISCV IP address is: " + riscv_ip)
         if (riscv_ip == 0) or (riscv_ip == "0.0.0.0"):
             raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
         ping_response = os.system("ping -c 1 " + riscv_ip)
@@ -732,7 +732,7 @@ class TestLinux(BaseGfeTest):
             if index != -1:
                 ip_str = line.split()
                 riscv_ip = ip_str[3]
-                print("RISCV IP address is: " + riscv_i))
+                print("RISCV IP address is: " + riscv_ip)
                 # break # keep reading till the end to get the latest IP asignemnt
 
         # Ping FPGA
@@ -796,7 +796,7 @@ class TestLinux(BaseGfeTest):
                 riscv_ip = ip_str[2]
 
         # Ping FPGA
-        print("RISCV IP address is: " + riscv_i))
+        print("RISCV IP address is: " + riscv_ip)
         if (riscv_ip == 0) or (riscv_ip == "0.0.0.0"):
             raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
         ping_response = os.system("ping -c 1 " + riscv_ip)
