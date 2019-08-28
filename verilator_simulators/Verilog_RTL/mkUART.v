@@ -441,63 +441,66 @@ module mkUART(CLK,
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [31 : 0] v__h2519;
-  reg [31 : 0] v__h2187;
-  reg [31 : 0] v__h2025;
-  reg [31 : 0] v__h2925;
-  reg [31 : 0] v__h3279;
-  reg [31 : 0] v__h4042;
-  reg [31 : 0] v__h3482;
-  reg [31 : 0] v__h4340;
-  reg [31 : 0] v__h4781;
-  reg [31 : 0] v__h4891;
+  reg [31 : 0] v__h2522;
+  reg [31 : 0] v__h2188;
+  reg [31 : 0] v__h2026;
+  reg [31 : 0] v__h3027;
+  reg [31 : 0] v__h3395;
+  reg [31 : 0] v__h4158;
+  reg [31 : 0] v__h3598;
+  reg [31 : 0] v__h4456;
+  reg [31 : 0] v__h4897;
+  reg [31 : 0] v__h5007;
   reg [31 : 0] v__h1811;
   reg [31 : 0] v__h1805;
-  reg [31 : 0] v__h2019;
-  reg [31 : 0] v__h2181;
-  reg [31 : 0] v__h2513;
-  reg [31 : 0] v__h2919;
-  reg [31 : 0] v__h3273;
-  reg [31 : 0] v__h3476;
-  reg [31 : 0] v__h4036;
-  reg [31 : 0] v__h4334;
-  reg [31 : 0] v__h4775;
-  reg [31 : 0] v__h4885;
+  reg [31 : 0] v__h2020;
+  reg [31 : 0] v__h2182;
+  reg [31 : 0] v__h2516;
+  reg [31 : 0] v__h3021;
+  reg [31 : 0] v__h3389;
+  reg [31 : 0] v__h3592;
+  reg [31 : 0] v__h4152;
+  reg [31 : 0] v__h4450;
+  reg [31 : 0] v__h4891;
+  reg [31 : 0] v__h5001;
   // synopsys translate_on
 
   // remaining internal signals
-  reg [7 : 0] y_avValue_snd__h2683;
-  wire [63 : 0] IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q2,
-		rdata___1__h2817,
-		rdata__h2759,
-		rdr_rdata__h2792,
+  reg [7 : 0] y_avValue_snd_fst__h2885, y_avValue_snd_snd__h2872;
+  wire [63 : 0] IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q2,
+		IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153,
+		byte_addr___1__h3329,
+		byte_addr__h3263,
+		rdr_rdata__h2809,
 		slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17,
-		slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136,
-		wdata___1__h3246;
-  wire [7 : 0] IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1,
+		wdata___1__h3328;
+  wire [7 : 0] IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1,
 	       fn_iir__h1356,
-	       new_lsr__h4548,
-	       wstrb___1__h3245,
-	       x__h2820,
-	       y_avValue_snd__h2696,
-	       y_avValue_snd__h2709,
-	       y_avValue_snd__h2724,
-	       y_avValue_snd__h2738;
-  wire [1 : 0] rdr_rresp__h2793,
-	       v__h3172,
-	       v__h3428,
-	       v__h3606,
-	       y_avValue_fst__h2737,
-	       y_avValue_fst__h2751;
-  wire NOT_cfg_verbosity_read_ULE_1_27___d128,
-       NOT_slave_xactor_f_wr_addr_first__34_BITS_92_T_ETC___d240,
-       NOT_slave_xactor_f_wr_addr_first__34_BITS_92_T_ETC___d251,
+	       new_lsr__h4664,
+	       wstrb___1__h3327,
+	       x__h2854,
+	       x__h2964,
+	       y_avValue_snd_fst__h2859,
+	       y_avValue_snd_fst__h2865,
+	       y_avValue_snd_fst__h2871,
+	       y_avValue_snd_fst__h2879,
+	       y_avValue_snd_snd__h2860,
+	       y_avValue_snd_snd__h2866;
+  wire [1 : 0] rdr_rresp__h2810,
+	       v__h3275,
+	       v__h3544,
+	       v__h3722,
+	       y_avValue_fst__h2751,
+	       y_avValue_fst__h2767;
+  wire IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d197,
+       IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d204,
+       IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d208,
+       IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d211,
+       NOT_IF_slave_xactor_f_wr_data_first__44_BITS_8_ETC___d254,
+       NOT_IF_slave_xactor_f_wr_data_first__44_BITS_8_ETC___d265,
+       NOT_cfg_verbosity_read_ULE_1_37___d138,
        slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d29,
-       slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d183,
-       slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d190,
-       slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d194,
-       slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d197,
-       slave_xactor_f_wr_resp_i_notFull__33_AND_NOT_s_ETC___d160;
+       slave_xactor_f_wr_resp_i_notFull__43_AND_NOT_I_ETC___d174;
 
   // action method server_reset_request_put
   assign RDY_server_reset_request_put = f_reset_reqs$FULL_N ;
@@ -656,7 +659,7 @@ module mkUART(CLK,
   assign WILL_FIRE_RL_rl_process_wr_req =
 	     slave_xactor_f_wr_addr$EMPTY_N &&
 	     slave_xactor_f_wr_data$EMPTY_N &&
-	     slave_xactor_f_wr_resp_i_notFull__33_AND_NOT_s_ETC___d160 &&
+	     slave_xactor_f_wr_resp_i_notFull__43_AND_NOT_I_ETC___d174 &&
 	     rg_state ;
 
   // rule RL_rl_receive
@@ -670,45 +673,45 @@ module mkUART(CLK,
   // inputs to muxes for submodule ports
   assign MUX_rg_fcr$write_1__SEL_2 =
 	     WILL_FIRE_RL_rl_process_wr_req &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	     2'd0 &&
-	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] ==
+	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] ==
 	     3'd0 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] ==
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] ==
 	     3'h2 ;
   assign MUX_rg_lcr$write_1__SEL_2 =
 	     WILL_FIRE_RL_rl_process_wr_req &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	     2'd0 &&
-	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] ==
+	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] ==
 	     3'd0 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] ==
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] ==
 	     3'h3 ;
   assign MUX_rg_lsr$write_1__SEL_3 =
 	     WILL_FIRE_RL_rl_process_rd_req &&
 	     slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d29 ;
   assign MUX_rg_mcr$write_1__SEL_2 =
 	     WILL_FIRE_RL_rl_process_wr_req &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	     2'd0 &&
-	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] ==
+	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] ==
 	     3'd0 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] ==
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] ==
 	     3'h4 ;
   assign MUX_rg_scr$write_1__SEL_2 =
 	     WILL_FIRE_RL_rl_process_wr_req &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	     2'd0 &&
-	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] ==
+	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] ==
 	     3'd0 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] ==
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] ==
 	     3'h7 ;
   assign MUX_rg_dll$write_1__VAL_2 =
-	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q2[7:0] ;
+	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q2[7:0] ;
   assign MUX_rg_lsr$write_1__VAL_3 = { rg_lsr[7:1], 1'd0 } ;
 
   // register cfg_verbosity
@@ -727,54 +730,54 @@ module mkUART(CLK,
   assign rg_dll$D_IN =
 	     WILL_FIRE_RL_rl_reset ?
 	       8'd0 :
-	       IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q2[7:0] ;
+	       IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q2[7:0] ;
   assign rg_dll$EN =
 	     WILL_FIRE_RL_rl_process_wr_req &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d190 ||
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d204 ||
 	     WILL_FIRE_RL_rl_reset ;
 
   // register rg_dlm
   assign rg_dlm$D_IN =
 	     WILL_FIRE_RL_rl_reset ?
 	       8'd0 :
-	       IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q2[7:0] ;
+	       IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q2[7:0] ;
   assign rg_dlm$EN =
 	     WILL_FIRE_RL_rl_process_wr_req &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d197 ||
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d211 ||
 	     WILL_FIRE_RL_rl_reset ;
 
   // register rg_fcr
   assign rg_fcr$D_IN =
 	     WILL_FIRE_RL_rl_reset ?
 	       8'd0 :
-	       IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q2[7:0] ;
+	       IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q2[7:0] ;
   assign rg_fcr$EN = MUX_rg_fcr$write_1__SEL_2 || WILL_FIRE_RL_rl_reset ;
 
   // register rg_ier
   assign rg_ier$D_IN =
 	     WILL_FIRE_RL_rl_reset ?
 	       8'd0 :
-	       IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q2[7:0] ;
+	       IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q2[7:0] ;
   assign rg_ier$EN =
 	     WILL_FIRE_RL_rl_process_wr_req &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d194 ||
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d208 ||
 	     WILL_FIRE_RL_rl_reset ;
 
   // register rg_lcr
   assign rg_lcr$D_IN =
 	     WILL_FIRE_RL_rl_reset ?
 	       8'd0 :
-	       IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q2[7:0] ;
+	       IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q2[7:0] ;
   assign rg_lcr$EN = MUX_rg_lcr$write_1__SEL_2 || WILL_FIRE_RL_rl_reset ;
 
   // register rg_lsr
   always@(WILL_FIRE_RL_rl_reset or
 	  WILL_FIRE_RL_rl_receive or
-	  new_lsr__h4548 or
+	  new_lsr__h4664 or
 	  MUX_rg_lsr$write_1__SEL_3 or MUX_rg_lsr$write_1__VAL_3)
   case (1'b1)
     WILL_FIRE_RL_rl_reset: rg_lsr$D_IN = 8'd96;
-    WILL_FIRE_RL_rl_receive: rg_lsr$D_IN = new_lsr__h4548;
+    WILL_FIRE_RL_rl_receive: rg_lsr$D_IN = new_lsr__h4664;
     MUX_rg_lsr$write_1__SEL_3: rg_lsr$D_IN = MUX_rg_lsr$write_1__VAL_3;
     default: rg_lsr$D_IN = 8'b10101010 /* unspecified value */ ;
   endcase
@@ -788,7 +791,7 @@ module mkUART(CLK,
   assign rg_mcr$D_IN =
 	     WILL_FIRE_RL_rl_reset ?
 	       8'd0 :
-	       IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q2[7:0] ;
+	       IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q2[7:0] ;
   assign rg_mcr$EN = MUX_rg_mcr$write_1__SEL_2 || WILL_FIRE_RL_rl_reset ;
 
   // register rg_msr
@@ -803,7 +806,7 @@ module mkUART(CLK,
   assign rg_scr$D_IN =
 	     WILL_FIRE_RL_rl_reset ?
 	       8'd0 :
-	       IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q2[7:0] ;
+	       IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q2[7:0] ;
   assign rg_scr$EN = MUX_rg_scr$write_1__SEL_2 || WILL_FIRE_RL_rl_reset ;
 
   // register rg_state
@@ -814,7 +817,7 @@ module mkUART(CLK,
   assign rg_thr$D_IN = MUX_rg_dll$write_1__VAL_2 ;
   assign rg_thr$EN =
 	     WILL_FIRE_RL_rl_process_wr_req &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d183 ;
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d197 ;
 
   // submodule f_from_console
   assign f_from_console$D_IN = put_from_console_put ;
@@ -836,7 +839,7 @@ module mkUART(CLK,
   assign f_to_console$D_IN = MUX_rg_dll$write_1__VAL_2 ;
   assign f_to_console$ENQ =
 	     WILL_FIRE_RL_rl_process_wr_req &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d183 ;
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d197 ;
   assign f_to_console$DEQ = EN_get_to_console_get ;
   assign f_to_console$CLR = 1'b0 ;
 
@@ -861,8 +864,8 @@ module mkUART(CLK,
   // submodule slave_xactor_f_rd_data
   assign slave_xactor_f_rd_data$D_IN =
 	     { slave_xactor_f_rd_addr$D_OUT[96:93],
-	       rdr_rdata__h2792,
-	       rdr_rresp__h2793,
+	       rdr_rdata__h2809,
+	       rdr_rresp__h2810,
 	       1'd1 } ;
   assign slave_xactor_f_rd_data$ENQ = WILL_FIRE_RL_rl_process_rd_req ;
   assign slave_xactor_f_rd_data$DEQ =
@@ -899,7 +902,7 @@ module mkUART(CLK,
 
   // submodule slave_xactor_f_wr_resp
   assign slave_xactor_f_wr_resp$D_IN =
-	     { slave_xactor_f_wr_addr$D_OUT[96:93], v__h3172 } ;
+	     { slave_xactor_f_wr_addr$D_OUT[96:93], v__h3275 } ;
   assign slave_xactor_f_wr_resp$ENQ = WILL_FIRE_RL_rl_process_wr_req ;
   assign slave_xactor_f_wr_resp$DEQ =
 	     slave_bready && slave_xactor_f_wr_resp$EMPTY_N ;
@@ -907,62 +910,108 @@ module mkUART(CLK,
 	     f_reset_reqs$EMPTY_N && f_reset_rsps$FULL_N ;
 
   // remaining internal signals
-  assign IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1 =
-	     (slave_xactor_f_wr_data$D_OUT[8:1] == 8'h10) ?
-	       wstrb___1__h3245 :
-	       slave_xactor_f_wr_data$D_OUT[8:1] ;
-  assign IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q2 =
-	     (slave_xactor_f_wr_data$D_OUT[8:1] == 8'h10) ?
-	       wdata___1__h3246 :
-	       slave_xactor_f_wr_data$D_OUT[72:9] ;
-  assign NOT_cfg_verbosity_read_ULE_1_27___d128 = cfg_verbosity > 8'd1 ;
-  assign NOT_slave_xactor_f_wr_addr_first__34_BITS_92_T_ETC___d240 =
-	     (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+  assign IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1 =
+	     (slave_xactor_f_wr_data$D_OUT[8:5] == 4'd0) ?
+	       slave_xactor_f_wr_data$D_OUT[8:1] :
+	       wstrb___1__h3327 ;
+  assign IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q2 =
+	     (slave_xactor_f_wr_data$D_OUT[8:5] == 4'd0) ?
+	       slave_xactor_f_wr_data$D_OUT[72:9] :
+	       wdata___1__h3328 ;
+  assign IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153 =
+	     (slave_xactor_f_wr_data$D_OUT[8:5] == 4'd0) ?
+	       byte_addr__h3263 :
+	       byte_addr___1__h3329 ;
+  assign IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d197 =
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
+	     2'd0 &&
+	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] ==
+	     3'd0 &&
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] ==
+	     3'h0 &&
+	     !rg_lcr[7] ;
+  assign IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d204 =
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
+	     2'd0 &&
+	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] ==
+	     3'd0 &&
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] ==
+	     3'h0 &&
+	     rg_lcr[7] ;
+  assign IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d208 =
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
+	     2'd0 &&
+	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] ==
+	     3'd0 &&
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] ==
+	     3'h1 &&
+	     !rg_lcr[7] ;
+  assign IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d211 =
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
+	     2'd0 &&
+	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] ==
+	     3'd0 &&
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] ==
+	     3'h1 &&
+	     rg_lcr[7] ;
+  assign NOT_IF_slave_xactor_f_wr_data_first__44_BITS_8_ETC___d254 =
+	     (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	      3'h1 ||
 	      !rg_lcr[7]) &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	     3'h2 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	     3'h3 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	     3'h4 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	     3'h5 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	     3'h6 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	     3'h7 &&
 	     slave_xactor_f_wr_data$D_OUT[0] ;
-  assign NOT_slave_xactor_f_wr_addr_first__34_BITS_92_T_ETC___d251 =
-	     (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+  assign NOT_IF_slave_xactor_f_wr_data_first__44_BITS_8_ETC___d265 =
+	     (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	      3'h1 ||
 	      !rg_lcr[7]) &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	     3'h2 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	     3'h3 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	     3'h4 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	     3'h5 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	     3'h6 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	     IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	     3'h7 &&
 	     !slave_xactor_f_wr_data$D_OUT[0] ;
+  assign NOT_cfg_verbosity_read_ULE_1_37___d138 = cfg_verbosity > 8'd1 ;
+  assign byte_addr___1__h3329 =
+	     { byte_addr__h3263[63:3], 1'd1, byte_addr__h3263[1:0] } ;
+  assign byte_addr__h3263 =
+	     slave_xactor_f_wr_addr$D_OUT[92:29] - rg_addr_base ;
   assign fn_iir__h1356 =
 	     (rg_ier[0] && rg_lsr[0]) ? 8'h04 : (rg_ier[1] ? 8'h02 : 8'd0) ;
-  assign new_lsr__h4548 = { rg_lsr[7:1], 1'd1 } ;
-  assign rdata___1__h2817 = { 24'd0, x__h2820, 32'd0 } ;
-  assign rdata__h2759 = { 56'd0, x__h2820 } ;
-  assign rdr_rdata__h2792 =
-	     slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[2] ?
-	       rdata___1__h2817 :
-	       rdata__h2759 ;
-  assign rdr_rresp__h2793 =
+  assign new_lsr__h4664 = { rg_lsr[7:1], 1'd1 } ;
+  assign rdr_rdata__h2809 =
+	     { 24'd0,
+	       slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[2] ?
+		 x__h2854 :
+		 x__h2964,
+	       slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[2] ?
+		 32'd0 :
+		 { 24'd0, x__h2854 } } ;
+  assign rdr_rresp__h2810 =
 	     (slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[1:0] ==
 	      2'd0) ?
-	       y_avValue_fst__h2751 :
+	       y_avValue_fst__h2767 :
 	       2'b10 ;
   assign slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17 =
 	     slave_xactor_f_rd_addr$D_OUT[92:29] - rg_addr_base ;
@@ -974,117 +1023,109 @@ module mkUART(CLK,
 	     slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[4:2] ==
 	     3'h0 &&
 	     !rg_lcr[7] ;
-  assign slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136 =
-	     slave_xactor_f_wr_addr$D_OUT[92:29] - rg_addr_base ;
-  assign slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d183 =
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
-	     2'd0 &&
-	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] ==
-	     3'd0 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] ==
-	     3'h0 &&
-	     !rg_lcr[7] ;
-  assign slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d190 =
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
-	     2'd0 &&
-	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] ==
-	     3'd0 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] ==
-	     3'h0 &&
-	     rg_lcr[7] ;
-  assign slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d194 =
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
-	     2'd0 &&
-	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] ==
-	     3'd0 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] ==
-	     3'h1 &&
-	     !rg_lcr[7] ;
-  assign slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d197 =
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
-	     2'd0 &&
-	     IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] ==
-	     3'd0 &&
-	     slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] ==
-	     3'h1 &&
-	     rg_lcr[7] ;
-  assign slave_xactor_f_wr_resp_i_notFull__33_AND_NOT_s_ETC___d160 =
+  assign slave_xactor_f_wr_resp_i_notFull__43_AND_NOT_I_ETC___d174 =
 	     slave_xactor_f_wr_resp$FULL_N &&
-	     (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	     (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	      2'd0 ||
-	      !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] ||
-	      slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	      !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] ||
+	      IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	      3'd0 ||
-	      slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	      IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	      3'h0 ||
 	      rg_lcr[7] ||
 	      f_to_console$FULL_N) ;
-  assign v__h3172 =
-	     (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+  assign v__h3275 =
+	     (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	      2'd0 ||
-	      !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]) ?
+	      !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]) ?
 	       2'b10 :
-	       v__h3428 ;
-  assign v__h3428 =
-	     (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] ==
+	       v__h3544 ;
+  assign v__h3544 =
+	     (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] ==
 	      3'd0) ?
-	       v__h3606 :
+	       v__h3722 :
 	       2'b11 ;
-  assign v__h3606 = y_avValue_fst__h2737 ;
-  assign wdata___1__h3246 = { 32'd0, slave_xactor_f_wr_data$D_OUT[72:41] } ;
-  assign wstrb___1__h3245 = { 4'd0, slave_xactor_f_wr_data$D_OUT[8:5] } ;
-  assign x__h2820 =
+  assign v__h3722 = y_avValue_fst__h2751 ;
+  assign wdata___1__h3328 = { 32'd0, slave_xactor_f_wr_data$D_OUT[72:41] } ;
+  assign wstrb___1__h3327 = { 4'd0, slave_xactor_f_wr_data$D_OUT[8:5] } ;
+  assign x__h2854 =
 	     (slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[1:0] !=
 	      2'd0 ||
 	      slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[7:5] !=
 	      3'd0) ?
 	       8'd0 :
-	       y_avValue_snd__h2738 ;
-  assign y_avValue_fst__h2737 = 2'b0 ;
-  assign y_avValue_fst__h2751 =
+	       y_avValue_snd_fst__h2859 ;
+  assign x__h2964 =
+	     (slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[1:0] !=
+	      2'd0 ||
+	      slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[7:5] !=
+	      3'd0) ?
+	       8'd0 :
+	       y_avValue_snd_snd__h2860 ;
+  assign y_avValue_fst__h2751 = 2'b0 ;
+  assign y_avValue_fst__h2767 =
 	     (slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[7:5] ==
 	      3'd0) ?
-	       y_avValue_fst__h2737 :
+	       y_avValue_fst__h2751 :
 	       2'b11 ;
-  assign y_avValue_snd__h2696 =
-	     (slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[4:2] ==
-	      3'h1 &&
-	      rg_lcr[7]) ?
-	       rg_dlm :
-	       y_avValue_snd__h2683 ;
-  assign y_avValue_snd__h2709 =
-	     (slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[4:2] ==
-	      3'h1 &&
-	      !rg_lcr[7]) ?
-	       rg_ier :
-	       y_avValue_snd__h2696 ;
-  assign y_avValue_snd__h2724 =
-	     (slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[4:2] ==
-	      3'h0 &&
-	      rg_lcr[7]) ?
-	       rg_dll :
-	       y_avValue_snd__h2709 ;
-  assign y_avValue_snd__h2738 =
+  assign y_avValue_snd_fst__h2859 =
 	     (slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[4:2] ==
 	      3'h0 &&
 	      !rg_lcr[7]) ?
 	       rg_rbr :
-	       y_avValue_snd__h2724 ;
+	       y_avValue_snd_fst__h2865 ;
+  assign y_avValue_snd_fst__h2865 =
+	     (slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[4:2] ==
+	      3'h0 &&
+	      rg_lcr[7]) ?
+	       rg_dll :
+	       y_avValue_snd_fst__h2871 ;
+  assign y_avValue_snd_fst__h2871 =
+	     (slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[4:2] ==
+	      3'h1 &&
+	      !rg_lcr[7]) ?
+	       rg_ier :
+	       y_avValue_snd_fst__h2879 ;
+  assign y_avValue_snd_fst__h2879 =
+	     (slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[4:2] ==
+	      3'h1 &&
+	      rg_lcr[7]) ?
+	       rg_dlm :
+	       y_avValue_snd_fst__h2885 ;
+  assign y_avValue_snd_snd__h2860 =
+	     (slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[4:2] ==
+	      3'h0 &&
+	      !rg_lcr[7]) ?
+	       rg_ier :
+	       y_avValue_snd_snd__h2866 ;
+  assign y_avValue_snd_snd__h2866 =
+	     (slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[4:2] ==
+	      3'h0 &&
+	      rg_lcr[7]) ?
+	       rg_dlm :
+	       y_avValue_snd_snd__h2872 ;
+  always@(slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17 or
+	  rg_lcr or rg_lsr or rg_scr)
+  begin
+    case (slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[4:2])
+      3'h1, 3'h3, 3'h5: y_avValue_snd_snd__h2872 = 8'd0;
+      3'h2: y_avValue_snd_snd__h2872 = rg_lcr;
+      3'h4: y_avValue_snd_snd__h2872 = rg_lsr;
+      3'h6: y_avValue_snd_snd__h2872 = rg_scr;
+      default: y_avValue_snd_snd__h2872 = 8'd0;
+    endcase
+  end
   always@(slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17 or
 	  fn_iir__h1356 or rg_lcr or rg_mcr or rg_lsr or rg_msr or rg_scr)
   begin
     case (slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[4:2])
-      3'h2: y_avValue_snd__h2683 = fn_iir__h1356;
-      3'h3: y_avValue_snd__h2683 = rg_lcr;
-      3'h4: y_avValue_snd__h2683 = rg_mcr;
-      3'h5: y_avValue_snd__h2683 = rg_lsr;
-      3'h6: y_avValue_snd__h2683 = rg_msr;
-      3'h7: y_avValue_snd__h2683 = rg_scr;
-      default: y_avValue_snd__h2683 = 8'd0;
+      3'h2: y_avValue_snd_fst__h2885 = fn_iir__h1356;
+      3'h3: y_avValue_snd_fst__h2885 = rg_lcr;
+      3'h4: y_avValue_snd_fst__h2885 = rg_mcr;
+      3'h5: y_avValue_snd_fst__h2885 = rg_lsr;
+      3'h6: y_avValue_snd_fst__h2885 = rg_msr;
+      3'h7: y_avValue_snd_fst__h2885 = rg_scr;
+      default: y_avValue_snd_fst__h2885 = 8'd0;
     endcase
   end
 
@@ -1164,17 +1205,17 @@ module mkUART(CLK,
 	  2'd0 &&
 	  1'b0)
 	begin
-	  v__h2519 = $stime;
+	  v__h2522 = $stime;
 	  #0;
 	end
-    v__h2513 = v__h2519 / 32'd10;
+    v__h2516 = v__h2522 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
 	  slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[1:0] ==
 	  2'd0 &&
 	  1'b0)
 	$display("%0d: ERROR: UART.rl_process_rd_req: unrecognized addr",
-		 v__h2513);
+		 v__h2516);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
 	  slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[1:0] ==
@@ -1326,10 +1367,10 @@ module mkUART(CLK,
 	  slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[7:5] !=
 	  3'd0)
 	begin
-	  v__h2187 = $stime;
+	  v__h2188 = $stime;
 	  #0;
 	end
-    v__h2181 = v__h2187 / 32'd10;
+    v__h2182 = v__h2188 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
 	  slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[1:0] ==
@@ -1337,7 +1378,7 @@ module mkUART(CLK,
 	  slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[7:5] !=
 	  3'd0)
 	$display("%0d: ERROR: UART.rl_process_rd_req: unrecognized addr",
-		 v__h2181);
+		 v__h2182);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
 	  slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[1:0] ==
@@ -1511,16 +1552,16 @@ module mkUART(CLK,
 	  slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[1:0] !=
 	  2'd0)
 	begin
-	  v__h2025 = $stime;
+	  v__h2026 = $stime;
 	  #0;
 	end
-    v__h2019 = v__h2025 / 32'd10;
+    v__h2020 = v__h2026 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
 	  slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[1:0] !=
 	  2'd0)
 	$display("%0d: ERROR: UART.rl_process_rd_req: misaligned addr",
-		 v__h2019);
+		 v__h2020);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
 	  slave_xactor_f_rd_addr_first__4_BITS_92_TO_29__ETC___d17[1:0] !=
@@ -1643,1189 +1684,1189 @@ module mkUART(CLK,
 	$write("\n");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	begin
-	  v__h2925 = $stime;
+	  v__h3027 = $stime;
 	  #0;
 	end
-    v__h2919 = v__h2925 / 32'd10;
+    v__h3021 = v__h3027 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
-	$display("%0d: UART.rl_process_rd_req", v__h2919);
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
+	$display("%0d: UART.rl_process_rd_req", v__h3021);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("            ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("AXI4_Rd_Addr { ", "arid: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_rd_addr$D_OUT[96:93]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "araddr: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_rd_addr$D_OUT[92:29]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "arlen: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_rd_addr$D_OUT[28:21]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "arsize: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_rd_addr$D_OUT[20:18]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "arburst: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_rd_addr$D_OUT[17:16]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "arlock: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_rd_addr$D_OUT[15]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "arcache: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_rd_addr$D_OUT[14:11]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "arprot: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_rd_addr$D_OUT[10:8]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "arqos: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_rd_addr$D_OUT[7:4]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "arregion: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_rd_addr$D_OUT[3:0]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "aruser: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", 1'd0, " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("\n");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("            ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("AXI4_Rd_Data { ", "rid: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_rd_addr$D_OUT[96:93]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "rdata: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
-	$write("'h%h", rdr_rdata__h2792);
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
+	$write("'h%h", rdr_rdata__h2809);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "rresp: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
-	$write("'h%h", rdr_rresp__h2793);
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
+	$write("'h%h", rdr_rresp__h2810);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "rlast: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("True");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "ruser: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", 1'd0, " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_rd_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("\n");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	begin
-	  v__h3279 = $stime;
+	  v__h3395 = $stime;
 	  #0;
 	end
-    v__h3273 = v__h3279 / 32'd10;
+    v__h3389 = v__h3395 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$display("%0d: ERROR: UART.rl_process_wr_req: misaligned addr",
-		 v__h3273);
+		 v__h3389);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("            ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("AXI4_Wr_Addr { ", "awid: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[96:93]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write(", ", "awaddr: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[92:29]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write(", ", "awlen: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[28:21]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write(", ", "awsize: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[20:18]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write(", ", "awburst: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[17:16]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write(", ", "awlock: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[15]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write(", ", "awcache: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[14:11]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write(", ", "awprot: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[10:8]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write(", ", "awqos: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[7:4]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write(", ", "awregion: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[3:0]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write(", ", "awuser: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("'h%h", 1'd0, " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("\n");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("            ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("AXI4_Wr_Data { ", "wdata: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("'h%h", slave_xactor_f_wr_data$D_OUT[72:9]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write(", ", "wstrb: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("'h%h", slave_xactor_f_wr_data$D_OUT[8:1]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write(", ", "wlast: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]) &&
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]) &&
 	  slave_xactor_f_wr_data$D_OUT[0])
 	$write("True");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]) &&
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]) &&
 	  !slave_xactor_f_wr_data$D_OUT[0])
 	$write("False");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write(", ", "wuser: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("'h%h", 1'd0, " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] !=
 	   2'd0 ||
-	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0]))
+	   !IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0]))
 	$write("\n");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	begin
-	  v__h4042 = $stime;
+	  v__h4158 = $stime;
 	  #0;
 	end
-    v__h4036 = v__h4042 / 32'd10;
+    v__h4152 = v__h4158 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$display("%0d: ERROR: UART.rl_process_wr_req: unrecognized addr",
-		 v__h4036);
+		 v__h4152);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("            ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("AXI4_Wr_Addr { ", "awid: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[96:93]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write(", ", "awaddr: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[92:29]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write(", ", "awlen: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[28:21]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write(", ", "awsize: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[20:18]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write(", ", "awburst: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[17:16]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write(", ", "awlock: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[15]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write(", ", "awcache: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[14:11]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write(", ", "awprot: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[10:8]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write(", ", "awqos: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[7:4]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write(", ", "awregion: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[3:0]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write(", ", "awuser: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("'h%h", 1'd0, " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("\n");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("            ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("AXI4_Wr_Data { ", "wdata: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("'h%h", slave_xactor_f_wr_data$D_OUT[72:9]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write(", ", "wstrb: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("'h%h", slave_xactor_f_wr_data$D_OUT[8:1]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write(", ", "wlast: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] ==
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] ==
 	  3'd0 &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	   3'h0 ||
 	   rg_lcr[7]) &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	   3'h0 ||
 	   !rg_lcr[7]) &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	   3'h1 ||
 	   rg_lcr[7]) &&
-	  NOT_slave_xactor_f_wr_addr_first__34_BITS_92_T_ETC___d240)
+	  NOT_IF_slave_xactor_f_wr_data_first__44_BITS_8_ETC___d254)
 	$write("True");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] ==
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] ==
 	  3'd0 &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	   3'h0 ||
 	   rg_lcr[7]) &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	   3'h0 ||
 	   !rg_lcr[7]) &&
-	  (slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[4:2] !=
+	  (IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[4:2] !=
 	   3'h1 ||
 	   rg_lcr[7]) &&
-	  NOT_slave_xactor_f_wr_addr_first__34_BITS_92_T_ETC___d251)
+	  NOT_IF_slave_xactor_f_wr_data_first__44_BITS_8_ETC___d265)
 	$write("False");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write(", ", "wuser: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("'h%h", 1'd0, " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
 	  1'b0)
 	$write("\n");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	begin
-	  v__h3482 = $stime;
+	  v__h3598 = $stime;
 	  #0;
 	end
-    v__h3476 = v__h3482 / 32'd10;
+    v__h3592 = v__h3598 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$display("%0d: ERROR: UART.rl_process_wr_req: unrecognized addr",
-		 v__h3476);
+		 v__h3592);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("            ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("AXI4_Wr_Addr { ", "awid: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[96:93]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write(", ", "awaddr: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[92:29]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write(", ", "awlen: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[28:21]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write(", ", "awsize: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[20:18]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write(", ", "awburst: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[17:16]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write(", ", "awlock: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[15]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write(", ", "awcache: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[14:11]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write(", ", "awprot: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[10:8]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write(", ", "awqos: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[7:4]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write(", ", "awregion: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[3:0]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write(", ", "awuser: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("'h%h", 1'd0, " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("\n");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("            ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("AXI4_Wr_Data { ", "wdata: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("'h%h", slave_xactor_f_wr_data$D_OUT[72:9]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write(", ", "wstrb: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("'h%h", slave_xactor_f_wr_data$D_OUT[8:1]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write(", ", "wlast: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0 &&
 	  slave_xactor_f_wr_data$D_OUT[0])
 	$write("True");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0 &&
 	  !slave_xactor_f_wr_data$D_OUT[0])
 	$write("False");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write(", ", "wuser: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("'h%h", 1'd0, " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[1:0] ==
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[1:0] ==
 	  2'd0 &&
-	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_1_EQ_ETC__q1[0] &&
-	  slave_xactor_f_wr_addr_first__34_BITS_92_TO_29_ETC___d136[7:5] !=
+	  IF_slave_xactor_f_wr_dataD_OUT_BITS_8_TO_5_EQ_ETC__q1[0] &&
+	  IF_slave_xactor_f_wr_data_first__44_BITS_8_TO__ETC___d153[7:5] !=
 	  3'd0)
 	$write("\n");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	begin
-	  v__h4340 = $stime;
+	  v__h4456 = $stime;
 	  #0;
 	end
-    v__h4334 = v__h4340 / 32'd10;
+    v__h4450 = v__h4456 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
-	$display("%0d: UART.rl_process_wr_req", v__h4334);
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
+	$display("%0d: UART.rl_process_wr_req", v__h4450);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("            ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("AXI4_Wr_Addr { ", "awid: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[96:93]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "awaddr: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[92:29]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "awlen: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[28:21]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "awsize: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[20:18]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "awburst: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[17:16]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "awlock: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[15]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "awcache: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[14:11]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "awprot: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[10:8]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "awqos: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[7:4]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "awregion: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[3:0]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "awuser: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", 1'd0, " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("\n");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("            ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("AXI4_Wr_Data { ", "wdata: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_wr_data$D_OUT[72:9]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "wstrb: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_wr_data$D_OUT[8:1]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "wlast: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128 &&
+	  NOT_cfg_verbosity_read_ULE_1_37___d138 &&
 	  slave_xactor_f_wr_data$D_OUT[0])
 	$write("True");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128 &&
+	  NOT_cfg_verbosity_read_ULE_1_37___d138 &&
 	  !slave_xactor_f_wr_data$D_OUT[0])
 	$write("False");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "wuser: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", 1'd0, " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("\n");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("            ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("AXI4_Wr_Resp { ", "bid: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", slave_xactor_f_wr_addr$D_OUT[96:93]);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "bresp: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
-	$write("'h%h", v__h3172);
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
+	$write("'h%h", v__h3275);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write(", ", "buser: ");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("'h%h", 1'd0, " }");
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
-	  NOT_cfg_verbosity_read_ULE_1_27___d128)
+	  NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$write("\n");
     if (EN_set_addr_map && set_addr_map_addr_base[2:0] != 3'd0)
       begin
-        v__h4781 = $stime;
+        v__h4897 = $stime;
 	#0;
       end
-    v__h4775 = v__h4781 / 32'd10;
+    v__h4891 = v__h4897 / 32'd10;
     if (EN_set_addr_map && set_addr_map_addr_base[2:0] != 3'd0)
       $display("%0d: WARNING: UART.set_addr_map: addr_base 0x%0h is not 8-Byte-aligned",
-	       v__h4775,
+	       v__h4891,
 	       set_addr_map_addr_base);
     if (EN_set_addr_map && set_addr_map_addr_lim[2:0] != 3'd0)
       begin
-        v__h4891 = $stime;
+        v__h5007 = $stime;
 	#0;
       end
-    v__h4885 = v__h4891 / 32'd10;
+    v__h5001 = v__h5007 / 32'd10;
     if (EN_set_addr_map && set_addr_map_addr_lim[2:0] != 3'd0)
       $display("%0d: WARNING: UART.set_addr_map: addr_lim 0x%0h is not 8-Byte-aligned",
-	       v__h4885,
+	       v__h5001,
 	       set_addr_map_addr_lim);
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_rl_receive && NOT_cfg_verbosity_read_ULE_1_27___d128)
+      if (WILL_FIRE_RL_rl_receive && NOT_cfg_verbosity_read_ULE_1_37___d138)
 	$display("UART_Model.rl_receive: received char 0x%0h; new_lsr = 0x%0h",
 		 f_from_console$D_OUT,
-		 new_lsr__h4548);
+		 new_lsr__h4664);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset && cfg_verbosity != 8'd0)
 	begin
