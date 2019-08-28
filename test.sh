@@ -22,7 +22,7 @@ err_msg $? "Failed to make isa tests"
 # Run some unittests including UART, DDR, and Bootrom
 # The final unittest tests booting freeRTOS
 cd $BASE_DIR/testing/scripts
-python test_gfe_unittest.py TestGfe${XLEN}
+./test_gfe_unittest.py TestGfe${XLEN}
 err_msg $? "GFE unittests failed. Run python test_gfe_unittest.py"
 
 # Generate gdb isa test script

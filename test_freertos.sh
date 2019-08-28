@@ -27,7 +27,7 @@ function freertos_test {
 	err_msg $? "Building FreeRTOS-RISCV PROG=$1 test failed"
 
 	cd $BASE_DIR/testing/scripts
-	python $python_unittest_script TestFreeRTOS.$2
+	./$python_unittest_script TestFreeRTOS.$2
 	err_msg $? "FreeRTOS test TestFreeRTOS.$2 failed"
 }
 
@@ -99,7 +99,7 @@ elif [ "$use_flash" = true ]; then
 	#The Test itself
 	if [[ $flash_option == "full" ]] || [[ $flash_option == "blinky" ]]; then
 		cd $BASE_DIR/testing/scripts
-		python $python_unittest_script TestFreeRTOS.test_flash_$flash_option
+		./$python_unittest_script TestFreeRTOS.test_flash_$flash_option
 		err_msg $? "FreeRTOS test TestFreeRTOS.test_flash_$flash_option failed"
 	else
 		echo "test_freertos.sh: No test available for $flash_option. Please test accordingly."
