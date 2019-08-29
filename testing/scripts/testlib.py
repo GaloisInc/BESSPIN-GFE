@@ -373,7 +373,7 @@ class Gdb(object):
         self.children = []
         for port in ports:
             logfile = tempfile.NamedTemporaryFile(prefix="gdb@%d-" % port,
-                    suffix=".log")
+                    suffix=".log", encoding='utf-8')
             self.logfiles.append(logfile)
             if print_log_names:
                 real_stdout.write("Temporary gdb log: %s\n" % logfile.name)
@@ -729,8 +729,8 @@ def add_test_run_options(parser):
 def header(title, dash='-', length=78):
     if title:
         dashes = dash * (length - 4 - len(title))
-        before = dashes[:len(dashes)/2]
-        after = dashes[len(dashes)/2:]
+        before = dashes[:len(dashes)//2]
+        after = dashes[len(dashes)//2:]
         print("%s[ %s ]%s" % (before, title, after))
     else:
         print(dash * length)
