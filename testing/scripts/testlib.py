@@ -377,7 +377,7 @@ class Gdb(object):
             self.logfiles.append(logfile)
             if print_log_names:
                 real_stdout.write("Temporary gdb log: %s\n" % logfile.name)
-            child = pexpect.spawn(cmd)
+            child = pexpect.spawn(cmd, encoding='utf-8')
             child.logfile = logfile
             child.logfile.write("+ %s\n" % cmd)
             self.children.append(child)
