@@ -195,7 +195,7 @@ class TestGfe(BaseGfeTest):
         uart_baud_rate = 115200
         uart_elf_path = os.path.abspath(
             os.path.join(self.path_to_asm, uart_elf))
-        print("Using: " + uart_elf_pat)
+        print("Using: " + uart_elf_path)
 
         self.gfe.setupUart(
             timeout=1,
