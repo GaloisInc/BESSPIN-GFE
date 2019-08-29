@@ -208,8 +208,9 @@ class TestGfe(BaseGfeTest):
         # different frequencies
         divisor = int(self.getFreq()/(16 * uart_baud_rate))
         # Get the upper and lower divisor bytes into dlm and dll respectively
-        uart_dll_val = struct.unpack("B", struct.pack(">I", divisor)[-1])[0]
-        uart_dlm_val = struct.unpack("B", struct.pack(">I", divisor)[-2])[0]
+        packed = struct.pack(">I", divisor)
+        uart_dll_val = struct.unpack("B", bytes([packed[-1]]))[0]
+        uart_dlm_val = struct.unpack("B", bytes([packed[-2]]))[0]
         uart_base = gfeparameters.UART_BASE
         print("Uart baud rate {} Clock Freq {}\nSetting divisor to {}. dlm = {}, dll = {}".format(
             uart_baud_rate, self.getFreq(),
