@@ -373,7 +373,7 @@ class Gdb(object):
         self.children = []
         for port in ports:
             logfile = tempfile.NamedTemporaryFile(prefix="gdb@%d-" % port,
-                    suffix=".log", encoding='utf-8')
+                    suffix=".log", mode='w+', encoding='utf-8')
             self.logfiles.append(logfile)
             if print_log_names:
                 real_stdout.write("Temporary gdb log: %s\n" % logfile.name)
