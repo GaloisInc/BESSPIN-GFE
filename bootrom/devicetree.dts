@@ -2,7 +2,7 @@
 #if __riscv_xlen == 32
 #define CPU_SPEED 500000000
 #else
-#define CPU_SPEED 680000000
+#define CPU_SPEED 1000000000
 #endif
 #endif
 
