@@ -1,1 +1,1 @@
-tool-suite/nix/dev/gfe-public.nix
+tool-suite/nix/dev/gfe.nix
