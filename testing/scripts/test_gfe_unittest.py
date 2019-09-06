@@ -76,9 +76,9 @@ class BaseGfeTest(unittest.TestCase):
             if pending:
                 data = self.gfe.uart_session.read(pending)
                 rx_buf.append(data) # Append read chunks to the list.
-                sys.stdout.write(data)
+                sys.stdout.write(str(data, encoding='utf-8'))
 
-        rx = ''.join(rx_buf)
+        rx = ''.join([str(x, encoding='utf-8') for x in rx_buf])
 
         # Check that the output contains the expected text
         for text in expected_contents:
