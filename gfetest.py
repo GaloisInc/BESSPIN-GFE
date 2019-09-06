@@ -1,7 +1,10 @@
 #! /usr/bin/env python3
 
 from argparse import ArgumentParser
+from pathlib import Path
+from subprocess import run
 from sys import exit
+
 
 
 def main():
@@ -31,8 +34,32 @@ def main():
     exit(0 if isa_ok and os_ok else 1)
 
 
-def program_fpga(bitfile_path):
-    pass
+def program_fpga(bitfile_path_string):
+    bitpath = Path(bitfile_path_string)
+    if not bitpath.is_file():
+        print('Could not locate bitstream at {}'.format(bitpath))
+        exit(1)
+    ltxpath = bitpath.with_suffix('.ltx')
+    if not ltxpath.is_file():
+        print('Could not locate probe file at {}'.format(ltxpath))
+        exit(1)
+    print('Programming FPGA...')
+    result = run([
+        'vivado_lab',
+        '-nojournal',
+        '-notrace',
+        '-nolog',
+        '-source ./tcl/prog_bit.tcl',
+        '-mode batch',
+        '-tclargs {} {}'.format(bitpath, ltxpath),
+    ])
+    if result.returncode != 0:
+        print('Programming FPGA failed!')
+        exit(1)
+    for junk in ('webtalk.log', 'webtalk.jou'):
+        p = Path(junk)
+        if p.is_file():
+            p.unlink()
 
 
 def isa_test(arch_string):
