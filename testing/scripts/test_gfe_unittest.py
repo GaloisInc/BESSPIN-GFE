@@ -2,8 +2,6 @@
 
 import unittest
 import argparse
-import gfetester
-import gfeparameters
 import os
 import time
 import struct
@@ -13,6 +11,10 @@ import subprocess
 import socket
 import re
 import select
+
+import gfeparameters
+import gfetester
+
 
 class BaseGfeTest(unittest.TestCase):
     """GFE base testing class. All GFE Python unittests inherit from this class
@@ -296,6 +298,21 @@ class TestGfe64(TestGfe):
 
     def getFreq(self):
         return gfeparameters.GFE_P2_DEFAULT_HZ
+
+
+# Make a test class with arbitrary parameters
+def mkTestGfe(xlen, freq=None):
+    defaults = {
+        '32': gfeparameters.GFE_P1_DEFAULT_HZ,
+        '64': gfeparameters.GFE_P2_DEFAULT_HZ,
+    }
+    if freq is None:
+        freq = defaults[xlen]
+
+    cls = TestGfe
+    cls.getXlen = lambda: xlen
+    cls.getFreq = lambda: freq
+    return cls
 
 
 class TestFreeRTOS(BaseGfeTest):
