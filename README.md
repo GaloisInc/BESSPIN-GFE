@@ -93,9 +93,24 @@ The GFE relies on several nested Git submodules to provide processor sources
 and RISC-V development tools.
 Because some of these submodules contain redundant copies of the toolchain,
 we provide a script to initialize only those necessary for GFE development.
+```bash
+./init_submodules.sh
+```
+
+**Release 4.1** contains a riscv-openocd submodule with a development version
+of OpenOCD. When updating from a previous GFE release, the new OpenOCD should be
+built and installed before continuing.
+```bash
+cd riscv-openocd
+./bootstrap
+./configure
+make
+sudo make install
+cd ..
+```
 
 The tool-suite submodule contains a [Nix](https://nixos.org/nix/) shell environment
-that builds all the tools necessary for the GFE excluding Vivado.
+that builds all other tools necessary for the GFE, excluding Vivado.
 The argument-less `nix-shell` command relies on a configuration file in the tool-suite repo,
 which is the target of the `shell.nix` symlink.
 **All subsequent commands in this document should be run within the Nix shell.**
@@ -108,7 +123,7 @@ If you do not have Nix installed, first follow
 
 Then run the following command to get the current version of all GFE dependencies.
 ```bash
-./init_submodules.sh && nix-shell
+nix-shell
 ```
 
 *This may take several hours to complete the first time it is run*,
