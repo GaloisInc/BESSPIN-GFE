@@ -661,13 +661,11 @@ class TestLinux(BaseGfeTest):
         if not image:
             image = self.getBootImage()
 
-        linux_elf = self.getBootImage()
-
         self.gfe.gdb_session.command("set $a0 = 0")
         self.gfe.gdb_session.command("set $a1 = 0x70000020")
 
         self.check_in_output(
-            elf=linux_elf,
+            elf=image,
             timeout=timeout,
             expected_contents=expected_contents,
             run_from_flash=run_from_flash)
@@ -704,41 +702,18 @@ class TestLinux(BaseGfeTest):
         self.gfe.uart_session.write(b'\r')
         time.sleep(1)
 
-        # Run DHCP client
+        # Configure the ethernet and get it up
         self.gfe.uart_session.write(b'ifconfig eth0 up\r')
         self.check_uart_out(
             timeout=10,
             expected_contents=["xilinx_axienet 62100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx"])
 
-        self.gfe.uart_session.write(b'udhcpc -i eth0\r')
-         # Store and print all UART output while the elf is running
-        timeout = 10
-        print("Printing all UART output from the GFE...")
-        rx_buf = []
-        start_time = time.time()
-        while time.time() < (start_time + timeout):
-            pending = self.gfe.uart_session.in_waiting
-            if pending:
-                data = self.gfe.uart_session.read(pending)
-                rx_buf.append(data) # Append read chunks to the list.
-                sys.stdout.write(data)
-        print("Timeout reached")
+        riscv_ip = "10.88.88.5" #set statically
+        self.gfe.uart_session.write('ip addr add {0}/24 dev eth0\n'.format(riscv_ip).encode('utf-8'))
+        self.check_uart_out(
+            timeout=10,
+            expected_contents=["/ #"])
 
-        # Get FPGA IP address
-        riscv_ip = 0
-        rx_buf_str = ''.join(rx_buf)
-        rx_buf_list = rx_buf_str.split('\n')
-        for line in rx_buf_list:
-            index = line.find('Setting IP address')
-            if index != -1:
-                ip_str = line.split()
-                riscv_ip = ip_str[3]
-                print("RISCV IP address is: " + riscv_ip)
-                # break # keep reading till the end to get the latest IP asignemnt
-
-        # Ping FPGA
-        if (riscv_ip == 0) or (riscv_ip == "0.0.0.0"):
-            raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
         ping_response = os.system("ping -c 1 " + riscv_ip)
         self.assertEqual(ping_response, 0,
                         "Cannot ping FPGA.")
@@ -747,7 +722,9 @@ class TestLinux(BaseGfeTest):
 
     def test_debian_ethernet(self):
         # Boot Debian
-        self.boot_linux()
+        self.boot_linux(image=os.path.join(
+            os.path.dirname(os.path.dirname(os.getcwd())),
+            '..', 'testgen', 'osImages', 'debianBblFpga.elf'))
         linux_boot_timeout=800
         print("Running elf with a timeout of {}s".format(linux_boot_timeout))
         
@@ -768,38 +745,17 @@ class TestLinux(BaseGfeTest):
                 expected_contents=["The programs included with the Debian GNU/Linux system are free software;",
                                     ":~#"
                                     ])
+
+        riscv_ip = "10.88.88.5" #set statically
+        self.gfe.uart_session.write(b'echo \"auto eth0\" > /etc/network/interfaces\r')
+        self.gfe.uart_session.write(b'echo \"iface eth0 inet static\" >> /etc/network/interfaces\r')
+        self.gfe.uart_session.write('echo \"address {0}/24\" >> /etc/network/interfaces\n'.format(riscv_ip).encode('utf-8'))
         self.gfe.uart_session.write(b'ifup eth0\r')
-        self.gfe.uart_session.write(b'ip addr\r')
 
-        # Get RISC-V IP address and ping it from host
-        # Store and print all UART output while the elf is running
-        timeout = 60
-        print("Printing all UART output from the GFE...")
-        rx_buf = []
-        start_time = time.time()
-        while time.time() < (start_time + timeout):
-            pending = self.gfe.uart_session.in_waiting
-            if pending:
-                data = self.gfe.uart_session.read(pending)
-                rx_buf.append(data) # Append read chunks to the list.
-                sys.stdout.write(data)
-        print("Timeout reached")
+        self.check_uart_out(
+            timeout=15,
+            expected_contents=["xilinx_axienet 62100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx"])
 
-        # Get FPGA IP address
-        riscv_ip = 0
-        rx_buf_str = ''.join(rx_buf)
-        rx_buf_list = rx_buf_str.split('\n')
-        for line in rx_buf_list:
-            index1 = line.find('inet')
-            index2 = line.find('eth0')
-            if (index1 != -1) & (index2 != -1):
-                ip_str = re.split('[/\s]\s*', line)
-                riscv_ip = ip_str[2]
-
-        # Ping FPGA
-        print("RISCV IP address is: " + riscv_ip)
-        if (riscv_ip == 0) or (riscv_ip == "0.0.0.0"):
-            raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
         ping_response = os.system("ping -c 1 " + riscv_ip)
         self.assertEqual(ping_response, 0,
                         "Cannot ping FPGA.")
