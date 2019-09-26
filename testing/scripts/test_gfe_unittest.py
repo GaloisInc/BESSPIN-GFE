@@ -619,6 +619,8 @@ class TestFreeRTOS(BaseGfeTest):
 class TestLinux(BaseGfeTest):
 
     def getBootImage(self):
+        # Despite its name, this path will refer to a *debian* image
+        # if 'make debian' was called by test_linux.sh
         return os.path.join(
             os.path.dirname(os.path.dirname(os.getcwd())),
             'bootmem', 'build-bbl', 'bbl')
@@ -721,9 +723,7 @@ class TestLinux(BaseGfeTest):
 
     def test_debian_ethernet(self):
         # Boot Debian
-        self.boot_linux(image=os.path.join(
-            os.path.dirname(os.path.dirname(os.getcwd())),
-            '..', 'testgen', 'osImages', 'debianBblFpga.elf'))
+        self.boot_linux()
         linux_boot_timeout=800
         print("Running elf with a timeout of {}s".format(linux_boot_timeout))
         
