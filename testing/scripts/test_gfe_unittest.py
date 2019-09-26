@@ -495,7 +495,7 @@ class TestFreeRTOS(BaseGfeTest):
         while time.time() < (start_time + timeout):
             pending = self.gfe.uart_session.in_waiting
             if pending:
-                data = self.gfe.uart_session.read(pending)
+                data = str(self.gfe.uart_session.read(pending),'utf-8')
                 rx_buf.append(data) # Append read chunks to the list.
                 sys.stdout.write(data)
         print("Timeout reached")
@@ -531,7 +531,7 @@ class TestFreeRTOS(BaseGfeTest):
             # Send data
             message = 'This is the message.  It will be repeated.'
             print('sending "%s"' % message, file=sys.stderr)
-            sock.sendall(message)
+            sock.sendall(message.encode('utf-8'))
 
             # Look for the response
             amount_received = 0
@@ -540,7 +540,7 @@ class TestFreeRTOS(BaseGfeTest):
             while amount_received < amount_expected:
                 ready = select.select([sock], [], [], 10)
                 if ready[0]:
-                    data = sock.recv(128)
+                    data = str(sock.recv(128),'utf-8')
                     amount_received += len(data)
                     print('received "%s"' % data, file=sys.stderr)
                     self.assertEqual(message, data)
@@ -573,7 +573,7 @@ class TestFreeRTOS(BaseGfeTest):
         while time.time() < (start_time + timeout):
             pending = self.gfe.uart_session.in_waiting
             if pending:
-                data = self.gfe.uart_session.read(pending)
+                data = str(self.gfe.uart_session.read(pending),'utf-8')
                 rx_buf.append(data) # Append read chunks to the list.
                 sys.stdout.write(data)
         print("Timeout reached")
@@ -601,7 +601,7 @@ class TestFreeRTOS(BaseGfeTest):
         # Create a UDP socket at client side
         UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
         msgFromClient       = "Hello UDP Server"
-        bytesToSend         = str.encode(msgFromClient)
+        bytesToSend         = msgFromClient.encode('utf-8')
         serverAddressPort   = (riscv_ip, 5006)
         bufferSize          = 1024
 
@@ -610,8 +610,7 @@ class TestFreeRTOS(BaseGfeTest):
         UDPClientSocket.sendto(bytesToSend, serverAddressPort)
         ready = select.select([UDPClientSocket], [], [], 10)
         if ready[0]:
-            msgFromServer = UDPClientSocket.recvfrom(bufferSize)
-            print(msgFromServer)
+            msgFromServer = str((UDPClientSocket.recvfrom(bufferSize))[0],'utf-8')
             self.assertIn(msgFromClient, msgFromServer)
         else:
             raise Exception("UDP socket timeout")
