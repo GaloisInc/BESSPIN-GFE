@@ -68,17 +68,16 @@ class BaseGfeTest(unittest.TestCase):
                 baud, bytesize, parity, stopbits))
 
     def check_uart_out(self, timeout, expected_contents, absent_contents=None):
-        # Store and print all UART output while the elf is running
-        rx_buf = []
+        # Store and print all UART output while the elf is running.
+        # Use raw bytestrings to avoid problems with decoding.
+        rx = b''
         start_time = time.time()
         while time.time() < (start_time + timeout):
             pending = self.gfe.uart_session.in_waiting
             if pending:
                 data = self.gfe.uart_session.read(pending)
-                rx_buf.append(data) # Append read chunks to the list.
-                sys.stdout.write(str(data, encoding='utf-8'))
-
-        rx = ''.join([str(x, encoding='utf-8') for x in rx_buf])
+                sys.stdout.buffer.write(data)
+                rx += data
 
         # Check that the output contains the expected text
         for text in expected_contents:
