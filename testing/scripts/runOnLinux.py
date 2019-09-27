@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 """This script is used by ../../runOnLinux
 - It can be used for debugging by running a terminal-like interface with the FPGA
 - And it can be used for running a program (or more) above linux on FPGA
@@ -93,7 +94,7 @@ class BaseGfeForLinux(BaseGfeTest):
                             formatwarning_orig(message, category, filename, lineno, line='')
         exitTerminal = False
         while (not exitTerminal):
-            instruction = raw_input ("")
+            instruction = input ("")
             if (len(instruction)>2 and instruction[0:2]=='--'): #instruction to the interpreter
                 if (instruction[2:6] == 'exit'): #exit terminal and end test
                     exitTerminal = True
@@ -164,7 +165,7 @@ class RunOnLinux (TestLinux, BaseGfeForLinux):
             if index != -1:
                 ip_str = line.split()
                 riscv_ip = ip_str[3]
-                print("RISCV IP address is: " + riscv_ip)
+                print("RISCV IP address is: " + riscv_i))
                 # break # keep reading till the end to get the latest IP asignemnt
 
         # Ping FPGA

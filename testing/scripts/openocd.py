@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Test that OpenOCD can talk to a RISC-V target."""
 

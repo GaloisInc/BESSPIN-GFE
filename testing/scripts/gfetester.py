@@ -189,7 +189,7 @@ class gfetester(object):
         if size not in size_options:
             raise Exception(
                 "Write size {} must be one of {}".format(
-                    size, size_options.keys()))
+                    size, list(size_options.keys())))
 
         if not self.gdb_session:
             self.startGdb()
@@ -237,7 +237,7 @@ class gfetester(object):
             m = re.search('LOCATION=.*:1.(\d)', port.hwid)
             if m:
                 if m.group(1) == '1':
-                    print "Located UART device at %s with serial number %s" % (port.device, port.serial_number)
+                    print("Located UART device at %s with serial number %s" % (port.device, port.serial_number))
                     return port.device
         raise Exception(
                 "Could not find a UART port with expected VID:PID = %X:%X" % (search_vid, search_pid))
