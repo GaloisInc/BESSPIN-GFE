@@ -50,8 +50,8 @@ def compile(args, xlen=32): # pylint: disable=redefined-builtin
                                stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
     if process.returncode:
-        print(stdout, end=' ')
-        print(stderr, end=' ')
+        print(stdout)
+        print(stderr)
         header("")
         raise Exception("Compile failed!")
 
@@ -939,7 +939,7 @@ class ExamineTarget(GdbTest):
             for i in range(26):
                 if hart.misa & (1<<i):
                     txt += chr(i + ord('A'))
-            print(txt, end=' ')
+            print(txt)
 
 class TestFailed(Exception):
     def __init__(self, message):
