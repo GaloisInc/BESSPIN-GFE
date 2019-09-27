@@ -69,7 +69,7 @@ class BaseGfeTest(unittest.TestCase):
 
     def check_uart_out(self, timeout, expected_contents, absent_contents=None):
         # Store and print all UART output while the elf is running.
-        # Use raw bytestrings to avoid problems with decoding.
+        # Use bytestrings to avoid problems with decoding output.
         rx = b''
         start_time = time.time()
         while time.time() < (start_time + timeout):
@@ -81,10 +81,10 @@ class BaseGfeTest(unittest.TestCase):
 
         # Check that the output contains the expected text
         for text in expected_contents:
-            self.assertIn(text, rx)
+            self.assertIn(bytes(text, encoding='utf-8'), rx)
 
-        if absent_contents != None:
-            self.assertNotIn(absent_contents, rx)
+        if absent_contents:
+            self.assertNotIn(bytes(absent_contents, encoding='utf-8'), rx)
 
         return rx
 
