@@ -15,7 +15,6 @@ function check_command {
 check_command openocd
 check_command riscv64-unknown-elf-gcc
 check_command riscv64-unknown-linux-gnu-gcc
-check_command riscv32-unknown-elf-gcc
 
 function err_msg {
 	if [[ $1 -ne 0 ]]

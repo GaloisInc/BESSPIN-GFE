@@ -30,14 +30,14 @@ source configure --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi
 make
 make install
 popd
-# TODO: maybe provide a pre-built binary instead, like for gbd (see below)
-
+# TODO: maybe provide a pre-built binary instead of the submodule?
 
 # RISC-V toolchains (both linux and newlib versions):
 tar -xf riscv-gnu-toolchains.tar.gz
 cp -r opt/* /opt/
 rm -rf opt/
 # Make these available to all users:
+echo 'RISCV=/opt/riscv' | tee -a /etc/bash.bashrc
 echo 'PATH=/opt/riscv/bin:$PATH' | tee -a /etc/bash.bashrc
 
 # Clang and LLVM for RISC-V:

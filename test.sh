@@ -15,7 +15,7 @@ err_msg $? "Making the assembly tests failed"
 
 # Compile riscv-tests
 cd $BASE_DIR/riscv-tests
-CC=riscv${XLEN}-unknown-elf-gcc ./configure --with-xlen=${XLEN} --target=riscv${XLEN}-unknown-elf
+CC=riscv64-unknown-elf-gcc ./configure --with-xlen=${XLEN} --target=riscv64-unknown-elf
 make
 err_msg $? "Failed to make isa tests"
 
@@ -37,7 +37,7 @@ else
 fi
 
 # Run the isa tests
-riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/test_${XLEN}.gdb
+riscv64-unknown-elf-gdb --batch -x $BASE_DIR/test_${XLEN}.gdb
 echo "riscv-tests summary:"
 grep -E "(PASS|FAIL)" gdb-client.log | uniq -c 
 # Return a non-zero exit code on failure
