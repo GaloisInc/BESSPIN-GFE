@@ -35,9 +35,11 @@ gfe_dir="$(dirname "$debian_dir")"
 self="${debian_dir}/$(basename "${BASH_SOURCE[0]}")"
 build_dir="$debian_dir/build"
 
-# Pointing to a particular snapshot of debian as the master repo can be unstable!
-#debian_url="https://snapshot.debian.org/archive/debian-ports/20190424T014031Z/"
-debian_url="http://deb.debian.org/debian-ports/"
+if [ -n "$GFE_DEBIAN_URL" ]; then
+    debian_url="${GFE_DEBIAN_URL}"
+else
+    debian_url="http://deb.debian.org/debian-ports/"
+fi
 
 : ${DEBIAN_PORTS_ARCHIVE_KEYRING:=/usr/share/keyrings/debian-ports-archive-keyring.gpg}
 
