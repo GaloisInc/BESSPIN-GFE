@@ -36,7 +36,8 @@ class gfetester(object):
         server_cmd=None,
         config=None,
         riscv_gdb_cmd=None,
-        verbose=False
+        verbose=False,
+        xlen=32
     ):
         """Start a gdb session with the riscv core on the GFE
 
@@ -60,7 +61,8 @@ class gfetester(object):
         self.gdb_session = testlib.Gdb(
             cmd=riscv_gdb_cmd,
             ports=self.openocd_session.gdb_ports,
-            binary=binary)
+            binary=binary,
+            xlen=xlen)
         self.gdb_session.connect()
 
     def endGdb(self):

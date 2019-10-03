@@ -133,7 +133,7 @@ class BaseGfeTest(unittest.TestCase):
     def setUp(self):
         # Reset the GFE
         self.gfe = gfetester.gfetester(gdb_path=self.getGdbPath())
-        self.gfe.startGdb()
+        self.gfe.startGdb(xlen=int(self.getXlen()))
         self.path_to_asm = os.path.join(
                 os.path.dirname(os.getcwd()), 'baremetal', 'asm')
         self.path_to_freertos = os.path.join(

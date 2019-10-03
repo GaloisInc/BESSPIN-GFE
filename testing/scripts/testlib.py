@@ -358,13 +358,14 @@ class Gdb(object):
 
     def __init__(self, ports,
             cmd=os.path.expandvars("$RISCV/bin/riscv64-unknown-elf-gdb"),
-            timeout=60, binary=None):
+            timeout=60, binary=None, xlen=32):
         assert ports
 
         self.ports = ports
         self.cmd = cmd
         self.timeout = timeout
         self.binary = binary
+        self.xlen = xlen
 
         self.stack = []
         self.harts = {}
@@ -394,6 +395,7 @@ class Gdb(object):
             # Force consistency.
             self.command("set print entry-values no")
             self.command("set remotetimeout %d" % self.timeout)
+            self.command("set architecture riscv:rv%d" % self.xlen)
             self.command("target extended-remote localhost:%d" % port)
             if self.binary:
                 self.command("file %s" % self.binary)
