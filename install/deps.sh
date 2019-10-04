@@ -25,8 +25,8 @@ apt-get install -y verilator qemu
 # OpenOCD
 apt-get install -y libftdi1-2 libusb-1.0-0-dev libtool pkg-config texinfo
 pushd riscv-openocd
-source bootstrap
-source configure --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi
+./bootstrap
+./configure --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi
 make
 make install
 popd
@@ -42,15 +42,12 @@ echo 'PATH=/opt/riscv/bin:$PATH' | tee -a /etc/bash.bashrc
 
 # Clang and LLVM for RISC-V:
 wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-add-apt-repository 'http://apt.llvm.org/buster/ llvm-toolchain-buster main'
-# XXX 2019-09-24 the update is still failing
-# "The repository 'http://apt.llvm.org/buster buster Release' does not have a Release file."
+add-apt-repository 'http://apt.llvm.org/buster/ llvm-toolchain-buster-9 main'
 apt-get update
+# XXX 2019-10-04 the install below fails with some weird 'unmet dependencies'
+# See https://bugs.llvm.org/show_bug.cgi?id=43451
 apt-get install -y clang-9 lldb-9 lld-9 clangd-9
 
 # System-wide python packages needed by testing scripts
 apt-get install -y python3-pip
 pip3 install pyserial pexpect
-
-
-
