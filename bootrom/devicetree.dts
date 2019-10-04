@@ -1,8 +1,8 @@
 #if CPU_SPEED == 0
 #if __riscv_xlen == 32
-#define CPU_SPEED 500000000
+#define CPU_SPEED 50000000
 #else
-#define CPU_SPEED 1000000000
+#define CPU_SPEED 100000000
 #endif
 #endif
 
@@ -33,8 +33,6 @@
 			mmu-type = "riscv,sv39";
 #endif
 			clock-frequency = <CPU_SPEED>;
-			dmas = <&axi_dma 0>, <&axi_dma 1>;
-			dma-names = "tx", "rx";
 			CPU0_intc: interrupt-controller {
 				#interrupt-cells = <1>;
 				interrupt-controller;
