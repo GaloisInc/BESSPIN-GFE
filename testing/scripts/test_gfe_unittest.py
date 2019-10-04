@@ -132,8 +132,8 @@ class BaseGfeTest(unittest.TestCase):
 
     def setUp(self):
         # Reset the GFE
-        self.gfe = gfetester.gfetester(gdb_path=self.getGdbPath())
-        self.gfe.startGdb(xlen=int(self.getXlen()))
+        self.gfe = gfetester.gfetester(gdb_path=self.getGdbPath(), xlen=int(self.getXlen()))
+        self.gfe.startGdb()
         self.path_to_asm = os.path.join(
                 os.path.dirname(os.getcwd()), 'baremetal', 'asm')
         self.path_to_freertos = os.path.join(
@@ -297,6 +297,7 @@ class TestGfe64(TestGfe):
     def getFreq(self):
         return gfeparameters.GFE_P2_DEFAULT_HZ
 
+
 class TestFreeRTOS(BaseGfeTest):
 
     def getFreq(self):
@@ -304,7 +305,8 @@ class TestFreeRTOS(BaseGfeTest):
 
     def setUp(self):
         # Reset the GFE
-        self.gfe = gfetester.gfetester(gdb_path=self.getGdbPath())
+        self.gfe = gfetester.gfetester(
+            gdb_path=self.getGdbPath(), xlen=int(self.getXlen()))
         self.gfe.startGdb()
         self.gfe.softReset()
         self.path_to_freertos = os.path.join(

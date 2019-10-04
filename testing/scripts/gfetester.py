@@ -17,6 +17,7 @@ class gfetester(object):
         gdb_path=gfeparameters.gdb_path,
         openocd_command=gfeparameters.openocd_command,
         openocd_cfg_path=gfeparameters.openocd_cfg_path,
+        xlen=32
     ):
         super(gfetester, self).__init__()
         self.gdb_port = gdb_port
@@ -26,6 +27,7 @@ class gfetester(object):
         self.gdb_session = None
         self.openocd_session = None
         self.uart_session = None
+        self.xlen = xlen
 
     # ------------------ GDB/JTAG Functions ------------------
 
@@ -36,8 +38,7 @@ class gfetester(object):
         server_cmd=None,
         config=None,
         riscv_gdb_cmd=None,
-        verbose=False,
-        xlen=32
+        verbose=False
     ):
         """Start a gdb session with the riscv core on the GFE
 
@@ -62,7 +63,7 @@ class gfetester(object):
             cmd=riscv_gdb_cmd,
             ports=self.openocd_session.gdb_ports,
             binary=binary,
-            xlen=xlen)
+            xlen=self.xlen)
         self.gdb_session.connect()
 
     def endGdb(self):
