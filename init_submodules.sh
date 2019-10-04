@@ -13,7 +13,7 @@ cd riscv-tests
 git submodule sync
 cd ..
 
-git submodule update --init tool-suite FreeRTOS-mirror busybox
+git submodule update --init FreeRTOS-mirror busybox
 git submodule update --init --recursive \
 bluespec-processors/P1/Piccolo bluespec-processors/P2/Flute \
 riscv-linux bluespec-processors/P3/Toooba riscv-tests riscv-pk
