@@ -463,7 +463,6 @@ proc create_hier_cell_svf_pcie_bridge { parentCell nameHier } {
   create_bd_pin -dir I -type clk CLK
   create_bd_pin -dir I -type rst RST_N
   create_bd_pin -dir I -type rst pcie_perstn
-  create_bd_pin -dir I -from 1 -to 0 tvswitch_0
 
   # Create instance: clk_wiz_1, and set properties
   set clk_wiz_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.4 clk_wiz_1 ]
@@ -638,7 +637,6 @@ proc create_hier_cell_svf_pcie_bridge { parentCell nameHier } {
   connect_bd_net -net pcie4_uscale_plus_0_user_lnk_up [get_bd_pins mkSVF_Bridge_0/pcie4_user_link_up] [get_bd_pins pcie4_uscale_plus_0/user_lnk_up]
   connect_bd_net -net pcie4_uscale_plus_0_user_reset [get_bd_pins mkSVF_Bridge_0/RST_N_user_reset] [get_bd_pins pcie4_uscale_plus_0/user_reset]
   connect_bd_net -net pcie_perstn_1 [get_bd_pins pcie_perstn] [get_bd_pins pcie4_uscale_plus_0/sys_reset]
-  connect_bd_net -net tvswitch_0_1 [get_bd_pins tvswitch_0] [get_bd_pins mkSVF_Bridge_0/tvswitch]
   connect_bd_net -net util_vector_logic_0_Res [get_bd_pins RST_N] [get_bd_pins mkSVF_Bridge_0/RST_N_aresetn]
 
   # Restore current instance
@@ -707,7 +705,6 @@ proc create_hier_cell_gfe_subsystem { parentCell nameHier } {
   create_bd_pin -dir IO spi_mosi
   create_bd_pin -dir IO spi_sck
   create_bd_pin -dir IO spi_ss
-  create_bd_pin -dir O -from 1 -to 0 tvswitch
   create_bd_pin -dir I uart1_rx
   create_bd_pin -dir O uart1_tx
 
@@ -838,7 +835,7 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   # Create instance: ddr4_0, and set properties
   set ddr4_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:ddr4:2.2 ddr4_0 ]
   set_property -dict [ list \
-   CONFIG.ADDN_UI_CLKOUT1_FREQ_HZ {100} \
+   CONFIG.ADDN_UI_CLKOUT1_FREQ_HZ {50} \
    CONFIG.C0_CLOCK_BOARD_INTERFACE {default_250mhz_clk1} \
    CONFIG.C0_DDR4_BOARD_INTERFACE {ddr4_sdram_c1} \
    CONFIG.RESET_BOARD_INTERFACE {reset} \
@@ -889,14 +886,6 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   # Create instance: xlslice_0, and set properties
   set xlslice_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_0 ]
 
-  # Create instance: xlslice_1, and set properties
-  set xlslice_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_1 ]
-  set_property -dict [ list \
-   CONFIG.DIN_FROM {9} \
-   CONFIG.DIN_TO {8} \
-   CONFIG.DOUT_WIDTH {2} \
- ] $xlslice_1
-
   # Create interface connections
   connect_bd_intf_net -intf_net Conn2 [get_bd_intf_pins sgmii_lvds] [get_bd_intf_pins axi_ethernet_0/sgmii]
   connect_bd_intf_net -intf_net Conn3 [get_bd_intf_pins sgmii_phyclk] [get_bd_intf_pins axi_ethernet_0/lvds_clk]
@@ -946,7 +935,7 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   connect_bd_net -net axi_dma_0_s2mm_sts_reset_out_n [get_bd_pins axi_dma_0/s2mm_sts_reset_out_n] [get_bd_pins axi_ethernet_0/axi_rxs_arstn]
   connect_bd_net -net axi_ethernet_0_interrupt [get_bd_pins axi_ethernet_0/interrupt] [get_bd_pins xlconcat_0/In1]
   connect_bd_net -net axi_ethernet_0_phy_rst_n [get_bd_pins phy_reset_out] [get_bd_pins axi_ethernet_0/phy_rst_n]
-  connect_bd_net -net axi_gpio_0_gpio_io_o [get_bd_pins axi_gpio_0/gpio_io_o] [get_bd_pins xlslice_0/Din] [get_bd_pins xlslice_1/Din]
+  connect_bd_net -net axi_gpio_0_gpio_io_o [get_bd_pins axi_gpio_0/gpio_io_o] [get_bd_pins xlslice_0/Din]
   connect_bd_net -net axi_gpio_1_gpio2_io_o [get_bd_pins gpio_led] [get_bd_pins axi_gpio1/gpio_led]
   connect_bd_net -net axi_iic0_iic2intc_irpt [get_bd_pins axi_iic0/iic2intc_irpt] [get_bd_pins xlconcat_0/In6]
   connect_bd_net -net axi_quad_spi1_ip2intc_irpt [get_bd_pins axi_quad_spi1/ip2intc_irpt] [get_bd_pins xlconcat_0/In7]
@@ -966,7 +955,6 @@ here on its own." [get_bd_cells /gfe_subsystem/axi_clock_converter_0]
   connect_bd_net -net xlconstant_1_dout [get_bd_pins axi_quad_spi_0/keyclearb] [get_bd_pins axi_quad_spi_0/usrdoneo] [get_bd_pins axi_quad_spi_0/usrdonets] [get_bd_pins proc_sys_reset_0/dcm_locked] [get_bd_pins proc_sys_reset_1/dcm_locked] [get_bd_pins xlconstant_1/dout]
   connect_bd_net -net xlconstant_2_dout [get_bd_pins xlconcat_0/In8] [get_bd_pins xlconstant_2/dout]
   connect_bd_net -net xlslice_0_Dout [get_bd_pins proc_sys_reset_0/aux_reset_in] [get_bd_pins xlslice_0/Dout]
-  connect_bd_net -net xlslice_1_Dout [get_bd_pins tvswitch] [get_bd_pins xlslice_1/Dout]
 
   # Restore current instance
   current_bd_instance $oldCurInst
@@ -1058,20 +1046,6 @@ proc create_root_design { parentCell } {
   # Create instance: ssith_processor_0, and set properties
   set ssith_processor_0 [ create_bd_cell -type ip -vlnv ssith:user:ssith_processor:1.0 ssith_processor_0 ]
 
-  set_property -dict [ list \
-   CONFIG.SUPPORTS_NARROW_BURST {1} \
-   CONFIG.NUM_READ_OUTSTANDING {2} \
-   CONFIG.NUM_WRITE_OUTSTANDING {2} \
-   CONFIG.MAX_BURST_LENGTH {256} \
- ] [get_bd_intf_pins /ssith_processor_0/master0]
-
-  set_property -dict [ list \
-   CONFIG.SUPPORTS_NARROW_BURST {1} \
-   CONFIG.NUM_READ_OUTSTANDING {2} \
-   CONFIG.NUM_WRITE_OUTSTANDING {2} \
-   CONFIG.MAX_BURST_LENGTH {256} \
- ] [get_bd_intf_pins /ssith_processor_0/master1]
-
   # Create instance: svf_pcie_bridge
   create_hier_cell_svf_pcie_bridge [current_bd_instance .] svf_pcie_bridge
 
@@ -1108,7 +1082,6 @@ proc create_root_design { parentCell } {
   connect_bd_net -net gfe_subsystem_phy_reset_out [get_bd_ports phy_reset_out] [get_bd_pins gfe_subsystem/phy_reset_out]
   connect_bd_net -net gfe_subsystem_rs232_uart_rts [get_bd_ports rs232_uart_rts] [get_bd_pins gfe_subsystem/rs232_uart_rts]
   connect_bd_net -net gfe_subsystem_rs232_uart_txd [get_bd_ports rs232_uart_txd] [get_bd_pins gfe_subsystem/rs232_uart_txd]
-  connect_bd_net -net gfe_subsystem_tvswitch [get_bd_pins gfe_subsystem/tvswitch] [get_bd_pins svf_pcie_bridge/tvswitch_0]
   connect_bd_net -net gfe_subsystem_uart1_tx [get_bd_ports uart1_tx] [get_bd_pins gfe_subsystem/uart1_tx]
   connect_bd_net -net pcie_perstn_1 [get_bd_ports pcie_perstn] [get_bd_pins svf_pcie_bridge/pcie_perstn]
   connect_bd_net -net reset_1 [get_bd_ports reset] [get_bd_pins gfe_subsystem/reset]
