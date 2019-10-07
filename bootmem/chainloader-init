@@ -1,0 +1,28 @@
+#!/bin/sh
+# This is the /init script used for the chainloader initramfs.  Its purpose is
+# to load a second initramfs from a QEMU virtual block device, unpack it, and
+# switch to it.
+#
+# The chainloader environment has busybox installed and nothing else.  Its
+# kernel config is based on the one we use for Debian, but augmented with vfat
+# support, so it can mount QEMU `-drive file=fat:rw:$PATH` virtual drives.
+
+DEVICE=vda1
+FILE=initramfs.cpio.gz
+
+echo "chainloader: booting from $DEVICE"
+
+mkdir -v -p /chain/dev /chain/new /chain/mnt
+mount -v -t devtmpfs none /chain/dev
+mount -v -t vfat /chain/dev/$DEVICE /chain/mnt
+mount -v -t tmpfs none /chain/new
+
+echo "chainloader: unpacking initramfs.cpio.gz"
+cd /chain/new
+gunzip -c /chain/mnt/initramfs.cpio.gz | cpio -i
+
+echo "chainloader: switching root"
+exec switch_root /chain/new /init
+
+echo "chainloader: failed to switch_root"
+exit 1
