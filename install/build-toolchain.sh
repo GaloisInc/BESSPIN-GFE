@@ -11,7 +11,7 @@ rm -rf /opt/riscv/
 # System packages needed for the build:
 apt-get install -y autoconf automake autotools-dev curl libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev
 
-if [ -d riscv-gnu-toolchain ]; then
+if [ ! -d riscv-gnu-toolchain ]; then
     git clone https://github.com/riscv/riscv-gnu-toolchain
 fi
 pushd riscv-gnu-toolchain

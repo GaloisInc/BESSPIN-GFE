@@ -33,21 +33,20 @@ popd
 # TODO: maybe provide a pre-built binary instead of the submodule?
 
 # RISC-V toolchains (both linux and newlib versions):
-tar -xf riscv-gnu-toolchains.tar.gz
-cp -r opt/* /opt/
-rm -rf opt/
+tar -C / -xf install/riscv-gnu-toolchains.tar.gz
 # Make these available to all users:
-echo 'RISCV=/opt/riscv' | tee -a /etc/bash.bashrc
-echo 'PATH=/opt/riscv/bin:$PATH' | tee -a /etc/bash.bashrc
+echo 'export RISCV=/opt/riscv' | tee -a /etc/bash.bashrc
+echo 'export PATH=/opt/riscv/bin:$PATH' | tee -a /etc/bash.bashrc
+
+# System-wide python packages needed by testing scripts
+apt-get install -y python3-pip
+pip3 install pyserial pexpect
 
 # Clang and LLVM for RISC-V:
 wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 add-apt-repository 'http://apt.llvm.org/buster/ llvm-toolchain-buster-9 main'
 apt-get update
-# XXX 2019-10-04 the install below fails with some weird 'unmet dependencies'
+# XXX 2019-10-07 the install below fails with some weird 'unmet dependencies'
 # See https://bugs.llvm.org/show_bug.cgi?id=43451
-apt-get install -y clang-9 lldb-9 lld-9 clangd-9
-
-# System-wide python packages needed by testing scripts
-apt-get install -y python3-pip
-pip3 install pyserial pexpect
+# Restore when LLVM 9 packages are working again:
+# apt-get install -y clang-9 lldb-9 lld-9 clangd-9

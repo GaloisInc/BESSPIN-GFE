@@ -85,9 +85,13 @@ cd gfe
 
 ### Update Dependencies ###
 
-If you are updating from an earlier release or development version of the GFE,
-first run
+This version of the GFE uses Git LFS to manage Vivado bitfiles as well as
+an archived, pre-built copy of the GNU toolchains.
+If you are updating from an earlier release or development version of the GFE, first run
 ```bash
+sudo apt install git-lfs
+git-lfs install
+
 git pull origin master
 ```
 in the GFE repo's root directory.
@@ -100,38 +104,15 @@ we provide a script to initialize only those necessary for GFE development.
 ./init_submodules.sh
 ```
 
-**Release 4.1** contains a riscv-openocd submodule with a development version
-of OpenOCD. When updating from a previous GFE release, the new OpenOCD should be
-built and installed before continuing.
+**Nix is no longer required** to run GFE software.
+The script below will install necessary system packages as well as copies of
+the newlib (`riscv64-unknown-elf-*`) and linux (`riscv64-unknown-linux-gnu-*`)
+variants of the GNU toolchain in /opt/riscv. It will also build a development
+version of riscv-openocd from the included submodule, placing an executable in
+/usr/local/bin/openocd. The script should be run directly from the root of this repo:
 ```bash
-cd riscv-openocd
-./bootstrap
-./configure
-make
-sudo make install
-cd ..
+sudo ./install/deps.sh
 ```
-
-The tool-suite submodule contains a [Nix](https://nixos.org/nix/) shell environment
-that builds all other tools necessary for the GFE, excluding Vivado.
-The argument-less `nix-shell` command relies on a configuration file in the tool-suite repo,
-which is the target of the `shell.nix` symlink.
-**All subsequent commands in this document should be run within the Nix shell.**
-This applies to scripts within the GFE such as `test_processor.sh`.
-If you wish to use your own binaries for RISCV tools,
-then you should modify your PATH variable from inside the Nix shell.
-
-If you do not have Nix installed, first follow
-[these instructions](https://nixos.org/nix/manual/#sect-multi-user-installation).
-
-Then run the following command to get the current version of all GFE dependencies.
-```bash
-nix-shell
-```
-
-*This may take several hours to complete the first time it is run*,
-as it checks out several large repositories and builds an entire toolchain from source.
-Subsequent runs will be fast, using the locally cached Nix packages.
 
 
 ### Building the Bitstream ###

@@ -32,3 +32,5 @@ git submodule update --init firrtl chisel3 hardfloat
 cd ../../../rocket-chip
 git submodule sync
 git submodule update --init firrtl chisel3 hardfloat
+
+cd $home
