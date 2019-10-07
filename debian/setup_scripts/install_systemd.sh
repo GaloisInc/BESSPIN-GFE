@@ -5,7 +5,7 @@ setup_scripts_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 "${setup_scripts_dir}/install_important.sh"
 
 # Use systemd to provide /init
-ln -s /lib/systemd/systemd /init
+ln -sf /lib/systemd/systemd /init
 
 # Fixup serial service for slower processors
 echo "DefaultTimeoutStartSec=300s" >> /etc/systemd/system.conf

@@ -8,6 +8,7 @@ find . \
     -path ./debian.cpio.gz -o \
     -path ./host-rootfs -prune -o \
     -path ./nix -prune -o \
+    -path ./mnt -prune -print0 -o \
     -path ./proc -prune -print0 -o \
     -path ./sys -prune -print0 -o \
     -path ./tmp -prune -print0 -o \

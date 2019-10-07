@@ -4,7 +4,7 @@ set -e
 apt-get install -y sysvinit-core apt-utils netbase busybox ifupdown isc-dhcp-client
 
 # Use sysvinit to provide /init
-ln -s /sbin/init /init
+ln -sf /sbin/init /init
 
 echo "
 id:3:initdefault:

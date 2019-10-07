@@ -1,0 +1,87 @@
+#!/bin/sh
+set -e
+
+
+debug_shell() {
+    echo 'debian stage1: an error occurred; launching debug shell'
+    exec /bin/sh
+}
+trap debug_shell EXIT
+
+
+# Basic system setup
+
+mount -v -t devtmpfs none /dev
+mkdir -p /dev/pts
+mount -v -t devpts devpts /dev/pts
+mount -v -t proc proc /proc
+mount -v -t sysfs sysfs /sys
+
+# dpkg complains if $PATH is unset.
+export PATH
+
+
+# Mount the virtual disk early, so we have access to the debian repo.
+#
+# The virtual disk is expected to contain:
+# - debian-repo/: a Debian repository snapshot, containing all the packages
+#   that will be needed during setup
+# - scripts/{setup_chroot.sh,setup_scripts/}: initramfs setup scripts copied
+#   from gfe/debian/
+mkdir -p /mnt
+mount -v -t vfat -o noatime /dev/vda1 /mnt
+
+# The system clock defaults to the Unix epoch, causing the system to think that
+# the InRelease file from the debian repo snapshot is not valid yet.  As a
+# workaround, we set the clock to the timestamp from the InRelease.
+release_date=$(
+    grep Date: /mnt/debian-repo/dists/sid/InRelease |
+    head -n 1 |
+    sed -e 's/^Date: //'
+)
+echo "debian stage1: setting system time to $release_date"
+date -s "$release_date"
+
+
+# Debootstrap second-stage setup.  This part is hardcoded, since it's not
+# entirely clear which parts of the system are usable before this is done.
+
+echo 'debian stage1: running `debootstrap --second-stage`'
+
+# Change the apt mirror path used by debootstrap.
+echo 'file:///mnt/debian-repo' >/debootstrap/mirror
+# Also rename the downloaded package lists, to match the new mirror path.
+(
+    cd /var/lib/apt/lists
+    for f in *_dists_*; do
+        mv -v $f _mnt_debian-repo_dists_${f##*_dists_}
+    done
+)
+
+/debootstrap/debootstrap --second-stage
+
+# This is here because it was part of create_chroot's stage2 function.
+apt-get remove -y --purge fakeroot libfakeroot
+
+# For some reason, debootstrap leaves the system with an empty sources.list
+echo 'deb file:///mnt/debian-repo sid main' >/etc/apt/sources.list
+apt-get update
+
+
+# We now have a fully functional Debian system, and can run the setup scripts.
+
+echo 'debian stage1: running setup scripts'
+
+# create_chroot.sh stage3:
+/mnt/scripts/setup_chroot.sh
+# create_chroot.sh create_cpio:
+echo 'debian stage1: creating cpio'
+mount --bind / /root
+(
+    cd /root
+    find . -print0 | cpio --null --create --format=newc >/mnt/debian-initramfs.cpio
+)
+
+echo 'debian stage1: done'
+umount -v /mnt
+poweroff -f
