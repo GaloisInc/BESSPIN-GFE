@@ -21,7 +21,26 @@ mount -v -t sysfs sysfs /sys
 export PATH
 
 
-# Mount the virtual disk early, so we have access to the debian repo.
+# Debootstrap second-stage setup.  This part is hardcoded, since it's not
+# entirely clear which parts of the system are usable before this is done.
+
+echo 'debian stage1: running `debootstrap --second-stage`'
+
+/debootstrap/debootstrap --second-stage
+
+# debootstrap unmounts /proc, /sys, and /dev/pts, so we have to re-mount them
+mkdir -p /dev/pts
+mount -v -t devpts devpts /dev/pts
+mount -v -t proc proc /proc
+mount -v -t sysfs sysfs /sys
+
+# This is here because it was part of create_chroot's stage2 function.
+apt-get remove -y --purge fakeroot libfakeroot
+
+# We now have a fully functional Debian system, and can run the setup scripts.
+
+
+# Mount the virtual disk, which normally contains the debian repo.
 #
 # The virtual disk is expected to contain:
 # - debian-repo/: a Debian repository snapshot, containing all the packages
@@ -31,49 +50,42 @@ export PATH
 mkdir -p /mnt
 mount -v -t vfat -o noatime /dev/vda1 /mnt
 
-# The system clock defaults to the Unix epoch, causing the system to think that
-# the InRelease file from the debian repo snapshot is not valid yet.  As a
-# workaround, we set the clock to the timestamp from the InRelease.
-release_date=$(
-    grep Date: /mnt/debian-repo/dists/sid/InRelease |
-    head -n 1 |
-    sed -e 's/^Date: //'
-)
-echo "debian stage1: setting system time to $release_date"
-date -s "$release_date"
+# Parse kernel command line arguments that are relevant to this script.
+DEBIAN_REPO='file:///mnt/debian-repo'
 
+set -- $(cat /proc/cmdline)
+for x in "$@"; do
+    case "$x" in
+        besspin.debian_repo=*) DEBIAN_REPO="${x#*=}" ;;
+        besspin.inet_addr=*) INET_ADDR="${x#*=}" ;;
+        besspin.extra_setup=*) EXTRA_SETUP="${x#*=}" ;;
+        besspin.set_clock=*) SET_CLOCK="${x#*=}" ;;
+    esac
+done
 
-# Debootstrap second-stage setup.  This part is hardcoded, since it's not
-# entirely clear which parts of the system are usable before this is done.
+if [ -n "$INET_ADDR" ]; then
+    ip link set eth0 up
+    ip addr add dev eth0 "$INET_ADDR"
+fi
 
-echo 'debian stage1: running `debootstrap --second-stage`'
+if [ -n "$SET_CLOCK" ]; then
+    date -s "$SET_CLOCK"
+fi
 
-# Change the apt mirror path used by debootstrap.
-echo 'file:///mnt/debian-repo' >/debootstrap/mirror
-# Also rename the downloaded package lists, to match the new mirror path.
-(
-    cd /var/lib/apt/lists
-    for f in *_dists_*; do
-        mv -v $f _mnt_debian-repo_dists_${f##*_dists_}
-    done
-)
-
-/debootstrap/debootstrap --second-stage
-
-# This is here because it was part of create_chroot's stage2 function.
-apt-get remove -y --purge fakeroot libfakeroot
-
-# For some reason, debootstrap leaves the system with an empty sources.list
-echo 'deb file:///mnt/debian-repo sid main' >/etc/apt/sources.list
+# Change the apt mirror path used for further `apt-get install` commands.  This
+# happens only after setting up the network and the clock, so apt can access
+# http mirrors and check release file timestamps.
+echo "deb $DEBIAN_REPO sid main" >/etc/apt/sources.list
 apt-get update
 
-
-# We now have a fully functional Debian system, and can run the setup scripts.
 
 echo 'debian stage1: running setup scripts'
 
 # create_chroot.sh stage3:
+# $EXTRA_SETUP is run by setup_chroot.sh, if set
+[ -n "$EXTRA_SETUP" ] && export EXTRA_SETUP
 /mnt/scripts/setup_chroot.sh
+
 # create_chroot.sh create_cpio:
 echo 'debian stage1: creating cpio'
 mount --bind / /root

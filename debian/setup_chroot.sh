@@ -28,6 +28,11 @@ allow-hotplug eth0
 iface eth0 inet dhcp
 " >> /etc/network/interfaces
 
+if [ -n "$EXTRA_SETUP" ]; then
+    echo "running extra setup script: $EXTRA_SETUP"
+    "$EXTRA_SETUP"
+fi
+
 # Remove debconf internationalization for debconf
 dpkg --remove debconf-i18n
 
