@@ -114,6 +114,11 @@ version of riscv-openocd from the included submodule, placing an executable in
 sudo ./install/deps.sh
 ```
 
+The `riscv32-unknown-elf-*` tools are not included in this /opt/riscv tree install,
+as they are now redundant. The tools labeled `64` all work with 32-bit binaries,
+although they may require explicit flags (such as `-march=rv32gc` for gcc) to get
+the behaviors that were implicit defaults of the corresponding `32` versions.
+
 
 ### Building the Bitstream ###
 
