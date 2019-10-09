@@ -7,19 +7,24 @@
 # kernel config is based on the one we use for Debian, but augmented with vfat
 # support, so it can mount QEMU `-drive file=fat:rw:$PATH` virtual drives.
 
-DEVICE=vda1
+MOUNT_TAG=virtfs
 FILE=initramfs.cpio.gz
 
-echo "chainloader: booting from $DEVICE"
+echo "chainloader: booting from $MOUNT_TAG"
 
 mkdir -v -p /chain/dev /chain/new /chain/mnt
 mount -v -t devtmpfs none /chain/dev
-mount -v -t vfat /chain/dev/$DEVICE /chain/mnt
+mount -v -t 9p "$MOUNT_TAG" /chain/mnt
 mount -v -t tmpfs none /chain/new
 
 echo "chainloader: unpacking initramfs.cpio.gz"
 cd /chain/new
-gunzip -c /chain/mnt/initramfs.cpio.gz | cpio -i
+gunzip -c /chain/mnt/"$FILE" | cpio -i
+
+# Explicitly unmount the 9pfs.  Otherwise the next initramfs won't be able to
+# mount it ("no channels available for device")
+umount -v /chain/dev
+umount -v /chain/mnt
 
 echo "chainloader: switching root"
 exec switch_root /chain/new /init

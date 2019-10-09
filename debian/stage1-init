@@ -40,22 +40,14 @@ apt-get remove -y --purge fakeroot libfakeroot
 # We now have a fully functional Debian system, and can run the setup scripts.
 
 
-# Mount the virtual disk, which normally contains the debian repo.
-#
-# The virtual disk is expected to contain:
-# - debian-repo/: a Debian repository snapshot, containing all the packages
-#   that will be needed during setup
-# - scripts/{setup_chroot.sh,setup_scripts/}: initramfs setup scripts copied
-#   from gfe/debian/
-mkdir -p /mnt
-mount -v -t vfat -o noatime /dev/vda1 /mnt
-
 # Parse kernel command line arguments that are relevant to this script.
 DEBIAN_REPO='file:///mnt/debian-repo'
+MOUNT_TAG=virtfs
 
 set -- $(cat /proc/cmdline)
 for x in "$@"; do
     case "$x" in
+        besspin.9p_mount_tag=*) MOUNT_TAG="${x#*=}" ;;
         besspin.debian_repo=*) DEBIAN_REPO="${x#*=}" ;;
         besspin.inet_addr=*) INET_ADDR="${x#*=}" ;;
         besspin.extra_setup=*) EXTRA_SETUP="${x#*=}" ;;
@@ -71,6 +63,16 @@ fi
 if [ -n "$SET_CLOCK" ]; then
     date -s "$SET_CLOCK"
 fi
+
+# Mount the virtual disk, which normally contains the debian repo.
+#
+# The virtual disk is expected to contain:
+# - debian-repo/: a Debian repository snapshot, containing all the packages
+#   that will be needed during setup
+# - scripts/{setup_chroot.sh,setup_scripts/}: initramfs setup scripts copied
+#   from gfe/debian/
+mkdir -p /mnt
+mount -v -t 9p "$MOUNT_TAG" /mnt
 
 # Change the apt mirror path used for further `apt-get install` commands.  This
 # happens only after setting up the network and the clock, so apt can access
