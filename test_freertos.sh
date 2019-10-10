@@ -112,8 +112,8 @@ elif [ "$full_ci" = true ]; then
 	sleep 10
 	freertos_test main_iic test_iic
 	sleep 10
-	freertos_test main_sd test_sd
-	sleep 10
+	#freertos_test main_sd test_sd
+	#sleep 10
 else
 	freertos_test main_blinky test_blink
 	sleep 10
