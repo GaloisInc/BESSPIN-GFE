@@ -12,8 +12,8 @@ script_dir = os.path.dirname(
 
 gdb_port = 3333
 
-gdb_path = os.path.join("riscv32-unknown-elf-gdb")
-gdb_path32 = os.path.join("riscv32-unknown-elf-gdb")
+gdb_path = os.path.join("riscv64-unknown-elf-gdb")
+gdb_path32 = os.path.join("riscv64-unknown-elf-gdb")
 gdb_path64 = os.path.join("riscv64-unknown-elf-gdb")
 openocd_command = os.path.join("openocd")
 

@@ -7,7 +7,7 @@
 	url = https://github.com/bluespec/Piccolo.git
 [submodule "FreeRTOS-mirror"]
 	path = FreeRTOS-mirror
-	url = ../FreeRTOS-mirror.git
+	url = https://github.com/GaloisInc/FreeRTOS-mirror.git
 [submodule "bluespec-processors/P2/Flute"]
 	path = bluespec-processors/P2/Flute
 	url = https://github.com/bluespec/Flute.git
@@ -23,10 +23,6 @@
 [submodule "riscv-tests"]
 	path = riscv-tests
 	url = ../riscv-tests.git
-[submodule "tool-suite"]
-	path = tool-suite
-	url = ../tool-suite.git
-	branch = develop
 [submodule "busybox"]
 	path = busybox
 	url = https://github.com/mirror/busybox.git
