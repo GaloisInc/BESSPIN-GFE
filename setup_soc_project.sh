@@ -36,9 +36,9 @@ esac
 
 err_msg $? "Making the bootrom failed"
 
-echo "Please run with Vivado 2017.4"
+echo "Please run with Vivado 2019.1"
 # i.e.
-# source /Xilinx/Vivado/2017.4/settings64.sh
+# source /Xilinx/Vivado/2019.1/settings64.sh
 mkdir -p $BASE_DIR/vivado
 cd $BASE_DIR/vivado
 

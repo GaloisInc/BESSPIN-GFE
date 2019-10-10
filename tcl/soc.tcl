@@ -136,7 +136,7 @@ set_msg_config  -ruleid {8}  -id {[BD 41-1271]}  -suppress  -source 2
 
 # Set project properties
 set obj [current_project]
-set_property -name "board_part" -value "xilinx.com:vcu118:part0:2.0" -objects $obj
+set_property -name "board_part" -value "xilinx.com:vcu118:part0:2.3" -objects $obj
 set_property -name "default_lib" -value "xil_defaultlib" -objects $obj
 set_property -name "dsa.num_compute_units" -value "60" -objects $obj
 set_property -name "ip_cache_permissions" -value "read write" -objects $obj
