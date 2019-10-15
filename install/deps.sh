@@ -10,26 +10,26 @@ git-lfs install
 # Vivado Lab 2017.4 needs an old version of libtinfo:
 apt-get install -y libtinfo5
 # It may also need debug cable drivers and a udev rule:
-cd /opt/Xilinx/Vivado_Lab/2017.4/data/xicom/cable_drivers/lin64/install_script/install_drivers/
-./install_drivers
-cd -
+pushd /opt/Xilinx/Vivado_Lab/2017.4/data/xicom/cable_drivers/lin64/install_script/install_drivers/
+source install_drivers
+popd
 # Make vivado_lab available to all users:
 echo 'source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh' | tee -a /etc/bash.bashrc
 
 # For riscv-linux build:
-apt-get install -y openssl bc bison flex make autoconf debootstrap proot
+apt-get install -y openssl bc bison flex make autoconf
 
 # RTL simulator and RISC-V emulator:
-apt-get install -y verilator qemu qemu-user
+apt-get install -y verilator qemu
 
 # OpenOCD
 apt-get install -y libftdi1-2 libusb-1.0-0-dev libtool pkg-config texinfo
-cd riscv-openocd
+pushd riscv-openocd
 ./bootstrap
 ./configure --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi
 make
 make install
-cd -
+popd
 # TODO: maybe provide a pre-built binary instead of the submodule?
 
 # RISC-V toolchains (both linux and newlib versions):
