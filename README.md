@@ -14,6 +14,7 @@ for a high-level overview of the system.
   - [Install Vivado](#install-vivado)
   - [Clone this Repo](#clone-this-repo)
   - [Update Dependencies](#update-dependencies)
+  - [Configure Network](#configure-network)
   - [Building the Bitstream](#building-the-bitstream)
   - [Storing a Bitstream in Flash](#storing-a-bitstream-in-flash)
   - [Testing](#testing)
@@ -118,6 +119,15 @@ The `riscv32-unknown-elf-*` tools are not included in this /opt/riscv tree insta
 as they are now redundant. The tools labeled `64` all work with 32-bit binaries,
 although they may require explicit flags (such as `-march=rv32gc` for gcc) to get
 the behaviors that were implicit defaults of the corresponding `32` versions.
+
+
+### Configure Network
+
+Your GFE host PC should reserve one ethernet interface to connect directly to
+the ethernet adapter onboard the VCU118, with static IP address
+`10.88.88.1/24`. This is required by the Linux and FreeRTOS networking tests.
+Detailed [setup instructions](install/network.md) are included in the install
+directory.
 
 
 ### Building the Bitstream ###
