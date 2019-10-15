@@ -50,7 +50,7 @@ import multiprocessing
 
 exclude_list = []
 
-n_workers_max = 4
+n_workers_max = 9
 
 # ================================================================
 
@@ -381,8 +381,8 @@ def do_isa_test (worker_no, args_dict, full_filename):
     # Construct the commands for sub-process execution
     command1 = [args_dict ['elf_to_hex_exe'], full_filename, "Mem.hex"]
 
-    command2 = [args_dict ['sim_path'], "+tohost", "+jtag_port=666{0}".format(worker_no)]
-    command2.append ("+vpi_port=777{0}".format(worker_no))
+    command2 = [args_dict ['sim_path'], "+tohost", "+jtag_port=999{0}".format(worker_no)]
+    command2.append ("+vpi_port=888{0}".format(worker_no))
     if (args_dict ['verbosity'] == 1): command2.append ("+v1")
     elif (args_dict ['verbosity'] == 2): command2.append ("+v2")
 
@@ -428,7 +428,7 @@ def run_command (command):
     if python_minor_version < 6:
         # Python 3.5 and earlier
         result = subprocess.run (args = command,
-                                 timeout = 30,
+                                 timeout = 60,
                                  bufsize = 0,
                                  stdout = subprocess.PIPE,
                                  stderr = subprocess.STDOUT,
@@ -436,7 +436,7 @@ def run_command (command):
     else:
         # Python 3.6 and later
         result = subprocess.run (args = command,
-                                 timeout = 30,
+                                 timeout = 60,
                                  bufsize = 0,
                                  stdout = subprocess.PIPE,
                                  stderr = subprocess.STDOUT,
