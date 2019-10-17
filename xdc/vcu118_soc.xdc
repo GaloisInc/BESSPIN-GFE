@@ -92,23 +92,6 @@ set_property PACKAGE_PIN AV34 [get_ports gpio_led[1]]; # GPIO_LED_1
 set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[0]]
 set_property PACKAGE_PIN AT32 [get_ports gpio_led[0]]; # GPIO_LED_0
 
-# FMC PCIe pins
-set_property PACKAGE_PIN V38 [get_ports fmc_pcie_clk_p[0]]
-set_property PACKAGE_PIN V39 [get_ports fmc_pcie_clk_n[0]]
-
-create_clock -period 10.000 -name fmc_pcie_clk [get_ports fmc_pcie_clk_p[0]]
-
-set_property LOC GTYE4_CHANNEL_X0Y31 [get_cells -hierarchical -filter {NAME =~ *gen_channel_container[8].*gen_gtye4_channel_inst[0].GTYE4_CHANNEL_PRIM_INST}]
-set_property LOC GTYE4_CHANNEL_X0Y28 [get_cells -hierarchical -filter {NAME =~ *gen_channel_container[8].*gen_gtye4_channel_inst[1].GTYE4_CHANNEL_PRIM_INST}]
-set_property LOC GTYE4_CHANNEL_X0Y30 [get_cells -hierarchical -filter {NAME =~ *gen_channel_container[8].*gen_gtye4_channel_inst[2].GTYE4_CHANNEL_PRIM_INST}]
-set_property LOC GTYE4_CHANNEL_X0Y29 [get_cells -hierarchical -filter {NAME =~ *gen_channel_container[8].*gen_gtye4_channel_inst[3].GTYE4_CHANNEL_PRIM_INST}]
-
-set_clock_groups -asynchronous -group {mmcm_clkout1} -group [get_clocks -of_objects [get_pins -hierarchical -filter {NAME =~ *gen_channel_container[*].*gen_gtye4_channel_inst[*].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}]]
-set_clock_groups -asynchronous -group [get_clocks -of_objects [get_pins -hierarchical -filter {NAME =~ *gen_channel_container[*].*gen_gtye4_channel_inst[*].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}]] -group {mmcm_clkout1}
-
-set_clock_groups -asynchronous -group {mmcm_clkout1} -group {fmc_pcie_clk}
-set_clock_groups -asynchronous -group {fmc_pcie_clk} -group {mmcm_clkout1}
-
 # ----- JTAG TAP constraints ------
 
 create_clock -period 40.000 -name tck -waveform {0.000 20.000} [get_pins xilinx_jtag_0/tck]

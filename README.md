@@ -37,9 +37,6 @@ for a high-level overview of the system.
   - [Licensing](#licensing)
   - [Capturing a Trace](#capturing-a-trace)
   - [Comparing a Trace](#comparing-a-trace)
-- [PCI Express](#pcie)
-  - [Hardware Setup](#pcie-hardware-setup)
-  - [Reset](#pcie-reset)
 
 
 ## Getting Started ##
@@ -65,7 +62,7 @@ but we expect to upgrade Buster to the stable release version when it is availab
 
 ### Install Vivado ###
 
-Download and install Vivado 2019.1. A license key for the tool is included on a piece of paper in the box containing the VCU118. See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2019_1/ug973-vivado-release-notes-install-license.pdf) for download and installation instructions. The GFE only requires the Vivado tool, not the SDK, so download the `Vivado Design Suite - HLx 2019.1 ` from the [Vivado Download Page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2019-1.html). You must make an account with Vivado in order to register the tool and install the license. After installing Vivado, you must also install libtinfo5 for Debian to run the tool. Install this dependency by running `sudo apt-get install libtinfo5`.
+Download and install Vivado 2017.4. A license key for the tool is included on a piece of paper in the box containing the VCU118. See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug973-vivado-release-notes-install-license.pdf) for download and installation instructions. The GFE only requires the Vivado tool, not the SDK, so download the `Vivado Design Suite - HLx 2017.4 ` from the [Vivado Download Page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2017-4.html). You must make an account with Vivado in order to register the tool and install the license. After installing Vivado, you must also install libtinfo5 for Debian to run the tool. Install this dependency by running `sudo apt-get install libtinfo5`.
 
 If using separate development and testing machines, only the development machine needs a license. We recommend installing Vivado Lab on the testing machine, because it does not require a license and can be used to program the FPGA.
 
@@ -132,7 +129,7 @@ directory.
 
 ### Building the Bitstream ###
 
-To build your own bitstream, make sure Vivado 2019.1 is on your path (`$ which vivado`) and run the following commands
+To build your own bitstream, make sure Vivado 2017.4 is on your path (`$ which vivado`) and run the following commands
 
 ```bash
 cd $GFE_REPO
@@ -169,7 +166,7 @@ sudo reboot
 ```
 2. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
 3. Make sure the VCU118 is powered on (fan should be running) 
-4. Add Vivado or Vivado Lab to your path (i.e. `source /opt/Xilinx/Vivado_Lab/2019.1/settings64.sh`).
+4. Add Vivado or Vivado Lab to your path (i.e. `source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh`).
 5. Run `./test_processor.sh chisel_p1` from the top level of the gfe repo. Replace `chisel_p1` with your processor of choice. This command will program the FPGA and run the appropriate tests for that processor.
 
 A passing test will not display any error messages. All failing tests will report errors and stop early.
