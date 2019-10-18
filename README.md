@@ -86,17 +86,6 @@ cd gfe
 
 ### Update Dependencies ###
 
-This version of the GFE uses Git LFS to manage Vivado bitfiles as well as
-an archived, pre-built copy of the GNU toolchains.
-If you are updating from an earlier release or development version of the GFE, first run
-```bash
-sudo apt install git-lfs
-git-lfs install
-
-git pull origin master
-```
-in the GFE repo's root directory.
-
 The GFE relies on several nested Git submodules to provide processor sources
 and RISC-V development tools.
 Because some of these submodules contain redundant copies of the toolchain,
@@ -105,17 +94,27 @@ we provide a script to initialize only those necessary for GFE development.
 ./init_submodules.sh
 ```
 
-**Nix is no longer required** to run GFE software.
-The script below will install necessary system packages as well as copies of
+As of Release 4.2, **Nix is no longer required** to run GFE software.
+The Nix shell from release 3 of the tool-suite project can still be used if desired,
+but tool-suite is no longer a submodule of gfe.
+The script below will install necessary system packages using apt.
+It downloads a 1.1GB archive containing pre-built copies of both
 the newlib (`riscv64-unknown-elf-*`) and linux (`riscv64-unknown-linux-gnu-*`)
-variants of the GNU toolchain in /opt/riscv. It will also build a development
+variants of the GNU toolchain, which should be unpacked into /opt/riscv
+after backing up any files which may already exist there.
+
+The same deps.sh script will also build a development
 version of riscv-openocd from the included submodule, placing an executable in
-/usr/local/bin/openocd. The script should be run directly from the root of this repo:
+/usr/local/bin/openocd.
+
+The script should be run directly from the root of this repo:
 ```bash
 sudo ./install/deps.sh
+# WARNING: will overwrite any existing /opt/riscv/
+sudo tar -C / -xf install/riscv-gnu-toolchains.tar.gz
 ```
 
-The `riscv32-unknown-elf-*` tools are not included in this /opt/riscv tree install,
+The `riscv32-unknown-elf-*` tools are not included in this /opt/riscv tree,
 as they are now redundant. The tools labeled `64` all work with 32-bit binaries,
 although they may require explicit flags (such as `-march=rv32gc` for gcc) to get
 the behaviors that were implicit defaults of the corresponding `32` versions.
