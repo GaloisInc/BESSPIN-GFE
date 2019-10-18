@@ -110,8 +110,8 @@ version of riscv-openocd from the included submodule, placing an executable in
 The script should be run directly from the root of this repo:
 ```bash
 sudo ./install/deps.sh
-# WARNING: will overwrite any existing /opt/riscv/
-sudo tar -C / -xf install/riscv-gnu-toolchains.tar.gz
+# WARNING: will overwrite any existing /opt/riscv/ tree!
+sudo tar -C /opt -xf install/riscv-gnu-toolchains.tar.gz
 ```
 
 The `riscv32-unknown-elf-*` tools are not included in this /opt/riscv tree,

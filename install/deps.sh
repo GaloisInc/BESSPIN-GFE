@@ -57,7 +57,7 @@ mv "$tmp_file" "install/$filename"
 rm -f "$tmp_cookies" "$tmp_headers"
 echo Saved: "install/$filename"
 # Unpack into /opt/riscv/ -- not automated here
-# tar -C / -xf "install/$filename"
+# tar -C /opt -xf "install/$filename"
 
 # Make these available to all users:
 echo 'export RISCV=/opt/riscv' | tee -a /etc/bash.bashrc
