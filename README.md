@@ -65,7 +65,24 @@ but we expect to upgrade Buster to the stable release version when it is availab
 
 ### Install Vivado ###
 
-Download and install Vivado 2019.1. A license key for the tool is included on a piece of paper in the box containing the VCU118. See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2019_1/ug973-vivado-release-notes-install-license.pdf) for download and installation instructions. The GFE only requires the Vivado tool, not the SDK, so download the `Vivado Design Suite - HLx 2019.1 ` from the [Vivado Download Page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2019-1.html). You must make an account with Vivado in order to register the tool and install the license. After installing Vivado, you must also install libtinfo5 for Debian to run the tool. Install this dependency by running `sudo apt-get install libtinfo5`.
+Download and install **Vivado 2019.1**.
+This is a change from previous versions of the GFE, which used Vivado 2017.4.
+The new version is needed to support bitstream generation for designs using the PCIe bus.
+A license key for the tool is included on a piece of paper in the box containing the VCU118.
+See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2019_1/ug973-vivado-release-notes-install-license.pdf) for download and installation instructions.
+The GFE only requires the Vivado tool, not the SDK, so download the `Vivado Design Suite - HLx 2019.1 ` from the [Vivado Download Page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2019-1.html).
+You must make an account with Vivado in order to register the tool and install the license.
+After installing Vivado, you must also install libtinfo5 for Debian to run the tool.
+Install this dependency by running `sudo apt-get install libtinfo5`.
+
+If you've already installed FTDI cable drivers and udev rules with a previous version of Vivado or Vivado Lab,
+they should still work with the new version.
+If necessary, they can be (re)installed from the new version:
+```bash
+cd /opt/Xilinx/Vivado_Lab/2019.1/data/xicom/cable_drivers/lin64/install_script/install_drivers/
+./install_drivers
+cd -
+```
 
 If using separate development and testing machines, only the development machine needs a license. We recommend installing Vivado Lab on the testing machine, because it does not require a license and can be used to program the FPGA.
 
@@ -122,10 +139,16 @@ as they are now redundant. The tools labeled `64` all work with 32-bit binaries,
 although they may require explicit flags (such as `-march=rv32gc` for gcc) to get
 the behaviors that were implicit defaults of the corresponding `32` versions.
 
-Finally, make the toolchains and Vivado Lab available to all users by running this script:
+Finally, make the gnu toolchains and Vivado Lab 2019.1 available to all users by running this script:
 ```bash
 sudo ./install/amend-bashrc.sh 
 ```
+
+You may want to verify that the new version of the `vivado_lab` program is available in your normal user shell:
+```bash
+vivado_lab -version
+```
+
 
 ### Configure Network
 

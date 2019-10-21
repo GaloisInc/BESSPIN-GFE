@@ -4,13 +4,6 @@
 
 set -eux
 
-# Vivado Lab 2017.4 needs an old version of libtinfo:
-apt-get install -y libtinfo5
-# It may also need debug cable drivers and a udev rule:
-cd /opt/Xilinx/Vivado_Lab/2017.4/data/xicom/cable_drivers/lin64/install_script/install_drivers/
-./install_drivers
-cd -
-
 # For riscv-linux build:
 apt-get install -y openssl bc bison flex make autoconf debootstrap proot
 
