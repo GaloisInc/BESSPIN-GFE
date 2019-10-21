@@ -97,20 +97,23 @@ we provide a script to initialize only those necessary for GFE development.
 As of Release 4.2, **Nix is no longer required** to run GFE software.
 The Nix shell from release 3 of the tool-suite project can still be used if desired,
 but tool-suite is no longer a submodule of gfe.
-The script below will install necessary system packages using apt.
-It downloads a 1.1GB archive containing pre-built copies of both
+The `deps.sh` script below will install necessary system packages using `apt`.
+
+The `build-openocd.sh` script will build a GFE-specific development
+version of riscv-openocd from the included submodule, placing an executable in
+/usr/local/bin/openocd.
+
+The `download-toolchains.sh` script downloads a 1.1GB archive containing pre-built copies of both
 the newlib (`riscv64-unknown-elf-*`) and linux (`riscv64-unknown-linux-gnu-*`)
 variants of the GNU toolchain, which should be unpacked into /opt/riscv
 after backing up any files which may already exist there.
 
-The same deps.sh script will also build a development
-version of riscv-openocd from the included submodule, placing an executable in
-/usr/local/bin/openocd.
-
-The script should be run directly from the root of this repo:
+The scripts should be run directly from the root of this repo:
 ```bash
 sudo ./install/deps.sh
-# WARNING: will overwrite any existing /opt/riscv/ tree!
+sudo ./install/build-openocd.sh
+sudo ./install/download-toolchains.sh
+# WARNING: tar will overwrite any existing /opt/riscv/ tree!
 sudo tar -C /opt -xf install/riscv-gnu-toolchains.tar.gz
 ```
 
@@ -119,6 +122,10 @@ as they are now redundant. The tools labeled `64` all work with 32-bit binaries,
 although they may require explicit flags (such as `-march=rv32gc` for gcc) to get
 the behaviors that were implicit defaults of the corresponding `32` versions.
 
+Finally, make the toolchains and Vivado Lab available to all users by running this script:
+```bash
+sudo ./install/amend-bashrc.sh 
+```
 
 ### Configure Network
 
