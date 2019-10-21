@@ -65,7 +65,24 @@ but we expect to upgrade Buster to the stable release version when it is availab
 
 ### Install Vivado ###
 
-Download and install Vivado 2019.1. A license key for the tool is included on a piece of paper in the box containing the VCU118. See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2019_1/ug973-vivado-release-notes-install-license.pdf) for download and installation instructions. The GFE only requires the Vivado tool, not the SDK, so download the `Vivado Design Suite - HLx 2019.1 ` from the [Vivado Download Page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2019-1.html). You must make an account with Vivado in order to register the tool and install the license. After installing Vivado, you must also install libtinfo5 for Debian to run the tool. Install this dependency by running `sudo apt-get install libtinfo5`.
+Download and install **Vivado 2019.1**.
+This is a change from previous versions of the GFE, which used Vivado 2017.4.
+The new version is needed to support bitstream generation for designs using the PCIe bus.
+A license key for the tool is included on a piece of paper in the box containing the VCU118.
+See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2019_1/ug973-vivado-release-notes-install-license.pdf) for download and installation instructions.
+The GFE only requires the Vivado tool, not the SDK, so download the `Vivado Design Suite - HLx 2019.1 ` from the [Vivado Download Page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2019-1.html).
+You must make an account with Vivado in order to register the tool and install the license.
+After installing Vivado, you must also install libtinfo5 for Debian to run the tool.
+Install this dependency by running `sudo apt-get install libtinfo5`.
+
+If you've already installed FTDI cable drivers and udev rules with a previous version of Vivado or Vivado Lab,
+they should still work with the new version.
+If necessary, they can be (re)installed from the new version:
+```bash
+cd /opt/Xilinx/Vivado_Lab/2019.1/data/xicom/cable_drivers/lin64/install_script/install_drivers/
+./install_drivers
+cd -
+```
 
 If using separate development and testing machines, only the development machine needs a license. We recommend installing Vivado Lab on the testing machine, because it does not require a license and can be used to program the FPGA.
 
@@ -97,20 +114,23 @@ we provide a script to initialize only those necessary for GFE development.
 As of Release 4.2, **Nix is no longer required** to run GFE software.
 The Nix shell from release 3 of the tool-suite project can still be used if desired,
 but tool-suite is no longer a submodule of gfe.
-The script below will install necessary system packages using apt.
-It downloads a 1.1GB archive containing pre-built copies of both
+The `deps.sh` script below will install necessary system packages using `apt`.
+
+The `build-openocd.sh` script will build a GFE-specific development
+version of riscv-openocd from the included submodule, placing an executable in
+/usr/local/bin/openocd.
+
+The `download-toolchains.sh` script downloads a 1.1GB archive containing pre-built copies of both
 the newlib (`riscv64-unknown-elf-*`) and linux (`riscv64-unknown-linux-gnu-*`)
 variants of the GNU toolchain, which should be unpacked into /opt/riscv
 after backing up any files which may already exist there.
 
-The same deps.sh script will also build a development
-version of riscv-openocd from the included submodule, placing an executable in
-/usr/local/bin/openocd.
-
-The script should be run directly from the root of this repo:
+The scripts should be run directly from the root of this repo:
 ```bash
 sudo ./install/deps.sh
-# WARNING: will overwrite any existing /opt/riscv/ tree!
+sudo ./install/build-openocd.sh
+sudo ./install/download-toolchains.sh
+# WARNING: tar will overwrite any existing /opt/riscv/ tree!
 sudo tar -C /opt -xf install/riscv-gnu-toolchains.tar.gz
 ```
 
@@ -118,6 +138,16 @@ The `riscv32-unknown-elf-*` tools are not included in this /opt/riscv tree,
 as they are now redundant. The tools labeled `64` all work with 32-bit binaries,
 although they may require explicit flags (such as `-march=rv32gc` for gcc) to get
 the behaviors that were implicit defaults of the corresponding `32` versions.
+
+Finally, make the gnu toolchains and Vivado Lab 2019.1 available to all users by running this script:
+```bash
+sudo ./install/amend-bashrc.sh 
+```
+
+You may want to verify that the new version of the `vivado_lab` program is available in your normal user shell:
+```bash
+vivado_lab -version
+```
 
 
 ### Configure Network
