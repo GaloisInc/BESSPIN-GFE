@@ -37,9 +37,10 @@ for a high-level overview of the system.
   - [Licensing](#licensing)
   - [Capturing a Trace](#capturing-a-trace)
   - [Comparing a Trace](#comparing-a-trace)
-- [PCI Express](#pcie)
+- [PCI Express Root Complex](#pci-express-root-complex)
   - [Hardware Setup](#pcie-hardware-setup)
   - [Reset](#pcie-reset)
+  - [Testing](#pcie-testing)
 
 
 ## Getting Started ##
@@ -743,10 +744,10 @@ Cissr: reset
 
 Note that some early mismatches are expected as the simulation model is updated with the correct PC and initial status registers.
 
-## PCI Express ##
+## PCI Express Root Complex ##
 **NOTE:** the PCIe is currently supported only in busybox.
 
-### Hardware Setup ###
+### PCIe Hardware Setup ###
 
 To utilize the PCIe root port, the following hardware setup is required:
 
@@ -767,13 +768,13 @@ To utilize the PCIe root port, the following hardware setup is required:
 - Alternatively, a PCIe expansion chassis may be connected to the FMC
   card by way of expansion cards and cable.
 
-### Reset ###
+### PCIe Reset ###
 
 Every time a bitfile is loaded, prior to loading the bitfile, the PCIe
 bus must be reset by pressing S1 on HTG-FMC-PCIE (the RESET PCIE
 button on the FMC card).
 
-### Testing ### 
+### PCIe Testing ### 
 
 #### Ethernet ####
 * If you are testing the ethernet card, you have to first bring the interface up
