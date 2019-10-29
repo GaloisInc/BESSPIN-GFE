@@ -13,3 +13,5 @@ apt-cache dumpavail | \
 #In case we needed a debian snapshot: Everything was working on 09/19/19 .
 apt-get install -y netcat
 apt-get install -y keyutils
+apt-get install -y pciutils
+apt-get install -y nvme-cli
