@@ -5,14 +5,17 @@
 set -eux
 
 # For riscv-linux build:
-apt-get install -y openssl bc bison flex make autoconf debootstrap proot
+apt install -y openssl bc bison flex make autoconf debootstrap proot
 
 # RTL simulator and RISC-V emulator:
-apt-get install -y verilator qemu qemu-user
+apt install -y verilator qemu qemu-user
 
 # System-wide python packages needed by testing scripts
-apt-get install -y python3-pip
+apt install -y python3-pip
 pip3 install pyserial pexpect
+
+# Xilinx vivado_lab dependency
+apt install -y libtinfo5
 
 # TODO: Clang and LLVM for RISC-V:
 # wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
