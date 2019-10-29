@@ -130,7 +130,7 @@ The scripts should be run directly from the root of this repo:
 ```bash
 sudo ./install/deps.sh
 sudo ./install/build-openocd.sh
-sudo ./install/download-toolchains.sh
+sudo ./install/download-toolchain.sh
 # WARNING: tar will overwrite any existing /opt/riscv/ tree!
 sudo tar -C /opt -xf install/riscv-gnu-toolchains.tar.gz
 ```
