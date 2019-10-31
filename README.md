@@ -125,6 +125,10 @@ The `download-toolchains.sh` script downloads a 1.1GB archive containing pre-bui
 the newlib (`riscv64-unknown-elf-*`) and linux (`riscv64-unknown-linux-gnu-*`)
 variants of the GNU toolchain, which should be unpacked into /opt/riscv
 after backing up any files which may already exist there.
+The archive is served from Google Drive. If you cannot access it, try
+downloading the file from Galois' OwnCloud service,
+using [this link](https://owncloud-tng.galois.com/index.php/s/WFVC0TnUgc7Efos)
+in your browser, and saving the archive in the install directory.
 
 The scripts should be run directly from the root of this repo:
 ```bash
