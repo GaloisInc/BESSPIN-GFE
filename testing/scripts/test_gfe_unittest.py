@@ -440,14 +440,14 @@ class TestFreeRTOS(BaseGfeTest):
 
         return
 
-    def test_iic(self):
+    def test_rtc(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
-           os.path.join( self.path_to_freertos, 'main_iic.elf'))
+           os.path.join( self.path_to_freertos, 'main_rtc.elf'))
         print(freertos_elf)
 
         expected_contents = [
-            "Whoami: 0x71",
+            "Current time: ",
         ]
         
         self.check_in_output(
@@ -464,7 +464,7 @@ class TestFreeRTOS(BaseGfeTest):
         print(freertos_elf)
 
         expected_contents = [
-            "prvSdTestTask0 terminating, exit code = 0",
+            "Root opened",
         ]
         
         self.check_in_output(
