@@ -15,3 +15,4 @@ apt-get install -y netcat
 apt-get install -y keyutils
 apt-get install -y pciutils
 apt-get install -y nvme-cli
+apt-get install -y sysvinit-core # to switch to sysv init instead of init.d
