@@ -9,9 +9,10 @@ OBJCOPY=$(CROSS_COMPILE)objcopy
 OBJDUMP=$(CROSS_COMPILE)objdump
 
 BUSYBOX_CONFIG?=$(CURDIR)/busybox.config
-KCONFIG_CONFIG?=$(CURDIR)/linux.config
+#KCONFIG_CONFIG?=$(CURDIR)/linux.config
 DEBIAN_CONFIG=$(CURDIR)/debian-linux.config
 CHAINLOADER_CONFIG=$(CURDIR)/chainloader-linux.config
+KCONFIG_CONFIG=$(CHAINLOADER_CONFIG)
 CPIO_UTILS_PREFIX=$(CURDIR)/build-cpio_utils/
 
 NPROCS := 1
@@ -76,12 +77,7 @@ build-bbl/bbl: build-linux/vmlinux
 	$(MAKE) -C $(@D)
 	@echo "build-bbl/bbl done"
 
-change-qemu-kconfig:
-	@echo "change-qemu-kconfig"
-	$(eval export KCONFIG_CONFIG=$(CURDIR)/chainloader-linux.config)
-	@echo "change-qemu-kconfig done"
-
-build-qemu-bbl/bbl: change-qemu-kconfig build-linux/vmlinux
+build-qemu-bbl/bbl: build-linux/vmlinux
 	@echo "build-qemu-bbl/bbl"
 	$(MKDIR) -p $(@D)
 	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-linux/vmlinux
@@ -106,17 +102,14 @@ bootmem.bin: bootmem
 clean-cpio-utils:
 	@rm -rf build-cpio-utils
 
-clean-stage1-initramfs.cpio.gz:
-	@rm -rf $(DEBIAN_DIR)/stage1-initramfs.cpio.gz
-	@rm -rf initramfs.cpio.gz
-	@rm -rf $(OUT_DIR)
-
 clean:
 	@rm -f bootmem bootmem.bin bbl.bin
 	@rm -rf build-bbl
+	@rm -rf chainloader-initramfs.cpio.gz
+	@rm -rf chainloader-initramfs.files
 	@make -f Makefile.deb clean
 	@make -f Makefile.bb clean
-	@rm -rf initramfs.cpio.gz
+	#@rm -rf $(OUT_DIR)
 FORCE:
 	
 .PHONY: default debian
@@ -130,14 +123,14 @@ build-cpio-utils:
 	@echo "Compiling cpio utils done"
 
 # target : prerequisitites ; recipe
-stage1-initramfs.cpio.gz: #initramfs.cpio.gz
+$(OUT_DIR)/initramfs.cpio.gz:
 	@echo "stage1-initramfs.cpio.gz"
 	mkdir -p $(OUT_DIR)
 	$(DEBIAN_DIR)/build_stage1_initramfs.sh
 	mv $(DEBIAN_DIR)/stage1-initramfs.cpio.gz $(OUT_DIR)/initramfs.cpio.gz
 	@echo "stage1-initramfs.cpio.gz done"
 
-debian-stage1-virtual-disk: stage1-initramfs.cpio.gz
+debian-stage1-virtual-disk:
 	@echo "debian-stage1-virtual-disk"
 	mkdir -p $(OUT_DIR)/scripts
 	cp $(DEBIAN_DIR)/setup_chroot.sh $(OUT_DIR)/scripts/
@@ -150,7 +143,7 @@ debian-chainloader-initramfs: build-busybox/busybox_unstripped
 	./build_chainloader_initramfs.sh
 	@echo "debian-chainloader-initramfs done"
 
-debian-chainloader-image: debian-stage1-virtual-disk debian-chainloader-initramfs build-qemu-bbl/bbl | build-cpio-utils
+debian-chainloader-image: debian-stage1-virtual-disk $(OUT_DIR)/initramfs.cpio.gz debian-chainloader-initramfs build-qemu-bbl/bbl | build-cpio-utils
 	@echo "debian-chainloader-image"
 	qemu-system-riscv64 \
       -nographic -machine virt -m 2G \
