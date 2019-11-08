@@ -143,12 +143,16 @@ debian-chainloader-initramfs: build-busybox/busybox_unstripped
 	./build_chainloader_initramfs.sh
 	@echo "debian-chainloader-initramfs done"
 
-debian-chainloader-image: debian-stage1-virtual-disk $(OUT_DIR)/initramfs.cpio.gz debian-chainloader-initramfs build-qemu-bbl/bbl | build-cpio-utils
+extraSetupArg=besspin.debian_repo=http://deb.debian.org/debian/
+#extraSetupArg=besspin.debian_repo=/home/mpodhradsky/Workspace/BESSPIN/git_repos/debian-repo-snapshot-src-fixed
+
+debian-chainloader-image: #debian-stage1-virtual-disk $(OUT_DIR)/initramfs.cpio.gz debian-chainloader-initramfs build-qemu-bbl/bbl | build-cpio-utils
 	@echo "debian-chainloader-image"
 	qemu-system-riscv64 \
-      -nographic -machine virt -m 2G \
+      -nographic -machine virt -m 2G -smp $$(nproc) \
       -kernel build-qemu-bbl/bbl \
-      -append "console=ttyS0 besspin.set_clock=@$(date +%s) ${extraSetupArg}" \
+      -append "console=ttyS0 besspin.set_clock=$$(date --iso-8601=sec) ${extraSetupArg}" \
       -fsdev local,id=virtfs,path=$(CURDIR)/virtfs,security_model=mapped-file \
-      -device virtio-9p-device,fsdev=virtfs,mount_tag=virtfs
+      -device virtio-9p-device,fsdev=virtfs,mount_tag=virtfs \
+	  -device virtio-net-device,netdev=usernet -netdev user,id=usernet,hostfwd=tcp::22222-:22
 	@echo "debian-chainloader-image done"
