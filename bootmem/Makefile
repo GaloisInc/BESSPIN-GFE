@@ -14,6 +14,15 @@ DEBIAN_CONFIG=$(CURDIR)/debian-linux.config
 CHAINLOADER_CONFIG=$(CURDIR)/chainloader-linux.config
 CPIO_UTILS_PREFIX=$(CURDIR)/build-cpio_utils/
 
+NPROCS := 1
+ifeq ($(UNAME),Linux)
+        NPROCS := $(shell grep -c ^processor /proc/cpuinfo)
+else ifeq ($(UNAME),Darwin)
+        NPROCS := $(shell sysctl hw.ncpu | awk '{print $$2}')
+endif # $(UNAME)
+
+
+
 export CROSS_COMPILE KCONFIG_CONFIG CPIO_UTILS_PREFIX
 
 LINUX_SRC=../riscv-linux
@@ -130,19 +139,18 @@ debian-stage1-virtual-disk: stage1-initramfs.cpio.gz
 	cp -r $(DEBIAN_DIR)/setup_scripts $(OUT_DIR)/scripts/
 	@echo "debian-stage1-virtual-disk done"	
 
-debian-chainloader-initramfs:
+debian-chainloader-initramfs: build-busybox/busybox_unstripped
 	@echo "debian-chainloader-initramfs"
-	# set BUSYBOX_PREFIX & build the chainloader's initramfs containing stuff from busybox's _install dir
 	$(eval export BUSYBOX_PREFIX=$(CURDIR)/build-busybox/_install)
 	./build_chainloader_initramfs.sh
 	ln -s chainloader-linux.config initramfs.cpio.gz
 	@echo "debian-chainloader-initramfs done"
 
-debian-chainloader-image: build-busybox/busybox_unstripped build-qemu-bbl/bbl
+debian-chainloader-image: debian-stage1-virtual-disk debian-chainloader-initramfs build-qemu-bbl/bbl | build-cpio-utils
 	@echo "debian-chainloader-image"
 	qemu-system-riscv64 \
       -nographic -machine virt -m 2G \
-      -kernel build-bbl/bbl \
+      -kernel build-qemu-bbl/bbl \
       -append "console=ttyS0 besspin.set_clock=@$(date +%s) ${extraSetupArg}" \
       -fsdev local,id=virtfs,path=$(CURDIR)/virtfs,security_model=mapped-file \
       -device virtio-9p-device,fsdev=virtfs,mount_tag=virtfs
