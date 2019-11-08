@@ -113,6 +113,7 @@ clean:
 	@rm -rf build-bbl
 	@make -f Makefile.deb clean
 	@make -f Makefile.bb clean
+	@rm -rf initramfs.cpio.gz
 FORCE:
 	
 .PHONY: default debian
@@ -125,7 +126,8 @@ build-cpio-utils:
 	cp $(LINUX_SRC)/usr/gen_initramfs_list.sh $(CPIO_UTILS_PREFIX)
 	@echo "Compiling cpio utils done"
 
-stage1-initramfs.cpio.gz:
+# target : prerequisitites ; recipe
+stage1-initramfs.cpio.gz: #initramfs.cpio.gz
 	@echo "stage1-initramfs.cpio.gz"
 	mkdir -p $(OUT_DIR)
 	$(DEBIAN_DIR)/build_stage1_initramfs.sh
@@ -143,7 +145,7 @@ debian-chainloader-initramfs: build-busybox/busybox_unstripped
 	@echo "debian-chainloader-initramfs"
 	$(eval export BUSYBOX_PREFIX=$(CURDIR)/build-busybox/_install)
 	./build_chainloader_initramfs.sh
-	ln -s chainloader-linux.config initramfs.cpio.gz
+	ln -s chainloader-initramfs.cpio.gz initramfs.cpio.gz
 	@echo "debian-chainloader-initramfs done"
 
 debian-chainloader-image: debian-stage1-virtual-disk debian-chainloader-initramfs build-qemu-bbl/bbl | build-cpio-utils
