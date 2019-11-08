@@ -65,7 +65,7 @@ build-linux/.config: $(KCONFIG_CONFIG) # this means we should recompile when KCO
 
 build-linux/vmlinux: build-linux/.config build-busybox/busybox_unstripped
 	@echo "build-linux/vmlinux"
-	@echo "Building Linux with config: $$KCONFIG_CONFIG and $(PAYLOAD)"
+	@echo "Building Linux with config: $$KCONFIG_CONFIG"
 	$(MAKE) -C $(@D) ARCH=riscv O=$(CURDIR)/build-linux $(@F)
 	@echo "build-linux/vmlinux done"
 
@@ -76,10 +76,13 @@ build-bbl/bbl: build-linux/vmlinux
 	$(MAKE) -C $(@D)
 	@echo "build-bbl/bbl done"
 
-build-qemu-bbl/bbl: build-linux/vmlinux
-	@echo "build-qemu-bbl/bbl"
+change-qemu-kconfig:
+	@echo "change-qemu-kconfig"
 	$(eval export KCONFIG_CONFIG=$(CURDIR)/chainloader-linux.config)
-	$(eval PAYLOAD=initramfs.cpio.gz)
+	@echo "change-qemu-kconfig done"
+
+build-qemu-bbl/bbl: change-qemu-kconfig build-linux/vmlinux
+	@echo "build-qemu-bbl/bbl"
 	$(MKDIR) -p $(@D)
 	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-linux/vmlinux
 	$(MAKE) -C $(@D) TARGET_QEMU=yes
@@ -145,7 +148,6 @@ debian-chainloader-initramfs: build-busybox/busybox_unstripped
 	@echo "debian-chainloader-initramfs"
 	$(eval export BUSYBOX_PREFIX=$(CURDIR)/build-busybox/_install)
 	./build_chainloader_initramfs.sh
-	ln -s chainloader-initramfs.cpio.gz initramfs.cpio.gz
 	@echo "debian-chainloader-initramfs done"
 
 debian-chainloader-image: debian-stage1-virtual-disk debian-chainloader-initramfs build-qemu-bbl/bbl | build-cpio-utils
