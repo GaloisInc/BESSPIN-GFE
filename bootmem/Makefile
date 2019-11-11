@@ -21,8 +21,9 @@ ifeq ($(UNAME),Linux)
 else ifeq ($(UNAME),Darwin)
         NPROCS := $(shell sysctl hw.ncpu | awk '{print $$2}')
 endif # $(UNAME)
-
-
+# Limit NPROCS to 8 so qemu can handle it
+NPROCS=$(shell $((NPROCS>8 ? 8 : NPROCS)))
+$(info NPROCS=$(NPROCS))
 
 export CROSS_COMPILE KCONFIG_CONFIG CPIO_UTILS_PREFIX
 
@@ -109,7 +110,7 @@ clean:
 	@rm -rf chainloader-initramfs.files
 	@make -f Makefile.deb clean
 	@make -f Makefile.bb clean
-	#@rm -rf $(OUT_DIR)
+	@rm -rf $(OUT_DIR)
 FORCE:
 	
 .PHONY: default debian
@@ -122,7 +123,6 @@ build-cpio-utils:
 	cp $(LINUX_SRC)/usr/gen_initramfs_list.sh $(CPIO_UTILS_PREFIX)
 	@echo "Compiling cpio utils done"
 
-# target : prerequisitites ; recipe
 $(OUT_DIR)/initramfs.cpio.gz:
 	@echo "stage1-initramfs.cpio.gz"
 	mkdir -p $(OUT_DIR)
@@ -144,12 +144,11 @@ debian-chainloader-initramfs: build-busybox/busybox_unstripped
 	@echo "debian-chainloader-initramfs done"
 
 extraSetupArg=besspin.debian_repo=http://deb.debian.org/debian/ besspin.inet_addr=10.0.2.15
-#extraSetupArg=besspin.debian_repo=/home/mpodhradsky/Workspace/BESSPIN/git_repos/debian-repo-snapshot-src-fixed
 
 debian-chainloader-image: debian-stage1-virtual-disk $(OUT_DIR)/initramfs.cpio.gz debian-chainloader-initramfs build-qemu-bbl/bbl | build-cpio-utils
 	@echo "debian-chainloader-image"
 	qemu-system-riscv64 \
-      -nographic -machine virt -m 2G -smp $$(nproc) \
+      -nographic -machine virt -m 2G -smp ${NPROCS} \
       -kernel build-qemu-bbl/bbl \
       -append "console=ttyS0 besspin.set_clock=$$(date --iso-8601=sec) ${extraSetupArg}" \
       -fsdev local,id=virtfs,path=$(CURDIR)/virtfs,security_model=mapped-file \

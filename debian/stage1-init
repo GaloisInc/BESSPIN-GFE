@@ -17,6 +17,14 @@ mount -v -t devpts devpts /dev/pts
 mount -v -t proc proc /proc
 mount -v -t sysfs sysfs /sys
 
+mkdir -p /etc/network
+echo "auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+" >>/etc/network/interfaces
+
 # dpkg complains if $PATH is unset.
 export PATH
 
@@ -38,7 +46,7 @@ mount -v -t sysfs sysfs /sys
 apt-get remove -y --purge fakeroot libfakeroot
 
 # We now have a fully functional Debian system, and can run the setup scripts.
-
+echo 'debian stage1: `debootstrap --second-stage` done'
 
 # Parse kernel command line arguments that are relevant to this script.
 DEBIAN_REPO='file:///mnt/debian-repo'
@@ -60,7 +68,7 @@ echo "INET_ADDR=$INET_ADDR"
 echo "SET_CLOCK=$SET_CLOCK"
 
 # set nameserver
-#echo "nameserver 4.4.2.2" > /etc/resolv.conf
+echo "nameserver 4.4.2.2" > /etc/resolv.conf
 echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 
 if [ -n "$INET_ADDR" ]; then
