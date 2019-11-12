@@ -166,7 +166,7 @@ stage1_inner() {
     # Download and unpack initial packages.  This uses --foreign, meaning it
     # doesn't actually run package install scripts yet.
     edo debootstrap \
-        --include=fakeroot,debian-ports-archive-keyring,iproute2,vim,whois \
+        --include=fakeroot,debian-ports-archive-keyring,iproute2,iputils-ping,wget,dhcp-client \
         --variant=minbase --foreign --arch=riscv64 \
         --no-merged-usr \
         --keyring $DEBIAN_PORTS_ARCHIVE_KEYRING \

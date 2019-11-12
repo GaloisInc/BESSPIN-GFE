@@ -15,6 +15,9 @@ CHAINLOADER_CONFIG=$(CURDIR)/chainloader-linux.config
 KCONFIG_CONFIG=$(CHAINLOADER_CONFIG)
 CPIO_UTILS_PREFIX=$(CURDIR)/build-cpio_utils/
 
+#export GFE_DEBIAN_URL=/nix/store/kjycmkx2mv9v7x7wdb5rn3da6cxj2d8r-debian-repo-snapshot-src-fixed
+#export GFE_DEBIAN_URL=http://localhost:3142
+
 NPROCS := 1
 ifeq ($(UNAME),Linux)
         NPROCS := $(shell grep -c ^processor /proc/cpuinfo)
@@ -22,7 +25,7 @@ else ifeq ($(UNAME),Darwin)
         NPROCS := $(shell sysctl hw.ncpu | awk '{print $$2}')
 endif # $(UNAME)
 # Limit NPROCS to 8 so qemu can handle it
-NPROCS=$(shell $((NPROCS>8 ? 8 : NPROCS)))
+NPROCS=$(shell echo $$((NPROCS>8 ? 8 : NPROCS)))
 $(info NPROCS=$(NPROCS))
 
 export CROSS_COMPILE KCONFIG_CONFIG CPIO_UTILS_PREFIX
@@ -143,7 +146,7 @@ debian-chainloader-initramfs: build-busybox/busybox_unstripped
 	./build_chainloader_initramfs.sh
 	@echo "debian-chainloader-initramfs done"
 
-extraSetupArg=besspin.debian_repo=http://deb.debian.org/debian/ besspin.inet_addr=10.0.2.15
+extraSetupArg=besspin.debian_repo=http://deb.debian.org/debian/ besspin.inet_addr=10.0.2.15/24
 
 debian-chainloader-image: debian-stage1-virtual-disk $(OUT_DIR)/initramfs.cpio.gz debian-chainloader-initramfs build-qemu-bbl/bbl | build-cpio-utils
 	@echo "debian-chainloader-image"
@@ -153,5 +156,6 @@ debian-chainloader-image: debian-stage1-virtual-disk $(OUT_DIR)/initramfs.cpio.g
       -append "console=ttyS0 besspin.set_clock=$$(date --iso-8601=sec) ${extraSetupArg}" \
       -fsdev local,id=virtfs,path=$(CURDIR)/virtfs,security_model=mapped-file \
       -device virtio-9p-device,fsdev=virtfs,mount_tag=virtfs \
-	  -device virtio-net-device,netdev=usernet -netdev user,id=usernet,hostfwd=tcp::22222-:22
+	  -device virtio-net-device,netdev=usernet \
+   	  -netdev user,id=usernet,hostfwd=tcp::10001-:22
 	@echo "debian-chainloader-image done"
