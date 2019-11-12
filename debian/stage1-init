@@ -24,7 +24,7 @@ export PATH
 # entirely clear which parts of the system are usable before this is done.
 
 echo 'debian stage1: running `debootstrap --second-stage`'
-
+sed -i -e 's/systemd systemd-sysv //g' system/debootstrap/required
 /debootstrap/debootstrap --second-stage
 
 # debootstrap unmounts /proc, /sys, and /dev/pts, so we have to re-mount them
