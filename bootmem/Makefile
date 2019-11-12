@@ -20,14 +20,14 @@ CPIO_UTILS_PREFIX=$(CURDIR)/build-cpio_utils/
 #export GFE_DEBIAN_URL=http://localhost:3142
 
 UNAME = $(shell uname -s)
-NPROCS := 8
+NPROCS:=1
 ifeq ($(UNAME),Linux)
         NPROCS := $(shell grep -c ^processor /proc/cpuinfo)
 else ifeq ($(UNAME),Darwin)
         NPROCS := $(shell sysctl hw.ncpu | awk '{print $$2}')
 endif # $(UNAME)
 # Limit NPROCS to 8 so qemu can handle it
-#NPROCS=$(shell echo $$((NPROCS>8 ? 8 : NPROCS)))
+NPROCS:=$(shell echo $$(($(NPROCS)>8 ? 8 : $(NPROCS))))
 $(info NPROCS=$(NPROCS))
 
 export CROSS_COMPILE KCONFIG_CONFIG CPIO_UTILS_PREFIX
