@@ -1,56 +1,61 @@
+# Define some global variables
 CROSS_COMPILE?=riscv64-unknown-linux-gnu-
-
 MKDIR?=mkdir
 CP?=cp
-
 CC=$(CROSS_COMPILE)gcc
 LD=$(CROSS_COMPILE)ld
 OBJCOPY=$(CROSS_COMPILE)objcopy
 OBJDUMP=$(CROSS_COMPILE)objdump
 
+# For Busybox build
 BUSYBOX_CONFIG?=$(CURDIR)/busybox.config
-#KCONFIG_CONFIG?=$(CURDIR)/linux.config
+LINUX_CONFIG?=$(CURDIR)/linux.config
+# Debian build
 DEBIAN_CONFIG=$(CURDIR)/debian-linux.config
+# Chainloader build
 CHAINLOADER_CONFIG=$(CURDIR)/chainloader-linux.config
-KCONFIG_CONFIG=$(CHAINLOADER_CONFIG)
-#KCONFIG_CONFIG=$(DEBIAN_CONFIG)
+
+BUSYBOX_PREFIX=$(CURDIR)/_install
 CPIO_UTILS_PREFIX=$(CURDIR)/build-cpio_utils/
 
-#export GFE_DEBIAN_URL=/nix/store/kjycmkx2mv9v7x7wdb5rn3da6cxj2d8r-debian-repo-snapshot-src-fixed
-#export GFE_DEBIAN_URL=http://localhost:3142
-
-UNAME = $(shell uname -s)
-NPROCS:=1
-ifeq ($(UNAME),Linux)
-        NPROCS := $(shell grep -c ^processor /proc/cpuinfo)
-else ifeq ($(UNAME),Darwin)
-        NPROCS := $(shell sysctl hw.ncpu | awk '{print $$2}')
-endif # $(UNAME)
-# Limit NPROCS to 8 so qemu can handle it
-NPROCS:=$(shell echo $$(($(NPROCS)>8 ? 8 : $(NPROCS))))
-$(info NPROCS=$(NPROCS))
-
-export CROSS_COMPILE KCONFIG_CONFIG CPIO_UTILS_PREFIX
-
+# Define build directories
 LINUX_SRC=../riscv-linux
 BUSYBOX_SRC=../busybox
 BBL_SRC=../../riscv-pk
 DEBIAN_DIR=../debian
 OUT_DIR=$(CURDIR)/virtfs
 
-TARGET_QEMU=no
+# Export variables
+export CROSS_COMPILE CPIO_UTILS_PREFIX BUSYBOX_PREFIX
 
-#TARGET=build-busybox/busybox_unstripped
+# For faster builds, use all available cores
+UNAME = $(shell uname -s)
+NPROCS:=1
+ifeq ($(UNAME),Linux)
+        NPROCS := $(shell grep -c ^processor /proc/cpuinfo)
+else ifeq ($(UNAME),Darwin)
+        NPROCS := $(shell sysctl hw.ncpu | awk '{print $$2}')
+endif
+# Limit NPROCS to 8 so qemu can handle it
+NPROCS:=$(shell echo $$(($(NPROCS)>8 ? 8 : $(NPROCS))))
 
-default: build-bbl/bbl.text bootmem.bin
-#debian: override TARGET=deb
-debian: build-bbl/bbl.text bootmem.bin
+# Public targets
+default: busybox
+busybox: build-busybox-bbl/bbl.text bootmem-busybox.bin
+debian: build-debian-bbl/bbl.text bootmem-debian.bin
 
+FORCE:
+
+.PHONY: default debian clean-debian clean-busybox
+
+
+# General targets
 %.text: %
 	@echo "text, target name: $@, first prereq: $<"
 	$(OBJDUMP) -dS $< > $@
 	@echo "text done"
 
+# Busybox target
 build-busybox/.config: $(BUSYBOX_CONFIG)
 	@echo "build-busybox/.config, BUSYBOX_CONFIG=$(BUSYBOX_CONFIG)"
 	$(MKDIR) -p $(@D)
@@ -65,60 +70,43 @@ build-busybox/busybox_unstripped: build-busybox/.config
 	$(MAKE) -C $(@D) install
 	@echo "build-busybox/busybox_unstripped done"
 
-build-linux/.config: $(KCONFIG_CONFIG) # this means we should recompile when KCONFIG_CONFIG changes
-	@echo "build-linux/.config: KCONFIG_CONFIG=$(KCONFIG_CONFIG)"
-	$(MAKE) -C $(LINUX_SRC) ARCH=riscv O=$(CURDIR)/build-linux olddefconfig
-	@echo "build-linux/.config done"
-
-build-linux/vmlinux: build-linux/.config build-busybox/busybox_unstripped
-	@echo "build-linux/vmlinux"
-	@echo "Building Linux with config: $$KCONFIG_CONFIG"
-	$(MAKE) -C $(@D) ARCH=riscv O=$(CURDIR)/build-linux $(@F)
+build-linux/vmlinux: $(LINUX_CONFIG) build-busybox/busybox_unstripped
+	@echo "Building Linux with config: $$LINUX_CONFIG"
+	export KCONFIG_CONFIG=$(LINUX_CONFIG) && $(MAKE) -C $(LINUX_SRC) ARCH=riscv O=$(CURDIR)/build-linux olddefconfig
+	export KCONFIG_CONFIG=$(LINUX_CONFIG) && $(MAKE) -C $(@D) ARCH=riscv O=$(CURDIR)/build-linux $(@F)
 	@echo "build-linux/vmlinux done"
 
-build-bbl/bbl: build-linux/vmlinux
-	@echo "build-bbl/bbl"
+build-busybox-bbl/bbl: build-linux/vmlinux
+	@echo "build-busybox-bbl/bbl"
 	$(MKDIR) -p $(@D)
 	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-linux/vmlinux
 	$(MAKE) -C $(@D)
-	@echo "build-bbl/bbl done"
+	@echo "build-busybox-bbl/bbl done"
 
-build-qemu-bbl/bbl: build-linux/vmlinux
-	@echo "build-qemu-bbl/bbl"
-	$(MKDIR) -p $(@D)
-	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-linux/vmlinux
-	$(MAKE) -C $(@D) TARGET_QEMU=yes
-	@echo "build-qemu-bbl/bbl done"
-
-bbl.bin: build-bbl/bbl
+bbl-busybox.bin: build-busybox-bbl/bbl
 	@echo "bbl.bin"
 	$(OBJCOPY) -O binary $< $@
 	@echo "bbl.bin done"
 
-bootmem: bootmem.S linker.ld bbl.bin
+bootmem-busybox: bootmem.S linker.ld bbl-busybox.bin
 	@echo "bootmem"
+	ln -s bbl-busybox.bin bbl.bin
 	$(CC) -Tlinker.ld $< -nostdlib -static -Wl,--no-gc-sections -o $@
 	@echo "bootmem done"
 
-bootmem.bin: bootmem
+bootmem-busybox.bin: bootmem-busybox
 	@echo "bootmem.bin"
 	$(OBJCOPY) -O binary $< $@
 	@echo "bootmem.bin done"
 
-clean-cpio-utils:
-	@rm -rf build-cpio-utils
+clean-busybox:
+	@rm -rf build-linux build-busybox
+	@rm -f bootmem-busybox bootmem-busybox.bin bbl-busybox.bin
+	@rm -rf build-busybox-bbl
 
-clean:
-	@rm -f bootmem bootmem.bin bbl.bin
-	@rm -rf build-bbl
-	@rm -rf chainloader-initramfs.cpio.gz
-	@rm -rf chainloader-initramfs.files
-	@make -f Makefile.deb clean
-	@make -f Makefile.bb clean
-	@rm -rf $(OUT_DIR)
-FORCE:
-	
-.PHONY: default debian
+
+
+# Debian build
 
 # we also have to compile initramfs utils from riscv-linux
 build-cpio-utils:
@@ -128,29 +116,40 @@ build-cpio-utils:
 	cp $(LINUX_SRC)/usr/gen_initramfs_list.sh $(CPIO_UTILS_PREFIX)
 	@echo "Compiling cpio utils done"
 
-$(OUT_DIR)/initramfs.cpio.gz:
-	@echo "stage1-initramfs.cpio.gz"
-	mkdir -p $(OUT_DIR)
-	$(DEBIAN_DIR)/build_stage1_initramfs.sh
-	mv $(DEBIAN_DIR)/stage1-initramfs.cpio.gz $(OUT_DIR)/initramfs.cpio.gz
-	@echo "stage1-initramfs.cpio.gz done"
+# busybox utils
+$(BUSYBOX_PREFIX): build-busybox/busybox_unstripped
+	@echo "busybox-install"
+	cp -r build-busybox/_install _install
+	@echo "busybox-install done"
 
-debian-stage1-virtual-disk:
-	@echo "debian-stage1-virtual-disk"
-	mkdir -p $(OUT_DIR)/scripts
-	cp $(DEBIAN_DIR)/setup_chroot.sh $(OUT_DIR)/scripts/
-	cp -r $(DEBIAN_DIR)/setup_scripts $(OUT_DIR)/scripts/
-	@echo "debian-stage1-virtual-disk done"	
-
-debian-chainloader-initramfs: build-busybox/busybox_unstripped
+# chainloader initramfs
+debian-chainloader-initramfs: $(BUSYBOX_PREFIX)
 	@echo "debian-chainloader-initramfs"
-	$(eval export BUSYBOX_PREFIX=$(CURDIR)/build-busybox/_install)
 	./build_chainloader_initramfs.sh
 	@echo "debian-chainloader-initramfs done"
 
-extraSetupArg=besspin.debian_repo=http://deb.debian.org/debian-ports/
+# deboostrap image
+# TODO: split, so we can update the image if only the init script changed
+$(OUT_DIR)/initramfs.cpio.gz: $(DEBIAN_DIR)/stage1-init
+	@echo "$(OUT_DIR)/initramfs.cpio.gz"
+	mkdir -p $(OUT_DIR)
+	$(DEBIAN_DIR)/build_stage1_initramfs.sh
+	mv $(DEBIAN_DIR)/stage1-initramfs.cpio.gz $(OUT_DIR)/initramfs.cpio.gz
+	@echo "$(OUT_DIR)/initramfs.cpio.gz done"
 
-debian-chainloader-image: debian-stage1-virtual-disk $(OUT_DIR)/initramfs.cpio.gz debian-chainloader-initramfs build-qemu-bbl/bbl | build-cpio-utils
+# startup scripts
+debian-startup-scripts:
+	@echo "debian-startup-scripts"
+	mkdir -p $(OUT_DIR)/scripts
+	cp $(DEBIAN_DIR)/setup_chroot.sh $(OUT_DIR)/scripts/
+	cp -r $(DEBIAN_DIR)/setup_scripts $(OUT_DIR)/scripts/
+	@echo "debian-startup-scripts done"	
+
+# kernel arguments
+extraSetupArg=besspin.debian_repo=http://deb.debian.org/debian-ports/ besspin.sysvinit=1
+
+# run debian chainloader image through qemu and finish seting up the system via debootstrap
+debian.cpio.gz: debian-startup-scripts $(OUT_DIR)/initramfs.cpio.gz debian-chainloader-initramfs build-qemu-bbl/bbl | build-cpio-utils
 	@echo "debian-chainloader-image"
 	qemu-system-riscv64 \
       -nographic -machine virt -m 2G -smp ${NPROCS} \
@@ -162,3 +161,60 @@ debian-chainloader-image: debian-stage1-virtual-disk $(OUT_DIR)/initramfs.cpio.g
    	  -netdev user,id=usernet,hostfwd=tcp::10001-:22
 	gzip -c --best $(OUT_DIR)/debian-initramfs.cpio >debian.cpio.gz
 	@echo "debian-chainloader-image done"
+
+# compile chainloader linux image
+build-qemu-linux/vmlinux: $(CHAINLOADER_CONFIG) build-busybox/busybox_unstripped
+	@echo "Building Linux with config: $$CHAINLOADER_CONFIG"
+	export KCONFIG_CONFIG=$(CHAINLOADER_CONFIG) && $(MAKE) -C $(LINUX_SRC) ARCH=riscv O=$(CURDIR)/build-qemu-linux olddefconfig
+	export KCONFIG_CONFIG=$(CHAINLOADER_CONFIG) && $(MAKE) -C $(@D) ARCH=riscv O=$(CURDIR)/build-qemu-linux $(@F)
+	@echo "build-qemu-linux/vmlinux done"
+
+# builds chainloader image for qemu
+build-qemu-bbl/bbl: build-qemu-linux/vmlinux
+	@echo "build-qemu-bbl/bbl"
+	$(MKDIR) -p $(@D)
+	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-qemu-linux/vmlinux
+	$(MAKE) -C $(@D) TARGET_QEMU=yes
+	@echo "build-qemu-bbl/bbl done"
+
+# compile final debian image
+build-debian-linux/vmlinux: $(DEBIAN_CONFIG) build-busybox/busybox_unstripped
+	@echo "Building Linux with config: $$DEBIAN_CONFIG"
+	export KCONFIG_CONFIG=$(DEBIAN_CONFIG) && $(MAKE) -C $(LINUX_SRC) ARCH=riscv O=$(CURDIR)/build-debian-linux olddefconfig
+	export KCONFIG_CONFIG=$(DEBIAN_CONFIG) && $(MAKE) -C $(@D) ARCH=riscv O=$(CURDIR)/build-debian-linux $(@F)
+	@echo "build-qemu-linux/vmlinux done"
+
+# build final debian image
+build-debian-bbl/bbl: build-debian-linux/vmlinux debian.cpio.gz
+	@echo "build-debian-bbl/bbl"
+	$(MKDIR) -p $(@D)
+	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-debian-linux/vmlinux
+	$(MAKE) -C $(@D)
+	@echo "build-debian-bbl/bbl done"
+
+bbl-debian.bin: build-debian-bbl/bbl
+	@echo "bbl.bin"
+	$(OBJCOPY) -O binary $< $@
+	@echo "bbl.bin done"
+
+bootmem-debian: bootmem.S linker.ld bbl-debian.bin
+	@echo "bootmem"
+	ln -s bbl-debian.bin bbl.bin
+	$(CC) -Tlinker.ld $< -nostdlib -static -Wl,--no-gc-sections -o $@
+	@echo "bootmem done"
+
+bootmem-debian.bin: bootmem-debian
+	@echo "bootmem.bin"
+	$(OBJCOPY) -O binary $< $@
+	@echo "bootmem.bin done"
+
+clean-cpio-utils:
+	@rm -rf build-cpio-utils
+
+clean-debian:
+	@rm -f bootmem-debian bootmem-debian.bin bbl-debian.bin
+	@rm -rf build-debian-bbl
+	@rm -f debian.cpio.gz
+	@rm -rf build-debian-linux
+	$(MAKE) -C $(DEBIAN_DIR) clean
+

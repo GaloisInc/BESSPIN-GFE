@@ -13,8 +13,8 @@ apt-cache dumpavail | \
 #In case we needed a debian snapshot: Everything was working on 09/19/19 .
 apt-get install -y netcat
 apt-get install -y keyutils
+
+# pciutils are for `lcpci`, 
 apt-get install -y pciutils
+# set of tools for manipulating NVMe drives
 apt-get install -y nvme-cli
-apt-get install -y sysvinit-core # to switch to sysv init instead of init.d
-# Use sysvinit to provide /init
-ln -sf /sbin/init /init
