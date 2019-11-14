@@ -90,7 +90,8 @@ bbl-busybox.bin: build-busybox-bbl/bbl
 
 bootmem-busybox: bootmem.S linker.ld bbl-busybox.bin
 	@echo "bootmem"
-	ln -s bbl-busybox.bin bbl.bin
+	@rm -rf bbl.bin
+	@ln -s bbl-busybox.bin bbl.bin
 	$(CC) -Tlinker.ld $< -nostdlib -static -Wl,--no-gc-sections -o $@
 	@echo "bootmem done"
 
@@ -130,12 +131,12 @@ debian-chainloader-initramfs: $(BUSYBOX_PREFIX)
 
 # deboostrap image
 # TODO: split, so we can update the image if only the init script changed
-$(OUT_DIR)/initramfs.cpio.gz: $(DEBIAN_DIR)/stage1-init
-	@echo "$(OUT_DIR)/initramfs.cpio.gz"
+$(OUT_DIR)/initramfs.cpio.xz: $(DEBIAN_DIR)/stage1-init
+	@echo "$(OUT_DIR)/initramfs.cpio.xz"
 	mkdir -p $(OUT_DIR)
 	$(DEBIAN_DIR)/build_stage1_initramfs.sh
-	mv $(DEBIAN_DIR)/stage1-initramfs.cpio.gz $(OUT_DIR)/initramfs.cpio.gz
-	@echo "$(OUT_DIR)/initramfs.cpio.gz done"
+	mv $(DEBIAN_DIR)/stage1-initramfs.cpio.xz $(OUT_DIR)/initramfs.cpio.xz
+	@echo "$(OUT_DIR)/initramfs.cpio.xz done"
 
 # startup scripts
 debian-startup-scripts:
@@ -146,10 +147,10 @@ debian-startup-scripts:
 	@echo "debian-startup-scripts done"	
 
 # kernel arguments
-extraSetupArg=besspin.debian_repo=http://deb.debian.org/debian-ports/ besspin.sysvinit=1
+extraSetupArg?=besspin.debian_repo=http://deb.debian.org/debian-ports/ besspin.sysvinit=1
 
 # run debian chainloader image through qemu and finish seting up the system via debootstrap
-debian.cpio.gz: debian-startup-scripts $(OUT_DIR)/initramfs.cpio.gz debian-chainloader-initramfs build-qemu-bbl/bbl | build-cpio-utils
+debian.cpio.xz: debian-startup-scripts $(OUT_DIR)/initramfs.cpio.xz debian-chainloader-initramfs build-qemu-bbl/bbl | build-cpio-utils
 	@echo "debian-chainloader-image"
 	qemu-system-riscv64 \
       -nographic -machine virt -m 2G -smp ${NPROCS} \
@@ -159,7 +160,7 @@ debian.cpio.gz: debian-startup-scripts $(OUT_DIR)/initramfs.cpio.gz debian-chain
       -device virtio-9p-device,fsdev=virtfs,mount_tag=virtfs \
 	  -device virtio-net-device,netdev=usernet \
    	  -netdev user,id=usernet,hostfwd=tcp::10001-:22
-	gzip -c --best $(OUT_DIR)/debian-initramfs.cpio >debian.cpio.gz
+	xz -c --best $(OUT_DIR)/debian-initramfs.cpio >debian.cpio.xz
 	@echo "debian-chainloader-image done"
 
 # compile chainloader linux image
@@ -185,7 +186,7 @@ build-debian-linux/vmlinux: $(DEBIAN_CONFIG) build-busybox/busybox_unstripped
 	@echo "build-qemu-linux/vmlinux done"
 
 # build final debian image
-build-debian-bbl/bbl: build-debian-linux/vmlinux debian.cpio.gz
+build-debian-bbl/bbl: debian.cpio.xz build-debian-linux/vmlinux
 	@echo "build-debian-bbl/bbl"
 	$(MKDIR) -p $(@D)
 	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-debian-linux/vmlinux
@@ -199,7 +200,8 @@ bbl-debian.bin: build-debian-bbl/bbl
 
 bootmem-debian: bootmem.S linker.ld bbl-debian.bin
 	@echo "bootmem"
-	ln -s bbl-debian.bin bbl.bin
+	@rm -rf bbl.bin
+	@ln -s bbl-debian.bin bbl.bin
 	$(CC) -Tlinker.ld $< -nostdlib -static -Wl,--no-gc-sections -o $@
 	@echo "bootmem done"
 
@@ -214,7 +216,7 @@ clean-cpio-utils:
 clean-debian:
 	@rm -f bootmem-debian bootmem-debian.bin bbl-debian.bin
 	@rm -rf build-debian-bbl
-	@rm -f debian.cpio.gz
+	@rm -f debian.cpio.xz
 	@rm -rf build-debian-linux
 	$(MAKE) -C $(DEBIAN_DIR) clean
 

@@ -62,9 +62,9 @@ echo "SET_SYSVINIT=$SET_SYSVINIT"
 
 # do we have a static IP provided?
 if [ -n "$INET_ADDR" ]; then
-    ip addr add dev eth1 "$INET_ADDR"
+    ip addr add dev eth0 "$INET_ADDR"
 else
-    dhclient -v eth1
+    dhclient -v eth0
 fi
 
 if [ -n "$SET_CLOCK" ]; then
