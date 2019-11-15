@@ -35,3 +35,6 @@
 [submodule "freebsd/cheribsd"]
 	path = freebsd/cheribsd
 	url = https://github.com/CTSRD-CHERI/cheribsd.git
+[submodule "freebsd/cheribuild"]
+	path = freebsd/cheribuild
+	url = https://github.com/CTSRD-CHERI/cheribuild.git
