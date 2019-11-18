@@ -61,28 +61,28 @@ FORCE:
 build-busybox/.config: $(BUSYBOX_CONFIG)
 	@echo "build-busybox/.config, BUSYBOX_CONFIG=$(BUSYBOX_CONFIG)"
 	$(MKDIR) -p $(@D)
-	$(MAKE) -C $(BUSYBOX_SRC) O=$(CURDIR)/build-busybox defconfig
+	$(MAKE) -C $(BUSYBOX_SRC) O=$(CURDIR)/build-busybox -j$(NPROCS) defconfig
 	$(CP) $< $@
-	$(MAKE) -C $(@D) oldconfig
+	$(MAKE) -C $(@D) -j$(NPROCS) oldconfig
 	@echo "build-busybox/.config done"
 
 build-busybox/busybox_unstripped: build-busybox/.config
 	@echo "build-busybox/busybox_unstripped"
-	$(MAKE) -C $(@D) all
-	$(MAKE) -C $(@D) install
+	$(MAKE) -C $(@D) -j$(NPROCS) all
+	$(MAKE) -C $(@D) -j$(NPROCS) install
 	@echo "build-busybox/busybox_unstripped done"
 
 build-linux/vmlinux: $(LINUX_CONFIG) build-busybox/busybox_unstripped
 	@echo "Building Linux with config: $$LINUX_CONFIG"
-	export KCONFIG_CONFIG=$(LINUX_CONFIG) && $(MAKE) -C $(LINUX_SRC) ARCH=riscv O=$(CURDIR)/build-linux olddefconfig
-	export KCONFIG_CONFIG=$(LINUX_CONFIG) && $(MAKE) -C $(@D) ARCH=riscv O=$(CURDIR)/build-linux $(@F)
+	export KCONFIG_CONFIG=$(LINUX_CONFIG) && $(MAKE) -C $(LINUX_SRC) -j$(NPROCS) ARCH=riscv O=$(CURDIR)/build-linux olddefconfig
+	export KCONFIG_CONFIG=$(LINUX_CONFIG) && $(MAKE) -C $(@D) -j$(NPROCS) ARCH=riscv O=$(CURDIR)/build-linux $(@F)
 	@echo "build-linux/vmlinux done"
 
 build-busybox-bbl/bbl: build-linux/vmlinux
 	@echo "build-busybox-bbl/bbl"
 	$(MKDIR) -p $(@D)
 	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-linux/vmlinux
-	$(MAKE) -C $(@D)
+	$(MAKE) -C $(@D) -j$(NPROCS)
 	@echo "build-busybox-bbl/bbl done"
 
 bbl-busybox.bin: build-busybox-bbl/bbl
@@ -175,8 +175,8 @@ debian.cpio: $(OUT_DIR)/initramfs.cpio.gz debian-startup-scripts debian-chainloa
 # compile chainloader linux image
 build-qemu-linux/vmlinux: $(CHAINLOADER_CONFIG) build-busybox/busybox_unstripped
 	@echo "Building Linux with config: $$CHAINLOADER_CONFIG"
-	export KCONFIG_CONFIG=$(CHAINLOADER_CONFIG) && $(MAKE) -C $(LINUX_SRC) ARCH=riscv O=$(CURDIR)/build-qemu-linux olddefconfig
-	export KCONFIG_CONFIG=$(CHAINLOADER_CONFIG) && $(MAKE) -C $(@D) ARCH=riscv O=$(CURDIR)/build-qemu-linux $(@F)
+	export KCONFIG_CONFIG=$(CHAINLOADER_CONFIG) && $(MAKE) -C $(LINUX_SRC) -j$(NPROCS) ARCH=riscv O=$(CURDIR)/build-qemu-linux olddefconfig
+	export KCONFIG_CONFIG=$(CHAINLOADER_CONFIG) && $(MAKE) -C $(@D) -j$(NPROCS) ARCH=riscv O=$(CURDIR)/build-qemu-linux $(@F)
 	@echo "build-qemu-linux/vmlinux done"
 
 # builds chainloader image for qemu
@@ -184,14 +184,14 @@ build-qemu-bbl/bbl: build-qemu-linux/vmlinux
 	@echo "build-qemu-bbl/bbl"
 	$(MKDIR) -p $(@D)
 	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-qemu-linux/vmlinux
-	$(MAKE) -C $(@D) TARGET_QEMU=yes
+	$(MAKE) -C $(@D) TARGET_QEMU=yes -j$(NPROCS)
 	@echo "build-qemu-bbl/bbl done"
 
 # compile final debian image
 build-debian-linux/vmlinux: $(DEBIAN_CONFIG) build-busybox/busybox_unstripped
 	@echo "Building Linux with config: $$DEBIAN_CONFIG"
-	export KCONFIG_CONFIG=$(DEBIAN_CONFIG) && $(MAKE) -C $(LINUX_SRC) ARCH=riscv O=$(CURDIR)/build-debian-linux olddefconfig
-	export KCONFIG_CONFIG=$(DEBIAN_CONFIG) && $(MAKE) -C $(@D) ARCH=riscv O=$(CURDIR)/build-debian-linux $(@F)
+	export KCONFIG_CONFIG=$(DEBIAN_CONFIG) && $(MAKE) -C $(LINUX_SRC) -j$(NPROCS) ARCH=riscv O=$(CURDIR)/build-debian-linux olddefconfig
+	export KCONFIG_CONFIG=$(DEBIAN_CONFIG) && $(MAKE) -C $(@D) -j$(NPROCS) ARCH=riscv O=$(CURDIR)/build-debian-linux $(@F)
 	@echo "build-qemu-linux/vmlinux done"
 
 # Serve cpio archive over network
@@ -206,7 +206,7 @@ build-debian-bbl/bbl: debian.cpio build-debian-linux/vmlinux
 	@echo "build-debian-bbl/bbl"
 	$(MKDIR) -p $(@D)
 	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-debian-linux/vmlinux
-	$(MAKE) -C $(@D)
+	$(MAKE) -C $(@D) -j$(NPROCS)
 	@echo "build-debian-bbl/bbl done"
 
 bbl-debian.bin: build-debian-bbl/bbl
