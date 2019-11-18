@@ -18,4 +18,4 @@ rm "$chroot_dir/debootstrap/debootstrap.old"
 cd "$chroot_dir"
 find . -print0 | \
     ../create_chroot.sh as_fake_root cpio --null --create --format=newc | \
-    gzip --best >../stage1-initramfs.cpio.xz
+    gzip --best >../stage1-initramfs.cpio.gz
