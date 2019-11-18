@@ -128,14 +128,13 @@ $(BUSYBOX_PREFIX): build-busybox/busybox_unstripped
 # chainloader initramfs
 debian-chainloader-initramfs: $(BUSYBOX_PREFIX)
 	@echo "debian-chainloader-initramfs"
-ifeq ($(CHAINLOADER_NETWORK_BOOT),yes)
-	@echo "Building with network chainloader" 
-	./build_chainloader_initramfs_network.sh
-else
-	@echo "Building with standard chainloader"
 	./build_chainloader_initramfs.sh
-endif
 	@echo "debian-chainloader-initramfs done"
+
+debian-chainloader-initramfs-network: $(BUSYBOX_PREFIX)
+	@echo "debian-chainloader-initramfs-network"
+	./build_chainloader_initramfs_network.sh
+	@echo "debian-chainloader-initramfs-network done"
 
 # deboostrap image
 # TODO: split, so we can update the image if only the init script changed
@@ -188,18 +187,23 @@ build-qemu-bbl/bbl: build-qemu-linux/vmlinux
 	@echo "build-qemu-bbl/bbl done"
 
 # compile final debian image
-build-debian-linux/vmlinux: $(DEBIAN_CONFIG) build-busybox/busybox_unstripped
+build-debian-linux/vmlinux: $(DEBIAN_CONFIG) build-busybox/busybox_unstripped debian-chainloader-initramfs-network
 	@echo "Building Linux with config: $$DEBIAN_CONFIG"
 	export KCONFIG_CONFIG=$(DEBIAN_CONFIG) && $(MAKE) -C $(LINUX_SRC) -j$(NPROCS) ARCH=riscv O=$(CURDIR)/build-debian-linux olddefconfig
 	export KCONFIG_CONFIG=$(DEBIAN_CONFIG) && $(MAKE) -C $(@D) -j$(NPROCS) ARCH=riscv O=$(CURDIR)/build-debian-linux $(@F)
 	@echo "build-qemu-linux/vmlinux done"
 
 # Serve cpio archive over network
+# Assumes your network is configured with:
+# ```
+# ip addr add 10.88.88.2/24 broadcast 10.88.88.255 dev eth1
+# ip link set eth1 up
+# ```
+# where `eth1` is the ethernet adapter connected to the FPGA
 run-debian.cpio: debian.cpio
 	@echo "run-debian.cpio"
 	python3 -m http.server 8000 --bind 10.88.88.1 -d .
 	@echo "run-debian.cpio done"
-
 
 # build final debian image
 build-debian-bbl/bbl: debian.cpio build-debian-linux/vmlinux
