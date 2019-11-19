@@ -7,8 +7,6 @@ LD=$(CROSS_COMPILE)ld
 OBJCOPY=$(CROSS_COMPILE)objcopy
 OBJDUMP=$(CROSS_COMPILE)objdump
 
-CHAINLOADER_NETWORK_BOOT?=yes
-
 # For Busybox build
 BUSYBOX_CONFIG?=$(CURDIR)/busybox.config
 LINUX_CONFIG?=$(CURDIR)/linux.config
@@ -136,9 +134,14 @@ debian-chainloader-initramfs-network: $(BUSYBOX_PREFIX)
 	./build_chainloader_initramfs_network.sh
 	@echo "debian-chainloader-initramfs-network done"
 
-# deboostrap image
-# TODO: split, so we can update the image if only the init script changed
-$(OUT_DIR)/initramfs.cpio.gz: $(DEBIAN_DIR)/stage1-init
+# split creating chroot
+$(DEBIAN_DIR)/riscv64-chroot.tar: $(DEBIAN_DIR)/create_chroot.sh
+	@echo "$(DEBIAN_DIR)/riscv64-chroot.tar"
+	$(DEBIAN_DIR)/build_stage1_initramfs.sh stage1
+	@echo "$(DEBIAN_DIR)/riscv64-chroot.tar done"
+
+# deboostrap image: update only if the stage1-init script changed
+$(OUT_DIR)/initramfs.cpio.gz: $(DEBIAN_DIR)/stage1-init $(DEBIAN_DIR)/riscv64-chroot.tar
 	@echo "$(OUT_DIR)/initramfs.cpio.gz"
 	mkdir -p $(OUT_DIR)
 	$(DEBIAN_DIR)/build_stage1_initramfs.sh
@@ -154,10 +157,10 @@ debian-startup-scripts:
 	@echo "debian-startup-scripts done"	
 
 # kernel arguments
-extraSetupArg?=besspin.debian_repo=http://deb.debian.org/debian-ports/ besspin.sysvinit=1
+extraSetupArg?=besspin.debian_repo=http://deb.debian.org/debian-ports/ besspin.sysvinit=1 besspin.dhcp_addr=1
 
 # run debian chainloader image through qemu and finish seting up the system via debootstrap
-debian.cpio: $(OUT_DIR)/initramfs.cpio.gz debian-startup-scripts debian-chainloader-initramfs build-qemu-bbl/bbl | build-cpio-utils
+debian.cpio: build-cpio-utils $(OUT_DIR)/initramfs.cpio.gz debian-startup-scripts debian-chainloader-initramfs build-qemu-bbl/bbl
 	@echo "debian-chainloader-image"
 	qemu-system-riscv64 \
       -nographic -machine virt -m 2G -smp ${NPROCS} \
@@ -167,8 +170,7 @@ debian.cpio: $(OUT_DIR)/initramfs.cpio.gz debian-startup-scripts debian-chainloa
       -device virtio-9p-device,fsdev=virtfs,mount_tag=virtfs \
 	  -device virtio-net-device,netdev=usernet \
    	  -netdev user,id=usernet,hostfwd=tcp::10001-:22
-	#xz -c -C crc32 --best $(OUT_DIR)/debian-initramfs.cpio >debian.cpio.gz
-	cp $(OUT_DIR)/debian-initramfs.cpio debian.cpio
+	mv $(OUT_DIR)/debian-initramfs.cpio debian.cpio
 	@echo "debian-chainloader-image done"
 
 # compile chainloader linux image
@@ -200,10 +202,10 @@ build-debian-linux/vmlinux: $(DEBIAN_CONFIG) build-busybox/busybox_unstripped de
 # ip link set eth1 up
 # ```
 # where `eth1` is the ethernet adapter connected to the FPGA
-run-debian.cpio: debian.cpio
-	@echo "run-debian.cpio"
+serve-cpio-archive:
+	@echo "serve-cpio-archive"
 	python3 -m http.server 8000 --bind 10.88.88.1 -d .
-	@echo "run-debian.cpio done"
+	@echo "serve-cpio-archive done"
 
 # build final debian image
 build-debian-bbl/bbl: debian.cpio build-debian-linux/vmlinux
@@ -238,5 +240,7 @@ clean-debian:
 	@rm -rf build-debian-bbl
 	@rm -f debian.cpio
 	@rm -rf build-debian-linux
+	@rm -rf chainloader-initramfs.cpio.gz
+	@rm -rf $(OUT_DIR)
 	$(MAKE) -C $(DEBIAN_DIR) clean
 

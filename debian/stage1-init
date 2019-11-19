@@ -24,7 +24,6 @@ export PATH
 # entirely clear which parts of the system are usable before this is done.
 
 echo 'debian stage1: running `debootstrap --second-stage`'
-sed -i -e 's/systemd systemd-sysv //g' /debootstrap/required
 /debootstrap/debootstrap --second-stage
 
 # debootstrap unmounts /proc, /sys, and /dev/pts, so we have to re-mount them
@@ -49,6 +48,7 @@ for x in "$@"; do
         besspin.9p_mount_tag=*) MOUNT_TAG="${x#*=}" ;;
         besspin.debian_repo=*) DEBIAN_REPO="${x#*=}" ;;
         besspin.inet_addr=*) INET_ADDR="${x#*=}" ;;
+        besspin.dhcp_addr=*) DHCP_ADDR="${x#*=}" ;;
         besspin.extra_setup=*) EXTRA_SETUP="${x#*=}" ;;
         besspin.set_clock=*) SET_CLOCK="${x#*=}" ;;
         besspin.sysvinit=*) SET_SYSVINIT="${x#*=}" ;;
@@ -57,14 +57,19 @@ done
 
 echo "DEBIAN_REPO=$DEBIAN_REPO"
 echo "INET_ADDR=$INET_ADDR"
+echo "DHCP_ADDR=$DHCP_ADDR"
 echo "SET_CLOCK=$SET_CLOCK"
 echo "SET_SYSVINIT=$SET_SYSVINIT"
 
 # do we have a static IP provided?
 if [ -n "$INET_ADDR" ]; then
+    ip link set eth0 up
     ip addr add dev eth0 "$INET_ADDR"
 else
+# should we use DHCP?
+if [ -n "$DHCP_ADDR" ]; then
     dhclient -v eth0
+fi
 fi
 
 if [ -n "$SET_CLOCK" ]; then
@@ -74,7 +79,7 @@ fi
 # Mount the virtual disk, which normally contains the debian repo.
 #
 # The virtual disk is expected to contain:
-# - debian-repo/: a Debian repository snapshot, containing all the packages
+# - [optional] debian-repo/: a Debian repository snapshot, containing all the packages
 #   that will be needed during setup
 # - scripts/{setup_chroot.sh,setup_scripts/}: initramfs setup scripts copied
 #   from gfe/debian/

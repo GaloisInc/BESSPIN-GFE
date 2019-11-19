@@ -4,40 +4,37 @@
 # switch to it.
 #
 # The chainloader environment has busybox installed and nothing else.  Its
-# kernel config is based on the one we use for Debian, but augmented with vfat
-# support, so it can mount QEMU `-drive file=fat:rw:$PATH` virtual drives.
-
-MOUNT_TAG=virtfs
+# kernel config is based on the one we use for Debian.
+# It is sole purpose is to load the root file system archive over the network,
+# unpack it and switch root to it.
 FILE=debian.cpio
 
-echo "chainloader: booting from $MOUNT_TAG"
-
-mkdir -v -p /chain/dev /chain/new /chain/mnt
-mount -v -t devtmpfs none /chain/dev
-mount -v -t 9p "$MOUNT_TAG" /chain/mnt
+echo "$(uptime) chainloader: booting from network"
+mkdir -v -p /chain/new
 mount -v -t tmpfs none /chain/new
 
 # Set up network to a fixed IP
 # Assuming PCIe root complex with an ethernet card
+echo "$(uptime) chainloader: Configuring network"
 ip addr add 10.88.88.2/24 broadcast 10.88.88.255 dev eth1
 ip link set eth1 up
 
 # Download the archive
-echo "Downloading the archive"
-wget http://10.88.88.1:8000/"$FILE" -P /chain/mnt
+echo "$(uptime) chainloader: Downloading the archive"
+wget http://10.88.88.1:8000/"$FILE" --quiet -P /
+echo "$(uptime) chainloader: Archive donwloaded"
 
+# Clean network config
+echo "$(uptime) chainloader: Tearing down network"
+ip link set eth1 down
+ip addr del 10.88.88.2/24 dev eth1
 
-echo "chainloader: unpacking initramfs.cpio"
+echo "$(uptime) chainloader: unpacking initramfs.cpio"
 cd /chain/new
-cpio -i -F /chain/mnt/"$FILE" 
+cpio -i -F /"$FILE" 
 
-# Explicitly unmount the 9pfs.  Otherwise the next initramfs won't be able to
-# mount it ("no channels available for device")
-umount -v /chain/dev
-umount -v /chain/mnt
-
-echo "chainloader: switching root"
+echo "$(uptime) chainloader: switching root"
 exec switch_root /chain/new /init
 
-echo "chainloader: failed to switch_root"
+echo "$(uptime) chainloader: failed to switch_root"
 exit 1
