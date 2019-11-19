@@ -107,6 +107,7 @@ clean-busybox:
 
 
 
+
 # Debian build
 
 # we also have to compile initramfs utils from riscv-linux
@@ -232,14 +233,18 @@ bootmem-debian.bin: bootmem-debian
 	$(OBJCOPY) -O binary $< $@
 	@echo "bootmem.bin done"
 
-clean-cpio-utils:
-	@rm -rf build-cpio-utils
-
 clean-debian:
+	@echo "clean-debian"
+	@rm -rf build-cpio-utils
 	@rm -f bootmem-debian bootmem-debian.bin bbl-debian.bin
 	@rm -rf build-debian-bbl
 	@rm -f debian.cpio
 	@rm -rf build-debian-linux
+	@rm -rf build-qemu-linux
+	@rm -rf build-qemu-bbl
+	@rm -rf _install
+	@rm -rf chainloader-linux.config.old
+	@rm -rf chainloader-initramfs.files
 	@rm -rf chainloader-initramfs.cpio.gz
 	@rm -rf $(OUT_DIR)
 	$(MAKE) -C $(DEBIAN_DIR) clean

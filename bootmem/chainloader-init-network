@@ -21,7 +21,7 @@ ip link set eth1 up
 
 # Download the archive
 echo "$(uptime) chainloader: Downloading the archive"
-wget http://10.88.88.1:8000/"$FILE" --quiet -P /
+wget http://10.88.88.1:8000/"$FILE" -P /
 echo "$(uptime) chainloader: Archive donwloaded"
 
 # Clean network config

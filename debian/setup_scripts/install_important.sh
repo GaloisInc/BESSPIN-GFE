@@ -18,3 +18,5 @@ apt-get install -y keyutils
 apt-get install -y pciutils
 # set of tools for manipulating NVMe drives
 apt-get install -y nvme-cli
+# for remote access
+apt-get install -y openssh-server
