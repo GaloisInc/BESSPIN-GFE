@@ -199,7 +199,7 @@ build-debian-linux/vmlinux: $(DEBIAN_CONFIG) build-busybox/busybox_unstripped de
 # Serve cpio archive over network
 # Assumes your network is configured with:
 # ```
-# ip addr add 10.88.88.2/24 broadcast 10.88.88.255 dev eth1
+# ip addr add 10.88.88.1/24 broadcast 10.88.88.255 dev eth1
 # ip link set eth1 up
 # ```
 # where `eth1` is the ethernet adapter connected to the FPGA
@@ -243,9 +243,12 @@ clean-debian:
 	@rm -rf build-qemu-linux
 	@rm -rf build-qemu-bbl
 	@rm -rf _install
+	@rm -rf debian-linux.config.old
 	@rm -rf chainloader-linux.config.old
 	@rm -rf chainloader-initramfs.files
 	@rm -rf chainloader-initramfs.cpio.gz
+	@rm -rf chainloader-initramfs-network.files
+	@rm -rf chainloader-initramfs-network.cpio.gz
 	@rm -rf $(OUT_DIR)
 	$(MAKE) -C $(DEBIAN_DIR) clean
 
