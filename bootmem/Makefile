@@ -197,12 +197,22 @@ build-debian-linux/vmlinux: $(DEBIAN_CONFIG) build-busybox/busybox_unstripped de
 	@echo "build-qemu-linux/vmlinux done"
 
 # Serve cpio archive over network
-# Assumes your network is configured with:
+# Assumes your host network is configured with:
 # ```
 # ip addr add 10.88.88.1/24 broadcast 10.88.88.255 dev eth1
 # ip link set eth1 up
 # ```
 # where `eth1` is the ethernet adapter connected to the FPGA
+# on the guest, do:
+# ```
+# ip addr add 10.88.88.2/24 broadcast 10.88.88.255 dev eth0
+# ip link set eth0 up
+# ```
+# To remove the address, do:
+# ```
+# ip link set eth0 down
+# ip addr del 10.88.88.2/24 dev eth0
+# ```
 serve-cpio-archive:
 	@echo "serve-cpio-archive"
 	python3 -m http.server 8000 --bind 10.88.88.1 -d .
