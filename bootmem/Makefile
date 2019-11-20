@@ -37,7 +37,7 @@ else ifeq ($(UNAME),Darwin)
         NPROCS := $(shell sysctl hw.ncpu | awk '{print $$2}')
 endif
 # Limit NPROCS to 8 so qemu can handle it
-NPROCS:=$(shell echo $$(($(NPROCS)>8 ? 8 : $(NPROCS))))
+QEMU_NPROCS:=$(shell echo $$(($(NPROCS)>8 ? 8 : $(NPROCS))))
 
 # Public targets
 default: busybox
@@ -164,7 +164,7 @@ extraSetupArg?=besspin.debian_repo=http://deb.debian.org/debian-ports/ besspin.s
 debian.cpio: build-cpio-utils $(OUT_DIR)/initramfs.cpio.gz debian-startup-scripts debian-chainloader-initramfs build-qemu-bbl/bbl
 	@echo "debian-chainloader-image"
 	qemu-system-riscv64 \
-      -nographic -machine virt -m 2G -smp ${NPROCS} \
+      -nographic -machine virt -m 2G -smp ${QEMU_NPROCS} \
       -kernel build-qemu-bbl/bbl \
       -append "console=ttyS0 besspin.set_clock=$$(date --iso-8601=sec) ${extraSetupArg}" \
       -fsdev local,id=virtfs,path=$(CURDIR)/virtfs,security_model=mapped-file \
