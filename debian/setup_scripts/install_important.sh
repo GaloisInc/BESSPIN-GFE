@@ -20,3 +20,5 @@ apt-get install -y pciutils
 apt-get install -y nvme-cli
 # for remote access
 apt-get install -y openssh-server
+# lsusb
+apt install -y usbutils
