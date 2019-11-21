@@ -14,6 +14,6 @@ $(BOOTMEM_DIR)/debian.cpio.gz: riscv64-chroot
 	cp riscv64-chroot/debian.cpio.gz $@
 
 clean:
-	@rm -rf build riscv64-chroot $(BOOTMEM_DIR)/debian.cpio.gz
+	@rm -rf build riscv64-chroot $(BOOTMEM_DIR)/debian.cpio.gz riscv64-chroot.tar
 
 .PHONY: default clean
