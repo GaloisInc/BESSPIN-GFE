@@ -29,6 +29,3 @@
 [submodule "riscv-openocd"]
 	path = riscv-openocd
 	url = ../riscv-openocd.git
-[submodule "benchmarks/coremark"]
-	path = benchmarks/coremark
-	url = git@github.com:GaloisInc/coremark.git
