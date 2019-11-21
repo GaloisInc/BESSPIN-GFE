@@ -27,11 +27,19 @@ yes riscv | passwd
 
 # Modify network configuration
 echo "
-# Use DHCP to automatically configure eth1
-auto eth1
-allow-hotplug eth1
-iface eth1 inet dhcp
+# # Use DHCP to automatically configure eth1
+# auto eth1
+# allow-hotplug eth1
+# iface eth1 inet dhcp
+
+# Use static IP on the on-board interface
+iface eth1 inet static
+address 10.88.88.2
+netmask 255.255.255.0
+gateway 10.88.88.1
+broadcast 10.88.88.255
 " >> /etc/network/interfaces
+
 
 if [ -n "$EXTRA_SETUP" ]; then
     echo "running extra setup script: $EXTRA_SETUP"
