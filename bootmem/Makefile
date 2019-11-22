@@ -57,14 +57,6 @@ QEMU_NPROCS:=$(shell echo $$(($(NPROCS)>8 ? 8 : $(NPROCS))))
 default: busybox
 busybox: build-busybox-bbl/bbl.asm bootmem-busybox.bin
 debian: build-$(DEBIAN_TARGET)-bbl/bbl.asm bootmem-$(DEBIAN_TARGET).bin
-debian-network: network debian
-
-network:
-   $(eval DEBIAN_TARGET=debian-network)
-
-
-# Not sure if this is good for anything
-#FORCE:
 
 .PHONY: default debian clean-debian clean-busybox
 
