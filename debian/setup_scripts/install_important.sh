@@ -14,11 +14,16 @@ apt-cache dumpavail | \
 apt-get install -y netcat
 apt-get install -y keyutils
 
-# pciutils are for `lcpci`, 
+# for lcpci
 apt-get install -y pciutils
-# set of tools for manipulating NVMe drives
-apt-get install -y nvme-cli
+
 # for remote access
 apt-get install -y openssh-server
-# lsusb
+# enable root login
+echo "PermitRootLogin yes" >>> /etc/ssh/sshd_config
+
+# for lsusb
 apt install -y usbutils
+
+# (not needed yet) set of tools for manipulating NVMe drives
+# apt-get install -y nvme-cli

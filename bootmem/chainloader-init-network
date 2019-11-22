@@ -29,7 +29,7 @@ echo "$(uptime) chainloader: Tearing down network"
 ip link set eth1 down
 ip addr del 10.88.88.2/24 dev eth1
 
-echo "$(uptime) chainloader: unpacking initramfs.cpio"
+echo "$(uptime) chainloader: unpacking $FILE"
 cd /chain/new
 cpio -i -F /"$FILE" 
 
