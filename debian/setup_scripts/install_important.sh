@@ -20,7 +20,7 @@ apt-get install -y pciutils
 # for remote access
 apt-get install -y openssh-server
 # enable root login
-echo "PermitRootLogin yes" >>> /etc/ssh/sshd_config
+echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 
 # for lsusb
 apt install -y usbutils
