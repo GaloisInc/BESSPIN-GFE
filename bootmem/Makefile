@@ -292,8 +292,9 @@ bootmem-$(DEBIAN_TARGET).bin: bootmem-$(DEBIAN_TARGET)
 clean-debian:
 	@rm -rf $(CPIO_UTILS_PREFIX)
 	@rm -f bootmem-$(DEBIAN_TARGET) bootmem-$(DEBIAN_TARGET).bin bbl-$(DEBIAN_TARGET).bin
-	@rm -rf build-debian-bbl
+	@rm -rf build-$(DEBIAN_TARGET)-bbl
 	@rm -f debian.cpio
+	@rm -f debian.cpio.gz
 	@rm -rf build-$(DEBIAN_TARGET)-linux
 	@rm -rf build-qemu-linux
 	@rm -rf build-qemu-bbl
