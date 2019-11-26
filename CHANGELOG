@@ -1,0 +1,3 @@
+v4.3 (2019-11-26)
+* Microarchitecture enhancements to P2 flute processors
+* Performance enhancements to PCIe root complex for P1 and P2 processors
