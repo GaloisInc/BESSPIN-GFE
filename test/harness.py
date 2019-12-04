@@ -1,5 +1,7 @@
 #! /usr/bin/env python3
 
+import re
+
 from pexpect import spawn, which, TIMEOUT, EOF
 import serial
 import serial.tools.list_ports
@@ -33,8 +35,14 @@ class GdbSession(object):
                 openocd, openocd_config_filename)
         ]:
             self.pty.sendline(command)
-        if xlen in ['auto', None]:
-            # parse value from openocd.tmp.log
+        if xlen in ('auto', None):
+            regex = re.compile('XLEN=(32|64)')
+            log = open('openocd.tmp.log').read()
+            match = regex.search(log)
+            if match:
+                xlen = int(match.group(1))
+            else:
+                raise ValueError('xlen not found')
         self.pty.sendline('set architecture riscv:rv{}'.format(xlen))
 
     def __del__(self):
@@ -97,7 +105,7 @@ class UartSession(object):
                     choice, list(options.keys())))
             return valid_choice
 
-        valid_parity = select(parity, {
+        valid_parity = select(parity.lower(), {
             "odd": serial.PARITY_ODD,
             "even": serial.PARITY_EVEN,
             "none": serial.PARITY_NONE,
@@ -114,7 +122,7 @@ class UartSession(object):
             6: serial.SIXBITS,
             7: serial.SEVENBITS,
             8: serial.EIGHTBITS,
-        })           
+        })
 
         # Configure the serial connections 
         self.uart = serial.Serial(
