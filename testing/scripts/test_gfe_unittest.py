@@ -425,12 +425,14 @@ class TestFreeRTOS(BaseGfeTest):
         expected_contents = [
             "#0 changed: 1 -> 0",
             "#1 changed: 1 -> 0",
-            "#2 changed: 1 -> 0",
-            "#3 changed: 1 -> 0",
+            # #2 and #3 are not connected on the IO board
+            # "#2 changed: 1 -> 0",
+            # "#3 changed: 1 -> 0",
             "#0 changed: 0 -> 1",
             "#1 changed: 0 -> 1",
-            "#2 changed: 0 -> 1",
-            "#3 changed: 0 -> 1",
+            # #2 and #3 are not connected on the IO board
+            # "#2 changed: 0 -> 1",
+            # "#3 changed: 0 -> 1",
         ]
         
         self.check_in_output(
@@ -440,14 +442,14 @@ class TestFreeRTOS(BaseGfeTest):
 
         return
 
-    def test_iic(self):
+    def test_rtc(self):
         # Load FreeRTOS binary
         freertos_elf = os.path.abspath(
-           os.path.join( self.path_to_freertos, 'main_iic.elf'))
+           os.path.join( self.path_to_freertos, 'main_rtc.elf'))
         print(freertos_elf)
 
         expected_contents = [
-            "Whoami: 0x71",
+            "Current time: ",
         ]
         
         self.check_in_output(
@@ -464,7 +466,7 @@ class TestFreeRTOS(BaseGfeTest):
         print(freertos_elf)
 
         expected_contents = [
-            "prvSdTestTask0 terminating, exit code = 0",
+            "Root opened",
         ]
         
         self.check_in_output(

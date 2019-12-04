@@ -107,13 +107,14 @@ elif [ "$use_flash" = true ]; then
 	fi
 elif [ "$full_ci" = true ]; then
 	# Disaling for now, the PMOD header has difficulty pulling the line down
-	#freertos_test main_gpio test_gpio
+	freertos_test main_gpio test_gpio
+	sleep 
 	freertos_test main_uart test_uart
 	sleep 10
-	freertos_test main_iic test_iic
+	freertos_test main_rtc test_rtc
 	sleep 10
-	#freertos_test main_sd test_sd
-	#sleep 10
+	freertos_test main_sd test_sd
+	sleep 10
 else
 	freertos_test main_blinky test_blink
 	sleep 10
