@@ -20,12 +20,10 @@ mount -v -t sysfs sysfs /sys
 # dpkg complains if $PATH is unset.
 export PATH
 
-
 # Debootstrap second-stage setup.  This part is hardcoded, since it's not
 # entirely clear which parts of the system are usable before this is done.
 
 echo 'debian stage1: running `debootstrap --second-stage`'
-
 /debootstrap/debootstrap --second-stage
 
 # debootstrap unmounts /proc, /sys, and /dev/pts, so we have to re-mount them
@@ -38,7 +36,7 @@ mount -v -t sysfs sysfs /sys
 apt-get remove -y --purge fakeroot libfakeroot
 
 # We now have a fully functional Debian system, and can run the setup scripts.
-
+echo 'debian stage1: `debootstrap --second-stage` done'
 
 # Parse kernel command line arguments that are relevant to this script.
 DEBIAN_REPO='file:///mnt/debian-repo'
@@ -50,14 +48,28 @@ for x in "$@"; do
         besspin.9p_mount_tag=*) MOUNT_TAG="${x#*=}" ;;
         besspin.debian_repo=*) DEBIAN_REPO="${x#*=}" ;;
         besspin.inet_addr=*) INET_ADDR="${x#*=}" ;;
+        besspin.dhcp_addr=*) DHCP_ADDR="${x#*=}" ;;
         besspin.extra_setup=*) EXTRA_SETUP="${x#*=}" ;;
         besspin.set_clock=*) SET_CLOCK="${x#*=}" ;;
+        besspin.sysvinit=*) SET_SYSVINIT="${x#*=}" ;;
     esac
 done
 
+echo "DEBIAN_REPO=$DEBIAN_REPO"
+echo "INET_ADDR=$INET_ADDR"
+echo "DHCP_ADDR=$DHCP_ADDR"
+echo "SET_CLOCK=$SET_CLOCK"
+echo "SET_SYSVINIT=$SET_SYSVINIT"
+
+# do we have a static IP provided?
 if [ -n "$INET_ADDR" ]; then
     ip link set eth0 up
     ip addr add dev eth0 "$INET_ADDR"
+else
+# should we use DHCP?
+if [ -n "$DHCP_ADDR" ]; then
+    dhclient -v eth0
+fi
 fi
 
 if [ -n "$SET_CLOCK" ]; then
@@ -67,7 +79,7 @@ fi
 # Mount the virtual disk, which normally contains the debian repo.
 #
 # The virtual disk is expected to contain:
-# - debian-repo/: a Debian repository snapshot, containing all the packages
+# - [optional] debian-repo/: a Debian repository snapshot, containing all the packages
 #   that will be needed during setup
 # - scripts/{setup_chroot.sh,setup_scripts/}: initramfs setup scripts copied
 #   from gfe/debian/
@@ -78,7 +90,7 @@ mount -v -t 9p "$MOUNT_TAG" /mnt
 # happens only after setting up the network and the clock, so apt can access
 # http mirrors and check release file timestamps.
 echo "deb $DEBIAN_REPO sid main" >/etc/apt/sources.list
-apt-get update
+apt-get update -y
 
 
 echo 'debian stage1: running setup scripts'
@@ -86,6 +98,7 @@ echo 'debian stage1: running setup scripts'
 # create_chroot.sh stage3:
 # $EXTRA_SETUP is run by setup_chroot.sh, if set
 [ -n "$EXTRA_SETUP" ] && export EXTRA_SETUP
+[ -n "$SET_SYSVINIT" ] && export SET_SYSVINIT
 /mnt/scripts/setup_chroot.sh
 
 # create_chroot.sh create_cpio:

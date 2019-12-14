@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 set -e
 
-apt-get install -y sysvinit-core apt-utils netbase busybox ifupdown isc-dhcp-client
+# to switch to sysv init instead of init.d
+apt-get install -y sysvinit-core
 
 # Use sysvinit to provide /init
 ln -sf /sbin/init /init
 
+# and replace the init tab
 echo "
 id:3:initdefault:
 
@@ -33,6 +35,3 @@ po::powerokwait:/etc/init.d/powerfail stop
 
 T0:2345:respawn:/sbin/getty -L console 115200 vt100
 " > /etc/inittab
-
-# Install busybox
-busybox --install -s
