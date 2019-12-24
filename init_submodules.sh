@@ -6,6 +6,8 @@ home=$(pwd)
 # This reduces the runtime of git status and other git commands
 git submodule sync
 
+git submodule update --init benchmarks/coremark
+
 git submodule update --init riscv-openocd
 
 git submodule update --init riscv-tests
