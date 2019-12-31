@@ -28,7 +28,7 @@ echo "Testing $proc_name"
 
 # Run all P1 processor tests
 if [ "$proc_name" == "chisel_p1" ] || [ "$proc_name" == "bluespec_p1" ]; then
-	./test.sh 32
+	./test.sh 32 $proc_name
 	err_msg $? "test.sh 32 failed" "test.sh 32 OK"
 	./test_freertos.sh
 	err_msg $? "test_freertos.sh basic failed" "test_freertos.sh basic OK"
@@ -46,7 +46,7 @@ fi
 
 # Run all P2/P3 processor tests
 if [ "$proc_name" == "chisel_p2" ] || [ "$proc_name" == "bluespec_p2" ] || [ "$proc_name" == "chisel_p3" ] || [ "$proc_name" == "bluespec_p3" ]; then
-	./test.sh 64
+	./test.sh 64 $proc_name
 	err_msg $? "test.sh 64 failed" "test.sh 64 OK"
 	./test_linux.sh busybox
 	err_msg $? "test_linux.sh busybox failed" "test_linux.sh busybox OK"

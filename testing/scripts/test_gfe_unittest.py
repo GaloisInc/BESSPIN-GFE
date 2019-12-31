@@ -152,8 +152,8 @@ class BaseGfeTest(unittest.TestCase):
 
 class TestGfe(BaseGfeTest):
     """Collection of smoke tests to exercise the GFE peripherals.
-    This class is inherited by TestGfe32 and TestGfe64 for testing P1
-    and P2/3 processors respectively."""
+    This class is inherited by TestGfeP1 et al for testing the different
+    processors."""
 
     def test_soft_reset(self):
         """Test the soft reset mechanism of the GFE.
@@ -280,8 +280,8 @@ class TestGfe(BaseGfeTest):
             )
         return
 
-# Create test classes for 64 and 32 bit processors
-class TestGfe32(TestGfe):
+# Create test classes for different processors
+class TestGfeP1(TestGfe):
 
     def getXlen(self):
         return '32'
@@ -289,13 +289,21 @@ class TestGfe32(TestGfe):
     def getFreq(self):
         return gfeparameters.GFE_P1_DEFAULT_HZ
 
-class TestGfe64(TestGfe):
+class TestGfeP2(TestGfe):
 
     def getXlen(self):
         return '64'
 
     def getFreq(self):
         return gfeparameters.GFE_P2_DEFAULT_HZ
+
+class TestGfeP3(TestGfe):
+
+    def getXlen(self):
+        return '64'
+
+    def getFreq(self):
+        return gfeparameters.GFE_P3_DEFAULT_HZ
 
 
 class TestFreeRTOS(BaseGfeTest):
