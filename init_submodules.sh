@@ -24,7 +24,7 @@ git submodule update --init chisel_processors
 cd chisel_processors
 git submodule sync
 git submodule update --init rocket-chip
-git submodule update --init P3/boom-template
+git submodule update --init chipyard
 cd P3/boom-template
 git submodule sync
 git submodule update --init boom rocket-chip
