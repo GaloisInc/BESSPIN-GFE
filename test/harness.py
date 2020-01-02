@@ -31,10 +31,10 @@ class GdbSession(object):
             'set height 0',
             'set print entry-values no',
             'set remotetimeout {}'.format(timeout),
-            'target remote | {} -c "gdb_port pipe; log_output openocd.tmp.log" -f {}'.format(
+            'target extended-remote | {} -c "gdb_port pipe; log_output openocd.tmp.log" -f {}'.format(
                 openocd, openocd_config_filename)
         ]:
-            self.pty.sendline(command)
+            self.cmd(command)
         if xlen in ('auto', None):
             regex = re.compile('XLEN=(32|64)')
             log = open('openocd.tmp.log').read()
@@ -43,20 +43,19 @@ class GdbSession(object):
                 xlen = int(match.group(1))
             else:
                 raise ValueError('xlen not found')
-        self.pty.sendline('set architecture riscv:rv{}'.format(xlen))
+        self.cmd('set architecture riscv:rv{}'.format(xlen))
 
     def __del__(self):
         self.pty.close()
 
     def wait_for_prompt(self):
-        self.pty.expect_exact('(gdb) ')
+        self.pty.expect_exact('\n(gdb) ')
 
     def cmd(self, gdb_command_string):
-        if not self.pty.is_alive():
+        if not self.pty.isalive():
             raise GdbError('Dead process')
         try:
             self.pty.sendline(gdb_command_string)
-            # self.pty.expect('\n')
             self.wait_for_prompt()
         except TIMEOUT as exc:
             self.pty.close()
@@ -65,6 +64,23 @@ class GdbSession(object):
             self.pty.close()
             raise GdbError('Read end of file') from exc
         return self.pty.before.strip()
+
+    def interrupt(self):
+        return self.cmd('\003')
+
+    def x(self, address, size='w'):
+        output = self.cmd("x/{} {:#x}".format(size, address))
+        print('Read raw output: {}'.format(output))
+        value = int(output.split(':')[1], base=0)
+        return value
+
+    def read32(self, address, debug_text=None):
+        value = self.x(address=address, size="1w")
+        if debug_text is not None:
+            print("{} Read: {:#x} from {:#x}".format(
+                debug_txt, hex(value), hex(address)))
+        return value
+
 
 
 class UartError(Exception):
@@ -86,12 +102,10 @@ class UartSession(object):
             # Silabs chip on VCU118 has two ports;
             # locate port 1 from the hardware description
             for p in ports:
-                m = re.search('LOCATION=.*:1.(\d)', p.hwid)
-                if m:
-                    if m.group(1) == '1':
-                        print("Located UART device at {} with serial number {}".format(
-                            p.device, p.serial_number))
-                        port = p.device
+                if re.search('LOCATION=.*:1.1', p.hwid):
+                    print("Located UART device at {} with serial number {}".format(
+                        p.device, p.serial_number))
+                    port = p.device
 
         if port in (None, 'auto'):
             raise UartError("Could not find a UART port with VID={:X}, PID={:X}".format(
@@ -174,6 +188,8 @@ if __name__ == '__main__':
     gdb.cmd('load')
     gdb.cmd('b write_tohost')
     gdb.cmd('c')
+    gdb.interrupt()
+    gdb.read32(0x80001000, debug_text='Tohost check:')
     print('Deleting session...')
     del gdb
     print('finished!')
