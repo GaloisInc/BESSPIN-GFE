@@ -8,7 +8,7 @@ _start:
     // We intentionally have the end of the stack be the beginning of DRAM. This
     // way, (assuming nothing is mapped immediately before DRAM) stack overflows
     // will trigger a trap.
-    li sp, 0x80400000
+    li sp, 0xC0400000
     // The call operation doesn't misalign the stack, because it doesn't even
     // touch the stack. It just writes the return address to a register, which
     // ought to be caller-saved.
