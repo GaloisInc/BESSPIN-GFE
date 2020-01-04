@@ -8,6 +8,16 @@ cd $BASE_DIR/testing/scripts
 
 xlen_picker $1
 
+case $2 in
+    *p1) PROC=P1 ;;
+    *p2) PROC=P2 ;;
+    *p3) PROC=P3 ;;
+    *)
+	echo "ERROR: unknown processor: $2"
+	exit 1
+	;;
+esac
+
 # Compile a set of assembly tests for the GFE
 cd $BASE_DIR/testing/baremetal/asm
 make XLEN=${XLEN}
@@ -22,7 +32,7 @@ err_msg $? "Failed to make isa tests"
 # Run some unittests including UART, DDR, and Bootrom
 # The final unittest tests booting freeRTOS
 cd $BASE_DIR/testing/scripts
-./test_gfe_unittest.py TestGfe${XLEN}
+./test_gfe_unittest.py TestGfe${PROC}
 err_msg $? "GFE unittests failed. Run python test_gfe_unittest.py"
 
 # Generate gdb isa test script

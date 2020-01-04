@@ -81,7 +81,7 @@ they should still work with the new version.
 If necessary, they can be (re)installed from the new version:
 ```bash
 cd /opt/Xilinx/Vivado_Lab/2019.1/data/xicom/cable_drivers/lin64/install_script/install_drivers/
-./install_drivers
+sudo ./install_drivers
 cd -
 ```
 

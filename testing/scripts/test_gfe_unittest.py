@@ -152,8 +152,8 @@ class BaseGfeTest(unittest.TestCase):
 
 class TestGfe(BaseGfeTest):
     """Collection of smoke tests to exercise the GFE peripherals.
-    This class is inherited by TestGfe32 and TestGfe64 for testing P1
-    and P2/3 processors respectively."""
+    This class is inherited by TestGfeP1 et al for testing the different
+    processors."""
 
     def test_soft_reset(self):
         """Test the soft reset mechanism of the GFE.
@@ -280,8 +280,8 @@ class TestGfe(BaseGfeTest):
             )
         return
 
-# Create test classes for 64 and 32 bit processors
-class TestGfe32(TestGfe):
+# Create test classes for different processors
+class TestGfeP1(TestGfe):
 
     def getXlen(self):
         return '32'
@@ -289,13 +289,21 @@ class TestGfe32(TestGfe):
     def getFreq(self):
         return gfeparameters.GFE_P1_DEFAULT_HZ
 
-class TestGfe64(TestGfe):
+class TestGfeP2(TestGfe):
 
     def getXlen(self):
         return '64'
 
     def getFreq(self):
         return gfeparameters.GFE_P2_DEFAULT_HZ
+
+class TestGfeP3(TestGfe):
+
+    def getXlen(self):
+        return '64'
+
+    def getFreq(self):
+        return gfeparameters.GFE_P3_DEFAULT_HZ
 
 
 class TestFreeRTOS(BaseGfeTest):
@@ -620,13 +628,22 @@ class TestFreeRTOS(BaseGfeTest):
         return
 
 class TestLinux(BaseGfeTest):
+    def getDebianBootImage(self):
+        return os.path.join(
+            os.path.dirname(os.path.dirname(os.getcwd())),
+            'bootmem', 'build-debian-bbl', 'bbl')
+
+    def getBusyboxBootImage(self):
+        return os.path.join(
+            os.path.dirname(os.path.dirname(os.getcwd())),
+            'bootmem', 'build-busybox-bbl', 'bbl')
 
     def getBootImage(self):
         # Despite its name, this path will refer to a *debian* image
         # if 'make debian' was called by test_linux.sh
         return os.path.join(
             os.path.dirname(os.path.dirname(os.getcwd())),
-            'bootmem', 'build-bbl', 'bbl')
+            'bootmem', 'build-debian-bbl', 'bbl')
 
     def getXlen(self):
         return '64'
@@ -676,24 +693,28 @@ class TestLinux(BaseGfeTest):
         return
 
     def test_busybox_boot(self):
-        self.boot_image(expected_contents=self.getBusyBoxExpected(), timeout=60)
+        self.boot_image(expected_contents=self.getBusyBoxExpected(),
+        image=self.getBusyboxBootImage(), timeout=60)
         return
 
     def test_busybox_flash_boot(self):
-        self.boot_image(expected_contents=self.getBusyBoxExpected(), timeout=100, run_from_flash=True)
+        self.boot_image(expected_contents=self.getBusyBoxExpected(),
+        image=self.getBusyboxBootImage(), timeout=100, run_from_flash=True)
         return
 
     def test_debian_boot(self):
-        self.boot_image(expected_contents=self.getDebianExpected(), timeout=1500)
+        self.boot_image(expected_contents=self.getDebianExpected(),
+        image=self.getDebianBootImage(), timeout=300)
         return
 
     def test_debian_flash_boot(self):
-        self.boot_image(expected_contents=self.getDebianExpected(), timeout=1500, run_from_flash=True)
+        self.boot_image(expected_contents=self.getDebianExpected(),
+        image=self.getDebianBootImage(), timeout=300, run_from_flash=True)
         return
 
     def test_busybox_ethernet(self):
         # Boot busybox
-        self.boot_linux();
+        self.boot_linux(image=self.getBusyboxBootImage())
         linux_boot_timeout=60
 
         print("Running elf with a timeout of {}s".format(linux_boot_timeout))
@@ -707,12 +728,12 @@ class TestLinux(BaseGfeTest):
         time.sleep(1)
 
         # Configure the ethernet and get it up
-        self.gfe.uart_session.write(b'ifconfig eth0 up\r')
+        self.gfe.uart_session.write(b'ifconfig eth1 up\r')
         self.check_uart_out(
             timeout=10,
             expected_contents=["xilinx_axienet 62100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx"])
 
-        riscv_ip = "10.88.88.5" #set statically
+        riscv_ip = "10.88.88.2" #set statically
         self.gfe.uart_session.write('ip addr add {0}/24 dev eth0\n'.format(riscv_ip).encode('utf-8'))
         self.check_uart_out(
             timeout=10,
@@ -726,8 +747,8 @@ class TestLinux(BaseGfeTest):
 
     def test_debian_ethernet(self):
         # Boot Debian
-        self.boot_linux()
-        linux_boot_timeout=800
+        self.boot_linux(image=self.getDebianBootImage())
+        linux_boot_timeout=400
         print("Running elf with a timeout of {}s".format(linux_boot_timeout))
         
         # Check that Debian booted
@@ -748,15 +769,15 @@ class TestLinux(BaseGfeTest):
                                     ":~#"
                                     ])
 
-        riscv_ip = "10.88.88.5" #set statically
-        self.gfe.uart_session.write(b'echo \"auto eth0\" > /etc/network/interfaces\r')
-        self.gfe.uart_session.write(b'echo \"iface eth0 inet static\" >> /etc/network/interfaces\r')
+        riscv_ip = "10.88.88.2" #set statically
+        self.gfe.uart_session.write(b'echo \"auto eth1\" > /etc/network/interfaces\r')
+        self.gfe.uart_session.write(b'echo \"iface eth1 inet static\" >> /etc/network/interfaces\r')
         self.gfe.uart_session.write('echo \"address {0}/24\" >> /etc/network/interfaces\n'.format(riscv_ip).encode('utf-8'))
-        self.gfe.uart_session.write(b'ifup eth0\r')
+        self.gfe.uart_session.write(b'ifup eth1\r')
 
         self.check_uart_out(
             timeout=15,
-            expected_contents=["xilinx_axienet 62100000.ethernet eth0: Link is Up - 1Gbps/Full - flow control rx/tx"])
+            expected_contents=["xilinx_axienet 62100000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx"])
 
         ping_response = os.system("ping -c 1 " + riscv_ip)
         self.assertEqual(ping_response, 0,

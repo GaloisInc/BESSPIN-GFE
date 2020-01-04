@@ -1,0 +1,40 @@
+#!/bin/sh
+# This is the /init script used for the chainloader initramfs.  Its purpose is
+# to load a second initramfs from a QEMU virtual block device, unpack it, and
+# switch to it.
+#
+# The chainloader environment has busybox installed and nothing else.  Its
+# kernel config is based on the one we use for Debian.
+# It is sole purpose is to load the root file system archive over the network,
+# unpack it and switch root to it.
+FILE=debian.cpio
+
+echo "$(uptime) chainloader: booting from network"
+mkdir -v -p /chain/new
+mount -v -t tmpfs none /chain/new
+
+# Set up network to a fixed IP
+# Assuming PCIe root complex with an ethernet card
+echo "$(uptime) chainloader: Configuring network"
+ip addr add 10.88.88.2/24 broadcast 10.88.88.255 dev eth1
+ip link set eth1 up
+
+# Download the archive
+echo "$(uptime) chainloader: Downloading the archive"
+wget http://10.88.88.1:8000/"$FILE" -P /
+echo "$(uptime) chainloader: Archive donwloaded"
+
+# Clean network config
+echo "$(uptime) chainloader: Tearing down network"
+ip link set eth1 down
+ip addr del 10.88.88.2/24 dev eth1
+
+echo "$(uptime) chainloader: unpacking $FILE"
+cd /chain/new
+cpio -i -F /"$FILE" 
+
+echo "$(uptime) chainloader: switching root"
+exec switch_root /chain/new /init
+
+echo "$(uptime) chainloader: failed to switch_root"
+exit 1

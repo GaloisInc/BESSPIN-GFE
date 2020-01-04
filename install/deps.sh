@@ -5,10 +5,13 @@
 set -eux
 
 # For riscv-linux build:
-apt install -y openssl bc bison flex make autoconf debootstrap proot
+apt install -y curl openssl bc bison flex make autoconf debootstrap proot libssl-dev debian-ports-archive-keyring
 
 # RTL simulator and RISC-V emulator:
-apt install -y verilator qemu qemu-user
+apt install -y verilator qemu qemu-user qemu-system-misc
+
+# Needed for GDB
+apt install -y libpython2.7
 
 # System-wide python packages needed by testing scripts
 apt install -y python3-pip

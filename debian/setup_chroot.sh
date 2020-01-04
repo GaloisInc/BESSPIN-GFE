@@ -9,11 +9,16 @@ debian_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 setup_scripts_dir="${debian_dir}/setup_scripts"
 
 "${setup_scripts_dir}/exclude_docs.sh"
+"${setup_scripts_dir}/install_important.sh"
 
 # Install an init system.
-"${setup_scripts_dir}/install_systemd.sh"
-#"${setup_scripts_dir}/install_sysvinit.sh"
-
+if [ -n "$SET_SYSVINIT" ]; then
+    echo "using sysvinit as init script"
+    "${setup_scripts_dir}/install_sysvinit.sh"
+else
+    echo "using systemd as init script"
+    "${setup_scripts_dir}/install_systemd.sh"
+fi
 
 # Common setup
 
@@ -22,11 +27,21 @@ yes riscv | passwd
 
 # Modify network configuration
 echo "
-# Use DHCP to automatically configure eth0
-auto eth0
-allow-hotplug eth0
-iface eth0 inet dhcp
+# # Use DHCP to automatically configure eth1
+# auto eth1
+# allow-hotplug eth1
+# iface eth1 inet dhcp
+
+# Use static IP on the on-board interface
+auto eth1
+allow-hotplug eth1
+iface eth1 inet static
+    address 10.88.88.2
+    netmask 255.255.255.0
+    gateway 10.88.88.1
+    broadcast 10.88.88.255
 " >> /etc/network/interfaces
+
 
 if [ -n "$EXTRA_SETUP" ]; then
     echo "running extra setup script: $EXTRA_SETUP"
