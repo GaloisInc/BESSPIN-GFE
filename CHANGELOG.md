@@ -2,9 +2,9 @@
 
 ## v5.0 (2020-01-02)
 * Parallelized build processes for Busybox and Debian using qemu, improving performance on multicore host machines (!44)
-* Resolved Chisel P3 Ethernet panic  (#76)
 * Resolved a PCIe packet loss issue for Chisel P2 processors (#130)
 * Added Coremark benchmarks for P1 and P2 processors (!51)
+* Updated P3 processors
 
 ## v4.3 (2019-11-26)
 * Microarchitecture improvements to P2 Flute processors
