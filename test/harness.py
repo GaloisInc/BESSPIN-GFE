@@ -1,8 +1,11 @@
 #! /usr/bin/env python3
 
 import re
+from subprocess import run, TimeoutExpired
+from time import sleep
 
 from pexpect import spawn, which, TIMEOUT, EOF
+from pexpect.replwrap import REPLWrapper
 import serial
 import serial.tools.list_ports
 
@@ -15,70 +18,79 @@ class GdbSession(object):
     '''Wraps a pseudo-terminal interface to GDB on the FPGA via OpenOCD.'''
 
     def __init__(self, gdb='riscv64-unknown-elf-gdb', openocd='openocd',
-        openocd_config_filename='openocd.cfg', timeout=60, xlen='auto'):
+        openocd_config_filename='openocd.cfg', timeout=60):
         if not which(gdb):
             raise GdbError('Executable {} not found'.format(gdb))
         if not which(openocd):
             raise GdbError('Executable {} not found'.format(openocd))
-        if xlen not in [32, 64, 'auto', None]:
-            raise ValueError('Invalid xlen')
 
-        logfile = open('gdb.tmp.log', 'w')
-        self.pty = spawn(gdb, encoding='utf-8', logfile=logfile, timeout=timeout)
-        for command in [
+        try:
+            run([openocd, '-f', openocd_config_filename], timeout=0.5, capture_output=True)
+        except TimeoutExpired as exc:
+            log = str(exc.stderr, encoding='utf-8')
+            match = re.search('XLEN=(32|64)', log)
+            if match:
+                xlen = int(match.group(1))
+            else:
+                raise GdbError('XLEN not found by OpenOCD')
+
+        init_cmds = '\n'.join([
             'set confirm off',
+            'set pagination off'
             'set width 0',
             'set height 0',
             'set print entry-values no',
             'set remotetimeout {}'.format(timeout),
-            'target extended-remote | {} -c "gdb_port pipe; log_output openocd.tmp.log" -f {}'.format(
+            'set arch riscv:rv{}'.format(xlen),
+            'target remote | {} -c "gdb_port pipe; log_output openocd.tmp.log" -f {}'.format(
                 openocd, openocd_config_filename)
-        ]:
-            self.cmd(command)
-        if xlen in ('auto', None):
-            regex = re.compile('XLEN=(32|64)')
-            log = open('openocd.tmp.log').read()
-            match = regex.search(log)
-            if match:
-                xlen = int(match.group(1))
-            else:
-                raise ValueError('xlen not found')
-        self.cmd('set architecture riscv:rv{}'.format(xlen))
+        ])
+
+        logfile = open('gdb.tmp.log', 'w')
+        self.pty = spawn(gdb, encoding='utf-8', logfile=logfile, timeout=timeout)
+        self.repl = REPLWrapper(self.pty, '(gdb) ', None, extra_init_cmd=init_cmds)
+
 
     def __del__(self):
         self.pty.close()
 
-    def wait_for_prompt(self):
-        self.pty.expect_exact('\n(gdb) ')
-
-    def cmd(self, gdb_command_string):
+    def cmd(self, gdb_command_string, timeout=-1):
         if not self.pty.isalive():
             raise GdbError('Dead process')
         try:
-            self.pty.sendline(gdb_command_string)
-            self.wait_for_prompt()
+            reply = self.repl.run_command(gdb_command_string, timeout=timeout)
         except TIMEOUT as exc:
             self.pty.close()
             raise GdbError('Timeout expired') from exc
         except EOF as exc:
             self.pty.close()
             raise GdbError('Read end of file') from exc
-        return self.pty.before.strip()
+        return reply
 
     def interrupt(self):
+        # send ctrl-c and wait for prompt
         return self.cmd('\003')
+
+    def c(self, timeout):
+        try:
+            self.cmd('c', timeout=timeout)
+        except GdbError:
+            self.interrupt()
 
     def x(self, address, size='w'):
         output = self.cmd("x/{} {:#x}".format(size, address))
         print('Read raw output: {}'.format(output))
-        value = int(output.split(':')[1], base=0)
+        if ':' in output:
+            value = int(output.split(':')[1], base=0)
+        else:
+            raise GdbError('Failed to read from address {:#x}'.format(address))
         return value
 
     def read32(self, address, debug_text=None):
         value = self.x(address=address, size="1w")
         if debug_text is not None:
             print("{} Read: {:#x} from {:#x}".format(
-                debug_txt, hex(value), hex(address)))
+                debug_text, value, address))
         return value
 
 
@@ -86,7 +98,7 @@ class GdbSession(object):
 class UartError(Exception):
     pass
 
-
+# TODO: exercise and debug this with peripheral and OS tests
 class UartSession(object):
     '''Wraps a serial interface to the UART on the FPGA.'''
 
@@ -177,19 +189,49 @@ class UartSession(object):
         return rx
 
 
+# TODO: turn this into a 'test_isa.py' pytest suite with configurable test selection;
+#       see gfe/verilator_simulators/run/Run_regression.py for arch string parsing?
+def isa_tester(gdb, isa_exe_filename):
+    # gdb script adapted from gfe/testing/scripts/gen-test-all
+    soft_reset_cmd = 'set *((int *) 0x6FFF0000) = 1'
+ 
+    if '-p-' in isa_exe_filename:
+        breakpoint = 'write_tohost'
+        tohost_var = '$gp'
+    elif '-v-' in isa_exe_filename:
+        breakpoint = 'terminate'
+        tohost_var = '$a0'
+    else:
+        raise ValueError('Malformed ISA test filename')
 
-# temporary smoketest; feed it a compiled ISA test
+    setup_cmds = [
+        'dont-repeat',
+        soft_reset_cmd,
+        'monitor reset halt',
+        'delete',
+        'file ' + isa_exe_filename,
+        'load',
+        'break ' + breakpoint,
+        'continue'
+    ]
+    print('Loading and running {} ...'.format(isa_exe_filename))
+    for c in setup_cmds:
+        gdb.cmd(c)
+
+    raw_tohost = gdb.cmd(r'printf "%x\n", ' + tohost_var)
+    tohost = int(raw_tohost.split('\r', 1)[0], 16)
+    if tohost == 1:
+        print('PASS')
+    else:
+        print('FAIL (tohost={:#x})'.format(tohost))
+
+
 if __name__ == '__main__':
     from sys import argv
-    print('Starting session...')
+    print('Starting GDB session...')
     gdb = GdbSession()
-    print('Sending commands...')
-    gdb.cmd('file {}'.format(argv[1]))
-    gdb.cmd('load')
-    gdb.cmd('b write_tohost')
-    gdb.cmd('c')
-    gdb.interrupt()
-    gdb.read32(0x80001000, debug_text='Tohost check:')
-    print('Deleting session...')
+    for filename in argv[1:]:
+        isa_tester(gdb, filename)
+    print('Deleting GDB session...')
     del gdb
-    print('finished!')
+    print('Finished!')
