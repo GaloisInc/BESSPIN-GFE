@@ -12,7 +12,7 @@ BUSYBOX_CONFIG?=$(CURDIR)/busybox.config
 LINUX_CONFIG?=$(CURDIR)/linux.config
 
 # Debian build
-DEBIAN_CONFIG=$(CURDIR)/debian-linux.config
+DEBIAN_CONFIG?=$(CURDIR)/debian-linux.config
 BUSYBOX_PREFIX=$(CURDIR)/_install
 CPIO_UTILS_PREFIX=$(CURDIR)/build-cpio-utils/
 # change to DEBIAN_TARGET=debian-network for rootfs served over ethernet
@@ -27,6 +27,11 @@ DEBIAN_TARGET?=debian
 
 # Chainloader build
 CHAINLOADER_CONFIG=$(CURDIR)/chainloader-linux.config
+
+$(info DEBIAN_TARGET=$(DEBIAN_TARGET))
+$(info LINUX_CONFIG=$(LINUX_CONFIG))
+$(info CHAINLOADER_CONFIG=$(CHAINLOADER_CONFIG))
+$(info DEBIAN_CONFIG=$(DEBIAN_CONFIG))
 
 # Build and source directories
 LINUX_SRC=../riscv-linux
@@ -204,7 +209,7 @@ debian-startup-scripts:
 # besspin.debian_repo=http://deb.debian.org/debian-ports/ is the url of the debian repo
 # (or a path to file in case we are booting offline)
 # Pinning to a particular repo snapshot because of broken libc (12/13/19)
-extraSetupArg?=besspin.debian_repo=https://snapshot.debian.org/archive/debian-ports/20191209T111800Z/ besspin.dhcp_addr=1
+extraSetupArg?=besspin.debian_repo=https://snapshot.debian.org/archive/debian-ports/20191209T111800Z/ besspin.dhcp_addr=1 besspin.sysvinit=1
 # Revert once resolved
 #extraSetupArg?=besspin.debian_repo=http://deb.debian.org/debian-ports/ besspin.dhcp_addr=1
 

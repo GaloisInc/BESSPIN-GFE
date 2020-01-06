@@ -42,12 +42,22 @@ else
 	test_ethernet=false
 fi
 
+# Use PCIe config for tests
+if [[ $3 == "--no-pcie" ]]; then
+	echo "Linux config without PCIe"
+	LINUX_CONFIG_PATH=`pwd`/../../bootmem/linux-no-pcie.config
+	DEBIAN_CONFIG_PATH=`pwd`/../../bootmem/debian-linux-no-pcie.config
+else
+	LINUX_CONFIG_PATH=`pwd`/../../bootmem/linux.config
+	DEBIAN_CONFIG_PATH=`pwd`/../../bootmem/debian-linux.config
+fi
+
 # Build the Linux image
 cd $linux_folder
 if [ "$linux_image" == "debian" ]; then
-	make debian
-else
-	make
+	DEBIAN_CONFIG=$DEBIAN_CONFIG_PATH make debian
+else # busybox
+	LINUX_CONFIG=$LINUX_CONFIG_PATH make
 fi
 err_msg $? "Building Linux failed"
 

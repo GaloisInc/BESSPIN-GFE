@@ -66,6 +66,18 @@ sim_bluespec_p2:
     paths:
       - verilator_simulators/run/Logs/bluespec_p2/
 
+sim_chisel_p3:
+  script:
+    - ./test_simulator.sh chisel_p3
+  tags: ["verilator"]
+  except:
+    - schedules
+  artifacts:
+    when: on_failure
+    expire_in: 1 week
+    paths:
+      - verilator_simulators/run/Logs/chisel_p3/
+
 #-----------------------------------------------------------------------------#
 #
 # Bitstream generation
@@ -148,7 +160,6 @@ bitstream_gen_bluespec_p2:
   script:
     - ./setup_soc_project.sh bluespec_p2
     - ./build.sh bluespec_p2
-    - ./init_submodules.sh
   tags: ["bitstream"]
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
@@ -206,39 +217,48 @@ chisel_p1:
 
 chisel_p2:
   script:
-    - ./test_processor.sh chisel_p2
-  after_script:
-    - echo "Cleaning debian chroot"
-    - rm -rf debian/riscv64-chroot
-  tags: ["fpga"]
+    - DEBIAN_TARGET=debian-network ./test_processor.sh chisel_p2
+  tags: ["fpga-pcie"]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - debian/riscv64-chroot.tar
+      - bootmem/
   only:
     variables:
-      - $JOB_TYPE == "chisel_p2"
+      - $JOB_TYPE == "linux"
 
 bluespec_p2:
   script:
-    - ./test_processor.sh bluespec_p2
-  after_script:
-    - echo "Cleaning debian chroot"
-    - rm -rf debian/riscv64-chroot
-  tags: ["fpga"]
+    - DEBIAN_TARGET=debian-network ./test_processor.sh bluespec_p2
+  tags: ["fpga-pcie"]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - debian/riscv64-chroot.tar
+      - bootmem/
   only:
       variables:
-      - $JOB_TYPE == "bluespec_p2"
+      - $JOB_TYPE == "linux"
 
 chisel_p3: # currently fails
   script:
-    - ./test_processor.sh chisel_p3 --full_ci
-  tags: ["fpga"]
+    - ./test_processor.sh chisel_p3
+  tags: ["fpga-pcie"]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - debian/riscv64-chroot.tar
+      - bootmem/
   only:
       variables:
-      - $JOB_TYPE == "chisel_p3"
+      - $JOB_TYPE == "linux"
 
-bluespec_p3: # currently fails
-  script:
-    - ./test_processor.sh bluespec_p3 --full_ci
-  tags: ["fpga"]
-  only:
-      variables:
-      - $JOB_TYPE == "bluespec_p3"
+#bluespec_p3: # currently fails
+#  script:
+#    - ./test_processor.sh bluespec_p3
+#  tags: ["fpga"]
+#  only:
+#      variables:
+#      - $JOB_TYPE == "bluespec_p3"
 
