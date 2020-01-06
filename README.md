@@ -749,7 +749,6 @@ Cissr: reset
 Note that some early mismatches are expected as the simulation model is updated with the correct PC and initial status registers.
 
 ## PCI Express Root Complex ##
-**NOTE:** the PCIe is currently supported only in busybox.
 
 ### PCIe Hardware Setup ###
 

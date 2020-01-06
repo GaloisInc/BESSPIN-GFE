@@ -13,6 +13,11 @@ else
 	full_ci=false
 fi
 
+# Allow different kernel configurations - with PCIe enabled or without
+if [[ $3 == "--no-pcie" ]]; then
+	PCIE_OPTION=--no-pcie
+fi
+
 # Make sure the Bluespec P1 is programmed with a valid flash content
 # This is a workaround for https://gitlab-ext.galois.com/ssith/gfe/issues/58
 if [ "$proc_name" == "bluespec_p1" ]; then
@@ -48,17 +53,18 @@ fi
 if [ "$proc_name" == "chisel_p2" ] || [ "$proc_name" == "bluespec_p2" ] || [ "$proc_name" == "chisel_p3" ] || [ "$proc_name" == "bluespec_p3" ]; then
 	./test.sh 64 $proc_name
 	err_msg $? "test.sh 64 failed" "test.sh 64 OK"
-	./test_linux.sh busybox
+	./test_linux.sh busybox --dummy $PCIE_OPTION
 	err_msg $? "test_linux.sh busybox failed" "test_linux.sh busybox OK"
-	./test_linux.sh debian
+	./test_linux.sh debian --dummy $PCIE_OPTION
 	err_msg $? "test_linux.sh debian failed" "test_linux.sh debian OK"
 	if [ "$full_ci" = true ]; then
 		# Run ethernet test only if we have the proper hardware setup
-		./test_linux.sh busybox --ethernet
+		./test_linux.sh busybox --ethernet $PCIE_OPTION
 		err_msg $? "test_linux.sh busybox ethernet failed" "test_linux.sh busybox ethernet OK"
-		./test_linux.sh debian --ethernet
+		./test_linux.sh debian --ethernet $PCIE_OPTION
 		err_msg $? "test_linux.sh debian ethernet failed" "test_linux.sh debian ethernet OK"
-		./test_linux.sh debian --flash $proc_name
-		err_msg $? "test_linux.sh debian boot from flash failed" "test_linux.sh debian boot from flash OK"
+		# TODO: don't test flash until PCIe options are properly parametrized
+		# ./test_linux.sh debian --flash $proc_name
+		# err_msg $? "test_linux.sh debian boot from flash failed" "test_linux.sh debian boot from flash OK"
 	fi
 fi
