@@ -25,13 +25,7 @@ cd chisel_processors
 git submodule sync
 git submodule update --init rocket-chip
 git submodule update --init chipyard
-cd P3/boom-template
-git submodule sync
-git submodule update --init boom rocket-chip
 cd rocket-chip
-git submodule sync
-git submodule update --init firrtl chisel3 hardfloat
-cd ../../../rocket-chip
 git submodule sync
 git submodule update --init firrtl chisel3 hardfloat
 

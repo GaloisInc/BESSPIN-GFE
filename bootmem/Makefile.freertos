@@ -1,5 +1,8 @@
 
-CROSS_COMPILE?=riscv32-unknown-elf-
+CROSS_COMPILE?=riscv64-unknown-elf-
+
+ARCH 		= -march=rv32im
+ABI 		= -mabi=ilp32
 
 CP=cp
 MKDIR=mkdir
@@ -19,7 +22,7 @@ freertos.bin: $(PROG)
 	$(OBJCOPY) -O binary $< $@
 
 bootmem: bootmem_freertos.S linker.ld freertos.bin
-	$(CC) -Tlinker.ld $< -nostdlib -static -Wl,--no-gc-sections -o $@
+	$(CC) $(ARCH) $(ABI) -Tlinker.ld $< -nostdlib -static -Wl,--no-gc-sections -o $@
 
 bootmem.bin: bootmem
 	$(OBJCOPY) -O binary $< $@
