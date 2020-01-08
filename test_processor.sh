@@ -55,8 +55,8 @@ if [ "$proc_name" == "chisel_p2" ] || [ "$proc_name" == "bluespec_p2" ] || [ "$p
 	err_msg $? "test.sh 64 failed" "test.sh 64 OK"
 	./test_linux.sh busybox --dummy $PCIE_OPTION
 	err_msg $? "test_linux.sh busybox failed" "test_linux.sh busybox OK"
-	./test_linux.sh debian --dummy $PCIE_OPTION
-	err_msg $? "test_linux.sh debian failed" "test_linux.sh debian OK"
+	#./test_linux.sh debian --dummy $PCIE_OPTION
+	#err_msg $? "test_linux.sh debian failed" "test_linux.sh debian OK"
 	if [ "$full_ci" = true ]; then
 		# Run ethernet test only if we have the proper hardware setup
 		./test_linux.sh busybox --ethernet $PCIE_OPTION
