@@ -724,7 +724,7 @@ class TestLinux(BaseGfeTest):
         return
 
     def test_debian_boot(self):
-        self.thread = Process(target = self.httpd.serve_forever)
+        self.thread = Process(target = self.httpd.handle_one_request)
         self.thread.start()
         print("set: Thread started")
         self.boot_image(expected_contents=self.getDebianExpected(),
