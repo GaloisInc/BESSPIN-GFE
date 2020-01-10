@@ -54,6 +54,8 @@ if [ "$proc_name" == "chisel_p2" ] || [ "$proc_name" == "bluespec_p2" ] || [ "$p
 	export XARCH=64
 	./test_freertos.sh
 	err_msg $? "test_freertos.sh basic failed" "test_freertos.sh basic OK"
+	./test_freertos.sh --ethernet
+	err_msg $? "test_freertos.sh ethernet failed" "test_freertos.sh ethernet OK"
 	./test.sh 64 $proc_name
 	err_msg $? "test.sh 64 failed" "test.sh 64 OK"
 	./test_linux.sh busybox --dummy $PCIE_OPTION
