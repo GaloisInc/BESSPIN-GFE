@@ -21,6 +21,8 @@ apt install -y libtinfo5
 
 # Clang and LLVM for RISC-V:
 wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-add-apt-repository 'http://apt.llvm.org/buster/ llvm-toolchain-buster main'
+add-apt-repository 'deb http://apt.llvm.org/buster/ llvm-toolchain-buster main'
 apt-get update
 apt-get install -y clang-10 lldb-10 lld-10 clangd-10
+# TODO: set up a symlink
+ln -s /usr/bin/clang-10 /usr/bin/clang
