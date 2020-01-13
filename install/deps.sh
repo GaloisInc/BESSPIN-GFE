@@ -12,6 +12,9 @@ apt install -y verilator qemu qemu-user qemu-system-misc
 # Needed for GDB
 apt install -y libpython2.7
 
+# Needed for manual tests
+apt install minicom
+
 # System-wide python packages needed by testing scripts
 apt install -y python3-pip
 pip3 install pyserial pexpect
