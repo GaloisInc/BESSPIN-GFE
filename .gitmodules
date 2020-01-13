@@ -14,23 +14,22 @@
 	url = https://github.com/bluespec/Flute.git
 [submodule "riscv-linux"]
 	path = riscv-linux
-	url = https://gitlab-ext.galois.com/ssith/riscv-linux.git
-[submodule "bluespec-processors/P3/Tuba"]
-	path = bluespec-processors/P3/Tuba
-	url = https://github.com/bluespec/Tuba.git
+	url = ../riscv-linux.git
+[submodule "bluespec-processors/P3/Toooba"]
+	path = bluespec-processors/P3/Toooba
+	url = https://github.com/bluespec/Toooba.git
 [submodule "riscv-pk"]
 	path = riscv-pk
-	url = https://gitlab-ext.galois.com/ssith/riscv-pk.git
+	url = ../riscv-pk.git
 [submodule "riscv-tests"]
 	path = riscv-tests
-	url = https://gitlab-ext.galois.com/ssith/riscv-tests.git
-[submodule "tool-suite"]
-	path = tool-suite
-	url = https://gitlab-ext.galois.com/ssith/tool-suite.git
-	branch = develop
+	url = ../riscv-tests.git
 [submodule "busybox"]
 	path = busybox
 	url = https://github.com/mirror/busybox.git
+[submodule "riscv-openocd"]
+	path = riscv-openocd
+	url = ../riscv-openocd.git
 [submodule "newlib"]
 	path = newlib
 	url = https://github.com/CTSRD-CHERI/newlib

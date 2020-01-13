@@ -15,14 +15,14 @@ err_msg $? "Making the assembly tests failed"
 
 # Compile riscv-tests
 cd $BASE_DIR/riscv-tests
-CC=riscv${XLEN}-unknown-elf-gcc ./configure --with-xlen=${XLEN} --target=riscv${XLEN}-unknown-elf
+CC=riscv64-unknown-elf-gcc ./configure --with-xlen=${XLEN} --target=riscv64-unknown-elf
 make
 err_msg $? "Failed to make isa tests"
 
 # Run some unittests including UART, DDR, and Bootrom
 # The final unittest tests booting freeRTOS
 cd $BASE_DIR/testing/scripts
-python test_gfe_unittest.py TestGfe${XLEN}
+./test_gfe_unittest.py TestGfe${XLEN}
 err_msg $? "GFE unittests failed. Run python test_gfe_unittest.py"
 
 # Generate gdb isa test script
@@ -38,7 +38,7 @@ else
 fi
 
 # Run the isa tests
-riscv${XLEN}-unknown-elf-gdb --batch -x $BASE_DIR/test_${XLEN}.gdb
+riscv64-unknown-elf-gdb --batch -x $BASE_DIR/test_${XLEN}.gdb
 echo "riscv-tests summary:"
 grep -E "(PASS|FAIL)" gdb-client.log | uniq -c 
 # Return a non-zero exit code on failure

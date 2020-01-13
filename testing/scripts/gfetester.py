@@ -17,6 +17,7 @@ class gfetester(object):
         gdb_path=gfeparameters.gdb_path,
         openocd_command=gfeparameters.openocd_command,
         openocd_cfg_path=gfeparameters.openocd_cfg_path,
+        xlen=32
     ):
         super(gfetester, self).__init__()
         self.gdb_port = gdb_port
@@ -26,6 +27,7 @@ class gfetester(object):
         self.gdb_session = None
         self.openocd_session = None
         self.uart_session = None
+        self.xlen = xlen
 
     # ------------------ GDB/JTAG Functions ------------------
 
@@ -60,7 +62,8 @@ class gfetester(object):
         self.gdb_session = testlib.Gdb(
             cmd=riscv_gdb_cmd,
             ports=self.openocd_session.gdb_ports,
-            binary=binary)
+            binary=binary,
+            xlen=self.xlen)
         self.gdb_session.connect()
 
     def endGdb(self):
@@ -189,7 +192,7 @@ class gfetester(object):
         if size not in size_options:
             raise Exception(
                 "Write size {} must be one of {}".format(
-                    size, size_options.keys()))
+                    size, list(size_options.keys())))
 
         if not self.gdb_session:
             self.startGdb()
@@ -237,7 +240,7 @@ class gfetester(object):
             m = re.search('LOCATION=.*:1.(\d)', port.hwid)
             if m:
                 if m.group(1) == '1':
-                    print "Located UART device at %s with serial number %s" % (port.device, port.serial_number)
+                    print("Located UART device at %s with serial number %s" % (port.device, port.serial_number))
                     return port.device
         raise Exception(
                 "Could not find a UART port with expected VID:PID = %X:%X" % (search_vid, search_pid))

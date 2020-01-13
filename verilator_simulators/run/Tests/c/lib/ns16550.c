@@ -3,44 +3,44 @@
 #include "ns16550.h"
 
 
-#define DEFAULT_BAUDRATE  (9600)
+#define DEFAULT_BAUDRATE  (115200)
 
 
-struct __attribute__ ((aligned (8))) ns16550_pio
+struct __attribute__ ((aligned (4))) ns16550_pio
 {
   // 0x000
-  union __attribute__ ((aligned (8))) {
+  union __attribute__ ((aligned (4))) {
     const volatile uint8_t rbr;
     volatile uint8_t thr;
     volatile uint8_t dll;
   };
 
-  // 0x008
-  union __attribute__ ((aligned (8))) {
+  // 0x004
+  union __attribute__ ((aligned (4))) {
     volatile uint8_t dlm;
     volatile enum ier_t ier;
   };
 
-  // 0x010
-  union __attribute__ ((aligned (8))) {
+  // 0x008
+  union __attribute__ ((aligned (4))) {
     const volatile enum iir_t iir;
     volatile enum fcr_t fcr;
   };
 
+  // 0x00c
+  volatile enum lcr_t lcr __attribute__ ((aligned (4)));
+
+  // 0x010
+  volatile enum mcr_t mcr __attribute__ ((aligned (4)));
+
+  // 0x014
+  volatile enum lsr_t lsr __attribute__ ((aligned (4)));
+
   // 0x018
-  volatile enum lcr_t lcr __attribute__ ((aligned (8)));
+  volatile uint8_t msr __attribute__ ((aligned (4)));
 
-  // 0x020
-  volatile enum mcr_t mcr __attribute__ ((aligned (8)));
-
-  // 0x028
-  volatile enum lsr_t lsr __attribute__ ((aligned (8)));
-
-  // 0x030
-  volatile uint8_t msr __attribute__ ((aligned (8)));
-
-  // 0x038
-  volatile uint8_t scr __attribute__ ((aligned (8)));
+  // 0x01c
+  volatile uint8_t scr __attribute__ ((aligned (4)));
 };
 
 

@@ -37,4 +37,3 @@ tcl/program_flash datafile bootmem/bootmem.bin
 echo ">>> Binary upload finished"
 
 echo ">>> Done! Power cycle your FPGA."
-

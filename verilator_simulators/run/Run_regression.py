@@ -22,7 +22,7 @@ usage_line = (
     "      Specifies the number of parallel processes used\n"
     "        (creates temporary separate working directories worker_0, worker_1, ...)\n"
     "      By default uses 1/2 the CPUs listed in /proc/cpuinfo.\n"
-    "      In any case, limits it to 8.\n"
+    "      In any case, limits it to 4.\n"
     "\n"
     "  Example:\n"
     "      $ <this_prog>  .exe_HW_sim  ~somebody/GitHub/Piccolo  ./Logs  RV32IMU  v1 4\n"
@@ -50,7 +50,7 @@ import multiprocessing
 
 exclude_list = []
 
-n_workers_max = 8
+n_workers_max = 9
 
 # ================================================================
 
@@ -91,9 +91,12 @@ def main (argv = None):
 
     # Logs directory
     logs_path = os.path.abspath (os.path.normpath (argv [3]))
-    if not (os.path.exists (logs_path) and os.path.isdir (logs_path)):
-        print ("Creating dir: " + logs_path)
-        os.mkdir (logs_path)
+    pass_path = logs_path + '/pass'
+    fail_path = logs_path + '/fail'
+    for path in (logs_path, pass_path, fail_path):
+        if not os.path.isdir (path):
+            print ("Creating dir: " + path)
+            os.mkdir (path)
     args_dict ['logs_path'] = logs_path
 
     # Architecture string and implied ISA test families
@@ -378,8 +381,8 @@ def do_isa_test (worker_no, args_dict, full_filename):
     # Construct the commands for sub-process execution
     command1 = [args_dict ['elf_to_hex_exe'], full_filename, "Mem.hex"]
 
-    command2 = [args_dict ['sim_path'], "+tohost", "+jtag_port=666{0}".format(worker_no)]
-    command2.append ("+vpi_port=777{0}".format(worker_no))
+    command2 = [args_dict ['sim_path'], "+tohost", "+jtag_port=999{0}".format(worker_no)]
+    command2.append ("+vpi_port=888{0}".format(worker_no))
     if (args_dict ['verbosity'] == 1): command2.append ("+v1")
     elif (args_dict ['verbosity'] == 2): command2.append ("+v2")
 
@@ -399,7 +402,8 @@ def do_isa_test (worker_no, args_dict, full_filename):
     passed = completed_process2.stdout.find ("PASS") != -1
 
     # Save stdouts in log file
-    log_filename = os.path.join (args_dict ['logs_path'], basename + ".log")
+    log_filename = os.path.join (
+        args_dict ['logs_path'], "pass" if passed else "fail", basename + ".log")
     message = message + ("    Writing log: {0}\n".format (log_filename))
 
     fd = open (log_filename, 'w')
@@ -409,7 +413,7 @@ def do_isa_test (worker_no, args_dict, full_filename):
 
     # If Tandem Verification trace file was created, save it as well
     if os.path.exists ("./trace_out.dat"):
-        trace_filename = os.path.join (args_dict ['logs_path'], basename + ".trace_data")
+        trace_filename = log_filename.rsplit('.', 1)[0] + ".trace_data"
         os.rename ("./trace_out.dat", trace_filename)
         message = message + ("    Trace output saved in: {0}\n".format (trace_filename))
 
@@ -424,7 +428,7 @@ def run_command (command):
     if python_minor_version < 6:
         # Python 3.5 and earlier
         result = subprocess.run (args = command,
-                                 timeout = 30,
+                                 timeout = 60,
                                  bufsize = 0,
                                  stdout = subprocess.PIPE,
                                  stderr = subprocess.STDOUT,
@@ -432,7 +436,7 @@ def run_command (command):
     else:
         # Python 3.6 and later
         result = subprocess.run (args = command,
-                                 timeout = 30,
+                                 timeout = 60,
                                  bufsize = 0,
                                  stdout = subprocess.PIPE,
                                  stderr = subprocess.STDOUT,

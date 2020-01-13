@@ -1,5 +1,7 @@
 # Government Furnished Equipment (GFE) #
 
+[![pipeline status](https://gitlab-ext.galois.com/ssith/gfe/badges/develop/pipeline.svg)](https://gitlab-ext.galois.com/ssith/gfe/commits/develop)
+
 Source files and build scripts for generating and testing the GFE for SSITH.
 
 Please refer to the [GFE System Description pdf](GFE_Rel4_System_Description.pdf)
@@ -12,6 +14,7 @@ for a high-level overview of the system.
   - [Install Vivado](#install-vivado)
   - [Clone this Repo](#clone-this-repo)
   - [Update Dependencies](#update-dependencies)
+  - [Configure Network](#configure-network)
   - [Building the Bitstream](#building-the-bitstream)
   - [Storing a Bitstream in Flash](#storing-a-bitstream-in-flash)
   - [Testing](#testing)
@@ -34,6 +37,10 @@ for a high-level overview of the system.
   - [Licensing](#licensing)
   - [Capturing a Trace](#capturing-a-trace)
   - [Comparing a Trace](#comparing-a-trace)
+- [PCI Express Root Complex](#pci-express-root-complex)
+  - [Hardware Setup](#pcie-hardware-setup)
+  - [Reset](#pcie-reset)
+  - [Testing](#pcie-testing)
 
 
 ## Getting Started ##
@@ -59,7 +66,24 @@ but we expect to upgrade Buster to the stable release version when it is availab
 
 ### Install Vivado ###
 
-Download and install Vivado 2017.4. A license key for the tool is included on a piece of paper in the box containing the VCU118. See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug973-vivado-release-notes-install-license.pdf) for download and installation instructions. The GFE only requires the Vivado tool, not the SDK, so download the `Vivado Design Suite - HLx 2017.4 ` from the [Vivado Download Page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2017-4.html). You must make an account with Vivado in order to register the tool and install the license. After installing Vivado, you must also install libtinfo5 for Debian to run the tool. Install this dependency by running `sudo apt-get install libtinfo5`.
+Download and install **Vivado 2019.1**.
+This is a change from previous versions of the GFE, which used Vivado 2017.4.
+The new version is needed to support bitstream generation for designs using the PCIe bus.
+A license key for the tool is included on a piece of paper in the box containing the VCU118.
+See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2019_1/ug973-vivado-release-notes-install-license.pdf) for download and installation instructions.
+The GFE only requires the Vivado tool, not the SDK, so download the `Vivado Design Suite - HLx 2019.1 ` from the [Vivado Download Page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2019-1.html).
+You must make an account with Vivado in order to register the tool and install the license.
+After installing Vivado, you must also install libtinfo5 for Debian to run the tool.
+Install this dependency by running `sudo apt-get install libtinfo5`.
+
+If you've already installed FTDI cable drivers and udev rules with a previous version of Vivado or Vivado Lab,
+they should still work with the new version.
+If necessary, they can be (re)installed from the new version:
+```bash
+cd /opt/Xilinx/Vivado_Lab/2019.1/data/xicom/cable_drivers/lin64/install_script/install_drivers/
+./install_drivers
+cd -
+```
 
 If using separate development and testing machines, only the development machine needs a license. We recommend installing Vivado Lab on the testing machine, because it does not require a license and can be used to program the FPGA.
 
@@ -80,43 +104,65 @@ cd gfe
 
 ### Update Dependencies ###
 
-If you are updating from an earlier release or development version of the GFE,
-first run
-```bash
-git pull origin master
-```
-in the GFE repo's root directory.
-
 The GFE relies on several nested Git submodules to provide processor sources
 and RISC-V development tools.
 Because some of these submodules contain redundant copies of the toolchain,
 we provide a script to initialize only those necessary for GFE development.
-
-The tool-suite submodule contains a [Nix](https://nixos.org/nix/) shell environment
-that builds all the tools necessary for the GFE excluding Vivado.
-The argument-less `nix-shell` command relies on a configuration file in the tool-suite repo,
-which is the target of the `shell.nix` symlink.
-**All subsequent commands in this document should be run within the Nix shell.**
-This applies to scripts within the GFE such as `test_processor.sh`.
-If you wish to use your own binaries for RISCV tools,
-then you should modify your PATH variable from inside the Nix shell.
-
-If you do not have Nix installed, first follow
-[these instructions](https://nixos.org/nix/manual/#sect-multi-user-installation).
-
-Then run the following command to get the current version of all GFE dependencies.
 ```bash
-./init_submodules.sh && nix-shell
+./init_submodules.sh
 ```
 
-*This may take several hours to complete the first time it is run*,
-as it checks out several large repositories and builds an entire toolchain from source.
-Subsequent runs will be fast, using the locally cached Nix packages.
+As of Release 4.2, **Nix is no longer required** to run GFE software.
+The Nix shell from release 3 of the tool-suite project can still be used if desired,
+but tool-suite is no longer a submodule of gfe.
+The `deps.sh` script below will install necessary system packages using `apt`.
+
+The `build-openocd.sh` script will build a GFE-specific development
+version of riscv-openocd from the included submodule, placing an executable in
+/usr/local/bin/openocd.
+
+The `download-toolchains.sh` script downloads a 1.1GB archive containing pre-built copies of both
+the newlib (`riscv64-unknown-elf-*`) and linux (`riscv64-unknown-linux-gnu-*`)
+variants of the GNU toolchain, which should be unpacked into /opt/riscv
+after backing up any files which may already exist there.
+
+The scripts should be run directly from the root of this repo:
+```bash
+sudo ./install/deps.sh
+sudo ./install/build-openocd.sh
+sudo ./install/download-toolchains.sh
+# WARNING: tar will overwrite any existing /opt/riscv/ tree!
+sudo tar -C /opt -xf install/riscv-gnu-toolchains.tar.gz
+```
+
+The `riscv32-unknown-elf-*` tools are not included in this /opt/riscv tree,
+as they are now redundant. The tools labeled `64` all work with 32-bit binaries,
+although they may require explicit flags (such as `-march=rv32gc` for gcc) to get
+the behaviors that were implicit defaults of the corresponding `32` versions.
+
+Finally, make the gnu toolchains and Vivado Lab 2019.1 available to all users by running this script:
+```bash
+sudo ./install/amend-bashrc.sh 
+```
+
+You may want to verify that the new version of the `vivado_lab` program is available in your normal user shell:
+```bash
+vivado_lab -version
+```
+
+
+### Configure Network
+
+Your GFE host PC should reserve one ethernet interface to connect directly to
+the ethernet adapter onboard the VCU118, with static IP address
+`10.88.88.1/24`. This is required by the Linux and FreeRTOS networking tests.
+Detailed [setup instructions](install/network.md) are included in the install
+directory.
 
 
 ### Building the Bitstream ###
 
-To build your own bitstream, make sure Vivado 2017.4 is on your path (`$ which vivado`) and run the following commands
+To build your own bitstream, make sure Vivado 2019.1 is on your path (`$ which vivado`) and run the following commands
 
 ```bash
 cd $GFE_REPO
@@ -153,7 +199,7 @@ sudo reboot
 ```
 2. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
 3. Make sure the VCU118 is powered on (fan should be running) 
-4. Add Vivado or Vivado Lab to your path (i.e. `source /opt/Xilinx/Vivado_Lab/2017.4/settings64.sh`).
+4. Add Vivado or Vivado Lab to your path (i.e. `source /opt/Xilinx/Vivado_Lab/2019.1/settings64.sh`).
 5. Run `./test_processor.sh chisel_p1` from the top level of the gfe repo. Replace `chisel_p1` with your processor of choice. This command will program the FPGA and run the appropriate tests for that processor.
 
 A passing test will not display any error messages. All failing tests will report errors and stop early.
@@ -231,70 +277,66 @@ To run any `.elf` file on the GFE, you can use the `run_elf.py` script in `$GFE_
 
 ### Running FreeRTOS + TCP/IP stack ###
 Details about the FreeRTOS TCP/IP stack can be found [here](https://www.freertos.org/FreeRTOS-Plus/FreeRTOS_Plus_TCP/index.html). We provide a small example, demonstrating 
-the DHCP, ICMP (ping), UDP and TCP functionality. The setup is little bit involved, hence it is not automated yet. The demo can also be modified to better suit your use-case.
+the ICMP (ping), UDP and TCP functionality.
 
 Our setup is below:
 ```
 ----------------------------------                       ---------------------------------------
 |    HOST COMPUTER               |                       |      FPGA Board                     |
-|    DHCP server                 |    Ethernet cable     |      DHCP On                        |
-|    IP: 10.88.88.2              |<=====================>|      IP: assumed to be 10.88.88.3   |
+|    Static IP                   |    Ethernet cable     |      Static IP                      |
+|    IP: 10.88.88.1              |<=====================>|      IP: 10.88.88.2                 |
 |    Netmask: 255.255.255.0      |                       |      MAC: 00:0A:35:04:DB:77         |
 ----------------------------------                       ---------------------------------------
 ```
 
 If you want to replicate our setup you should:
-1) Install and start a DHCP server on your host machine (make sure you configure it to service the interface that is connected to the FPGA).
-A howto guide is for example [here](https://www.tecmint.com/install-dhcp-server-in-ubuntu-debian/)
+1) On your host machine, set up a static IP for the network interface connecting to the FPGA
 2) If you have only one FPGA on the network, then you can leave the MAC address as is,
 otherwise [change it](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L325) 
-to the MAC address of the particular board (there is a sticker).
+to the MAC address of the particular board (there is a sticker on the FPGA board next to the Ethernet adapter).
 3) If you change the host IP, reflect the changes accordingly in [FreeRTOSIPConfig](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L315)
-
-**Scenario 1: DHCP**
 
 Follow the steps below:
 
 1) Program your FPGA with a P1 bitstream: `./program_fpga.sh chisel_p1` **NOTE:** If you have already programmed the FPGA, at least restart it before continuing to make sure it is in a good state. 
 2) Start openocd with `openocd -f $GFE_REPO/testing/targets/ssith_gfe.cfg`
-3) Connect the FPGA Ethernet port into a router/switch that provides a DHCP server. Our router has an adress/netmask of 10.88.88.1/255.255.255.0
-4) Connect your host computer to the same router.
-5) Go to the demo directory: `cd FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1`
-6) Generate `main_tcp.elf` binary: `export PROG=main_tcp; make clean; make`
-7) Start GDB: `riscv32-unknown-elf-gdb main_tcp.elf`
-8) in your GDB session type: `target remote localhost:3333`
-9) in your GDB session type: `load`
-10) start minicom: `minicom -D /dev/ttyUSB1 -b 115200` **NOTE:** The default baud rate for TCP example is 115200 baud.
-11) in your GDB session type: `continue`
-12) In minicom, you will see a bunch of debug prints. The interesting piece is when you get:
+3) Connect the FPGA Ethernet port with the host eterhent port
+4) Go to the demo directory: `cd FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1`
+5) Generate `main_tcp.elf` binary: `export PROG=main_tcp; make clean; make`
+6) Start GDB: `riscv32-unknown-elf-gdb main_tcp.elf`
+7) in your GDB session type: `target remote localhost:3333`
+8) in your GDB session type: `load`
+9) start minicom: `minicom -D /dev/ttyUSB1 -b 115200`
+10) in your GDB session type: `continue`
+11) In minicom, you will see a bunch of debug prints. The interesting piece is when you get:
 ```
-IP Address: 10.88.88.3
+IP Address: 10.88.88.2
 Subnet Mask: 255.255.255.0
 Gateway Address: 10.88.88.1
 DNS Server Address: 10.88.88.1
 ```
-which means the FreeRTOS got assigned an IP address and is ready to communicate.
+which means the FreeRTOS has the network interface up and is ready to communicate.
 
-13) Open a new terminal, and type `ping 10.88.88.3` (or whatever is the FPGA's IP address) - you should see something like this:
+12) Open a new terminal, and type `ping 10.88.88.2` (or whatever is the FPGA's IP address) - you should see something like this:
 ```
-$ ping 10.88.88.3
-PING 10.88.88.3 (10.88.88.3) 56(84) bytes of data.
-64 bytes from 10.88.88.3: icmp_seq=1 ttl=64 time=14.1 ms
-64 bytes from 10.88.88.3: icmp_seq=2 ttl=64 time=9.22 ms
-64 bytes from 10.88.88.3: icmp_seq=3 ttl=64 time=8.85 ms
-64 bytes from 10.88.88.3: icmp_seq=4 ttl=64 time=8.84 ms
-64 bytes from 10.88.88.3: icmp_seq=5 ttl=64 time=8.85 ms
-64 bytes from 10.88.88.3: icmp_seq=6 ttl=64 time=8.83 ms
-64 bytes from 10.88.88.3: icmp_seq=7 ttl=64 time=8.83 ms
+$ ping 10.88.88.2
+PING 10.88.88.2 (10.88.88.2) 56(84) bytes of data.
+64 bytes from 10.88.88.2: icmp_seq=1 ttl=64 time=14.1 ms
+64 bytes from 10.88.88.2: icmp_seq=2 ttl=64 time=9.22 ms
+64 bytes from 10.88.88.2: icmp_seq=3 ttl=64 time=8.85 ms
+64 bytes from 10.88.88.2: icmp_seq=4 ttl=64 time=8.84 ms
+64 bytes from 10.88.88.2: icmp_seq=5 ttl=64 time=8.85 ms
+64 bytes from 10.88.88.2: icmp_seq=6 ttl=64 time=8.83 ms
+64 bytes from 10.88.88.2: icmp_seq=7 ttl=64 time=8.83 ms
 ^C
---- 10.88.88.3 ping statistics ---
+--- 10.88.88.2 ping statistics ---
 7 packets transmitted, 7 received, 0% packet loss, time 6007ms
 rtt min/avg/max/mdev = 8.838/9.663/14.183/1.851 ms
 ```
 That means ping is working and your FPGA is responding.
 
-14) Now open another terminal and run TCP Echo server at port 9999: `ncat -l 9999 --keep-open --exec "/bin/cat" -v`
-Note that this will work only if your TCP Echo server is at 10.88.88.2 (or you [updated the config file](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L315)
+13) Now open another terminal and run TCP Echo server at port 9999: `ncat -l 9999 --keep-open --exec "/bin/cat" -v`
+Note that this will work only if your TCP Echo server is at 10.88.88.1 (or you [updated the config file](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L315)
 ). After a few seconds, you will see something like this:
 ```
 $ ncat -l 9999 --keep-open --exec "/bin/cat" -v
@@ -303,18 +345,18 @@ Ncat: Generating a temporary 1024-bit RSA key. Use --ssl-key and --ssl-cert to u
 Ncat: SHA-1 fingerprint: 2EDF 34C4 1F16 FF89 0AE1 6B1B F236 D933 A4DD 030E
 Ncat: Listening on :::9999
 Ncat: Listening on 0.0.0.0:9999
-Ncat: Connection from 10.88.88.3.
-Ncat: Connection from 10.88.88.3:25816.
-Ncat: Connection from 10.88.88.3.
-Ncat: Connection from 10.88.88.3:2334.
-Ncat: Connection from 10.88.88.3.
-Ncat: Connection from 10.88.88.3:14588.
+Ncat: Connection from 10.88.88.2.
+Ncat: Connection from 10.88.88.2:25816.
+Ncat: Connection from 10.88.88.2.
+Ncat: Connection from 10.88.88.2:2334.
+Ncat: Connection from 10.88.88.2.
+Ncat: Connection from 10.88.88.2:14588.
 ```
 
 
-15) [Optional] start `wireshark` and inspect the interface that is at the same network as the FPGA. You sould clearly see the ICMP ping requests and responses, as well as the TCP packets
+14) [Optional] start `wireshark` and inspect the interface that is at the same network as the FPGA. You sould clearly see the ICMP ping requests and responses, as well as the TCP packets
 to and from the echo server.
-16) [Optional] Send a UDP packet with `socat stdio udp4-connect:10.88.88.3:5006 <<< "Hello there"`. In the minicom output, you should see `prvSimpleZeroCopyServerTask: received $N bytes` depending 
+16) [Optional] Send a UDP packet with `socat stdio udp4-connect:10.88.88.2:5006 <<< "Hello there"`. In the minicom output, you should see `prvSimpleZeroCopyServerTask: received $N bytes` depending 
 on how much data you send. **Hint:** instead of minicom, you can use `cat /dev/ttyUSB1 > log.txt` to redirect the serial output into a log file for later inspection.
 
 **Troubleshooting**
@@ -701,3 +743,51 @@ Cissr: reset
 ```
 
 Note that some early mismatches are expected as the simulation model is updated with the correct PC and initial status registers.
+
+## PCI Express Root Complex ##
+**NOTE:** the PCIe is currently supported only in busybox.
+
+### PCIe Hardware Setup ###
+
+To utilize the PCIe root port, the following hardware setup is required:
+
+- Install the FMC card (HiTech Global HTG-FMC-PCIE) into J22 on the
+  VCU118.  This is the FMC connector on the left, when viewing the
+  VCU118 with the PCIe edge connector pointing downward, as shown below:
+  ![FMC jumper configuration][fmc_jumper]
+- Install a jumper between JP3 and JP4 on the PCIe FMC card.
+- Set switch S2 to the position labeled FMC (away from the FMC
+  connector) as shown below:
+  ![FMC card configuration][fmc_card_config]
+- Connect the USB controller card into J1 on HTG-FMC-PCIE (the edge
+  connector on the FMC card):
+  ![PCIe root complex with USB PCIe card][pcie_usb]
+- Alternatively, connect the Ethernet card into J1 on HTG-FMC-PCIE (the edge
+  connector on the FMC card):
+  ![PCIe root complex with Ethernet PCIe card][pcie_ethernet]
+- Alternatively, a PCIe expansion chassis may be connected to the FMC
+  card by way of expansion cards and cable.
+
+### PCIe Reset ###
+
+Every time a bitfile is loaded, prior to loading the bitfile, the PCIe
+bus must be reset by pressing S1 on HTG-FMC-PCIE (the RESET PCIE
+button on the FMC card).
+
+### PCIe Testing ### 
+
+#### Ethernet ####
+* If you are testing the ethernet card, you have to first bring the interface up
+* Then you have to assign it a static IP address (busybox currently doesn't support DHCP)
+
+#### USB ####
+* We tested the USB card with a genetic USB keyboard, USB mouse and a USB memory stick.
+* If you plug in a keyboard or a mice, and want to see if it works, type `dd if=/dev/input/event0 | od`
+in the busybox terminal, and you should see numbers rolling on the screen as you press keys/move the mouse.
+The numbers are decoded events coming from the devices.
+
+
+[fmc_jumper]: documentation_source/images/FMC_JUMPER.JPG "FMC jumper connection"
+[fmc_card_config]: documentation_source/images/FMC_CARD_CONFIG.JPG "FMC card configuration"
+[pcie_ethernet]: documentation_source/images/PCIE_ROOT_COMPLEX_ETHERNET.JPG "PCIe root complex with Ethernet PCIe card"
+[pcie_usb]: documentation_source/images/PCIE_ROOT_COMPLEX_USB.JPG "PCIe root complex with USB PCIe card"

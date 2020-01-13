@@ -23,11 +23,12 @@ function proc_freertos_usage {
 
 function freertos_test {
 	cd $freertos_folder
-	make clean; PROG=$1 make
+	# the Makefile only uses RISCV_XLEN to name the gcc command 
+	make clean; PROG=$1 RISCV_XLEN=64 make
 	err_msg $? "Building FreeRTOS-RISCV PROG=$1 test failed"
 
 	cd $BASE_DIR/testing/scripts
-	python $python_unittest_script TestFreeRTOS.$2
+	./$python_unittest_script TestFreeRTOS.$2
 	err_msg $? "FreeRTOS test TestFreeRTOS.$2 failed"
 }
 
@@ -67,7 +68,9 @@ fi
 
 if [ "$test_ethernet" = true ]; then
 	freertos_test main_udp test_udp
+	sleep 10
 	freertos_test main_tcp test_tcp
+	sleep 10
 elif [ "$use_flash" = true ]; then
 	#Fetching the specified elf file
 	if [[ $flash_option == "full" ]] || [[ $flash_option == "blinky" ]]; then
@@ -97,7 +100,7 @@ elif [ "$use_flash" = true ]; then
 	#The Test itself
 	if [[ $flash_option == "full" ]] || [[ $flash_option == "blinky" ]]; then
 		cd $BASE_DIR/testing/scripts
-		python $python_unittest_script TestFreeRTOS.test_flash_$flash_option
+		./$python_unittest_script TestFreeRTOS.test_flash_$flash_option
 		err_msg $? "FreeRTOS test TestFreeRTOS.test_flash_$flash_option failed"
 	else
 		echo "test_freertos.sh: No test available for $flash_option. Please test accordingly."
@@ -106,9 +109,14 @@ elif [ "$full_ci" = true ]; then
 	# Disaling for now, the PMOD header has difficulty pulling the line down
 	#freertos_test main_gpio test_gpio
 	freertos_test main_uart test_uart
+	sleep 10
 	freertos_test main_iic test_iic
-	freertos_test main_sd test_sd
+	sleep 10
+	#freertos_test main_sd test_sd
+	#sleep 10
 else
 	freertos_test main_blinky test_blink
-	freertos_test main_full test_full
+	sleep 10
+	#freertos_test main_full test_full
+	#sleep 10
 fi

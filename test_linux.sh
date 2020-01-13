@@ -68,10 +68,10 @@ if [ "$use_flash" = true ]; then
 	./program_fpga.sh $proc_name $3
 	err_msg $? "test_linux.sh: Programming the FPGA failed" "test_linux.sh: Programming the FPGA OK"
 	cd $BASE_DIR/testing/scripts
-	python $python_unittest_script TestLinux.test_${linux_image}_flash_boot
+	./$python_unittest_script TestLinux.test_${linux_image}_flash_boot
 elif [ "$test_ethernet" = true ]; then
-	python $python_unittest_script TestLinux.test_${linux_image}_ethernet
+	./$python_unittest_script TestLinux.test_${linux_image}_ethernet
 else
-	python $python_unittest_script TestLinux.test_${linux_image}_boot
+	./$python_unittest_script TestLinux.test_${linux_image}_boot
 fi
 err_msg $? "The Linux test failed"

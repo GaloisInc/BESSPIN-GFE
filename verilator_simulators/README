@@ -128,12 +128,12 @@ line should be commented out, and the
 also be amended if necessary.  (Note: the "set INTERFACE xilinx" line is for
 use when connecting openocd to a FPGA.)
 
-riscv32-unknown-elf-gdb --command test-all32.gdb
-riscv32-unknown-elf-gdb --command test-all.gdb
+riscv64-unknown-elf-gdb --command test-all32.gdb
+riscv64-unknown-elf-gdb --command test-all.gdb
 Run a regression under control of the specified gdb script (test-all32.gdb for
 a P1 processor, test-all.gdb for a P2 one).  Note that the gdb program,
 despite its name, can handle both rv32 and rv64 processors.
 
-riscv32-unknown-elf-gdb --command init.gdb
+riscv64-unknown-elf-gdb --command init.gdb
 This will set up an interactive gdb session, within which an .elf file can be
 specified, loaded and run (with breakpoints) in the usual way.

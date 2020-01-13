@@ -1,3 +1,12 @@
+*.map
+*.text
+*.o
+*/*.map
+*/*.text
+*/*.o
+*/*/*.map
+*/*/*.text
+*/*/*.o
 accel_aes/accel_aes
 accel_aes_zero/accel_aes_zero
 cat/cat

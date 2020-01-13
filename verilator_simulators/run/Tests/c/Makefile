@@ -3,7 +3,7 @@
 # RV32IM is default
 XLEN		?= 32
 ifeq ($(XLEN), 32)
-CROSS_COMPILE 	= riscv32-unknown-elf-
+CROSS_COMPILE 	= riscv64-unknown-elf-
 ARCH 		= -march=rv32im
 ABI 		= -mabi=ilp32
 TEST_PREFIX	= rv32-

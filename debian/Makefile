@@ -6,12 +6,14 @@ default: riscv64-chroot $(BOOTMEM_DIR)/debian.cpio.gz
 
 riscv64-chroot:
 	@echo "Building chroot environment"
-	@echo "Your password may be requested for superuser privileges"
 	./create_chroot.sh
 
 $(BOOTMEM_DIR)/debian.cpio.gz: riscv64-chroot
 	@echo "Building cpio.gz image"
-	@echo "Your password may be requested for superuser privileges"
-	./create_cpio.sh
+	./create_chroot.sh create_cpio
+	cp riscv64-chroot/debian.cpio.gz $@
 
-.PHONY: default
+clean:
+	@rm -rf build riscv64-chroot $(BOOTMEM_DIR)/debian.cpio.gz
+
+.PHONY: default clean

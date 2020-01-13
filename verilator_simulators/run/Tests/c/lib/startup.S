@@ -54,3 +54,7 @@ zinit:  sw      zero, 0(t1)
 	// TODO: (Previous version for v1.7 priv spec set PRV to S
 	// TODO: when setting the MSTATUS above.)
 	j _start
+
+.pushsection .tohost,"aw",@progbits   
+.align 6; .global tohost; tohost: .dword 0
+.popsection

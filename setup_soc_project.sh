@@ -12,21 +12,21 @@ proc_path=""
 clock_freq_mhz=50
 
 # Parse the processor selection
-proc_picker $1 
+proc_picker $1
 
 # Compile the bootrom and set the clock frequency
 cd $BASE_DIR/bootrom
 case "$proc_name" in
     *p1)
-	make
+	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=50000000
 	clock_freq_mhz=50
 	;;
     *p2)
-	make CROSS_COMPILE=riscv64-unknown-elf-
-	clock_freq_mhz=68
+	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=100000000
+	clock_freq_mhz=100
 	;;
     *p3)
-	make CROSS_COMPILE=riscv64-unknown-elf-
+	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=25000000
 	clock_freq_mhz=25
 	;;
     *)
@@ -36,9 +36,9 @@ esac
 
 err_msg $? "Making the bootrom failed"
 
-echo "Please run with Vivado 2017.4"
+echo "Please run with Vivado 2019.1"
 # i.e.
-# source /Xilinx/Vivado/2017.4/settings64.sh
+# source /Xilinx/Vivado/2019.1/settings64.sh
 mkdir -p $BASE_DIR/vivado
 cd $BASE_DIR/vivado
 
@@ -50,4 +50,3 @@ vivado -mode batch -source $BASE_DIR/tcl/soc.tcl \
 --clock_freq_mhz $clock_freq_mhz
 
 err_msg $? "Creating the vivado project failed"
-
