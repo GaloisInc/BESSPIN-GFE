@@ -34,3 +34,6 @@
 	path = newlib
 	url = https://github.com/CTSRD-CHERI/newlib
 	branch = p1_release
+[submodule "benchmarks/coremark"]
+	path = benchmarks/coremark
+	url = https://github.com/GaloisInc/coremark.git

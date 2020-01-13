@@ -13,3 +13,17 @@ apt-cache dumpavail | \
 #In case we needed a debian snapshot: Everything was working on 09/19/19 .
 apt-get install -y netcat
 apt-get install -y keyutils
+
+# for lcpci
+apt-get install -y pciutils
+
+# for remote access
+apt-get install -y openssh-server
+# enable root login
+echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+
+# for lsusb
+apt install -y usbutils
+
+# (not needed yet) set of tools for manipulating NVMe drives
+# apt-get install -y nvme-cli
