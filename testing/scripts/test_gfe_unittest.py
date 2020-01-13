@@ -166,7 +166,7 @@ class BaseGfeTest(unittest.TestCase):
         self.gfe.gdb_session.command("info threads", ops=100)
         # Shutdown server
         if self.thread is not None:
-            #print("Shutting down server")
+            print("Shutting down server")
             #self.httpd.shutdown()
             #self.thread.terminate()
         del self.gfe
