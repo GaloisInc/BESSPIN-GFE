@@ -24,7 +24,7 @@ function proc_freertos_usage {
 function freertos_test {
 	cd $freertos_folder
 	# the Makefile only uses RISCV_XLEN to name the gcc command 
-	make clean; PROG=$1 RISCV_XLEN=64 make
+	PROG=$1	make clean; PROG=$1 make
 	err_msg $? "Building FreeRTOS-RISCV PROG=$1 test failed"
 
 	cd $BASE_DIR/testing/scripts

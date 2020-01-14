@@ -26,8 +26,8 @@ class BaseGfeTest(unittest.TestCase):
         path_to_freertos (string): Path to FreeRTOS folder in the GFE repo
     """
     # create our server
-    Handler = functools.partial(SimpleHTTPRequestHandler, directory='../../bootmem')
-    httpd = HTTPServer(('10.88.88.1', 8000), Handler)
+    #Handler = functools.partial(SimpleHTTPRequestHandler, directory='../../bootmem')
+    #httpd = HTTPServer(('10.88.88.1', 8000), Handler)
     thread = None
 
     def getXlen(self):
@@ -168,7 +168,7 @@ class BaseGfeTest(unittest.TestCase):
         if self.thread is not None:
             print("Shutting down server")
             #self.httpd.shutdown()
-            self.thread.terminate()
+            #self.thread.terminate()
         del self.gfe
 
 class TestGfe(BaseGfeTest):
@@ -724,9 +724,9 @@ class TestLinux(BaseGfeTest):
         return
 
     def test_debian_boot(self):
-        self.thread = Process(target = self.httpd.handle_one_request)
-        self.thread.start()
-        print("set: Thread started")
+        #self.thread = Process(target = self.httpd.handle_one_request)
+        #self.thread.start()
+        #print("set: Thread started")
         self.boot_image(expected_contents=self.getDebianExpected(),
             image=self.getDebianBootImage(), timeout=1000)
         return
