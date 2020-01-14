@@ -33,9 +33,9 @@
 4. Build the bootrom using `nix-shell --pure --run make`, setting the `CROSS_COMPILE` environment variable appropriately.
 5. Connect to the processor using gdb.
 6. Run in GDB:
-    1. `add-symbol-file bootrom.elf 0x80400000`
-    2. `restore bootrom.bin binary 0x80400000`
-    3. `set $pc = 0x80400000`
+    1. `add-symbol-file bootrom.elf 0xC0400000`
+    2. `restore bootrom.bin binary 0xC0400000`
+    3. `set $pc = 0xC0400000`
 7. The bootrom is setup, and the processor will resume execution if you run the `continue` command
 
 # How to Run the Assurance Checks
