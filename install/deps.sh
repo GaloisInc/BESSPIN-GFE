@@ -13,7 +13,7 @@ apt install -y verilator qemu qemu-user qemu-system-misc
 apt install -y libpython2.7
 
 # Needed for manual tests
-apt install minicom
+apt install -y minicom
 
 # System-wide python packages needed by testing scripts
 apt install -y python3-pip
