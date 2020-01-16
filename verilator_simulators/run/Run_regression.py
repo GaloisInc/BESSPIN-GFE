@@ -428,7 +428,7 @@ def run_command (command):
     if python_minor_version < 6:
         # Python 3.5 and earlier
         result = subprocess.run (args = command,
-                                 timeout = 60,
+                                 timeout = 120,
                                  bufsize = 0,
                                  stdout = subprocess.PIPE,
                                  stderr = subprocess.STDOUT,
@@ -436,7 +436,7 @@ def run_command (command):
     else:
         # Python 3.6 and later
         result = subprocess.run (args = command,
-                                 timeout = 60,
+                                 timeout = 120,
                                  bufsize = 0,
                                  stdout = subprocess.PIPE,
                                  stderr = subprocess.STDOUT,
