@@ -1,12 +1,56 @@
+# For debugging
+$(info $$PROG is [${PROG}])
+
 bootrom_rev_mem = bootrom.bytereversed.mem
 bootrom_mem = bootrom.mem
 bootrom_coe = bootrom.coe
 
-CROSS_COMPILE?=riscv32-unknown-elf-
-CPP=$(CROSS_COMPILE)cpp
-CC=$(CROSS_COMPILE)gcc
-OBJCOPY=$(CROSS_COMPILE)objcopy
-OBJDUMP=$(CROSS_COMPILE)objdump
+CCPATH 		?=
+TARGET=$(CCPATH)riscv64-unknown-elf
+
+XARCH?=32
+
+ifeq ($(XARCH),64)
+	ARCH 		= -march=rv64imac
+	ABI 		= -mabi=lp64
+	CLANG_ARCH  = riscv64
+	BIT_WIDTH = 64
+else
+	ARCH 		= -march=rv32im
+	ABI 		= -mabi=ilp32
+	CLANG_ARCH  = riscv32
+	BIT_WIDTH = 32
+endif
+
+# Decide which compiler to use
+ifeq ($(USE_CLANG),yes)
+	CC		= clang --target=$(CLANG_ARCH)
+	# CPP		= clang++ --target=$(CLANG_ARCH)
+	# TODO: clang has problems with system includes, use g++ for now
+	CPP		= $(TARGET)-g++
+	# LLVM doesn't support linking RISC-V files yet,
+	# so we have to use GCC linker to do so
+	LD		= $(TARGET)-gcc
+	OBJCOPY	= llvm-objcopy
+	# LLVM doesn't uderstand debug symbols created by GCC linker
+	# using GCC objdump for the time being (instead of llvm-objdump)
+	OBJDUMP	= $(TARGET)-objdump
+	AR		= llvm-ar
+	RANLIB	= llvm-ranlib
+else
+	CC		= $(TARGET)-gcc
+	CPP		= $(TARGET)-g++
+	LD		= $(CC)
+	OBJCOPY	= $(TARGET)-objcopy
+	OBJDUMP	= $(TARGET)-objdump
+	AR		= $(TARGET)-ar
+	RANLIB	= $(TARGET)-ranlib
+endif
+
+COMPILER_FLAGS = -mcmodel=medany
+
+$(info CC=${CC})
+
 DTC=dtc
 
 CLANG ?= clang
@@ -26,16 +70,6 @@ C_OBJS= \
 
 OBJS= $(C_OBJS) \
     bootrom.o \
-
-ifneq (,$(findstring 32,$(CROSS_COMPILE)))
-    BIT_WIDTH_32=true
-endif
-
-ifdef BIT_WIDTH_32
-    BIT_WIDTH=32
-else
-    BIT_WIDTH=64
-endif
 
 all: $(bootrom_mem) $(bootrom_coe) $(bootrom_rev_mem)
 
