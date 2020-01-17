@@ -119,6 +119,12 @@ Another suitable benchmark:
 https://github.com/embecosm/mibench
 
 ## Dhrystone
-Everybone says how bad Dryhstone is, but if it is easy to get it running, why not?
 
-https://github.com/sifive/benchmark-dhrystone/tree/8ff0ab1db77b134b56815905bf694eb8a767285b
+After attempting to use Dhrystone ([sifive](https://github.com/sifive/benchmark-dhrystone), [original](https://github.com/Keith-S-Thompson/dhrystone/tree/master/v2.2)), we encountered several issues that make it not worth the trouble to use (especially with the [embench-iot](https://github.com/embench/embench-iot), a more pertinent tool). Here are the reasons:
+* Dhrystone does not compile for HiFive1 RevB as the memory layout spec is not correct. [See this issue.](https://github.com/sifive/freedom-e-sdk/issues/396).
+* Dhrystone does not account for any advantages of RISC (in case comparisons between RISC and non-RISC chips were to be attempted). [See this paper.](https://www.eembc.org/techlit/datasheets/ECLDhrystoneWhitePaper2.pdf)
+* Porting Dhrystone for the P1 would be challenging as it relies on `malloc`, `memcpy`, `strcpy`, and `strcmp`, among others. The work involved in defining these is not worth it given the availability of embench.
+
+## Embench-IOT
+
+https://github.com/embench/embench-iot
