@@ -23,9 +23,9 @@ $(info XARCH=${XARCH})
 # Decide which compiler to use
 ifeq ($(USE_CLANG),yes)
 	CC		= clang --target=$(CLANG_ARCH)
-	# CPP		= clang++ --target=$(CLANG_ARCH)
-	# TODO: clang has problems with system includes, use g++ for now
-	CPP		= $(TARGET)-g++
+	# Note, we're always using the GCC CPP because it's just preprocessing
+	# device trees
+	CPP		= $(TARGET)-cpp
 	# LLVM doesn't support linking RISC-V files yet,
 	# so we have to use GCC linker to do so
 	LD		= $(TARGET)-gcc
@@ -37,7 +37,7 @@ ifeq ($(USE_CLANG),yes)
 	RANLIB	= llvm-ranlib
 else
 	CC		= $(TARGET)-gcc
-	CPP		= $(TARGET)-g++
+	CPP		= $(TARGET)-cpp
 	LD		= $(CC)
 	OBJCOPY	= $(TARGET)-objcopy
 	OBJDUMP	= $(TARGET)-objdump
@@ -94,7 +94,7 @@ all: $(bootrom_mem) $(bootrom_coe) $(bootrom_rev_mem)
 	$(OBJCOPY) -O binary $< $@
 
 %.dtb: %.dts
-	$(CPP) -x assembler-with-cpp $< | $(DTC) -O dtb -o $@
+	$(CPP) $(ARCH) $(ABI) -x assembler-with-cpp $< | $(DTC) -O dtb -o $@
 
 bootrom.elf: $(OBJS) linker.ld devicetree.dtb
 	$(CC) $(CFLAGS) -Tlinker.ld $(OBJS) -nostdlib -static -Wl,--no-gc-sections -o $@
