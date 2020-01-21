@@ -4,7 +4,7 @@ ENTRY("_start")
 SECTIONS
 {
     ROM_BASE       = 0x70000000;
-    DRAM_BASE      = 0x80000000;
+    DRAM_BASE      = 0xC0000000;
 /*
  * We intentionally have the end of the stack be the beginning of DRAM. This
  * way, (assuming nothing is mapped immediately before DRAM) stack overflows
