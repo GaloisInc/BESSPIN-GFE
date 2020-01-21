@@ -1,6 +1,3 @@
-# For debugging
-$(info $$PROG is [${PROG}])
-
 bootrom_rev_mem = bootrom.bytereversed.mem
 bootrom_mem = bootrom.mem
 bootrom_coe = bootrom.coe
@@ -14,13 +11,14 @@ ifeq ($(XARCH),64)
 	ARCH 		= -march=rv64imac
 	ABI 		= -mabi=lp64
 	CLANG_ARCH  = riscv64
-	BIT_WIDTH = 64
 else
 	ARCH 		= -march=rv32im
 	ABI 		= -mabi=ilp32
 	CLANG_ARCH  = riscv32
-	BIT_WIDTH = 32
+	XARCH       = 32 # if it's any value other than 64 normalize it to 32
 endif
+
+$(info XARCH=${XARCH})
 
 # Decide which compiler to use
 ifeq ($(USE_CLANG),yes)
@@ -47,17 +45,18 @@ else
 	RANLIB	= $(TARGET)-ranlib
 endif
 
-COMPILER_FLAGS = -mcmodel=medany
+COMPILER_FLAGS = -ffreestanding -O0 -Wall -Wextra --std=c11 -MMD -I. -mcmodel=medany -static
+
+CFLAGS += -O0 -g3 $(ARCH) $(ABI) $(COMPILER_FLAGS)
 
 $(info CC=${CC})
+$(info CFLAGS=${CFLAGS})
 
 DTC=dtc
 
 CLANG ?= clang
 LLVM_LINK ?= llvm-link
 LLVM_OPT ?= opt
-
-CFLAGS=-ffreestanding -O0 -Wall -Wextra --std=c11 -MMD -I. -mcmodel=medany -static
 
 C_OBJS= \
     main.o \
@@ -98,10 +97,10 @@ all: $(bootrom_mem) $(bootrom_coe) $(bootrom_rev_mem)
 	$(CPP) -x assembler-with-cpp $< | $(DTC) -O dtb -o $@
 
 bootrom.elf: $(OBJS) linker.ld devicetree.dtb
-	$(CC) -Tlinker.ld $(OBJS) -nostdlib -static -Wl,--no-gc-sections -o $@
+	$(CC) $(CFLAGS) -Tlinker.ld $(OBJS) -nostdlib -static -Wl,--no-gc-sections -o $@
 
 # We match the target width of the cross compilation target.
-ifdef BIT_WIDTH_32
+ifeq ($(XARCH), 32)
     LLVM_TARGET=i386-pc-none-eabi
 else
     LLVM_TARGET=x86_64-pc-none-eabi
@@ -118,14 +117,15 @@ check_sha256: bootrom.bc
 	# to the script. Since we're not using the java functionality, the value of
 	# the classpath option remains untouched, so it's safe for use to abuse to
 	# pass the bit-width.
-	saw secure-boot/sha256_crucible.saw --classpath $(BIT_WIDTH)
+	saw secure-boot/sha256_crucible.saw --classpath $(XARCH)
 
 bootrom.bc: $(patsubst %.o,%.bc, $(C_OBJS))
 	$(LLVM_LINK) -o $@ $^
 	#$(LLVM_OPT) -o $@ -mem2reg unopt-$@
 
 bootrom.o: bootrom.S devicetree.dtb
-
+	$(CC) $(CFLAGS) -c -o bootrom.o bootrom.S
+  
 secure-boot/peripherals_generated_code.o: secure-boot/peripherals_generated_code.c devicetree.dtb
 secure-boot/peripherals_generated_code.bc: secure-boot/peripherals_generated_code.c devicetree.dtb
 secure-boot/peripherals_generated_code.c: $(wildcard secure-boot/peripherals/*.py)
@@ -137,7 +137,7 @@ secure-boot/PeripheralCommands.cry: $(wildcard secure-boot/peripherals/*.py)
 	# NOTE: this should be python3-compatible, but some of our systems do
 	# not have python3 installed, and it's not contained within their
 	# package managers. For ease of portability, we use python2.
-	python2 secure-boot/peripherals/config.py cryptol$(BIT_WIDTH) > $@
+	python2 secure-boot/peripherals/config.py cryptol$(XARCH) > $@
 
 check_secure_boot: secure-boot/PeripheralCommands.saw secure-boot/PeripheralCommands.cry bootrom.bc
 	saw $<
