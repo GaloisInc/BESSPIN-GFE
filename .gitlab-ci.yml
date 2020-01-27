@@ -262,3 +262,12 @@ chisel_p3:
 #      variables:
 #      - $JOB_TYPE == "bluespec_p3"
 
+testgen:
+  stage: .post
+  tags: ["fpga"]
+  only:
+    variables:
+      - $PIPELINE_TYPE == "full"
+  script:
+    - "curl -X POST -F 'token=$TESTGEN_TRIGGER' -F 'ref=master' https://gitlab-ext.galois.com/api/v4/projects/273/trigger/pipeline"
+  
