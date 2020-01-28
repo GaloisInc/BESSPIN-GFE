@@ -1,3 +1,4 @@
+---
 #-----------------------------------------------------------------------------#
 #
 # General startup commands
@@ -12,6 +13,10 @@ before_script:
   - ./init_submodules.sh
   - source /opt/Xilinx/Vivado_Lab/2019.1/settings64.sh
   - export XILINXD_LICENSE_FILE=/opt/Xilinx/Xilinx.lic
+
+variables:
+  testgen_id: 273
+  testgen_ref: master
 
 #-----------------------------------------------------------------------------#
 #
@@ -201,8 +206,8 @@ bluespec_p1:
   script:
     - ./test_processor.sh bluespec_p1 #--full_ci
   tags: ["fpga"]
-#  only:
-#    - develop
+  #  only:
+  #    - develop
   except:
     - schedules
 
@@ -210,8 +215,8 @@ chisel_p1:
   script:
     - ./test_processor.sh chisel_p1 #--full_ci
   tags: ["fpga"]
-#  only:
-#    - develop
+  #  only:
+  #    - develop
   except:
     - schedules
 
@@ -238,7 +243,7 @@ bluespec_p2:
       - debian/riscv64-chroot.tar
       - bootmem/
   only:
-      variables:
+    variables:
       - $JOB_TYPE == "linux"
 
 chisel_p3:
@@ -251,7 +256,7 @@ chisel_p3:
       - debian/riscv64-chroot.tar
       - bootmem/
   only:
-      variables:
+    variables:
       - $JOB_TYPE == "linux"
 
 #bluespec_p3: # currently fails
@@ -262,3 +267,20 @@ chisel_p3:
 #      variables:
 #      - $JOB_TYPE == "bluespec_p3"
 
+testgen_msg:
+  stage: .pre
+  tags: ["fpga"]
+  only:
+    variables:
+      - $PIPELINE_TYPE == "full"
+  script:
+    - "echo 'Running full pipeline: Will trigger testgen if all tests pass'"
+
+testgen:
+  stage: .post
+  tags: ["fpga"]
+  only:
+    variables:
+      - $PIPELINE_TYPE == "full"
+  script:
+    - "curl -X POST -F token=$TESTGEN_TRIGGER -F ref=$testgen_ref https://gitlab-ext.galois.com/api/v4/projects/$testgen_id/trigger/pipeline"
