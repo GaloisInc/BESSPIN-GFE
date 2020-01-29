@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+echo "This script is obsolete, use pytest_processor.py instead."
+echo "Press ENTER if you want to continue, or CTRL-C to abort"
+read
+
 
 # Get the path to the script folder of the git repository
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null && pwd)"
