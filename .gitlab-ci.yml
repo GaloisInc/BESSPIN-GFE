@@ -1,4 +1,4 @@
-
+---
 #-----------------------------------------------------------------------------#
 #
 # General startup commands
@@ -16,8 +16,11 @@ before_script:
   - export XILINXD_LICENSE_FILE=/opt/Xilinx/Xilinx.lic
 
 variables:
+  # defaults. Overridden when this pipeline is called by tool-suite.
   testgen_id: 273
   testgen_ref: master
+  tool_suite_url: git@gitlab-ext.galois.com:ssith/tool-suite.git
+  tool_suite_rev: master
 
 #-----------------------------------------------------------------------------#
 #
@@ -31,15 +34,11 @@ CHSL_P1_sim:
   except:
     - schedules
   artifacts:
-    when: on_failure
+    when: always
     expire_in: 1 week
     paths:
       - verilator_simulators/run/Logs/chisel_p1/
-  artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+      - test_processor.log
 
 BSV_P1_sim:
   script:
@@ -48,15 +47,11 @@ BSV_P1_sim:
   except:
     - schedules
   artifacts:
-    when: on_failure
+    when: always
     expire_in: 1 week
     paths:
       - verilator_simulators/run/Logs/bluespec_p1/
-  artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+      - test_processor.log
 
 CHSL_P2_sim:
   script:
@@ -65,15 +60,11 @@ CHSL_P2_sim:
   except:
     - schedules
   artifacts:
-    when: on_failure
+    when: always
     expire_in: 1 week
     paths:
       - verilator_simulators/run/Logs/chisel_p2/
-  artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+      - test_processor.log
 
 BSV_P2_sim:
   script:
@@ -82,15 +73,11 @@ BSV_P2_sim:
   except:
     - schedules
   artifacts:
-    when: on_failure
+    when: always
     expire_in: 1 week
     paths:
       - verilator_simulators/run/Logs/bluespec_p2/
-  artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+      - test_processor.log
 
 CHSL_P3_sim:
   script:
@@ -99,15 +86,11 @@ CHSL_P3_sim:
   except:
     - schedules
   artifacts:
-    when: on_failure
+    when: always
     expire_in: 1 week
     paths:
       - verilator_simulators/run/Logs/chisel_p3/
-  artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+      - test_processor.log
 
 # TODO: currently fails
 # BSV_P3_sim:
@@ -130,7 +113,7 @@ CHSL_P3_sim:
 
 #-----------------------#
 #                       #
-#     Bluespec P1 
+#     Bluespec P1
 #                       #
 #-----------------------#
 BSV_P1_isa:
@@ -140,10 +123,10 @@ BSV_P1_isa:
   except:
     - schedules
   artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+    when: always
+    expire_in: 1 day
+    paths:
+      - test_processor.log
 
 BSV_P1_freertos_gcc:
   script:
@@ -152,10 +135,10 @@ BSV_P1_freertos_gcc:
   except:
     - schedules
   artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+    when: always
+    expire_in: 1 day
+    paths:
+      - test_processor.log
 
 BSV_P1_freertos_io_gcc:
   script:
@@ -164,10 +147,10 @@ BSV_P1_freertos_io_gcc:
   except:
     - schedules
   artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+    when: always
+    expire_in: 1 day
+    paths:
+      - test_processor.log
 
 BSV_P1_freertos_network_gcc:
   script:
@@ -176,14 +159,14 @@ BSV_P1_freertos_network_gcc:
   except:
     - schedules
   artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+    when: always
+    expire_in: 1 day
+    paths:
+      - test_processor.log
 
 #-----------------------#
 #                       #
-#     Chisel P1 
+#     Chisel P1
 #                       #
 #-----------------------#
 CHSL_P1_isa:
@@ -193,10 +176,10 @@ CHSL_P1_isa:
   except:
     - schedules
   artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+    when: always
+    expire_in: 1 day
+    paths:
+      - test_processor.log
 
 CHSL_P1_freertos_gcc:
   script:
@@ -205,10 +188,10 @@ CHSL_P1_freertos_gcc:
   except:
     - schedules
   artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+    when: always
+    expire_in: 1 day
+    paths:
+      - test_processor.log
 
 CHSL_P1_freertos_io_gcc:
   script:
@@ -217,10 +200,10 @@ CHSL_P1_freertos_io_gcc:
   except:
     - schedules
   artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+    when: always
+    expire_in: 1 day
+    paths:
+      - test_processor.log
 
 CHSL_P1_freertos_network_gcc:
   script:
@@ -229,14 +212,14 @@ CHSL_P1_freertos_network_gcc:
   except:
     - schedules
   artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+    when: always
+    expire_in: 1 day
+    paths:
+      - test_processor.log
 
 #-----------------------#
 #                       #
-#     Chisel P2 
+#     Chisel P2
 #                       #
 #-----------------------#
 CHSL_P2_isa:
@@ -246,10 +229,10 @@ CHSL_P2_isa:
   except:
     - schedules
   artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+    when: always
+    expire_in: 1 day
+    paths:
+      - test_processor.log
 
 CHSL_P2_freertos_gcc:
   script:
@@ -258,10 +241,10 @@ CHSL_P2_freertos_gcc:
   except:
     - schedules
   artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+    when: always
+    expire_in: 1 day
+    paths:
+      - test_processor.log
 
 CHSL_P2_freertos_network_gcc:
   script:
@@ -270,20 +253,20 @@ CHSL_P2_freertos_network_gcc:
   except:
     - schedules
   artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+    when: always
+    expire_in: 1 day
+    paths:
+      - test_processor.log
 
 CHSL_P2_busybox:
   script:
     - ./pytest_processor.py chisel_p2 --busybox --network --no-pcie
   tags: ["fpga"]
   artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+    when: always
+    expire_in: 1 day
+    paths:
+      - test_processor.log
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -306,7 +289,7 @@ CHSL_P2_busybox:
 
 #-----------------------#
 #                       #
-#     Bluespec P2 
+#     Bluespec P2
 #                       #
 #-----------------------#
 BSV_P2_isa:
@@ -314,20 +297,20 @@ BSV_P2_isa:
     - ./pytest_processor.py bluespec_p2 --isa
   tags: ["fpga"]
   artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+    when: always
+    expire_in: 1 day
+    paths:
+      - test_processor.log
 
 BSV_P2_freertos_gcc:
   script:
     - ./pytest_processor.py bluespec_p2 --freertos
   tags: ["fpga"]
   artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+    when: always
+    expire_in: 1 day
+    paths:
+      - test_processor.log
 
 BSV_P2_freertos_network_gcc:
   script:
@@ -336,20 +319,20 @@ BSV_P2_freertos_network_gcc:
   except:
     - schedules
   artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+    when: always
+    expire_in: 1 day
+    paths:
+      - test_processor.log
 
 BSV_P2_busybox:
   script:
     - ./pytest_processor.py bluespec_p2 --busybox --network --no-pcie
   tags: ["fpga"]
   artifacts:
-      when: always
-      expire_in: 1 day
-      paths:
-        - test_processor.log
+    when: always
+    expire_in: 1 day
+    paths:
+      - test_processor.log
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -372,7 +355,7 @@ BSV_P2_busybox:
 
 #-----------------------#
 #                       #
-#     Chisel P3 
+#     Chisel P3
 #                       #
 #-----------------------#
 CHSL_P3_isa:
@@ -401,7 +384,6 @@ CHSL_P3_isa:
 #  only:
 #      variables:
 #      - $JOB_TYPE == "bluespec_p3"
-
 
 #-----------------------------------------------------------------------------#
 #
@@ -538,4 +520,10 @@ testgen:
     variables:
       - $PIPELINE_TYPE == "full"
   script:
-    - "curl -X POST -F token=$TESTGEN_TRIGGER -F ref=$testgen_ref https://gitlab-ext.galois.com/api/v4/projects/$testgen_id/trigger/pipeline"
+    - >-
+      curl -XPOST
+        -F "token=$TESTGEN_TRIGGER"
+        -F "ref=$testgen_ref"
+        -F "tool_suite_url=$tool_suite_url"
+        -F "tool_suite_rev=$tool_suite_rev"
+        "$CI_API_V4_URL/projects/$testgen_id/trigger/pipeline"
