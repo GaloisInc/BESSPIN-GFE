@@ -13,6 +13,9 @@ import subprocess
 import socket
 import re
 import select
+from multiprocessing import Process
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+import functools
 
 class BaseGfeTest(unittest.TestCase):
     """GFE base testing class. All GFE Python unittests inherit from this class
@@ -22,6 +25,10 @@ class BaseGfeTest(unittest.TestCase):
         path_to_asm (string): Path to custom GFE assembly tests
         path_to_freertos (string): Path to FreeRTOS folder in the GFE repo
     """
+    # create our server
+    #Handler = functools.partial(SimpleHTTPRequestHandler, directory='../../bootmem')
+    #httpd = HTTPServer(('10.88.88.1', 8000), Handler)
+    thread = None
 
     def getXlen(self):
         return '32'
@@ -67,7 +74,8 @@ class BaseGfeTest(unittest.TestCase):
             "Setup pySerial UART. {} baud, {} {} {}".format(
                 baud, bytesize, parity, stopbits))
 
-    def check_uart_out(self, timeout, expected_contents, absent_contents=None):
+
+    def gather_uart_output(self, timeout, expected_contents, absent_contents=None):
         # Store and print all UART output while the elf is running.
         # Use bytestrings to avoid problems with decoding output.
         rx = b''
@@ -78,6 +86,14 @@ class BaseGfeTest(unittest.TestCase):
                 data = self.gfe.uart_session.read(pending)
                 sys.stdout.buffer.write(data)
                 rx += data
+                res = [ (bytes(text, encoding='utf-8') in rx) for text in expected_contents]
+                if all(res):
+                    print("early exit!")
+                    return rx
+        return rx
+
+    def check_uart_out(self, timeout, expected_contents, absent_contents=None):
+        rx = self.gather_uart_output(timeout, expected_contents, absent_contents)
 
         # Check that the output contains the expected text
         for text in expected_contents:
@@ -148,6 +164,11 @@ class BaseGfeTest(unittest.TestCase):
         self.gfe.gdb_session.command("info registers all", ops=100)
         self.gfe.gdb_session.command("flush regs")
         self.gfe.gdb_session.command("info threads", ops=100)
+        # Shutdown server
+        if self.thread is not None:
+            print("Shutting down server")
+            #self.httpd.shutdown()
+            #self.thread.terminate()
         del self.gfe
 
 class TestGfe(BaseGfeTest):
@@ -631,7 +652,7 @@ class TestLinux(BaseGfeTest):
     def getDebianBootImage(self):
         return os.path.join(
             os.path.dirname(os.path.dirname(os.getcwd())),
-            'bootmem', 'build-debian-bbl', 'bbl')
+            'bootmem', 'build-debian-network-bbl', 'bbl')
 
     def getBusyboxBootImage(self):
         return os.path.join(
@@ -643,7 +664,7 @@ class TestLinux(BaseGfeTest):
         # if 'make debian' was called by test_linux.sh
         return os.path.join(
             os.path.dirname(os.path.dirname(os.getcwd())),
-            'bootmem', 'build-debian-bbl', 'bbl')
+            'bootmem', 'build-debian-network-bbl', 'bbl')
 
     def getXlen(self):
         return '64'
@@ -694,22 +715,25 @@ class TestLinux(BaseGfeTest):
 
     def test_busybox_boot(self):
         self.boot_image(expected_contents=self.getBusyBoxExpected(),
-        image=self.getBusyboxBootImage(), timeout=60)
+            image=self.getBusyboxBootImage(), timeout=60)
         return
 
     def test_busybox_flash_boot(self):
         self.boot_image(expected_contents=self.getBusyBoxExpected(),
-        image=self.getBusyboxBootImage(), timeout=100, run_from_flash=True)
+            image=self.getBusyboxBootImage(), timeout=100, run_from_flash=True)
         return
 
     def test_debian_boot(self):
+        #self.thread = Process(target = self.httpd.serve_forever)
+        #self.thread.start()
+        #print("set: Thread started")
         self.boot_image(expected_contents=self.getDebianExpected(),
-        image=self.getDebianBootImage(), timeout=300)
+            image=self.getDebianBootImage(), timeout=1000)
         return
 
     def test_debian_flash_boot(self):
         self.boot_image(expected_contents=self.getDebianExpected(),
-        image=self.getDebianBootImage(), timeout=300, run_from_flash=True)
+            image=self.getDebianBootImage(), timeout=300, run_from_flash=True)
         return
 
     def test_busybox_ethernet(self):

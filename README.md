@@ -749,7 +749,6 @@ Cissr: reset
 Note that some early mismatches are expected as the simulation model is updated with the correct PC and initial status registers.
 
 ## PCI Express Root Complex ##
-**NOTE:** the PCIe is currently supported only in busybox.
 
 ### PCIe Hardware Setup ###
 
@@ -795,3 +794,26 @@ The numbers are decoded events coming from the devices.
 [fmc_card_config]: documentation_source/images/FMC_CARD_CONFIG.JPG "FMC card configuration"
 [pcie_ethernet]: documentation_source/images/PCIE_ROOT_COMPLEX_ETHERNET.JPG "PCIe root complex with Ethernet PCIe card"
 [pcie_usb]: documentation_source/images/PCIE_ROOT_COMPLEX_USB.JPG "PCIe root complex with USB PCIe card"
+
+
+## Baseline Performance
+
+### PPA
+Run the `./get_ppa.py` script to get numbers measured by vivado, for example:
+```
+$ ./get_ppa.py vivado/soc_bluespec_p1/soc_bluespec_p1.runs/impl_1/
+{"power_W": 0.25, "CLB_LUTs": 90341, "CLB_regs": 118324, "cpu_Mhz": 50.0}
+```
+
+Baseline values are:
+
+| processor | power_W | CLB_LUTs | CLB_regs | cpu_Mhz |
+|------|---|---|---|---|
+| Bluespec P1 | 0.25 | 90341 | 118324 | 50.0 |
+| Bluespec P2 | 0.302 | 121254 | 128260 | 100.0 |
+| Bluespec P3 | 0.365 | 343698 | 250477 | 25.0 |
+| Chisel P1 | 0.267 | 84043 | 113347 | 50.0 |
+| Chisel P2 | 0.457 | 131524 | 188846 | 100.0 |
+| Chisel P3 | 0.37 | 188629 | 156332 | 25.0 |
+
+

@@ -5,6 +5,7 @@ import os
 import time
 import serial
 import serial.tools.list_ports
+import subprocess
 
 
 class gfetester(object):
@@ -241,6 +242,13 @@ class gfetester(object):
             if m:
                 if m.group(1) == '1':
                     print("Located UART device at %s with serial number %s" % (port.device, port.serial_number))
+                    #Check if no one else is using the serial port. Especially Minicom.
+                    sttyOut = str(subprocess.check_output (f"stty -F {port.device} | grep min",stderr=subprocess.STDOUT,shell=True),'utf-8')
+                    sttyMatch = re.match(r"^min = (?P<vMin>\d+); time = (?P<vTime>\d+);$", sttyOut)
+                    if (not sttyMatch):
+                        raise Exception (f"Failed to get the status of {port.device}.")
+                    elif ( (int(sttyMatch.group('vMin')) != 0) or (int(sttyMatch.group('vTime')) != 0)):
+                        raise Exception (f"The UART {port.device} is already in use. [Maybe minicom is open].")
                     return port.device
         raise Exception(
                 "Could not find a UART port with expected VID:PID = %X:%X" % (search_vid, search_pid))

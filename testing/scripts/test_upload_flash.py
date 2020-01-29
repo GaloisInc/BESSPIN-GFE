@@ -20,7 +20,9 @@ print(retval)
 time.sleep(10)
 if "Program/Verify Operation successful." in retval:
     # success
+    print("TestFlashUpload: Successfull")
     sys.exit(0)
 else:
     # script failed
+    print("TestFlashUpload: Failer")
     sys.exit(1)

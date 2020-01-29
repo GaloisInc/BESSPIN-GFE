@@ -1,0 +1,15 @@
+2K performance run parameters for coremark.
+CoreMark Size    : 666
+Total ticks      : 1720290432
+Total time (secs): 107
+Iterations/Sec   : 46
+Iterations       : 5000
+Compiler version : GCC8.3.0
+Compiler flags   : -O3 -DPERFORMANCE_RUN=1 -DMAIN_HAS_NOARGC=1 -DHAS_STDIO -DHAS_PRINTF -DHAS_TIME_H -DUSE_CLOCK -DHAS_FLOAT=0 -Wno-maybe-uninitialized -O2 -fno-common -funroll-loops -finline-functions -falign-functions=16 -falign-jumps=4 -falign-loops=4 -finline-limit=1000 -fno-if-conversion2 -fselective-scheduling -fno-tree-dominator-opts -fno-reg-struct-return -fno-rename-registers --param case-values-threshold=8 -fno-crossjumping -freorder-blocks-and-partition -fno-tree-loop-if-convert -fno-tree-sink -fgcse-sm -fno-strict-overflow -DITERATIONS=5000  -Wl,--gc-sections -Wl,-Map,coremark.map -nostartfiles -nostdlib -L/home/lread/lread/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/release/ -T/home/lread/lread/freedom-e-sdk/bsp/sifive-hifive1-revb/metal.ramrodata.lds -Wl,--start-group -lc -lgcc -lm -lmetal -lmetal-gloss -Wl,--end-group
+Memory location  : STACK
+seedcrc          : 0xe9f5
+[0]crclist       : 0xe714
+[0]crcmatrix     : 0x1fd7
+[0]crcstate      : 0x8e3a
+[0]crcfinal      : 0xbd59
+Correct operation validated. See README.md for run and reporting rules.

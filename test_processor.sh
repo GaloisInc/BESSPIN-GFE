@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+echo "This script is obsolete, use pytest_processor.py instead."
+echo "Press ENTER if you want to continue, or CTRL-C to abort"
+read
+
 
 # Get the path to the script folder of the git repository
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null && pwd)"
@@ -11,6 +15,11 @@ if [[ $2 == "--full_ci" ]]; then
 	full_ci=true
 else
 	full_ci=false
+fi
+
+# Allow different kernel configurations - with PCIe enabled or without
+if [[ $3 == "--no-pcie" ]]; then
+	PCIE_OPTION=--no-pcie
 fi
 
 # Make sure the Bluespec P1 is programmed with a valid flash content
@@ -46,19 +55,25 @@ fi
 
 # Run all P2/P3 processor tests
 if [ "$proc_name" == "chisel_p2" ] || [ "$proc_name" == "bluespec_p2" ] || [ "$proc_name" == "chisel_p3" ] || [ "$proc_name" == "bluespec_p3" ]; then
+	export XARCH=64
+	./test_freertos.sh
+	err_msg $? "test_freertos.sh basic failed" "test_freertos.sh basic OK"
+	./test_freertos.sh --ethernet
+	err_msg $? "test_freertos.sh ethernet failed" "test_freertos.sh ethernet OK"
 	./test.sh 64 $proc_name
 	err_msg $? "test.sh 64 failed" "test.sh 64 OK"
-	./test_linux.sh busybox
+	./test_linux.sh busybox --dummy $PCIE_OPTION
 	err_msg $? "test_linux.sh busybox failed" "test_linux.sh busybox OK"
-	./test_linux.sh debian
-	err_msg $? "test_linux.sh debian failed" "test_linux.sh debian OK"
+	#./test_linux.sh debian --dummy $PCIE_OPTION
+	#err_msg $? "test_linux.sh debian failed" "test_linux.sh debian OK"
 	if [ "$full_ci" = true ]; then
 		# Run ethernet test only if we have the proper hardware setup
-		./test_linux.sh busybox --ethernet
+		./test_linux.sh busybox --ethernet $PCIE_OPTION
 		err_msg $? "test_linux.sh busybox ethernet failed" "test_linux.sh busybox ethernet OK"
-		./test_linux.sh debian --ethernet
+		./test_linux.sh debian --ethernet $PCIE_OPTION
 		err_msg $? "test_linux.sh debian ethernet failed" "test_linux.sh debian ethernet OK"
-		./test_linux.sh debian --flash $proc_name
-		err_msg $? "test_linux.sh debian boot from flash failed" "test_linux.sh debian boot from flash OK"
+		# TODO: don't test flash until PCIe options are properly parametrized
+		# ./test_linux.sh debian --flash $proc_name
+		# err_msg $? "test_linux.sh debian boot from flash failed" "test_linux.sh debian boot from flash OK"
 	fi
 fi
