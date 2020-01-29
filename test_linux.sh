@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 # Get the path to the script folder of the git repository
+
+echo "This script is obsolete, use pytest_processor.py instead."
+echo "Press ENTER if you want to continue, or CTRL-C to abort"
+read
+
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 source $BASE_DIR/setup_env.sh
 err_msg $SETUP_ENV_ERR "Sourcing setup_env.sh failed"
