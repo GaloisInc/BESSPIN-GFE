@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.0.3 (2020-01-29)
+* Refactored and improved test scripts (use now `pytest_processor.py` and `pyprogram_fpga.sh`)
+* CI changes and improvements to support BESSPIN CI pipeline
+
+
 ## v5.0 (2020-01-02)
 * Parallelized build processes for Busybox and Debian using qemu, improving performance on multicore host machines (!44)
 * Resolved a PCIe packet loss issue for Chisel P2 processors (#130)
