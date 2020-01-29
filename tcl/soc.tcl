@@ -223,6 +223,15 @@ if {[string equal [get_runs -quiet impl_1] ""]} {
   set_property flow "Vivado Implementation 2017" [get_runs impl_1]
 }
 
+# Special case: more aggressive strategy for bluespec_p2
+if { [string equal $proc_name "bluespec_p2"] } {
+#    set_property strategy {Flow_PerfOptimized_high} [get_runs synth_1]
+#    set_property flow "Vivado Synthesis 2019" [get_runs synth_1]
+
+    set_property strategy {Performance_ExplorePostRoutePhysOpt} [get_runs impl_1]
+    set_property flow "Vivado Implementation 2019" [get_runs impl_1]
+}
+
 set obj [get_runs impl_1]
 set_property -name "steps.write_bitstream.args.readback_file" -value "0" -objects $obj
 set_property -name "steps.write_bitstream.args.verbose" -value "0" -objects $obj
