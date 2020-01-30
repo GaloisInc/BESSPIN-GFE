@@ -39,8 +39,8 @@ case "$proc_name" in
 	clock_freq_mhz=100
 	;;
     *p3)
-	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=25000000 NO_PCI=$no_xdma
-	clock_freq_mhz=25
+	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=50000000
+	clock_freq_mhz=50
 	;;
     *)
 	echo "WARNING: don't know how to make a boot ROM for processor $proc_name"
