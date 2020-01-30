@@ -2,7 +2,8 @@
 #
 # General config for running tests etc.
 #
-from subprocess import run
+from shutil import which
+
 
 # Processor config
 proc_list = ['chisel_p1', 'chisel_p2', 'chisel_p3', 'bluespec_p1', 'bluespec_p2', 'bluespec_p3']
@@ -20,8 +21,7 @@ def proc_picker(proc):
 def check_vivado():
     program_list = ['vivado_lab','vivado']
     for program in program_list:
-        res = run(['which',program],capture_output=True)
-        if res.returncode == 0:
+        if which(program) is not None:
             return program
     raise RuntimeError("Neither vivado nor vivado_lab found")
 
@@ -29,7 +29,8 @@ def check_vivado():
 def check_environment():
     print("Checking environment")
     for program in env_requried:
-        run(['which',program], capture_output=True,check=True)
+        if which(program) is None:
+            raise RuntimeError("Required program {} not found".format(program))
     return True
 
 
