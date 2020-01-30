@@ -81,6 +81,7 @@ if { $::argc > 0 } {
       "--proc_name" { incr i; set proc_name [lindex $::argv $i] }
       "--proc_path" { incr i; set proc_path [lindex $::argv $i] }
       "--clock_freq_mhz" { incr i; set clock_freq_mhz [lindex $::argv $i] }
+      "--no_xdma" { incr i; set no_xdma [lindex $::argv $i] }
       "--help"         { help }
       default {
         if { [regexp {^-} $option] } {
@@ -164,6 +165,11 @@ set_property "ip_repo_paths" [list \
 
 # Generate block diagram
 source $origin_dir/soc_bd.tcl
+
+if {$no_xdma == 1} {
+    puts "Building with svf instead of xdma"
+    source $origin_dir/svf.tcl
+}
 
 # Configure the clock frequency
 puts "Setting clock fequency to $clock_freq_mhz MHz"
