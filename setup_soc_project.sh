@@ -14,19 +14,32 @@ clock_freq_mhz=50
 # Parse the processor selection
 proc_picker $1
 
+no_xdma=1
+
+if [[ $2 == "use_xdma" ]]; then
+    case "$proc_name" in
+	*p2)
+	    no_xdma=0
+	    ;;
+	*)
+	    echo "use_xdma is valid only for P2 processors"
+	    ;;
+    esac
+fi
+
 # Compile the bootrom and set the clock frequency
 cd $BASE_DIR/bootrom
 case "$proc_name" in
     *p1)
-	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=50000000
+	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=50000000 NO_PCI=$no_xdma
 	clock_freq_mhz=50
 	;;
     *p2)
-	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=100000000
+	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=100000000 NO_PCI=$no_xdma
 	clock_freq_mhz=100
 	;;
     *p3)
-	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=25000000
+	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=25000000 NO_PCI=$no_xdma
 	clock_freq_mhz=25
 	;;
     *)
@@ -47,6 +60,8 @@ cd $BASE_DIR/vivado
 vivado -mode batch -source $BASE_DIR/tcl/soc.tcl \
 -tclargs --origin_dir $BASE_DIR/tcl \
 --proc_name $proc_name \
---clock_freq_mhz $clock_freq_mhz
+--clock_freq_mhz $clock_freq_mhz \
+--no_xdma $no_xdma
+
 
 err_msg $? "Creating the vivado project failed"
