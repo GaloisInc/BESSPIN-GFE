@@ -665,7 +665,6 @@ def load_elf(config, path_to_elf, timeout, expected_contents=None):
     gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
     uart = UartSession()
 
-    print_and_log('Executing ' + path_to_elf)
     soft_reset_cmd = 'set *((int *) 0x6FFF0000) = 1'
 
     setup_cmds = [
@@ -683,7 +682,10 @@ def load_elf(config, path_to_elf, timeout, expected_contents=None):
     print_and_log("Continuing")
     gdb.cont()
 
-    uart.read_and_check(timeout, expected_contents)
+    if not expected_contents:
+        print_and_log(uart.read(timeout))
+    else:
+        uart.read_and_check(timeout, expected_contents)
 
     del uart
     del gdb
@@ -715,8 +717,8 @@ def test_init():
     parser.add_argument("--compiler", help="select compiler to use [gcc|clang]",default="gcc")
     parser.add_argument("--elf", help="path to an elf file to load and run. Make sure to specify --timeout parameter")
     parser.add_argument("--timeout", help="specify how log to run a binary specified in the --elf argument")
-    parser.add_argument("--expected-content", help="specify expected output of the binary specifed in the --elf argument, used for early exit." +
-        "Can be multiple arguments comma separated: c1,c2,c3...",default="None")
+    parser.add_argument("--expected-contents", help="specify expected output of the binary specifed in the --elf argument, used for early exit." +
+        "Can be multiple arguments comma separated: \"c1,c2,c3...\"",default="None")
     parser.add_argument("--simulator", help="run in verilator",action="store_true")
     args = parser.parse_args()
 
@@ -747,7 +749,7 @@ if __name__ == '__main__':
             expected_contents = None
         else:
             expected_contents = args.expected_content.split()   
-        load_elf(config, args.elf, args.timeout, expected_contents)
+        load_elf(config, args.elf, int(args.timeout), expected_contents)
 
     if args.asm:
         test_asm(config)
