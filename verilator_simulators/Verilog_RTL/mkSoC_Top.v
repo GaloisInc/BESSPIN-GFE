@@ -1246,45 +1246,45 @@ module mkSoC_Top(CLK,
 
   // declarations used by system tasks
   // synopsys translate_off
-  reg [31 : 0] v__h22880;
-  reg [31 : 0] v__h23453;
+  reg [31 : 0] v__h22889;
+  reg [31 : 0] v__h23462;
   reg [31 : 0] v__h6705;
   reg [31 : 0] v__h5732;
   reg [31 : 0] v__h10605;
   reg [31 : 0] v__h9632;
-  reg [31 : 0] v__h14944;
-  reg [31 : 0] v__h13971;
+  reg [31 : 0] v__h14953;
+  reg [31 : 0] v__h13980;
   reg [31 : 0] v__h5726;
   reg [31 : 0] v__h6699;
   reg [31 : 0] v__h9626;
   reg [31 : 0] v__h10599;
-  reg [31 : 0] v__h13965;
-  reg [31 : 0] v__h14938;
-  reg [31 : 0] v__h22874;
-  reg [31 : 0] v__h23447;
+  reg [31 : 0] v__h13974;
+  reg [31 : 0] v__h14947;
+  reg [31 : 0] v__h22883;
+  reg [31 : 0] v__h23456;
   // synopsys translate_on
 
   // remaining internal signals
   wire [63 : 0] a_out_araddr__h11117,
-		a_out_araddr__h15456,
+		a_out_araddr__h15465,
 		a_out_araddr__h7217,
 		a_out_awaddr__h10134,
-		a_out_awaddr__h14473,
+		a_out_awaddr__h14482,
 		a_out_awaddr__h6234,
 		addr___1__h10219,
 		addr___1__h11202,
-		addr___1__h14558,
-		addr___1__h15541,
+		addr___1__h14567,
+		addr___1__h15550,
 		addr___1__h6319,
 		addr___1__h7302;
   wire [7 : 0] x__h10480,
 	       x__h10971,
 	       x__h11363,
 	       x__h11561,
-	       x__h14819,
-	       x__h15310,
-	       x__h15702,
-	       x__h15900,
+	       x__h14828,
+	       x__h15319,
+	       x__h15711,
+	       x__h15909,
 	       x__h6580,
 	       x__h7071,
 	       x__h7463,
@@ -2154,7 +2154,9 @@ module mkSoC_Top(CLK,
 	      .slave_rresp(gpio$slave_rresp),
 	      .slave_rlast(gpio$slave_rlast),
 	      .assert_soft_reset(gpio$assert_soft_reset),
-	      .RDY_assert_soft_reset());
+	      .RDY_assert_soft_reset(),
+	      .tv_switch(),
+	      .RDY_tv_switch());
 
   // submodule mem0_controller
   mkMem_Controller mem0_controller(.CLK(CLK),
@@ -2487,9 +2489,9 @@ module mkSoC_Top(CLK,
 
   // rule RL_rl_reset_start_2
   assign WILL_FIRE_RL_rl_reset_start_2 =
+	     fabric$RDY_reset &&
 	     mem0_controller$RDY_server_reset_request_put &&
 	     uart0$RDY_server_reset_request_put &&
-	     fabric$RDY_reset &&
 	     rg_state == 2'd0 ;
 
   // rule RL_rl_reset_complete
@@ -2647,11 +2649,11 @@ module mkSoC_Top(CLK,
 	       8'd0 ;
   assign MUX_mem0_controller_axi4_deburster_rg_ar_beat_count$write_1__VAL_2 =
 	     mem0_controller_axi4_deburster_rg_ar_beat_coun_ETC___d320 ?
-	       x__h15702 :
+	       x__h15711 :
 	       8'd0 ;
   assign MUX_mem0_controller_axi4_deburster_rg_b_beat_count$write_1__VAL_2 =
 	     mem0_controller_axi4_deburster_rg_b_beat_count_ETC___d276 ?
-	       x__h15310 :
+	       x__h15319 :
 	       8'd0 ;
   assign MUX_mem0_controller_axi4_deburster_rg_b_resp$write_1__VAL_2 =
 	     mem0_controller_axi4_deburster_rg_b_beat_count_ETC___d276 ?
@@ -2659,11 +2661,11 @@ module mkSoC_Top(CLK,
 	       2'b0 ;
   assign MUX_mem0_controller_axi4_deburster_rg_r_beat_count$write_1__VAL_2 =
 	     mem0_controller_axi4_deburster_rg_r_beat_count_ETC___d331 ?
-	       x__h15900 :
+	       x__h15909 :
 	       8'd0 ;
   assign MUX_mem0_controller_axi4_deburster_rg_w_beat_count$write_1__VAL_2 =
 	     mem0_controller_axi4_deburster_rg_w_beat_count_ETC___d261 ?
-	       x__h14819 :
+	       x__h14828 :
 	       8'd0 ;
 
   // register boot_rom_axi4_deburster_rg_ar_beat_count
@@ -3694,7 +3696,7 @@ module mkSoC_Top(CLK,
   // submodule mem0_controller_axi4_deburster_xactor_to_slave_f_rd_addr
   assign mem0_controller_axi4_deburster_xactor_to_slave_f_rd_addr$D_IN =
 	     { mem0_controller_axi4_deburster_xactor_from_master_f_rd_addr$D_OUT[96:93],
-	       a_out_araddr__h15456,
+	       a_out_araddr__h15465,
 	       8'd0,
 	       mem0_controller_axi4_deburster_xactor_from_master_f_rd_addr$D_OUT[20:18],
 	       2'b0,
@@ -3724,7 +3726,7 @@ module mkSoC_Top(CLK,
   // submodule mem0_controller_axi4_deburster_xactor_to_slave_f_wr_addr
   assign mem0_controller_axi4_deburster_xactor_to_slave_f_wr_addr$D_IN =
 	     { mem0_controller_axi4_deburster_xactor_from_master_f_wr_addr$D_OUT[96:93],
-	       a_out_awaddr__h14473,
+	       a_out_awaddr__h14482,
 	       8'd0,
 	       mem0_controller_axi4_deburster_xactor_from_master_f_wr_addr$D_OUT[20:18],
 	       2'b0,
@@ -3823,10 +3825,10 @@ module mkSoC_Top(CLK,
 	      2'b01) ?
 	       addr___1__h11202 :
 	       flash_axi4_deburster_xactor_from_master_f_rd_addr$D_OUT[92:29] ;
-  assign a_out_araddr__h15456 =
+  assign a_out_araddr__h15465 =
 	     (mem0_controller_axi4_deburster_xactor_from_master_f_rd_addr$D_OUT[17:16] ==
 	      2'b01) ?
-	       addr___1__h15541 :
+	       addr___1__h15550 :
 	       mem0_controller_axi4_deburster_xactor_from_master_f_rd_addr$D_OUT[92:29] ;
   assign a_out_araddr__h7217 =
 	     (boot_rom_axi4_deburster_xactor_from_master_f_rd_addr$D_OUT[17:16] ==
@@ -3838,10 +3840,10 @@ module mkSoC_Top(CLK,
 	      2'b01) ?
 	       addr___1__h10219 :
 	       flash_axi4_deburster_xactor_from_master_f_wr_addr$D_OUT[92:29] ;
-  assign a_out_awaddr__h14473 =
+  assign a_out_awaddr__h14482 =
 	     (mem0_controller_axi4_deburster_xactor_from_master_f_wr_addr$D_OUT[17:16] ==
 	      2'b01) ?
-	       addr___1__h14558 :
+	       addr___1__h14567 :
 	       mem0_controller_axi4_deburster_xactor_from_master_f_wr_addr$D_OUT[92:29] ;
   assign a_out_awaddr__h6234 =
 	     (boot_rom_axi4_deburster_xactor_from_master_f_wr_addr$D_OUT[17:16] ==
@@ -3856,11 +3858,11 @@ module mkSoC_Top(CLK,
 	     flash_axi4_deburster_xactor_from_master_f_rd_addr$D_OUT[92:29] +
 	     ({ 56'd0, flash_axi4_deburster_rg_ar_beat_count } <<
 	      flash_axi4_deburster_xactor_from_master_f_rd_addr$D_OUT[20:18]) ;
-  assign addr___1__h14558 =
+  assign addr___1__h14567 =
 	     mem0_controller_axi4_deburster_xactor_from_master_f_wr_addr$D_OUT[92:29] +
 	     ({ 56'd0, mem0_controller_axi4_deburster_rg_w_beat_count } <<
 	      mem0_controller_axi4_deburster_xactor_from_master_f_wr_addr$D_OUT[20:18]) ;
-  assign addr___1__h15541 =
+  assign addr___1__h15550 =
 	     mem0_controller_axi4_deburster_xactor_from_master_f_rd_addr$D_OUT[92:29] +
 	     ({ 56'd0, mem0_controller_axi4_deburster_rg_ar_beat_count } <<
 	      mem0_controller_axi4_deburster_xactor_from_master_f_rd_addr$D_OUT[20:18]) ;
@@ -3912,10 +3914,10 @@ module mkSoC_Top(CLK,
   assign x__h10971 = flash_axi4_deburster_rg_b_beat_count + 8'd1 ;
   assign x__h11363 = flash_axi4_deburster_rg_ar_beat_count + 8'd1 ;
   assign x__h11561 = flash_axi4_deburster_rg_r_beat_count + 8'd1 ;
-  assign x__h14819 = mem0_controller_axi4_deburster_rg_w_beat_count + 8'd1 ;
-  assign x__h15310 = mem0_controller_axi4_deburster_rg_b_beat_count + 8'd1 ;
-  assign x__h15702 = mem0_controller_axi4_deburster_rg_ar_beat_count + 8'd1 ;
-  assign x__h15900 = mem0_controller_axi4_deburster_rg_r_beat_count + 8'd1 ;
+  assign x__h14828 = mem0_controller_axi4_deburster_rg_w_beat_count + 8'd1 ;
+  assign x__h15319 = mem0_controller_axi4_deburster_rg_b_beat_count + 8'd1 ;
+  assign x__h15711 = mem0_controller_axi4_deburster_rg_ar_beat_count + 8'd1 ;
+  assign x__h15909 = mem0_controller_axi4_deburster_rg_r_beat_count + 8'd1 ;
   assign x__h6580 = boot_rom_axi4_deburster_rg_w_beat_count + 8'd1 ;
   assign x__h7071 = boot_rom_axi4_deburster_rg_b_beat_count + 8'd1 ;
   assign x__h7463 = boot_rom_axi4_deburster_rg_ar_beat_count + 8'd1 ;
@@ -4054,23 +4056,23 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_start_2)
 	begin
-	  v__h22880 = $stime;
+	  v__h22889 = $stime;
 	  #0;
 	end
-    v__h22874 = v__h22880 / 32'd10;
+    v__h22883 = v__h22889 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_start_2)
-	$display("%0d: SoC_Top. Reset start ...", v__h22874);
+	$display("%0d: SoC_Top. Reset start ...", v__h22883);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_complete)
 	begin
-	  v__h23453 = $stime;
+	  v__h23462 = $stime;
 	  #0;
 	end
-    v__h23447 = v__h23453 / 32'd10;
+    v__h23456 = v__h23462 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_reset_complete)
-	$display("%0d: SoC_Top. Reset complete ...", v__h23447);
+	$display("%0d: SoC_Top. Reset complete ...", v__h23456);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_boot_rom_axi4_deburster_rl_wr_xaction_master_to_slave &&
 	  !boot_rom_axi4_deburster_rg_w_beat_count_2_ULT__ETC___d39 &&
@@ -4242,16 +4244,16 @@ module mkSoC_Top(CLK,
 	  !mem0_controller_axi4_deburster_rg_w_beat_count_ETC___d261 &&
 	  !mem0_controller_axi4_deburster_xactor_from_master_f_wr_data$D_OUT[0])
 	begin
-	  v__h14944 = $stime;
+	  v__h14953 = $stime;
 	  #0;
 	end
-    v__h14938 = v__h14944 / 32'd10;
+    v__h14947 = v__h14953 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_mem0_controller_axi4_deburster_rl_wr_xaction_master_to_slave &&
 	  !mem0_controller_axi4_deburster_rg_w_beat_count_ETC___d261 &&
 	  !mem0_controller_axi4_deburster_xactor_from_master_f_wr_data$D_OUT[0])
 	$display("%0d: ERROR: %m::AXI4_Deburster.rl_wr_xaction_master_to_slave: m -> s",
-		 v__h14938);
+		 v__h14947);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_mem0_controller_axi4_deburster_rl_wr_xaction_master_to_slave &&
 	  !mem0_controller_axi4_deburster_rg_w_beat_count_ETC___d261 &&
@@ -4313,13 +4315,13 @@ module mkSoC_Top(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (mem0_controller_axi4_deburster_rg_reset)
 	begin
-	  v__h13971 = $stime;
+	  v__h13980 = $stime;
 	  #0;
 	end
-    v__h13965 = v__h13971 / 32'd10;
+    v__h13974 = v__h13980 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (mem0_controller_axi4_deburster_rg_reset)
-	$display("%0d: %m::AXI4_Deburster.rl_reset", v__h13965);
+	$display("%0d: %m::AXI4_Deburster.rl_reset", v__h13974);
   end
   // synopsys translate_on
 endmodule  // mkSoC_Top
