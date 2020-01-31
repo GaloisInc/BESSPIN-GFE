@@ -5,9 +5,9 @@ bootrom_coe = bootrom.coe
 CCPATH 		?=
 TARGET=$(CCPATH)riscv64-unknown-elf
 
-XARCH?=32
+XLEN?=32
 
-ifeq ($(XARCH),64)
+ifeq ($(XLEN),64)
 	ARCH 		= -march=rv64imac
 	ABI 		= -mabi=lp64
 	CLANG_ARCH  = riscv64
@@ -15,10 +15,10 @@ else
 	ARCH 		= -march=rv32im
 	ABI 		= -mabi=ilp32
 	CLANG_ARCH  = riscv32
-	XARCH       = 32 # if it's any value other than 64 normalize it to 32
+	XLEN        = 32 # if it's any value other than 64 normalize it to 32
 endif
 
-$(info XARCH=${XARCH})
+$(info XLEN=${XLEN})
 
 # Decide which compiler to use
 ifeq ($(USE_CLANG),yes)
@@ -100,7 +100,7 @@ bootrom.elf: $(OBJS) linker.ld devicetree.dtb
 	$(CC) $(CFLAGS) -Tlinker.ld $(OBJS) -nostdlib -static -Wl,--no-gc-sections -o $@
 
 # We match the target width of the cross compilation target.
-ifeq ($(XARCH), 32)
+ifeq ($(XLEN), 32)
     LLVM_TARGET=i386-pc-none-eabi
 else
     LLVM_TARGET=x86_64-pc-none-eabi
@@ -117,7 +117,7 @@ check_sha256: bootrom.bc
 	# to the script. Since we're not using the java functionality, the value of
 	# the classpath option remains untouched, so it's safe for use to abuse to
 	# pass the bit-width.
-	saw secure-boot/sha256_crucible.saw --classpath $(XARCH)
+	saw secure-boot/sha256_crucible.saw --classpath $(XLEN)
 
 bootrom.bc: $(patsubst %.o,%.bc, $(C_OBJS))
 	$(LLVM_LINK) -o $@ $^
@@ -137,7 +137,7 @@ secure-boot/PeripheralCommands.cry: $(wildcard secure-boot/peripherals/*.py)
 	# NOTE: this should be python3-compatible, but some of our systems do
 	# not have python3 installed, and it's not contained within their
 	# package managers. For ease of portability, we use python2.
-	python2 secure-boot/peripherals/config.py cryptol$(XARCH) > $@
+	python2 secure-boot/peripherals/config.py cryptol$(XLEN) > $@
 
 check_secure_boot: secure-boot/PeripheralCommands.saw secure-boot/PeripheralCommands.cry bootrom.bc
 	saw $<

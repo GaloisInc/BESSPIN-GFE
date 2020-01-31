@@ -29,15 +29,15 @@ case "$proc_name" in
 cd $BASE_DIR/bootrom
 case "$proc_name" in
     *p1)
-	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=50000000 NO_PCI=$no_xdma
+	make --always-make XLEN=32 CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=50000000 NO_PCI=$no_xdma
 	clock_freq_mhz=50
 	;;
-    *p2*)
-	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=100000000 NO_PCI=$no_xdma
+    *p2)
+	make --always-make XLEN=64 CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=100000000 NO_PCI=$no_xdma
 	clock_freq_mhz=100
 	;;
     *p3)
-	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=25000000 NO_PCI=$no_xdma
+	make --always-make XLEN=64 CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=25000000 NO_PCI=$no_xdma
 	clock_freq_mhz=25
 	;;
     *)
