@@ -20,7 +20,7 @@ git submodule update --init busybox
 git submodule update --init --recursive \
 bluespec-processors/P1/Piccolo
 git submodule update --init --recursive \
-bluespec-processors/P2/Flute \
+bluespec-processors/P2/Flute
 git submodule update --init --recursive \
 bluespec-processors/P3/Toooba
 git submodule update --init --recursive \
