@@ -92,18 +92,17 @@ CHSL_P3_sim:
       - verilator_simulators/run/Logs/chisel_p3/
       - test_processor.log
 
-# TODO: currently fails
-# BSV_P3_sim:
-#   script:
-#     - ./pytest_processor.py bluespec_p3 --simulator
-#   tags: ["verilator"]
-#   except:
-#     - schedules
-#   artifacts:
-#     when: on_failure
-#     expire_in: 1 week
-#     paths:
-#       - verilator_simulators/run/Logs/bluespec_p3/
+BSV_P3_sim:
+  script:
+    - ./pytest_processor.py bluespec_p3 --simulator
+  tags: ["verilator"]
+  except:
+    - schedules
+  artifacts:
+    when: on_failure
+    expire_in: 1 week
+    paths:
+      - verilator_simulators/run/Logs/bluespec_p3/
 
 #-----------------------------------------------------------------------------#
 #
