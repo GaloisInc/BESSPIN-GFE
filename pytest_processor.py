@@ -717,7 +717,7 @@ def test_init():
     parser.add_argument("--compiler", help="select compiler to use [gcc|clang]",default="gcc")
     parser.add_argument("--elf", help="path to an elf file to load and run. Make sure to specify --timeout parameter")
     parser.add_argument("--timeout", help="specify how log to run a binary specified in the --elf argument")
-    parser.add_argument("--expected-contents", help="specify expected output of the binary specifed in the --elf argument, used for early exit." +
+    parser.add_argument("--expected", help="specify expected output of the binary specifed in the --elf argument, used for early exit." +
         "Can be multiple arguments comma separated: \"c1,c2,c3...\"",default="None")
     parser.add_argument("--simulator", help="run in verilator",action="store_true")
     args = parser.parse_args()
@@ -745,11 +745,11 @@ if __name__ == '__main__':
     if args.elf:
         if not args.timeout:
             raise RuntimeError("Please specify timeout for how long to run the binary")
-        if args.expected_content == "None":
-            expected_contents = None
+        if args.expected == "None":
+            expected = None
         else:
-            expected_contents = args.expected_content.split()   
-        load_elf(config, args.elf, int(args.timeout), expected_contents)
+            expected = args.expected.split()   
+        load_elf(config, args.elf, int(args.timeout), expected)
 
     if args.asm:
         test_asm(config)
