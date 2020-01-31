@@ -9,6 +9,7 @@ lint_off -msg STMTDLY
 lint_off -msg INITIALDLY
 lint_off -msg UNSIGNED
 lint_off -msg CMPCONST
+lint_off -msg PINMISSING
 `verilog
 // Copyright (c) 2018-2019 Bluespec, Inc. All Rights Reserved
 
