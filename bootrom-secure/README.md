@@ -8,7 +8,7 @@
 4. Open `secure-boot/peripherals/config.py` and locate the `Flash_OS` initialization. The arguments have these meanings:
 
     * `flash_base`: The memory-mapped address in flash to start copying the OS from. If you are building a bitstream, you want `0x44000000`; otherwise you want `0x44000100` to skip the zeros we inserted in step 3.
-    * `ram_base`: The memory-mapped address in RAM to copy the OS to. You should avoid the bottom `0x400000` bytes (the stack will live there) and whatever memory you may need to store the BootROM itself if you are not building a bitstream. The default value that's already there should be fine.
+    * `ram_base`: The memory-mapped address in RAM to copy the OS to. It is important that this matches the address the OS was linked to load at. The default value that's already there should be fine in most cases.
     * `size`: The number of bytes to copy from flash to RAM; so the size in bytes of `whatever.bin` (not `whatever_with_zeros.bin`).
     * `sha256sum`: The SHA256 hash of the bytes to be copied; so the output of `sha256sum whatever.bin`.
     * `ram_device`: No change should be needed here.
@@ -23,7 +23,7 @@
 # How to Build a Bitstream with the BootROM
 1. Setup your machine to build the GFE, following the instructions in the GFE README.
 2. Replace the `bootrom` subdirectory of the GFE with the directory containing this README.
-3. Build the bootrom using `env CROSS_COMPILE=riscv64-unknown-elf- make` for 64-bit targets and `env CROSS_COMPILE=riscv32-unknown-elf- make` for 32-bit targets.
+3. Build the bootrom using `env XLEN=64 make` for 64-bit targets and `env XLEN=32 make` for 32-bit targets.
 4. Follow the normal GFE instructions for building a bitstream.
 5. To test that the secure boot worked successfully, connect to the processor using GDB. After secure boot has finished, the current symbol should be `successful_secure_boot`.
 
@@ -33,9 +33,9 @@
 4. Build the bootrom using `nix-shell --pure --run make`, setting the `CROSS_COMPILE` environment variable appropriately.
 5. Connect to the processor using gdb.
 6. Run in GDB:
-    1. `add-symbol-file bootrom.elf 0xC0400000`
-    2. `restore bootrom.bin binary 0xC0400000`
-    3. `set $pc = 0xC0400000`
+    1. `add-symbol-file bootrom.elf 0xF0400000`
+    2. `restore bootrom.bin binary 0xF0400000`
+    3. `set $pc = 0xF0400000`
 7. The bootrom is setup, and the processor will resume execution if you run the `continue` command
 
 # How to Run the Assurance Checks
