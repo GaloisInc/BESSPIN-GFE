@@ -5,13 +5,14 @@ SECTIONS
 {
     ROM_BASE       = 0x70000000;
     DRAM_BASE      = 0xC0000000;
-/*
- * We intentionally have the end of the stack be the beginning of DRAM. This
- * way, (assuming nothing is mapped immediately before DRAM) stack overflows
- * will trigger a trap.
+/* 
+ * we intentionally place the stack high in RAM, so loading the actual trusted
+ * binary into RAM doesn't clobber it.
  */
-    STACK_SIZE = 0x400000;
-    STACK_MAX_ADDR = DRAM_BASE + STACK_SIZE;
+    STACK_BASE     = 0xF0000000;
+    STACK_SIZE     = 0x400000;
+    STACK_MAX_ADDR = STACK_BASE + STACK_SIZE;
+    
 /******************************************************************************
  * Exactly one of these lines should be commented. The other should be
  * uncommmented.
