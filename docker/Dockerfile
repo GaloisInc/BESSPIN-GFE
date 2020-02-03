@@ -28,15 +28,15 @@ RUN pip3 install pyserial pexpect
 # Clang and LLVM for RISC-V:
 RUN wget https://apt.llvm.org/llvm.sh
 RUN chmod +x llvm.sh
-RUN ./llvm.sh 10
+RUN ./llvm.sh 9
 RUN rm llvm.sh
 
 # Set llvm symlinks and variables
-RUN cd /usr/bin && ln -s clang-10 clang
-RUN cd /usr/bin && ln -s llvm-objcopy-10 llvm-objcopy
-RUN cd /usr/bin && ln -s llvm-objdump-10 llvm-objdump
-RUN cd /usr/bin && ln -s llvm-ar-10 llvm-ar
-RUN cd /usr/bin && ln -s llvm-ranlib-10 llvm-ranlib
+RUN cd /usr/bin && ln -s clang-9 clang
+RUN cd /usr/bin && ln -s llvm-objcopy-9 llvm-objcopy
+RUN cd /usr/bin && ln -s llvm-objdump-9 llvm-objdump
+RUN cd /usr/bin && ln -s llvm-ar-9 llvm-ar
+RUN cd /usr/bin && ln -s llvm-ranlib-9 llvm-ranlib
 
 # RISC-V toolchains (both linux and newlib versions):
 # Set PATH for RISCV-tools and LLVM Sysroot
