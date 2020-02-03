@@ -120,7 +120,7 @@ GFE development.
 
 As of Release 4.2, **Nix is no longer required** to run GFE software.
 The Nix shell from release 3 of the tool-suite project can still be
-used if desired, but tool-suite is no longer a submodule of gfe.  The
+used if desired, but tool-suite is no longer a submodule of GFE.  The
 `deps.sh` script below will install necessary system packages using
 `apt`.
 
@@ -182,7 +182,7 @@ cd $GFE_REPO
 ./setup_soc_project.sh chisel_p1 # generate vivado/soc_chisel_p1/soc_chisel_p1.xpr
 ./build.sh chisel_p1 # generate bitstreams/soc_chisel_p1.bit
 ```
-where `GFE_REPO` is the top level directory for the gfe repository. To
+where `GFE_REPO` is the top level directory for the GFE repository. To
 view the project in the Vivado GUI, run the following:
 ```bash
 cd $GFE_REPO/vivado
