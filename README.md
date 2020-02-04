@@ -47,7 +47,7 @@ for a high-level overview of the system.
 To update from a previous release, please follow the instructions
 below, starting with [Update Dependencies](#update-dependencies).
 
-Pre-built images are available in the bitstreams folder.  Use these,
+Pre-built images are available in the `bitstreams` folder.  Use these,
 if you want to quickly get started.  This documentation walks through
 the process of building and testing a bitstream.  It suggests how to
 modify the GFE with your own processor.
@@ -88,9 +88,9 @@ cd -
 ```
 
 If using separate development and testing machines, only the
-development machine needs a license. We recommend installing Vivado
-Lab on the testing machine, because it does not require a license and
-can be used to program the FPGA.
+development machine needs a license in order to build new bitstreams.
+We recommend installing Vivado Lab on the testing machine because it
+does not require a license and is solely used to program the FPGA.
 
 ### Clone this Repo ###
 
@@ -142,7 +142,7 @@ The scripts should be run directly from the root of this repo:
 ```bash
 sudo ./install/deps.sh
 sudo ./install/build-openocd.sh
-sudo ./install/download-toolchains.sh
+(cd install; sudo ./download-toolchains.sh)
 # WARNING: tar will overwrite any existing /opt/riscv/ tree!
 sudo tar -C /opt -xf install/riscv-gnu-toolchains.tar.gz
 ```
@@ -153,7 +153,7 @@ tree, as they are now redundant. The tools labeled `64` all work with
 `-march=rv32gc` for gcc) to get the behaviors that were implicit
 defaults of the corresponding `32` versions.
 
-Finally, make the gnu toolchains and Vivado Lab 2019.1 available to
+Finally, make the GNU toolchains and Vivado Lab 2019.1 available to
 all users by running this script:
 ```bash
 sudo ./install/amend-bashrc.sh 
@@ -204,6 +204,9 @@ bitstream and corresponding Vivado project
 See [flash-scripts/README](flash-scripts/README) for directions on how
 to write a bitstream to flash on the VCU118.  This is optional, and
 allows the FPGA to be programmed from flash on power-up.
+
+As of the GFE 5.0 release, flash programming is not operational.
+See #141 for updates on the re-introduction of this feature.
 
 ### Testing ###
 
