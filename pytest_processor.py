@@ -218,8 +218,8 @@ class UartSession(object):
                     break
         if decode:
             rx = str(rx, encoding='utf-8')
+        print_and_log(rx)
         if contains_expected_contents:
-            logging.debug(rx)
             if absent_contents:
                 if absent_contents not in rx:
                     print_and_log("Absent contents not present")
@@ -231,7 +231,6 @@ class UartSession(object):
             print_and_log("All expected contents found")
             return True, rx
         else:
-            print_and_log(rx)
             print_and_log("Expected contents NOT found!")
             return False, rx 
 
@@ -448,6 +447,7 @@ def busybox_basic_tester(gdb, uart, exe_filename, timeout):
     setup_cmds = [
         'dont-repeat',
         soft_reset_cmd,
+        soft_reset_cmd, # reset twice just to be sure
         'monitor reset halt',
         'delete',
         'file ' + exe_filename,
@@ -527,33 +527,6 @@ def test_asm(config):
     gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
     # ...
     del gdb
-
-# Initialize processor test, set logging etc
-def test_init():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("proc_name", help="processor to test [chisel_p1|chisel_p2|chisel_p3|bluespec_p1|bluespec_p2|bluespec_p3]")
-    parser.add_argument("--asm", help="run ASSEMBLY tests",action="store_true")
-    parser.add_argument("--isa", help="run ISA tests",action="store_true")
-    parser.add_argument("--busybox", help="run Busybox OS",action="store_true")
-    parser.add_argument("--linux", help="run Debian OS",action="store_true")
-    parser.add_argument("--freertos", help="run FreeRTOS OS",action="store_true")
-    parser.add_argument("--network", help="run network tests",action="store_true")
-    parser.add_argument("--io", help="run IO tests (P1 only)",action="store_true")
-    parser.add_argument("--flash", help="run flash tests",action="store_true")
-    parser.add_argument("--pcie", help="run PCIe tests (P2/P3 only)",action="store_true")
-    parser.add_argument("--no-pcie", help="build without PCIe support (P2/P3 only)",action="store_true")
-    parser.add_argument("--no-bitstream",help="do not upload bitstream",action="store_true")
-    parser.add_argument("--compiler", help="select compiler to use [gcc|clang]",default="gcc")
-    parser.add_argument("--simulator", help="run in verilator",action="store_true")
-    args = parser.parse_args()
-
-    gfeconfig.check_environment()
-
-    run(['rm','-rf','test_processor.log'])
-    logging.basicConfig(filename='test_processor.log',level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
-    print_and_log("Test processor starting.")
-
-    return args
 
 # ISA tests
 def test_isa(config):
@@ -686,7 +659,36 @@ def test_busybox(config, args):
     del gdb
     del uart
 
-    
+# Load ELF
+def load_elf(config, path_to_elf, timeout, expected_contents=None):
+    print_and_log("Load and run binary: " + path_to_elf)
+    gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
+    uart = UartSession()
+
+    soft_reset_cmd = 'set *((int *) 0x6FFF0000) = 1'
+
+    setup_cmds = [
+        'dont-repeat',
+        soft_reset_cmd,
+        soft_reset_cmd, # reset twice to make sure we did reset
+        'monitor reset halt',
+        'delete',
+        'file ' + path_to_elf,
+        'load',
+    ]
+    print_and_log('Loading and running {} ...'.format(path_to_elf))
+    for c in setup_cmds:
+        gdb.cmd(c)
+    print_and_log("Continuing")
+    gdb.cont()
+
+    if not expected_contents:
+        print_and_log(uart.read(timeout))
+    else:
+        uart.read_and_check(timeout, expected_contents)
+
+    del uart
+    del gdb
 
 # Common busybox test parts
 def build_busybox(config, linux_config_path):
@@ -696,6 +698,37 @@ def build_busybox(config, linux_config_path):
     run_and_log("Compiling busybox, this might take a while",
         run(['make'],cwd=config.busybox_folder,
         env=dict(os.environ, LINUX_CONFIG=linux_config_path), capture_output=True))
+
+# Initialize processor test, set logging etc
+def test_init():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("proc_name", help="processor to test [chisel_p1|chisel_p2|chisel_p3|bluespec_p1|bluespec_p2|bluespec_p3]")
+    parser.add_argument("--asm", help="run ASSEMBLY tests",action="store_true")
+    parser.add_argument("--isa", help="run ISA tests",action="store_true")
+    parser.add_argument("--busybox", help="run Busybox OS",action="store_true")
+    parser.add_argument("--linux", help="run Debian OS",action="store_true")
+    parser.add_argument("--freertos", help="run FreeRTOS OS",action="store_true")
+    parser.add_argument("--network", help="run network tests",action="store_true")
+    parser.add_argument("--io", help="run IO tests (P1 only)",action="store_true")
+    parser.add_argument("--flash", help="run flash tests",action="store_true")
+    parser.add_argument("--pcie", help="run PCIe tests (P2/P3 only)",action="store_true")
+    parser.add_argument("--no-pcie", help="build without PCIe support (P2/P3 only)",action="store_true")
+    parser.add_argument("--no-bitstream",help="do not upload bitstream",action="store_true")
+    parser.add_argument("--compiler", help="select compiler to use [gcc|clang]",default="gcc")
+    parser.add_argument("--elf", help="path to an elf file to load and run. Make sure to specify --timeout parameter")
+    parser.add_argument("--timeout", help="specify how log to run a binary specified in the --elf argument")
+    parser.add_argument("--expected", help="specify expected output of the binary specifed in the --elf argument, used for early exit." +
+        "Can be multiple arguments comma separated: \"c1,c2,c3...\"",default="None")
+    parser.add_argument("--simulator", help="run in verilator",action="store_true")
+    args = parser.parse_args()
+
+    gfeconfig.check_environment()
+
+    run(['rm','-rf','test_processor.log'])
+    logging.basicConfig(filename='test_processor.log',level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+    print_and_log("Test processor starting.")
+
+    return args
 
 if __name__ == '__main__':
     args = test_init()
@@ -708,6 +741,15 @@ if __name__ == '__main__':
         test_program_bitstream(config)
     else:
         print_and_log("Skiping bitstream programming")
+
+    if args.elf:
+        if not args.timeout:
+            raise RuntimeError("Please specify timeout for how long to run the binary")
+        if args.expected == "None":
+            expected = None
+        else:
+            expected = args.expected.split()   
+        load_elf(config, args.elf, int(args.timeout), expected)
 
     if args.asm:
         test_asm(config)

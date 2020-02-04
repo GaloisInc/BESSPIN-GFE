@@ -192,7 +192,7 @@ This is optional, and allows the FPGA to be programmed from flash on power-up.
 ### Testing ###
 
 We include some automated tests for the GFE.
-The `test_processor.sh` script programs the FPGA with an appropriate bitstream, tests the GDB connection to the FPGA then runs the appropriate ISA and operating system tests.
+The `pytest_processor.py` script programs the FPGA with an appropriate bitstream, tests the GDB connection to the FPGA then runs the appropriate ISA and operating system tests.
 To check that you have properly setup the GFE, or to test a version you have modified yourself, run the following steps:
 
 1. Give the current user access to the serial and JTAG devices.
@@ -204,7 +204,7 @@ sudo reboot
 2. Connect micro USB cables to JTAG and UART on the the VCU118. This enables programming, debugging, and UART communication.
 3. Make sure the VCU118 is powered on (fan should be running) 
 4. Add Vivado or Vivado Lab to your path (i.e. `source /opt/Xilinx/Vivado_Lab/2019.1/settings64.sh`).
-5. Run `./test_processor.sh chisel_p1` from the top level of the gfe repo. Replace `chisel_p1` with your processor of choice. This command will program the FPGA and run the appropriate tests for that processor.
+5. Run `./pytest_processor.py chisel_p1` from the top level of the gfe repo. Replace `chisel_p1` with your processor of choice. This command will program the FPGA and run the appropriate tests for that processor.
 
 A passing test will not display any error messages. All failing tests will report errors and stop early.
 
@@ -817,3 +817,43 @@ Baseline values are:
 | Chisel P3 | 0.37 | 188629 | 156332 | 25.0 |
 
 
+## LLVM and Clang for RISC-V
+
+Support for the RISC-V architecture in LLVM and Clang graduated to "stable" in
+upstream releases as of LLVM 9.0 (Sep'19). You are recommended to use upstream
+LLVM and Clang unless directed otherwise (e.g. to temporarily use a downstream
+branch that includes additional yet-to-be-upstreamed fixes). As such, the
+[LLVM getting started
+documentation](https://llvm.org/docs/GettingStarted.html) is a good source on
+how to checkout and build the project. 
+
+If developing your own patches for LLVM, you should develop those either on
+top of the most recent release branch or on the `master` branch and regularly
+rebase or merge in changes (the trade-offs between the two approaches have
+been discussed extensively within the LLVM community). If simply using
+Clang/LLVM, building and using the 10.0 release branch is recommended:
+
+    git clone https://github.com/llvm/llvm-project.git
+    cd llvm-project
+    git checkout release/10.x
+    mkdir -p build && cd build
+    cmake -G Ninja -DCMAKE_BUILD_TYPE="Release" \
+      -DLLVM_ENABLE_PROJECTS="clang;lld" \
+      -DLLVM_TARGETS_TO_BUILD="all" \
+      -DLLVM_APPEND_VC_REV=False ../../llvm
+    cmake --build .
+
+LLVM binaries will be produced in the `build/bin` directory.
+
+When building software with Clang, as with GCC, you are advised to pass
+explicit `-march` and `-mabi` arguments to specify the RISC-V ISA string and
+target ABI. In addition to these, you should pass:
+* `--target=...` to specify the target triple. e.g. `riscv64-unknown-linux-gnu`
+  (for 64-bit Linux targets) or `riscv32-unknown-elf` (for 32-bit bare metal).
+* `--gcc-toolchain=...` to specify the location of a built RISC-V GCC
+  toolchain. Clang uses this to identify the location of the GNU linker and
+  compiler support libraries like libgcc. Avoiding this dependnecy, using LLD
+  and compiler-rt can be done and is being used successfully in the FreeBSD
+  community, but has not yet seen the same degree of testing as this approach.
+* `--sysroot=...` to specify the location of the sysroot containing headers,
+  libraries, etc for the target.
