@@ -215,12 +215,6 @@ We include some automated tests for the GFE.  The
 bitstream, tests the GDB connection to the FPGA then runs the
 appropriate ISA and operating system tests.  To check that you have
 properly setup the GFE, or to test a version you have modified
-yourself, run the following steps.
-
-The `test_processor.sh` script programs the FPGA with an appropriate
-bitstream, tests the GDB connection to the FPGA then runs the
-appropriate ISA and operating system tests.  To check that you have
-properly setup the GFE, or to test a version you have modified
 yourself, run the following steps:
 1. Give the current user access to the serial and JTAG devices.
 ```bash
