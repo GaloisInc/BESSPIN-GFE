@@ -125,7 +125,7 @@ used if desired, but tool-suite is no longer a submodule of GFE.  The
 `apt`.
 
 The `build-openocd.sh` script will build a GFE-specific development
-version of riscv-openocd from the included submodule, placing an
+version of `riscv-openocd` from the included submodule, placing an
 executable in `/usr/local/bin/openocd`.
 
 The `download-toolchains.sh` script downloads a 1.1GB archive
@@ -241,13 +241,13 @@ For Verilator simulation instructions, see
 [verilator_simulators/README](verilator_simulators/).  To build and
 run ISA tests on a simulated GFE processor, run, e.g.,
 ```bash
-./test_simulator.sh bluespec_p1
+./pytest_processor.py bluespec_p1 --sim
 ```
 
 ## Manually Running FreeRTOS ##
 
 To run FreeRTOS on the GFE, you'll need to run OpenOCD, connect to
-gdb, and view the UART output in minicom. First, install minicom and
+GDB, and view the UART output in Minicom. First, install Minicom and
 build the FreeRTOS demo.
 
 ```bash
@@ -265,12 +265,13 @@ make clean; PROG=main_full make
 We expect to see warnings about memory alignment and timer demo
 functions when compiling.
 
-Follow these steps to run freeRTOS with an interactive GDB session:
+Follow these steps to run FreeRTOS with an interactive GDB session:
 1. Reset the SoC by pressing the CPU_RESET button (SW5) on the VCU118
    before running FreeRTOS.
-2. Run OpenOCD to connect to the riscv core 
+2. Run OpenOCD to connect to the RISC-V core you have running on the
+   FPGA:
    `openocd -f $GFE_REPO/testing/targets/ssith_gfe.cfg`.
-3. In a new terminal, run minicom with 
+3. In a new terminal, run Minicom with 
    `minicom -D /dev/ttyUSB1 -b 115200`. 
    `ttyUSB1` should be replaced with whichever USB port is connected
    to the VCU118's USB-to-UART bridge.
@@ -280,16 +281,16 @@ Follow these steps to run freeRTOS with an interactive GDB session:
    configured to have 8 data bits, 2 stop bits, no parity bits, and a
    baud rate of 115200.
 
-4. In a new shell, run gdb with 
-   `riscv32-unknown-elf-gdb $GFE_REPO/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1/main_blinky.elf`,
+4. In a new shell, run GDB with 
+   `riscv64-unknown-elf-gdb $GFE_REPO/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1/main_blinky.elf`,
    where `main_blinky` should be the name of the demo you have
    compiled and want to run.
    
-5. Once gdb is open, type `target remote localhost:3333` to connect to
-   OpenOCD. OpenOCD should give a message that it has accepted a gdb
+5. Once GDB is open, type `target remote localhost:3333` to connect to
+   OpenOCD. OpenOCD should give a message that it has accepted a GDB
    connection.
    
-   Load the FreeRTOS elf file onto the processor with `load`. To run,
+   Load the FreeRTOS ELF file onto the processor with `load`. To run,
    type `c` or `continue`.
 
 6. When you've finished running FreeRTOS, make sure to reset the SoC
@@ -369,12 +370,12 @@ Follow the steps below:
 3) Connect the FPGA Ethernet port with the host ethernet port
 4) Go to the demo directory: `cd FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1`
 5) Generate `main_tcp.elf` binary: `export PROG=main_tcp; make clean; make`
-6) Start GDB: `riscv32-unknown-elf-gdb main_tcp.elf`
+6) Start GDB: `riscv64-unknown-elf-gdb main_tcp.elf`
 7) in your GDB session type: `target remote localhost:3333`
 8) in your GDB session type: `load`
-9) start minicom: `minicom -D /dev/ttyUSB1 -b 115200`
+9) start Minicom: `minicom -D /dev/ttyUSB1 -b 115200`
 10) in your GDB session type: `continue`
-11) In minicom, you will see a bunch of debug prints. The interesting
+11) In Minicom, you will see a bunch of debug prints. The interesting
    piece is when you get:
 ```
 IP Address: 10.88.88.2
@@ -429,9 +430,9 @@ Ncat: Connection from 10.88.88.2:14588.
   requests and responses, as well as the TCP packets to and from the
   echo server.  16) [Optional] Send a UDP packet with 
   `socat stdio udp4-connect:10.88.88.2:5006 <<< "Hello there"`.
-  In the minicom output, you should see `prvSimpleZeroCopyServerTask:
+  In the Minicom output, you should see `prvSimpleZeroCopyServerTask:
   received $N bytes` depending on how much data you send. **Hint:**
-  instead of minicom, you can use `cat /dev/ttyUSB1 > log.txt` to
+  instead of Minicom, you can use `cat /dev/ttyUSB1 > log.txt` to
   redirect the serial output into a log file for later inspection.
 
 **Troubleshooting**
@@ -498,7 +499,7 @@ use `apt-get` to install or remove any packages from within the chroot
 and run `./clean_chroot` from within the chroot afterwards.
 
 The bbl image is located at `$GFE_REPO/bootmem/build-bbl/bbl` and can
-be loaded and run using gdb. The default root password is `riscv`.
+be loaded and run using GDB. The default root password is `riscv`.
 
 A memory image is also created that can be loaded into the flash ROM
 on the FPGA at `$GFE_REPO/bootmem/bootmem.bin`
@@ -524,7 +525,7 @@ session:
    before running Linux.
 2. Run OpenOCD to connect to the riscv core `openocd -f
    $GFE_REPO/testing/targets/ssith_gfe.cfg`.
-3. In a new terminal, run minicom with 
+3. In a new terminal, run Minicom with 
    `minicom -D /dev/ttyUSB1 -b 115200`. `ttyUSB1` 
    should be replaced with whichever USB port is connected to the
    VCU118's USB-to-UART bridge. Settings can be configured by running
@@ -532,13 +533,13 @@ session:
    `Bps/Par/Bits`.
 
    The UART is configured to have 8 data bits, 2 stop bits, no parity
-   bits, and a baud rate of 115200. In the minicom settings, make sure
+   bits, and a baud rate of 115200. In the Minicom settings, make sure
    hardware flow control is turned off. Otherwise, the Linux terminal
    may not be responsive.
-4. In a new terminal, run gdb with 
+4. In a new terminal, run GDB with 
    `riscv64-unknown-elf-gdb $GFE_REPO/bootmem/build-bbl/bbl`.
-5. Once gdb is open, type `target remote localhost:3333` to connect to
-   OpenOCD. OpenOCD should give a message that it has accepted a gdb
+5. Once GDB is open, type `target remote localhost:3333` to connect to
+   OpenOCD. OpenOCD should give a message that it has accepted a GDB
    connection.
 6. On Bluespec processors, run `continue` then interrupt the processor
    with `Ctrl-C`. The Bluespec processors start in a halted state, and
