@@ -34,6 +34,12 @@ variables:
   artifacts:
     when: always
 
+.verilator:
+  tags: ["verilator"]
+
+.no_sched:
+  except: ["schedules"]
+
 #-----------------------------------------------------------------------------#
 #
 # Verilator simulation tests
@@ -42,50 +48,32 @@ variables:
 CHSL_P1_sim:
   script:
     - ./pytest_processor.py chisel_p1 --simulator
-  tags: ["verilator"]
-  except:
-    - schedules
-  extends: .log_failure
+  extends: [.log_failure, .no_sched, .verilator]
 
 BSV_P1_sim:
   script:
     - ./pytest_processor.py bluespec_p1 --simulator
-  tags: ["verilator"]
-  except:
-    - schedules
-  extends: .log_failure
+  extends: [.log_failure, .no_sched, .verilator]
 
 CHSL_P2_sim:
   script:
     - ./pytest_processor.py chisel_p2 --simulator
-  tags: ["verilator"]
-  except:
-    - schedules
-  extends: .log_failure
+  extends: [.log_failure, .no_sched, .verilator]
 
 BSV_P2_sim:
   script:
     - ./pytest_processor.py bluespec_p2 --simulator
-  tags: ["verilator"]
-  except:
-    - schedules
-  extends: .log_failure
+  extends: [.log_failure, .no_sched, .verilator]
 
 CHSL_P3_sim:
   script:
     - ./pytest_processor.py chisel_p3 --simulator
-  tags: ["verilator"]
-  except:
-    - schedules
-  extends: .log_failure
+  extends: [.log_failure, .no_sched, .verilator]
 
 BSV_P3_sim:
   script:
     - ./pytest_processor.py bluespec_p3 --simulator
-  tags: ["verilator"]
-  except:
-    - schedules
-  extends: .log_failure
+  extends: [.log_failure, .no_sched, .verilator]
 
 #-----------------------------------------------------------------------------#
 #
@@ -102,33 +90,25 @@ BSV_P1_isa:
   script:
     - ./pytest_processor.py bluespec_p1 --isa
   tags: ["fpga"]
-  except:
-    - schedules
-  extends: .log_always
+  extends: [.log_always, .no_sched]
 
 BSV_P1_freertos_gcc:
   script:
     - ./pytest_processor.py bluespec_p1 --freertos
   tags: ["fpga"]
-  except:
-    - schedules
-  extends: .log_always
+  extends: [.log_always, .no_sched]
 
 BSV_P1_freertos_io_gcc:
   script:
     - ./pytest_processor.py bluespec_p1 --freertos --io
   tags: ["fpga-io"]
-  except:
-    - schedules
-  extends: .log_always
+  extends: [.log_always, .no_sched]
 
 BSV_P1_freertos_network_gcc:
   script:
     - ./pytest_processor.py bluespec_p1 --freertos --network
   tags: ["fpga-network"]
-  except:
-    - schedules
-  extends: .log_always
+  extends: [.log_always, .no_sched]
 
 #-----------------------#
 #                       #
@@ -139,33 +119,25 @@ CHSL_P1_isa:
   script:
     - ./pytest_processor.py chisel_p1 --isa
   tags: ["fpga"]
-  except:
-    - schedules
-  extends: .log_always
+  extends: [.log_always, .no_sched]
 
 CHSL_P1_freertos_gcc:
   script:
     - ./pytest_processor.py chisel_p1 --freertos
   tags: ["fpga"]
-  except:
-    - schedules
-  extends: .log_always
+  extends: [.log_always, .no_sched]
 
 CHSL_P1_freertos_io_gcc:
   script:
     - ./pytest_processor.py chisel_p1 --freertos --io
   tags: ["fpga-io"]
-  except:
-    - schedules
-  extends: .log_always
+  extends: [.log_always, .no_sched]
 
 CHSL_P1_freertos_network_gcc:
   script:
     - ./pytest_processor.py chisel_p1 --freertos --network
   tags: ["fpga-network"]
-  except:
-    - schedules
-  extends: .log_always
+  extends: [.log_always, .no_sched]
 
 #-----------------------#
 #                       #
@@ -176,37 +148,29 @@ CHSL_P2_isa:
   script:
     - ./pytest_processor.py chisel_p2 --isa
   tags: ["fpga"]
-  except:
-    - schedules
-  extends: .log_always
+  extends: [.log_always, .no_sched]
 
 CHSL_P2_freertos_gcc:
   script:
     - ./pytest_processor.py chisel_p2 --freertos
   tags: ["fpga"]
-  except:
-    - schedules
-  extends: .log_always
+  extends: [.log_always, .no_sched]
 
 CHSL_P2_freertos_network_gcc:
   script:
     - ./pytest_processor.py chisel_p2 --freertos --network
   tags: ["fpga-network"]
-  except:
-    - schedules
-  extends: .log_always
+  extends: [.log_always, .no_sched]
 
 CHSL_P2_busybox:
   script:
     - ./pytest_processor.py chisel_p2 --busybox --network --no-pcie
   tags: ["fpga"]
-  extends: .log_always
+  extends: [.log_always, .no_sched]
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - bootmem/
-  except:
-    - schedules
 
 # CHSL_P2_debian:
 #   script:
@@ -242,21 +206,17 @@ BSV_P2_freertos_network_gcc:
   script:
     - ./pytest_processor.py bluespec_p2 --freertos --network
   tags: ["fpga-network"]
-  except:
-    - schedules
-  extends: .log_always
+  extends: [.log_always, .no_sched]
 
 BSV_P2_busybox:
   script:
     - ./pytest_processor.py bluespec_p2 --busybox --network --no-pcie
   tags: ["fpga"]
-  extends: .log_always
+  extends: [.log_always, .no_sched]
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - bootmem/
-  except:
-    - schedules
 
 # BSV_P2_debian:
 #   script:
@@ -280,8 +240,8 @@ CHSL_P3_isa:
   script:
     - ./pytest_processor.py chisel_p3 --isa
   tags: ["fpga"]
-  except:
-    - schedules
+  extends: .no_sched
+
 # CHSL_P3:
 #   script:
 #     - ./pytest_processor.py chisel_p3 --isa
