@@ -326,7 +326,7 @@ Pass....
 
 If you see error messages, then something went wrong.
 
-To run any `.elf` file on the GFE, you can use the `run_elf.py` script
+To run any `.elf` file on the GFE, you can use `./pytest_processor.py $cpu --elf $elffile --timeout $val` where `$cpu` is the processor bitstream you want to use, and `$val` is the duration in seconds for how long the program is run after loading. You can skip loading the bitfile using `--no-bitstream` argument. If you are waiting for a specific output from the program, you can use `--expected $contents` argument - this will lead to an early exit once the `$contents$` are received (useful for example for running benchmarks we are not sure how long they run).
 in `$GFE_REPO/testing/scripts/`. It can be run using `python
 run_elf.py path_to_elf/file.elf`. By default the program waits 0.5
 seconds before printing what it has received from UART, but this can
