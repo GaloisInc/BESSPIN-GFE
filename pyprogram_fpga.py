@@ -1,8 +1,8 @@
-#!/usr/bin/python3.7
+#!/usr/bin/python3
 import gfeconfig
 import argparse
 import os.path
-from subprocess import run
+from subprocess import run, PIPE
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -32,10 +32,10 @@ if __name__ == '__main__':
 
     print("Programming flash")
     run([vivado,'-nojournal','-notrace','-nolog','-source','./tcl/prog_bit.tcl',
-        '-mode','batch','-tclargs',bitfile, probfile], check=True, capture_output=False)
+        '-mode','batch','-tclargs',bitfile, probfile], check=True)
     print("Programming flash OK")
 
-    run(['rm','-rf','webtalk.log'],check=True,capture_output=True)
-    run(['rm','-rf','webtalk.jou'],check=True,capture_output=True)
+    run(['rm','-rf','webtalk.log'],check=True,stdout=PIPE,stderr=PIPE)
+    run(['rm','-rf','webtalk.jou'],check=True,stdout=PIPE,stderr=PIPE)
     
     print("Finished!")

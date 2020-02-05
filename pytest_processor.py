@@ -1,6 +1,6 @@
-#! /usr/bin/env python3.7
+#! /usr/bin/env python3
 import re
-from subprocess import run, TimeoutExpired, CalledProcessError
+from subprocess import run, TimeoutExpired, CalledProcessError, PIPE
 import time
 import os
 
@@ -29,7 +29,7 @@ class GdbSession(object):
             raise GdbError('Executable {} not found'.format(openocd))
         xlen=32 # Default
         try:
-            run_and_log("Starting openocd", run([openocd, '-f', openocd_config_filename], timeout=0.5, capture_output=True))
+            run_and_log("Starting openocd", run([openocd, '-f', openocd_config_filename], timeout=0.5, stdout=PIPE, stderr=PIPE))
         except TimeoutExpired as exc:
             log = str(exc.stderr, encoding='utf-8')
             match = re.search('XLEN=(32|64)', log)
@@ -286,11 +286,11 @@ def test_freertos_common(gdb, uart, config, prog_name):
     print_and_log("\nTesting: " + prog_name)
     run_and_log("Cleaning FreeRTOS program directory",
         run(['make','clean'],cwd=config.freertos_folder,
-        env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen), capture_output=True))
+        env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen), stdout=PIPE, stderr=PIPE))
     run_and_log("Compiling: " + prog_name,
         run(['make'],cwd=config.freertos_folder,
         env=dict(os.environ, C_INCLUDE_PATH=config.freertos_c_include_path, USE_CLANG=use_clang,
-        PROG=prog_name, XLEN=config.xlen), capture_output=True))
+        PROG=prog_name, XLEN=config.xlen), stdout=PIPE, stderr=PIPE))
     filename = config.freertos_folder + '/' + prog_name + '.elf'
     res, rx =  freertos_tester(gdb, uart, filename,
         timeout=config.freertos_timeouts[prog_name],
@@ -332,7 +332,7 @@ def test_freertos_network(uart, config, prog_name):
     if (riscv_ip == 0) or (riscv_ip == "0.0.0.0"):
         raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
     print_and_log("Ping FPGA")
-    ping_result = run(['ping','-c','10',riscv_ip], capture_output=True)
+    ping_result = run(['ping','-c','10',riscv_ip], stdout=PIPE, stderr=PIPE)
     print_and_log(str(ping_result.stdout,'utf-8'))
     if ping_result.returncode != 0:
         print_and_log("Ping FPGA failed")
@@ -496,15 +496,15 @@ def run_and_log(cmd, res, expected_contents=None):
 def test_simulator(config):
     print_and_log("Run Verilator tests")
     run_and_log("Compiling ISA tests",
-        run(['make'], cwd="./riscv-tests/isa", capture_output=True))
+        run(['make'], cwd="./riscv-tests/isa", stdout=PIPE, stderr=PIPE))
 
     run_and_log("Building Verilator simulator for " + config.proc_name,
         run(['make','simulator'],cwd="./verilator_simulators",
-        env=dict(os.environ, PROC=config.proc_name), capture_output=True))
+        env=dict(os.environ, PROC=config.proc_name), stdout=PIPE, stderr=PIPE))
 
     run_and_log("Testing " + config.proc_name,
         run(['make','isa_tests'],cwd="./verilator_simulators/run",check=True,
-        env=dict(os.environ, PROC=config.proc_name), capture_output=True))
+        env=dict(os.environ, PROC=config.proc_name), stdout=PIPE, stderr=PIPE))
     print_and_log("Verilator tests OK, exiting...")
     exit(0)    
 
@@ -512,17 +512,17 @@ def test_simulator(config):
 def test_program_bitstream(config):
     if config.proc_name == 'bluespec_p1':
         run_and_log("Programming flash",
-            run(['tcl/program_flash','datafile','./bootmem/small.bin'], capture_output=True),
+            run(['tcl/program_flash','datafile','./bootmem/small.bin'], stdout=PIPE, stderr=PIPE),
             "Program/Verify Operation successful.")
     run_and_log("Programming bitstream",
-        run(['./pyprogram_fpga.py', config.proc_name], capture_output=True))
+        run(['./pyprogram_fpga.py', config.proc_name], stdout=PIPE, stderr=PIPE))
 
 # Assembly tests
 def test_asm(config):
     print("ASM tests not implemented yet!")
     exit(1)
     run_and_log("Run ASM tests",
-        run(['make','XLEN=' + config.xlen], cwd="./riscv-tests", capture_output=True))
+        run(['make','XLEN=' + config.xlen], cwd="./riscv-tests", stdout=PIPE, stderr=PIPE))
     # TODO
     gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
     # ...
@@ -536,11 +536,11 @@ def test_isa(config):
     run_and_log("Compiling ISA tests",
         run(['./configure','--target=riscv64-unknown-elf',
         '--with-xlen=' + config.xlen],cwd="./riscv-tests",
-        env=dict(os.environ, CC="riscv64-unknown-elf-gcc"), capture_output=True))
-    run_and_log("", run(['make'], cwd="./riscv-tests", capture_output=True))
+        env=dict(os.environ, CC="riscv64-unknown-elf-gcc"), stdout=PIPE, stderr=PIPE))
+    run_and_log("", run(['make'], cwd="./riscv-tests", stdout=PIPE, stderr=PIPE))
 
     res = run_and_log("Generating a list of available ISA tests",
-        run(['./testing/scripts/gen-test-all',config.xarch], capture_output=True))
+        run(['./testing/scripts/gen-test-all',config.xarch], stdout=PIPE, stderr=PIPE))
     files = res.split("\n")
 
     isa_failed = []  
@@ -597,7 +597,7 @@ def test_busybox(config, args):
     if config.compiler == "clang":
         raise RuntimeError("Clang compiler is not supported for building Busybox tests yet")
 
-    pwd = run(['pwd'], capture_output=True)
+    pwd = run(['pwd'], stdout=PIPE, stderr=PIPE)
     pwd = str(pwd.stdout,'utf-8').rstrip()
     if args.no_pcie:
         linux_config_path = pwd + '/' + config.busybox_linux_config_path_no_pcie
@@ -649,7 +649,7 @@ def test_busybox(config, args):
 
         print_and_log("Ping FPGA")
         riscv_ip = "10.88.88.2"
-        ping_result = run(['ping','-c','10',riscv_ip], capture_output=True)
+        ping_result = run(['ping','-c','10',riscv_ip], stdout=PIPE, stderr=PIPE)
         print_and_log(str(ping_result.stdout,'utf-8'))
         if ping_result.returncode != 0:
             raise RuntimeError("Busybox network test failed: cannot ping the FPGA")
@@ -694,10 +694,10 @@ def load_elf(config, path_to_elf, timeout, expected_contents=None):
 def build_busybox(config, linux_config_path):
     run_and_log("Cleaning bootmem program directory",
         run(['make','clean'],cwd=config.busybox_folder,
-        env=dict(os.environ, LINUX_CONFIG=linux_config_path), capture_output=True))
+        env=dict(os.environ, LINUX_CONFIG=linux_config_path), stdout=PIPE, stderr=PIPE))
     run_and_log("Compiling busybox, this might take a while",
         run(['make'],cwd=config.busybox_folder,
-        env=dict(os.environ, LINUX_CONFIG=linux_config_path), capture_output=True))
+        env=dict(os.environ, LINUX_CONFIG=linux_config_path), stdout=PIPE, stderr=PIPE))
 
 # Initialize processor test, set logging etc
 def test_init():
