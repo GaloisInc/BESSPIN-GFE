@@ -363,7 +363,7 @@ If you want to replicate our setup you should:
 
 Follow the steps below:
 1) Program your FPGA with a P1 bitstream: 
-   `./program_fpga.sh chisel_p1` 
+   `./pyprogram_fpga.sh chisel_p1` 
    **NOTE:** If you have already programmed the FPGA, at least restart
    it before continuing to make sure it is in a good state.
 2) Start openocd with `openocd -f $GFE_REPO/testing/targets/ssith_gfe.cfg`
