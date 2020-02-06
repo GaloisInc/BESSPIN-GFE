@@ -112,7 +112,7 @@ BSV_P1_freertos_network_gcc:
 
 BSV_P1_coremark:
   script:
-    - ./pytest_processor.py bluespec_p1 --elf benchmarks/coremark/tool-suite-binaries/coremark-p1.bin --timeout 30
+    - ./pytest_processor.py bluespec_p1 --elf benchmarks/tool-suite-coremark-builds/coremark-p1.bin --timeout 30
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
