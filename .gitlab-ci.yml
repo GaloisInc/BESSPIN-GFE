@@ -144,6 +144,12 @@ CHSL_P1_freertos_network_gcc:
     - ./pytest_processor.py chisel_p1 --freertos --network
   tags: ["fpga-network"]
   extends: [.log_always, .no_sched]
+  
+CHSL_P1_coremark:
+  script:
+    - ./pytest_processor.py chisel_p1 --elf benchmarks/tool-suite-coremark-builds/coremark-p1.bin --timeout 30
+  tags: ["fpga"]
+  extends: [.log_always, .no_sched]
 
 #-----------------------#
 #                       #
@@ -177,6 +183,12 @@ CHSL_P2_busybox:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - bootmem/
+      
+CHSL_P2_coremark:
+  script:
+    - ./pytest_processor.py chisel_p2 --elf benchmarks/tool-suite-coremark-builds/coremark-p2.bin --timeout 30
+  tags: ["fpga"]
+  extends: [.log_always, .no_sched]
 
 # CHSL_P2_debian:
 #   script:
@@ -223,6 +235,12 @@ BSV_P2_busybox:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - bootmem/
+      
+BSV_P2_coremark:
+  script:
+    - ./pytest_processor.py bluespec_p2 --elf benchmarks/tool-suite-coremark-builds/coremark-p2.bin --timeout 30
+  tags: ["fpga"]
+  extends: [.log_always, .no_sched]
 
 # BSV_P2_debian:
 #   script:
