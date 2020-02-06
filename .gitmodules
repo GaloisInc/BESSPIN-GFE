@@ -32,3 +32,6 @@
 [submodule "benchmarks/coremark"]
 	path = benchmarks/coremark
 	url = https://github.com/GaloisInc/coremark.git
+[submodule "aws-fpga"]
+	path = aws-fpga
+	url = https://github.com/aws/aws-fpga.git

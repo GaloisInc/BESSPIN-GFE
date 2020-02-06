@@ -4,6 +4,7 @@ testing/scripts/logs
 # compiled files
 bootrom/bootrom.bin
 bootrom/bootrom.img
+bootrom/bootrom.coe
 bootrom/bootrom.hex
 bootrom/bootrom.mem
 bootrom/bootrom.bytereversed.mem
@@ -31,3 +32,5 @@ test_32.gdb
 test_64.gdb
 # filesystem artifacts
 ._*
+install/*.tar.gz
+install/*.file

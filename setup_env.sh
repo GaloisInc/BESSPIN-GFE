@@ -34,7 +34,9 @@ function check_file {
 }
 
 function proc_usage {
-    echo "Usage: $0 [chisel_p1|chisel_p2|chisel_p3|bluespec_p1|bluespec_p2|bluespec_p3]"
+    echo "Usage: $0 [chisel_p1|chisel_aws_p1|chisel_p2|chisel_aws_p2|chisel_p3|"
+    echo "           chisel_aws_p3|bluespec_p1|bluespec_aws_p1|bluespec_p2|"
+    echo "           bluespec_aws_p2|bluespec_p3|bluespec_aws_p3]"
     echo "Please specify a bluespec or chisel processor!"
 }
 
@@ -52,6 +54,18 @@ function proc_picker {
 	        proc_name="chisel_p2"
 	elif [ "$1" == "chisel_p3" ]; then
 	        proc_name="chisel_p3"
+	elif [ "$1" == "chisel_aws_p1" ]; then
+		proc_name="chisel_aws_p1"
+	elif [ "$1" == "chisel_aws_p2" ]; then
+		proc_name="chisel_aws_p2"
+	elif [ "$1" == "chisel_aws_p3" ]; then
+		proc_name="chisel_aws_p3"
+	elif [ "$1" == "bluespec_aws_p1" ]; then
+		proc_name="bluespec_aws_p1"
+	elif [ "$1" == "bluespec_aws_p2" ]; then
+		proc_name="bluespec_aws_p2"
+	elif [ "$1" == "bluespec_aws_p3" ]; then
+		proc_name="bluespec_aws_p3"
 	else
 	        proc_usage
 	        exit -1
