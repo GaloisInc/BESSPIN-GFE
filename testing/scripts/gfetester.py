@@ -244,7 +244,7 @@ class gfetester(object):
                     print("Located UART device at %s with serial number %s" % (port.device, port.serial_number))
                     #Check if no one else is using the serial port. Especially Minicom.
                     sttyOut = str(subprocess.check_output (f"stty -F {port.device} | grep min",stderr=subprocess.STDOUT,shell=True),'utf-8')
-                    sttyMatch = re.match(r"^min = (?P<vMin>\d+); time = (?P<vTime>\d+);$", sttyOut)
+                    sttyMatch = re.match(r"^.*min = (?P<vMin>\d+); time = (?P<vTime>\d+);$", sttyOut)
                     if (not sttyMatch):
                         raise Exception (f"Failed to get the status of {port.device}.")
                     elif ( (int(sttyMatch.group('vMin')) != 0) or (int(sttyMatch.group('vTime')) != 0)):
