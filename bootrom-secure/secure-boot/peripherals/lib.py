@@ -103,7 +103,23 @@ return world;
 }
 
 void successful_secure_boot() {
+    // note: have to restore a0/a1 to containing mhartid and
+    // the device tree address; the rest of the zeroing out
+    // of registers is probably not necessary, but is polite
     __asm__ volatile(
+        "li ra, 0\\n\\t"
+        "li sp, 0\\n\\t"
+        "li gp, 0\\n\\t"
+        "li tp, 0\\n\\t"
+        "li fp, 0\\n\\t"
+        "li a2, 0\\n\\t"
+        "li a3, 0\\n\\t"
+        "li a4, 0\\n\\t"
+        "li a5, 0\\n\\t"
+        "li a6, 0\\n\\t"
+        "li a7, 0\\n\\t"
+        "csrr a0, mhartid\\n\\t"
+        "la a1, _dtb\\n\\t"
         "li t0, %(boot_address)s\\n\\t"
         "jr t0\\n\\t"
         :::);
