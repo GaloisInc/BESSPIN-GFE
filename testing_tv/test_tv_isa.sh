@@ -22,7 +22,7 @@ fi
 
 if [[ $PROCNAME =~ ^(chisel|bluespec)_p(1|2|3)$ ]]; then
     PROCTYPE=${BASH_REMATCH[1]}
-    PROCNUM=${BASH_REMATCH[2]}    
+    PROCNUM=${BASH_REMATCH[2]}
 else
     echo "Processor '$PROCNAME' not recognized"
     exit 1
@@ -134,47 +134,56 @@ for e in $ENV; do
     done
 done
 
+LOGFILE="${RESULTS_DIR}/results.log"
+
+echolog()
+(
+echo $1
+echo $1 >> $LOGFILE
+)
+
 echo
 echo '-------------------------'
 echo "Finished running $NUMTESTS tests"
-echo
-echo "Pass count: $PASSCOUNT"
-echo "Skip count: $SKIPCOUNT"
-echo "Self-check fail count: $SCFAILCOUNT"
-echo "TV check fail count: $TVFAILCOUNT"
-echo "Unexpected behavior count: $UNEXPCOUNT"
+echo "Summary of Results" >> $LOGFILE
+
+echolog
+echolog "Pass count: $PASSCOUNT"
+echolog "Skip count: $SKIPCOUNT"
+echolog "Self-check fail count: $SCFAILCOUNT"
+echolog "TV check fail count: $TVFAILCOUNT"
+echolog "Unexpected behavior count: $UNEXPCOUNT"
 if [[ $SKIPCOUNT -gt 0 ]]; then
-    echo
-    echo 'Skipped tests:'
+    echolog
+    echolog 'Skipped tests:'
     for f in $SKIPLIST; do
-	echo "    $f"
+	echolog "    $f"
     done
 fi
 if [[ $SCFAILCOUNT -gt 0 ]]; then
-    echo
-    echo 'Self-check failed tests:'
+    echolog
+    echolog 'Self-check failed tests:'
     for f in $SCFAILLIST; do
-	echo "    $f"
+	echolog "    $f"
     done
 fi
 if [[ $TVFAILCOUNT -gt 0 ]]; then
-    echo
-    echo 'TV check failed tests:'
+    echolog
+    echolog 'TV check failed tests:'
     for f in $TVFAILLIST; do
-	echo "    $f"
+	echolog "    $f"
     done
 fi
 if [[ $UNEXPCOUNT -gt 0 ]]; then
-    echo
-    echo 'Unexpected behavior tests:'
+    echolog
+    echolog 'Unexpected behavior tests:'
     for f in $UNEXPLIST; do
-	echo "    $f"
+	echolog "    $f"
     done
 fi
-echo -------------------------
+echolog -------------------------
 
 # TODO: Return non-zero if any tests didn't PASS?
 exit 0
-
 # =========================
 
