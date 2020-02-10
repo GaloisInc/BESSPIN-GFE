@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 import re
 from subprocess import run, TimeoutExpired, CalledProcessError, PIPE
+import tempfile
 import time
 import os
 
@@ -38,6 +39,13 @@ class GdbSession(object):
             else:
                 raise GdbError('XLEN not found by OpenOCD')
 
+        # Create temporary files for gdb and openocd.  The `NamedTemporaryFile`
+        # objects are stored in `self` so the files stay around as long as this
+        # `GdbSession` is in use.  We open both in text mode, instead of the
+        # default 'w+b'.
+        self.openocd_log = tempfile.NamedTemporaryFile(mode='w', prefix='openocd.', suffix='.log')
+        self.gdb_log = tempfile.NamedTemporaryFile(mode='w', prefix='gdb.', suffix='.log')
+
         init_cmds = '\n'.join([
             'set confirm off',
             'set pagination off'
@@ -46,12 +54,11 @@ class GdbSession(object):
             'set print entry-values no',
             'set remotetimeout {}'.format(timeout),
             'set arch riscv:rv{}'.format(xlen),
-            'target remote | {} -c "gdb_port pipe; log_output openocd.tmp.log" -f {}'.format(
-                openocd, openocd_config_filename)
+            'target remote | {} -c "gdb_port pipe; log_output {}" -f {}'.format(
+                openocd, self.openocd_log.name, openocd_config_filename)
         ])
 
-        logfile = open('gdb.tmp.log', 'w')
-        self.pty = spawn(gdb, encoding='utf-8', logfile=logfile, timeout=timeout)
+        self.pty = spawn(gdb, encoding='utf-8', logfile=self.gdb_log, timeout=timeout)
         self.repl = REPLWrapper(self.pty, '(gdb) ', None, extra_init_cmd=init_cmds)
 
 
@@ -722,6 +729,10 @@ def test_init():
     parser.add_argument("--simulator", help="run in verilator",action="store_true")
     args = parser.parse_args()
 
+    # Make all paths in `args` absolute, so we can safely `chdir` later.
+    if args.elf is not None:
+        args.elf = os.path.abspath(args.elf)
+
     gfeconfig.check_environment()
 
     run(['rm','-rf','test_processor.log'])
@@ -732,6 +743,9 @@ def test_init():
 
 if __name__ == '__main__':
     args = test_init()
+    # Make sure all `subprocess` calls, which use paths relative to this
+    # script, can find the right files.
+    os.chdir(os.path.dirname(__file__))
     config = gfeconfig.Config(args)
 
     if args.simulator:
