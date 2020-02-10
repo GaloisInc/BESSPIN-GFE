@@ -1165,7 +1165,7 @@ module mkBoot_ROM(CLK,
 	      32'h00028067;
       61'd3:
 	  CASE_slave_xactor_f_rd_addrD_OUT_BITS_92_TO_29_ETC__q3 =
-	      32'h44000000;
+	      32'hC0000000;
       61'd4:
 	  CASE_slave_xactor_f_rd_addrD_OUT_BITS_92_TO_29_ETC__q3 =
 	      32'hEDFE0DD0;
