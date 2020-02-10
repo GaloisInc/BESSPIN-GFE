@@ -31,4 +31,4 @@
 	url = ../riscv-openocd.git
 [submodule "benchmarks/coremark"]
 	path = benchmarks/coremark
-	url = https://github.com/GaloisInc/coremark.git
+	url = https://gitlab-ext.galois.com/ssith/coremark.git
