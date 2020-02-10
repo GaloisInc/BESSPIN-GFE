@@ -15,7 +15,7 @@ To compile coremark executable, you need to install [GFE dependencies](https://g
   ```
 * Run the coremark binary from `gfe` root directory and set `$cpu` to your processor:
   ```
-  ./pytest_processor.py $cpu --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated"
+  ./pytest_processor.py $cpu --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
   ```
 * You should see something like this:
   ```
@@ -47,7 +47,7 @@ To compile coremark executable, you need to install [GFE dependencies](https://g
   ```
 * Run the coremark binary from `gfe` root directory and set `$cpu` to your processor:
   ```
-  ./pytest_processor.py $cpu --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated"
+  ./pytest_processor.py $cpu --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
   ```
 * You should see something like this:
   ```
