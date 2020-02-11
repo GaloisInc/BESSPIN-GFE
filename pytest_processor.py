@@ -667,7 +667,7 @@ def test_busybox(config, args):
     del uart
 
 # Load ELF
-def load_elf(config, path_to_elf, timeout, expected_contents=None):
+def load_elf(config, path_to_elf, timeout, expected_contents=None, absent_contents=None):
     print_and_log("Load and run binary: " + path_to_elf)
     gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
     uart = UartSession()
@@ -692,7 +692,7 @@ def load_elf(config, path_to_elf, timeout, expected_contents=None):
     if not expected_contents:
         print_and_log(uart.read(timeout))
     else:
-        uart.read_and_check(timeout, expected_contents)
+        uart.read_and_check(timeout, expected_contents, absent_contents)
 
     del uart
     del gdb
@@ -725,6 +725,8 @@ def test_init():
     parser.add_argument("--elf", help="path to an elf file to load and run. Make sure to specify --timeout parameter")
     parser.add_argument("--timeout", help="specify how log to run a binary specified in the --elf argument")
     parser.add_argument("--expected", help="specify expected output of the binary specifed in the --elf argument, used for early exit." +
+        "Can be multiple arguments comma separated: \"c1,c2,c3...\"",default="None")
+    parser.add_argument("--absent", help="specify absent output of the binary specifed in the --elf argument. Absent content should not be present." +
         "Can be multiple arguments comma separated: \"c1,c2,c3...\"",default="None")
     parser.add_argument("--simulator", help="run in verilator",action="store_true")
     args = parser.parse_args()
@@ -762,8 +764,12 @@ if __name__ == '__main__':
         if args.expected == "None":
             expected = None
         else:
-            expected = args.expected.split()   
-        load_elf(config, args.elf, int(args.timeout), expected)
+            expected = args.expected.split()
+        if args.absent == "None":
+            absent = None
+        else:
+            absent = args.absent.split()
+        load_elf(config, args.elf, int(args.timeout), expected, absent)
 
     if args.asm:
         test_asm(config)
