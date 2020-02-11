@@ -16,16 +16,14 @@ proc_picker $1
 
 no_xdma=1
 
-if [[ $2 == "use_xdma" ]]; then
-    case "$proc_name" in
-	*p2)
-	    no_xdma=0
-	    ;;
-	*)
-	    echo "use_xdma is valid only for P2 processors"
-	    ;;
+case "$proc_name" in
+    *p2_pcie)
+	no_xdma=0
+	;;
+    *)
+	echo "use_xdma is valid only for P2 processors"
+	;;
     esac
-fi
 
 # Compile the bootrom and set the clock frequency
 cd $BASE_DIR/bootrom
