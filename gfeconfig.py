@@ -83,8 +83,8 @@ class Config(object):
         expected_contents = {'boot': ["Please press Enter to activate this console"],
                             'ping': ["Please press Enter to activate this console"]}
 
-        absent_contents = {'boot': None,
-                            'ping': None}
+        absent_contents = {'boot': [],
+                            'ping': []}
 
         timeouts = {'boot': 300, # large timeout to account for loading the binary over JTAG
                     'ping': 60}
@@ -103,7 +103,7 @@ class Config(object):
         ]
 
         main_full = ["Pass", ".", ".","."]
-        main_full_absent="ERROR"
+        main_full_absent=["ERROR"]
 
         main_uart = ["UART1 RX: Hello from UART1"]
         main_gpio = ["#2 changed: 0 -> 1","#3 changed: 0 -> 1"]
@@ -121,14 +121,14 @@ class Config(object):
                             'main_udp': main_udp,
                             'main_tcp': main_tcp}
 
-        absent_contents = {'main_blinky': None,
+        absent_contents = {'main_blinky': [],
                             'main_full': main_full_absent,
-                            'main_uart': None,
-                            'main_gpio': None,
-                            'main_rtc': None,
-                            'main_sd': None,
-                            'main_udp': None,
-                            'main_tcp': None}
+                            'main_uart': [],
+                            'main_gpio': [],
+                            'main_rtc': [],
+                            'main_sd': [],
+                            'main_udp': [],
+                            'main_tcp': []}
 
         timeouts = {'main_blinky': 3,
                     'main_full': 10,

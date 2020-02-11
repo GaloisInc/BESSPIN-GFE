@@ -206,37 +206,41 @@ class UartSession(object):
             rx = str(rx, encoding='utf-8')
         return rx
 
-    def read_and_check(self, timeout, expected_contents, absent_contents=None, decode=True):
+    def read_and_check(self, timeout, expected_contents, absent_contents=[], decode=True):
         # Local timeout (in seconds) should be less than global timeout
         # passed to the Serial constructor, if any.
         rx = b''
         start_time = time.time()
         pending = None
         contains_expected_contents = False
+        contains_absent_contents = False
         while time.time() < start_time + timeout:
             pending = self.uart.in_waiting
             if pending:
                 new_data = self.uart.read(pending)
                 rx += new_data
                 res = [ (bytes(text, encoding='utf-8') in rx) for text in expected_contents]
+                res_absent = [ (bytes(text, encoding='utf-8') in rx) for text in absent_contents]
                 if all(res):
-                    print_and_log("Early exit!")
                     contains_expected_contents = True
+                    print_and_log("Found all expected contents.")
+                if any(res_absent):
+                    contains_absent_contents = True
+                    print_and_log("Found at least some absent contents.")
+                if contains_expected_contents or contains_absent_contents:
+                    print_and_log("Early exit!")
                     break
         if decode:
             rx = str(rx, encoding='utf-8')
         print_and_log(rx)
         if contains_expected_contents:
-            if absent_contents:
-                if absent_contents not in rx:
-                    print_and_log("Absent contents not present")
-                    return True, rx
-                else:
-                    print_and_log(rx)
-                    print_and_log("Absent contents present!")
-                    return False, rx
-            print_and_log("All expected contents found")
-            return True, rx
+            if contains_absent_contents:
+                print_and_log(rx)
+                print_and_log("Absent contents present!")
+                return False, rx
+            else:
+                print_and_log("All expected contents found")
+                return True, rx
         else:
             print_and_log("Expected contents NOT found!")
             return False, rx 
@@ -416,7 +420,7 @@ def test_freertos_network(uart, config, prog_name):
     return res
 
 # FreeRTOS: load executable and check UART output
-def freertos_tester(gdb, uart, exe_filename, timeout, expected_contents, absent_contents=None):
+def freertos_tester(gdb, uart, exe_filename, timeout, expected_contents, absent_contents=[]):
     print_and_log('Starting FreeRTOS test of ' + exe_filename)
     soft_reset_cmd = 'set *((int *) 0x6FFF0000) = 1'
 
@@ -448,7 +452,7 @@ def busybox_basic_tester(gdb, uart, exe_filename, timeout):
     print_and_log('Starting basic Busybox test using ' + exe_filename)
     soft_reset_cmd = 'set *((int *) 0x6FFF0000) = 1'
     expected_contents=["Please press Enter to activate this console"]
-    absent_contents=None
+    absent_contents=[]
 
     gdb.interrupt()
     setup_cmds = [
@@ -667,7 +671,7 @@ def test_busybox(config, args):
     del uart
 
 # Load ELF
-def load_elf(config, path_to_elf, timeout, expected_contents=None, absent_contents=None):
+def load_elf(config, path_to_elf, timeout, expected_contents=None, absent_contents=[]):
     print_and_log("Load and run binary: " + path_to_elf)
     gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
     uart = UartSession()
@@ -766,7 +770,7 @@ if __name__ == '__main__':
         else:
             expected = args.expected.split()
         if args.absent == "None":
-            absent = None
+            absent = []
         else:
             absent = args.absent.split()
         load_elf(config, args.elf, int(args.timeout), expected, absent)

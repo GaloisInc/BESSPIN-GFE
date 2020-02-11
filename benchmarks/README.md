@@ -9,7 +9,7 @@ To compile coremark executable, you need to install [GFE dependencies](https://g
 ### Coremark on P1
 * Build coremark for P1:
   ```bash
-  cd coremark
+  cd benchmarks/coremark
   make PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 clean
   make PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 link
   ```
@@ -41,7 +41,7 @@ To compile coremark executable, you need to install [GFE dependencies](https://g
 ### Coremark on P2
 * Build coremark for P2 (make sure to set `ITERATIONS=3000`):
   ```bash
-  cd coremark
+  cd benchmarks/coremark
   make PORT_DIR=riscv-bare-metal GFE_TARGET=P2 ITERATIONS=3000 clean
   make PORT_DIR=riscv-bare-metal GFE_TARGET=P2 ITERATIONS=3000 link
   ```
