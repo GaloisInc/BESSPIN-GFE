@@ -1,6 +1,7 @@
-#! /usr/bin/env python3.7
+#! /usr/bin/env python3
 import re
-from subprocess import run, TimeoutExpired, CalledProcessError
+from subprocess import run, TimeoutExpired, CalledProcessError, PIPE
+import tempfile
 import time
 import os
 
@@ -29,7 +30,7 @@ class GdbSession(object):
             raise GdbError('Executable {} not found'.format(openocd))
         xlen=32 # Default
         try:
-            run_and_log("Starting openocd", run([openocd, '-f', openocd_config_filename], timeout=0.5, capture_output=True))
+            run_and_log("Starting openocd", run([openocd, '-f', openocd_config_filename], timeout=0.5, stdout=PIPE, stderr=PIPE))
         except TimeoutExpired as exc:
             log = str(exc.stderr, encoding='utf-8')
             match = re.search('XLEN=(32|64)', log)
@@ -37,6 +38,13 @@ class GdbSession(object):
                 xlen = int(match.group(1))
             else:
                 raise GdbError('XLEN not found by OpenOCD')
+
+        # Create temporary files for gdb and openocd.  The `NamedTemporaryFile`
+        # objects are stored in `self` so the files stay around as long as this
+        # `GdbSession` is in use.  We open both in text mode, instead of the
+        # default 'w+b'.
+        self.openocd_log = tempfile.NamedTemporaryFile(mode='w', prefix='openocd.', suffix='.log')
+        self.gdb_log = tempfile.NamedTemporaryFile(mode='w', prefix='gdb.', suffix='.log')
 
         init_cmds = '\n'.join([
             'set confirm off',
@@ -46,12 +54,11 @@ class GdbSession(object):
             'set print entry-values no',
             'set remotetimeout {}'.format(timeout),
             'set arch riscv:rv{}'.format(xlen),
-            'target remote | {} -c "gdb_port pipe; log_output openocd.tmp.log" -f {}'.format(
-                openocd, openocd_config_filename)
+            'target remote | {} -c "gdb_port pipe; log_output {}" -f {}'.format(
+                openocd, self.openocd_log.name, openocd_config_filename)
         ])
 
-        logfile = open('gdb.tmp.log', 'w')
-        self.pty = spawn(gdb, encoding='utf-8', logfile=logfile, timeout=timeout)
+        self.pty = spawn(gdb, encoding='utf-8', logfile=self.gdb_log, timeout=timeout)
         self.repl = REPLWrapper(self.pty, '(gdb) ', None, extra_init_cmd=init_cmds)
 
 
@@ -199,39 +206,42 @@ class UartSession(object):
             rx = str(rx, encoding='utf-8')
         return rx
 
-    def read_and_check(self, timeout, expected_contents, absent_contents=None, decode=True):
+    def read_and_check(self, timeout, expected_contents, absent_contents=[], decode=True):
         # Local timeout (in seconds) should be less than global timeout
         # passed to the Serial constructor, if any.
         rx = b''
         start_time = time.time()
         pending = None
         contains_expected_contents = False
+        contains_absent_contents = False
         while time.time() < start_time + timeout:
             pending = self.uart.in_waiting
             if pending:
                 new_data = self.uart.read(pending)
                 rx += new_data
                 res = [ (bytes(text, encoding='utf-8') in rx) for text in expected_contents]
+                res_absent = [ (bytes(text, encoding='utf-8') in rx) for text in absent_contents]
                 if all(res):
-                    print_and_log("Early exit!")
                     contains_expected_contents = True
+                    print_and_log("Found all expected contents.")
+                if any(res_absent):
+                    contains_absent_contents = True
+                    print_and_log("Found at least some absent contents.")
+                if contains_expected_contents or contains_absent_contents:
+                    print_and_log("Early exit!")
                     break
         if decode:
             rx = str(rx, encoding='utf-8')
+        print_and_log(rx)
         if contains_expected_contents:
-            logging.debug(rx)
-            if absent_contents:
-                if absent_contents not in rx:
-                    print_and_log("Absent contents not present")
-                    return True, rx
-                else:
-                    print_and_log(rx)
-                    print_and_log("Absent contents present!")
-                    return False, rx
-            print_and_log("All expected contents found")
-            return True, rx
+            if contains_absent_contents:
+                print_and_log(rx)
+                print_and_log("Absent contents present!")
+                return False, rx
+            else:
+                print_and_log("All expected contents found")
+                return True, rx
         else:
-            print_and_log(rx)
             print_and_log("Expected contents NOT found!")
             return False, rx 
 
@@ -287,11 +297,11 @@ def test_freertos_common(gdb, uart, config, prog_name):
     print_and_log("\nTesting: " + prog_name)
     run_and_log("Cleaning FreeRTOS program directory",
         run(['make','clean'],cwd=config.freertos_folder,
-        env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen), capture_output=True))
+        env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen), stdout=PIPE, stderr=PIPE))
     run_and_log("Compiling: " + prog_name,
         run(['make'],cwd=config.freertos_folder,
         env=dict(os.environ, C_INCLUDE_PATH=config.freertos_c_include_path, USE_CLANG=use_clang,
-        PROG=prog_name, XLEN=config.xlen), capture_output=True))
+        PROG=prog_name, XLEN=config.xlen), stdout=PIPE, stderr=PIPE))
     filename = config.freertos_folder + '/' + prog_name + '.elf'
     res, rx =  freertos_tester(gdb, uart, filename,
         timeout=config.freertos_timeouts[prog_name],
@@ -333,7 +343,7 @@ def test_freertos_network(uart, config, prog_name):
     if (riscv_ip == 0) or (riscv_ip == "0.0.0.0"):
         raise Exception("Could not get RISCV IP Address. Check that it was assigned in the UART output.")
     print_and_log("Ping FPGA")
-    ping_result = run(['ping','-c','10',riscv_ip], capture_output=True)
+    ping_result = run(['ping','-c','10',riscv_ip], stdout=PIPE, stderr=PIPE)
     print_and_log(str(ping_result.stdout,'utf-8'))
     if ping_result.returncode != 0:
         print_and_log("Ping FPGA failed")
@@ -410,7 +420,7 @@ def test_freertos_network(uart, config, prog_name):
     return res
 
 # FreeRTOS: load executable and check UART output
-def freertos_tester(gdb, uart, exe_filename, timeout, expected_contents, absent_contents=None):
+def freertos_tester(gdb, uart, exe_filename, timeout, expected_contents, absent_contents=[]):
     print_and_log('Starting FreeRTOS test of ' + exe_filename)
     soft_reset_cmd = 'set *((int *) 0x6FFF0000) = 1'
 
@@ -442,12 +452,13 @@ def busybox_basic_tester(gdb, uart, exe_filename, timeout):
     print_and_log('Starting basic Busybox test using ' + exe_filename)
     soft_reset_cmd = 'set *((int *) 0x6FFF0000) = 1'
     expected_contents=["Please press Enter to activate this console"]
-    absent_contents=None
+    absent_contents=[]
 
     gdb.interrupt()
     setup_cmds = [
         'dont-repeat',
         soft_reset_cmd,
+        soft_reset_cmd, # reset twice just to be sure
         'monitor reset halt',
         'delete',
         'file ' + exe_filename,
@@ -496,15 +507,15 @@ def run_and_log(cmd, res, expected_contents=None):
 def test_simulator(config):
     print_and_log("Run Verilator tests")
     run_and_log("Compiling ISA tests",
-        run(['make'], cwd="./riscv-tests/isa", capture_output=True))
+        run(['make'], cwd="./riscv-tests/isa", stdout=PIPE, stderr=PIPE))
 
     run_and_log("Building Verilator simulator for " + config.proc_name,
         run(['make','simulator'],cwd="./verilator_simulators",
-        env=dict(os.environ, PROC=config.proc_name), capture_output=True))
+        env=dict(os.environ, PROC=config.proc_name), stdout=PIPE, stderr=PIPE))
 
     run_and_log("Testing " + config.proc_name,
         run(['make','isa_tests'],cwd="./verilator_simulators/run",check=True,
-        env=dict(os.environ, PROC=config.proc_name), capture_output=True))
+        env=dict(os.environ, PROC=config.proc_name), stdout=PIPE, stderr=PIPE))
     print_and_log("Verilator tests OK, exiting...")
     exit(0)    
 
@@ -512,48 +523,21 @@ def test_simulator(config):
 def test_program_bitstream(config):
     if config.proc_name == 'bluespec_p1':
         run_and_log("Programming flash",
-            run(['tcl/program_flash','datafile','./bootmem/small.bin'], capture_output=True),
+            run(['tcl/program_flash','datafile','./bootmem/small.bin'], stdout=PIPE, stderr=PIPE),
             "Program/Verify Operation successful.")
     run_and_log("Programming bitstream",
-        run(['./pyprogram_fpga.py', config.proc_name], capture_output=True))
+        run(['./pyprogram_fpga.py', config.proc_name], stdout=PIPE, stderr=PIPE))
 
 # Assembly tests
 def test_asm(config):
     print("ASM tests not implemented yet!")
     exit(1)
     run_and_log("Run ASM tests",
-        run(['make','XLEN=' + config.xlen], cwd="./riscv-tests", capture_output=True))
+        run(['make','XLEN=' + config.xlen], cwd="./riscv-tests", stdout=PIPE, stderr=PIPE))
     # TODO
     gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
     # ...
     del gdb
-
-# Initialize processor test, set logging etc
-def test_init():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("proc_name", help="processor to test [chisel_p1|chisel_p2|chisel_p3|bluespec_p1|bluespec_p2|bluespec_p3]")
-    parser.add_argument("--asm", help="run ASSEMBLY tests",action="store_true")
-    parser.add_argument("--isa", help="run ISA tests",action="store_true")
-    parser.add_argument("--busybox", help="run Busybox OS",action="store_true")
-    parser.add_argument("--linux", help="run Debian OS",action="store_true")
-    parser.add_argument("--freertos", help="run FreeRTOS OS",action="store_true")
-    parser.add_argument("--network", help="run network tests",action="store_true")
-    parser.add_argument("--io", help="run IO tests (P1 only)",action="store_true")
-    parser.add_argument("--flash", help="run flash tests",action="store_true")
-    parser.add_argument("--pcie", help="run PCIe tests (P2/P3 only)",action="store_true")
-    parser.add_argument("--no-pcie", help="build without PCIe support (P2/P3 only)",action="store_true")
-    parser.add_argument("--no-bitstream",help="do not upload bitstream",action="store_true")
-    parser.add_argument("--compiler", help="select compiler to use [gcc|clang]",default="gcc")
-    parser.add_argument("--simulator", help="run in verilator",action="store_true")
-    args = parser.parse_args()
-
-    gfeconfig.check_environment()
-
-    run(['rm','-rf','test_processor.log'])
-    logging.basicConfig(filename='test_processor.log',level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
-    print_and_log("Test processor starting.")
-
-    return args
 
 # ISA tests
 def test_isa(config):
@@ -563,11 +547,11 @@ def test_isa(config):
     run_and_log("Compiling ISA tests",
         run(['./configure','--target=riscv64-unknown-elf',
         '--with-xlen=' + config.xlen],cwd="./riscv-tests",
-        env=dict(os.environ, CC="riscv64-unknown-elf-gcc"), capture_output=True))
-    run_and_log("", run(['make'], cwd="./riscv-tests", capture_output=True))
+        env=dict(os.environ, CC="riscv64-unknown-elf-gcc"), stdout=PIPE, stderr=PIPE))
+    run_and_log("", run(['make'], cwd="./riscv-tests", stdout=PIPE, stderr=PIPE))
 
     res = run_and_log("Generating a list of available ISA tests",
-        run(['./testing/scripts/gen-test-all',config.xarch], capture_output=True))
+        run(['./testing/scripts/gen-test-all',config.xarch], stdout=PIPE, stderr=PIPE))
     files = res.split("\n")
 
     isa_failed = []  
@@ -624,7 +608,7 @@ def test_busybox(config, args):
     if config.compiler == "clang":
         raise RuntimeError("Clang compiler is not supported for building Busybox tests yet")
 
-    pwd = run(['pwd'], capture_output=True)
+    pwd = run(['pwd'], stdout=PIPE, stderr=PIPE)
     pwd = str(pwd.stdout,'utf-8').rstrip()
     if args.no_pcie:
         linux_config_path = pwd + '/' + config.busybox_linux_config_path_no_pcie
@@ -676,7 +660,7 @@ def test_busybox(config, args):
 
         print_and_log("Ping FPGA")
         riscv_ip = "10.88.88.2"
-        ping_result = run(['ping','-c','10',riscv_ip], capture_output=True)
+        ping_result = run(['ping','-c','10',riscv_ip], stdout=PIPE, stderr=PIPE)
         print_and_log(str(ping_result.stdout,'utf-8'))
         if ping_result.returncode != 0:
             raise RuntimeError("Busybox network test failed: cannot ping the FPGA")
@@ -686,19 +670,88 @@ def test_busybox(config, args):
     del gdb
     del uart
 
-    
+# Load ELF
+def load_elf(config, path_to_elf, timeout, expected_contents=None, absent_contents=[]):
+    print_and_log("Load and run binary: " + path_to_elf)
+    gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
+    uart = UartSession()
+
+    soft_reset_cmd = 'set *((int *) 0x6FFF0000) = 1'
+
+    setup_cmds = [
+        'dont-repeat',
+        soft_reset_cmd,
+        soft_reset_cmd, # reset twice to make sure we did reset
+        'monitor reset halt',
+        'delete',
+        'file ' + path_to_elf,
+        'load',
+    ]
+    print_and_log('Loading and running {} ...'.format(path_to_elf))
+    for c in setup_cmds:
+        gdb.cmd(c)
+    print_and_log("Continuing")
+    gdb.cont()
+
+    if not expected_contents:
+        print_and_log(uart.read(timeout))
+    else:
+        uart.read_and_check(timeout, expected_contents, absent_contents)
+
+    del uart
+    del gdb
 
 # Common busybox test parts
 def build_busybox(config, linux_config_path):
     run_and_log("Cleaning bootmem program directory",
         run(['make','clean'],cwd=config.busybox_folder,
-        env=dict(os.environ, LINUX_CONFIG=linux_config_path), capture_output=True))
+        env=dict(os.environ, LINUX_CONFIG=linux_config_path), stdout=PIPE, stderr=PIPE))
     run_and_log("Compiling busybox, this might take a while",
         run(['make'],cwd=config.busybox_folder,
-        env=dict(os.environ, LINUX_CONFIG=linux_config_path), capture_output=True))
+        env=dict(os.environ, LINUX_CONFIG=linux_config_path), stdout=PIPE, stderr=PIPE))
+
+# Initialize processor test, set logging etc
+def test_init():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("proc_name", help="processor to test [chisel_p1|chisel_p2|chisel_p3|bluespec_p1|bluespec_p2|bluespec_p3]")
+    parser.add_argument("--asm", help="run ASSEMBLY tests",action="store_true")
+    parser.add_argument("--isa", help="run ISA tests",action="store_true")
+    parser.add_argument("--busybox", help="run Busybox OS",action="store_true")
+    parser.add_argument("--linux", help="run Debian OS",action="store_true")
+    parser.add_argument("--freertos", help="run FreeRTOS OS",action="store_true")
+    parser.add_argument("--network", help="run network tests",action="store_true")
+    parser.add_argument("--io", help="run IO tests (P1 only)",action="store_true")
+    parser.add_argument("--flash", help="run flash tests",action="store_true")
+    parser.add_argument("--pcie", help="run PCIe tests (P2/P3 only)",action="store_true")
+    parser.add_argument("--no-pcie", help="build without PCIe support (P2/P3 only)",action="store_true")
+    parser.add_argument("--no-bitstream",help="do not upload bitstream",action="store_true")
+    parser.add_argument("--compiler", help="select compiler to use [gcc|clang]",default="gcc")
+    parser.add_argument("--elf", help="path to an elf file to load and run. Make sure to specify --timeout parameter")
+    parser.add_argument("--timeout", help="specify how log to run a binary specified in the --elf argument")
+    parser.add_argument("--expected", help="specify expected output of the binary specifed in the --elf argument, used for early exit." +
+        "Can be multiple arguments comma separated: \"c1,c2,c3...\"",default="None")
+    parser.add_argument("--absent", help="specify absent output of the binary specifed in the --elf argument. Absent content should not be present." +
+        "Can be multiple arguments comma separated: \"c1,c2,c3...\"",default="None")
+    parser.add_argument("--simulator", help="run in verilator",action="store_true")
+    args = parser.parse_args()
+
+    # Make all paths in `args` absolute, so we can safely `chdir` later.
+    if args.elf is not None:
+        args.elf = os.path.abspath(args.elf)
+
+    gfeconfig.check_environment()
+
+    run(['rm','-rf','test_processor.log'])
+    logging.basicConfig(filename='test_processor.log',level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+    print_and_log("Test processor starting.")
+
+    return args
 
 if __name__ == '__main__':
     args = test_init()
+    # Make sure all `subprocess` calls, which use paths relative to this
+    # script, can find the right files.
+    os.chdir(os.path.dirname(__file__))
     config = gfeconfig.Config(args)
 
     if args.simulator:
@@ -708,6 +761,19 @@ if __name__ == '__main__':
         test_program_bitstream(config)
     else:
         print_and_log("Skiping bitstream programming")
+
+    if args.elf:
+        if not args.timeout:
+            raise RuntimeError("Please specify timeout for how long to run the binary")
+        if args.expected == "None":
+            expected = None
+        else:
+            expected = args.expected.split()
+        if args.absent == "None":
+            absent = []
+        else:
+            absent = args.absent.split()
+        load_elf(config, args.elf, int(args.timeout), expected, absent)
 
     if args.asm:
         test_asm(config)
