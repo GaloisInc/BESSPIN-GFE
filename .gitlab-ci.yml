@@ -134,7 +134,7 @@ BSV_P1_freertos_io_gcc:
 BSV_P1_freertos_network_gcc:
   script:
     - ./pytest_processor.py bluespec_p1 --freertos --network
-  tags: ["fpga-network"]
+  tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
 #-----------------------#
@@ -163,7 +163,7 @@ CHSL_P1_freertos_io_gcc:
 CHSL_P1_freertos_network_gcc:
   script:
     - ./pytest_processor.py chisel_p1 --freertos --network
-  tags: ["fpga-network"]
+  tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
 #-----------------------#
@@ -186,7 +186,7 @@ CHSL_P2_freertos_gcc:
 CHSL_P2_freertos_network_gcc:
   script:
     - ./pytest_processor.py chisel_p2 --freertos --network
-  tags: ["fpga-network"]
+  tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
 CHSL_P2_busybox:
@@ -232,7 +232,7 @@ BSV_P2_freertos_gcc:
 BSV_P2_freertos_network_gcc:
   script:
     - ./pytest_processor.py bluespec_p2 --freertos --network
-  tags: ["fpga-network"]
+  tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
 BSV_P2_busybox:
