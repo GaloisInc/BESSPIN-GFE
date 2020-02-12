@@ -92,19 +92,19 @@ BSV_P1_isa:
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
-BSV_P1_freertos_gcc:
+BSV_P1_freertos:
   script:
     - ./pytest_processor.py bluespec_p1 --freertos
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
-BSV_P1_freertos_io_gcc:
+BSV_P1_freertos_io:
   script:
     - ./pytest_processor.py bluespec_p1 --freertos --io
   tags: ["fpga-io"]
   extends: [.log_always, .no_sched]
 
-BSV_P1_freertos_network_gcc:
+BSV_P1_freertos_network:
   script:
     - ./pytest_processor.py bluespec_p1 --freertos --network
   tags: ["fpga-network"]
@@ -121,19 +121,19 @@ CHSL_P1_isa:
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
-CHSL_P1_freertos_gcc:
+CHSL_P1_freertos:
   script:
     - ./pytest_processor.py chisel_p1 --freertos
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
-CHSL_P1_freertos_io_gcc:
+CHSL_P1_freertos_io:
   script:
     - ./pytest_processor.py chisel_p1 --freertos --io
   tags: ["fpga-io"]
   extends: [.log_always, .no_sched]
 
-CHSL_P1_freertos_network_gcc:
+CHSL_P1_freertos_network:
   script:
     - ./pytest_processor.py chisel_p1 --freertos --network
   tags: ["fpga-network"]
@@ -150,13 +150,13 @@ CHSL_P2_isa:
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
-CHSL_P2_freertos_gcc:
+CHSL_P2_freertos:
   script:
     - ./pytest_processor.py chisel_p2 --freertos
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
-CHSL_P2_freertos_network_gcc:
+CHSL_P2_freertos_network:
   script:
     - ./pytest_processor.py chisel_p2 --freertos --network
   tags: ["fpga-network"]
@@ -197,13 +197,13 @@ BSV_P2_isa:
   tags: ["fpga"]
   extends: .log_always
 
-BSV_P2_freertos_gcc:
+BSV_P2_freertos:
   script:
     - ./pytest_processor.py bluespec_p2 --freertos
   tags: ["fpga"]
   extends: .log_always
 
-BSV_P2_freertos_network_gcc:
+BSV_P2_freertos_network:
   script:
     - ./pytest_processor.py bluespec_p2 --freertos --network
   tags: ["fpga-network"]
@@ -322,7 +322,7 @@ CHSL_P2_PCIE_bitstream_gen:
       - vivado/soc_chisel_p2/soc_chisel_p2_pcie.runs/impl_1/design_1_power_routed.rpt
   only:
     variables:
-      - $JOB_TYPE == "bitstream_gen_chisel_p2_pcie"
+      - $JOB_TYPE == "bitstream_gen_chisel_p2"
 
 CHSL_P3_bitstream_gen:
   script:
@@ -394,7 +394,7 @@ BSV_P2_PCIE_bitstream_gen:
       - vivado/soc_bluespec_p2/soc_bluespec_p2_pcie.runs/impl_1/design_1_power_routed.rpt
   only:
     variables:
-      - $JOB_TYPE == "bitstream_gen_bluespec_p2_pcie"
+      - $JOB_TYPE == "bitstream_gen_bluespec_p2"
 
 BSV_P3_bitstream_gen:
   script:
