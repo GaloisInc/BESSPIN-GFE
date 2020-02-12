@@ -204,7 +204,7 @@ All bitstreams generated using processor names of the form
 complex.
 
 Release 5.1 adds two new bitstreams - `chisel_p2_pcie.bit` and
-`bluespec_p2_pcie.xbit`. These are FPGA systems with a PCIe root complex
+`bluespec_p2_pcie.bit`. These are FPGA systems with a PCIe root complex
 and no SVF. For example, run the following to build `chisel_p2_pcie.bit`:
 ```bash cd $GFE_REPO
 ./setup_soc_project.sh chisel_p2_pcie # generate vivado/soc_chisel_p1/soc_chisel_p2_pcie.xpr
