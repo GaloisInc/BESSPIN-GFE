@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.0.4 (2020-02-12)
+* Improved test sripts
+* Improved documentation
+* Improved Continuous Integration pipeline
+
 ## v5.0.3 (2020-01-29)
 * Refactored and improved test scripts (use now `pytest_processor.py` and `pyprogram_fpga.sh`)
 * CI changes and improvements to support BESSPIN CI pipeline
