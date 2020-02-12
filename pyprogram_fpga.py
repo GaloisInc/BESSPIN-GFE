@@ -6,8 +6,8 @@ from subprocess import run, PIPE
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("proc_name", 
-        help="processor to test [chisel_p1|chisel_p2|chisel_p3|bluespec_p1|bluespec_p2|bluespec_p3]")
+    parser.add_argument("proc_name",
+        help="processor to test [chisel_p1|chisel_p2|chisel_p2_pcie|chisel_p3|bluespec_p1|bluespec_p2_pcie|bluespec_p2|bluespec_p3]")
     parser.add_argument("--bitstream", help="specify bitstream")
     args = parser.parse_args()
 
@@ -27,7 +27,7 @@ if __name__ == '__main__':
         exit(1)
 
     if not os.path.isfile(probfile):
-        print("Could not locate probe file at ", probfile) 
+        print("Could not locate probe file at ", probfile)
         exit(1)
 
     print("Programming flash")
@@ -37,5 +37,5 @@ if __name__ == '__main__':
 
     run(['rm','-rf','webtalk.log'],check=True,stdout=PIPE,stderr=PIPE)
     run(['rm','-rf','webtalk.jou'],check=True,stdout=PIPE,stderr=PIPE)
-    
+
     print("Finished!")
