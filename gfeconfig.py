@@ -6,7 +6,7 @@ from shutil import which
 
 
 # Processor config
-proc_list = ['chisel_p1', 'chisel_p2', 'chisel_p3', 'bluespec_p1', 'bluespec_p2', 'bluespec_p3']
+proc_list = ['chisel_p1', 'chisel_p2', 'chisel_p2_pcie', 'chisel_p3', 'bluespec_p1', 'bluespec_p2', 'bluespec_p2_pcie', 'bluespec_p3']
 
 # Environment config
 env_requried = ['openocd','riscv64-unknown-elf-gcc','riscv64-unknown-linux-gnu-gcc']    

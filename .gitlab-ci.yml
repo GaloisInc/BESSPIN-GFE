@@ -192,6 +192,7 @@ CHSL_P2_freertos_network_gcc:
 CHSL_P2_busybox:
   script:
     - ./pytest_processor.py chisel_p2 --busybox --network --no-pcie
+    - ./pytest_processor.py chisel_p2_pcie --busybox --network
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
   cache:
@@ -238,6 +239,7 @@ BSV_P2_freertos_network_gcc:
 BSV_P2_busybox:
   script:
     - ./pytest_processor.py bluespec_p2 --busybox --network --no-pcie
+    - ./pytest_processor.py bluespec_p2_pcie --busybox --network
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
   cache:
@@ -327,10 +329,27 @@ CHSL_P2_bitstream_gen:
       - vivado/soc_chisel_p2/soc_chisel_p2.runs/impl_1/design_1_timing_summary_routed.rpt
       - vivado/soc_chisel_p2/soc_chisel_p2.runs/impl_1/design_1_utilization_placed.rpt
       - vivado/soc_chisel_p2/soc_chisel_p2.runs/impl_1/design_1_power_routed.rpt
-
   only:
     variables:
       - $JOB_TYPE == "bitstream_gen_chisel_p2"
+
+CHSL_P2_PCIE_bitstream_gen:
+  script:
+    - ./setup_soc_project.sh chisel_p2_pcie
+    - ./build.sh chisel_p2_pcie
+  tags: ["bitstream"]
+  artifacts:
+    name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+    when: always
+    expire_in: 1 week
+    paths:
+      - bitstreams/soc_chisel_p2_pcie.*
+      - vivado/soc_chisel_p2/soc_chisel_p2_pcie.runs/impl_1/design_1_timing_summary_routed.rpt
+      - vivado/soc_chisel_p2/soc_chisel_p2_pcie.runs/impl_1/design_1_utilization_placed.rpt
+      - vivado/soc_chisel_p2/soc_chisel_p2_pcie.runs/impl_1/design_1_power_routed.rpt
+  only:
+    variables:
+      - $JOB_TYPE == "bitstream_gen_chisel_p2_pcie"
 
 CHSL_P3_bitstream_gen:
   script:
@@ -385,6 +404,24 @@ BSV_P2_bitstream_gen:
   only:
     variables:
       - $JOB_TYPE == "bitstream_gen_bluespec_p2"
+
+BSV_P2_PCIE_bitstream_gen:
+  script:
+    - ./setup_soc_project.sh bluespec_p2_pcie
+    - ./build.sh bluespec_p2_pcie
+  tags: ["bitstream"]
+  artifacts:
+    name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+    when: always
+    expire_in: 1 week
+    paths:
+      - bitstreams/soc_bluespec_p2_pcie.*
+      - vivado/soc_bluespec_p2/soc_bluespec_p2_pcie.runs/impl_1/design_1_timing_summary_routed.rpt
+      - vivado/soc_bluespec_p2/soc_bluespec_p2_pcie.runs/impl_1/design_1_utilization_placed.rpt
+      - vivado/soc_bluespec_p2/soc_bluespec_p2_pcie.runs/impl_1/design_1_power_routed.rpt
+  only:
+    variables:
+      - $JOB_TYPE == "bitstream_gen_bluespec_p2_pcie"
 
 BSV_P3_bitstream_gen:
   script:
