@@ -297,11 +297,12 @@ def test_freertos_common(gdb, uart, config, prog_name):
     print_and_log("\nTesting: " + prog_name)
     run_and_log("Cleaning FreeRTOS program directory",
         run(['make','clean'],cwd=config.freertos_folder,
-        env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen), stdout=PIPE, stderr=PIPE))
+        env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen,
+        configCPU_CLOCK_HZ=config.cpu_freq), stdout=PIPE, stderr=PIPE))
     run_and_log("Compiling: " + prog_name,
         run(['make'],cwd=config.freertos_folder,
         env=dict(os.environ, C_INCLUDE_PATH=config.freertos_c_include_path, USE_CLANG=use_clang,
-        PROG=prog_name, XLEN=config.xlen), stdout=PIPE, stderr=PIPE))
+        PROG=prog_name, XLEN=config.xlen, configCPU_CLOCK_HZ=config.cpu_freq), stdout=PIPE, stderr=PIPE))
     filename = config.freertos_folder + '/' + prog_name + '.elf'
     res, rx =  freertos_tester(gdb, uart, filename,
         timeout=config.freertos_timeouts[prog_name],
