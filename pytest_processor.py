@@ -656,7 +656,8 @@ def test_busybox(config, args):
         uart.send(cmd3)
 
         expected_contents=["xilinx_axienet 62100000.ethernet","Link is Up - 1Gbps/Full - flow control rx/tx"]
-        if not uart.read_and_check(10, expected_contents):
+        res, rx = uart.read_and_check(10, expected_contents)
+        if not res:
             raise RuntimeError("Busybox network test failed: cannot bring up eth interface")
 
         print_and_log("Ping FPGA")
@@ -697,8 +698,9 @@ def load_elf(config, path_to_elf, timeout, expected_contents=None, absent_conten
     if not expected_contents:
         print_and_log(uart.read(timeout))
     else:
-        uart.read_and_check(timeout, expected_contents, absent_contents)
-
+        res, rx = uart.read_and_check(timeout, expected_contents, absent_contents)
+        if not res:
+            raise RuntimeError("Load elf failed - check log for more details.")
     del uart
     del gdb
 
