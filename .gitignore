@@ -8,6 +8,7 @@ bootrom/bootrom.hex
 bootrom/bootrom.mem
 bootrom/bootrom.bytereversed.mem
 bootrom/bootrom.dump
+bootrom/bootrom.coe
 
 flash-scripts/*.mcs
 flash-scripts/*.log

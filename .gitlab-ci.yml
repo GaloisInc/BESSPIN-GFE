@@ -119,22 +119,12 @@ BSV_P1_isa:
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
-BSV_P1_freertos_gcc:
+BSV_P1_freertos:
   script:
     - ./pytest_processor.py bluespec_p1 --freertos
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
-
-BSV_P1_freertos_io_gcc:
-  script:
-    - ./pytest_processor.py bluespec_p1 --freertos --io
+    - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --io
+    - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --network
   tags: ["fpga-io"]
-  extends: [.log_always, .no_sched]
-
-BSV_P1_freertos_network_gcc:
-  script:
-    - ./pytest_processor.py bluespec_p1 --freertos --network
-  tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
 #-----------------------#
@@ -148,22 +138,12 @@ CHSL_P1_isa:
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
-CHSL_P1_freertos_gcc:
+CHSL_P1_freertos:
   script:
     - ./pytest_processor.py chisel_p1 --freertos
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
-
-CHSL_P1_freertos_io_gcc:
-  script:
-    - ./pytest_processor.py chisel_p1 --freertos --io
-  tags: ["fpga-io"]
-  extends: [.log_always, .no_sched]
-
-CHSL_P1_freertos_network_gcc:
-  script:
+    - ./pytest_processor.py chisel_p1 --no-bitstream --freertos --io
     - ./pytest_processor.py chisel_p1 --freertos --network
-  tags: ["fpga"]
+  tags: ["fpga-io"]
   extends: [.log_always, .no_sched]
 
 #-----------------------#
@@ -177,15 +157,10 @@ CHSL_P2_isa:
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
-CHSL_P2_freertos_gcc:
+CHSL_P2_freertos:
   script:
     - ./pytest_processor.py chisel_p2 --freertos
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
-
-CHSL_P2_freertos_network_gcc:
-  script:
-    - ./pytest_processor.py chisel_p2 --freertos --network
+    - ./pytest_processor.py chisel_p2 --no-bitstream --freertos --network
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
@@ -221,17 +196,12 @@ BSV_P2_isa:
   script:
     - ./pytest_processor.py bluespec_p2 --isa
   tags: ["fpga"]
-  extends: .log_always
+  extends: [.log_always, .no_sched]
 
-BSV_P2_freertos_gcc:
+BSV_P2_freertos:
   script:
     - ./pytest_processor.py bluespec_p2 --freertos
-  tags: ["fpga"]
-  extends: .log_always
-
-BSV_P2_freertos_network_gcc:
-  script:
-    - ./pytest_processor.py bluespec_p2 --freertos --network
+    - ./pytest_processor.py bluespec_p2 --no-bitstream --freertos --network
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
@@ -267,7 +237,24 @@ CHSL_P3_isa:
   script:
     - ./pytest_processor.py chisel_p3 --isa
   tags: ["fpga"]
-  extends: .no_sched
+  extends: [.log_always, .no_sched]
+
+CHSL_P3_freertos:
+  script:
+    - ./pytest_processor.py chisel_p3 --freertos
+    - ./pytest_processor.py chisel_p3 --no-bitstream --freertos --network
+  tags: ["fpga"]
+  extends: [.log_always, .no_sched]
+
+CHSL_P3_busybox:
+  script:
+    - ./pytest_processor.py chisel_p3 --busybox --network --no-pcie
+  tags: ["fpga"]
+  extends: [.log_always, .no_sched]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - bootmem/
 
 # CHSL_P3:
 #   script:
@@ -299,6 +286,7 @@ CHSL_P1_bitstream_gen:
   script:
     - ./setup_soc_project.sh chisel_p1
     - ./build.sh chisel_p1
+    - ./get_ppa.py vivado/soc_chisel_p1/soc_chisel_p1.runs/impl_1/
   tags: ["bitstream"]
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
@@ -317,6 +305,7 @@ CHSL_P2_bitstream_gen:
   script:
     - ./setup_soc_project.sh chisel_p2
     - ./build.sh chisel_p2
+    - ./get_ppa.py vivado/soc_chisel_p2/soc_chisel_p2.runs/impl_1/
   tags: ["bitstream"]
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
@@ -336,6 +325,7 @@ CHSL_P3_bitstream_gen:
   script:
     - ./setup_soc_project.sh chisel_p3
     - ./build.sh chisel_p3
+    - ./get_ppa.py vivado/soc_chisel_p3/soc_chisel_p3.runs/impl_1/
   tags: ["bitstream"]
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
@@ -354,6 +344,7 @@ BSV_P1_bitstream_gen:
   script:
     - ./setup_soc_project.sh bluespec_p1
     - ./build.sh bluespec_p1
+    - ./get_ppa.py vivado/soc_bluespec_p1/soc_bluespec_p1.runs/impl_1/
   tags: ["bitstream"]
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
@@ -372,6 +363,7 @@ BSV_P2_bitstream_gen:
   script:
     - ./setup_soc_project.sh bluespec_p2
     - ./build.sh bluespec_p2
+    - ./get_ppa.py vivado/soc_bluespec_p2/soc_bluespec_p2.runs/impl_1/
   tags: ["bitstream"]
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
@@ -390,6 +382,7 @@ BSV_P3_bitstream_gen:
   script:
     - ./setup_soc_project.sh bluespec_p3
     - ./build.sh bluespec_p3
+    - ./get_ppa.py vivado/soc_bluespec_p3/soc_bluespec_p3.runs/impl_1/
   tags: ["bitstream"]
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
