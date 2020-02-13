@@ -15,10 +15,20 @@ cd riscv-tests
 git submodule sync
 cd ..
 
-git submodule update --init FreeRTOS-mirror busybox
+git submodule update --init FreeRTOS-mirror
+git submodule update --init busybox
 git submodule update --init --recursive \
-bluespec-processors/P1/Piccolo bluespec-processors/P2/Flute \
-riscv-linux bluespec-processors/P3/Toooba riscv-tests riscv-pk
+bluespec-processors/P1/Piccolo
+git submodule update --init --recursive \
+bluespec-processors/P2/Flute
+git submodule update --init --recursive \
+bluespec-processors/P3/Toooba
+git submodule update --init --recursive \
+riscv-linux
+git submodule update --init --recursive \
+riscv-tests
+git submodule update --init --recursive \
+riscv-pk
 git submodule update --init chisel_processors
 
 cd chisel_processors
