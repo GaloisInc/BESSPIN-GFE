@@ -71,9 +71,18 @@ class Config(object):
         if 'p1' in self.proc_name:
             self.xlen = '32'
             self.xarch = 'rv32imacu'
-        else:
+            self.cpu_freq = '50000000'
+        elif 'p2' in self.proc_name:
             self.xlen = '64'
             self.xarch = 'rv64gcsu'
+            self.cpu_freq = '100000000'
+        elif 'p3' in self.proc_name:
+            self.xlen = '64'
+            self.xarch = 'rv64gcsu'
+            self.cpu_freq = '25000000'
+        else:
+            # this should never happen
+            raise ValueError('Unknown processor ' + args.proc_name)
 
         self.get_freertos_config()
         self.get_busybox_config()

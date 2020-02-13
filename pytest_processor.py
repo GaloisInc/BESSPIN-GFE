@@ -297,11 +297,12 @@ def test_freertos_common(gdb, uart, config, prog_name):
     print_and_log("\nTesting: " + prog_name)
     run_and_log("Cleaning FreeRTOS program directory",
         run(['make','clean'],cwd=config.freertos_folder,
-        env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen), stdout=PIPE, stderr=PIPE))
+        env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen,
+        configCPU_CLOCK_HZ=config.cpu_freq), stdout=PIPE, stderr=PIPE))
     run_and_log("Compiling: " + prog_name,
         run(['make'],cwd=config.freertos_folder,
         env=dict(os.environ, C_INCLUDE_PATH=config.freertos_c_include_path, USE_CLANG=use_clang,
-        PROG=prog_name, XLEN=config.xlen), stdout=PIPE, stderr=PIPE))
+        PROG=prog_name, XLEN=config.xlen, configCPU_CLOCK_HZ=config.cpu_freq), stdout=PIPE, stderr=PIPE))
     filename = config.freertos_folder + '/' + prog_name + '.elf'
     res, rx =  freertos_tester(gdb, uart, filename,
         timeout=config.freertos_timeouts[prog_name],
@@ -654,8 +655,9 @@ def test_busybox(config, args):
         print_and_log(cmd3)
         uart.send(cmd3)
 
-        expected_contents=["xilinx_axienet 62100000.ethernet","Link is Up - 1Gbps/Full - flow control rx/tx"]
-        if not uart.read_and_check(10, expected_contents):
+        expected_contents=["xilinx_axienet 62100000.ethernet","Link is Up"]
+        res, rx = uart.read_and_check(10, expected_contents)
+        if not res:
             raise RuntimeError("Busybox network test failed: cannot bring up eth interface")
 
         print_and_log("Ping FPGA")
@@ -696,8 +698,9 @@ def load_elf(config, path_to_elf, timeout, expected_contents=None, absent_conten
     if not expected_contents:
         print_and_log(uart.read(timeout))
     else:
-        uart.read_and_check(timeout, expected_contents, absent_contents)
-
+        res, rx = uart.read_and_check(timeout, expected_contents, absent_contents)
+        if not res:
+            raise RuntimeError("Load elf failed - check log for more details.")
     del uart
     del gdb
 
