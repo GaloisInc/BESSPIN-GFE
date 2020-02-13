@@ -32,7 +32,7 @@ case "$proc_name" in
 	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=50000000 NO_PCI=$no_xdma
 	clock_freq_mhz=50
 	;;
-    *p2)
+    *p2*)
 	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=100000000 NO_PCI=$no_xdma
 	clock_freq_mhz=100
 	;;
