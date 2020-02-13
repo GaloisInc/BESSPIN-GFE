@@ -655,7 +655,7 @@ def test_busybox(config, args):
         print_and_log(cmd3)
         uart.send(cmd3)
 
-        expected_contents=["xilinx_axienet 62100000.ethernet","Link is Up - 1Gbps/Full - flow control rx/tx"]
+        expected_contents=["xilinx_axienet 62100000.ethernet","Link is Up"]
         res, rx = uart.read_and_check(10, expected_contents)
         if not res:
             raise RuntimeError("Busybox network test failed: cannot bring up eth interface")

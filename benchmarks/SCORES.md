@@ -3,30 +3,36 @@
 ## Chisel P1
 
 ### CoreMark
-**NOTE:** 
-* CoreMark: 160
-* CoreMark/MHz: 3.2
+* CoreMark: 93
+* CoreMark/MHz: 1.86
 
 ## Chisel P2
 
 ### CoreMark
 
-* CoreMark: 272
+* CoreMark: 213
+* CoreMark/MHz = 2.13
+
+## Chisel P3
+
+### CoreMark
+
+* CoreMark: 68
 * CoreMark/MHz = 2.72
 
 ## Bluespec P1
 
 ### CoreMark
 
-* CoreMark: 140
-* CoreMark/MHz: 2.8
+* CoreMark: 138
+* CoreMark/MHz: 2.7
 
 ## Bluespec P2
 
 ### CoreMark
 
-* CoreMark: 221
-* CoreMark/MHz = 2.21
+* CoreMark: 222
+* CoreMark/MHz = 2.22
 
 ## SiFive HiFive1 RevB
 
