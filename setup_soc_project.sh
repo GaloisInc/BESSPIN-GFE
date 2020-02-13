@@ -46,7 +46,6 @@ elif [ -f "$2" ]; then
     echo "    sha256sum: $sha"
     cp -pr "$BASE_DIR/bootrom-secure" "$BASE_DIR/bootrom-configured"
     $BASE_DIR/bootrom-configured/configure.sh $sha $len
-    pwd
     err_msg $? "failed to configure the secure bootrom"
 else
     proc_usage
