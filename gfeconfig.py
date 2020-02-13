@@ -6,10 +6,10 @@ from shutil import which
 
 
 # Processor config
-proc_list = ['chisel_p1', 'chisel_p2', 'chisel_p3', 'bluespec_p1', 'bluespec_p2', 'bluespec_p3']
+proc_list = ['chisel_p1', 'chisel_p2', 'chisel_p2_pcie', 'chisel_p3', 'bluespec_p1', 'bluespec_p2', 'bluespec_p2_pcie', 'bluespec_p3']
 
 # Environment config
-env_requried = ['openocd','riscv64-unknown-elf-gcc','riscv64-unknown-linux-gnu-gcc']    
+env_requried = ['openocd','riscv64-unknown-elf-gcc','riscv64-unknown-linux-gnu-gcc']
 
 # Check if the processor is in the list of supported processors
 def proc_picker(proc):
@@ -67,7 +67,7 @@ class Config(object):
             raise ValueError('Unknown processor ' + args.proc_name)
         else:
             self.proc_name = args.proc_name
-        
+
         if 'p1' in self.proc_name:
             self.xlen = '32'
             self.xarch = 'rv32imacu'
@@ -87,7 +87,7 @@ class Config(object):
         self.get_freertos_config()
         self.get_busybox_config()
         self.compiler = args.compiler
-    
+
     def get_busybox_config(self):
         expected_contents = {'boot': ["Please press Enter to activate this console"],
                             'ping': ["Please press Enter to activate this console"]}

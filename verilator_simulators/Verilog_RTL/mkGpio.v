@@ -20,6 +20,8 @@
 // slave_rlast                    O     1 reg
 // assert_soft_reset              O     1 reg
 // RDY_assert_soft_reset          O     1 const
+// tv_switch                      O     2 reg
+// RDY_tv_switch                  O     1 const
 // CLK                            I     1 clock
 // RST_N                          I     1 reset
 // set_addr_map_addr_base         I    64 reg
@@ -135,7 +137,10 @@ module mkGpio(CLK,
 	      slave_rready,
 
 	      assert_soft_reset,
-	      RDY_assert_soft_reset);
+	      RDY_assert_soft_reset,
+
+	      tv_switch,
+	      RDY_tv_switch);
   input  CLK;
   input  RST_N;
 
@@ -224,12 +229,17 @@ module mkGpio(CLK,
   output assert_soft_reset;
   output RDY_assert_soft_reset;
 
+  // value method tv_switch
+  output [1 : 0] tv_switch;
+  output RDY_tv_switch;
+
   // signals for module outputs
   wire [63 : 0] slave_rdata;
   wire [3 : 0] slave_bid, slave_rid;
-  wire [1 : 0] slave_bresp, slave_rresp;
+  wire [1 : 0] slave_bresp, slave_rresp, tv_switch;
   wire RDY_assert_soft_reset,
        RDY_set_addr_map,
+       RDY_tv_switch,
        assert_soft_reset,
        slave_arready,
        slave_awready,
@@ -255,6 +265,11 @@ module mkGpio(CLK,
   // register rg_module_ready
   reg rg_module_ready;
   wire rg_module_ready$D_IN, rg_module_ready$EN;
+
+  // register rg_tvswitch
+  reg [1 : 0] rg_tvswitch;
+  wire [1 : 0] rg_tvswitch$D_IN;
+  wire rg_tvswitch$EN;
 
   // ports of submodule slave_xactor_f_rd_addr
   wire [96 : 0] slave_xactor_f_rd_addr$D_IN, slave_xactor_f_rd_addr$D_OUT;
@@ -302,23 +317,23 @@ module mkGpio(CLK,
   // declarations used by system tasks
   // synopsys translate_off
   reg [31 : 0] v__h721;
-  reg [31 : 0] v__h1088;
-  reg [31 : 0] v__h1276;
-  reg [31 : 0] v__h1507;
-  reg [31 : 0] v__h1674;
-  reg [31 : 0] v__h1784;
-  reg [31 : 0] v__h1951;
+  reg [31 : 0] v__h1122;
+  reg [31 : 0] v__h1310;
+  reg [31 : 0] v__h1548;
+  reg [31 : 0] v__h1727;
+  reg [31 : 0] v__h1837;
+  reg [31 : 0] v__h2004;
   reg [31 : 0] v__h715;
-  reg [31 : 0] v__h1082;
-  reg [31 : 0] v__h1270;
-  reg [31 : 0] v__h1501;
-  reg [31 : 0] v__h1668;
-  reg [31 : 0] v__h1778;
-  reg [31 : 0] v__h1945;
+  reg [31 : 0] v__h1116;
+  reg [31 : 0] v__h1304;
+  reg [31 : 0] v__h1542;
+  reg [31 : 0] v__h1721;
+  reg [31 : 0] v__h1831;
+  reg [31 : 0] v__h1998;
   // synopsys translate_on
 
   // remaining internal signals
-  wire [1 : 0] v__h990;
+  wire [1 : 0] v__h1024;
   wire rg_addr_base_1_ULE_slave_xactor_f_wr_addr_firs_ETC___d23,
        slave_xactor_f_wr_addr_first__7_BITS_31_TO_29__ETC___d53,
        slave_xactor_f_wr_addr_first__7_BITS_92_TO_29__ETC___d26;
@@ -362,6 +377,10 @@ module mkGpio(CLK,
   // value method assert_soft_reset
   assign assert_soft_reset = rg_assertReset ;
   assign RDY_assert_soft_reset = 1'd1 ;
+
+  // value method tv_switch
+  assign tv_switch = rg_tvswitch ;
+  assign RDY_tv_switch = 1'd1 ;
 
   // submodule slave_xactor_f_rd_addr
   FIFO2 #(.width(32'd97), .guarded(32'd1)) slave_xactor_f_rd_addr(.RST(RST_N),
@@ -450,6 +469,13 @@ module mkGpio(CLK,
   assign rg_module_ready$D_IN = 1'd1 ;
   assign rg_module_ready$EN = EN_set_addr_map ;
 
+  // register rg_tvswitch
+  assign rg_tvswitch$D_IN = slave_xactor_f_wr_data$D_OUT[18:17] ;
+  assign rg_tvswitch$EN =
+	     WILL_FIRE_RL_rl_process_wr_req &&
+	     slave_xactor_f_wr_addr_first__7_BITS_31_TO_29__ETC___d53 &&
+	     slave_xactor_f_wr_data$D_OUT[72:9] != 64'd1 ;
+
   // submodule slave_xactor_f_rd_addr
   assign slave_xactor_f_rd_addr$D_IN =
 	     { slave_arid,
@@ -502,7 +528,7 @@ module mkGpio(CLK,
 
   // submodule slave_xactor_f_wr_resp
   assign slave_xactor_f_wr_resp$D_IN =
-	     { slave_xactor_f_wr_addr$D_OUT[96:93], v__h990 } ;
+	     { slave_xactor_f_wr_addr$D_OUT[96:93], v__h1024 } ;
   assign slave_xactor_f_wr_resp$ENQ = WILL_FIRE_RL_rl_process_wr_req ;
   assign slave_xactor_f_wr_resp$DEQ =
 	     slave_bready && slave_xactor_f_wr_resp$EMPTY_N ;
@@ -517,7 +543,7 @@ module mkGpio(CLK,
 	     slave_xactor_f_wr_addr$D_OUT[92:29] == 64'h000000006FFF0000 ;
   assign slave_xactor_f_wr_addr_first__7_BITS_92_TO_29__ETC___d26 =
 	     slave_xactor_f_wr_addr$D_OUT[92:29] < rg_addr_lim ;
-  assign v__h990 =
+  assign v__h1024 =
 	     (slave_xactor_f_wr_addr$D_OUT[31:29] != 3'b0 ||
 	      !rg_addr_base_1_ULE_slave_xactor_f_wr_addr_firs_ETC___d23 ||
 	      !slave_xactor_f_wr_addr_first__7_BITS_92_TO_29__ETC___d26) ?
@@ -532,6 +558,7 @@ module mkGpio(CLK,
       begin
         rg_assertReset <= `BSV_ASSIGNMENT_DELAY 1'd0;
 	rg_module_ready <= `BSV_ASSIGNMENT_DELAY 1'd0;
+	rg_tvswitch <= `BSV_ASSIGNMENT_DELAY 2'd0;
       end
     else
       begin
@@ -539,6 +566,8 @@ module mkGpio(CLK,
 	  rg_assertReset <= `BSV_ASSIGNMENT_DELAY rg_assertReset$D_IN;
 	if (rg_module_ready$EN)
 	  rg_module_ready <= `BSV_ASSIGNMENT_DELAY rg_module_ready$D_IN;
+	if (rg_tvswitch$EN)
+	  rg_tvswitch <= `BSV_ASSIGNMENT_DELAY rg_tvswitch$D_IN;
       end
     if (rg_addr_base$EN)
       rg_addr_base <= `BSV_ASSIGNMENT_DELAY rg_addr_base$D_IN;
@@ -554,6 +583,7 @@ module mkGpio(CLK,
     rg_addr_lim = 64'hAAAAAAAAAAAAAAAA;
     rg_assertReset = 1'h0;
     rg_module_ready = 1'h0;
+    rg_tvswitch = 2'h2;
   end
   `endif // BSV_NO_INITIAL_BLOCKS
   // synopsys translate_on
@@ -581,17 +611,17 @@ module mkGpio(CLK,
 	   !rg_addr_base_1_ULE_slave_xactor_f_wr_addr_firs_ETC___d23 ||
 	   !slave_xactor_f_wr_addr_first__7_BITS_92_TO_29__ETC___d26))
 	begin
-	  v__h1088 = $stime;
+	  v__h1122 = $stime;
 	  #0;
 	end
-    v__h1082 = v__h1088 / 32'd10;
+    v__h1116 = v__h1122 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
 	  (slave_xactor_f_wr_addr$D_OUT[31:29] != 3'b0 ||
 	   !rg_addr_base_1_ULE_slave_xactor_f_wr_addr_firs_ETC___d23 ||
 	   !slave_xactor_f_wr_addr_first__7_BITS_92_TO_29__ETC___d26))
 	$display("%0d: ERROR: GPIO.rl_process_wr_req: unrecognized addr",
-		 v__h1082);
+		 v__h1116);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
 	  (slave_xactor_f_wr_addr$D_OUT[31:29] != 3'b0 ||
@@ -739,13 +769,13 @@ module mkGpio(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req)
 	begin
-	  v__h1276 = $stime;
+	  v__h1310 = $stime;
 	  #0;
 	end
-    v__h1270 = v__h1276 / 32'd10;
+    v__h1304 = v__h1310 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req)
-	$display("%0d: GPIO.rl_process_wr_req:", v__h1270);
+	$display("%0d: GPIO.rl_process_wr_req:", v__h1304);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req) $write("        ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -841,7 +871,7 @@ module mkGpio(CLK,
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req) $write(", ", "bresp: ");
     if (RST_N != `BSV_RESET_VALUE)
-      if (WILL_FIRE_RL_rl_process_wr_req) $write("'h%h", v__h990);
+      if (WILL_FIRE_RL_rl_process_wr_req) $write("'h%h", v__h1024);
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req) $write(", ", "buser: ");
     if (RST_N != `BSV_RESET_VALUE)
@@ -853,50 +883,50 @@ module mkGpio(CLK,
 	  slave_xactor_f_wr_addr_first__7_BITS_31_TO_29__ETC___d53 &&
 	  slave_xactor_f_wr_data$D_OUT[72:9] == 64'd1)
 	begin
-	  v__h1507 = $stime;
+	  v__h1548 = $stime;
 	  #0;
 	end
-    v__h1501 = v__h1507 / 32'd10;
+    v__h1542 = v__h1548 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (WILL_FIRE_RL_rl_process_wr_req &&
 	  slave_xactor_f_wr_addr_first__7_BITS_31_TO_29__ETC___d53 &&
 	  slave_xactor_f_wr_data$D_OUT[72:9] == 64'd1)
-	$display("%0d: ASSERTING SOFT RESET!", v__h1501);
+	$display("%0d: ASSERTING SOFT RESET!", v__h1542);
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_set_addr_map && set_addr_map_addr_base[2:0] != 3'd0)
 	begin
-	  v__h1674 = $stime;
+	  v__h1727 = $stime;
 	  #0;
 	end
-    v__h1668 = v__h1674 / 32'd10;
+    v__h1721 = v__h1727 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_set_addr_map && set_addr_map_addr_base[2:0] != 3'd0)
 	$display("%0d: WARNING: Boot_ROM.set_addr_map: addr_base 0x%0h is not 4-Byte-aligned",
-		 v__h1668,
+		 v__h1721,
 		 set_addr_map_addr_base);
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_set_addr_map && set_addr_map_addr_lim[2:0] != 3'd0)
 	begin
-	  v__h1784 = $stime;
+	  v__h1837 = $stime;
 	  #0;
 	end
-    v__h1778 = v__h1784 / 32'd10;
+    v__h1831 = v__h1837 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_set_addr_map && set_addr_map_addr_lim[2:0] != 3'd0)
 	$display("%0d: WARNING: Boot_ROM.set_addr_map: addr_lim 0x%0h is not 4-Byte-aligned",
-		 v__h1778,
+		 v__h1831,
 		 set_addr_map_addr_lim);
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_set_addr_map)
 	begin
-	  v__h1951 = $stime;
+	  v__h2004 = $stime;
 	  #0;
 	end
-    v__h1945 = v__h1951 / 32'd10;
+    v__h1998 = v__h2004 / 32'd10;
     if (RST_N != `BSV_RESET_VALUE)
       if (EN_set_addr_map)
 	$display("%0d: GPIO.set_addr_map: base 0x%0h lim 0x%0h",
-		 v__h1945,
+		 v__h1998,
 		 set_addr_map_addr_base,
 		 set_addr_map_addr_lim);
   end

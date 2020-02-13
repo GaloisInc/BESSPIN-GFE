@@ -1222,11 +1222,11 @@ module mkSVF_PCIE(CLK,
        WILL_FIRE_rq_xmit_put;
 
   // remaining internal signals
-  wire [63 : 0] x__read_data__h1848, x__read_data__h3837;
-  wire [61 : 0] x_wget__h5066;
-  wire [10 : 0] x__h1914, x__h2037;
-  wire [8 : 0] x__h3923, x__h4060;
-  wire [1 : 0] x__read_keep__h1849;
+  wire [63 : 0] x__h1920, x__h3999;
+  wire [61 : 0] x_wget__h5220;
+  wire [10 : 0] x__h1932, x__h2063;
+  wire [8 : 0] x__h4015, x__h4160;
+  wire [1 : 0] x__h1862;
 
   // value method pcie_in_m_axis_cc_m_tvalid
   assign pcie_in_m_axis_cc_tvalid = fAxiCc_out_buf$EMPTY_N ;
@@ -1267,7 +1267,7 @@ module mkSVF_PCIE(CLK,
 
   // value method pcie_in_m_axis_rq_m_tuser
   assign pcie_in_m_axis_rq_tuser =
-	     fAxiRq_out_buf$EMPTY_N ? x_wget__h5066 : 62'd0 ;
+	     fAxiRq_out_buf$EMPTY_N ? x_wget__h5220 : 62'd0 ;
 
   // action method pcie_in_m_axis_rq_m_tready
   assign CAN_FIRE_pcie_in_m_axis_rq_m_tready = 1'd1 ;
@@ -1914,17 +1914,17 @@ module mkSVF_PCIE(CLK,
   assign fAxiCc_data_buf_rCache$D_IN =
 	     { 1'd1,
 	       fAxiCc_data_buf_rWrPtr,
-	       x__read_data__h1848,
-	       x__read_keep__h1849,
+	       x__h1920,
+	       x__h1862,
 	       CAN_FIRE_RL_fAxiCc_moveIn && fAxiCc_in_buf$D_OUT[0] } ;
   assign fAxiCc_data_buf_rCache$EN = CAN_FIRE_RL_fAxiCc_moveIn ;
 
   // register fAxiCc_data_buf_rRdPtr
-  assign fAxiCc_data_buf_rRdPtr$D_IN = x__h2037 ;
+  assign fAxiCc_data_buf_rRdPtr$D_IN = x__h2063 ;
   assign fAxiCc_data_buf_rRdPtr$EN = CAN_FIRE_RL_fAxiCc_moveOut ;
 
   // register fAxiCc_data_buf_rWrPtr
-  assign fAxiCc_data_buf_rWrPtr$D_IN = x__h1914 ;
+  assign fAxiCc_data_buf_rWrPtr$D_IN = x__h1932 ;
   assign fAxiCc_data_buf_rWrPtr$EN = CAN_FIRE_RL_fAxiCc_moveIn ;
 
   // register fAxiCq_rv
@@ -1939,7 +1939,7 @@ module mkSVF_PCIE(CLK,
   assign fAxiRq_data_buf_rCache$D_IN =
 	     { 1'd1,
 	       fAxiRq_data_buf_rWrPtr,
-	       x__read_data__h3837,
+	       x__h3999,
 	       CAN_FIRE_RL_fAxiRq_moveIn && fAxiRq_in_buf$D_OUT[10],
 	       CAN_FIRE_RL_fAxiRq_moveIn ?
 		 fAxiRq_in_buf$D_OUT[9:0] :
@@ -1947,22 +1947,22 @@ module mkSVF_PCIE(CLK,
   assign fAxiRq_data_buf_rCache$EN = CAN_FIRE_RL_fAxiRq_moveIn ;
 
   // register fAxiRq_data_buf_rRdPtr
-  assign fAxiRq_data_buf_rRdPtr$D_IN = x__h4060 ;
+  assign fAxiRq_data_buf_rRdPtr$D_IN = x__h4160 ;
   assign fAxiRq_data_buf_rRdPtr$EN = CAN_FIRE_RL_fAxiRq_moveOut ;
 
   // register fAxiRq_data_buf_rWrPtr
-  assign fAxiRq_data_buf_rWrPtr$D_IN = x__h3923 ;
+  assign fAxiRq_data_buf_rWrPtr$D_IN = x__h4015 ;
   assign fAxiRq_data_buf_rWrPtr$EN = CAN_FIRE_RL_fAxiRq_moveIn ;
 
   // submodule fAxiCc_data_buf_memory
   assign fAxiCc_data_buf_memory$ADDRA = fAxiCc_data_buf_rWrPtr[9:0] ;
   assign fAxiCc_data_buf_memory$ADDRB =
 	     CAN_FIRE_RL_fAxiCc_moveOut ?
-	       x__h2037[9:0] :
+	       x__h2063[9:0] :
 	       fAxiCc_data_buf_rRdPtr[9:0] ;
   assign fAxiCc_data_buf_memory$DIA =
-	     { x__read_data__h1848,
-	       x__read_keep__h1849,
+	     { x__h1920,
+	       x__h1862,
 	       CAN_FIRE_RL_fAxiCc_moveIn && fAxiCc_in_buf$D_OUT[0] } ;
   assign fAxiCc_data_buf_memory$DIB =
 	     67'h2AAAAAAAAAAAAAAAA /* unspecified value */  ;
@@ -1995,10 +1995,10 @@ module mkSVF_PCIE(CLK,
   assign fAxiRq_data_buf_memory$ADDRA = fAxiRq_data_buf_rWrPtr[7:0] ;
   assign fAxiRq_data_buf_memory$ADDRB =
 	     CAN_FIRE_RL_fAxiRq_moveOut ?
-	       x__h4060[7:0] :
+	       x__h4160[7:0] :
 	       fAxiRq_data_buf_rRdPtr[7:0] ;
   assign fAxiRq_data_buf_memory$DIA =
-	     { x__read_data__h3837,
+	     { x__h3999,
 	       CAN_FIRE_RL_fAxiRq_moveIn && fAxiRq_in_buf$D_OUT[10],
 	       CAN_FIRE_RL_fAxiRq_moveIn ?
 		 fAxiRq_in_buf$D_OUT[9:0] :
@@ -2032,17 +2032,17 @@ module mkSVF_PCIE(CLK,
   assign fAxiRq_out_buf$CLR = 1'b0 ;
 
   // remaining internal signals
-  assign x__h1914 = fAxiCc_data_buf_rWrPtr + 11'd1 ;
-  assign x__h2037 = fAxiCc_data_buf_rRdPtr + 11'd1 ;
-  assign x__h3923 = fAxiRq_data_buf_rWrPtr + 9'd1 ;
-  assign x__h4060 = fAxiRq_data_buf_rRdPtr + 9'd1 ;
-  assign x__read_data__h1848 =
-	     CAN_FIRE_RL_fAxiCc_moveIn ? fAxiCc_in_buf$D_OUT[66:3] : 64'd0 ;
-  assign x__read_data__h3837 =
-	     CAN_FIRE_RL_fAxiRq_moveIn ? fAxiRq_in_buf$D_OUT[74:11] : 64'd0 ;
-  assign x__read_keep__h1849 =
+  assign x__h1862 =
 	     CAN_FIRE_RL_fAxiCc_moveIn ? fAxiCc_in_buf$D_OUT[2:1] : 2'd0 ;
-  assign x_wget__h5066 =
+  assign x__h1920 =
+	     CAN_FIRE_RL_fAxiCc_moveIn ? fAxiCc_in_buf$D_OUT[66:3] : 64'd0 ;
+  assign x__h1932 = fAxiCc_data_buf_rWrPtr + 11'd1 ;
+  assign x__h2063 = fAxiCc_data_buf_rRdPtr + 11'd1 ;
+  assign x__h3999 =
+	     CAN_FIRE_RL_fAxiRq_moveIn ? fAxiRq_in_buf$D_OUT[74:11] : 64'd0 ;
+  assign x__h4015 = fAxiRq_data_buf_rWrPtr + 9'd1 ;
+  assign x__h4160 = fAxiRq_data_buf_rRdPtr + 9'd1 ;
+  assign x_wget__h5220 =
 	     { 54'd0, fAxiRq_out_buf$D_OUT[3:0], fAxiRq_out_buf$D_OUT[7:4] } ;
 
   // handling of inlined registers

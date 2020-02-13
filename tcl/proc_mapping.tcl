@@ -5,3 +5,5 @@ dict set proc_mapping bluespec_p3 "../bluespec-processors/P3/Toooba/src_SSITH_P3
 dict set proc_mapping chisel_p1 "../chisel_processors/P1/xilinx_ip"
 dict set proc_mapping chisel_p2 "../chisel_processors/P2/xilinx_ip"
 dict set proc_mapping chisel_p3 "../chisel_processors/P3/xilinx_ip"
+dict set proc_mapping bluespec_p2_pcie "../bluespec-processors/P2/Flute/src_SSITH_P2/xilinx_ip"
+dict set proc_mapping chisel_p2_pcie "../chisel_processors/P2/xilinx_ip"

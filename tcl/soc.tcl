@@ -81,6 +81,7 @@ if { $::argc > 0 } {
       "--proc_name" { incr i; set proc_name [lindex $::argv $i] }
       "--proc_path" { incr i; set proc_path [lindex $::argv $i] }
       "--clock_freq_mhz" { incr i; set clock_freq_mhz [lindex $::argv $i] }
+      "--no_xdma" { incr i; set no_xdma [lindex $::argv $i] }
       "--help"         { help }
       default {
         if { [regexp {^-} $option] } {
@@ -165,6 +166,11 @@ set_property "ip_repo_paths" [list \
 # Generate block diagram
 source $origin_dir/soc_bd.tcl
 
+if {$no_xdma == 1} {
+    puts "Building with svf instead of xdma"
+    source $origin_dir/svf.tcl
+}
+
 # Configure the clock frequency
 puts "Setting clock fequency to $clock_freq_mhz MHz"
 set_property -dict [list CONFIG.ADDN_UI_CLKOUT1_FREQ_HZ $clock_freq_mhz] [get_bd_cells gfe_subsystem/ddr4_0]
@@ -221,6 +227,15 @@ if {[string equal [get_runs -quiet impl_1] ""]} {
 } else {
   set_property strategy {Vivado Implementation Defaults} [get_runs impl_1]
   set_property flow "Vivado Implementation 2017" [get_runs impl_1]
+}
+
+# Special case: more aggressive strategy for bluespec_p2
+if { [string equal $proc_name "bluespec_p2"] } {
+#    set_property strategy {Flow_PerfOptimized_high} [get_runs synth_1]
+#    set_property flow "Vivado Synthesis 2019" [get_runs synth_1]
+
+    set_property strategy {Performance_ExplorePostRoutePhysOpt} [get_runs impl_1]
+    set_property flow "Vivado Implementation 2019" [get_runs impl_1]
 }
 
 set obj [get_runs impl_1]

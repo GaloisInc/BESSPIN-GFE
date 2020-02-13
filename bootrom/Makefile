@@ -3,6 +3,7 @@ bootrom_rev_mem = bootrom.bytereversed.mem
 bootrom_mem = bootrom.mem
 bootrom_coe = bootrom.coe
 
+NO_PCI?=0
 CPU_SPEED?=0
 CROSS_COMPILE?=riscv64-unknown-elf-
 CPP=$(CROSS_COMPILE)cpp
@@ -33,7 +34,7 @@ all: $(bootrom_img) $(bootrom_mem) $(bootrom_coe) $(bootrom_rev_mem)
 	$(OBJDUMP) -d $< > $@
 
 %.dtb: %.dts
-	$(CPP) -x assembler-with-cpp -DCPU_SPEED=$(CPU_SPEED) $< | $(DTC) -O dtb -o $@
+	$(CPP) -x assembler-with-cpp -DCPU_SPEED=$(CPU_SPEED) -DNO_PCI=$(NO_PCI) $< | $(DTC) -O dtb -o $@
 
 %.elf: %.S linker.ld devicetree.dtb
 	$(GCC) -Tlinker.ld $< -nostdlib -static -Wl,--no-gc-sections -o $@

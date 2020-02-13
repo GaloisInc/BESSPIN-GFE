@@ -199,6 +199,30 @@ can be run with the argument `bluespec_p1` to generate the Bluespec P1
 bitstream and corresponding Vivado project
 (i.e., `./setup_soc_project.sh bluespec_p1`).
 
+All bitstreams generated using processor names of the form
+`{bluespec,chisel}_p{1,2,3}` build a system with SVF but no PCIe root
+complex.
+
+Release 5.1 adds two new bitstreams - `chisel_p2_pcie.bit` and
+`bluespec_p2_pcie.bit`. These are FPGA systems with a PCIe root complex
+and no SVF. For example, run the following to build `chisel_p2_pcie.bit`:
+```bash cd $GFE_REPO
+./setup_soc_project.sh chisel_p2_pcie # generate vivado/soc_chisel_p1/soc_chisel_p2_pcie.xpr
+vivado/soc_chisel_p2_pcie/soc_chisel_p2_pcie.xpr ./build.sh chisel_p2_pcie # generate bitstreams/soc_chisel_p2_pcie.bit
+```
+
+Vivado run complexity is significantly reduced by eliminating builds
+instantiating both a PCIe root complex and a PCIe endpoint. There is no loss
+in capability since the SVF flow control reduces the RISC-V instruction
+bandwidth to a level where the PCIe root firmware can't run.
+
+This PCIe root complex build option is not provided for P1, which doesn't
+support Linux, or for P3 whose frequency is too low to support PCIe
+root complex operation).
+
+
+
+
 ### Storing a Bitstream in Flash ###
 
 See [flash-scripts/README](flash-scripts/README) for directions on how
