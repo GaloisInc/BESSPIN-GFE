@@ -1009,6 +1009,7 @@ $ ./get_ppa.py vivado/soc_bluespec_p1/soc_bluespec_p1.runs/impl_1/
 ```
 
 Baseline values as of GFE 4.x release:
+
 | processor | power_W | CLB_LUTs | CLB_regs | cpu_Mhz |
 |------|---|---|---|---|
 | Bluespec P1 | 0.25 | 90341 | 118324 | 50.0 |
