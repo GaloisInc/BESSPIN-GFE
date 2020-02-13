@@ -167,8 +167,17 @@ CHSL_P2_freertos:
 CHSL_P2_busybox:
   script:
     - ./pytest_processor.py chisel_p2 --busybox --network --no-pcie
-    - ./pytest_processor.py chisel_p2_pcie --busybox --network
   tags: ["fpga"]
+  extends: [.log_always, .no_sched]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - bootmem/
+
+CHSL_P2_PCIE_busybox:
+  script:
+    - ./pytest_processor.py chisel_p2_pcie --busybox --network
+  tags: ["fpga-pcie"]
   extends: [.log_always, .no_sched]
   cache:
     key: ${CI_COMMIT_REF_SLUG}
@@ -209,6 +218,15 @@ BSV_P2_freertos:
 BSV_P2_busybox:
   script:
     - ./pytest_processor.py bluespec_p2 --busybox --network --no-pcie
+  tags: ["fpga"]
+  extends: [.log_always, .no_sched]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - bootmem/
+
+BSV_P2_PCIE_busybox:
+  script:
     - ./pytest_processor.py bluespec_p2_pcie --busybox --network
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
