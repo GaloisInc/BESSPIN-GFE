@@ -68,7 +68,7 @@ fi
 # Program the FPGA with the appropriate bitstream
 echo "Programming the FPGA with '$PROCNAME'..."
 cd $BASE_DIR
-./program_fpga.sh $PROCNAME >$RUNDIR/$RESULTS_DIR/program_fpga.log 2>&1
+./pyprogram_fpga.py $PROCNAME >$RUNDIR/$RESULTS_DIR/program_fpga.log 2>&1
 if [[ $? -ne 0 ]]; then
     echo 'Programming the FPGA failed'
     exit 1
@@ -134,54 +134,44 @@ for e in $ENV; do
     done
 done
 
-LOGFILE="${RESULTS_DIR}/results.log"
-
-echolog()
-(
-echo $1
-echo $1 >> $LOGFILE
-)
-
 echo
 echo '-------------------------'
 echo "Finished running $NUMTESTS tests"
-echo "Summary of Results" >> $LOGFILE
-
-echolog
-echolog "Pass count: $PASSCOUNT"
-echolog "Skip count: $SKIPCOUNT"
-echolog "Self-check fail count: $SCFAILCOUNT"
-echolog "TV check fail count: $TVFAILCOUNT"
-echolog "Unexpected behavior count: $UNEXPCOUNT"
+echo
+echo "Pass count: $PASSCOUNT"
+echo "Skip count: $SKIPCOUNT"
+echo "Self-check fail count: $SCFAILCOUNT"
+echo "TV check fail count: $TVFAILCOUNT"
+echo "Unexpected behavior count: $UNEXPCOUNT"
 if [[ $SKIPCOUNT -gt 0 ]]; then
-    echolog
-    echolog 'Skipped tests:'
+    echo
+    echo 'Skipped tests:'
     for f in $SKIPLIST; do
-	echolog "    $f"
+	echo "    $f"
     done
 fi
 if [[ $SCFAILCOUNT -gt 0 ]]; then
-    echolog
-    echolog 'Self-check failed tests:'
+    echo
+    echo 'Self-check failed tests:'
     for f in $SCFAILLIST; do
-	echolog "    $f"
+	echo "    $f"
     done
 fi
 if [[ $TVFAILCOUNT -gt 0 ]]; then
-    echolog
-    echolog 'TV check failed tests:'
+    echo
+    echo 'TV check failed tests:'
     for f in $TVFAILLIST; do
-	echolog "    $f"
+	echo "    $f"
     done
 fi
 if [[ $UNEXPCOUNT -gt 0 ]]; then
-    echolog
-    echolog 'Unexpected behavior tests:'
+    echo
+    echo 'Unexpected behavior tests:'
     for f in $UNEXPLIST; do
-	echolog "    $f"
+	echo "    $f"
     done
 fi
-echolog -------------------------
+echo -------------------------
 
 # TODO: Return non-zero if any tests didn't PASS?
 exit 0
