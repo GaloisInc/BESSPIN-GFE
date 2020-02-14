@@ -130,7 +130,7 @@ def get_ppa(dirname):
     dirpath = Path(dirname)
     reports = [f for f in dirpath.iterdir() if f.suffix == '.rpt']
     pwr_rpt = named_in(reports, 'power')
-    utl_rpt = named_in(reports, 'utilization')
+    utl_rpt = named_in(reports, 'utilization_placed')
     tmg_rpt = named_in(reports, 'timing')
 
     power = get_power(pwr_rpt)
