@@ -308,4 +308,5 @@ set_clock_groups -name async31 -asynchronous -group [get_clocks {svf_pcie_bridge
 
 set_clock_groups -name async90 -asynchronous -group [get_clocks mmcm_clkout1] -group [get_clocks clk_out1_design_1_clk_wiz_1_0]
 
-set_property USER_SLR_ASSIGNMENT SLR0 [get_cells ssith_processor_0]
+# Not to be used for bluespec_p3, so moved to other individual constraints files:
+# set_property USER_SLR_ASSIGNMENT SLR0 [get_cells ssith_processor_0]
