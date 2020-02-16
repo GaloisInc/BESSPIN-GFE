@@ -45,9 +45,9 @@ VTOP                = V$(TOPMODULE)
 VERILATOR_RESOURCES = Resources
 SOC_RTL_DIR ?= Verilog_RTL
 
-ifeq ($(PROC), bluespec_p3) 
-   SOC_RTL_DIR = Verilog_RTL_P3
-endif
+#ifeq ($(PROC), bluespec_p3)
+#   SOC_RTL_DIR = Verilog_RTL_P3
+#endif
 
 .PHONY: simulator
 simulator:
