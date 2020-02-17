@@ -19,7 +19,7 @@
 	url = https://github.com/bluespec/Toooba.git
 [submodule "riscv-pk"]
 	path = riscv-pk
-	url = ../riscv-pk.git
+	url = https://github.com/riscv/riscv-pk.git
 [submodule "riscv-tests"]
 	path = riscv-tests
 	url = ../riscv-tests.git
