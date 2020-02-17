@@ -20,6 +20,8 @@ git submodule update --init --recursive \
 bluespec-processors/P1/Piccolo bluespec-processors/P2/Flute \
 riscv-linux bluespec-processors/P3/Toooba riscv-tests riscv-pk
 git submodule update --init chisel_processors
+git submodule update --init freebsd/cheribsd
+
 
 cd chisel_processors
 git submodule sync
