@@ -3,15 +3,13 @@
 
 set architecture riscv:rv64
 set remotetimeout 5000
-set remotelogfile gdb-remote.log
+set remotelogfile logs/gdb-remote.log
 set logging overwrite
-set logging file gdb-client.log
+set logging file logs/gdb-client.log
 set logging on
 set pagination off
 
-source ignore-errors.py
-
-target remote | openocd --file openocd.cfg --log_output logs/openocd.log --debug
+target remote | ./openocd --file openocd.cfg --log_output logs/openocd.log --debug
 
 define run_prog
   dont-repeat
@@ -52,6 +50,7 @@ define run_test_p
     end
     # clean-up after the previous test
     delete
+    # reset the SoC
     set {int}0x6fff0000=0x1
     # reset the core
     monitor reset run
@@ -88,6 +87,7 @@ define run_test_v
 
   # clean-up after the previous test
   delete
+  # reset the SoC
   set {int}0x6fff0000=0x1
 
   # reset the core
