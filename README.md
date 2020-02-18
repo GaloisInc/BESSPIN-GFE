@@ -220,17 +220,15 @@ This PCIe root complex build option is not provided for P1, which doesn't
 support Linux, or for P3 whose frequency is too low to support PCIe
 root complex operation).
 
-
-
-
 ### Storing a Bitstream in Flash ###
 
 See [flash-scripts/README](flash-scripts/README) for directions on how
 to write a bitstream to flash on the VCU118.  This is optional, and
 allows the FPGA to be programmed from flash on power-up.
 
-As of the GFE 5.0 release, flash programming is not operational.
-See #141 for updates on the re-introduction of this feature.
+As of the GFE 5.0 release, the ability to store bitstreams in flash
+is not functional. See #141 for updates on the re-introduction of this 
+feature.
 
 ### Testing ###
 
@@ -675,7 +673,7 @@ round-trip min/avg/max = 20.536/20.913/23.320 ms
 / # 
 ```
 
-### Storing a boot image in Flash ###
+### Storing a boot image in flash memory ###
 
 1. Prepare the Linux image with either Debian or Busybox as described
    above.
@@ -698,6 +696,13 @@ printed before existing, the flash operation was completed.
 
 There will not be any console messages while the boot image is read
 from flash, which could take some time for the full Debian OS.
+
+Note that if there is a binary image in flash that is incompatible with
+the bitstream programmed onto the FPGA (for example, a 64-bit boot image 
+with a P1 SoC, or a binary image with invalid instructions), the processor 
+may not work properly. In particular, OpenOCD may fail to run. To avoid 
+such issues, always erase flash with `tcl/erase_flash` when you are done
+working with a boot image stored in flash.
 
 ## Adding in Your Processor ##
 
