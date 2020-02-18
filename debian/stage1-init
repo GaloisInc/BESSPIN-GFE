@@ -89,7 +89,7 @@ mount -v -t 9p "$MOUNT_TAG" /mnt
 # Change the apt mirror path used for further `apt-get install` commands.  This
 # happens only after setting up the network and the clock, so apt can access
 # http mirrors and check release file timestamps.
-echo "deb $DEBIAN_REPO sid main" >/etc/apt/sources.list
+echo "deb [trusted=yes] $DEBIAN_REPO sid main" >/etc/apt/sources.list
 apt-get update -y
 
 
