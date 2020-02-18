@@ -230,7 +230,7 @@ if {[string equal [get_runs -quiet impl_1] ""]} {
 }
 
 # Special case: more aggressive strategy for bluespec_p2
-if { [string equal $proc_name "bluespec_p2"] } {
+if { [string equal $proc_name "bluespec_p2"] || [string equal $proc_name "bluespec_p2_pcie"] } {
 #    set_property strategy {Flow_PerfOptimized_high} [get_runs synth_1]
 #    set_property flow "Vivado Synthesis 2019" [get_runs synth_1]
 
