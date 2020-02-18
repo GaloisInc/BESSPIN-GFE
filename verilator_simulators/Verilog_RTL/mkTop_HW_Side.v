@@ -163,8 +163,8 @@ module mkTop_HW_Side(CLK,
   reg TASK_testplusargs___d13;
   reg TASK_testplusargs___d12;
   reg TASK_testplusargs___d16;
-  reg [63 : 0] tohost_addr__h696;
-  reg [31 : 0] v__h752;
+  reg [63 : 0] tohost_addr__h693;
+  reg [31 : 0] v__h749;
   reg [31 : 0] c_trace_file_load_word64_in_buffer__avValue1;
   reg [31 : 0] c_trace_file_load_word64_in_buffer__avValue2;
   reg [31 : 0] c_trace_file_load_word64_in_buffer__avValue3;
@@ -174,8 +174,8 @@ module mkTop_HW_Side(CLK,
   reg [31 : 0] c_trace_file_load_word64_in_buffer__avValue7;
   reg [31 : 0] c_trace_file_load_word64_in_buffer__avValue8;
   reg [31 : 0] c_trace_file_load_word64_in_buffer__avValue9;
-  reg [31 : 0] v__h6006;
-  reg [7 : 0] v__h6269;
+  reg [31 : 0] v__h6003;
+  reg [7 : 0] v__h6266;
   // synopsys translate_on
 
   // submodule mem_model
@@ -189,8 +189,7 @@ module mkTop_HW_Side(CLK,
 			.RDY_mem_server_response_get(mem_model$RDY_mem_server_response_get));
 
   // submodule soc_top
-  mkSoC_Top soc_top(.RST_N_por(RST_N),
-		    .CLK(CLK),
+  mkSoC_Top soc_top(.CLK(CLK),
 		    .RST_N(sysRst_Ifc$OUT_RST),
 		    .put_from_console_put(soc_top$put_from_console_put),
 		    .set_verbosity_logdelay(soc_top$set_verbosity_logdelay),
@@ -248,13 +247,13 @@ module mkTop_HW_Side(CLK,
 	     mem_model$RDY_mem_server_response_get ;
 
   // submodule soc_top
-  assign soc_top$put_from_console_put = v__h6269 ;
+  assign soc_top$put_from_console_put = v__h6266 ;
   assign soc_top$set_verbosity_logdelay = 64'd0 ;
   assign soc_top$set_verbosity_verbosity =
 	     TASK_testplusargs___d12 ?
 	       4'd2 :
 	       (TASK_testplusargs___d13 ? 4'd1 : 4'd0) ;
-  assign soc_top$set_watch_tohost_tohost_addr = tohost_addr__h696 ;
+  assign soc_top$set_watch_tohost_tohost_addr = tohost_addr__h693 ;
   assign soc_top$set_watch_tohost_watch_tohost = TASK_testplusargs___d16 ;
   assign soc_top$to_raw_mem_response_put = mem_model$mem_server_response_get ;
   assign soc_top$EN_set_verbosity = !rg_banner_printed ;
@@ -270,7 +269,7 @@ module mkTop_HW_Side(CLK,
   assign soc_top$EN_put_from_console_put =
 	     WILL_FIRE_RL_rl_relay_console_in &&
 	     rg_console_in_poll == 12'd0 &&
-	     v__h6269 != 8'd0 ;
+	     v__h6266 != 8'd0 ;
   assign soc_top$EN_set_watch_tohost = !rg_banner_printed ;
 
   // submodule sysRst_Ifc
@@ -350,29 +349,29 @@ module mkTop_HW_Side(CLK,
     if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
       if (!rg_banner_printed)
 	begin
-	  tohost_addr__h696 = c_get_symbol_val("tohost");
+	  tohost_addr__h693 = c_get_symbol_val("tohost");
 	  #0;
 	end
     if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
       if (!rg_banner_printed)
 	$display("INFO: watch_tohost = %0d, tohost_addr = 0x%0h",
 		 TASK_testplusargs___d16,
-		 tohost_addr__h696);
+		 tohost_addr__h693);
     if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
       if (!rg_banner_printed)
 	begin
-	  v__h752 = c_trace_file_open(8'hAA);
+	  v__h749 = c_trace_file_open(8'hAA);
 	  #0;
 	end
     if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
-      if (!rg_banner_printed && v__h752 == 32'd0)
+      if (!rg_banner_printed && v__h749 == 32'd0)
 	$display("ERROR: Top_HW_Side.rl_step0: error opening trace file.");
     if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
-      if (!rg_banner_printed && v__h752 == 32'd0) $display("    Aborting.");
+      if (!rg_banner_printed && v__h749 == 32'd0) $display("    Aborting.");
     if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
-      if (!rg_banner_printed && v__h752 == 32'd0) $finish(32'd1);
+      if (!rg_banner_printed && v__h749 == 32'd0) $finish(32'd1);
     if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
-      if (!rg_banner_printed && v__h752 != 32'd0)
+      if (!rg_banner_printed && v__h749 != 32'd0)
 	$display("Top_HW_Side.rl_step0: opened trace file.");
     if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
       if (soc_top$RDY_tv_verifier_info_get_get)
@@ -449,16 +448,16 @@ module mkTop_HW_Side(CLK,
     if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
       if (soc_top$RDY_tv_verifier_info_get_get)
 	begin
-	  v__h6006 =
+	  v__h6003 =
 	      c_trace_file_write_buffer(soc_top$tv_verifier_info_get_get[607:576]);
 	  #0;
 	end
     if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
-      if (soc_top$RDY_tv_verifier_info_get_get && v__h6006 == 32'd0)
+      if (soc_top$RDY_tv_verifier_info_get_get && v__h6003 == 32'd0)
 	$display("ERROR: Top_HW_Side.rl_tv_vb_out: error writing out bytevec data buffer (%0d bytes)",
 		 soc_top$tv_verifier_info_get_get[607:576]);
     if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
-      if (soc_top$RDY_tv_verifier_info_get_get && v__h6006 == 32'd0)
+      if (soc_top$RDY_tv_verifier_info_get_get && v__h6003 == 32'd0)
 	$finish(32'd1);
     if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
       if (soc_top$RDY_get_to_console_get)
@@ -469,7 +468,7 @@ module mkTop_HW_Side(CLK,
       if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
 	if (WILL_FIRE_RL_rl_relay_console_in && rg_console_in_poll == 12'd0)
 	  begin
-	    v__h6269 = c_trygetchar(8'hAA);
+	    v__h6266 = c_trygetchar(8'hAA);
 	    #0;
 	  end
   end
