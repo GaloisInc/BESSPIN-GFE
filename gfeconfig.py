@@ -147,7 +147,7 @@ class Config(object):
                             'main_udp': None,
                             'main_tcp': None}
 
-        timeouts = {'main_blinky': 3,
+        timeouts = {'main_blinky': 10,
                     'main_full': 10,
                     'main_uart': 10,
                     'main_gpio': 10,
