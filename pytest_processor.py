@@ -511,34 +511,6 @@ def test_asm(config):
     # ...
     del gdb
 
-# Initialize processor test, set logging etc
-def test_init():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("proc_name", help="processor to test [chisel_p1|chisel_p2|chisel_p3|bluespec_p1|bluespec_p2|bluespec_p3]")
-    parser.add_argument("--asm", help="run ASSEMBLY tests",action="store_true")
-    parser.add_argument("--isa", help="run ISA tests",action="store_true")
-    parser.add_argument("--busybox", help="run Busybox OS",action="store_true")
-    parser.add_argument("--freebsd", help="run FreeBSD",action="store_true")
-    parser.add_argument("--linux", help="run Debian OS",action="store_true")
-    parser.add_argument("--freertos", help="run FreeRTOS OS",action="store_true")
-    parser.add_argument("--network", help="run network tests",action="store_true")
-    parser.add_argument("--io", help="run IO tests (P1 only)",action="store_true")
-    parser.add_argument("--flash", help="run flash tests",action="store_true")
-    parser.add_argument("--pcie", help="run PCIe tests (P2/P3 only)",action="store_true")
-    parser.add_argument("--no-pcie", help="build without PCIe support (P2/P3 only)",action="store_true")
-    parser.add_argument("--no-bitstream",help="do not upload bitstream",action="store_true")
-    parser.add_argument("--compiler", help="select compiler to use [gcc|clang]",default="gcc")
-    parser.add_argument("--simulator", help="run in verilator",action="store_true")
-    args = parser.parse_args()
-
-    gfeconfig.check_environment()
-
-    run(['rm','-rf','test_processor.log'])
-    logging.basicConfig(filename='test_processor.log',level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
-    print_and_log("Test processor starting.")
-
-    return args
-
 # ISA tests
 def test_isa(config):
     print_and_log("Run ISA tests")
@@ -714,6 +686,7 @@ def test_init():
     parser.add_argument("--busybox", help="run Busybox OS",action="store_true")
     parser.add_argument("--linux", help="run Debian OS",action="store_true")
     parser.add_argument("--freertos", help="run FreeRTOS OS",action="store_true")
+    parser.add_argument("--freebsd", help="run FreeBSD OS",action="store_true")
     parser.add_argument("--network", help="run network tests",action="store_true")
     parser.add_argument("--io", help="run IO tests (P1 only)",action="store_true")
     parser.add_argument("--flash", help="run flash tests",action="store_true")

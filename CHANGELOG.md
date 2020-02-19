@@ -1,5 +1,12 @@
 # Changelog
 
+## v5.1 (2020-02-20)
+* Updated GFE with final SVF  block
+* Released latest version of Bluespec P3 for initial integration (gdb is intermittent, under debug)
+* Released Bluesepc P2 processor with latest Cambridge pull requests
+* Updates Coremark submodule
+* Adds FreeBSD support (cross-compilation and a basic test)
+
 ## v5.0.4 (2020-02-12)
 * Improved test sripts
 * Improved documentation

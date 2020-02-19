@@ -1,4 +1,4 @@
-#! /usr/bin/env python3.7
+#! /usr/bin/env python3
 #
 # General config for running tests etc.
 #
