@@ -196,6 +196,7 @@ CHSL_P2_freebsd:
   script:
     - ./pytest_processor.py chisel_p2 --freebsd
   tags: ["fpga"]
+  extends: [.log_always]
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -264,6 +265,7 @@ BSV_P2_freebsd:
   script:
     - ./pytest_processor.py bluespec_p2 --freebsd
   tags: ["fpga"]
+  extends: [.log_always]
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
