@@ -55,10 +55,11 @@ $(OBJ_DIR):
 	./$(FREEBSD_DIR)/tools/build/make.py $(FLAGS) -j$(NPROCS) buildworld
 	@echo "Building done"
 
-# Copy `world` into WORLD_DIR
+# Copy 'world' into WORLD_DIR and run 'distribution'
 $(WORLD_DIR): $(OBJ_DIR)
 	@echo "Installing world"
 	./$(FREEBSD_DIR)/tools/build/make.py $(FLAGS) DESTDIR=$(WORLD_DIR) -j$(NPROCS) installworld
+	./$(FREEBSD_DIR)/tools/build/make.py $(FLAGS) DESTDIR=$(WORLD_DIR) -j$(NPROCS) distribution
 	@echo "Installing world done"
 
 # Location of FSTAB
