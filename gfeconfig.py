@@ -51,8 +51,6 @@ class Config(object):
     freertos_c_include_path='/opt/riscv/riscv64-unknown-elf/include'
 
     # Busybox config
-    busybox_basic_tests = ['boot']
-    busybox_network_tests = ['ping']
     busybox_expected_contents = None
     busybox_absent_contents = None
     busybox_timeouts = None
@@ -60,6 +58,13 @@ class Config(object):
     busybox_linux_config_path = 'bootmem/linux.config'
     busybox_linux_config_path_no_pcie = 'bootmem/linux-no-pcie.config'
     busybox_filename_bbl = 'bootmem/build-busybox-bbl/bbl'
+
+    # FreeBSD config
+    freebsd_expected_contents = None
+    freebsd_absent_contents = None
+    freebsd_timeouts = None
+    freebsd_folder = 'freebsd'
+    freebsd_filename_bbl = 'freebsd/freebsd.bbl'
 
     def __init__(self, args):
         if args.proc_name not in proc_list:
@@ -76,11 +81,24 @@ class Config(object):
         
         self.get_freertos_config()
         self.get_busybox_config()
+        self.get_freebsd_config()
         self.compiler = args.compiler
-    
+
+    def get_freebsd_config(self):
+        expected_contents = {'boot': ["FreeBSD/riscv","login:"]}
+
+        absent_contents = {'boot': None}
+
+        timeouts = {'boot': 300} # large timeout to account for loading the binary over JTAG
+
+        self.freebsd_expected_contents = expected_contents
+        self.freebsd_absent_contents = absent_contents
+        self.freebsd_timeouts = timeouts
+
+
     def get_busybox_config(self):
         expected_contents = {'boot': ["Please press Enter to activate this console"],
-                            'ping': ["Please press Enter to activate this console"]}
+                            'ping': ["xilinx_axienet 62100000.ethernet","Link is Up"]}
 
         absent_contents = {'boot': None,
                             'ping': None}

@@ -293,7 +293,7 @@ def test_freertos_common(gdb, uart, config, prog_name):
         env=dict(os.environ, C_INCLUDE_PATH=config.freertos_c_include_path, USE_CLANG=use_clang,
         PROG=prog_name, XLEN=config.xlen), capture_output=True))
     filename = config.freertos_folder + '/' + prog_name + '.elf'
-    res, rx =  freertos_tester(gdb, uart, filename,
+    res, rx =  basic_tester(gdb, uart, filename,
         timeout=config.freertos_timeouts[prog_name],
         expected_contents=config.freertos_expected_contents[prog_name],
         absent_contents=config.freertos_absent_contents[prog_name])
@@ -409,45 +409,17 @@ def test_freertos_network(uart, config, prog_name):
     del gdb
     return res
 
-# FreeRTOS: load executable and check UART output
-def freertos_tester(gdb, uart, exe_filename, timeout, expected_contents, absent_contents=None):
-    print_and_log('Starting FreeRTOS test of ' + exe_filename)
+
+# Generic basic tester
+def basic_tester(gdb, uart, exe_filename, timeout, expected_contents, absent_contents=None):
+    print_and_log('Starting basic tester using ' + exe_filename)
     soft_reset_cmd = 'set *((int *) 0x6FFF0000) = 1'
-
-    setup_cmds = [
-        'dont-repeat',
-        soft_reset_cmd,
-        soft_reset_cmd, # reset twice to make sure we did reset
-        'monitor reset halt',
-        'delete',
-        'file ' + exe_filename,
-        'load',
-    ]
-    print_and_log('Loading and running {} ...'.format(exe_filename))
-    for c in setup_cmds:
-        gdb.cmd(c)
-    print_and_log("Continuing")
-    gdb.cont()
-
-    res, rx = uart.read_and_check(timeout, expected_contents, absent_contents)
-    if res:
-        print_and_log('PASS')
-        return True, rx
-    else:
-        print_and_log('FAIL')
-        return False, rx
-
-# Busybox basic tester - boots and waits if you see the console
-def busybox_basic_tester(gdb, uart, exe_filename, timeout):
-    print_and_log('Starting basic Busybox test using ' + exe_filename)
-    soft_reset_cmd = 'set *((int *) 0x6FFF0000) = 1'
-    expected_contents=["Please press Enter to activate this console"]
-    absent_contents=None
 
     gdb.interrupt()
     setup_cmds = [
         'dont-repeat',
         soft_reset_cmd,
+        soft_reset_cmd, # reset twice to make sure we did reset
         'monitor reset halt',
         'delete',
         'file ' + exe_filename,
@@ -535,6 +507,7 @@ def test_init():
     parser.add_argument("--asm", help="run ASSEMBLY tests",action="store_true")
     parser.add_argument("--isa", help="run ISA tests",action="store_true")
     parser.add_argument("--busybox", help="run Busybox OS",action="store_true")
+    parser.add_argument("--freebsd", help="run FreeBSD",action="store_true")
     parser.add_argument("--linux", help="run Debian OS",action="store_true")
     parser.add_argument("--freertos", help="run FreeRTOS OS",action="store_true")
     parser.add_argument("--network", help="run network tests",action="store_true")
@@ -618,6 +591,22 @@ def test_freertos(config, args):
         raise RuntimeError("FreeRTOS IO tests failed: " + str(freertos_failed))
     print_and_log("FreeRTOS tests passed")
 
+# FreeBSD tests
+def test_freebsd(config, args):
+    print_and_log("Running FreeBSD tests")
+
+    build_freebsd(config)
+
+    print_and_log("FreeBSD basic test")
+    gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
+    res, _val = basic_tester(gdb, uart, config.freebsd_filename_bbl, \
+                config.freebsd_timeouts['boot'], config.freebsd_expected_contents['boot'], \
+                config.freebsd_absent_contents['boot'])
+    if res == True:
+        print_and_log("FreeBSD basic test passed")
+    else:
+        raise RuntimeError("FreeBSD basic test failed")
+
 # Busybox tests
 def test_busybox(config, args):
     print_and_log("Running busybox tests")
@@ -637,7 +626,9 @@ def test_busybox(config, args):
 
     print_and_log("Busybox basic test")
     gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
-    res, _val = busybox_basic_tester(gdb, uart, config.busybox_filename_bbl, config.busybox_timeouts['boot'])
+    res, _val = basic_tester(gdb, uart, config.busybox_filename_bbl, \
+                config.busybox_timeouts['boot'], config.busybox_expected_contents['boot'], \
+                config.busybox_absent_contents['boot'])
     if res == True:
         print_and_log("Busybox basic test passed")
     else:
@@ -670,8 +661,7 @@ def test_busybox(config, args):
         print_and_log(cmd3)
         uart.send(cmd3)
 
-        expected_contents=["xilinx_axienet 62100000.ethernet","Link is Up - 1Gbps/Full - flow control rx/tx"]
-        if not uart.read_and_check(10, expected_contents):
+        if not uart.read_and_check(10, config.busybox_expected_contents['ping']):
             raise RuntimeError("Busybox network test failed: cannot bring up eth interface")
 
         print_and_log("Ping FPGA")
@@ -686,7 +676,14 @@ def test_busybox(config, args):
     del gdb
     del uart
 
-    
+# Common FreeBSD test part
+def build_freebsd(config):
+    run_and_log("Cleaning freebsd",
+        run(['make','clean'],cwd=config.freebsd_folder,
+        env=dict(os.environ), capture_output=True))
+    run_and_log("Building freebsd",
+        run(['make'],cwd=config.freebsd_folder,
+        env=dict(os.environ), capture_output=True))
 
 # Common busybox test parts
 def build_busybox(config, linux_config_path):
@@ -720,6 +717,9 @@ if __name__ == '__main__':
 
     if args.busybox:
         test_busybox(config, args)
+
+    if args.freebsd:
+        test_freebsd(config, args)
 
     print_and_log('Finished!')
 
