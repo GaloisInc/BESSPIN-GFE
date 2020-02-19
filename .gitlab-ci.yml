@@ -274,6 +274,21 @@ CHSL_P2_busybox:
   except:
     - schedules
 
+CHSL_P2_freebsd:
+  script:
+    - ./pytest_processor.py chisel_p2 --freebsd
+  tags: ["fpga"]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - freebsd/world
+      - freebsd/obj
+      - freebsd/freebsd.bbl
+  only:
+    variables:
+      - $JOB_TYPE == "linux"
+
+
 # CHSL_P2_debian:
 #   script:
 #     - ./pytest_processor.py chisel_p2 --debian
@@ -339,6 +354,20 @@ BSV_P2_busybox:
       - bootmem/
   except:
     - schedules
+
+BSV_P2_freebsd:
+  script:
+    - ./pytest_processor.py bluespec_p2 --freebsd
+  tags: ["fpga"]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - freebsd/world
+      - freebsd/obj
+      - freebsd/freebsd.bbl
+  only:
+    variables:
+      - $JOB_TYPE == "linux"
 
 # BSV_P2_debian:
 #   script:
