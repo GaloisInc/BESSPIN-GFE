@@ -22,6 +22,24 @@ variables:
   tool_suite_url: git@gitlab-ext.galois.com:ssith/tool-suite.git
   tool_suite_rev: master
 
+.log_failure:
+  artifacts:
+    expire_in: 1 day
+    when: on_failure
+    paths:
+      - test_processor.log
+
+.log_always:
+  extends: .log_failure
+  artifacts:
+    when: always
+
+.verilator:
+  tags: ["verilator"]
+
+.no_sched:
+  except: ["schedules"]
+
 #-----------------------------------------------------------------------------#
 #
 # Verilator simulation tests
@@ -30,86 +48,65 @@ variables:
 CHSL_P1_sim:
   script:
     - ./pytest_processor.py chisel_p1 --simulator
-  tags: ["verilator"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 week
-    paths:
-      - verilator_simulators/run/Logs/chisel_p1/
-      - test_processor.log
+  extends: [.log_failure, .no_sched, .verilator]
 
 BSV_P1_sim:
   script:
     - ./pytest_processor.py bluespec_p1 --simulator
-  tags: ["verilator"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 week
-    paths:
-      - verilator_simulators/run/Logs/bluespec_p1/
-      - test_processor.log
+  extends: [.log_failure, .no_sched, .verilator]
 
 CHSL_P2_sim:
   script:
     - ./pytest_processor.py chisel_p2 --simulator
-  tags: ["verilator"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 week
-    paths:
-      - verilator_simulators/run/Logs/chisel_p2/
-      - test_processor.log
+  extends: [.log_failure, .no_sched, .verilator]
 
 BSV_P2_sim:
   script:
     - ./pytest_processor.py bluespec_p2 --simulator
-  tags: ["verilator"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 week
-    paths:
-      - verilator_simulators/run/Logs/bluespec_p2/
-      - test_processor.log
+  extends: [.log_failure, .no_sched, .verilator]
 
 CHSL_P3_sim:
   script:
     - ./pytest_processor.py chisel_p3 --simulator
-  tags: ["verilator"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 week
-    paths:
-      - verilator_simulators/run/Logs/chisel_p3/
-      - test_processor.log
+  extends: [.log_failure, .no_sched, .verilator]
 
-# TODO: currently fails
-# BSV_P3_sim:
-#   script:
-#     - ./pytest_processor.py bluespec_p3 --simulator
-#   tags: ["verilator"]
-#   except:
-#     - schedules
-#   artifacts:
-#     when: on_failure
-#     expire_in: 1 week
-#     paths:
-#       - verilator_simulators/run/Logs/bluespec_p3/
+BSV_P3_sim:
+  script:
+    - ./pytest_processor.py bluespec_p3 --simulator
+  extends: [.log_failure, .no_sched, .verilator]
 
 #-----------------------------------------------------------------------------#
 #
 # FPGA tests
 #
 #-----------------------------------------------------------------------------#
+P1_benchmarks:
+  script:
+    - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 clean
+    - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 link
+    - ./pytest_processor.py bluespec_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+    - ./pytest_processor.py chisel_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+  tags: ["fpga"]
+  extends: [.log_always, .no_sched]
+
+P2_benchmarks:
+  script:
+    - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P2 ITERATIONS=3000 clean
+    - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P2 ITERATIONS=3000 link
+    - ./pytest_processor.py bluespec_p2  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+    - ./pytest_processor.py chisel_p2  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+  tags: ["fpga"]
+  extends: [.log_always, .no_sched]
+
+P3_benchmarks:
+  script:
+    - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P3 ITERATIONS=1000 clean
+    - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P3 ITERATIONS=1000 link
+    # No BSV P3 yet
+    # - ./pytest_processor.py bluespec_p3  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+    - ./pytest_processor.py chisel_p3  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+  tags: ["fpga"]
+  extends: [.log_always, .no_sched]
 
 #-----------------------#
 #                       #
@@ -120,49 +117,15 @@ BSV_P1_isa:
   script:
     - ./pytest_processor.py bluespec_p1 --isa
   tags: ["fpga"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - test_processor.log
+  extends: [.log_always, .no_sched]
 
-BSV_P1_freertos_gcc:
+BSV_P1_freertos:
   script:
     - ./pytest_processor.py bluespec_p1 --freertos
-  tags: ["fpga"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - test_processor.log
-
-BSV_P1_freertos_io_gcc:
-  script:
-    - ./pytest_processor.py bluespec_p1 --freertos --io
+    - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --io
+    - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --network
   tags: ["fpga-io"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - test_processor.log
-
-BSV_P1_freertos_network_gcc:
-  script:
-    - ./pytest_processor.py bluespec_p1 --freertos --network
-  tags: ["fpga-network"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - test_processor.log
+  extends: [.log_always, .no_sched]
 
 #-----------------------#
 #                       #
@@ -173,49 +136,15 @@ CHSL_P1_isa:
   script:
     - ./pytest_processor.py chisel_p1 --isa
   tags: ["fpga"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - test_processor.log
+  extends: [.log_always, .no_sched]
 
-CHSL_P1_freertos_gcc:
+CHSL_P1_freertos:
   script:
     - ./pytest_processor.py chisel_p1 --freertos
-  tags: ["fpga"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - test_processor.log
-
-CHSL_P1_freertos_io_gcc:
-  script:
-    - ./pytest_processor.py chisel_p1 --freertos --io
-  tags: ["fpga-io"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - test_processor.log
-
-CHSL_P1_freertos_network_gcc:
-  script:
+    - ./pytest_processor.py chisel_p1 --no-bitstream --freertos --io
     - ./pytest_processor.py chisel_p1 --freertos --network
-  tags: ["fpga-network"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - test_processor.log
+  tags: ["fpga-io"]
+  extends: [.log_always, .no_sched]
 
 #-----------------------#
 #                       #
@@ -226,53 +155,34 @@ CHSL_P2_isa:
   script:
     - ./pytest_processor.py chisel_p2 --isa
   tags: ["fpga"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - test_processor.log
+  extends: [.log_always, .no_sched]
 
-CHSL_P2_freertos_gcc:
+CHSL_P2_freertos:
   script:
     - ./pytest_processor.py chisel_p2 --freertos
+    - ./pytest_processor.py chisel_p2 --no-bitstream --freertos --network
   tags: ["fpga"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - test_processor.log
-
-CHSL_P2_freertos_network_gcc:
-  script:
-    - ./pytest_processor.py chisel_p2 --freertos --network
-  tags: ["fpga-network"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - test_processor.log
+  extends: [.log_always, .no_sched]
 
 CHSL_P2_busybox:
   script:
-    - ./pytest_processor.py chisel_p2 --busybox --network --no-pcie
+    - ./pytest_processor.py chisel_p2 --busybox --network
   tags: ["fpga"]
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - test_processor.log
+  extends: [.log_always, .no_sched]
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - bootmem/
-  except:
-    - schedules
+
+CHSL_P2_PCIE_busybox:
+  script:
+    - ./pytest_processor.py chisel_p2_pcie --busybox --network
+  tags: ["fpga-pcie"]
+  extends: [.log_always, .no_sched]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - bootmem/
 
 CHSL_P2_freebsd:
   script:
@@ -311,49 +221,34 @@ BSV_P2_isa:
   script:
     - ./pytest_processor.py bluespec_p2 --isa
   tags: ["fpga"]
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - test_processor.log
+  extends: [.log_always, .no_sched]
 
-BSV_P2_freertos_gcc:
+BSV_P2_freertos:
   script:
     - ./pytest_processor.py bluespec_p2 --freertos
+    - ./pytest_processor.py bluespec_p2 --no-bitstream --freertos --network
   tags: ["fpga"]
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - test_processor.log
-
-BSV_P2_freertos_network_gcc:
-  script:
-    - ./pytest_processor.py bluespec_p2 --freertos --network
-  tags: ["fpga-network"]
-  except:
-    - schedules
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - test_processor.log
+  extends: [.log_always, .no_sched]
 
 BSV_P2_busybox:
   script:
-    - ./pytest_processor.py bluespec_p2 --busybox --network --no-pcie
+    - ./pytest_processor.py bluespec_p2 --busybox --network
   tags: ["fpga"]
-  artifacts:
-    when: always
-    expire_in: 1 day
-    paths:
-      - test_processor.log
+  extends: [.log_always, .no_sched]
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - bootmem/
-  except:
-    - schedules
+
+BSV_P2_PCIE_busybox:
+  script:
+    - ./pytest_processor.py bluespec_p2_pcie --busybox --network
+  tags: ["fpga-pcie"]
+  extends: [.log_always, .no_sched]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - bootmem/
 
 BSV_P2_freebsd:
   script:
@@ -391,8 +286,25 @@ CHSL_P3_isa:
   script:
     - ./pytest_processor.py chisel_p3 --isa
   tags: ["fpga"]
-  except:
-    - schedules
+  extends: [.log_always, .no_sched]
+
+CHSL_P3_freertos:
+  script:
+    - ./pytest_processor.py chisel_p3 --freertos
+    - ./pytest_processor.py chisel_p3 --no-bitstream --freertos --network
+  tags: ["fpga"]
+  extends: [.log_always, .no_sched]
+
+CHSL_P3_busybox:
+  script:
+    - ./pytest_processor.py chisel_p3 --busybox --network
+  tags: ["fpga"]
+  extends: [.log_always, .no_sched]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - bootmem/
+
 # CHSL_P3:
 #   script:
 #     - ./pytest_processor.py chisel_p3 --isa
@@ -423,6 +335,7 @@ CHSL_P1_bitstream_gen:
   script:
     - ./setup_soc_project.sh chisel_p1
     - ./build.sh chisel_p1
+    - ./get_ppa.py vivado/soc_chisel_p1/soc_chisel_p1.runs/impl_1/
   tags: ["bitstream"]
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
@@ -441,6 +354,7 @@ CHSL_P2_bitstream_gen:
   script:
     - ./setup_soc_project.sh chisel_p2
     - ./build.sh chisel_p2
+    - ./get_ppa.py vivado/soc_chisel_p2/soc_chisel_p2.runs/impl_1/
   tags: ["bitstream"]
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
@@ -451,7 +365,25 @@ CHSL_P2_bitstream_gen:
       - vivado/soc_chisel_p2/soc_chisel_p2.runs/impl_1/design_1_timing_summary_routed.rpt
       - vivado/soc_chisel_p2/soc_chisel_p2.runs/impl_1/design_1_utilization_placed.rpt
       - vivado/soc_chisel_p2/soc_chisel_p2.runs/impl_1/design_1_power_routed.rpt
+  only:
+    variables:
+      - $JOB_TYPE == "bitstream_gen_chisel_p2"
 
+CHSL_P2_PCIE_bitstream_gen:
+  script:
+    - ./setup_soc_project.sh chisel_p2_pcie
+    - ./build.sh chisel_p2_pcie
+    - ./get_ppa.py vivado/soc_chisel_p2_pcie/soc_chisel_p2_pcie.runs/impl_1/
+  tags: ["bitstream"]
+  artifacts:
+    name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+    when: always
+    expire_in: 1 week
+    paths:
+      - bitstreams/soc_chisel_p2_pcie.*
+      - vivado/soc_chisel_p2_pcie/soc_chisel_p2_pcie.runs/impl_1/design_1_timing_summary_routed.rpt
+      - vivado/soc_chisel_p2_pcie/soc_chisel_p2_pcie.runs/impl_1/design_1_utilization_placed.rpt
+      - vivado/soc_chisel_p2_pcie/soc_chisel_p2_pcie.runs/impl_1/design_1_power_routed.rpt
   only:
     variables:
       - $JOB_TYPE == "bitstream_gen_chisel_p2"
@@ -460,6 +392,7 @@ CHSL_P3_bitstream_gen:
   script:
     - ./setup_soc_project.sh chisel_p3
     - ./build.sh chisel_p3
+    - ./get_ppa.py vivado/soc_chisel_p3/soc_chisel_p3.runs/impl_1/
   tags: ["bitstream"]
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
@@ -478,6 +411,7 @@ BSV_P1_bitstream_gen:
   script:
     - ./setup_soc_project.sh bluespec_p1
     - ./build.sh bluespec_p1
+    - ./get_ppa.py vivado/soc_bluespec_p1/soc_bluespec_p1.runs/impl_1/
   tags: ["bitstream"]
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
@@ -496,6 +430,7 @@ BSV_P2_bitstream_gen:
   script:
     - ./setup_soc_project.sh bluespec_p2
     - ./build.sh bluespec_p2
+    - ./get_ppa.py vivado/soc_bluespec_p2/soc_bluespec_p2.runs/impl_1/
   tags: ["bitstream"]
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
@@ -510,23 +445,44 @@ BSV_P2_bitstream_gen:
     variables:
       - $JOB_TYPE == "bitstream_gen_bluespec_p2"
 
-BSV_P3_bitstream_gen:
+BSV_P2_PCIE_bitstream_gen:
   script:
-    - ./setup_soc_project.sh bluespec_p3
-    - ./build.sh bluespec_p3
+    - ./setup_soc_project.sh bluespec_p2_pcie
+    - ./build.sh bluespec_p2_pcie
+    - ./get_ppa.py vivado/soc_bluespec_p2_pcie/soc_bluespec_p2_pcie.runs/impl_1/
   tags: ["bitstream"]
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
     when: always
     expire_in: 1 week
     paths:
-      - bitstreams/soc_bluespec_p3.*
-      - vivado/soc_bluespec_p3/soc_bluespec_p3.runs/impl_1/design_1_timing_summary_routed.rpt
-      - vivado/soc_bluespec_p3/soc_bluespec_p3.runs/impl_1/design_1_utilization_placed.rpt
-      - vivado/soc_bluespec_p3/soc_bluespec_p3.runs/impl_1/design_1_power_routed.rpt
+      - bitstreams/soc_bluespec_p2_pcie.*
+      - vivado/soc_bluespec_p2_pcie/soc_bluespec_p2_pcie.runs/impl_1/design_1_timing_summary_routed.rpt
+      - vivado/soc_bluespec_p2_pcie/soc_bluespec_p2_pcie.runs/impl_1/design_1_utilization_placed.rpt
+      - vivado/soc_bluespec_p2_pcie/soc_bluespec_p2_pcie.runs/impl_1/design_1_power_routed.rpt
   only:
     variables:
-      - $JOB_TYPE == "bitstream_gen_bluespec_p3"
+      - $JOB_TYPE == "bitstream_gen_bluespec_p2"
+
+# NOTE: BSV P3 bitstream is not a part of 5.1 release
+# BSV_P3_bitstream_gen:
+#   script:
+#     - ./setup_soc_project.sh bluespec_p3
+#     - ./build.sh bluespec_p3
+#     - ./get_ppa.py vivado/soc_bluespec_p3/soc_bluespec_p3.runs/impl_1/
+#   tags: ["bitstream"]
+#   artifacts:
+#     name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+#     when: always
+#     expire_in: 1 week
+#     paths:
+#       - bitstreams/soc_bluespec_p3.*
+#       - vivado/soc_bluespec_p3/soc_bluespec_p3.runs/impl_1/design_1_timing_summary_routed.rpt
+#       - vivado/soc_bluespec_p3/soc_bluespec_p3.runs/impl_1/design_1_utilization_placed.rpt
+#       - vivado/soc_bluespec_p3/soc_bluespec_p3.runs/impl_1/design_1_power_routed.rpt
+#   only:
+#     variables:
+#       - $JOB_TYPE == "bitstream_gen_bluespec_p3"
 
 #-----------------------------------------------------------------------------#
 #

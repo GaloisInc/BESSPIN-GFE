@@ -8,6 +8,7 @@ bootrom/bootrom.hex
 bootrom/bootrom.mem
 bootrom/bootrom.bytereversed.mem
 bootrom/bootrom.dump
+bootrom/bootrom.coe
 
 flash-scripts/*.mcs
 flash-scripts/*.log
@@ -31,3 +32,5 @@ test_32.gdb
 test_64.gdb
 # filesystem artifacts
 ._*
+/docker/riscv-gnu-toolchains.tar.gz
+/install/riscv-gnu-toolchains.tar.gz

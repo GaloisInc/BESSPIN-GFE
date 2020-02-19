@@ -1,14 +1,15 @@
-#! /usr/bin/env python3.7
+#! /usr/bin/env python3
 #
 # General config for running tests etc.
 #
-from subprocess import run
+from shutil import which
+
 
 # Processor config
-proc_list = ['chisel_p1', 'chisel_p2', 'chisel_p3', 'bluespec_p1', 'bluespec_p2', 'bluespec_p3']
+proc_list = ['chisel_p1', 'chisel_p2', 'chisel_p2_pcie', 'chisel_p3', 'bluespec_p1', 'bluespec_p2', 'bluespec_p2_pcie', 'bluespec_p3']
 
 # Environment config
-env_requried = ['openocd','riscv64-unknown-elf-gcc','riscv64-unknown-linux-gnu-gcc']    
+env_requried = ['openocd','riscv64-unknown-elf-gcc','riscv64-unknown-linux-gnu-gcc']
 
 # Check if the processor is in the list of supported processors
 def proc_picker(proc):
@@ -20,8 +21,7 @@ def proc_picker(proc):
 def check_vivado():
     program_list = ['vivado_lab','vivado']
     for program in program_list:
-        res = run(['which',program],capture_output=True)
-        if res.returncode == 0:
+        if which(program) is not None:
             return program
     raise RuntimeError("Neither vivado nor vivado_lab found")
 
@@ -29,7 +29,8 @@ def check_vivado():
 def check_environment():
     print("Checking environment")
     for program in env_requried:
-        run(['which',program], capture_output=True,check=True)
+        if which(program) is None:
+            raise RuntimeError("Required program {} not found".format(program))
     return True
 
 
@@ -71,37 +72,34 @@ class Config(object):
             raise ValueError('Unknown processor ' + args.proc_name)
         else:
             self.proc_name = args.proc_name
-        
+
         if 'p1' in self.proc_name:
             self.xlen = '32'
             self.xarch = 'rv32imacu'
-        else:
+            self.cpu_freq = '50000000'
+        elif 'p2' in self.proc_name:
             self.xlen = '64'
             self.xarch = 'rv64gcsu'
-        
+            self.cpu_freq = '100000000'
+        elif 'p3' in self.proc_name:
+            self.xlen = '64'
+            self.xarch = 'rv64gcsu'
+            self.cpu_freq = '25000000'
+        else:
+            # this should never happen
+            raise ValueError('Unknown processor ' + args.proc_name)
+
         self.get_freertos_config()
         self.get_busybox_config()
         self.get_freebsd_config()
         self.compiler = args.compiler
 
-    def get_freebsd_config(self):
-        expected_contents = {'boot': ["FreeBSD/riscv","login:"]}
-
-        absent_contents = {'boot': None}
-
-        timeouts = {'boot': 1200} # large timeout to account for loading the binary over JTAG
-
-        self.freebsd_expected_contents = expected_contents
-        self.freebsd_absent_contents = absent_contents
-        self.freebsd_timeouts = timeouts
-
-
     def get_busybox_config(self):
         expected_contents = {'boot': ["Please press Enter to activate this console"],
                             'ping': ["xilinx_axienet 62100000.ethernet","Link is Up"]}
 
-        absent_contents = {'boot': None,
-                            'ping': None}
+        absent_contents = {'boot': [],
+                            'ping': []}
 
         timeouts = {'boot': 300, # large timeout to account for loading the binary over JTAG
                     'ping': 60}
@@ -120,7 +118,7 @@ class Config(object):
         ]
 
         main_full = ["Pass", ".", ".","."]
-        main_full_absent="ERROR"
+        main_full_absent=["ERROR"]
 
         main_uart = ["UART1 RX: Hello from UART1"]
         main_gpio = ["#2 changed: 0 -> 1","#3 changed: 0 -> 1"]
@@ -138,14 +136,14 @@ class Config(object):
                             'main_udp': main_udp,
                             'main_tcp': main_tcp}
 
-        absent_contents = {'main_blinky': None,
+        absent_contents = {'main_blinky': [],
                             'main_full': main_full_absent,
-                            'main_uart': None,
-                            'main_gpio': None,
-                            'main_rtc': None,
-                            'main_sd': None,
-                            'main_udp': None,
-                            'main_tcp': None}
+                            'main_uart': [],
+                            'main_gpio': [],
+                            'main_rtc': [],
+                            'main_sd': [],
+                            'main_udp': [],
+                            'main_tcp': []}
 
         timeouts = {'main_blinky': 10,
                     'main_full': 10,

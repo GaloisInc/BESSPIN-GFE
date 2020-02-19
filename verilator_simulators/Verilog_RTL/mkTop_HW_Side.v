@@ -9,6 +9,7 @@ lint_off -msg STMTDLY
 lint_off -msg INITIALDLY
 lint_off -msg UNSIGNED
 lint_off -msg CMPCONST
+lint_off -msg PINMISSING
 `verilog
 // Copyright (c) 2018-2019 Bluespec, Inc. All Rights Reserved
 
@@ -129,6 +130,7 @@ module mkTop_HW_Side(CLK,
        mem_model$RDY_mem_server_response_get;
 
   // ports of submodule soc_top
+  wire [607 : 0] soc_top$tv_verifier_info_get_get;
   wire [352 : 0] soc_top$to_raw_mem_request_get;
   wire [255 : 0] soc_top$to_raw_mem_response_put;
   wire [63 : 0] soc_top$set_verbosity_logdelay,
@@ -161,8 +163,19 @@ module mkTop_HW_Side(CLK,
   reg TASK_testplusargs___d13;
   reg TASK_testplusargs___d12;
   reg TASK_testplusargs___d16;
-  reg [63 : 0] tohost_addr__h689;
-  reg [7 : 0] v__h902;
+  reg [63 : 0] tohost_addr__h693;
+  reg [31 : 0] v__h749;
+  reg [31 : 0] c_trace_file_load_word64_in_buffer__avValue1;
+  reg [31 : 0] c_trace_file_load_word64_in_buffer__avValue2;
+  reg [31 : 0] c_trace_file_load_word64_in_buffer__avValue3;
+  reg [31 : 0] c_trace_file_load_word64_in_buffer__avValue4;
+  reg [31 : 0] c_trace_file_load_word64_in_buffer__avValue5;
+  reg [31 : 0] c_trace_file_load_word64_in_buffer__avValue6;
+  reg [31 : 0] c_trace_file_load_word64_in_buffer__avValue7;
+  reg [31 : 0] c_trace_file_load_word64_in_buffer__avValue8;
+  reg [31 : 0] c_trace_file_load_word64_in_buffer__avValue9;
+  reg [31 : 0] v__h6003;
+  reg [7 : 0] v__h6266;
   // synopsys translate_on
 
   // submodule mem_model
@@ -192,7 +205,7 @@ module mkTop_HW_Side(CLK,
 		    .EN_put_from_console_put(soc_top$EN_put_from_console_put),
 		    .EN_set_watch_tohost(soc_top$EN_set_watch_tohost),
 		    .RDY_set_verbosity(),
-		    .tv_verifier_info_get_get(),
+		    .tv_verifier_info_get_get(soc_top$tv_verifier_info_get_get),
 		    .RDY_tv_verifier_info_get_get(soc_top$RDY_tv_verifier_info_get_get),
 		    .to_raw_mem_request_get(soc_top$to_raw_mem_request_get),
 		    .RDY_to_raw_mem_request_get(soc_top$RDY_to_raw_mem_request_get),
@@ -234,13 +247,13 @@ module mkTop_HW_Side(CLK,
 	     mem_model$RDY_mem_server_response_get ;
 
   // submodule soc_top
-  assign soc_top$put_from_console_put = v__h902 ;
+  assign soc_top$put_from_console_put = v__h6266 ;
   assign soc_top$set_verbosity_logdelay = 64'd0 ;
   assign soc_top$set_verbosity_verbosity =
 	     TASK_testplusargs___d12 ?
 	       4'd2 :
 	       (TASK_testplusargs___d13 ? 4'd1 : 4'd0) ;
-  assign soc_top$set_watch_tohost_tohost_addr = tohost_addr__h689 ;
+  assign soc_top$set_watch_tohost_tohost_addr = tohost_addr__h693 ;
   assign soc_top$set_watch_tohost_watch_tohost = TASK_testplusargs___d16 ;
   assign soc_top$to_raw_mem_response_put = mem_model$mem_server_response_get ;
   assign soc_top$EN_set_verbosity = !rg_banner_printed ;
@@ -256,7 +269,7 @@ module mkTop_HW_Side(CLK,
   assign soc_top$EN_put_from_console_put =
 	     WILL_FIRE_RL_rl_relay_console_in &&
 	     rg_console_in_poll == 12'd0 &&
-	     v__h902 != 8'd0 ;
+	     v__h6266 != 8'd0 ;
   assign soc_top$EN_set_watch_tohost = !rg_banner_printed ;
 
   // submodule sysRst_Ifc
@@ -336,14 +349,116 @@ module mkTop_HW_Side(CLK,
     if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
       if (!rg_banner_printed)
 	begin
-	  tohost_addr__h689 = c_get_symbol_val("tohost");
+	  tohost_addr__h693 = c_get_symbol_val("tohost");
 	  #0;
 	end
     if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
       if (!rg_banner_printed)
 	$display("INFO: watch_tohost = %0d, tohost_addr = 0x%0h",
 		 TASK_testplusargs___d16,
-		 tohost_addr__h689);
+		 tohost_addr__h693);
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (!rg_banner_printed)
+	begin
+	  v__h749 = c_trace_file_open(8'hAA);
+	  #0;
+	end
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (!rg_banner_printed && v__h749 == 32'd0)
+	$display("ERROR: Top_HW_Side.rl_step0: error opening trace file.");
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (!rg_banner_printed && v__h749 == 32'd0) $display("    Aborting.");
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (!rg_banner_printed && v__h749 == 32'd0) $finish(32'd1);
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (!rg_banner_printed && v__h749 != 32'd0)
+	$display("Top_HW_Side.rl_step0: opened trace file.");
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (soc_top$RDY_tv_verifier_info_get_get)
+	begin
+	  c_trace_file_load_word64_in_buffer__avValue1 =
+	      c_trace_file_load_word64_in_buffer(32'd0,
+							   soc_top$tv_verifier_info_get_get[63:0]);
+	  #0;
+	end
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (soc_top$RDY_tv_verifier_info_get_get)
+	begin
+	  c_trace_file_load_word64_in_buffer__avValue2 =
+	      c_trace_file_load_word64_in_buffer(32'd8,
+							   soc_top$tv_verifier_info_get_get[127:64]);
+	  #0;
+	end
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (soc_top$RDY_tv_verifier_info_get_get)
+	begin
+	  c_trace_file_load_word64_in_buffer__avValue3 =
+	      c_trace_file_load_word64_in_buffer(32'd16,
+							   soc_top$tv_verifier_info_get_get[191:128]);
+	  #0;
+	end
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (soc_top$RDY_tv_verifier_info_get_get)
+	begin
+	  c_trace_file_load_word64_in_buffer__avValue4 =
+	      c_trace_file_load_word64_in_buffer(32'd24,
+							   soc_top$tv_verifier_info_get_get[255:192]);
+	  #0;
+	end
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (soc_top$RDY_tv_verifier_info_get_get)
+	begin
+	  c_trace_file_load_word64_in_buffer__avValue5 =
+	      c_trace_file_load_word64_in_buffer(32'd32,
+							   soc_top$tv_verifier_info_get_get[319:256]);
+	  #0;
+	end
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (soc_top$RDY_tv_verifier_info_get_get)
+	begin
+	  c_trace_file_load_word64_in_buffer__avValue6 =
+	      c_trace_file_load_word64_in_buffer(32'd40,
+							   soc_top$tv_verifier_info_get_get[383:320]);
+	  #0;
+	end
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (soc_top$RDY_tv_verifier_info_get_get)
+	begin
+	  c_trace_file_load_word64_in_buffer__avValue7 =
+	      c_trace_file_load_word64_in_buffer(32'd48,
+							   soc_top$tv_verifier_info_get_get[447:384]);
+	  #0;
+	end
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (soc_top$RDY_tv_verifier_info_get_get)
+	begin
+	  c_trace_file_load_word64_in_buffer__avValue8 =
+	      c_trace_file_load_word64_in_buffer(32'd56,
+							   soc_top$tv_verifier_info_get_get[511:448]);
+	  #0;
+	end
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (soc_top$RDY_tv_verifier_info_get_get)
+	begin
+	  c_trace_file_load_word64_in_buffer__avValue9 =
+	      c_trace_file_load_word64_in_buffer(32'd64,
+							   soc_top$tv_verifier_info_get_get[575:512]);
+	  #0;
+	end
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (soc_top$RDY_tv_verifier_info_get_get)
+	begin
+	  v__h6003 =
+	      c_trace_file_write_buffer(soc_top$tv_verifier_info_get_get[607:576]);
+	  #0;
+	end
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (soc_top$RDY_tv_verifier_info_get_get && v__h6003 == 32'd0)
+	$display("ERROR: Top_HW_Side.rl_tv_vb_out: error writing out bytevec data buffer (%0d bytes)",
+		 soc_top$tv_verifier_info_get_get[607:576]);
+    if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
+      if (soc_top$RDY_tv_verifier_info_get_get && v__h6003 == 32'd0)
+	$finish(32'd1);
     if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
       if (soc_top$RDY_get_to_console_get)
 	$write("%c", soc_top$get_to_console_get);
@@ -353,7 +468,7 @@ module mkTop_HW_Side(CLK,
       if (sysRst_Ifc$OUT_RST != `BSV_RESET_VALUE)
 	if (WILL_FIRE_RL_rl_relay_console_in && rg_console_in_poll == 12'd0)
 	  begin
-	    v__h902 = c_trygetchar(8'hAA);
+	    v__h6266 = c_trygetchar(8'hAA);
 	    #0;
 	  end
   end
