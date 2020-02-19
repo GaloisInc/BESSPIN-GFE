@@ -2,7 +2,7 @@
 #
 # General config for running tests etc.
 #
-from subprocess import run
+from subprocess import run, PIPE
 
 # Processor config
 proc_list = ['chisel_p1', 'chisel_p2', 'chisel_p3', 'bluespec_p1', 'bluespec_p2', 'bluespec_p3']
