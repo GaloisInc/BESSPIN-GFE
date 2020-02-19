@@ -30,7 +30,8 @@ class GdbSession(object):
             raise GdbError('Executable {} not found'.format(openocd))
         xlen=32 # Default
         try:
-            run_and_log("Starting openocd", run([openocd, '-f', openocd_config_filename], timeout=0.5, stdout=PIPE, stderr=PIPE))
+            run_and_log("Starting openocd", run([openocd, '-f', openocd_config_filename], \
+                        timeout=0.5, stdout=PIPE, stderr=PIPE))
         except TimeoutExpired as exc:
             log = str(exc.stderr, encoding='utf-8')
             match = re.search('XLEN=(32|64)', log)
@@ -695,10 +696,10 @@ def test_busybox(config, args):
 def build_freebsd(config):
     run_and_log("Cleaning freebsd",
         run(['make','clean'],cwd=config.freebsd_folder,
-        env=dict(os.environ), capture_output=True))
+        env=dict(os.environ), stdout=PIPE, stderr=PIPE))
     run_and_log("Building freebsd",
         run(['make'],cwd=config.freebsd_folder,
-        env=dict(os.environ), capture_output=True))
+        env=dict(os.environ), stdout=PIPE, stderr=PIPE))
 
 # Common busybox test parts
 def build_busybox(config, linux_config_path):
