@@ -16,11 +16,15 @@ export XOBJDUMP=/usr/bin/llvm-objdump-11
 export XOBJCOPY=/usr/bin/llvm-objcopy-11
 export XCFLAGS=-fuse-ld=/usr/bin/ld.lld-11 -Qunused-arguments
 
-FREEBSD_DIR=cheribsd
-DESTDIR=$(CURDIR)/world
+# Directory with freebsd repo
+FREEBSD_DIR = cheribsd
 
-# Define output directory
-export MAKEOBJDIRPREFIX=$(CURDIR)/obj
+# Destination directory for 'world'
+WORLD_DIR = $(CURDIR)/world
+
+# Destination directory for objects
+OBJ_DIR = $(CURDIR)/obj
+export MAKEOBJDIRPREFIX=$(OBJ_DIR)
 
 # Define compilation flags
 FLAGS=-DDB_FROM_SRC -DNO_ROOT -DBUILD_WITH_STRICT_TMPPATH TARGET=riscv \
@@ -34,55 +38,92 @@ FLAGS=-DDB_FROM_SRC -DNO_ROOT -DBUILD_WITH_STRICT_TMPPATH TARGET=riscv \
 	-DWITHOUT_PKGBOOTSTRAP -DWITHOUT_OPENMP -DWITHOUT_SHAREDOCS -DWITHOUT_WIRELESS -DWITHOUT_KDUMP \
 	-DWITHOUT_AUDIT -DWITHOUT_TFTP -DWITHOUT_CXGBETOOL -DWITHOUT_LDNS -DWITHOUT_QUOTAS \
 	-DWITHOUT_TALK -DWITHOUT_USB -DWITHOUT_NLS -DWITHOUT_UTMPX -DWITHOUT_KERNEL_SYMBOLS \
-	-DWITHOUT_OPENSSH -DWITHOUT_KERBEROS MODULES_OVERRIDE= -DNO_CLEAN -DI_REALLY_MEAN_NO_CLEAN
+	-DWITHOUT_OPENSSH -DWITHOUT_KERBEROS MODULES_OVERRIDE= -DNO_CLEAN -DI_REALLY_MEAN_NO_CLEAN \
+	LOCAL_XTOOL_DIRS="lib/libnetbsd usr.sbin/makefs usr.bin/mkimg"
 
-default: buildworld
+default: freebsd.bbl
 
-buildworld:
+clean:
+	@rm -rf $(OBJ_DIR)
+	@rm -rf $(WORLD_DIR)
+	@rm -rf freebsd.bbl
+
+# Build world
+$(OBJ_DIR):
 	@echo "Building world"
-	rm -rf $(MAKEOBJDIRPREFIX)
-	mkdir $(MAKEOBJDIRPREFIX)
+	@mkdir -p $(OBJ_DIR)
 	./$(FREEBSD_DIR)/tools/build/make.py $(FLAGS) -j$(NPROCS) buildworld
+	@echo "Building done"
 
-installworld: #buildworld
-	@echo "Install world"
-	@rm -rf $(DESTDIR)
-	@mkdir -p $(DESTDIR)
-	./$(FREEBSD_DIR)/tools/build/make.py $(FLAGS) DESTDIR=$(DESTDIR) -j$(NPROCS) installworld
+# Copy `world` into WORLD_DIR
+$(WORLD_DIR): $(OBJ_DIR)
+	@echo "Installing world"
+	./$(FREEBSD_DIR)/tools/build/make.py $(FLAGS) DESTDIR=$(WORLD_DIR) -j$(NPROCS) installworld
+	@echo "Installing world done"
 
+# Location of FSTAB
 FSTAB=$(CURDIR)/fstab.freebsd
+# Location of USERDB
 USERDB=$(CURDIR)/freebsd-userdb
-FREEBSD_IMAGE=riscv.img
+# Name of FreeBSD rootfs image
+FREEBSD_IMAGE=$(WORLD_DIR)/riscv.img
+# Image size - necessary for makefs
 IMAGE_SIZE = 65m
+# Aux var for freebsd root dir
+ROOT_DIR = $(OBJ_DIR)/$(CURDIR)/$(FREEBSD_DIR)/riscv.riscv64
+# Path for 'makefs'
+MAKEFS = $(ROOT_DIR)/tmp/usr/sbin/makefs
+
+$(FREEBSD_IMAGE): $(WORLD_DIR)
+	@echo "Build $(FREEBSD_IMAGE)"
+	@cd $(WORLD_DIR) && sed -i -E 's/time=[0-9\.]+$$//' METALOG
+	@cd $(WORLD_DIR) && egrep -v "usr/lib/[^ ]*\\.a|usr/share/i18n|^./var/" METALOG > METALOG.new
+	@cd $(WORLD_DIR) && mv METALOG.new METALOG
+	@cd $(WORLD_DIR) && mkdir -p home
+	@cd $(WORLD_DIR) && echo 'hostname="gfe"' > etc/rc.conf
+	@cd $(WORLD_DIR) && cp $(FSTAB) etc/fstab
+	@cd $(WORLD_DIR) && echo "./etc/fstab type=file uname=root gname=wheel mode=0644" >> METALOG
+	@cd $(WORLD_DIR) && echo "./etc/rc.conf type=file uname=root gname=wheel mode=0644" >> METALOG
+	@cd $(WORLD_DIR) && echo "./home type=dir uname=root gname=wheel mode=0755" >> METALOG
+	@cd $(WORLD_DIR) && $(MAKEFS) -N $(USERDB) -D -f 10000 -o version=2 -s $(IMAGE_SIZE) $(FREEBSD_IMAGE) METALOG
+	@echo "Build $(FREEBSD_IMAGE) done"
 
 
-makefs -N ./freebsd-userdb -D -f 10000 -o version=2 -s 65m riscv.img METALOG
+# Kernel config directory
+KERN_DIR=$(CURDIR)/$(FREEBSD_DIR)/sys/riscv/conf
+# Kernel config file (FPGA only for now)
+KERN_CONF=TSFREEBSD-FPGA
 
-rootfs: # installworld
-	@echo "Build rootfs"
-	cd $(DESTDIR) && sed -i -E 's/time=[0-9\.]+$$//' METALOG
-	cd $(DESTDIR) && egrep -v "usr/lib/[^ ]*\\.a|usr/share/i18n|^./var/" METALOG > METALOG.new
-	cd $(DESTDIR) && mv METALOG.new METALOG
-	cd $(DESTDIR) && mkdir -p home
-	cd $(DESTDIR) && echo 'hostname="gfe"' > etc/rc.conf
-	cd $(DESTDIR) && cp $(FSTAB) etc/fstab
-	cd $(DESTDIR) && echo "./etc/fstab type=file uname=root gname=wheel mode=0644" >> METALOG
-	cd $(DESTDIR) && echo "./etc/rc.conf type=file uname=root gname=wheel mode=0644" >> METALOG
-	cd $(DESTDIR) && echo "./home type=dir uname=root gname=wheel mode=0755" >> METALOG
-	makefs -N $(USERDB) -D -f 10000 -o version=2 -s $(IMAGE_SIZE) $(FREEBSD_IMAGE) METALOG
-
-HOMEDIR=$(CURDIR)/obj/$(CURDIR)/$(FREEBSD_DIR)/riscv.riscv64
-KERNDIR=$(HOMEDIR)/sys/riscv/conf
-KERNCONF=TSFREEBSD-FPGA
-
-
-kernel: # rootfs
+# Build kernel
+#buildkernel: $(FREEBSD_IMAGE)
+$(ROOT_DIR)/sys/$(KERN_CONF)/kernel: $(FREEBSD_IMAGE)
 	@echo "Building kernel"
-	@echo 'include     "GENERIC"'                    > $(KERNDIR)/$(KERNCONF)
-	@echo 'options     TMPFS'                        >> $(KERNDIR)/$(KERNCONF)
-	@echo 'options     MD_ROOT'                      >> $(KERNDIR)/$(KERNCONF)
-	@echo 'makeoptions   MFS_IMAGE=$(FREEBSD_IMAGE)'  >> $(KERNDIR)/$(KERNCONF)
-	@echo 'options ROOTDEVNAME=\"ufs:/dev/md0\"'     >> $(KERNDIR)/$(KERNCONF)
-	@cat $(KERNDIR)/$(KERNCONF)
+	@echo KERN_DIR=$(KERN_DIR)
+	@echo KERNCONF=$(KERN_CONF)
+	@mkdir -p $(KERN_DIR)
+	@echo 'include     "GENERIC"'                    >  $(KERN_DIR)/$(KERN_CONF)
+	@echo 'options     TMPFS'                        >> $(KERN_DIR)/$(KERN_CONF)
+	@echo 'options     MD_ROOT'                      >> $(KERN_DIR)/$(KERN_CONF)
+	@echo 'makeoptions MFS_IMAGE=$(FREEBSD_IMAGE)'   >> $(KERN_DIR)/$(KERN_CONF)
+	@echo 'options ROOTDEVNAME=\"ufs:/dev/md0\"'     >> $(KERN_DIR)/$(KERN_CONF)
+	@cat $(KERN_DIR)/$(KERN_CONF)
+	./$(FREEBSD_DIR)/tools/build/make.py $(FLAGS) -j$(NPROCS) KERNCONF=$(KERN_CONF) -j$(NPROCS) buildkernel
+	@echo "Building kernel done"
 
-#	./$(FREEBSD_DIR)/tools/build/make.py $(FLAGS) -j$(NPROCS) buildworld
+# Install kernel
+KERNEL_IMAGE_DIR = $(WORLD_DIR)/boot/kernel
+
+#installkernel: buildkernel
+$(KERNEL_IMAGE_DIR)/kernel: buildkernel
+	@echo "Installing kernel"
+	./$(FREEBSD_DIR)/tools/build/make.py $(FLAGS) -j$(NPROCS) KERNCONF=$(KERN_CONF) -j$(NPROCS) DESTDIR=$(WORLD_DIR) installkernel
+	@echo "Installing kernel done"	
+
+# Package with riscv-pk
+BBL_SRC=../../../../riscv-pk
+freebsd.bbl: $(KERNEL_IMAGE_DIR)/kernel
+	@echo "Build freebsd.bbl"
+	cd $(KERNEL_IMAGE_DIR) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=kernel
+	$(MAKE) -C $(KERNEL_IMAGE_DIR) -j$(NPROCS)
+	@cp $(KERNEL_IMAGE_DIR)/bbl freebsd.bbl
+	@echo "Build freebsd.bbl done"
