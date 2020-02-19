@@ -420,9 +420,41 @@ def test_freertos_network(uart, config, prog_name):
     del gdb
     return res
 
+# Load ELF
+def load_elf(config, path_to_elf, timeout, expected_contents=None, absent_contents=[]):
+    print_and_log("Load and run binary: " + path_to_elf)
+    gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
+    uart = UartSession()
+
+    soft_reset_cmd = 'set *((int *) 0x6FFF0000) = 1'
+
+    setup_cmds = [
+        'dont-repeat',
+        soft_reset_cmd,
+        soft_reset_cmd, # reset twice to make sure we did reset
+        'monitor reset halt',
+        'delete',
+        'file ' + path_to_elf,
+        'load',
+    ]
+    print_and_log('Loading and running {} ...'.format(path_to_elf))
+    for c in setup_cmds:
+        gdb.cmd(c)
+    print_and_log("Continuing")
+    gdb.cont()
+
+    if not expected_contents:
+        print_and_log(uart.read(timeout))
+    else:
+        res, rx = uart.read_and_check(timeout, expected_contents, absent_contents)
+        if not res:
+            raise RuntimeError("Load elf failed - check log for more details.")
+    del uart
+    del gdb
+
 
 # Generic basic tester
-def basic_tester(gdb, uart, exe_filename, timeout, expected_contents, absent_contents=None):
+def basic_tester(gdb, uart, exe_filename, timeout, expected_contents=None, absent_contents=None):
     print_and_log('Starting basic tester using ' + exe_filename)
     soft_reset_cmd = 'set *((int *) 0x6FFF0000) = 1'
 
