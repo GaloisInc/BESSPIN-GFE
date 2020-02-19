@@ -114,7 +114,7 @@ build-linux/vmlinux: $(LINUX_CONFIG) build-busybox/busybox_unstripped
 build-busybox-bbl/bbl: build-linux/vmlinux
 	@echo "build-busybox-bbl/bbl"
 	$(MKDIR) -p $(@D)
-	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-linux/vmlinux --enable-zero-bss --with-mem-start=0xC0000000
+	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-linux/vmlinux
 	$(MAKE) -C $(@D) -j$(NPROCS)
 	@echo "build-busybox-bbl/bbl done"
 
@@ -246,8 +246,8 @@ build-qemu-linux/vmlinux: $(CHAINLOADER_CONFIG) build-busybox/busybox_unstripped
 build-qemu-bbl/bbl: build-qemu-linux/vmlinux
 	@echo "build-qemu-bbl/bbl"
 	$(MKDIR) -p $(@D)
-	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-qemu-linux/vmlinux --enable-zero-bss --with-mem-start=0x80000000
-	$(MAKE) -C $(@D) -j$(NPROCS)
+	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-qemu-linux/vmlinux
+	$(MAKE) -C $(@D) TARGET_QEMU=yes -j$(NPROCS)
 	@echo "build-qemu-bbl/bbl done"
 
 # Linux kernel
@@ -278,14 +278,14 @@ build-debian-linux/vmlinux: $(DEBIAN_CONFIG) build-busybox/busybox_unstripped de
 build-debian-network-bbl/bbl: debian.cpio build-debian-network-linux/vmlinux
 	@echo "build-debian-network-bbl/bbl"
 	$(MKDIR) -p $(@D)
-	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-debian-network-linux/vmlinux --enable-zero-bss --with-mem-start=0xC0000000
+	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-debian-network-linux/vmlinux
 	$(MAKE) -C $(@D) -j$(NPROCS)
 	@echo "build-debian-network-bbl/bbl done"
 
 build-debian-bbl/bbl: build-debian-linux/vmlinux
 	@echo "build-debian-bbl/bbl"
 	$(MKDIR) -p $(@D)
-	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-debian-linux/vmlinux --enable-zero-bss --with-mem-start=0xC0000000
+	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-debian-linux/vmlinux
 	$(MAKE) -C $(@D) -j$(NPROCS)
 	@echo "build-debian-bbl/bbl done"
 
