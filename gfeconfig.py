@@ -20,7 +20,7 @@ def proc_picker(proc):
 def check_vivado():
     program_list = ['vivado_lab','vivado']
     for program in program_list:
-        res = run(['which',program],capture_output=True)
+        res = run(['which',program],stdout=PIPE, stderr=PIPE)
         if res.returncode == 0:
             return program
     raise RuntimeError("Neither vivado nor vivado_lab found")
@@ -29,7 +29,7 @@ def check_vivado():
 def check_environment():
     print("Checking environment")
     for program in env_requried:
-        run(['which',program], capture_output=True,check=True)
+        run(['which',program], stdout=PIPE, stderr=PIPE,check=True)
     return True
 
 
