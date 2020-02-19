@@ -95,7 +95,6 @@ KERN_DIR=$(CURDIR)/$(FREEBSD_DIR)/sys/riscv/conf
 KERN_CONF=TSFREEBSD-FPGA
 
 # Build kernel
-#buildkernel: $(FREEBSD_IMAGE)
 $(ROOT_DIR)/sys/$(KERN_CONF)/kernel: $(FREEBSD_IMAGE)
 	@echo "Building kernel"
 	@echo KERN_DIR=$(KERN_DIR)
@@ -112,9 +111,7 @@ $(ROOT_DIR)/sys/$(KERN_CONF)/kernel: $(FREEBSD_IMAGE)
 
 # Install kernel
 KERNEL_IMAGE_DIR = $(WORLD_DIR)/boot/kernel
-
-#installkernel: buildkernel
-$(KERNEL_IMAGE_DIR)/kernel: buildkernel
+$(KERNEL_IMAGE_DIR)/kernel: $(ROOT_DIR)/sys/$(KERN_CONF)/kernel
 	@echo "Installing kernel"
 	./$(FREEBSD_DIR)/tools/build/make.py $(FLAGS) -j$(NPROCS) KERNCONF=$(KERN_CONF) -j$(NPROCS) DESTDIR=$(WORLD_DIR) installkernel
 	@echo "Installing kernel done"	
