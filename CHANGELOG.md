@@ -6,6 +6,7 @@
 * Released Bluesepc P2 processor with latest Cambridge pull requests
 * Updates Coremark submodule
 * Adds FreeBSD support (cross-compilation and a basic test)
+* Added FreeRTOS Clang tests
 
 ## v5.0.4 (2020-02-12)
 * Improved test sripts

@@ -124,6 +124,9 @@ BSV_P1_freertos:
     - ./pytest_processor.py bluespec_p1 --freertos
     - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --io
     - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --network
+    - ./pytest_processor.py bluespec_p1 --freertos --compiler clang
+    - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --io --compiler clang
+    - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --network --compiler clang
   tags: ["fpga-io"]
   extends: [.log_always, .no_sched]
 
@@ -143,6 +146,9 @@ CHSL_P1_freertos:
     - ./pytest_processor.py chisel_p1 --freertos
     - ./pytest_processor.py chisel_p1 --no-bitstream --freertos --io
     - ./pytest_processor.py chisel_p1 --freertos --network
+    - ./pytest_processor.py chisel_p1 --freertos --compiler clang
+    - ./pytest_processor.py chisel_p1 --no-bitstream --freertos --io --compiler clang
+    - ./pytest_processor.py chisel_p1 --freertos --network --compiler clang
   tags: ["fpga-io"]
   extends: [.log_always, .no_sched]
 
@@ -161,6 +167,8 @@ CHSL_P2_freertos:
   script:
     - ./pytest_processor.py chisel_p2 --freertos
     - ./pytest_processor.py chisel_p2 --no-bitstream --freertos --network
+    - ./pytest_processor.py chisel_p2 --freertos --compiler clang
+    - ./pytest_processor.py chisel_p2 --no-bitstream --freertos --network --compiler clang
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
@@ -227,6 +235,8 @@ BSV_P2_freertos:
   script:
     - ./pytest_processor.py bluespec_p2 --freertos
     - ./pytest_processor.py bluespec_p2 --no-bitstream --freertos --network
+    - ./pytest_processor.py bluespec_p2 --freertos --compiler clang
+    - ./pytest_processor.py bluespec_p2 --no-bitstream --freertos --network --compiler clang
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
@@ -292,6 +302,8 @@ CHSL_P3_freertos:
   script:
     - ./pytest_processor.py chisel_p3 --freertos
     - ./pytest_processor.py chisel_p3 --no-bitstream --freertos --network
+    - ./pytest_processor.py chisel_p3 --freertos --compiler clang
+    - ./pytest_processor.py chisel_p3 --no-bitstream --freertos --network --compiler clang
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
