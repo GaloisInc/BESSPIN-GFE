@@ -18,8 +18,9 @@ proc_picker $1
 cd $BASE_DIR/bootrom
 case "$proc_name" in
     *p1)
-	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=50000000
-	clock_freq_mhz=50
+# Don't need a bootrom for P1, it won't run linux
+#	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=50000000
+#	clock_freq_mhz=50
 	;;
     *p2)
 	make --always-make CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=100000000
@@ -45,7 +46,7 @@ cd $BASE_DIR/vivado
 # Run vivado to create a top level project
 # See soc.tcl for detailed options
 vivado -mode batch -source $BASE_DIR/tcl/soc.tcl \
--tclargs --origin_dir $BASE_DIR/tcl \
+-notrace -tclargs --origin_dir $BASE_DIR/tcl \
 --proc_name $proc_name \
 --clock_freq_mhz $clock_freq_mhz
 
