@@ -9,7 +9,7 @@ proc_list = ['chisel_p1', 'chisel_p2', 'chisel_p2_pcie', 'chisel_p3', \
             'bluespec_p1', 'bluespec_p2', 'bluespec_p2_pcie','bluespec_p3']
 
 # Environment config
-env_requried = ['openocd','riscv64-unknown-elf-gcc','riscv64-unknown-linux-gnu-gcc']    
+env_requried = ['openocd','riscv64-unknown-elf-gcc','riscv64-unknown-linux-gnu-gcc']
 
 # Check if the processor is in the list of supported processors
 def proc_picker(proc):
@@ -99,7 +99,7 @@ class Config(object):
 
         absent_contents = {'boot': []}
 
-        timeouts = {'boot': 1200} # large timeout to account for loading the binary over JTAG
+        timeouts = {'boot': 1500} # large timeout to account for loading the binary over JTAG
 
         self.freebsd_expected_contents = expected_contents
         self.freebsd_absent_contents = absent_contents
@@ -130,7 +130,7 @@ class Config(object):
         ]
 
         main_full = ["Pass", ".", ".","."]
-        main_full_absent="ERROR"
+        main_full_absent=["ERROR"]
 
         main_uart = ["UART1 RX: Hello from UART1"]
         main_gpio = ["#2 changed: 0 -> 1","#3 changed: 0 -> 1"]

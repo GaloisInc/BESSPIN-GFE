@@ -796,4 +796,3 @@ if __name__ == '__main__':
         test_freebsd(config, args)
 
     print_and_log('Finished!')
-
