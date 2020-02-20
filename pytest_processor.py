@@ -613,6 +613,8 @@ def test_freebsd(config, args):
 
     build_freebsd(config)
 
+    uart = UartSession()
+
     print_and_log("FreeBSD basic test")
     gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
     res, _val = basic_tester(gdb, uart, config.freebsd_filename_bbl, \
@@ -622,6 +624,8 @@ def test_freebsd(config, args):
         print_and_log("FreeBSD basic test passed")
     else:
         raise RuntimeError("FreeBSD basic test failed")
+    del uart
+    del gdb
 
 # Busybox tests
 def test_busybox(config, args):
