@@ -30,6 +30,8 @@ riscv-tests
 git submodule update --init --recursive \
 riscv-pk
 git submodule update --init chisel_processors
+git submodule update --init freebsd/cheribsd
+
 
 cd chisel_processors
 git submodule sync

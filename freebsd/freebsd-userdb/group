@@ -1,0 +1,14 @@
+wheel:*:0:root
+audit:*:77:
+ntpd:*:123:
+authpf:*:63:
+operator:*:5:root
+daemon:*:1:
+mail:*:6:
+games:*:13:
+network:*:69:
+kmem:*:2:
+tty:*:4:
+smmsp:*:25:
+unbound:*:59:
+dialer:*:68:

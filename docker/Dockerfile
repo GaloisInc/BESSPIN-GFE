@@ -15,28 +15,42 @@ RUN apt-get install -y gnupg
 RUN apt-get install -y vim
 
 # Install dependencies
+
 # For riscv-linux build:
-RUN apt-get install -y openssl bc bison flex make autoconf proot debootstrap
+RUN apt install -y curl openssl bc bison flex make autoconf debootstrap proot libssl-dev debian-ports-archive-keyring
 
 # RTL simulator and RISC-V emulator:
-RUN apt-get install -y verilator qemu qemu-user
+RUN apt install -y verilator qemu qemu-user qemu-system-misc
+
+# Needed for GDB
+RUN apt install -y libpython2.7
+
+# Needed for manual tests
+RUN apt install -y minicom
 
 # System-wide python packages needed by testing scripts
-RUN apt-get install -y python3-pip
+RUN apt install -y python3-pip
 RUN pip3 install pyserial pexpect
 
+# Xilinx vivado_lab dependency
+RUN apt install -y libtinfo5
+
 # Clang and LLVM for RISC-V:
-RUN wget https://apt.llvm.org/llvm.sh
-RUN chmod +x llvm.sh
-RUN ./llvm.sh 9
-RUN rm llvm.sh
+RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
+RUN add-apt-repository 'deb http://apt.llvm.org/buster/ llvm-toolchain-buster main'
+RUN apt-get update
+RUN apt-get install -y clang-11 lldb-11 lld-11 clangd-11
 
 # Set llvm symlinks and variables
-RUN cd /usr/bin && ln -s clang-9 clang
-RUN cd /usr/bin && ln -s llvm-objcopy-9 llvm-objcopy
-RUN cd /usr/bin && ln -s llvm-objdump-9 llvm-objdump
-RUN cd /usr/bin && ln -s llvm-ar-9 llvm-ar
-RUN cd /usr/bin && ln -s llvm-ranlib-9 llvm-ranlib
+RUN ln -s /usr/bin/clang-11 /usr/bin/clang
+RUN ln -s /usr/bin/llvm-objcopy-11 llvm-objcopy
+RUN ln -s /usr/bin/llvm-objdump-11 llvm-objdump
+RUN ln -s /usr/bin/llvm-ar-11 llvm-ar
+RUN ln -s /usr/bin/llvm-ranlib-11 llvm-ranlib
+
+# Instal dependencies for FreeBSD
+RUN apt install -y libtool pkg-config bison cmake ninja-build samba flex texinfo libarchive-dev
+RUN apt install -y libglib2.0-dev libpixman-1-dev libarchive-dev bsdtar libbz2-dev
 
 # RISC-V toolchains (both linux and newlib versions):
 # Set PATH for RISCV-tools and LLVM Sysroot

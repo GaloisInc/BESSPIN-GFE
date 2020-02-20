@@ -26,6 +26,15 @@ apt install -y libtinfo5
 wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 add-apt-repository 'deb http://apt.llvm.org/buster/ llvm-toolchain-buster main'
 apt-get update
-apt-get install -y clang-10 lldb-10 lld-10 clangd-10
-# TODO: set up a symlink
-ln -s /usr/bin/clang-10 /usr/bin/clang
+apt-get install -y clang-11 lldb-11 lld-11 clangd-11
+
+# Set llvm symlinks and variables
+ln -s /usr/bin/clang-11 /usr/bin/clang
+ln -s /usr/bin/llvm-objcopy-11 llvm-objcopy
+ln -s /usr/bin/llvm-objdump-11 llvm-objdump
+ln -s /usr/bin/llvm-ar-11 llvm-ar
+ln -s /usr/bin/llvm-ranlib-11 llvm-ranlib
+
+# Instal dependencies for FreeBSD
+apt install -y libtool pkg-config bison cmake ninja-build samba flex texinfo libarchive-dev
+apt install -y libglib2.0-dev libpixman-1-dev libarchive-dev bsdtar libbz2-dev
