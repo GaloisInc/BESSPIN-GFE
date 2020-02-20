@@ -455,7 +455,7 @@ def load_elf(config, path_to_elf, timeout, expected_contents=None, absent_conten
 
 
 # Generic basic tester
-def basic_tester(gdb, uart, exe_filename, timeout, expected_contents=None, absent_contents=None):
+def basic_tester(gdb, uart, exe_filename, timeout, expected_contents=[], absent_contents=[]):
     print_and_log('Starting basic tester using ' + exe_filename)
     soft_reset_cmd = 'set *((int *) 0x6FFF0000) = 1'
 

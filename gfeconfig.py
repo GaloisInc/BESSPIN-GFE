@@ -99,7 +99,7 @@ class Config(object):
 
         absent_contents = {'boot': []}
 
-        timeouts = {'boot': 1500} # large timeout to account for loading the binary over JTAG
+        timeouts = {'boot': 2000} # large timeout to account for loading the binary over JTAG
 
         self.freebsd_expected_contents = expected_contents
         self.freebsd_absent_contents = absent_contents
