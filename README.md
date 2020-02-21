@@ -9,6 +9,13 @@ for a high-level overview of the system.
 
 ## Release Schedule ##
 
+Below is the planned release schedule for the remainder of Phase 2 of the BESSPIN program. 
+
+Links to related GitLab milestones:
+* [GFE Release 5.0](https://gitlab-ext.galois.com/ssith/gfe/-/milestones/2)  
+* [GFE Release 5.1](https://gitlab-ext.galois.com/ssith/gfe/-/milestones/7)
+* [GFE Release 5.2](https://gitlab-ext.galois.com/ssith/gfe/-/milestones/8)
+
 <img src="documentation_source/images/gfe-release-schedule.png" width = "800" height = "410">
 
 ## Table of contents ##
