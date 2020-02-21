@@ -7,6 +7,10 @@ Source files and build scripts for generating and testing the GFE for SSITH.
 Please refer to the [GFE System Description pdf](GFE_Rel5.0_System_Description.pdf)
 for a high-level overview of the system.
 
+## Release Schedule ##
+
+<img src="documentation_source/images/gfe-release-schedule.png" width = "800" height = "410">
+
 ## Table of contents ##
 
 - [Getting Started](#getting-started)
