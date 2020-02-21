@@ -2,14 +2,14 @@
 #
 # General config for running tests etc.
 #
-from shutil import which
-
+from subprocess import run, PIPE
 
 # Processor config
-proc_list = ['chisel_p1', 'chisel_p2', 'chisel_p3', 'bluespec_p1', 'bluespec_p2', 'bluespec_p3']
+proc_list = ['chisel_p1', 'chisel_p2', 'chisel_p2_pcie', 'chisel_p3', \
+            'bluespec_p1', 'bluespec_p2', 'bluespec_p2_pcie','bluespec_p3']
 
 # Environment config
-env_requried = ['openocd','riscv64-unknown-elf-gcc','riscv64-unknown-linux-gnu-gcc']    
+env_requried = ['openocd','riscv64-unknown-elf-gcc','riscv64-unknown-linux-gnu-gcc']
 
 # Check if the processor is in the list of supported processors
 def proc_picker(proc):
@@ -21,7 +21,8 @@ def proc_picker(proc):
 def check_vivado():
     program_list = ['vivado_lab','vivado']
     for program in program_list:
-        if which(program) is not None:
+        res = run(['which',program],stdout=PIPE, stderr=PIPE)
+        if res.returncode == 0:
             return program
     raise RuntimeError("Neither vivado nor vivado_lab found")
 
@@ -29,8 +30,7 @@ def check_vivado():
 def check_environment():
     print("Checking environment")
     for program in env_requried:
-        if which(program) is None:
-            raise RuntimeError("Required program {} not found".format(program))
+        run(['which',program], stdout=PIPE, stderr=PIPE,check=True)
     return True
 
 
@@ -52,8 +52,6 @@ class Config(object):
     freertos_c_include_path='/opt/riscv/riscv64-unknown-elf/include'
 
     # Busybox config
-    busybox_basic_tests = ['boot']
-    busybox_network_tests = ['ping']
     busybox_expected_contents = None
     busybox_absent_contents = None
     busybox_timeouts = None
@@ -61,6 +59,13 @@ class Config(object):
     busybox_linux_config_path = 'bootmem/linux.config'
     busybox_linux_config_path_no_pcie = 'bootmem/linux-no-pcie.config'
     busybox_filename_bbl = 'bootmem/build-busybox-bbl/bbl'
+
+    # FreeBSD config
+    freebsd_expected_contents = None
+    freebsd_absent_contents = None
+    freebsd_timeouts = None
+    freebsd_folder = 'freebsd'
+    freebsd_filename_bbl = 'freebsd/freebsd.bbl'
 
     def __init__(self, args):
         if args.proc_name not in proc_list:
@@ -71,17 +76,39 @@ class Config(object):
         if 'p1' in self.proc_name:
             self.xlen = '32'
             self.xarch = 'rv32imacu'
-        else:
+            self.cpu_freq = '50000000'
+        elif 'p2' in self.proc_name:
             self.xlen = '64'
             self.xarch = 'rv64gcsu'
+            self.cpu_freq = '100000000'
+        elif 'p3' in self.proc_name:
+            self.xlen = '64'
+            self.xarch = 'rv64gcsu'
+            self.cpu_freq = '25000000'
+        else:
+            # this should never happen
+            raise ValueError('Unknown processor ' + args.proc_name)
         
         self.get_freertos_config()
         self.get_busybox_config()
+        self.get_freebsd_config()
         self.compiler = args.compiler
-    
+
+    def get_freebsd_config(self):
+        expected_contents = {'boot': ["FreeBSD/riscv","login:"]}
+
+        absent_contents = {'boot': []}
+
+        timeouts = {'boot': 2000} # large timeout to account for loading the binary over JTAG
+
+        self.freebsd_expected_contents = expected_contents
+        self.freebsd_absent_contents = absent_contents
+        self.freebsd_timeouts = timeouts
+
+
     def get_busybox_config(self):
         expected_contents = {'boot': ["Please press Enter to activate this console"],
-                            'ping': ["Please press Enter to activate this console"]}
+                            'ping': ["xilinx_axienet 62100000.ethernet","Link is Up"]}
 
         absent_contents = {'boot': [],
                             'ping': []}
@@ -130,7 +157,7 @@ class Config(object):
                             'main_udp': [],
                             'main_tcp': []}
 
-        timeouts = {'main_blinky': 3,
+        timeouts = {'main_blinky': 10,
                     'main_full': 10,
                     'main_uart': 10,
                     'main_gpio': 10,

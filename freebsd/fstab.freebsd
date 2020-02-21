@@ -1,0 +1,5 @@
+/dev/md0        /       ufs     rw      0       1
+tmpfs		/root	tmpfs	rw	0
+tmpfs		/tmp	tmpfs	rw	0
+tmpfs           /home   tmpfs   rw      0
+tmpfs           /var    tmpfs   rw      0

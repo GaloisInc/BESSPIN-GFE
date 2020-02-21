@@ -130,10 +130,22 @@ use when connecting openocd to a FPGA.)
 
 riscv64-unknown-elf-gdb --command test-all32.gdb
 riscv64-unknown-elf-gdb --command test-all.gdb
+riscv64-unknown-elf-gdb --command test-all-p3.gdb
 Run a regression under control of the specified gdb script (test-all32.gdb for
-a P1 processor, test-all.gdb for a P2 one).  Note that the gdb program,
-despite its name, can handle both rv32 and rv64 processors.
+a P1 processor, test-all.gdb for a P2 one, test-all-p3.gdb fo the P3).  Note
+that the gdb program, despite its name, can handle both rv32 and rv64
+processors.
 
-riscv64-unknown-elf-gdb --command init.gdb
+For 32-bit CPUs,
+riscv64-unknown-elf-gdb --command init_32.gdb
+
+and for 64-bit CPUs
+riscv64-unknown-elf-gdb --command init_64.gdb
 This will set up an interactive gdb session, within which an .elf file can be
 specified, loaded and run (with breakpoints) in the usual way.
+
+The hardware executable expects a memory image to load when it starts
+executing. When running with GDB, this hex image is empty as the actual
+loading happends through GDB (file and load commands). Mem0.hex is such an
+empty image. Copy Mem0.hex into Mem.hex before running the HW executable as
+the name Mem.hex is expected by the testbench.

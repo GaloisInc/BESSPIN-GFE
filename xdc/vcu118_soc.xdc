@@ -307,3 +307,6 @@ set_clock_groups -name async30 -asynchronous -group [get_clocks pcie_refclk_clk]
 set_clock_groups -name async31 -asynchronous -group [get_clocks {svf_pcie_bridge/pcie4_uscale_plus_0/inst/gt_top_i/diablo_gt.diablo_gt_phy_wrapper/gt_wizard.gtwizard_top_i/design_1_pcie4_uscale_plus_0_0_gt_i/inst/gen_gtwizard_gtye4_top.design_1_pcie4_uscale_plus_0_0_gt_gtwizard_gtye4_inst/gen_gtwizard_gtye4.gen_channel_container[31].gen_enabled_channel.gtye4_channel_wrapper_inst/channel_inst/gtye4_channel_gen.gen_gtye4_channel_inst[0].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}] -group [get_clocks mmcm_clkout5]
 
 set_clock_groups -name async90 -asynchronous -group [get_clocks mmcm_clkout1] -group [get_clocks clk_out1_design_1_clk_wiz_1_0]
+
+# Not to be used for bluespec_p3, so moved to other individual constraints files:
+# set_property USER_SLR_ASSIGNMENT SLR0 [get_cells ssith_processor_0]

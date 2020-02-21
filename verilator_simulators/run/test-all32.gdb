@@ -9,8 +9,8 @@ set logging file logs/gdb-client.log
 set logging on
 set pagination off
 
-target remote | ./openocd --file openocd.cfg --log_output logs/openocd.log --debug
-# target remote | openocd --debug --log_output openocd.log
+# target remote | ./openocd --file openocd.cfg --log_output logs/openocd.log --debug
+target remote | openocd --debug --log_output openocd.log
 
 define run_prog
   dont-repeat

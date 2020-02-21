@@ -7,6 +7,17 @@ Source files and build scripts for generating and testing the GFE for SSITH.
 Please refer to the [GFE System Description pdf](GFE_Rel5.0_System_Description.pdf)
 for a high-level overview of the system.
 
+## Release Schedule ##
+
+Below is the planned release schedule for the remainder of Phase 2 of the BESSPIN program. 
+
+Links to related GitLab milestones:
+* [GFE Release 5.0](https://gitlab-ext.galois.com/ssith/gfe/-/milestones/2)  
+* [GFE Release 5.1](https://gitlab-ext.galois.com/ssith/gfe/-/milestones/7)
+* [GFE Release 5.2](https://gitlab-ext.galois.com/ssith/gfe/-/milestones/8)
+
+<img src="documentation_source/images/gfe-release-schedule.png" width = "800" height = "410">
+
 ## Table of contents ##
 
 - [Getting Started](#getting-started)
@@ -199,14 +210,36 @@ can be run with the argument `bluespec_p1` to generate the Bluespec P1
 bitstream and corresponding Vivado project
 (i.e., `./setup_soc_project.sh bluespec_p1`).
 
+All bitstreams generated using processor names of the form
+`{bluespec,chisel}_p{1,2,3}` build a system with SVF but no PCIe root
+complex.
+
+Release 5.1 adds two new bitstreams - `chisel_p2_pcie.bit` and
+`bluespec_p2_pcie.bit`. These are FPGA systems with a PCIe root complex
+and no SVF. For example, run the following to build `chisel_p2_pcie.bit`:
+```bash cd $GFE_REPO
+./setup_soc_project.sh chisel_p2_pcie # generate vivado/soc_chisel_p1/soc_chisel_p2_pcie.xpr
+vivado/soc_chisel_p2_pcie/soc_chisel_p2_pcie.xpr ./build.sh chisel_p2_pcie # generate bitstreams/soc_chisel_p2_pcie.bit
+```
+
+Vivado run complexity is significantly reduced by eliminating builds
+instantiating both a PCIe root complex and a PCIe endpoint. There is no loss
+in capability since the SVF flow control reduces the RISC-V instruction
+bandwidth to a level where the PCIe root firmware can't run.
+
+This PCIe root complex build option is not provided for P1, which doesn't
+support Linux, or for P3 whose frequency is too low to support PCIe
+root complex operation).
+
 ### Storing a Bitstream in Flash ###
 
 See [flash-scripts/README](flash-scripts/README) for directions on how
 to write a bitstream to flash on the VCU118.  This is optional, and
 allows the FPGA to be programmed from flash on power-up.
 
-As of the GFE 5.0 release, flash programming is not operational.
-See #141 for updates on the re-introduction of this feature.
+As of the GFE 5.0 release, the ability to store bitstreams in flash
+is not functional. See #141 for updates on the re-introduction of this 
+feature.
 
 ### Testing ###
 
@@ -651,7 +684,7 @@ round-trip min/avg/max = 20.536/20.913/23.320 ms
 / # 
 ```
 
-### Storing a boot image in Flash ###
+### Storing a boot image in flash memory ###
 
 1. Prepare the Linux image with either Debian or Busybox as described
    above.
@@ -674,6 +707,13 @@ printed before existing, the flash operation was completed.
 
 There will not be any console messages while the boot image is read
 from flash, which could take some time for the full Debian OS.
+
+Note that if there is a binary image in flash that is incompatible with
+the bitstream programmed onto the FPGA (for example, a 64-bit boot image 
+with a P1 SoC, or a binary image with invalid instructions), the processor 
+may not work properly. In particular, OpenOCD may fail to run. To avoid 
+such issues, always erase flash with `tcl/erase_flash` when you are done
+working with a boot image stored in flash.
 
 ## Adding in Your Processor ##
 
@@ -1009,6 +1049,7 @@ $ ./get_ppa.py vivado/soc_bluespec_p1/soc_bluespec_p1.runs/impl_1/
 ```
 
 Baseline values as of GFE 4.x release:
+
 | processor | power_W | CLB_LUTs | CLB_regs | cpu_Mhz |
 |------|---|---|---|---|
 | Bluespec P1 | 0.25 | 90341 | 118324 | 50.0 |

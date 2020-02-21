@@ -39,10 +39,15 @@ VERILATOR_FLAGS += -LDFLAGS "-static -L ${GLIBC_STATIC}/lib"
 
 # Verilator flags: use the following to include code to generate VCDs
 # Select trace-depth according to your module hierarchy
-VERILATOR_FLAGS += --trace -CFLAGS -DVM_TRACE
+VERILATOR_FLAGS += --trace --trace-depth 10 -CFLAGS -DVM_TRACE
 
 VTOP                = V$(TOPMODULE)
 VERILATOR_RESOURCES = Resources
+SOC_RTL_DIR ?= Verilog_RTL
+
+ifeq ($(PROC), bluespec_p3) 
+   SOC_RTL_DIR = Verilog_RTL_P3
+endif
 
 .PHONY: simulator
 simulator:
@@ -51,22 +56,22 @@ ifeq ($(strip $(PROC)),)
 	exit 1
 endif
 	@echo "INFO: Verilating Verilog files (in newly created obj_dir)"
-	cp Verilog_RTL/mkSoC_Top_orig.v Verilog_RTL/mkSoC_Top.v
-	sed  -f $(VERILATOR_RESOURCES)/sed_script.txt  Verilog_RTL/$(TOPMODULE)_orig.v > tmp1.v
+	cp $(SOC_RTL_DIR)/mkSoC_Top_orig.v $(SOC_RTL_DIR)/mkSoC_Top.v
+	sed  -f $(VERILATOR_RESOURCES)/sed_script.txt  $(SOC_RTL_DIR)/$(TOPMODULE)_orig.v > tmp1.v
 	cat  $(VERILATOR_RESOURCES)/verilator_config.vlt \
 	     $(VERILATOR_RESOURCES)/import_DPI_C_decls.v \
-	     tmp1.v                                     > Verilog_RTL/$(TOPMODULE).v
+	     tmp1.v                                     > $(SOC_RTL_DIR)/$(TOPMODULE).v
 	rm   -f  tmp1.v
 	sed  -f $(VERILATOR_RESOURCES)/sed_script2.txt  $(PROCESSOR_RTL)/$(TOPNAME).v > tmp2.v
-	mv tmp2.v Verilog_RTL/mkP_Core.v
+	mv tmp2.v $(SOC_RTL_DIR)/mkP_Core.v
 ifeq ($(PROC), chisel_p1XXX)
-	sed  -f $(VERILATOR_RESOURCES)/sed_script3.txt  Verilog_RTL/mkSoC_Top_orig.v > Verilog_RTL/mkSoC_Top.v
+	sed  -f $(VERILATOR_RESOURCES)/sed_script3.txt  $(SOC_RTL_DIR)/mkSoC_Top_orig.v > $(SOC_RTL_DIR)/mkSoC_Top.v
 endif
 ifeq ($(PROC), chisel_p2XXX)
-	sed  -f $(VERILATOR_RESOURCES)/sed_script3.txt  Verilog_RTL/mkSoC_Top_orig.v > Verilog_RTL/mkSoC_Top.v
+	sed  -f $(VERILATOR_RESOURCES)/sed_script3.txt  $(SOC_RTL_DIR)/mkSoC_Top_orig.v > $(SOC_RTL_DIR)/mkSoC_Top.v
 endif
 	verilator \
-		-IVerilog_RTL \
+		-I$(SOC_RTL_DIR) \
 		-Iprocs/$(PROC) \
 		-I$(PROCESSOR_RTL) \
 		--top-module mkTop_HW_Side \
@@ -80,7 +85,7 @@ endif
 	cd obj_dir; \
 	   make -j -f V$(TOPMODULE).mk  $(VTOP); \
 	   cp -p  $(VTOP)  ../$(SIM_EXE_FILE)
-	rm Verilog_RTL/mkP_Core.v
+	rm $(SOC_RTL_DIR)/mkP_Core.v
 	@echo "INFO: Created verilator executable:    $(SIM_EXE_FILE)"
 
 .PHONY: jtag_simulator
@@ -90,18 +95,18 @@ ifeq ($(strip $(PROC)),)
 	exit 1
 endif
 	@echo "INFO: Verilating Verilog files (in newly created obj_dir)"
-	cp Verilog_RTL/mkSoC_Top_orig.v Verilog_RTL/mkSoC_Top.v
-	sed  -f $(VERILATOR_RESOURCES)/sed_script.txt  Verilog_RTL/$(TOPMODULE)_orig.v > tmp1.v
+	cp $(SOC_RTL_DIR)/mkSoC_Top_orig.v $(SOC_RTL_DIR)/mkSoC_Top.v
+	sed  -f $(VERILATOR_RESOURCES)/sed_script.txt  $(SOC_RTL_DIR)/$(TOPMODULE)_orig.v > tmp1.v
 	cat  $(VERILATOR_RESOURCES)/verilator_config.vlt \
 	     $(VERILATOR_RESOURCES)/import_DPI_C_decls.v \
-	     tmp1.v                                     > Verilog_RTL/$(TOPMODULE).v
+	     tmp1.v                                     > $(SOC_RTL_DIR)/$(TOPMODULE).v
 	rm   -f  tmp1.v
 	sed  -f $(VERILATOR_RESOURCES)/sed_script2.txt  $(PROCESSOR_RTL)/$(TOPNAME).v > tmp2.v
-	mv tmp2.v Verilog_RTL/mkP_Core.v
+	mv tmp2.v $(SOC_RTL_DIR)/mkP_Core.v
 	verilator \
 		-IProcessor/Boot_ROM \
+		-I$(SOC_RTL_DIR) \
 		-I$(PROCESSOR_RTL) \
-		-IVerilog_RTL \
 		--top-module mkTop_HW_Side \
 		$(VERILATOR_FLAGS) \
 		--cc  $(TOPMODULE).v \
@@ -113,7 +118,7 @@ endif
 	cd obj_dir; \
 	   make -j -f V$(TOPMODULE).mk  $(VTOP); \
 	   cp -p  $(VTOP)  ../$(SIM_EXE_FILE)
-	rm Verilog_RTL/mkP_Core.v
+	rm $(SOC_RTL_DIR)/mkP_Core.v
 	@echo "INFO: Created verilator executable:    $(SIM_EXE_FILE)"
 
 clean:

@@ -1,0 +1,9 @@
+root::0:0::0:0:Charlie &:/root:/bin/csh
+daemon:*:1:1::0:0:Owner of many system processes:/root:/usr/sbin/nologin
+operator:*:2:5::0:0:System &:/:/usr/sbin/nologin
+smmsp:*:25:25::0:0:Sendmail Submission User:/var/spool/clientmqueue:/usr/sbin/nologin
+unbound:*:59:59::0:0:Unbound DNS Resolver:/var/unbound:/usr/sbin/nologin
+uucp:*:66:66::0:0:UUCP pseudo-user:/var/spool/uucppublic:/usr/local/libexec/uucp/uucico
+auditdistd:*:78:77::0:0:Auditdistd unprivileged user:/var/empty:/usr/sbin/nologin
+nobody:*:65534:65534::0:0:Unprivileged user:/nonexistent:/usr/sbin/nologin
+ntpd:*:123:123::0:0:NTP Daemon:/var/db/ntp:/usr/sbin/nologin

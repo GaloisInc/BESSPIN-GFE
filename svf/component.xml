@@ -636,7 +636,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>dc8c0629</spirit:value>
+            <spirit:value>016a93cf</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -652,7 +652,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>e5ca9626</spirit:value>
+            <spirit:value>5c749332</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -2781,6 +2781,23 @@
           </spirit:wireTypeDefs>
         </spirit:wire>
       </spirit:port>
+      <spirit:port>
+        <spirit:name>tvswitch</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">1</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_anylanguagesynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_anylanguagebehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
     </spirit:ports>
   </spirit:model>
   <spirit:choices>
@@ -2801,14 +2818,14 @@
     <spirit:fileSet>
       <spirit:name>xilinx_anylanguagesynthesis_view_fileset</spirit:name>
       <spirit:file>
+        <spirit:name>svf_constraints.xdc</spirit:name>
+        <spirit:userFileType>xdc</spirit:userFileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
         <spirit:name>mkSVF_Bridge.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>CHECKSUM_56703d48</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>./mkBytevec_Mux_HW_Side.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:logicalName>xil_defaultlib</spirit:logicalName>
       </spirit:file>
       <spirit:file>
         <spirit:name>./mkSVF_PCIE.v</spirit:name>
@@ -2832,27 +2849,12 @@
         <spirit:logicalName>xil_defaultlib</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>mkBytevec_Mux_HW_Side.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:logicalName>xil_defaultlib</spirit:logicalName>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>./ResetEither.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:logicalName>xil_defaultlib</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>./mkSceMiLinkTypeParameter.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:logicalName>xil_defaultlib</spirit:logicalName>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>./ClockInverter.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:logicalName>xil_defaultlib</spirit:logicalName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>./mkSceMiUInt32Parameter.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:logicalName>xil_defaultlib</spirit:logicalName>
       </spirit:file>
@@ -2918,11 +2920,6 @@
       </spirit:file>
       <spirit:file>
         <spirit:name>./mkSVF_Bridge.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:logicalName>xil_defaultlib</spirit:logicalName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>./mkSceMiStringParameter.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:logicalName>xil_defaultlib</spirit:logicalName>
       </spirit:file>
@@ -2975,6 +2972,12 @@
         <spirit:userFileType>CHECKSUM_2f2f1842</spirit:userFileType>
         <spirit:logicalName>xil_defaultlib</spirit:logicalName>
       </spirit:file>
+      <spirit:file>
+        <spirit:name>./ResetToBool.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>CHECKSUM_79cec4de</spirit:userFileType>
+        <spirit:logicalName>xil_defaultlib</spirit:logicalName>
+      </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
       <spirit:name>xilinx_anylanguagebehavioralsimulation_view_fileset</spirit:name>
@@ -2982,11 +2985,6 @@
         <spirit:name>mkSVF_Bridge.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>CHECKSUM_56703d48</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>./mkBytevec_Mux_HW_Side.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:logicalName>xil_defaultlib</spirit:logicalName>
       </spirit:file>
       <spirit:file>
         <spirit:name>./mkSVF_PCIE.v</spirit:name>
@@ -3010,27 +3008,12 @@
         <spirit:logicalName>xil_defaultlib</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>mkBytevec_Mux_HW_Side.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:logicalName>xil_defaultlib</spirit:logicalName>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>./ResetEither.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:logicalName>xil_defaultlib</spirit:logicalName>
       </spirit:file>
       <spirit:file>
-        <spirit:name>./mkSceMiLinkTypeParameter.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:logicalName>xil_defaultlib</spirit:logicalName>
-      </spirit:file>
-      <spirit:file>
         <spirit:name>./ClockInverter.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:logicalName>xil_defaultlib</spirit:logicalName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>./mkSceMiUInt32Parameter.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:logicalName>xil_defaultlib</spirit:logicalName>
       </spirit:file>
@@ -3096,11 +3079,6 @@
       </spirit:file>
       <spirit:file>
         <spirit:name>./mkSVF_Bridge.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:logicalName>xil_defaultlib</spirit:logicalName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>./mkSceMiStringParameter.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:logicalName>xil_defaultlib</spirit:logicalName>
       </spirit:file>
@@ -3200,18 +3178,23 @@
       </xilinx:taxonomies>
       <xilinx:displayName>mkSVF_Bridge_v1_0</xilinx:displayName>
       <xilinx:definitionSource>package_project</xilinx:definitionSource>
-      <xilinx:coreRevision>31</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2019-03-16T01:43:54Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>32</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2020-01-21T22:07:39Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="nopcore"/>
         <xilinx:tag xilinx:name="bluespec:user:mkSVF_Bridge:1.0_ARCHIVE_LOCATION">/export/home/stoy/examples/galois/gfe1/svf</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@407e6c8d_ARCHIVE_LOCATION">/home/stoy/feature_svf/gfe/svf</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@46e364fb_ARCHIVE_LOCATION">/home/stoy/feature_svf/gfe/svf</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@18d40c25_ARCHIVE_LOCATION">/home/stoy/feature_svf/gfe/svf</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@6d5e1ef1_ARCHIVE_LOCATION">/home/stoy/feature_svf/gfe/svf</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@69550f4d_ARCHIVE_LOCATION">/home/stoy/feature_svf/gfe/svf</xilinx:tag>
       </xilinx:tags>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
-      <xilinx:xilinxVersion>2017.4</xilinx:xilinxVersion>
+      <xilinx:xilinxVersion>2019.1</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="af940f5a"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="fecc5e99"/>
-      <xilinx:checksum xilinx:scope="ports" xilinx:value="ea7de02b"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="5393dd2e"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="8941e838"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="6ea9c1fe"/>
     </xilinx:packagingInfo>
   </spirit:vendorExtensions>
