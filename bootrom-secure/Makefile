@@ -8,14 +8,14 @@ TARGET=$(CCPATH)riscv64-unknown-elf
 XLEN?=32
 
 ifeq ($(XLEN),64)
-	ARCH 		= -march=rv64imac
-	ABI 		= -mabi=lp64
-	CLANG_ARCH  = riscv64
+	ARCH		= -march=rv64imac
+	ABI		= -mabi=lp64
+	CLANG_ARCH 	= riscv64
 else
-	ARCH 		= -march=rv32im
-	ABI 		= -mabi=ilp32
-	CLANG_ARCH  = riscv32
-	XLEN        = 32 # if it's any value other than 64 normalize it to 32
+	XLEN		= 32 # if it's not 64 normalize it to 32
+	ARCH		= -march=rv32im
+	ABI		= -mabi=ilp32
+	CLANG_ARCH	= riscv32
 endif
 
 $(info XLEN=${XLEN})
