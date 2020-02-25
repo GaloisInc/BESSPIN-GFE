@@ -56,7 +56,7 @@ set_msg_config -id {Opt 31-430}          -suppress
 source $HDK_SHELL_DIR/build/scripts/strategy_DEFAULT.tcl
 
 # Encrypt source code
-source encrypt.tcl
+# source encrypt.tcl
 
 # Procedure for running various implementation steps (impl_step)
 source $HDK_SHELL_DIR/build/scripts/step_user.tcl -notrace

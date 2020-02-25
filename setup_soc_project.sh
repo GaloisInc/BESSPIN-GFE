@@ -3,6 +3,7 @@
 # Get the path to the root folder of the git repository
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 cd $BASE_DIR
+
 source $BASE_DIR/setup_env.sh
 source $BASE_DIR/init_submodules.sh
 
@@ -36,6 +37,11 @@ case "$proc_name" in
 esac
 
 err_msg $? "Making the bootrom failed"
+
+if [[ $1 == *"aws"* ]]; then
+  shift # This blasts $1 so that we don't pass invalid arguments to hdk_setup
+  source $BASE_DIR/aws-fpga/hdk_setup.sh
+fi
 
 echo "Please run with Vivado 2019.1"
 # i.e.

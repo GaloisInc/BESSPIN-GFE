@@ -17,6 +17,19 @@ check_file $vivado_project "$vivado_project does not exist. Cannot build project
 Please run setup_soc_project.sh first and/or specify a valid proc_name For example,
 run ./build.sh chisel_p1"
 
+# AWS F1 Targets
+if [[ $1 == *"aws"* ]]; then
+  shift # This blasts $1 so that we don't pass invalid arguments to hdk_setup
+  export CL_DIR=$BASE_DIR/$proc_name
+  echo "CL_DIR: "$CL_DIR
+  source $BASE_DIR/aws-fpga/hdk_setup.sh
+  $HDK_SHELL_DIR/build/scripts/prepare_build_environment.sh
+  cd $CL_DIR/build/scripts
+  $BASE_DIR/aws-fpga/hdk/common/shell_stable/build/scripts/aws_build_dcp_from_cl.sh -foreground
+
+# VC118 Targets
+else
+
 # Run vivado to build a top level project
 cd $BASE_DIR/vivado
 vivado -mode batch $vivado_project -source $BASE_DIR/tcl/build.tcl
@@ -27,3 +40,6 @@ bitstream=$BASE_DIR/vivado/${project_name}/${project_name}.runs/impl_1/design_1.
 output_bitstream=$BASE_DIR/bitstreams/${project_name}.bit
 check_file $bitstream "Bitstream $bitstream not generated. Check Vivado logs"
 cp $bitstream $output_bitstream
+
+fi
+
