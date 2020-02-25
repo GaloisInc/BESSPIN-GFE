@@ -1,0 +1,5 @@
+build/reports/*.rpt
+build/scripts/last_log
+build/checkpoints/*
+build/scripts/.Xil
+build/scripts/hd_visual
