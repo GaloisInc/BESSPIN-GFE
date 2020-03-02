@@ -62,5 +62,9 @@ ENV RISCV_C_INCLUDE_PATH="/opt/riscv/riscv64-unknown-elf/include"
 # OpenOCD dependencies
 RUN apt-get install -y libftdi1-2 libusb-1.0-0-dev libtool pkg-config texinfo
 
+# Install and configure TFTP server
+RUN apt-get install -y atftpd
+RUN chmod 777 /srv/tftp
+
 WORKDIR /gfe
 

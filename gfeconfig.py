@@ -41,9 +41,13 @@ class Config(object):
     compiler = None
     openocd_config_filename='./testing/targets/ssith_gfe.cfg'
 
+    # Netboot config
+    netboot_folder = '/srv/tftp/'
+    netboor_server_ip = '10.88.88.1'
+
     # FreeRTOS config
     freertos_basic_tests = ['main_blinky']
-    freertos_io_tests = ['main_uart','main_rtc','main_gpio','main_sd']
+    freertos_io_tests = ['main_uart','main_rtc','main_gpio','main_sd','main_netboot']
     freertos_network_tests = ['main_udp','main_tcp']
     freertos_expected_contents = None
     freertos_absent_contents = None
@@ -138,6 +142,7 @@ class Config(object):
         main_sd = ["Root opened"]
         main_udp = ["IP Address:"]
         main_tcp = ["IP Address:"]
+        main_netboot = [">"]
 
         expected_contents = {'main_blinky': main_blinky,
                             'main_full': main_full,
@@ -146,7 +151,8 @@ class Config(object):
                             'main_rtc': main_rtc,
                             'main_sd': main_sd,
                             'main_udp': main_udp,
-                            'main_tcp': main_tcp}
+                            'main_tcp': main_tcp,
+                            'main_netboot': main_netboot}
 
         absent_contents = {'main_blinky': [],
                             'main_full': main_full_absent,
@@ -155,7 +161,8 @@ class Config(object):
                             'main_rtc': [],
                             'main_sd': [],
                             'main_udp': [],
-                            'main_tcp': []}
+                            'main_tcp': [],
+                            'main_netboot': []}
 
         timeouts = {'main_blinky': 10,
                     'main_full': 10,
@@ -164,7 +171,8 @@ class Config(object):
                     'main_rtc': 10,
                     'main_sd': 10,
                     'main_udp': 30,
-                    'main_tcp': 30}
+                    'main_tcp': 30,
+                    'main_netboot': 30}
 
         self.freertos_expected_contents = expected_contents
         self.freertos_absent_contents = absent_contents

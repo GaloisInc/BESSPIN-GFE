@@ -421,6 +421,52 @@ def test_freertos_network(uart, config, prog_name):
     del gdb
     return res
 
+# Netboot loader
+# Similar to network test
+def load_netboot(config, path_to_elf, timeout, expected_contents=[], absent_contents=[]):
+    print_and_log("Loading netboot")
+
+    gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
+    uart = UartSession()
+
+    res, rx = test_freertos_common(gdb, uart, config, 'main_netboot')
+    # early exit
+    if not res:
+        raise RuntimeError("Loading netboot failed - check log for more details.")
+
+    run_and_log("Moving elf to netboot server folder",
+        run(['cp',path_to_elf,config.netboot_folder], stdout=PIPE, stderr=PIPE))
+    
+    elf_name = os.basename(path_to_elf)
+    print_and_log("Netboot loaded OK, loading binary file: " + elf_name + " from " + config.netboot_folder)
+    cmd = "boot " + config.netboor_server_ip + " " + elf_name + "\r"
+    uart.send(cmd.encode())
+    rx = uart.read(10)
+    print_and_log(rx)
+
+    res, rx = uart.read_and_check(timeout, expected_contents, absent_contents)
+    del gdb
+    del uart
+
+    if res:
+        print_and_log('PASS')
+        return True
+    else:
+        print_and_log('FAIL')
+        return False
+
+# Wrapper for loading a binary
+def load_elf(config, path_to_elf, timeout, expected_contents=[], absent_contents=[]):
+    print_and_log("Load and run binary: " + path_to_elf)
+    gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
+    uart = UartSession()
+    res, _rx = basic_tester(gdb, uart, args.elf, int(args.timeout), expected, absent)
+    if not res:
+        raise RuntimeError("Load elf failed - check log for more details.")
+    del uart
+    del gdb
+
+
 # Generic basic tester
 def basic_tester(gdb, uart, exe_filename, timeout, expected_contents=[], absent_contents=[]):
     print_and_log('Starting basic tester using ' + exe_filename)
@@ -682,17 +728,18 @@ def test_init():
     parser.add_argument("--network", help="run network tests",action="store_true")
     parser.add_argument("--io", help="run IO tests (P1 only)",action="store_true")
     parser.add_argument("--flash", help="run flash tests",action="store_true")
-    parser.add_argument("--pcie", help="run PCIe tests (P2/P3 only)",action="store_true")
     parser.add_argument("--no-pcie", help="build without PCIe support (P2/P3 only)",action="store_true")
     parser.add_argument("--no-bitstream",help="do not upload bitstream",action="store_true")
     parser.add_argument("--compiler", help="select compiler to use [gcc|clang]",default="gcc")
     parser.add_argument("--elf", help="path to an elf file to load and run. Make sure to specify --timeout parameter")
+    parser.add_argument("--netboot", help="Load file using netboot. Make sure to specify --timeout and --elf parameters",action="store_true")
     parser.add_argument("--timeout", help="specify how log to run a binary specified in the --elf argument")
     parser.add_argument("--expected", help="specify expected output of the binary specifed in the --elf argument, used for early exit." +
         "Can be multiple arguments comma separated: \"c1,c2,c3...\"",default="None")
     parser.add_argument("--absent", help="specify absent output of the binary specifed in the --elf argument. Absent content should not be present." +
         "Can be multiple arguments comma separated: \"c1,c2,c3...\"",default="None")
     parser.add_argument("--simulator", help="run in verilator",action="store_true")
+    parser.add_argument("--keep-log", help="Don't erase the log file at the beginning of session",action="store_true")
     args = parser.parse_args()
 
     # Make all paths in `args` absolute, so we can safely `chdir` later.
@@ -701,7 +748,9 @@ def test_init():
 
     gfeconfig.check_environment()
 
-    run(['rm','-rf','test_processor.log'])
+    if not args.keep_log:
+        run(['rm','-rf','test_processor.log'])
+
     logging.basicConfig(filename='test_processor.log',level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
     print_and_log("Test processor starting.")
 
@@ -722,6 +771,7 @@ if __name__ == '__main__':
     else:
         print_and_log("Skiping bitstream programming")
 
+    # Load elf via GDB
     if args.elf:
         if not args.timeout:
             raise RuntimeError("Please specify timeout for how long to run the binary")
@@ -733,11 +783,22 @@ if __name__ == '__main__':
             absent = []
         else:
             absent = args.absent.split()
-        gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
-        uart = UartSession()
-        basic_tester(gdb, uart, args.elf, int(args.timeout), expected, absent)
-        del uart
-        del gdb
+        load_elf(config, args.elf, int(args.timeout), expected, absent)
+
+    # Load elf via netboot
+    if args.netboot:
+        if not args.timeout:
+            raise RuntimeError("Please specify timeout for how long to run the binary")
+        if args.expected == "None":
+            expected = []
+        else:
+            expected = args.expected.split()
+        if args.absent == "None":
+            absent = []
+        else:
+            absent = args.absent.split()
+        if not load_netboot(config, args.elf, int(args.timeout), expected, absent):
+            raise RuntimeError("Netboot test failed")
 
     if args.isa:
         test_isa(config)
