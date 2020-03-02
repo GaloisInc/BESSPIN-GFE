@@ -437,7 +437,7 @@ def load_netboot(config, path_to_elf, timeout, expected_contents=[], absent_cont
     run_and_log("Moving elf to netboot server folder",
         run(['cp',path_to_elf,config.netboot_folder], stdout=PIPE, stderr=PIPE))
     
-    elf_name = os.basename(path_to_elf)
+    elf_name = os.path.basename(path_to_elf)
     print_and_log("Netboot loaded OK, loading binary file: " + elf_name + " from " + config.netboot_folder)
     cmd = "boot " + config.netboor_server_ip + " " + elf_name + "\r"
     uart.send(cmd.encode())
@@ -448,23 +448,24 @@ def load_netboot(config, path_to_elf, timeout, expected_contents=[], absent_cont
     del gdb
     del uart
 
-    if res:
-        print_and_log('PASS')
-        return True
-    else:
-        print_and_log('FAIL')
-        return False
+    if not res:
+        raise RuntimeError("Load netboot failed - check log for more details.")
+
 
 # Wrapper for loading a binary
 def load_elf(config, path_to_elf, timeout, expected_contents=[], absent_contents=[]):
     print_and_log("Load and run binary: " + path_to_elf)
+    
     gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
     uart = UartSession()
+    
     res, _rx = basic_tester(gdb, uart, args.elf, int(args.timeout), expected, absent)
-    if not res:
-        raise RuntimeError("Load elf failed - check log for more details.")
+    
     del uart
     del gdb
+
+    if not res:
+        raise RuntimeError("Load elf failed - check log for more details.")
 
 
 # Generic basic tester
@@ -778,27 +779,15 @@ if __name__ == '__main__':
         if args.expected == "None":
             expected = []
         else:
-            expected = args.expected.split()
+            expected = args.expected.split(',')
         if args.absent == "None":
             absent = []
         else:
-            absent = args.absent.split()
-        load_elf(config, args.elf, int(args.timeout), expected, absent)
-
-    # Load elf via netboot
-    if args.netboot:
-        if not args.timeout:
-            raise RuntimeError("Please specify timeout for how long to run the binary")
-        if args.expected == "None":
-            expected = []
+            absent = args.absent.split(',')
+        if args.netboot:
+            load_netboot(config, args.elf, int(args.timeout), expected, absent)
         else:
-            expected = args.expected.split()
-        if args.absent == "None":
-            absent = []
-        else:
-            absent = args.absent.split()
-        if not load_netboot(config, args.elf, int(args.timeout), expected, absent):
-            raise RuntimeError("Netboot test failed")
+            load_elf(config, args.elf, int(args.timeout), expected, absent)
 
     if args.isa:
         test_isa(config)
