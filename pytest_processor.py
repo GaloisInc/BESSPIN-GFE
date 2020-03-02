@@ -421,39 +421,6 @@ def test_freertos_network(uart, config, prog_name):
     del gdb
     return res
 
-# Load ELF
-def load_elf(config, path_to_elf, timeout, expected_contents=None, absent_contents=[]):
-    print_and_log("Load and run binary: " + path_to_elf)
-    gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
-    uart = UartSession()
-
-    soft_reset_cmd = 'set *((int *) 0x6FFF0000) = 1'
-
-    setup_cmds = [
-        'dont-repeat',
-        soft_reset_cmd,
-        soft_reset_cmd, # reset twice to make sure we did reset
-        'monitor reset halt',
-        'delete',
-        'file ' + path_to_elf,
-        'load',
-    ]
-    print_and_log('Loading and running {} ...'.format(path_to_elf))
-    for c in setup_cmds:
-        gdb.cmd(c)
-    print_and_log("Continuing")
-    gdb.cont()
-
-    if not expected_contents:
-        print_and_log(uart.read(timeout))
-    else:
-        res, rx = uart.read_and_check(timeout, expected_contents, absent_contents)
-        if not res:
-            raise RuntimeError("Load elf failed - check log for more details.")
-    del uart
-    del gdb
-
-
 # Generic basic tester
 def basic_tester(gdb, uart, exe_filename, timeout, expected_contents=[], absent_contents=[]):
     print_and_log('Starting basic tester using ' + exe_filename)
@@ -532,17 +499,6 @@ def test_program_bitstream(config):
             "Program/Verify Operation successful.")
     run_and_log("Programming bitstream",
         run(['./pyprogram_fpga.py', config.proc_name], stdout=PIPE, stderr=PIPE))
-
-# Assembly tests
-def test_asm(config):
-    print("ASM tests not implemented yet!")
-    exit(1)
-    run_and_log("Run ASM tests",
-        run(['make','XLEN=' + config.xlen], cwd="./riscv-tests", stdout=PIPE, stderr=PIPE))
-    # TODO
-    gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
-    # ...
-    del gdb
 
 # ISA tests
 def test_isa(config):
@@ -718,7 +674,6 @@ def build_busybox(config, linux_config_path):
 def test_init():
     parser = argparse.ArgumentParser()
     parser.add_argument("proc_name", help="processor to test [chisel_p1|chisel_p2|chisel_p3|bluespec_p1|bluespec_p2|bluespec_p3]")
-    parser.add_argument("--asm", help="run ASSEMBLY tests",action="store_true")
     parser.add_argument("--isa", help="run ISA tests",action="store_true")
     parser.add_argument("--busybox", help="run Busybox OS",action="store_true")
     parser.add_argument("--linux", help="run Debian OS",action="store_true")
@@ -771,17 +726,18 @@ if __name__ == '__main__':
         if not args.timeout:
             raise RuntimeError("Please specify timeout for how long to run the binary")
         if args.expected == "None":
-            expected = None
+            expected = []
         else:
             expected = args.expected.split()
         if args.absent == "None":
             absent = []
         else:
             absent = args.absent.split()
-        load_elf(config, args.elf, int(args.timeout), expected, absent)
-
-    if args.asm:
-        test_asm(config)
+        gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
+        uart = UartSession()
+        basic_tester(gdb, uart, args.elf, int(args.timeout), expected, absent)
+        del uart
+        del gdb
 
     if args.isa:
         test_isa(config)
