@@ -41,6 +41,8 @@ class Config(object):
     compiler = None
     openocd_config_filename='./testing/targets/ssith_gfe.cfg'
 
+    bootmem_folder = 'bootmem'
+
     # Netboot config
     netboot_folder = '/srv/tftp/'
     netboor_server_ip = '10.88.88.1'
@@ -143,6 +145,7 @@ class Config(object):
         main_udp = ["IP Address:"]
         main_tcp = ["IP Address:"]
         main_netboot = [">"]
+        main_netboot_absent = ["Error"]
 
         expected_contents = {'main_blinky': main_blinky,
                             'main_full': main_full,
@@ -162,7 +165,7 @@ class Config(object):
                             'main_sd': [],
                             'main_udp': [],
                             'main_tcp': [],
-                            'main_netboot': []}
+                            'main_netboot': main_netboot_absent}
 
         timeouts = {'main_blinky': 10,
                     'main_full': 10,
