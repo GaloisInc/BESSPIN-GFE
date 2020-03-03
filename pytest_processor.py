@@ -681,7 +681,7 @@ def test_busybox(config, args):
         print_and_log(cmd3)
         uart.send(cmd3)
 
-        if not uart.read_and_check(10, config.busybox_expected_contents['ping']):
+        if not uart.read_and_check(10, config.busybox_expected_contents['ping'])[0]:
             raise RuntimeError("Busybox network test failed: cannot bring up eth interface")
 
         print_and_log("Ping FPGA")
