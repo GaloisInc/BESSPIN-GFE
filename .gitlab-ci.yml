@@ -15,6 +15,7 @@ before_script:
   - source /opt/Xilinx/Vivado_Lab/2019.1/settings64.sh
   - export XILINXD_LICENSE_FILE=/opt/Xilinx/Xilinx.lic
 
+
 variables:
   # defaults. Overridden when this pipeline is called by tool-suite.
   testgen_id: 273
@@ -50,44 +51,44 @@ CHSL_P1_sim:
     - ./pytest_processor.py chisel_p1 --simulator
   extends: [.log_failure, .no_sched, .verilator]
 
-BSV_P1_sim:
-  script:
-    - ./pytest_processor.py bluespec_p1 --simulator
-  extends: [.log_failure, .no_sched, .verilator]
+# BSV_P1_sim:
+#   script:
+#     - ./pytest_processor.py bluespec_p1 --simulator
+#   extends: [.log_failure, .no_sched, .verilator]
 
-CHSL_P2_sim:
-  script:
-    - ./pytest_processor.py chisel_p2 --simulator
-  extends: [.log_failure, .no_sched, .verilator]
+# CHSL_P2_sim:
+#   script:
+#     - ./pytest_processor.py chisel_p2 --simulator
+#   extends: [.log_failure, .no_sched, .verilator]
 
-BSV_P2_sim:
-  script:
-    - ./pytest_processor.py bluespec_p2 --simulator
-  extends: [.log_failure, .no_sched, .verilator]
+# BSV_P2_sim:
+#   script:
+#     - ./pytest_processor.py bluespec_p2 --simulator
+#   extends: [.log_failure, .no_sched, .verilator]
 
-CHSL_P3_sim:
-  script:
-    - ./pytest_processor.py chisel_p3 --simulator
-  extends: [.log_failure, .no_sched, .verilator]
+# CHSL_P3_sim:
+#   script:
+#     - ./pytest_processor.py chisel_p3 --simulator
+#   extends: [.log_failure, .no_sched, .verilator]
 
-BSV_P3_sim:
-  script:
-    - ./pytest_processor.py bluespec_p3 --simulator
-  extends: [.log_failure, .no_sched, .verilator]
+# BSV_P3_sim:
+#   script:
+#     - ./pytest_processor.py bluespec_p3 --simulator
+#   extends: [.log_failure, .no_sched, .verilator]
 
 #-----------------------------------------------------------------------------#
 #
 # FPGA tests
 #
 #-----------------------------------------------------------------------------#
-P1_benchmarks:
-  script:
-    - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 clean
-    - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 link
-    - ./pytest_processor.py bluespec_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
-    - ./pytest_processor.py chisel_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+# P1_benchmarks:
+#   script:
+#     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 clean
+#     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 link
+#     - ./pytest_processor.py bluespec_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+#     - ./pytest_processor.py chisel_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+#   tags: ["fpga"]
+#   extends: [.log_always, .no_sched]
 
 # P2_benchmarks:
 #   script:
