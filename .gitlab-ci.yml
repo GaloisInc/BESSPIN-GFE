@@ -1,4 +1,4 @@
----
+image: artifactory.galois.com:5008/gfe:ci
 #-----------------------------------------------------------------------------#
 #
 # General startup commands
@@ -35,7 +35,7 @@ variables:
     when: always
 
 .verilator:
-  tags: ["docker"]
+  tags: ["docker-verilator"]
 
 .no_sched:
   except: ["schedules"]
@@ -46,37 +46,31 @@ variables:
 #
 #-----------------------------------------------------------------------------#
 CHSL_P1_sim:
-  image: galoisinc/besspin:gfe-develop
   script:
     - ./pytest_processor.py chisel_p1 --simulator
   extends: [.log_failure, .no_sched, .verilator]
 
 BSV_P1_sim:
-  image: galoisinc/besspin:gfe-develop
   script:
     - ./pytest_processor.py bluespec_p1 --simulator
   extends: [.log_failure, .no_sched, .verilator]
 
 CHSL_P2_sim:
-  image: galoisinc/besspin:gfe-develop
   script:
     - ./pytest_processor.py chisel_p2 --simulator
   extends: [.log_failure, .no_sched, .verilator]
 
 BSV_P2_sim:
-  image: galoisinc/besspin:gfe-develop
   script:
     - ./pytest_processor.py bluespec_p2 --simulator
   extends: [.log_failure, .no_sched, .verilator]
 
 CHSL_P3_sim:
-  image: galoisinc/besspin:gfe-develop
   script:
     - ./pytest_processor.py chisel_p3 --simulator
   extends: [.log_failure, .no_sched, .verilator]
 
 BSV_P3_sim:
-  image: galoisinc/besspin:gfe-develop
   script:
     - ./pytest_processor.py bluespec_p3 --simulator
   extends: [.log_failure, .no_sched, .verilator]

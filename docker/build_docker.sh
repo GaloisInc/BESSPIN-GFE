@@ -15,7 +15,7 @@ esac
 # Assume we are running from /gfe/docker directory
 GFE_PATH=`pwd`/../
 
-echo "TOOL_SUITE_PATH=$GFE_PATH"
+echo "GFE_PATH=$GFE_PATH"
 
 # The existence of `riscv-gnu-toolchains.tar.gz` is dependent upon the
 # `download-toolchains.sh` shell script having been run successfully.
