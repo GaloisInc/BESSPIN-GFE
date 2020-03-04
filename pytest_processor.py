@@ -290,18 +290,13 @@ def isa_tester(gdb, isa_exe_filename):
 
 # Compile FreeRTOS program
 def freertos_compile_program(config, prog_name):
-    if config.compiler == "clang":
-        use_clang="yes"
-    else:
-        use_clang="no"
-
     run_and_log("Cleaning FreeRTOS program directory",
         run(['make','clean'],cwd=config.freertos_folder,
-        env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen,
+        env=dict(os.environ, USE_CLANG=config.use_clang, PROG=prog_name, XLEN=config.xlen,
         configCPU_CLOCK_HZ=config.cpu_freq), stdout=PIPE, stderr=PIPE))
     run_and_log("Compiling: " + prog_name,
         run(['make'],cwd=config.freertos_folder,
-        env=dict(os.environ, C_INCLUDE_PATH=config.freertos_c_include_path, USE_CLANG=use_clang,
+        env=dict(os.environ, C_INCLUDE_PATH=config.freertos_c_include_path, USE_CLANG=config.use_clang,
         PROG=prog_name, XLEN=config.xlen, configCPU_CLOCK_HZ=config.cpu_freq), stdout=PIPE, stderr=PIPE))
     filename = config.freertos_folder + '/' + prog_name + '.elf'
     return filename
@@ -585,7 +580,7 @@ def test_freertos(config, args):
     uart = UartSession()
     freertos_failed = []
 
-    if not args.io and not args.network and not arg.flash:
+    if not args.io and not args.network and not args.flash:
         for prog in config.freertos_basic_tests:
             if not test_freertos_single_test(uart, config, prog):
                 freertos_failed.append(prog)
@@ -619,7 +614,7 @@ def test_freertos(config, args):
         
         print_and_log("Clean bootmem")
         run(['make','-f','Makefile.flash','clean'],cwd=config.bootmem_folder,
-            env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen),
+            env=dict(os.environ, USE_CLANG=config.use_clang, PROG=prog_name, XLEN=config.xlen),
             stdout=PIPE, stderr=PIPE, check=True)
 
         print_and_log("Copy FreeRTOS binary")
@@ -627,7 +622,7 @@ def test_freertos(config, args):
 
         print_and_log("Make bootable binary")
         run(['make','-f','Makefile.flash'],cwd=config.bootmem_folder,
-            env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen),
+            env=dict(os.environ, USE_CLANG=config.use_clang, PROG=prog_name, XLEN=config.xlen),
             stdout=PIPE, stderr=PIPE, check=True)
 
         run_and_log("Load binary",

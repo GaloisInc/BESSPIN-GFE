@@ -20,11 +20,6 @@ if __name__ == '__main__':
     vivado = gfeconfig.check_vivado()
     config = gfeconfig.Config(args)
 
-    if config.compiler == "clang":
-        use_clang="yes"
-    else:
-        use_clang="no"
-
     if args.erase:
         print("Erasing flash")
         run(['tcl/erase_flash'], check=True)

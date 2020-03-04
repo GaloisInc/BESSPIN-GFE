@@ -115,6 +115,11 @@ class Config(object):
             # this should never happen
             raise ValueError('Unknown processor ' + args.proc_name)
         
+        if args.compiler == "clang":
+            self.use_clang="yes"
+        else:
+            self.use_clang="no"
+
         self.get_freertos_config()
         self.get_busybox_config()
         self.get_freebsd_config()
