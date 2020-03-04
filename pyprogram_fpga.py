@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import gfeconfig
+from gfeconfig import run_and_check
 import argparse
 import os.path
 from subprocess import run, PIPE
@@ -29,16 +30,10 @@ if __name__ == '__main__':
         run(['tcl/erase_flash'], check=True)
         print("Erasing flash done!")
     elif args.flash_binary:
-        print("Programming persistent memory with binary...")
-        prog_name = os.path.basename(args.flash_binary)
-        run(['make','-f','Makefile.flash','clean'],cwd=config.bootmem_folder,
-            env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen),
-            stdout=PIPE, stderr=PIPE, check=True)
-        run(['cp',args.flash_binary,config.bootmem_folder], check=True)
-        run(['make','-f','Makefile.flash'],cwd=config.bootmem_folder,
-            env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen),
-            stdout=PIPE, stderr=PIPE, check=True)
-        run(['tcl/program_flash','datafile','bootmem/bootmem.bin'], check=True)
+        print("Programming persistent memory with binary: " + args.flash_binary)
+        run_and_check(
+            run(['tcl/program_flash','datafile',args.flash_binary], stdout=PIPE, stderr=PIPE),
+            "Program/Verify Operation successful.")
         print("Programming persistent memory with binary done!")
     else:
         # Program bitfile either to the persisent or non-persistent memory

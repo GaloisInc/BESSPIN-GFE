@@ -33,6 +33,22 @@ def check_environment():
         run(['which',program], stdout=PIPE, stderr=PIPE,check=True)
     return True
 
+# Run command and log it
+# Raise a runtime exception if it fails
+def run_and_check(cmd, res, expected_contents=None):
+    print_and_log(cmd)
+    res_stdout = str(res.stdout,'utf-8')
+    print(res_stdout)
+    if expected_contents:
+        if expected_contents in res_stdout:
+            res.returncode = 0
+        else:
+            res.returncode = 1
+    if res.returncode != 0:
+        print(str(res.stderr,'utf-8'))
+        msg = str("Running command failed: " + cmd + " Check test_processor.log for more details.")
+        raise RuntimeError(msg)
+    return res_stdout
 
 class Config(object):
     # General test config
@@ -42,6 +58,10 @@ class Config(object):
     openocd_config_filename='./testing/targets/ssith_gfe.cfg'
 
     bootmem_folder = 'bootmem'
+    bootmem_binary  = 'bootmem.bin'
+    bootmem_path = bootmem_folder + '/' + bootmem_binary
+
+    flash_prog_name = 'main_blinky'
 
     # Netboot config
     netboot_folder = '/srv/tftp/'

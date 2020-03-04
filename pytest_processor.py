@@ -288,14 +288,8 @@ def isa_tester(gdb, isa_exe_filename):
             print_and_log('FAIL (tohost={:#x})'.format(tohost))
             return False
 
-# Common FreeRTOS test code
-def test_freertos_common(gdb, uart, config, prog_name):
-    if config.compiler == "clang":
-        use_clang="yes"
-    else:
-        use_clang="no"
-
-    print_and_log("\nTesting: " + prog_name)
+# Compile FreeRTOS program
+def freertos_compile_program(config, prog_name):
     run_and_log("Cleaning FreeRTOS program directory",
         run(['make','clean'],cwd=config.freertos_folder,
         env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen,
@@ -305,6 +299,17 @@ def test_freertos_common(gdb, uart, config, prog_name):
         env=dict(os.environ, C_INCLUDE_PATH=config.freertos_c_include_path, USE_CLANG=use_clang,
         PROG=prog_name, XLEN=config.xlen, configCPU_CLOCK_HZ=config.cpu_freq), stdout=PIPE, stderr=PIPE))
     filename = config.freertos_folder + '/' + prog_name + '.elf'
+    return filename
+
+# Common FreeRTOS test code
+def test_freertos_common(gdb, uart, config, prog_name):
+    if config.compiler == "clang":
+        use_clang="yes"
+    else:
+        use_clang="no"
+
+    print_and_log("\nTesting: " + prog_name)
+    filename = freertos_compile_program(config, prog_name)
     res, rx =  basic_tester(gdb, uart, filename,
         timeout=config.freertos_timeouts[prog_name],
         expected_contents=config.freertos_expected_contents[prog_name],
@@ -604,6 +609,42 @@ def test_freertos(config, args):
                 print_and_log(prog + " PASSED")
             print_and_log("sleeping for 10 seconds between network tests")
             time.sleep(10)
+    
+    if args.flash:
+        prog_name = config.flash_prog_name
+        print_and_log("Flash test with " + prog_name)
+        
+        print_and_log("Compile FreeRTOS binary")
+        filename = freertos_compile_program(config, prog_name)
+        
+        print_and_log("Clean bootmem")
+        run(['make','-f','Makefile.flash','clean'],cwd=config.bootmem_folder,
+            env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen),
+            stdout=PIPE, stderr=PIPE, check=True)
+
+        print_and_log("Copy FreeRTOS binary")
+        run(['cp',filename,config.bootmem_folder], check=True)
+
+        print_and_log("Make bootable binary")
+        run(['make','-f','Makefile.flash'],cwd=config.bootmem_folder,
+            env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen),
+            stdout=PIPE, stderr=PIPE, check=True)
+
+        run_and_log("Load binary",
+            run(['./pyprogram_fpga.py', config.proc_name, '--flash-binary', config.bootmem_path], stdout=PIPE, stderr=PIPE))
+
+        print_and_log("Load bitstream")
+        run_and_log("Programming bitstream",
+            run(['./pyprogram_fpga.py', config.proc_name], stdout=PIPE, stderr=PIPE))
+
+        print_and_log("Check contents")
+        if uart.read_and_check(timeout=config.freertos_timeouts[prog_name],
+            expected_contents=config.freertos_expected_contents[prog_name],
+            absent_contents=config.freertos_absent_contents[prog_name])[0]:
+            print_and_log('Flash test PASS')
+        else:
+            print_and_log('Flash test FAIL')
+            freertos_failed.append('flash_' + prog_name)
 
     del uart
     if freertos_failed:
@@ -771,6 +812,11 @@ if __name__ == '__main__':
         test_program_bitstream(config)
     else:
         print_and_log("Skiping bitstream programming")
+
+    # TODO: flash test option
+    # load binary to flash
+    # program bitstream
+    # listen to uart
 
     # Load elf via GDB
     if args.elf:
