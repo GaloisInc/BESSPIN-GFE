@@ -35,7 +35,7 @@ variables:
     when: always
 
 .verilator:
-  tags: ["verilator"]
+  tags: ["docker"]
 
 .no_sched:
   except: ["schedules"]
