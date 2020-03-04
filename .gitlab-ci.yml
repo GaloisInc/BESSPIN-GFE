@@ -268,6 +268,7 @@ BSV_P2_freertos:
 BSV_P2_busybox:
   script:
     - ./pytest_processor.py bluespec_p2 --busybox --network
+    # - ./pytest_processor.py bluespec_p2 --elf bootmem/build-busybox-bbl/bbl --netboot --timeout 200 --expected "Please press Enter to activate this console"
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
   cache:
