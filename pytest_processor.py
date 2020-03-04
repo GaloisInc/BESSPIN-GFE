@@ -290,6 +290,11 @@ def isa_tester(gdb, isa_exe_filename):
 
 # Compile FreeRTOS program
 def freertos_compile_program(config, prog_name):
+    if config.compiler == "clang":
+        use_clang="yes"
+    else:
+        use_clang="no"
+
     run_and_log("Cleaning FreeRTOS program directory",
         run(['make','clean'],cwd=config.freertos_folder,
         env=dict(os.environ, USE_CLANG=use_clang, PROG=prog_name, XLEN=config.xlen,
@@ -303,11 +308,6 @@ def freertos_compile_program(config, prog_name):
 
 # Common FreeRTOS test code
 def test_freertos_common(gdb, uart, config, prog_name):
-    if config.compiler == "clang":
-        use_clang="yes"
-    else:
-        use_clang="no"
-
     print_and_log("\nTesting: " + prog_name)
     filename = freertos_compile_program(config, prog_name)
     res, rx =  basic_tester(gdb, uart, filename,
@@ -585,7 +585,7 @@ def test_freertos(config, args):
     uart = UartSession()
     freertos_failed = []
 
-    if not args.io and not args.network:
+    if not args.io and not args.network and not arg.flash:
         for prog in config.freertos_basic_tests:
             if not test_freertos_single_test(uart, config, prog):
                 freertos_failed.append(prog)
@@ -808,15 +808,10 @@ if __name__ == '__main__':
     if args.simulator:
         test_simulator(config)
     
-    if not args.no_bitstream:
-        test_program_bitstream(config)
-    else:
+    if args.no_bitstream or args.flash:
         print_and_log("Skiping bitstream programming")
-
-    # TODO: flash test option
-    # load binary to flash
-    # program bitstream
-    # listen to uart
+    else:
+        test_program_bitstream(config)
 
     # Load elf via GDB
     if args.elf:
