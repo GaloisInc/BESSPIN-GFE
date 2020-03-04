@@ -119,6 +119,12 @@ BSV_P1_isa:
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
+BSV_P1_flash:
+  script:
+    - ./pytest_processor.py bluespec_p1 --freertos --flash
+  tags: ["fpga"]
+  extends: [.log_always, .no_sched]
+
 BSV_P1_freertos:
   script:
     - ./pytest_processor.py bluespec_p1 --freertos
@@ -166,6 +172,12 @@ CHSL_P1_freertos:
 CHSL_P2_isa:
   script:
     - ./pytest_processor.py chisel_p2 --isa
+  tags: ["fpga"]
+  extends: [.log_always, .no_sched]
+
+CHSL_P2_flash:
+  script:
+    - ./pytest_processor.py chisel_p2 --freertos --flash
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
@@ -238,6 +250,12 @@ BSV_P2_isa:
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
+BSV_P2_flash:
+  script:
+    - ./pytest_processor.py bluespec_p2 --freertos --flash
+  tags: ["fpga"]
+  extends: [.log_always, .no_sched]
+
 BSV_P2_freertos:
   script:
     - ./pytest_processor.py bluespec_p2 --freertos
@@ -303,6 +321,12 @@ BSV_P2_freebsd:
 CHSL_P3_isa:
   script:
     - ./pytest_processor.py chisel_p3 --isa
+  tags: ["fpga"]
+  extends: [.log_always, .no_sched]
+
+CHSL_P3_flash:
+  script:
+    - ./pytest_processor.py chisel_p3 --freertos --flash
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 

@@ -624,7 +624,7 @@ def test_freertos(config, args):
             env=dict(os.environ, USE_CLANG=config.use_clang, PROG=prog_name+'.elf', XLEN=config.xlen),
             stdout=PIPE, stderr=PIPE))
 
-        run_and_log("Programming persistent memory with binary: " + args.flash_binary,
+        run_and_log("Programming persistent memory with binary",
             run(['tcl/program_flash','datafile', config.bootmem_path], stdout=PIPE, stderr=PIPE),
             "Program/Verify Operation successful.")
 
