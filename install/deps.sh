@@ -38,3 +38,7 @@ ln -s /usr/bin/llvm-ranlib-11 llvm-ranlib
 # Instal dependencies for FreeBSD
 apt install -y libtool pkg-config bison cmake ninja-build samba flex texinfo libarchive-dev
 apt install -y libglib2.0-dev libpixman-1-dev libarchive-dev bsdtar libbz2-dev
+
+# Install and configure TFTP server
+apt install -y atftpd
+chmod 777 /srv/tftp

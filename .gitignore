@@ -28,8 +28,6 @@ bluenoc/drivers/modules.order
 
 testing/baremetal/build
 *.pyc
-test_32.gdb
-test_64.gdb
 # filesystem artifacts
 ._*
 /docker/riscv-gnu-toolchains.tar.gz
