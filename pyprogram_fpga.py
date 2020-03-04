@@ -25,8 +25,7 @@ if __name__ == '__main__':
         run(['tcl/erase_flash'], check=True)
         print("Erasing flash done!")
     elif args.flash_binary:
-        print("Programming persistent memory with binary: " + args.flash_binary)
-        run_and_check(
+        run_and_check("Programming persistent memory with binary: " + args.flash_binary,
             run(['tcl/program_flash','datafile',args.flash_binary], stdout=PIPE, stderr=PIPE),
             "Program/Verify Operation successful.")
         print("Programming persistent memory with binary done!")
@@ -48,8 +47,9 @@ if __name__ == '__main__':
             raise RuntimeError(msg)
 
         if args.flash_bitstream:
-            print("Programming persistent memory with bitstream...")
-            run(['tcl/program_flash','bitfile',bitfile], check=True)
+            run_and_check("Programming persistent memory with bitstream: " + bitfile,
+                run(['tcl/program_flash','bitfile',bitfile], stdout=PIPE, stderr=PIPE),
+                "Program/Verify Operation successful.")
             print("Programming persistent memory with bitstream done!")
         else:
             print("Programming non-persistent memory with bitstream")

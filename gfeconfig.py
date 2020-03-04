@@ -36,7 +36,7 @@ def check_environment():
 # Run command and log it
 # Raise a runtime exception if it fails
 def run_and_check(cmd, res, expected_contents=None):
-    print_and_log(cmd)
+    print(cmd)
     res_stdout = str(res.stdout,'utf-8')
     print(res_stdout)
     if expected_contents:

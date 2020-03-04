@@ -533,7 +533,7 @@ def test_simulator(config):
         env=dict(os.environ, PROC=config.proc_name), stdout=PIPE, stderr=PIPE))
 
     run_and_log("Testing " + config.proc_name,
-        run(['make','isa_tests'],cwd="./verilator_simulators/run",check=True,
+        run(['make','isa_tests'],cwd="./verilator_simulators/run",
         env=dict(os.environ, PROC=config.proc_name), stdout=PIPE, stderr=PIPE))
     print_and_log("Verilator tests OK, exiting...")
     exit(0)    
@@ -612,23 +612,22 @@ def test_freertos(config, args):
         print_and_log("Compile FreeRTOS binary")
         filename = freertos_compile_program(config, prog_name)
         
-        print_and_log("Clean bootmem")
-        run(['make','-f','Makefile.flash','clean'],cwd=config.bootmem_folder,
+        run_and_log("Clean bootmem", run(['make','-f','Makefile.flash','clean'],cwd=config.bootmem_folder,
             env=dict(os.environ, USE_CLANG=config.use_clang, PROG=prog_name, XLEN=config.xlen),
-            stdout=PIPE, stderr=PIPE, check=True)
+            stdout=PIPE, stderr=PIPE))
 
-        print_and_log("Copy FreeRTOS binary")
-        run(['cp',filename,config.bootmem_folder], check=True)
+        run_and_log("Copy FreeRTOS binary",
+            run(['cp',filename,config.bootmem_folder], stdout=PIPE, stderr=PIPE))
 
-        print_and_log("Make bootable binary")
-        run(['make','-f','Makefile.flash'],cwd=config.bootmem_folder,
-            env=dict(os.environ, USE_CLANG=config.use_clang, PROG=prog_name, XLEN=config.xlen),
-            stdout=PIPE, stderr=PIPE, check=True)
+        run_and_log("Make bootable binary",
+            run(['make','-f','Makefile.flash'],cwd=config.bootmem_folder,
+            env=dict(os.environ, USE_CLANG=config.use_clang, PROG=prog_name+'.elf', XLEN=config.xlen),
+            stdout=PIPE, stderr=PIPE))
 
-        run_and_log("Load binary",
-            run(['./pyprogram_fpga.py', config.proc_name, '--flash-binary', config.bootmem_path], stdout=PIPE, stderr=PIPE))
+        run_and_log("Programming persistent memory with binary: " + args.flash_binary,
+            run(['tcl/program_flash','datafile', config.bootmem_path], stdout=PIPE, stderr=PIPE),
+            "Program/Verify Operation successful.")
 
-        print_and_log("Load bitstream")
         run_and_log("Programming bitstream",
             run(['./pyprogram_fpga.py', config.proc_name], stdout=PIPE, stderr=PIPE))
 

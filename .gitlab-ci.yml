@@ -141,6 +141,12 @@ CHSL_P1_isa:
   tags: ["fpga"]
   extends: [.log_always, .no_sched]
 
+CHSL_P1_flash:
+  script:
+    - ./pytest_processor.py chisel_p1 --freertos --flash
+  tags: ["fpga"]
+  extends: [.log_always, .no_sched]
+
 CHSL_P1_freertos:
   script:
     - ./pytest_processor.py chisel_p1 --freertos
