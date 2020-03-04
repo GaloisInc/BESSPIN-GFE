@@ -3,6 +3,12 @@
 # This script is meant to be run from inside of the `install`
 # directory, not from a relative path.
 
+# Check that this script is being run from within install, else fail:
+if [ $(pwd | tail -c 8) != "install" ]; then
+  echo "Please run this script from within the install directory. Exiting"
+  exit 1
+fi
+
 # Linux and OS X ?
 unameOut="$(uname -s)"
 case "${unameOut}" in
