@@ -81,14 +81,14 @@ CHSL_P1_sim:
 # FPGA tests
 #
 #-----------------------------------------------------------------------------#
-# P1_benchmarks:
-#   script:
-#     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 clean
-#     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 link
-#     - ./pytest_processor.py bluespec_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
-#     - ./pytest_processor.py chisel_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
-#   tags: ["fpga"]
-#   extends: [.log_always, .no_sched]
+P1_benchmarks:
+  script:
+    - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 clean
+    - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 link
+    - ./pytest_processor.py bluespec_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+    - ./pytest_processor.py chisel_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+  tags: ["docker-fpga"]
+  extends: [.log_always, .no_sched]
 
 # P2_benchmarks:
 #   script:
