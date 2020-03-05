@@ -38,6 +38,9 @@ variables:
 .verilator:
   tags: ["docker-verilator"]
 
+.fpga:
+  tags: ["docker-fpga"]
+
 .no_sched:
   except: ["schedules"]
 
@@ -51,30 +54,30 @@ CHSL_P1_sim:
     - ./pytest_processor.py chisel_p1 --simulator
   extends: [.log_failure, .no_sched, .verilator]
 
-# BSV_P1_sim:
-#   script:
-#     - ./pytest_processor.py bluespec_p1 --simulator
-#   extends: [.log_failure, .no_sched, .verilator]
+BSV_P1_sim:
+  script:
+    - ./pytest_processor.py bluespec_p1 --simulator
+  extends: [.log_failure, .no_sched, .verilator]
 
-# CHSL_P2_sim:
-#   script:
-#     - ./pytest_processor.py chisel_p2 --simulator
-#   extends: [.log_failure, .no_sched, .verilator]
+CHSL_P2_sim:
+  script:
+    - ./pytest_processor.py chisel_p2 --simulator
+  extends: [.log_failure, .no_sched, .verilator]
 
-# BSV_P2_sim:
-#   script:
-#     - ./pytest_processor.py bluespec_p2 --simulator
-#   extends: [.log_failure, .no_sched, .verilator]
+BSV_P2_sim:
+  script:
+    - ./pytest_processor.py bluespec_p2 --simulator
+  extends: [.log_failure, .no_sched, .verilator]
 
-# CHSL_P3_sim:
-#   script:
-#     - ./pytest_processor.py chisel_p3 --simulator
-#   extends: [.log_failure, .no_sched, .verilator]
+CHSL_P3_sim:
+  script:
+    - ./pytest_processor.py chisel_p3 --simulator
+  extends: [.log_failure, .no_sched, .verilator]
 
-# BSV_P3_sim:
-#   script:
-#     - ./pytest_processor.py bluespec_p3 --simulator
-#   extends: [.log_failure, .no_sched, .verilator]
+BSV_P3_sim:
+  script:
+    - ./pytest_processor.py bluespec_p3 --simulator
+  extends: [.log_failure, .no_sched, .verilator]
 
 #-----------------------------------------------------------------------------#
 #
@@ -87,55 +90,50 @@ P1_benchmarks:
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 link
     - ./pytest_processor.py bluespec_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
     - ./pytest_processor.py chisel_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
-  tags: ["docker-fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
 
-# P2_benchmarks:
-#   script:
-#     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P2 ITERATIONS=3000 clean
-#     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P2 ITERATIONS=3000 link
-#     - ./pytest_processor.py bluespec_p2  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
-#     - ./pytest_processor.py chisel_p2  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
-#   tags: ["fpga"]
-#   extends: [.log_always, .no_sched]
+P2_benchmarks:
+  script:
+    - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P2 ITERATIONS=3000 clean
+    - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P2 ITERATIONS=3000 link
+    - ./pytest_processor.py bluespec_p2  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+    - ./pytest_processor.py chisel_p2  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+  extends: [.log_always, .no_sched, .fpga]
 
-# P3_benchmarks:
-#   script:
-#     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P3 ITERATIONS=1000 clean
-#     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P3 ITERATIONS=1000 link
-#     # No BSV P3 yet
-#     # - ./pytest_processor.py bluespec_p3  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
-#     - ./pytest_processor.py chisel_p3  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
-#   tags: ["fpga"]
-#   extends: [.log_always, .no_sched]
+P3_benchmarks:
+  script:
+    - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P3 ITERATIONS=1000 clean
+    - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P3 ITERATIONS=1000 link
+    # No BSV P3 yet
+    # - ./pytest_processor.py bluespec_p3  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+    - ./pytest_processor.py chisel_p3  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+  extends: [.log_always, .no_sched, .fpga]
 
-# #-----------------------#
-# #                       #
-# #     Bluespec P1
-# #                       #
-# #-----------------------#
-# BSV_P1_isa:
-#   script:
-#     - ./pytest_processor.py bluespec_p1 --isa
-#   tags: ["fpga"]
-#   extends: [.log_always, .no_sched]
+#-----------------------#
+#                       #
+#     Bluespec P1
+#                       #
+#-----------------------#
+BSV_P1_isa:
+  script:
+    - ./pytest_processor.py bluespec_p1 --isa
+  extends: [.log_always, .no_sched, .fpga]
 
-# BSV_P1_flash:
-#   script:
-#     - ./pytest_processor.py bluespec_p1 --freertos --flash
-#   tags: ["fpga"]
-#   extends: [.log_always, .no_sched]
+BSV_P1_flash:
+  script:
+    - ./pytest_processor.py bluespec_p1 --freertos --flash
+  extends: [.log_always, .no_sched, .fpga]
 
-# BSV_P1_freertos:
-#   script:
-#     - ./pytest_processor.py bluespec_p1 --freertos
-#     - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --io
-#     - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --network
-#     - ./pytest_processor.py bluespec_p1 --freertos --compiler clang
-#     - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --io --compiler clang
-#     - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --network --compiler clang
-#   tags: ["fpga-io"]
-#   extends: [.log_always, .no_sched]
+BSV_P1_freertos:
+  script:
+    - ./pytest_processor.py bluespec_p1 --freertos
+    - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --io
+    - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --network
+    #- ./pytest_processor.py bluespec_p1 --freertos --compiler clang
+    #- ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --io --compiler clang
+    #- ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --network --compiler clang
+  #tags: ["fpga-io"]
+  extends: [.log_always, .no_sched, .fpga]
 
 # #-----------------------#
 # #                       #
