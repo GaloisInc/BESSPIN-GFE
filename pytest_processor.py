@@ -540,7 +540,8 @@ def test_simulator(config):
 
 # Program bitstream
 def test_program_bitstream(config):
-    if config.proc_name == 'bluespec_p1':
+    # For BSV CPUs, always program flash with nop binary
+    if 'bluespec' in config.proc_name:
         run_and_log("Programming flash",
             run(['tcl/program_flash','datafile','./bootmem/small.bin'], stdout=PIPE, stderr=PIPE),
             "Program/Verify Operation successful.")
