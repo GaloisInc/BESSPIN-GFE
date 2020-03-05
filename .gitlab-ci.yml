@@ -138,7 +138,7 @@ BSV_P1_freertos:
     - ./pytest_processor.py bluespec_p1 --freertos --compiler clang
     - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --io --compiler clang
     - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --network --compiler clang
-  extends: [.log_always, .no_sched, .fpga-io]
+  extends: [.log_always, .no_sched, .fpga_io]
 
 #-----------------------#
 #                       #
