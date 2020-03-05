@@ -1,7 +1,6 @@
 #!/bin/bash
-
 IMAGE_NAME=galoisinc/besspin
-IMAGE_TAG=gfe-develop
+IMAGE_TAG=gfe
 CONTAINER_NAME=besspin_gfe
 
 # Linux and OS X ?
