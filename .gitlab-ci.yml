@@ -270,7 +270,7 @@ BSV_P2_busybox:
 BSV_P2_PCIE_busybox:
   script:
     - ./pytest_processor.py bluespec_p2_pcie --busybox --network
-  extends: [.log_always, .no_sched, .fpga-pcie]
+  extends: [.log_always, .no_sched, .fpga_pcie]
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
