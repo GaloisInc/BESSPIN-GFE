@@ -6,6 +6,15 @@ cd $BASE_DIR
 source $BASE_DIR/setup_env.sh
 source $BASE_DIR/init_submodules.sh
 
+# utility function to move old bootrom folder out of the way
+move_old_bootrom() {
+    if [ -d "$BASE_DIR/bootrom-configured" ]; then
+        echo "moving old configured bootrom"
+        msec=`date +%s`
+        mv "$BASE_DIR/bootrom-configured" "$BASE_DIR/bootrom-configured.$msec"
+    fi
+}
+
 proc_name=""
 proc_path=""
 # Clock frequency is in MHz
@@ -87,12 +96,3 @@ vivado -mode batch -source $BASE_DIR/tcl/soc.tcl \
 --no_xdma $no_xdma
 
 err_msg $? "Creating the vivado project failed"
-
-# utility function to move old bootrom folder out of the way
-move_old_bootrom() {
-    if [ -d "$BASE_DIR/bootrom-configured" ]; then
-        echo "moving old configured bootrom"
-        msec=`date +%s`
-        mv "$BASE_DIR/bootrom-configured" "$BASE_DIR/bootrom-configured.$msec"
-    fi
-}
