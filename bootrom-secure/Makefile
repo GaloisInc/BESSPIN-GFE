@@ -11,11 +11,13 @@ ifeq ($(XLEN),64)
 	ARCH		= -march=rv64imac
 	ABI		= -mabi=lp64
 	CLANG_ARCH 	= riscv64
+	LLVM_TARGET = x86_64-pc-none-eabi
 else
 	XLEN		= 32 # if it's not 64 normalize it to 32
 	ARCH		= -march=rv32im
 	ABI		= -mabi=ilp32
 	CLANG_ARCH	= riscv32
+	LLVM_TARGET = i386-pc-none-eabi
 endif
 
 $(info XLEN=${XLEN})
@@ -98,13 +100,6 @@ all: $(bootrom_mem) $(bootrom_coe) $(bootrom_rev_mem)
 
 bootrom.elf: $(OBJS) linker.ld devicetree.dtb
 	$(CC) $(CFLAGS) -Tlinker.ld $(OBJS) -nostdlib -static -Wl,--no-gc-sections -o $@
-
-# We match the target width of the cross compilation target.
-ifeq ($(XLEN), 32)
-    LLVM_TARGET=i386-pc-none-eabi
-else
-    LLVM_TARGET=x86_64-pc-none-eabi
-endif
 
 %.bc: %.c
 	$(CLANG) -DSAW_BUILD=1 -emit-llvm -MMD -O0 -g -target $(LLVM_TARGET) -c --std=c11 -I. -o $@ $<
