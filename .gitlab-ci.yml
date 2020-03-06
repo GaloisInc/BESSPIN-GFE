@@ -130,15 +130,20 @@ BSV_P1_flash:
     - ./pytest_processor.py bluespec_p1 --freertos --flash
   extends: [.log_always, .no_sched, .fpga]
 
+BSV_P1_io:
+  script:
+    - ./pytest_processor.py bluespec_p1 --freertos --io
+    - ./pytest_processor.py bluespec_p1 --freertos --io --compiler clang
+  extends: [.log_always, .no_sched, .fpga_io]
+
+
 BSV_P1_freertos:
   script:
     - ./pytest_processor.py bluespec_p1 --freertos
-    - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --io
-    - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --network
+    - ./pytest_processor.py bluespec_p1 --freertos --network
     - ./pytest_processor.py bluespec_p1 --freertos --compiler clang
-    - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --io --compiler clang
-    - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --network --compiler clang
-  extends: [.log_always, .no_sched, .fpga_io]
+    - ./pytest_processor.py bluespec_p1 --freertos --network --compiler clang
+  extends: [.log_always, .no_sched, .fpga]
 
 #-----------------------#
 #                       #
@@ -155,15 +160,19 @@ CHSL_P1_flash:
     - ./pytest_processor.py chisel_p1 --freertos --flash
   extends: [.log_always, .no_sched, .fpga]
 
+CHSL_P1_io:
+  script:
+    - ./pytest_processor.py chisel_p1 --freertos --io
+    - ./pytest_processor.py chisel_p1 --freertos --io --compiler clang
+  extends: [.log_always, .no_sched, .fpga_io]
+
 CHSL_P1_freertos:
   script:
     - ./pytest_processor.py chisel_p1 --freertos
-    - ./pytest_processor.py chisel_p1 --no-bitstream --freertos --io
     - ./pytest_processor.py chisel_p1 --freertos --network
     - ./pytest_processor.py chisel_p1 --freertos --compiler clang
-    - ./pytest_processor.py chisel_p1 --no-bitstream --freertos --io --compiler clang
     - ./pytest_processor.py chisel_p1 --freertos --network --compiler clang
-  extends: [.log_always, .no_sched, .fpga_io]
+  extends: [.log_always, .no_sched, .fpga]
 
 #-----------------------#
 #                       #
@@ -259,8 +268,6 @@ BSV_P2_freertos:
 BSV_P2_busybox:
   script:
     - ./pytest_processor.py bluespec_p2 --busybox --network
-    # - ./pytest_processor.py bluespec_p2 --elf bootmem/build-busybox-bbl/bbl --netboot --timeout 200 --expected "Please press Enter to activate this console"
-  tags: ["fpga"]
   extends: [.log_always, .no_sched, .fpga]
   cache:
     key: ${CI_COMMIT_REF_SLUG}
