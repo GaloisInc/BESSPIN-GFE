@@ -35,7 +35,7 @@ function check_file {
 
 function proc_usage {
     echo "Usage: $0 <chisel_p1|chisel_p2|chisel_p2_pcie|chisel_p3|bluespec_p1|bluespec_p2|bluespec_p2_pcie|bluespec_p3> [secure-boot-binary-image]"
-    echo "Please specify a bluespec or chisel processor!"
+    echo "Please specify a bluespec or chisel processor, and optionally a binary image"
 }
 
 function proc_picker {
