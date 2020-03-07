@@ -44,6 +44,7 @@ let
 in with pkgs;
 mkShell {
   buildInputs = [
+    glibc_multi
     clang_6
     gnumake
     llvm_6
