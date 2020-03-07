@@ -53,35 +53,5 @@ mkShell {
     yices
     z3
     dtc
-    (let
-       riscv-toolchain-ver = "7.2.0";
-       arch = "rv32imac";
-       bits =
-         if builtins.substring 0 4 arch == "rv32" then "32"
-         else if builtins.substring 0 4 arch == "rv64" then "64"
-         else abort "failed to recognize bit with of riscv architecture ${arch}";
-     in stdenv.mkDerivation rec {
-       name    = "riscv-${arch}-toolchain-${version}";
-       version = "${riscv-toolchain-ver}-${builtins.substring 0 7 src.rev}";
-       src     = fetchFromGitHub {
-         owner  = "riscv";
-         repo   = "riscv-gnu-toolchain";
-         rev    = "64879b24e18572a3d67aa4268477946ddb248006";
-         sha256 = "0pd94vz2ksbrl7v64h32y9n89x2b75da03kj1qcxl2z8wrfi107b";
-         fetchSubmodules = true;
-       };
-       configureFlags   = [ "--with-arch=${arch}" ];
-       installPhase     = ":"; # 'make' installs on its own
-       hardeningDisable = [ "all" ];
-       enableParallelBuilding = true;
-       # Stripping/fixups break the resulting libgcc.a archives, somehow.
-       # Maybe something in stdenv that does this...
-       dontStrip = true;
-       dontFixup = true;
-       nativeBuildInputs = [ curl gawk texinfo bison flex gperf ];
-       buildInputs = [ libmpc mpfr gmp expat ];
-       inherit arch;
-       triple = "riscv${bits}-unknown-elf";
-     })
   ];
 }
