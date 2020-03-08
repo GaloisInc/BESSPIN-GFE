@@ -45,9 +45,6 @@ if [ -f riscv-gnu-toolchains.tar.gz ]; then
 
 	val2=`cat riscv-toolchains-hash.txt | tr -d '\n'`
 
-	echo "##### $val2 #####"
-	echo "##### $val1 #####"
-
 	# convert to values that bash can compare...
 	tmpval="Z${val1}" ; val1="${tmpval}"; tmpval="Z${val2}"; val2="${tmpval}"
 	
@@ -90,6 +87,3 @@ rm -f "$tmp_cookies" "$tmp_headers"
 echo "Saved: $filename"
 
 # Unpack into /opt/riscv/ -- not automated here
-# tar -C /opt -xf "install/$filename"
-
-exit 0
