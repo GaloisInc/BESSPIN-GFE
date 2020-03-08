@@ -87,3 +87,4 @@ rm -f "$tmp_cookies" "$tmp_headers"
 echo "Saved: $filename"
 
 # Unpack into /opt/riscv/ -- not automated here
+exit 0
