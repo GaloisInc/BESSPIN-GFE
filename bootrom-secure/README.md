@@ -99,10 +99,10 @@ should then either see the OS boot, or (eventually) stop at the symbol
 2. Run (from a configured secure boot ROM directory, either `bootrom-configured` or
 one you have made yourself)
    
-   `nix-shell --pure --run 'make clean && env XLEN=64 make check'` to run the assurance 
-   case for the 64-bit boot ROM,
-   
-   or `nix-shell --pure --run 'make clean && env XLEN=32 make check'` to run the
+   - `nix-shell --pure --run 'make clean && env XLEN=64 make check'` to run the assurance 
+   case for the 64-bit boot ROM, or
+      
+   - `nix-shell --pure --run 'make clean && env XLEN=32 make check'` to run the
    assurance case for the 32-bit boot ROM.
    
 3. If the assurance checks are successful, you should see the message 
