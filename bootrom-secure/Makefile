@@ -143,7 +143,7 @@ check: check_secure_boot check_sha256
 	@echo "ALL CHECKS PASSED"
 
 clean:
-	rm -f *.coe *.img *.bin *.dump *.elf *.mem.bytereversed *.mem $(OBJS) $(patsubst %.o,%.d,$(OBJS)) $(patsubst %.o,%.bcd,$(OBJS)) bootrom.bc unopt-bootrom.bc secure-boot/peripherals_generated_code.c secure-boot/PeripheralCommands.cry $(patsubst %.o,%.bc,$(OBJS))
+	rm -f *.coe *.img bootrom.bin *.dtb *.dump *.elf *.mem.bytereversed *.mem $(OBJS) $(patsubst %.o,%.d,$(OBJS)) $(patsubst %.o,%.bcd,$(OBJS)) bootrom.bc unopt-bootrom.bc secure-boot/peripherals_generated_code.c secure-boot/PeripheralCommands.cry $(patsubst %.o,%.bc,$(OBJS))
 
 reformat:
 	clang-format -style=file -i $(shell find . -name '*.c') $(shell find . -name '*.h') $(shell find . -name '*.inc')

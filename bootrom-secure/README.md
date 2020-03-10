@@ -47,24 +47,16 @@ not prefix it with `0x` to indicate that it is hexadecimal. Before doing this
 configuration, you might want to copy the entire `bootrom-secure` directory to another location (as would happen when building a bitstream) to avoid unintentionally 
 overwriting part of the original boot ROM distribution.
 
-4. Build the boot ROM using `env XLEN=32 make` or `env XLEN=64 make`, depending on 
-whether you want a 32- or 64-bit boot ROM.
+4. To prevent the default boot ROM from immediately trying to boot into your OS without executing the secure boot checks first, prepend the provided padding to your binary
+image. This padding is a small infinite loop that runs as soon as the processor starts up.
+    * for a 32-bit processor, `cat padding-32.bin whatever.bin > whatever_padded.bin`
+    * for a 64-bit processor, `cat padding-64.bin whatever.bin > whatever_padded.bin`
 
-5. To prevent the default boot ROM from immediately trying to boot into your OS without executing the secure boot checks first, prepend some invalid instructions to your binary
-image by running the following commands. Note that this can cause problems with some of 
-the Bluespec processors, which can become unresponsive at startup if they encounter 
-zeroes; in that case, you may wish to prepend an infinite loop or other construct that
-prevents execution of the OS.
-
-        dd if=/dev/zero count=1 bs=256 > zeroes
-        cat zeroes whatever.bin > whatever_with_zeroes.bin
-
-6. Open `secure-boot/peripherals/config.py` and locate the `Flash_OS` initialization. 
+5. Open `secure-boot/peripherals/config.py` and locate the `Flash_OS` initialization. 
 The arguments are as follows:
     * `flash_base`: The memory-mapped address in flash to start copying the OS from. 
-    If you are building a bitstream, you want (the default) `0x44000000`; otherwise,
-    you want `0x44000100` to skip the zeroes you inserted in step 4. If you added some
-    other amount of invalid instructions, use that amount instead.
+    Because of the padding you added in step 4, change the default `0x44000000` to 
+    `0x44000100`.
     * `ram_base`: The memory-mapped address in RAM to copy the OS to. It is important 
     that this matches the address the OS was linked to load at. The default value 
     that's already there should be fine in most cases. If you change `ram_base`, you
@@ -75,12 +67,16 @@ The arguments are as follows:
     configured properly by step 3.
     * `ram_device`: A description of the RAM in the system; no changes should be needed.
 
+6. Build the boot ROM using `env XLEN=<bits> NO_PCI=<no_pci> CPU_SPEED=<speed> make`. These parameters control various aspects of the device tree for the resulting boot ROM, so it is important to get them right; in particular, if you build a boot rom for a Bluespec P2 that doesn't have PCIe, but you forget to specify `NO_PCI=1`, Linux will kernel panic at boot time.
+    * `bits` is the bit width of your processor (32 or 64)
+    * `no_pci` is 0 if your SoC supports PCIe, and 1 otherwise
+    * `speed` is the CPU speed in mHz (that is, MHz times 100000 - e.g., 100000000 for a 100MHz P2)
 
-7. Flash the binary image to the FPGA, with the `tcl/program_flash` script: `tcl/program_flash datafile whatever_with_zeroes.bin`
+7. Flash the binary image to the FPGA, with the `tcl/program_flash` script: `tcl/program_flash datafile whatever_padded.bin`
 
-8. Either flash your bitstream to the FPGA, or reset the processor, to clear all the
-processor state and boot with the default boot ROM. At this point, the processor should
-stop at the first illegal instruction.
+8. Flash your bitstream to the FPGA to clear all the processor state and boot with the
+default boot ROM. At this point, the processor should infinitely loop (in the code
+prepended to your binary image in step 4).
 
 9. Connect to the processor using GDB, and run:
     1. `add-symbol-file bootrom.elf 0xF0400000`
