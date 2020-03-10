@@ -6,6 +6,8 @@ CCPATH 		?=
 TARGET=$(CCPATH)riscv64-unknown-elf
 
 XLEN?=32
+NO_PCI?=0
+CPU_SPEED?=0
 
 ifeq ($(XLEN),64)
 	ARCH		= -march=rv64imac
@@ -96,7 +98,7 @@ all: $(bootrom_mem) $(bootrom_coe) $(bootrom_rev_mem)
 	$(OBJCOPY) -O binary $< $@
 
 %.dtb: %.dts
-	$(CPP) $(ARCH) $(ABI) -x assembler-with-cpp $< | $(DTC) -O dtb -o $@
+	$(CPP) $(ARCH) $(ABI) -x assembler-with-cpp -DCPU_SPEED=$(CPU_SPEED) -DNO_PCI=$(NO_PCI) $< | $(DTC) -O dtb -o $@
 
 bootrom.elf: $(OBJS) linker.ld devicetree.dtb
 	$(CC) $(CFLAGS) -Tlinker.ld $(OBJS) -nostdlib -static -Wl,--no-gc-sections -o $@
