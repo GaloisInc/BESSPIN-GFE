@@ -124,6 +124,7 @@
 			clock-frequency = <CPU_SPEED>;
 			reg-shift = <2>;
 		};
+#if NO_PCI == 0
 		pci: pci@20000000 {
 		     #address-cells = <3>;
 		     #size-cells = <2>;
@@ -142,5 +143,6 @@
 			 #interrupt-cells = <1>;
 		     };
 		};
+#endif
 	};
 };
