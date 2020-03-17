@@ -4,7 +4,7 @@
 
 
 #define NS16550_BASE (0x62300000ULL)
-#define NS16550_CLOCK_RATE  (68000000ULL)
+#define NS16550_CLOCK_RATE  (25000000ULL)
 
 enum __attribute__ ((__packed__)) ier_t
 {
