@@ -1,120 +1,59 @@
+set_property PACKAGE_PIN R29 [get_ports spi_sck]
 # ----- UART Pins ------
-set_property IOSTANDARD LVCMOS18 [get_ports rs232_uart_rxd]
 set_property PACKAGE_PIN AW25 [get_ports rs232_uart_rxd]
-set_property IOSTANDARD LVCMOS18 [get_ports rs232_uart_txd]
 set_property PACKAGE_PIN BB21 [get_ports rs232_uart_txd]
-set_property DRIVE 12 [get_ports rs232_uart_txd]
-set_property SLEW SLOW [get_ports rs232_uart_txd]
-set_property IOSTANDARD LVCMOS18 [get_ports rs232_uart_cts]
 set_property PACKAGE_PIN BB22 [get_ports rs232_uart_cts]
-set_property IOSTANDARD LVCMOS18 [get_ports rs232_uart_rts]
 set_property PACKAGE_PIN AY25 [get_ports rs232_uart_rts]
-set_property DRIVE 12 [get_ports rs232_uart_rts]
-set_property SLEW SLOW [get_ports rs232_uart_rts]
 
 # ----- PCIe Pins ------
 
-set_false_path -from [get_ports pcie_perstn]
 
 # ----- PMOD0 Pins (J52 on VCU118) -----
 # ----- UART1 -----
-set_property IOSTANDARD LVCMOS12 [get_ports uart1_tx]
-set_property PACKAGE_PIN AV16 [get_ports uart1_tx]; # PMOD_0_4
-set_property IOSTANDARD LVCMOS12 [get_ports uart1_rx]
-set_property PACKAGE_PIN AU16 [get_ports uart1_rx]; # PMOD_0_5
+set_property PACKAGE_PIN AV16 [get_ports uart1_tx]
+set_property PACKAGE_PIN AU16 [get_ports uart1_rx]
 
 # ----- GPIO -----
-set_property IOSTANDARD LVCMOS12 [get_ports gpio[0]]
-set_property PACKAGE_PIN AY14 [get_ports gpio[0]]; # PMOD_0_0
-set_property DRIVE 8 [get_ports gpio[0]]
-set_property IOSTANDARD LVCMOS12 [get_ports gpio[1]]
-set_property PACKAGE_PIN AY15 [get_ports gpio[1]]; # PMOD_0_1
-set_property DRIVE 8 [get_ports gpio[1]]
-set_property IOSTANDARD LVCMOS12 [get_ports gpio[2]]
-set_property PACKAGE_PIN AW15 [get_ports gpio[2]]; # PMOD_0_2
-set_property DRIVE 8 [get_ports gpio[2]]
-set_property IOSTANDARD LVCMOS12 [get_ports gpio[3]]
-set_property PACKAGE_PIN AV15 [get_ports gpio[3]]; # PMOD_0_3
-set_property DRIVE 8 [get_ports gpio[3]]
-set_property IOSTANDARD LVCMOS12 [get_ports gpio[4]]
-set_property PACKAGE_PIN AT15 [get_ports gpio[4]]; # PMOD_0_6
-set_property DRIVE 8 [get_ports gpio[4]]
-set_property IOSTANDARD LVCMOS12 [get_ports gpio[5]]
-set_property PACKAGE_PIN AT16 [get_ports gpio[5]]; # PMOD_0_7
-set_property DRIVE 8 [get_ports gpio[5]]
+set_property PACKAGE_PIN AY14 [get_ports {gpio[0]}]
+set_property PACKAGE_PIN AY15 [get_ports {gpio[1]}]
+set_property PACKAGE_PIN AW15 [get_ports {gpio[2]}]
+set_property PACKAGE_PIN AV15 [get_ports {gpio[3]}]
+set_property PACKAGE_PIN AT15 [get_ports {gpio[4]}]
+set_property PACKAGE_PIN AT16 [get_ports {gpio[5]}]
 
 # ----- PMOD1 Pins (J53 on VCU118) -----
 # ----- IIC0 -----
-set_property IOSTANDARD LVCMOS12 [get_ports iic0_sda]
-set_property PACKAGE_PIN N28 [get_ports iic0_sda]; # PMOD_1_0
-set_property DRIVE 8 [get_ports iic0_sda]
-set_property IOSTANDARD LVCMOS12 [get_ports iic0_scl]
-set_property PACKAGE_PIN M30 [get_ports iic0_scl]; #PMOD_1_1
-set_property DRIVE 8 [get_ports iic0_scl]
+set_property PACKAGE_PIN N28 [get_ports iic0_sda]
+set_property PACKAGE_PIN M30 [get_ports iic0_scl]
 
 # ----- GPIO -----
-set_property IOSTANDARD LVCMOS12 [get_ports gpio[6]]
-set_property PACKAGE_PIN N30 [get_ports gpio[6]]; # PMOD_1_2
-set_property DRIVE 8 [get_ports gpio[6]]
-set_property IOSTANDARD LVCMOS12 [get_ports gpio[7]]
-set_property PACKAGE_PIN P30 [get_ports gpio[7]]; # PMOD_1_3
-set_property DRIVE 8 [get_ports gpio[7]]
+set_property PACKAGE_PIN N30 [get_ports {gpio[6]}]
+set_property PACKAGE_PIN P30 [get_ports {gpio[7]}]
 
 # ----- SPI -----
-set_property IOSTANDARD LVCMOS12 [get_ports spi_ss]
-set_property PACKAGE_PIN P29 [get_ports spi_ss]; # PMOD_1_4
-set_property DRIVE 8 [get_ports spi_ss]
-set_property IOSTANDARD LVCMOS12 [get_ports spi_mosi]
-set_property PACKAGE_PIN L31 [get_ports spi_mosi]; # PMOD_1_5
-set_property DRIVE 8 [get_ports spi_mosi]
-set_property IOSTANDARD LVCMOS12 [get_ports spi_miso]
-set_property PACKAGE_PIN M31 [get_ports spi_miso]; # PMOD_1_6
-set_property DRIVE 8 [get_ports spi_miso]
-set_property IOSTANDARD LVCMOS12 [get_ports spi_sck]
-set_property PACKAGE_PIN R29 [get_ports spi_sck]; # PMOD_1_7
-set_property DRIVE 8 [get_ports spi_sck]
+set_property PACKAGE_PIN P29 [get_ports spi_ss]
+set_property PACKAGE_PIN L31 [get_ports spi_mosi]
+set_property PACKAGE_PIN M31 [get_ports spi_miso]
 
 # ----- User GPIO LEDs -----
-set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[7]]
-set_property PACKAGE_PIN BA37 [get_ports gpio_led[7]]; # GPIO_LED_7
-set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[6]]
-set_property PACKAGE_PIN AV36 [get_ports gpio_led[6]]; # GPIO_LED_6
-set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[5]]
-set_property PACKAGE_PIN AU37 [get_ports gpio_led[5]]; # GPIO_LED_5
-set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[4]]
-set_property PACKAGE_PIN BF32 [get_ports gpio_led[4]]; # GPIO_LED_4
-set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[3]]
-set_property PACKAGE_PIN BB32 [get_ports gpio_led[3]]; # GPIO_LED_3
-set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[2]]
-set_property PACKAGE_PIN AY30 [get_ports gpio_led[2]]; # GPIO_LED_2
-set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[1]]
-set_property PACKAGE_PIN AV34 [get_ports gpio_led[1]]; # GPIO_LED_1
-set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[0]]
-set_property PACKAGE_PIN AT32 [get_ports gpio_led[0]]; # GPIO_LED_0
+set_property PACKAGE_PIN BA37 [get_ports {gpio_led[7]}]
+set_property PACKAGE_PIN AV36 [get_ports {gpio_led[6]}]
+set_property PACKAGE_PIN AU37 [get_ports {gpio_led[5]}]
+set_property PACKAGE_PIN BF32 [get_ports {gpio_led[4]}]
+set_property PACKAGE_PIN BB32 [get_ports {gpio_led[3]}]
+set_property PACKAGE_PIN AY30 [get_ports {gpio_led[2]}]
+set_property PACKAGE_PIN AV34 [get_ports {gpio_led[1]}]
+set_property PACKAGE_PIN AT32 [get_ports {gpio_led[0]}]
 
 # FMC PCIe pins
-set_property PACKAGE_PIN V38 [get_ports fmc_pcie_clk_p[0]]
-set_property PACKAGE_PIN V39 [get_ports fmc_pcie_clk_n[0]]
 
-create_clock -period 10.000 -name fmc_pcie_clk [get_ports fmc_pcie_clk_p[0]]
 
-set_property LOC GTYE4_CHANNEL_X0Y31 [get_cells -hierarchical -filter {NAME =~ *gen_channel_container[8].*gen_gtye4_channel_inst[0].GTYE4_CHANNEL_PRIM_INST}]
-set_property LOC GTYE4_CHANNEL_X0Y28 [get_cells -hierarchical -filter {NAME =~ *gen_channel_container[8].*gen_gtye4_channel_inst[1].GTYE4_CHANNEL_PRIM_INST}]
-set_property LOC GTYE4_CHANNEL_X0Y30 [get_cells -hierarchical -filter {NAME =~ *gen_channel_container[8].*gen_gtye4_channel_inst[2].GTYE4_CHANNEL_PRIM_INST}]
-set_property LOC GTYE4_CHANNEL_X0Y29 [get_cells -hierarchical -filter {NAME =~ *gen_channel_container[8].*gen_gtye4_channel_inst[3].GTYE4_CHANNEL_PRIM_INST}]
 
-set_clock_groups -asynchronous -group {mmcm_clkout1} -group [get_clocks -of_objects [get_pins -hierarchical -filter {NAME =~ *gen_channel_container[*].*gen_gtye4_channel_inst[*].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}]]
-set_clock_groups -asynchronous -group [get_clocks -of_objects [get_pins -hierarchical -filter {NAME =~ *gen_channel_container[*].*gen_gtye4_channel_inst[*].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}]] -group {mmcm_clkout1}
 
-set_clock_groups -asynchronous -group {mmcm_clkout1} -group {fmc_pcie_clk}
-set_clock_groups -asynchronous -group {fmc_pcie_clk} -group {mmcm_clkout1}
 
 # ----- JTAG TAP constraints ------
 
-create_clock -period 40.000 -name tck -waveform {0.000 20.000} [get_pins xilinx_jtag_0/tck]
 
-set_clock_groups -asynchronous -group tck -group {default_250mhz_clk1_clk_p mmcm_clkout0 mmcm_clkout1}
-set_clock_groups -asynchronous -group tck_internal -group {default_250mhz_clk1_clk_p mmcm_clkout0 mmcm_clkout1 tck}
 
 # ----- Bitstream Constraints -----
 
@@ -201,59 +140,25 @@ set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
 ###############################################################################
 # User Time Names / User Time Groups / Time Specs
 ###############################################################################
-create_clock -period 10.000 -name pcie_refclk_clk [get_ports pcie_refclk_clk_p]
 #
-set_false_path -from [get_ports pcie_perstn]
-set_property PULLUP true [get_ports pcie_perstn]
-set_property IOSTANDARD LVCMOS18 [get_ports pcie_perstn]
-set_property PACKAGE_PIN AM17 [get_ports pcie_perstn]
 #
 set_property PACKAGE_PIN AC8 [get_ports pcie_refclk_clk_n]
 set_property PACKAGE_PIN AC9 [get_ports pcie_refclk_clk_p]
 #
 # LEDs for VCU118
-set_property PACKAGE_PIN AT32 [get_ports led_0]
 # user_link_up
-set_property PACKAGE_PIN AV34 [get_ports led_1]
 # Clock Up/Heart Beat(HB)
-set_property PACKAGE_PIN AY30 [get_ports led_2]
 # cfg_current_speed[0] => 00: Gen1; 01: Gen2; 10:Gen3; 11:Gen4
-set_property PACKAGE_PIN BB32 [get_ports led_3]
 # cfg_current_speed[1]
-set_property PACKAGE_PIN BF32 [get_ports led_4]
 # cfg_negotiated_width[0] => 000: x1; 001: x2; 010: x4; 011: x8; 100: x16
-set_property PACKAGE_PIN AU37 [get_ports led_5]
 # cfg_negotiated_width[1]
-set_property PACKAGE_PIN AV36 [get_ports led_6]
 # cfg_negotiated_width[2]
-set_property PACKAGE_PIN BA37 [get_ports led_7]
 #
-set_property IOSTANDARD LVCMOS12 [get_ports led_0]
-set_property IOSTANDARD LVCMOS12 [get_ports led_1]
-set_property IOSTANDARD LVCMOS12 [get_ports led_2]
-set_property IOSTANDARD LVCMOS12 [get_ports led_3]
-set_property IOSTANDARD LVCMOS12 [get_ports led_4]
-set_property IOSTANDARD LVCMOS12 [get_ports led_5]
-set_property IOSTANDARD LVCMOS12 [get_ports led_6]
-set_property IOSTANDARD LVCMOS12 [get_ports led_7]
 #
-set_property DRIVE 8 [get_ports led_0]
-set_property DRIVE 8 [get_ports led_1]
-set_property DRIVE 8 [get_ports led_2]
-set_property DRIVE 8 [get_ports led_3]
-set_property DRIVE 8 [get_ports led_4]
-set_property DRIVE 8 [get_ports led_5]
-set_property DRIVE 8 [get_ports led_6]
-set_property DRIVE 8 [get_ports led_7]
 #
-set_false_path -to [get_ports -filter NAME=~led_*]
 #
 # Clock for the 300 MHz clock is already created in the Clock Wizard IP.
 # 300 MHz clock pin constraints.
-set_property IOSTANDARD DIFF_SSTL12 [get_ports clk_300MHz_p]
-set_property IOSTANDARD DIFF_SSTL12 [get_ports clk_300MHz_n]
-set_property PACKAGE_PIN G31 [get_ports clk_300MHz_p]
-set_property PACKAGE_PIN F31 [get_ports clk_300MHz_n]
 #
 #
 # CLOCK_ROOT LOCKing to Reduce CLOCK SKEW
@@ -272,24 +177,16 @@ set_property PACKAGE_PIN F31 [get_ports clk_300MHz_n]
 #
 #
 # pcie_refclk_clk vs TXOUTCLK
-set_clock_groups -name async18 -asynchronous -group [get_clocks pcie_refclk_clk] -group [get_clocks -of_objects [get_pins -hierarchical -filter {NAME =~ *gen_channel_container[*].*gen_gtye4_channel_inst[*].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}]]
-set_clock_groups -name async19 -asynchronous -group [get_clocks -of_objects [get_pins -hierarchical -filter {NAME =~ *gen_channel_container[*].*gen_gtye4_channel_inst[*].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}]] -group [get_clocks pcie_refclk_clk]
 #
 # clk_300MHz vs TXOUTCLK
-set_clock_groups -name async22 -asynchronous -group [get_clocks -of_objects [get_ports clk_300MHz_p]] -group [get_clocks -of_objects [get_pins -hierarchical -filter {NAME =~ *gen_channel_container[*].*gen_gtye4_channel_inst[*].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}]]
-set_clock_groups -name async23 -asynchronous -group [get_clocks -of_objects [get_pins -hierarchical -filter {NAME =~ *gen_channel_container[*].*gen_gtye4_channel_inst[*].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}]] -group [get_clocks -of_objects [get_ports clk_300MHz_p]]
 #
 #
 #
-set_clock_groups -name asynco -asynchronous -group [get_clocks -of_objects [get_pins mem_clk_inst/clk_out1]] -group [get_clocks {pcie_refclk_clk}]
-set_clock_groups -name asyncp -asynchronous -group [get_clocks {pcie_refclk_clk}] -group [get_clocks -of_objects [get_pins mem_clk_inst/clk_out1]]
 #
 #
 #
 # ASYNC CLOCK GROUPINGS
 # pcie_refclk_clk vs pclk
-set_clock_groups -name async1 -asynchronous -group [get_clocks {pcie_refclk_clk}] -group [get_clocks -of_objects [get_pins pcie4_uscale_plus_0_i/inst/gt_top_i/diablo_gt.diablo_gt_phy_wrapper/phy_clk_i/bufg_gt_pclk/O]]
-set_clock_groups -name async2 -asynchronous -group [get_clocks -of_objects [get_pins pcie4_uscale_plus_0_i/inst/gt_top_i/diablo_gt.diablo_gt_phy_wrapper/phy_clk_i/bufg_gt_pclk/O]] -group [get_clocks {pcie_refclk_clk}]
 #
 #
 #
@@ -300,13 +197,82 @@ set_clock_groups -name async2 -asynchronous -group [get_clocks -of_objects [get_
 # Keep This Logic Left/Right Side Of The PCIe Block (Whichever is near to the FPGA Boundary)
 #resize_pblock [get_pblocks init_ctr_rst] -add {SLICE_X157Y300:SLICE_X168Y372}
 #
-set_clock_groups -name async24 -asynchronous -group [get_clocks -of_objects [get_pins pcie4_uscale_plus_0_i/inst/gt_top_i/diablo_gt.diablo_gt_phy_wrapper/phy_clk_i/bufg_gt_intclk/O]] -group [get_clocks {pcie_refclk_clk}]
 
-set_clock_groups -name async30 -asynchronous -group [get_clocks pcie_refclk_clk] -group [get_clocks mmcm_clkout5]
 
-set_clock_groups -name async31 -asynchronous -group [get_clocks {svf_pcie_bridge/pcie4_uscale_plus_0/inst/gt_top_i/diablo_gt.diablo_gt_phy_wrapper/gt_wizard.gtwizard_top_i/design_1_pcie4_uscale_plus_0_0_gt_i/inst/gen_gtwizard_gtye4_top.design_1_pcie4_uscale_plus_0_0_gt_gtwizard_gtye4_inst/gen_gtwizard_gtye4.gen_channel_container[31].gen_enabled_channel.gtye4_channel_wrapper_inst/channel_inst/gtye4_channel_gen.gen_gtye4_channel_inst[0].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}] -group [get_clocks mmcm_clkout5]
 
-set_clock_groups -name async90 -asynchronous -group [get_clocks mmcm_clkout1] -group [get_clocks clk_out1_design_1_clk_wiz_1_0]
 
 # Not to be used for bluespec_p3, so moved to other individual constraints files:
 # set_property USER_SLR_ASSIGNMENT SLR0 [get_cells ssith_processor_0]
+
+
+
+####################################################################################
+# Constraints from file : 'design_1_axi_clock_converter_0_0_clocks.xdc'
+####################################################################################
+
+
+set_property IOSTANDARD LVCMOS18 [get_ports rs232_uart_rxd]
+set_property IOSTANDARD LVCMOS18 [get_ports rs232_uart_txd]
+set_property DRIVE 12 [get_ports rs232_uart_txd]
+set_property SLEW SLOW [get_ports rs232_uart_txd]
+set_property IOSTANDARD LVCMOS18 [get_ports rs232_uart_cts]
+set_property IOSTANDARD LVCMOS18 [get_ports rs232_uart_rts]
+set_property DRIVE 12 [get_ports rs232_uart_rts]
+set_property SLEW SLOW [get_ports rs232_uart_rts]
+set_false_path -from [get_ports pcie_perstn]
+set_property IOSTANDARD LVCMOS12 [get_ports uart1_tx]
+set_property IOSTANDARD LVCMOS12 [get_ports uart1_rx]
+set_property IOSTANDARD LVCMOS12 [get_ports {gpio[0]}]
+set_property DRIVE 8 [get_ports {gpio[0]}]
+set_property IOSTANDARD LVCMOS12 [get_ports {gpio[1]}]
+set_property DRIVE 8 [get_ports {gpio[1]}]
+set_property IOSTANDARD LVCMOS12 [get_ports {gpio[2]}]
+set_property DRIVE 8 [get_ports {gpio[2]}]
+set_property IOSTANDARD LVCMOS12 [get_ports {gpio[3]}]
+set_property DRIVE 8 [get_ports {gpio[3]}]
+set_property IOSTANDARD LVCMOS12 [get_ports {gpio[4]}]
+set_property DRIVE 8 [get_ports {gpio[4]}]
+set_property IOSTANDARD LVCMOS12 [get_ports {gpio[5]}]
+set_property DRIVE 8 [get_ports {gpio[5]}]
+set_property IOSTANDARD LVCMOS12 [get_ports iic0_sda]
+set_property DRIVE 8 [get_ports iic0_sda]
+set_property IOSTANDARD LVCMOS12 [get_ports iic0_scl]
+set_property DRIVE 8 [get_ports iic0_scl]
+set_property IOSTANDARD LVCMOS12 [get_ports {gpio[6]}]
+set_property DRIVE 8 [get_ports {gpio[6]}]
+set_property IOSTANDARD LVCMOS12 [get_ports {gpio[7]}]
+set_property DRIVE 8 [get_ports {gpio[7]}]
+set_property IOSTANDARD LVCMOS12 [get_ports spi_ss]
+set_property DRIVE 8 [get_ports spi_ss]
+set_property IOSTANDARD LVCMOS12 [get_ports spi_mosi]
+set_property DRIVE 8 [get_ports spi_mosi]
+set_property IOSTANDARD LVCMOS12 [get_ports spi_miso]
+set_property DRIVE 8 [get_ports spi_miso]
+set_property IOSTANDARD LVCMOS12 [get_ports spi_sck]
+set_property DRIVE 8 [get_ports spi_sck]
+set_property IOSTANDARD LVCMOS12 [get_ports {gpio_led[7]}]
+set_property IOSTANDARD LVCMOS12 [get_ports {gpio_led[6]}]
+set_property IOSTANDARD LVCMOS12 [get_ports {gpio_led[5]}]
+set_property IOSTANDARD LVCMOS12 [get_ports {gpio_led[4]}]
+set_property IOSTANDARD LVCMOS12 [get_ports {gpio_led[3]}]
+set_property IOSTANDARD LVCMOS12 [get_ports {gpio_led[2]}]
+set_property IOSTANDARD LVCMOS12 [get_ports {gpio_led[1]}]
+set_property IOSTANDARD LVCMOS12 [get_ports {gpio_led[0]}]
+set_clock_groups -asynchronous -group mmcm_clkout1 -group [get_clocks -of_objects [get_pins -hierarchical -filter {NAME =~ *gen_channel_container[*].*gen_gtye4_channel_inst[*].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}]]
+set_clock_groups -asynchronous -group [get_clocks -of_objects [get_pins -hierarchical -filter {NAME =~ *gen_channel_container[*].*gen_gtye4_channel_inst[*].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}]] -group mmcm_clkout1
+create_clock -period 40.000 -name tck -waveform {0.000 20.000} [get_pins xilinx_jtag_0/tck]
+set_clock_groups -asynchronous -group tck -group {default_250mhz_clk1_clk_p mmcm_clkout0 mmcm_clkout1}
+set_clock_groups -asynchronous -group tck_internal -group {default_250mhz_clk1_clk_p mmcm_clkout0 mmcm_clkout1 tck}
+create_clock -period 10.000 -name pcie_refclk_clk [get_ports pcie_refclk_clk_p]
+set_false_path -from [get_ports pcie_perstn]
+set_property PULLUP true [get_ports pcie_perstn]
+set_clock_groups -name async18 -asynchronous -group [get_clocks pcie_refclk_clk] -group [get_clocks -of_objects [get_pins -hierarchical -filter {NAME =~ *gen_channel_container[*].*gen_gtye4_channel_inst[*].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}]]
+set_clock_groups -name async19 -asynchronous -group [get_clocks -of_objects [get_pins -hierarchical -filter {NAME =~ *gen_channel_container[*].*gen_gtye4_channel_inst[*].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}]] -group [get_clocks pcie_refclk_clk]
+set_clock_groups -name async30 -asynchronous -group [get_clocks pcie_refclk_clk] -group [get_clocks mmcm_clkout5]
+set_clock_groups -name async31 -asynchronous -group [get_clocks {svf_pcie_bridge/pcie4_uscale_plus_0/inst/gt_top_i/diablo_gt.diablo_gt_phy_wrapper/gt_wizard.gtwizard_top_i/design_1_pcie4_uscale_plus_0_0_gt_i/inst/gen_gtwizard_gtye4_top.design_1_pcie4_uscale_plus_0_0_gt_gtwizard_gtye4_inst/gen_gtwizard_gtye4.gen_channel_container[31].gen_enabled_channel.gtye4_channel_wrapper_inst/channel_inst/gtye4_channel_gen.gen_gtye4_channel_inst[0].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}] -group [get_clocks mmcm_clkout5]
+set_clock_groups -name async90 -asynchronous -group [get_clocks mmcm_clkout1] -group [get_clocks clk_out1_design_1_clk_wiz_1_0]
+
+####################################################################################
+# Constraints from file : 'design_1_axi_clock_converter_0_0_clocks.xdc'
+####################################################################################
+
