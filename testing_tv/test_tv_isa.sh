@@ -20,7 +20,7 @@ fi
 
 # =========================
 
-if [[ $PROCNAME =~ ^(chisel|bluespec)_p(1|2|3)$ ]]; then
+if [[ $PROCNAME =~ ^(chisel|bluespec)_p(1|2|2_pcie|3)$ ]]; then
     PROCTYPE=${BASH_REMATCH[1]}
     PROCNUM=${BASH_REMATCH[2]}
 else
