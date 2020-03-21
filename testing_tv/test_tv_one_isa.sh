@@ -58,18 +58,13 @@ TRACE_WRITER=$BASE_DIR/TV-hostside/TV-trace_writer
 GDB=riscv64-unknown-elf-gdb
 
 if [ `echo $PROCNAME | grep -c "_p1"` -gt 0 ]; then
-    #echo "RV32 test"
     XLEN=32
-    TRACE_CHECKER=$BASE_DIR/TV-hostside/TV-trace_checker_p1
-elif [ `echo $PROCNAME | grep -c "chisel_p3"` -gt 0 ]; then
-    echo "RV64 test for chisel_p3"
-    XLEN=64
-    TRACE_CHECKER=$BASE_DIR/TV-hostside/TV-trace_checker_p3_chisel
 else
-    #echo "RV64 test"
     XLEN=64
-    TRACE_CHECKER=$BASE_DIR/TV-hostside/TV-trace_checker_p2
 fi
+
+TRACE_CHECKER=$BASE_DIR/TV-hostside/TV-trace_checker_$PROCNAME
+echo "Checker is TV-trace_checker_$PROCNAME"
 
 # =========================
 # GDB configuration
