@@ -26,7 +26,7 @@ git pull
 # Snapshot of master on 2019-10-10 -- update as needed
 git checkout 1505830a3b757b3e65c15147388dd1a91ee2c786
 git submodule update --init --recursive
-./configure --prefix /opt/riscv #--enable-multilib
+./configure --prefix /opt/riscv
 make freebsd
 cd ..
 
