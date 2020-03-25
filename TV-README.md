@@ -1,6 +1,6 @@
  # Tandem Verification for Chisel and Bluespec Processors #
 
-## Where to run TV, how to run TV and how to inspect TV results ##
+## Running TV ##
 
 **VERILATOR SIMULATION**
 
