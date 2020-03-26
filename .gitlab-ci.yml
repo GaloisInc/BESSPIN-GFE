@@ -1,4 +1,4 @@
----
+image: artifactory.galois.com:5008/gfe:ci
 #-----------------------------------------------------------------------------#
 #
 # General startup commands
@@ -14,6 +14,7 @@ before_script:
   - ./init_submodules.sh
   - source /opt/Xilinx/Vivado_Lab/2019.1/settings64.sh
   - export XILINXD_LICENSE_FILE=/opt/Xilinx/Xilinx.lic
+
 
 variables:
   # defaults. Overridden when this pipeline is called by tool-suite.
@@ -35,7 +36,16 @@ variables:
     when: always
 
 .verilator:
-  tags: ["verilator"]
+  tags: ["docker"]
+
+.fpga:
+  tags: ["docker-fpga"]
+
+.fpga_io:
+  tags: ["docker-fpga-io"]
+
+.fpga_pcie:
+  tags: ["docker-fpga-pcie"]
 
 .no_sched:
   except: ["schedules"]
@@ -86,8 +96,7 @@ P1_benchmarks:
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 link
     - ./pytest_processor.py bluespec_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
     - ./pytest_processor.py chisel_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
 
 P2_benchmarks:
   script:
@@ -95,8 +104,7 @@ P2_benchmarks:
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P2 ITERATIONS=3000 link
     - ./pytest_processor.py bluespec_p2  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
     - ./pytest_processor.py chisel_p2  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
 
 P3_benchmarks:
   script:
@@ -105,8 +113,7 @@ P3_benchmarks:
     # No BSV P3 yet
     # - ./pytest_processor.py bluespec_p3  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
     - ./pytest_processor.py chisel_p3  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
 
 #-----------------------#
 #                       #
@@ -116,25 +123,27 @@ P3_benchmarks:
 BSV_P1_isa:
   script:
     - ./pytest_processor.py bluespec_p1 --isa
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
 
 BSV_P1_flash:
   script:
     - ./pytest_processor.py bluespec_p1 --freertos --flash
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
+
+BSV_P1_io:
+  script:
+    - ./pytest_processor.py bluespec_p1 --freertos --io
+    - ./pytest_processor.py bluespec_p1 --freertos --io --compiler clang
+  extends: [.log_always, .no_sched, .fpga_io]
+
 
 BSV_P1_freertos:
   script:
     - ./pytest_processor.py bluespec_p1 --freertos
-    - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --io
-    - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --network
+    - ./pytest_processor.py bluespec_p1 --freertos --network
     - ./pytest_processor.py bluespec_p1 --freertos --compiler clang
-    - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --io --compiler clang
-    - ./pytest_processor.py bluespec_p1 --no-bitstream --freertos --network --compiler clang
-  tags: ["fpga-io"]
-  extends: [.log_always, .no_sched]
+    - ./pytest_processor.py bluespec_p1 --freertos --network --compiler clang
+  extends: [.log_always, .no_sched, .fpga]
 
 #-----------------------#
 #                       #
@@ -144,25 +153,26 @@ BSV_P1_freertos:
 CHSL_P1_isa:
   script:
     - ./pytest_processor.py chisel_p1 --isa
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
 
 CHSL_P1_flash:
   script:
     - ./pytest_processor.py chisel_p1 --freertos --flash
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
+
+CHSL_P1_io:
+  script:
+    - ./pytest_processor.py chisel_p1 --freertos --io
+    - ./pytest_processor.py chisel_p1 --freertos --io --compiler clang
+  extends: [.log_always, .no_sched, .fpga_io]
 
 CHSL_P1_freertos:
   script:
     - ./pytest_processor.py chisel_p1 --freertos
-    - ./pytest_processor.py chisel_p1 --no-bitstream --freertos --io
     - ./pytest_processor.py chisel_p1 --freertos --network
     - ./pytest_processor.py chisel_p1 --freertos --compiler clang
-    - ./pytest_processor.py chisel_p1 --no-bitstream --freertos --io --compiler clang
     - ./pytest_processor.py chisel_p1 --freertos --network --compiler clang
-  tags: ["fpga-io"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
 
 #-----------------------#
 #                       #
@@ -172,14 +182,12 @@ CHSL_P1_freertos:
 CHSL_P2_isa:
   script:
     - ./pytest_processor.py chisel_p2 --isa
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
 
 CHSL_P2_flash:
   script:
     - ./pytest_processor.py chisel_p2 --freertos --flash
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
 
 CHSL_P2_freertos:
   script:
@@ -187,14 +195,12 @@ CHSL_P2_freertos:
     - ./pytest_processor.py chisel_p2 --no-bitstream --freertos --network
     - ./pytest_processor.py chisel_p2 --freertos --compiler clang
     - ./pytest_processor.py chisel_p2 --no-bitstream --freertos --network --compiler clang
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
 
 CHSL_P2_busybox:
   script:
     - ./pytest_processor.py chisel_p2 --busybox --network
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -203,8 +209,7 @@ CHSL_P2_busybox:
 CHSL_P2_PCIE_busybox:
   script:
     - ./pytest_processor.py chisel_p2_pcie --busybox --network
-  tags: ["fpga-pcie"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga_pcie]
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -213,8 +218,7 @@ CHSL_P2_PCIE_busybox:
 CHSL_P2_freebsd:
   script:
     - ./pytest_processor.py chisel_p2 --freebsd
-  tags: ["fpga"]
-  extends: [.log_always]
+  extends: [.log_always, .fpga]
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -224,7 +228,6 @@ CHSL_P2_freebsd:
   only:
     variables:
       - $JOB_TYPE == "linux"
-
 
 # CHSL_P2_debian:
 #   script:
@@ -247,14 +250,12 @@ CHSL_P2_freebsd:
 BSV_P2_isa:
   script:
     - ./pytest_processor.py bluespec_p2 --isa
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
 
 BSV_P2_flash:
   script:
     - ./pytest_processor.py bluespec_p2 --freertos --flash
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
 
 BSV_P2_freertos:
   script:
@@ -262,15 +263,12 @@ BSV_P2_freertos:
     - ./pytest_processor.py bluespec_p2 --no-bitstream --freertos --network
     - ./pytest_processor.py bluespec_p2 --freertos --compiler clang
     - ./pytest_processor.py bluespec_p2 --no-bitstream --freertos --network --compiler clang
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
 
 BSV_P2_busybox:
   script:
     - ./pytest_processor.py bluespec_p2 --busybox --network
-    # - ./pytest_processor.py bluespec_p2 --elf bootmem/build-busybox-bbl/bbl --netboot --timeout 200 --expected "Please press Enter to activate this console"
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -279,8 +277,7 @@ BSV_P2_busybox:
 BSV_P2_PCIE_busybox:
   script:
     - ./pytest_processor.py bluespec_p2_pcie --busybox --network
-  tags: ["fpga-pcie"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga_pcie]
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -289,8 +286,7 @@ BSV_P2_PCIE_busybox:
 BSV_P2_freebsd:
   script:
     - ./pytest_processor.py bluespec_p2 --freebsd
-  tags: ["fpga"]
-  extends: [.log_always]
+  extends: [.log_always, .fpga]
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -322,14 +318,12 @@ BSV_P2_freebsd:
 CHSL_P3_isa:
   script:
     - ./pytest_processor.py chisel_p3 --isa
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
 
 CHSL_P3_flash:
   script:
     - ./pytest_processor.py chisel_p3 --freertos --flash
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
 
 CHSL_P3_freertos:
   script:
@@ -337,14 +331,12 @@ CHSL_P3_freertos:
     - ./pytest_processor.py chisel_p3 --no-bitstream --freertos --network
     - ./pytest_processor.py chisel_p3 --freertos --compiler clang
     - ./pytest_processor.py chisel_p3 --no-bitstream --freertos --network --compiler clang
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
 
 CHSL_P3_busybox:
   script:
     - ./pytest_processor.py chisel_p3 --busybox --network
-  tags: ["fpga"]
-  extends: [.log_always, .no_sched]
+  extends: [.log_always, .no_sched, .fpga]
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:

@@ -29,10 +29,15 @@ apt-get update
 apt-get install -y clang-11 lldb-11 lld-11 clangd-11
 
 # Set llvm symlinks and variables
+rm /usr/bin/clang
 ln -s /usr/bin/clang-11 /usr/bin/clang
+rm llvm-objcopy
 ln -s /usr/bin/llvm-objcopy-11 llvm-objcopy
+rm llvm-objdump
 ln -s /usr/bin/llvm-objdump-11 llvm-objdump
+rm llvm-ar
 ln -s /usr/bin/llvm-ar-11 llvm-ar
+rm llvm-ranlib
 ln -s /usr/bin/llvm-ranlib-11 llvm-ranlib
 
 # Instal dependencies for FreeBSD
@@ -42,3 +47,19 @@ apt install -y libglib2.0-dev libpixman-1-dev libarchive-dev bsdtar libbz2-dev
 # Install and configure TFTP server
 apt install -y atftpd
 chmod 777 /srv/tftp
+
+# Install docker engine
+apt-get -y install \
+    apt-transport-https \
+    ca-certificates \
+    gnupg2 \
+    software-properties-common
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+
+add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/debian \
+   $(lsb_release -cs) \
+   stable"
+
+apt-get update
+apt-get install -y docker-ce docker-ce-cli containerd.io

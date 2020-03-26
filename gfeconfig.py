@@ -69,7 +69,7 @@ class Config(object):
 
     # FreeRTOS config
     freertos_basic_tests = ['main_blinky']
-    freertos_io_tests = ['main_uart','main_rtc','main_gpio','main_sd','main_netboot']
+    freertos_io_tests = ['main_uart','main_rtc','main_gpio','main_sd']
     freertos_network_tests = ['main_udp','main_tcp']
     freertos_expected_contents = None
     freertos_absent_contents = None
