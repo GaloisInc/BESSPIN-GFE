@@ -11,15 +11,21 @@ BASE_DIR=..
 PROCNAME=$1
 TEST_FILENAME=$2
 
-if [ $# -lt 2 ] || [ $# -gt 3 ]; then
-    echo "Usage: $0 <procname> <test_filename> [<output_dir>]"
+if [ $# -lt 2 ] || [ $# -gt 4 ]; then
+    echo "Usage: $0 <procname> <test_filename> [<output_dir>] [<test_num>]"
     exit 1
 fi
 
-if [[ $# -eq 3 ]]; then
+if [[ $# -gt 2 ]]; then
     OUTDIR=$3
 else
     OUTDIR=.
+fi
+
+if [[ $# -gt 3 ]]; then
+    TESTNUM=$4
+else
+    TESTNUM=
 fi
 
 echo "Testing $PROCNAME on $TEST_FILENAME"
@@ -30,9 +36,9 @@ echo "Testing $PROCNAME on $TEST_FILENAME"
 TEST_NAME="$(basename -- $TEST_FILENAME)"
 
 TEST_MEMHEX=$OUTDIR/$TEST_NAME.memhex
-TEST_GDB_OUTPUT=$OUTDIR/$TEST_NAME.gdb_log
-TEST_TRACE_DATA=$OUTDIR/$TEST_NAME.trace_data
-TEST_TV_LOG=$OUTDIR/$TEST_NAME.tv_log
+TEST_GDB_OUTPUT=$OUTDIR/$TEST_NAME$TESTNUM.gdb_log
+TEST_TRACE_DATA=$OUTDIR/$TEST_NAME$TESTNUM.gdb_log.trace_data
+TEST_TV_LOG=$OUTDIR/$TEST_NAME$TESTNUM.tv_log
 
 TEST_GDB_SCRIPT=$OUTDIR/$TEST_NAME.gdb
 
@@ -52,14 +58,13 @@ TRACE_WRITER=$BASE_DIR/TV-hostside/TV-trace_writer
 GDB=riscv64-unknown-elf-gdb
 
 if [ `echo $PROCNAME | grep -c "_p1"` -gt 0 ]; then
-    #echo "RV32 test"
     XLEN=32
-    TRACE_CHECKER=$BASE_DIR/TV-hostside/TV-trace_checker_p1
 else
-    #echo "RV64 test"
     XLEN=64
-    TRACE_CHECKER=$BASE_DIR/TV-hostside/TV-trace_checker_p2
 fi
+
+TRACE_CHECKER=$BASE_DIR/TV-hostside/TV-trace_checker_$PROCNAME
+echo "Checker is TV-trace_checker_$PROCNAME"
 
 # =========================
 # GDB configuration
@@ -133,7 +138,8 @@ end
 
 run_test $TEST_FILENAME
 
-soft_reset
+#soft_reset
+monitor reset halt
 disconnect
 quit
 EOF

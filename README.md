@@ -9,10 +9,10 @@ for a high-level overview of the system.
 
 ## Release Schedule ##
 
-Below is the planned release schedule for the remainder of Phase 2 of the BESSPIN program. 
+Below is the planned release schedule for the remainder of Phase 2 of the BESSPIN program.
 
 Links to related GitLab milestones:
-* [GFE Release 5.0](https://gitlab-ext.galois.com/ssith/gfe/-/milestones/2)  
+* [GFE Release 5.0](https://gitlab-ext.galois.com/ssith/gfe/-/milestones/2)
 * [GFE Release 5.1](https://gitlab-ext.galois.com/ssith/gfe/-/milestones/7)
 * [GFE Release 5.2](https://gitlab-ext.galois.com/ssith/gfe/-/milestones/8)
 
@@ -66,7 +66,7 @@ modify the GFE with your own processor.
 ### Setup OS (Debian Buster) ###
 
 Before installing the GFE for the first time, please perform a clean
-install of [Debian 10 ("Buster")](https://www.debian.org/releases/buster/) 
+install of [Debian 10 ("Buster")](https://www.debian.org/releases/buster/)
 on the development and testing hosts.  This is the supported OS for
 building and testing the GFE.
 
@@ -77,11 +77,11 @@ previous versions of the GFE, which used Vivado 2017.4.  The new
 version is needed to support bitstream generation for designs using
 the PCIe bus.  A license key for the tool is included on a piece of
 paper in the box containing the VCU118.
-See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2019_1/ug973-vivado-release-notes-install-license.pdf) 
+See Vivado [UG973](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2019_1/ug973-vivado-release-notes-install-license.pdf)
 for download and installation instructions.
 
 The GFE only requires the Vivado tool, not the SDK, so download the
-`Vivado Design Suite - HLx 2019.1 ` from the 
+`Vivado Design Suite - HLx 2019.1 ` from the
 [Vivado Download Page](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2019-1.html).
 You must make an account with Vivado in order to register the tool and
 install the license.  After installing Vivado, you must also install
@@ -108,7 +108,7 @@ does not require a license and is solely used to program the FPGA.
 Once the OS is installed, you will need to
 [add an ssh key](https://gitlab-ext.galois.com/profile/keys)
 to your Galois GitLab account in order to clone the GFE repo.
-These [instructions](https://docs.gitlab.com/ee/ssh/#adding-an-ssh-key-to-your-gitlab-account) 
+These [instructions](https://docs.gitlab.com/ee/ssh/#adding-an-ssh-key-to-your-gitlab-account)
 have more details.
 
 After setting up an ssh key, clone this repo by running
@@ -167,7 +167,7 @@ defaults of the corresponding `32` versions.
 Finally, make the GNU toolchains and Vivado Lab 2019.1 available to
 all users by running this script:
 ```bash
-sudo ./install/amend-bashrc.sh 
+sudo ./install/amend-bashrc.sh
 ```
 
 You may want to verify that the new version of the `vivado_lab`
@@ -252,7 +252,7 @@ to write a bitstream to flash on the VCU118.  This is optional, and
 allows the FPGA to be programmed from flash on power-up.
 
 As of the GFE 5.0 release, the ability to store bitstreams in flash
-is not functional. See #141 for updates on the re-introduction of this 
+is not functional. See #141 for updates on the re-introduction of this
 feature.
 
 ### Testing ###
@@ -271,8 +271,8 @@ sudo reboot
 ```
 2. Connect micro USB cables to JTAG and UART on the the VCU118. This
    enables programming, debugging, and UART communication.
-3. Make sure the VCU118 is powered on (fan should be running) 
-4. Add Vivado or Vivado Lab to your path 
+3. Make sure the VCU118 is powered on (fan should be running)
+4. Add Vivado or Vivado Lab to your path
    (i.e. `source /opt/Xilinx/Vivado_Lab/2019.1/settings64.sh`).
 5. Run `./pytest_processor.sh chisel_p1` from the top level of the GFE
    repo. Replace `chisel_p1` with your processor of choice. This
@@ -318,25 +318,25 @@ Follow these steps to run FreeRTOS with an interactive GDB session:
 2. Run OpenOCD to connect to the RISC-V core you have running on the
    FPGA:
    `openocd -f $GFE_REPO/testing/targets/ssith_gfe.cfg`.
-3. In a new terminal, run Minicom with 
-   `minicom -D /dev/ttyUSB1 -b 115200`. 
+3. In a new terminal, run Minicom with
+   `minicom -D /dev/ttyUSB1 -b 115200`.
    `ttyUSB1` should be replaced with whichever USB port is connected
    to the VCU118's USB-to-UART bridge.
-   
+
    Settings can be configured by running `minicom -s` and selecting
    `Serial Port Setup` and then `Bps/Par/Bits`.  The UART is
    configured to have 8 data bits, 2 stop bits, no parity bits, and a
    baud rate of 115200.
 
-4. In a new shell, run GDB with 
+4. In a new shell, run GDB with
    `riscv64-unknown-elf-gdb $GFE_REPO/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1/main_blinky.elf`,
    where `main_blinky` should be the name of the demo you have
    compiled and want to run.
-   
+
 5. Once GDB is open, type `target remote localhost:3333` to connect to
    OpenOCD. OpenOCD should give a message that it has accepted a GDB
    connection.
-   
+
    Load the FreeRTOS ELF file onto the processor with `load`. To run,
    type `c` or `continue`.
 
@@ -383,7 +383,7 @@ of seconds to wait.
 ### Running FreeRTOS + TCP/IP stack ###
 
 Details about the FreeRTOS TCP/IP stack can be found
-[here](https://www.freertos.org/FreeRTOS-Plus/FreeRTOS_Plus_TCP/index.html). 
+[here](https://www.freertos.org/FreeRTOS-Plus/FreeRTOS_Plus_TCP/index.html).
 We provide a small example, demonstrating the ICMP (ping), UDP, and
 TCP functionality.
 
@@ -401,16 +401,16 @@ If you want to replicate our setup you should:
 1) On your host machine, set up a static IP for the network interface
    connecting to the FPGA
 2) If you have only one FPGA on the network, then you can leave the
-   MAC address as is, otherwise 
-   [change it](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L325) 
+   MAC address as is, otherwise
+   [change it](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L325)
    to the MAC address of the particular board (there is a sticker on
    the FPGA board next to the Ethernet adapter).
 3) If you change the host IP, reflect the changes accordingly in
    [FreeRTOSIPConfig](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L315)
 
 Follow the steps below:
-1) Program your FPGA with a P1 bitstream: 
-   `./pyprogram_fpga.sh chisel_p1` 
+1) Program your FPGA with a P1 bitstream:
+   `./pyprogram_fpga.sh chisel_p1`
    **NOTE:** If you have already programmed the FPGA, at least restart
    it before continuing to make sure it is in a good state.
 2) Start openocd with `openocd -f $GFE_REPO/testing/targets/ssith_gfe.cfg`
@@ -451,11 +451,11 @@ rtt min/avg/max/mdev = 8.838/9.663/14.183/1.851 ms
 ```
 That means ping is working and your FPGA is responding.
 
-13) Now open another terminal and run TCP Echo server at port 9999: 
+13) Now open another terminal and run TCP Echo server at port 9999:
   `ncat -l 9999 --keep-open --exec "/bin/cat" -v`
   Note that this will work only if your TCP Echo server is at
-  10.88.88.1 (or you 
-  [updated the config file](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L315)). 
+  10.88.88.1 (or you
+  [updated the config file](https://github.com/GaloisInc/FreeRTOS-mirror/blob/p1_release/FreeRTOS/Demo/RISC-V_Galois_P1/FreeRTOSIPConfig.h#L315)).
   After a few seconds, you will see something like this:
 ```
 $ ncat -l 9999 --keep-open --exec "/bin/cat" -v
@@ -475,7 +475,7 @@ Ncat: Connection from 10.88.88.2:14588.
 14) [Optional] start `wireshark` and inspect the interface that is at
   the same network as the FPGA. You should clearly see the ICMP ping
   requests and responses, as well as the TCP packets to and from the
-  echo server.  16) [Optional] Send a UDP packet with 
+  echo server.  16) [Optional] Send a UDP packet with
   `socat stdio udp4-connect:10.88.88.2:5006 <<< "Hello there"`.
   In the Minicom output, you should see `prvSimpleZeroCopyServerTask:
   received $N bytes` depending on how much data you send. **Hint:**
@@ -499,7 +499,7 @@ If something doesn't work, then:
 ### Creating Debian Image ###
 
 Before starting, there are several necessary packages to install. Run:
-``` 
+```
 apt-get install libssl-dev debian-ports-archive-keyring binfmt-support qemu-user-static mmdebstrap
 ```
 
@@ -572,8 +572,8 @@ session:
    before running Linux.
 2. Run OpenOCD to connect to the riscv core `openocd -f
    $GFE_REPO/testing/targets/ssith_gfe.cfg`.
-3. In a new terminal, run Minicom with 
-   `minicom -D /dev/ttyUSB1 -b 115200`. `ttyUSB1` 
+3. In a new terminal, run Minicom with
+   `minicom -D /dev/ttyUSB1 -b 115200`. `ttyUSB1`
    should be replaced with whichever USB port is connected to the
    VCU118's USB-to-UART bridge. Settings can be configured by running
    `minicom -s` and selecting `Serial Port Setup` and then
@@ -583,7 +583,7 @@ session:
    bits, and a baud rate of 115200. In the Minicom settings, make sure
    hardware flow control is turned off. Otherwise, the Linux terminal
    may not be responsive.
-4. In a new terminal, run GDB with 
+4. In a new terminal, run GDB with
    `riscv64-unknown-elf-gdb $GFE_REPO/bootmem/build-bbl/bbl`.
 5. Once GDB is open, type `target remote localhost:3333` to connect to
    OpenOCD. OpenOCD should give a message that it has accepted a GDB
@@ -627,7 +627,7 @@ in a kernel panic when using the provided Ethernet driver. A fix will
 be released shortly.
 
 The Debian image provided has the iproute2 package already installed
-and is ready for many network environments. 
+and is ready for many network environments.
 
 **DHCP IP Example**
 
@@ -655,7 +655,7 @@ Recreating /etc/resolv.conf
  Adding DNS server 10.0.0.2
 ```
 
-On either OS, you can run `ping 4.2.2.1` to test network connectivity. The expected output of this is: 
+On either OS, you can run `ping 4.2.2.1` to test network connectivity. The expected output of this is:
 ```
 PING 4.2.2.1 (4.2.2.1): 56 data bytes
 64 bytes from 4.2.2.1: seq=0 ttl=57 time=22.107 ms
@@ -666,7 +666,7 @@ PING 4.2.2.1 (4.2.2.1): 56 data bytes
 --- 4.2.2.1 ping statistics ---
 4 packets transmitted, 4 packets received, 0% packet loss
 round-trip min/avg/max = 20.754/21.136/22.107 ms
-/ # 
+/ #
 ```
 
 **Static IP Example**
@@ -695,7 +695,7 @@ PING 4.2.2.1 (4.2.2.1): 56 data bytes
 20 packets transmitted, 20 packets received, 0% packet loss
 round-trip min/avg/max = 20.536/20.913/23.320 ms
 
-/ # 
+/ #
 ```
 
 ### Storing a Boot Image in Flash Memory ###
@@ -710,7 +710,7 @@ round-trip min/avg/max = 20.536/20.913/23.320 ms
    instructions below:
     * If a suitable P2 or P3 bitstream is also stored in flash, the
       board can be physically reset or cold rebooted to automatically
-      boot into Linux. 
+      boot into Linux.
     * Otherwise, you will have to reprogram the desired bit file using
       the `program_fpga.sh` script at this point. The processor will
       execute the flash image immediately.
@@ -723,9 +723,9 @@ There will not be any console messages while the boot image is read
 from flash, which could take some time for the full Debian OS.
 
 Note that if there is a binary image in flash that is incompatible with
-the bitstream programmed onto the FPGA (for example, a 64-bit boot image 
-with a P1 SoC, or a binary image with invalid instructions), the processor 
-may not work properly. In particular, OpenOCD may fail to run. To avoid 
+the bitstream programmed onto the FPGA (for example, a 64-bit boot image
+with a P1 SoC, or a binary image with invalid instructions), the processor
+may not work properly. In particular, OpenOCD may fail to run. To avoid
 such issues, always erase flash with `tcl/erase_flash` when you are done
 working with a boot image stored in flash.
 
@@ -755,24 +755,24 @@ The steps to add in a new processor are as follows:
    and `$GFE_REPO/chisel_processors/P1/xilinx_ip/component.xml`. This
    is the most clunky part of the process, but is relatively straight
    forward.
-    *  Copy a reference component.xml file to a new folder (i.e., 
+    *  Copy a reference component.xml file to a new folder (i.e.,
        `cp $GFE_REPO/chisel_processors/P1/xilinx_ip/component.xml new_processor/`)
     *  Replace references to old Verilog files within
-       component.xml. Replace `spirit:file` entries such as 
+       component.xml. Replace `spirit:file` entries such as
     ```xml
     <spirit:file>
         <spirit:name>hdl/galois.system.P1FPGAConfig.behav_srams.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
     </spirit:file>
     ```
-   with paths to the hdl for the new processor such as: 
+   with paths to the hdl for the new processor such as:
     ```xml
     <spirit:file>
         <spirit:name>hdl/new_processor.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
     </spirit:file>
     ```
-    The paths in component.xml are relative to its parent directory 
+    The paths in component.xml are relative to its parent directory
     (i.e., `$GFE_REPO/chisel_processors/P1/xilinx_ip/`).
     * Note that the component.xml file contains a set of files used
       for simulation
@@ -837,7 +837,7 @@ cd chisel_processors/P1
 
 ## Tandem Verification ##
 
-Below are instructions for running Tandem verification on the GFE. For
+Below are instructions for setting up Tandem verification on the GFE. For
 more information on the trace collected by Tandem Verification see
 [trace-protocol.pdf](trace-protocol.pdf).
 
@@ -856,7 +856,7 @@ $ make
 ```
 
 Next, program the FPGA with a tandem-verification enabled bitstream:
-`./program_fpga.sh bluespec_p2`
+`./pyprogram_fpga.py bluespec_p2`
 
 **Note: This process is motherboard-dependent.**
 
@@ -894,111 +894,22 @@ Found BlueNoC device at /dev/bluenoc_1
 After the link has been established, you may reprogram the FPGA with
 other TV-enabled bitstreams and re-establish the PCIe link with just a
 warm reboot.  If you program a bitstream that does not include the
-tandem verification hardware, you will need to follow the cold reboot
+tandem verification hardware, you may need to follow the cold reboot
 procedure to re-establish the link later on.
 
-### Installing Bluespec ###
-
-A full Bluespec installation is required for the current version of
-the `write_tvtrace` program. It has been tested with
-Bluespec-2017.07.A. The following paths should to be set:
-```bash
-$ export BLUESPECDIR=/opt/Bluespec-2017.07.A/lib
-$ export PATH=$BLUESPECDIR/../bin:$PATH
+For some but not all motherboards, once the link has beeen established, it
+might be possible to reprogram the FPGA with another TV-enabled bitstream and
+re-establish the link without a warm reboot. After reprogramming, the commands
 ```
-
-### Licensing ###
-
-For the license to work, Debian must be reconfigured to use old-style
-naming of the Ethernet devices.
-
-Open `/etc/default/grub` and modify:
+cd bluenoc/bluenoc
+./bluenoc_hotswap
 ```
-GRUB_CMDLINE_LINUX=""
-```
-to contain:
-```
-GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"
-```
+might be all that is necessary.
 
-Rebuild the grub configuration:
-```
-sudo grub-mkconfig -o /boot/grub/grub.cfg
-```
+### Capturing asd Verifying Traces ###
 
-After a reboot, check that there is now a `eth0` networking device:
-```bash
-$ ip link
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
-    link/ether 30:9c:23:a5:f2:40 brd ff:ff:ff:ff:ff:ff
-```
-
-If you have more than one network device, be sure the MAC address for
-`eth0` is used to request a license, even if it is not your active
-connection.
-
-Send the MAC address to `support@bluespec.com` to request a license if
-you do not already have one.
-
-Once the license is obtained, set the following variable (replacing
-the path with the proper location):
-```bash
-$ export LM_LICENSE_FILE=/opt/Bluespec.lic
-```
-
-### Capturing a Trace ###
-
-Use the `exe_write_tvtrace_RV64` program to capture a trace (works for
-both 32-bit and 64-bit processors):
-```bash
-$ cd $GFE_REPO/TV-hostside
-$ ./exe_write_tvtrace_RV64
-----------------------------------------------------------------
-Bluespec SSITH Support, TV Trace Dumper v1.0
-Copyright (c) 2016-2019 Bluespec, Inc. All Rights Reserved.
-----------------------------------------------------------------
-
----------------- debug start
-Starting verifier thread
-Writing trace to 'trace_data.dat'
-Receiving traces ...
-^C
-```
-
-Use `Ctrl-C` to stop capturing trace data after your program has
-finished executing.
-
-### Comparing a Trace ###
-
-To compare the captured trace against the Cissr simulation model, use
-the `exe_tvchecker_RV*` programs. There are separate binaries for
-comparing 32-bit and 64-bit traces:
-```bash
-$ cd $GFE_REPO/TV-hostside
-$ ./exe_tvchecker_RV64 trace_data.dat
-Opened file 'test.trace' for reading trace_data.
-Loading BOOT ROM from file 'boot_ROM_RV64.memhex'
-ISA = RV64IMAFDCUS
-Cissr: v2018-01-31 (RV64)
-------
-Cissr: reset
-Tandem verifier is: Cissr
-Trace configation: XLEN=64, MLEN=64, FLEN=0
-{ STATE_INIT[mem_req addr 0x6fff0000 STORE 32b data 0x1] }
-ERROR: cissr_write_mem32: STORE_AMO_ACCESS_FAULT at address 0x6fff0000
-{ RESET }
-------
-Cissr: reset
-...
-{ [pc c000000c][instr 00800f93][t6(x31) 8] } inum 497
-{ [pc c0000040][instr 03ff0a63] } inum 498
-{ STATE_INIT[mem_req addr 0xc0000040 STORE 32b data 0x0] }
-```
-
-Note that some early mismatches are expected as the simulation model
-is updated with the correct PC and initial status registers.
+Information about these activities may be found in the separate document
+TV-README.md.
 
 ## PCI Express Root Complex ##
 
@@ -1028,7 +939,7 @@ Every time a bitfile is loaded, prior to loading the bitfile, the PCIe
 bus must be reset by pressing S1 on HTG-FMC-PCIE (the RESET PCIE
 button on the FMC card).
 
-### PCIe Testing ### 
+### PCIe Testing ###
 
 #### Ethernet ####
 
@@ -1082,7 +993,7 @@ LLVM and Clang unless directed otherwise (e.g. to temporarily use a downstream
 branch that includes additional yet-to-be-upstreamed fixes). As such, the
 [LLVM getting started
 documentation](https://llvm.org/docs/GettingStarted.html) is a good source on
-how to checkout and build the project. 
+how to checkout and build the project.
 
 If developing your own patches for LLVM, you should develop those either on
 top of the most recent release branch or on the `master` branch and regularly

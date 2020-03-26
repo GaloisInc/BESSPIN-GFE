@@ -24,7 +24,7 @@ if [[ $PROCNAME =~ ^(chisel|bluespec)_p(1|2|3)$ ]]; then
     PROCTYPE=${BASH_REMATCH[1]}
     PROCNUM=${BASH_REMATCH[2]}
 else
-    echo "Processor '$PROCNAME' not recognized"
+    echo "Processor '$PROCNAME' not recognized or does not support TV"
     exit 1
 fi
 

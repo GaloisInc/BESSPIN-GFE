@@ -45,9 +45,9 @@ VTOP                = V$(TOPMODULE)
 VERILATOR_RESOURCES = Resources
 SOC_RTL_DIR ?= Verilog_RTL
 
-ifeq ($(PROC), bluespec_p3) 
-   SOC_RTL_DIR = Verilog_RTL_P3
-endif
+#ifeq ($(PROC), bluespec_p3)
+#   SOC_RTL_DIR = Verilog_RTL_P3
+#endif
 
 .PHONY: simulator
 simulator:
@@ -104,9 +104,9 @@ endif
 	sed  -f $(VERILATOR_RESOURCES)/sed_script2.txt  $(PROCESSOR_RTL)/$(TOPNAME).v > tmp2.v
 	mv tmp2.v $(SOC_RTL_DIR)/mkP_Core.v
 	verilator \
-		-IProcessor/Boot_ROM \
-		-I$(SOC_RTL_DIR) \
+		-Iprocs/$(PROC) \
 		-I$(PROCESSOR_RTL) \
+		-I$(SOC_RTL_DIR) \
 		--top-module mkTop_HW_Side \
 		$(VERILATOR_FLAGS) \
 		--cc  $(TOPMODULE).v \
