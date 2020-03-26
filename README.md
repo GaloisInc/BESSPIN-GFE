@@ -193,8 +193,13 @@ cd $GFE_REPO
 ./setup_soc_project.sh chisel_p1 # generate vivado/soc_chisel_p1/soc_chisel_p1.xpr
 ./build.sh chisel_p1 # generate bitstreams/soc_chisel_p1.bit
 ```
-where `GFE_REPO` is the top level directory for the GFE repository. To
-view the project in the Vivado GUI, run the following:
+where `GFE_REPO` is the top level directory for the GFE repository.
+If you pass the filename of a binary image as an optional second 
+parameter to `setup_soc_project.sh`, the boot ROM for the SoC will be 
+configured to securely boot that binary image. See the 
+[secure boot instructions](bootrom-secure/README.md) for more information.
+
+To view the project in the Vivado GUI, run the following:
 ```bash
 cd $GFE_REPO/vivado
 vivado soc_chisel_p1/soc_chisel_p1.xpr
@@ -209,6 +214,15 @@ repository and can be re-opened there. Note that all the same commands
 can be run with the argument `bluespec_p1` to generate the Bluespec P1
 bitstream and corresponding Vivado project
 (i.e., `./setup_soc_project.sh bluespec_p1`).
+
+Note: when you build a SoC project, whether with `build.sh` or the
+Vivado GUI, it will take the boot ROM from the `bootrom-configured`
+directory. This allows you to modify the boot ROM after project
+configuration (by, for example, manually changing the checksum and
+length of the binary image a secure boot ROM should boot). However, it
+also means that you must be careful when building a SoC project, if you
+have run `setup_soc_project.sh` multiple times, to ensure that it builds 
+with the boot ROM you expect. 
 
 All bitstreams generated using processor names of the form
 `{bluespec,chisel}_p{1,2,3}` build a system with SVF but no PCIe root
@@ -231,7 +245,7 @@ This PCIe root complex build option is not provided for P1, which doesn't
 support Linux, or for P3 whose frequency is too low to support PCIe
 root complex operation).
 
-### Storing a Bitstream in Flash ###
+### Storing a Bitstream in Flash Memory ###
 
 See [flash-scripts/README](flash-scripts/README) for directions on how
 to write a bitstream to flash on the VCU118.  This is optional, and
@@ -541,7 +555,7 @@ on the FPGA at `$GFE_REPO/bootmem/bootmem.bin`
 
 The following instructions describe how to boot Linux with Busybox.
 
-#### Build the memory image ####
+#### Build the Memory Image ####
 
 The default make target will build a simpler kernel with only a
 busybox boot environment:
@@ -550,7 +564,7 @@ cd $GFE_REPO/bootmem/
 make
 ```
 
-#### Load and run the memory image ####
+#### Load and Run the Memory Image ####
 
 Follow these steps to run Linux and Busybox with an interactive GDB
 session:
@@ -684,7 +698,7 @@ round-trip min/avg/max = 20.536/20.913/23.320 ms
 / # 
 ```
 
-### Storing a boot image in flash memory ###
+### Storing a Boot Image in Flash Memory ###
 
 1. Prepare the Linux image with either Debian or Busybox as described
    above.
