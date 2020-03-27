@@ -30,7 +30,7 @@ class GdbSession(object):
             raise GdbError('Executable {} not found'.format(openocd))
         xlen=32 # Default
         try:
-            run_and_log("Starting openocd", run([openocd, '-f', openocd_config_filename], \
+            run_and_log(print_and_log("Starting openocd"), run([openocd, '-f', openocd_config_filename], \
                         timeout=0.5, stdout=PIPE, stderr=PIPE))
         except TimeoutExpired as exc:
             log = str(exc.stderr, encoding='utf-8')
@@ -290,11 +290,11 @@ def isa_tester(gdb, isa_exe_filename):
 
 # Compile FreeRTOS program
 def freertos_compile_program(config, prog_name):
-    run_and_log("Cleaning FreeRTOS program directory",
+    run_and_log(print_and_log("Cleaning FreeRTOS program directory"),
         run(['make','clean'],cwd=config.freertos_folder,
         env=dict(os.environ, USE_CLANG=config.use_clang, PROG=prog_name, XLEN=config.xlen,
         configCPU_CLOCK_HZ=config.cpu_freq), stdout=PIPE, stderr=PIPE))
-    run_and_log("Compiling: " + prog_name,
+    run_and_log(print_and_log("Compiling: " + prog_name),
         run(['make'],cwd=config.freertos_folder,
         env=dict(os.environ, C_INCLUDE_PATH=config.freertos_c_include_path, USE_CLANG=config.use_clang,
         PROG=prog_name, XLEN=config.xlen, configCPU_CLOCK_HZ=config.cpu_freq), stdout=PIPE, stderr=PIPE))
@@ -434,7 +434,7 @@ def load_netboot(config, path_to_elf, timeout, expected_contents=[], absent_cont
     if not res:
         raise RuntimeError("Loading netboot failed - check log for more details.")
 
-    run_and_log("Moving elf to netboot server folder",
+    run_and_log(print_and_log("Moving elf to netboot server folder"),
         run(['cp',path_to_elf,config.netboot_folder], stdout=PIPE, stderr=PIPE))
     
     elf_name = os.path.basename(path_to_elf)
@@ -504,11 +504,11 @@ def basic_tester(gdb, uart, exe_filename, timeout, expected_contents=[], absent_
 def print_and_log(msg):
     print(msg)
     logging.debug(msg)
+    return 1
 
-# Run command and log it
+# Run command
 # Raise a runtime exception if it fails
 def run_and_log(cmd, res, expected_contents=None):
-    print_and_log(cmd)
     res_stdout = str(res.stdout,'utf-8')
     logging.debug(res_stdout)
     if expected_contents:
@@ -518,21 +518,21 @@ def run_and_log(cmd, res, expected_contents=None):
             res.returncode = 1
     if res.returncode != 0:
         logging.debug(str(res.stderr,'utf-8'))
-        msg = str("Running command failed: " + cmd + " Check test_processor.log for more details.")
+        msg = str("Running command failed. Check test_processor.log for more details.")
         raise RuntimeError(msg)
     return res_stdout
 
 # Run simulator tests and exit
 def test_simulator(config):
     print_and_log("Run Verilator tests")
-    run_and_log("Compiling ISA tests",
+    run_and_log(print_and_log("Compiling ISA tests"),
         run(['make'], cwd="./riscv-tests/isa", stdout=PIPE, stderr=PIPE))
 
-    run_and_log("Building Verilator simulator for " + config.proc_name,
+    run_and_log(print_and_log("Building Verilator simulator for " + config.proc_name),
         run(['make','simulator'],cwd="./verilator_simulators",
         env=dict(os.environ, PROC=config.proc_name), stdout=PIPE, stderr=PIPE))
 
-    run_and_log("Testing " + config.proc_name,
+    run_and_log(print_and_log("Testing " + config.proc_name),
         run(['make','isa_tests'],cwd="./verilator_simulators/run",
         env=dict(os.environ, PROC=config.proc_name), stdout=PIPE, stderr=PIPE))
     print_and_log("Verilator tests OK, exiting...")
@@ -542,10 +542,10 @@ def test_simulator(config):
 def test_program_bitstream(config):
     # For BSV CPUs, always program flash with nop binary
     if 'bluespec' in config.proc_name:
-        run_and_log("Programming flash",
+        run_and_log(print_and_log("Programming flash"),
             run(['tcl/program_flash','datafile','./bootmem/small.bin'], stdout=PIPE, stderr=PIPE),
             "Program/Verify Operation successful.")
-    run_and_log("Programming bitstream",
+    run_and_log(print_and_log("Programming bitstream"),
         run(['./pyprogram_fpga.py', config.proc_name], stdout=PIPE, stderr=PIPE))
 
 # ISA tests
@@ -553,13 +553,13 @@ def test_isa(config):
     print_and_log("Run ISA tests")
     gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
     
-    run_and_log("Compiling ISA tests",
+    run_and_log(print_and_log("Compiling ISA tests"),
         run(['./configure','--target=riscv64-unknown-elf',
         '--with-xlen=' + config.xlen],cwd="./riscv-tests",
         env=dict(os.environ, CC="riscv64-unknown-elf-gcc"), stdout=PIPE, stderr=PIPE))
-    run_and_log("", run(['make'], cwd="./riscv-tests", stdout=PIPE, stderr=PIPE))
+    run_and_log(print_and_log(""), run(['make'], cwd="./riscv-tests", stdout=PIPE, stderr=PIPE))
 
-    res = run_and_log("Generating a list of available ISA tests",
+    res = run_and_log(print_and_log("Generating a list of available ISA tests"),
         run(['./testing/scripts/gen-test-all',config.xarch], stdout=PIPE, stderr=PIPE))
     files = res.split("\n")
 
@@ -613,23 +613,23 @@ def test_freertos(config, args):
         print_and_log("Compile FreeRTOS binary")
         filename = freertos_compile_program(config, prog_name)
         
-        run_and_log("Clean bootmem", run(['make','-f','Makefile.flash','clean'],cwd=config.bootmem_folder,
+        run_and_log(print_and_log("Clean bootmem"), run(['make','-f','Makefile.flash','clean'],cwd=config.bootmem_folder,
             env=dict(os.environ, USE_CLANG=config.use_clang, PROG=prog_name, XLEN=config.xlen),
             stdout=PIPE, stderr=PIPE))
 
-        run_and_log("Copy FreeRTOS binary",
+        run_and_log(print_and_log("Copy FreeRTOS binary"),
             run(['cp',filename,config.bootmem_folder], stdout=PIPE, stderr=PIPE))
 
-        run_and_log("Make bootable binary",
+        run_and_log(print_and_log("Make bootable binary"),
             run(['make','-f','Makefile.flash'],cwd=config.bootmem_folder,
             env=dict(os.environ, USE_CLANG=config.use_clang, PROG=prog_name+'.elf', XLEN=config.xlen),
             stdout=PIPE, stderr=PIPE))
 
-        run_and_log("Programming persistent memory with binary",
+        run_and_log(print_and_log("Programming persistent memory with binary"),
             run(['tcl/program_flash','datafile', config.bootmem_path], stdout=PIPE, stderr=PIPE),
             "Program/Verify Operation successful.")
 
-        run_and_log("Programming bitstream",
+        run_and_log(print_and_log("Programming bitstream"),
             run(['./pyprogram_fpga.py', config.proc_name], stdout=PIPE, stderr=PIPE))
 
         print_and_log("Check contents")
@@ -737,19 +737,19 @@ def test_busybox(config, args):
 
 # Common FreeBSD test part
 def build_freebsd(config):
-    run_and_log("Cleaning freebsd",
+    run_and_log(print_and_log("Cleaning freebsd"),
         run(['make','clean'],cwd=config.freebsd_folder,
         env=dict(os.environ), stdout=PIPE, stderr=PIPE))
-    run_and_log("Building freebsd",
+    run_and_log(print_and_log("Building freebsd"),
         run(['make'],cwd=config.freebsd_folder,
         env=dict(os.environ), stdout=PIPE, stderr=PIPE))
 
 # Common busybox test parts
 def build_busybox(config, linux_config_path):
-    run_and_log("Cleaning bootmem program directory",
+    run_and_log(print_and_log("Cleaning bootmem program directory"),
         run(['make','clean'],cwd=config.busybox_folder,
         env=dict(os.environ, LINUX_CONFIG=linux_config_path), stdout=PIPE, stderr=PIPE))
-    run_and_log("Compiling busybox, this might take a while",
+    run_and_log(print_and_log("Compiling busybox, this might take a while"),
         run(['make'],cwd=config.busybox_folder,
         env=dict(os.environ, LINUX_CONFIG=linux_config_path), stdout=PIPE, stderr=PIPE))
 
