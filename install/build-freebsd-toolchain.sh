@@ -31,6 +31,7 @@ git submodule update --init --recursive
 
 # Configure and Make
 ./configure --prefix /opt/riscv 
+make clean
 make freebsd OSREL=$OSREL #SYSROOT=$SYSROOT
 cd ..
 
