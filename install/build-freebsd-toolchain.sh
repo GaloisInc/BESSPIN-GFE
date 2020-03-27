@@ -22,7 +22,7 @@ git clean -f
 git pull
 
 # Snapshot of master on 2019-10-10 -- update as needed
-# git checkout 1505830a3b757b3e65c15147388dd1a91ee2c786
+git checkout d8243f7f81140bc732b91b7e02c45f425b204191
 git submodule update --init --recursive
 ./configure --prefix /opt/riscv
 make freebsd
