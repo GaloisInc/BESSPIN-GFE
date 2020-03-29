@@ -24,8 +24,8 @@ if __name__ == "__main__":
             # Exited failure
             print (" ==> Run", x+1, "failed with code", result)
             failures += 1
-        print(" ==> Run [", x+1, "/", iterations, "] Finished.") 
-
+        print(" ==> Run [", x+1, "/", iterations, "] Finished.")
+        print(" ==> So far [", 100-(failures/(x+1)*100), "% Success]")
 
     print(" ==> Completed", iterations, "runs of", ' '.join(subprocess_command), "results:")
     print(" ==> Consistency:", failures, "failures during", iterations, "iterations\n",
