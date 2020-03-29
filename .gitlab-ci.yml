@@ -56,31 +56,37 @@ variables:
 #
 #-----------------------------------------------------------------------------#
 CHSL_P1_sim:
+  timeout: 5min
   script:
     - ./pytest_processor.py chisel_p1 --simulator
   extends: [.log_failure, .no_sched, .verilator]
 
 BSV_P1_sim:
+  timeout: 5min
   script:
     - ./pytest_processor.py bluespec_p1 --simulator
   extends: [.log_failure, .no_sched, .verilator]
 
 CHSL_P2_sim:
+  timeout: 10min
   script:
     - ./pytest_processor.py chisel_p2 --simulator
   extends: [.log_failure, .no_sched, .verilator]
 
 BSV_P2_sim:
+  timeout: 10min
   script:
     - ./pytest_processor.py bluespec_p2 --simulator
   extends: [.log_failure, .no_sched, .verilator]
 
 CHSL_P3_sim:
+  timeout: 1h
   script:
     - ./pytest_processor.py chisel_p3 --simulator
   extends: [.log_failure, .no_sched, .verilator]
 
 BSV_P3_sim:
+  timeout: 1h
   script:
     - ./pytest_processor.py bluespec_p3 --simulator
   extends: [.log_failure, .no_sched, .verilator]
@@ -91,6 +97,7 @@ BSV_P3_sim:
 #
 #-----------------------------------------------------------------------------#
 P1_benchmarks:
+  timeout: 5min
   script:
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 clean
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 link
@@ -99,6 +106,7 @@ P1_benchmarks:
   extends: [.log_always, .no_sched, .fpga]
 
 P2_benchmarks:
+  timeout: 5min
   script:
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P2 ITERATIONS=3000 clean
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P2 ITERATIONS=3000 link
@@ -107,6 +115,7 @@ P2_benchmarks:
   extends: [.log_always, .no_sched, .fpga]
 
 P3_benchmarks:
+  timeout: 5min
   script:
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P3 ITERATIONS=1000 clean
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P3 ITERATIONS=1000 link
@@ -120,22 +129,26 @@ P3_benchmarks:
 #                       #
 #-----------------------#
 BSV_P1_isa:
+  timeout: 5min
   script:
     - ./pytest_processor.py bluespec_p1 --isa
   extends: [.log_always, .no_sched, .fpga]
 
 BSV_P1_flash:
+  timeout: 5min
   script:
     - ./pytest_processor.py bluespec_p1 --freertos --flash
   extends: [.log_always, .no_sched, .fpga]
 
 BSV_P1_io:
+  timeout: 5min
   script:
     - ./pytest_processor.py bluespec_p1 --freertos --io
     - ./pytest_processor.py bluespec_p1 --freertos --io --compiler clang
   extends: [.log_always, .no_sched, .fpga_io]
 
 BSV_P1_freertos:
+  timeout: 10min
   script:
     - ./pytest_processor.py bluespec_p1 --freertos
     - ./pytest_processor.py bluespec_p1 --freertos --network
@@ -149,22 +162,26 @@ BSV_P1_freertos:
 #                       #
 #-----------------------#
 CHSL_P1_isa:
+  timeout: 5min
   script:
     - ./pytest_processor.py chisel_p1 --isa
   extends: [.log_always, .no_sched, .fpga]
 
 CHSL_P1_flash:
+  timeout: 5min
   script:
     - ./pytest_processor.py chisel_p1 --freertos --flash
   extends: [.log_always, .no_sched, .fpga]
 
 CHSL_P1_io:
+  timeout: 5min
   script:
     - ./pytest_processor.py chisel_p1 --freertos --io
     - ./pytest_processor.py chisel_p1 --freertos --io --compiler clang
   extends: [.log_always, .no_sched, .fpga_io]
 
 CHSL_P1_freertos:
+  timeout: 10min
   script:
     - ./pytest_processor.py chisel_p1 --freertos
     - ./pytest_processor.py chisel_p1 --freertos --network
@@ -178,16 +195,19 @@ CHSL_P1_freertos:
 #                       #
 #-----------------------#
 CHSL_P2_isa:
+  timeout: 10min
   script:
     - ./pytest_processor.py chisel_p2 --isa
   extends: [.log_always, .no_sched, .fpga]
 
 CHSL_P2_flash:
+  timeout: 10min
   script:
     - ./pytest_processor.py chisel_p2 --freertos --flash
   extends: [.log_always, .no_sched, .fpga]
 
 CHSL_P2_freertos:
+  timeout: 10min
   script:
     - ./pytest_processor.py chisel_p2 --freertos
     - ./pytest_processor.py chisel_p2 --freertos --network
@@ -196,6 +216,7 @@ CHSL_P2_freertos:
   extends: [.log_always, .no_sched, .fpga]
 
 CHSL_P2_busybox:
+  timeout: 10min
   script:
     - ./pytest_processor.py chisel_p2 --busybox --network
   extends: [.log_always, .no_sched, .fpga]
@@ -205,6 +226,7 @@ CHSL_P2_busybox:
       - bootmem/
 
 CHSL_P2_PCIE_busybox:
+  timeout: 10min
   script:
     - ./pytest_processor.py chisel_p2_pcie --busybox --network
   extends: [.log_always, .no_sched, .fpga_pcie]
@@ -214,6 +236,7 @@ CHSL_P2_PCIE_busybox:
       - bootmem/
 
 CHSL_P2_freebsd:
+  timeout: 1h
   script:
     - ./pytest_processor.py chisel_p2 --freebsd
   extends: [.log_always, .fpga]
@@ -246,16 +269,19 @@ CHSL_P2_freebsd:
 #                       #
 #-----------------------#
 BSV_P2_isa:
+  timeout: 10min
   script:
     - ./pytest_processor.py bluespec_p2 --isa
   extends: [.log_always, .no_sched, .fpga]
 
 BSV_P2_flash:
+  timeout: 10min
   script:
     - ./pytest_processor.py bluespec_p2 --freertos --flash
   extends: [.log_always, .no_sched, .fpga]
 
 BSV_P2_freertos:
+  timeout: 10min
   script:
     - ./pytest_processor.py bluespec_p2 --freertos
     - ./pytest_processor.py bluespec_p2 --freertos --network
@@ -264,6 +290,7 @@ BSV_P2_freertos:
   extends: [.log_always, .no_sched, .fpga]
 
 BSV_P2_busybox:
+  timeout: 10min
   script:
     - ./pytest_processor.py bluespec_p2 --busybox --network
   extends: [.log_always, .no_sched, .fpga]
@@ -273,6 +300,7 @@ BSV_P2_busybox:
       - bootmem/
 
 BSV_P2_PCIE_busybox:
+  timeout: 10min
   script:
     - ./pytest_processor.py bluespec_p2_pcie --busybox --network
   extends: [.log_always, .no_sched, .fpga_pcie]
@@ -282,6 +310,7 @@ BSV_P2_PCIE_busybox:
       - bootmem/
 
 BSV_P2_freebsd:
+  timeout: 1h
   script:
     - ./pytest_processor.py bluespec_p2 --freebsd
   extends: [.log_always, .fpga]
@@ -314,16 +343,19 @@ BSV_P2_freebsd:
 #                       #
 #-----------------------#
 CHSL_P3_isa:
+  timeout: 10min
   script:
     - ./pytest_processor.py chisel_p3 --isa
   extends: [.log_always, .no_sched, .fpga]
 
 CHSL_P3_flash:
+  timeout: 10min
   script:
     - ./pytest_processor.py chisel_p3 --freertos --flash
   extends: [.log_always, .no_sched, .fpga]
 
 CHSL_P3_freertos:
+  timeout: 10min
   script:
     - ./pytest_processor.py chisel_p3 --freertos
     - ./pytest_processor.py chisel_p3 --freertos --network
@@ -332,6 +364,7 @@ CHSL_P3_freertos:
   extends: [.log_always, .no_sched, .fpga]
 
 CHSL_P3_busybox:
+  timeout: 10min
   script:
     - ./pytest_processor.py chisel_p3 --busybox --network
   extends: [.log_always, .no_sched, .fpga]
@@ -339,6 +372,21 @@ CHSL_P3_busybox:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - bootmem/
+
+CHSL_P3_freebsd:
+  timeout: 1h
+  script:
+    - ./pytest_processor.py chisel_p3 --freebsd
+  extends: [.log_always, .fpga]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - freebsd/world
+      - freebsd/obj
+      - freebsd/freebsd.bbl
+  only:
+    variables:
+      - $JOB_TYPE == "linux"
 
 # CHSL_P3:
 #   script:
@@ -359,16 +407,19 @@ CHSL_P3_busybox:
 #                       #
 #-----------------------#
 BSV_P3_isa:
+  timeout: 10min
   script:
     - ./pytest_processor.py bluespec_p3 --isa
   extends: [.log_always, .no_sched, .fpga]
 
 BSV_P3_flash:
+  timeout: 10min
   script:
     - ./pytest_processor.py bluespec_p3 --freertos --flash
   extends: [.log_always, .no_sched, .fpga]
 
 BSV_P3_freertos:
+  timeout: 10min
   script:
     - ./pytest_processor.py bluespec_p3 --freertos
     - ./pytest_processor.py bluespec_p3 --freertos --network
@@ -377,6 +428,7 @@ BSV_P3_freertos:
   extends: [.log_always, .no_sched, .fpga]
 
 BSV_P3_busybox:
+  timeout: 10min
   script:
     - ./pytest_processor.py bluespec_p3 --busybox --network
   extends: [.log_always, .no_sched, .fpga]
@@ -385,12 +437,27 @@ BSV_P3_busybox:
     paths:
       - bootmem/
 
+BSV_P3_freebsd:
+  timeout: 1h
+  script:
+    - ./pytest_processor.py bluespec_p3 --freebsd
+  extends: [.log_always, .fpga]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - freebsd/world
+      - freebsd/obj
+      - freebsd/freebsd.bbl
+  only:
+    variables:
+      - $JOB_TYPE == "linux"
 #-----------------------------------------------------------------------------#
 #
 # Bitstream generation
 #
 #-----------------------------------------------------------------------------#
 CHSL_P1_bitstream_gen:
+  timeout: 1h
   script:
     - ./setup_soc_project.sh chisel_p1
     - ./build.sh chisel_p1
@@ -410,6 +477,7 @@ CHSL_P1_bitstream_gen:
       - $JOB_TYPE == "bitstream_gen_chisel_p1"
 
 CHSL_P2_bitstream_gen:
+  timeout: 2h
   script:
     - ./setup_soc_project.sh chisel_p2
     - ./build.sh chisel_p2
@@ -429,6 +497,7 @@ CHSL_P2_bitstream_gen:
       - $JOB_TYPE == "bitstream_gen_chisel_p2"
 
 CHSL_P2_PCIE_bitstream_gen:
+  timeout: 2h
   script:
     - ./setup_soc_project.sh chisel_p2_pcie
     - ./build.sh chisel_p2_pcie
@@ -448,6 +517,7 @@ CHSL_P2_PCIE_bitstream_gen:
       - $JOB_TYPE == "bitstream_gen_chisel_p2"
 
 CHSL_P3_bitstream_gen:
+  timeout: 2h
   script:
     - ./setup_soc_project.sh chisel_p3
     - ./build.sh chisel_p3
@@ -467,6 +537,7 @@ CHSL_P3_bitstream_gen:
       - $JOB_TYPE == "bitstream_gen_chisel_p3"
 
 BSV_P1_bitstream_gen:
+  timeout: 1h
   script:
     - ./setup_soc_project.sh bluespec_p1
     - ./build.sh bluespec_p1
@@ -486,6 +557,7 @@ BSV_P1_bitstream_gen:
       - $JOB_TYPE == "bitstream_gen_bluespec_p1"
 
 BSV_P2_bitstream_gen:
+  timeout: 4h
   script:
     - ./setup_soc_project.sh bluespec_p2
     - ./build.sh bluespec_p2
@@ -505,6 +577,7 @@ BSV_P2_bitstream_gen:
       - $JOB_TYPE == "bitstream_gen_bluespec_p2"
 
 BSV_P2_PCIE_bitstream_gen:
+  timeout: 5h
   script:
     - ./setup_soc_project.sh bluespec_p2_pcie
     - ./build.sh bluespec_p2_pcie
@@ -524,6 +597,7 @@ BSV_P2_PCIE_bitstream_gen:
       - $JOB_TYPE == "bitstream_gen_bluespec_p2"
 
 BSV_P3_bitstream_gen:
+  timeout: 6h
   script:
     - ./setup_soc_project.sh bluespec_p3
     - ./build.sh bluespec_p3
