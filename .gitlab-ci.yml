@@ -457,7 +457,7 @@ BSV_P3_freebsd:
 #
 #-----------------------------------------------------------------------------#
 CHSL_P1_bitstream_gen:
-  timeout: 1h
+  timeout: 6h
   script:
     - ./setup_soc_project.sh chisel_p1
     - ./build.sh chisel_p1
@@ -477,7 +477,7 @@ CHSL_P1_bitstream_gen:
       - $JOB_TYPE == "bitstream_gen_chisel_p1"
 
 CHSL_P2_bitstream_gen:
-  timeout: 2h
+  timeout: 6h
   script:
     - ./setup_soc_project.sh chisel_p2
     - ./build.sh chisel_p2
@@ -497,7 +497,7 @@ CHSL_P2_bitstream_gen:
       - $JOB_TYPE == "bitstream_gen_chisel_p2"
 
 CHSL_P2_PCIE_bitstream_gen:
-  timeout: 2h
+  timeout: 6h
   script:
     - ./setup_soc_project.sh chisel_p2_pcie
     - ./build.sh chisel_p2_pcie
@@ -517,7 +517,7 @@ CHSL_P2_PCIE_bitstream_gen:
       - $JOB_TYPE == "bitstream_gen_chisel_p2"
 
 CHSL_P3_bitstream_gen:
-  timeout: 2h
+  timeout: 6h
   script:
     - ./setup_soc_project.sh chisel_p3
     - ./build.sh chisel_p3
@@ -537,7 +537,7 @@ CHSL_P3_bitstream_gen:
       - $JOB_TYPE == "bitstream_gen_chisel_p3"
 
 BSV_P1_bitstream_gen:
-  timeout: 1h
+  timeout: 6h
   script:
     - ./setup_soc_project.sh bluespec_p1
     - ./build.sh bluespec_p1
@@ -557,7 +557,7 @@ BSV_P1_bitstream_gen:
       - $JOB_TYPE == "bitstream_gen_bluespec_p1"
 
 BSV_P2_bitstream_gen:
-  timeout: 4h
+  timeout: 6h
   script:
     - ./setup_soc_project.sh bluespec_p2
     - ./build.sh bluespec_p2
@@ -577,7 +577,7 @@ BSV_P2_bitstream_gen:
       - $JOB_TYPE == "bitstream_gen_bluespec_p2"
 
 BSV_P2_PCIE_bitstream_gen:
-  timeout: 5h
+  timeout: 6h
   script:
     - ./setup_soc_project.sh bluespec_p2_pcie
     - ./build.sh bluespec_p2_pcie
