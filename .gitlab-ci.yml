@@ -348,21 +348,6 @@ CHSL_P3_isa:
     - ./pytest_processor.py chisel_p3 --isa
   extends: [.log_always, .no_sched, .fpga]
 
-CHSL_P3_flash:
-  timeout: 1h
-  script:
-    - ./pytest_processor.py chisel_p3 --freertos --flash
-  extends: [.log_always, .no_sched, .fpga]
-
-CHSL_P3_freertos:
-  timeout: 1h
-  script:
-    - ./pytest_processor.py chisel_p3 --freertos
-    - ./pytest_processor.py chisel_p3 --freertos --network
-    - ./pytest_processor.py chisel_p3 --freertos --compiler clang
-    - ./pytest_processor.py chisel_p3 --freertos --network --compiler clang
-  extends: [.log_always, .no_sched, .fpga]
-
 CHSL_P3_busybox:
   timeout: 1h
   script:
@@ -410,21 +395,6 @@ BSV_P3_isa:
   timeout: 1h
   script:
     - ./pytest_processor.py bluespec_p3 --isa
-  extends: [.log_always, .no_sched, .fpga]
-
-BSV_P3_flash:
-  timeout: 1h
-  script:
-    - ./pytest_processor.py bluespec_p3 --freertos --flash
-  extends: [.log_always, .no_sched, .fpga]
-
-BSV_P3_freertos:
-  timeout: 1h
-  script:
-    - ./pytest_processor.py bluespec_p3 --freertos
-    - ./pytest_processor.py bluespec_p3 --freertos --network
-    - ./pytest_processor.py bluespec_p3 --freertos --compiler clang
-    - ./pytest_processor.py bluespec_p3 --freertos --network --compiler clang
   extends: [.log_always, .no_sched, .fpga]
 
 BSV_P3_busybox:
