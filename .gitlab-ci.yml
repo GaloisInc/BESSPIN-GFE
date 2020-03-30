@@ -92,26 +92,47 @@ BSV_P3_sim:
 #-----------------------------------------------------------------------------#
 P1_benchmarks:
   script:
+    # Coremark
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 clean
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 link
     - ./pytest_processor.py bluespec_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
     - ./pytest_processor.py chisel_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+
+    # Mibench2
+    - benchmarks/mibench2/buildBenchmarks.sh P1 1
+    - for PROG in adpcm_decode adpcm_encode aes basicmath blowfish crc fft limits qsort randmath rc4; do ./pytest_processor.py chisel_p1 --elf benchmarks/mibench2/$PROG.elf --expected "Exit code 0" --absent "Failure" --timeout 60; done
+    - for PROG in adpcm_decode adpcm_encode aes basicmath blowfish crc fft limits qsort randmath rc4; do ./pytest_processor.py bluespec_p1 --elf benchmarks/mibench2/$PROG.elf --expected "Exit code 0" --absent "Failure" --timeout 60; done
+    - rm benchmarks/mibench2/*.elf
   extends: [.log_always, .no_sched, .fpga]
 
 P2_benchmarks:
   script:
+    # Coremark
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P2 ITERATIONS=3000 clean
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P2 ITERATIONS=3000 link
     - ./pytest_processor.py bluespec_p2  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
     - ./pytest_processor.py chisel_p2  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+    
+    # Mibench2
+    - benchmarks/mibench2/buildBenchmarks.sh P2 1
+    - for PROG in adpcm_decode adpcm_encode aes basicmath blowfish crc fft limits qsort randmath rc4; do ./pytest_processor.py chisel_p2 --elf benchmarks/mibench2/$PROG.elf --expected "Exit code 0" --absent "Failure" --timeout 60; done
+    - for PROG in adpcm_decode adpcm_encode aes basicmath blowfish crc fft limits qsort randmath rc4; do ./pytest_processor.py bluespec_p2 --elf benchmarks/mibench2/$PROG.elf --expected "Exit code 0" --absent "Failure" --timeout 60; done
+    - rm benchmarks/mibench2/*.elf
   extends: [.log_always, .no_sched, .fpga]
 
 P3_benchmarks:
   script:
+    # Coremark
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P3 ITERATIONS=1000 clean
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P3 ITERATIONS=1000 link
     - ./pytest_processor.py bluespec_p3  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
     - ./pytest_processor.py chisel_p3  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+  
+    # Mibench2
+    # - benchmarks/mibench2/buildBenchmarks.sh P3 1
+    # - for PROG in adpcm_decode adpcm_encode aes basicmath blowfish crc fft limits qsort randmath rc4; do ./pytest_processor.py chisel_p3 --elf benchmarks/mibench2/$PROG.elf --expected "Exit code 0" --absent "Failure" --timeout 60; done
+    # - for PROG in adpcm_decode adpcm_encode aes basicmath blowfish crc fft limits qsort randmath rc4; do ./pytest_processor.py bluespec_p3 --elf benchmarks/mibench2/$PROG.elf --expected "Exit code 0" --absent "Failure" --timeout 60; done
+    # - rm benchmarks/mibench2/*.elf
   extends: [.log_always, .no_sched, .fpga]
 
 #-----------------------#
