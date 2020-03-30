@@ -208,10 +208,7 @@ debian-startup-scripts:
 # besspin.dhcp_addr=1 enables network install
 # besspin.debian_repo=http://deb.debian.org/debian-ports/ is the url of the debian repo
 # (or a path to file in case we are booting offline)
-# Pinning to a particular repo snapshot because of broken libc (12/13/19)
-extraSetupArg?=besspin.debian_repo=https://snapshot.debian.org/archive/debian-ports/20191209T111800Z/ besspin.dhcp_addr=1 besspin.sysvinit=1
-# Revert once resolved
-#extraSetupArg?=besspin.debian_repo=http://deb.debian.org/debian-ports/ besspin.dhcp_addr=1
+extraSetupArg?=besspin.debian_repo=http://deb.debian.org/debian-ports/ besspin.dhcp_addr=1 besspin.sysvinit=1
 
 # Debian.cpio rootfs (uncompressed)
 # Run debian chainloader initramfs in QEMU and finish seting up the system via debootstrap
