@@ -913,6 +913,13 @@ TV-README.md.
 
 ## PCI Express Root Complex ##
 
+### PCIe-Enabled Bitstreams
+
+Two bistreams are provided - `chisel_p2_pcie.bit` and `bluespec_p2_pcie.bit`
+Note that the PCIe bitstreams can be run only with a full PCIe hardware setup (FMC Card + PCIe peripheral, or FMC Card + PCIe expansion set), having only
+the FMC card is not enough.
+
+
 ### PCIe Hardware Setup ###
 
 To utilize the PCIe root port, the following hardware setup is required:
