@@ -654,7 +654,34 @@ testgen:
 CHSL_P1_StressTest:
   timeout: 3h
   script:
-    - ./pytest_consistency.py 25 chisel_p1 --freertos --network --compiler clang
+    - ./pytest_consistency.py 25 chisel_p1 --freertos --network
+  extends: [.log_always, .fpga]
+  only:
+    variables:
+      - $JOB_TYPE == "stress"
+
+CHSL_P2_StressTest:
+  timeout: 3h
+  script:
+    - ./pytest_consistency.py 25 chisel_p2 --busybox --network
+  extends: [.log_always, .fpga]
+  only:
+    variables:
+      - $JOB_TYPE == "stress"
+
+BSV_P1_StressTest:
+  timeout: 3h
+  script:
+    - ./pytest_consistency.py 25 bluespec_p1 --freertos --network
+  extends: [.log_always, .fpga]
+  only:
+    variables:
+      - $JOB_TYPE == "stress"
+  
+BSV_P2_StressTest:
+  timeout: 3h
+  script:
+    - ./pytest_consistency.py 25 bluespec_p2 --busybox --network
   extends: [.log_always, .fpga]
   only:
     variables:
