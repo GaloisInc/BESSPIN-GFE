@@ -644,3 +644,18 @@ testgen:
         -F "tool_suite_url=$tool_suite_url"
         -F "tool_suite_rev=$tool_suite_rev"
         "$CI_API_V4_URL/projects/$testgen_id/trigger/pipeline"
+
+
+#-----------------------------------------------------------------------------#
+#
+# Stress test
+#
+#-----------------------------------------------------------------------------#
+CHSL_P1_StressTest:
+  timeout: 3h
+  script:
+    - ./pytest_consistency.py 25 chisel_p1 --freertos --network --compiler clang
+  extends: [.log_always, .fpga]
+  only:
+    variables:
+      - $JOB_TYPE == "stress"
