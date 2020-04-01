@@ -47,6 +47,9 @@ variables:
 .fpga_pcie:
   tags: ["docker-fpga-pcie"]
 
+.fpga_network:
+  tags: ["docker-fpga-network"]
+
 .no_sched:
   except: ["schedules"]
 
@@ -151,10 +154,15 @@ BSV_P1_freertos:
   timeout: 1h
   script:
     - ./pytest_processor.py bluespec_p1 --freertos
-    - ./pytest_processor.py bluespec_p1 --freertos --network
     - ./pytest_processor.py bluespec_p1 --freertos --compiler clang
-    - ./pytest_processor.py bluespec_p1 --freertos --network --compiler clang
   extends: [.log_always, .no_sched, .fpga]
+
+BSV_P1_network:
+  timeout: 1h
+  script:
+    - ./pytest_processor.py bluespec_p1 --freertos --network
+    - ./pytest_processor.py bluespec_p1 --freertos --network --compiler clang
+  extends: [.log_always, .no_sched, .fpga_network]
 
 #-----------------------#
 #                       #
@@ -184,84 +192,15 @@ CHSL_P1_freertos:
   timeout: 1h
   script:
     - ./pytest_processor.py chisel_p1 --freertos
-    - ./pytest_processor.py chisel_p1 --freertos --network
     - ./pytest_processor.py chisel_p1 --freertos --compiler clang
+  extends: [.log_always, .no_sched, .fpga]
+
+CHSL_P1_network:
+  timeout: 1h
+  script:
+    - ./pytest_processor.py chisel_p1 --freertos --network
     - ./pytest_processor.py chisel_p1 --freertos --network --compiler clang
-  extends: [.log_always, .no_sched, .fpga]
-
-#-----------------------#
-#                       #
-#     Chisel P2
-#                       #
-#-----------------------#
-CHSL_P2_isa:
-  timeout: 1h
-  script:
-    - ./pytest_processor.py chisel_p2 --isa
-  extends: [.log_always, .no_sched, .fpga]
-
-CHSL_P2_flash:
-  timeout: 1h
-  script:
-    - ./pytest_processor.py chisel_p2 --freertos --flash
-  extends: [.log_always, .no_sched, .fpga]
-
-CHSL_P2_freertos:
-  timeout: 1h
-  script:
-    - ./pytest_processor.py chisel_p2 --freertos
-    - ./pytest_processor.py chisel_p2 --freertos --network
-    - ./pytest_processor.py chisel_p2 --freertos --compiler clang
-    - ./pytest_processor.py chisel_p2 --freertos --network --compiler clang
-  extends: [.log_always, .no_sched, .fpga]
-
-CHSL_P2_busybox:
-  timeout: 1h
-  script:
-    - ./pytest_processor.py chisel_p2 --busybox --network
-  extends: [.log_always, .no_sched, .fpga]
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - bootmem/
-
-CHSL_P2_PCIE_busybox:
-  timeout: 1h
-  script:
-    - ./pytest_processor.py chisel_p2_pcie --busybox --network
-  extends: [.log_always, .no_sched, .fpga_pcie]
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - bootmem/
-
-CHSL_P2_freebsd:
-  timeout: 1h
-  script:
-    - ./pytest_processor.py chisel_p2 --freebsd
-  extends: [.log_always, .fpga]
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - freebsd/world
-      - freebsd/obj
-      - freebsd/freebsd.bbl
-  only:
-    variables:
-      - $JOB_TYPE == "linux"
-
-# CHSL_P2_debian:
-#   script:
-#     - ./pytest_processor.py chisel_p2 --debian
-#   tags: ["fpga-pcie"]
-#   cache:
-#     key: ${CI_COMMIT_REF_SLUG}
-#     paths:
-#       - debian/riscv64-chroot.tar
-#       - bootmem/
-#   only:
-#     variables:
-#       - $JOB_TYPE == "linux"
+  extends: [.log_always, .no_sched, .fpga_network]
 
 #-----------------------#
 #                       #
@@ -284,10 +223,15 @@ BSV_P2_freertos:
   timeout: 1h
   script:
     - ./pytest_processor.py bluespec_p2 --freertos
-    - ./pytest_processor.py bluespec_p2 --freertos --network
     - ./pytest_processor.py bluespec_p2 --freertos --compiler clang
-    - ./pytest_processor.py bluespec_p2 --freertos --network --compiler clang
   extends: [.log_always, .no_sched, .fpga]
+
+BSV_P2_network:
+  timeout: 1h
+  script:
+    - ./pytest_processor.py bluespec_p2 --freertos --network
+    - ./pytest_processor.py bluespec_p2 --freertos --network --compiler clang
+  extends: [.log_always, .no_sched, .fpga_network]
 
 BSV_P2_busybox:
   timeout: 1h
@@ -327,6 +271,86 @@ BSV_P2_freebsd:
 # BSV_P2_debian:
 #   script:
 #     - ./pytest_processor.py bluespec_p2 --debian
+#   tags: ["fpga-pcie"]
+#   cache:
+#     key: ${CI_COMMIT_REF_SLUG}
+#     paths:
+#       - debian/riscv64-chroot.tar
+#       - bootmem/
+#   only:
+#     variables:
+#       - $JOB_TYPE == "linux"
+
+#-----------------------#
+#                       #
+#     Chisel P2
+#                       #
+#-----------------------#
+CHSL_P2_isa:
+  timeout: 1h
+  script:
+    - ./pytest_processor.py chisel_p2 --isa
+  extends: [.log_always, .no_sched, .fpga]
+
+CHSL_P2_flash:
+  timeout: 1h
+  script:
+    - ./pytest_processor.py chisel_p2 --freertos --flash
+  extends: [.log_always, .no_sched, .fpga]
+
+CHSL_P2_freertos:
+  timeout: 1h
+  script:
+    - ./pytest_processor.py chisel_p2 --freertos
+    - ./pytest_processor.py chisel_p2 --freertos --compiler clang
+  extends: [.log_always, .no_sched, .fpga]
+
+CHSL_P2_network:
+  timeout: 1h
+  script:
+    - ./pytest_processor.py chisel_p2 --freertos --network
+    - ./pytest_processor.py chisel_p2 --freertos --network --compiler clang
+  extends: [.log_always, .no_sched, .fpga_network]
+
+
+CHSL_P2_busybox:
+  timeout: 1h
+  script:
+    - ./pytest_processor.py chisel_p2 --busybox --network
+  extends: [.log_always, .no_sched, .fpga]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - bootmem/
+
+CHSL_P2_PCIE_busybox:
+  timeout: 1h
+  script:
+    - ./pytest_processor.py chisel_p2_pcie --busybox --network
+  extends: [.log_always, .no_sched, .fpga_pcie]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - bootmem/
+
+CHSL_P2_freebsd:
+  timeout: 1h
+  script:
+    - ./pytest_processor.py chisel_p2 --freebsd
+  extends: [.log_always, .fpga]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - freebsd/world
+      - freebsd/obj
+      - freebsd/freebsd.bbl
+  only:
+    variables:
+      - $JOB_TYPE == "linux"
+
+# CHSL_P2_debian:
+#   script:
+#     - ./pytest_processor.py chisel_p2 --debian
 #   tags: ["fpga-pcie"]
 #   cache:
 #     key: ${CI_COMMIT_REF_SLUG}
