@@ -423,7 +423,7 @@ def test_freertos_network(uart, config, prog_name):
 
 # Netboot loader
 # Similar to network test
-def load_netboot(config, path_to_elf, timeout, expected_contents=[], absent_contents=[]):
+def load_netboot(config, path_to_elf, timeout, expected_contents=[], absent_contents=[], interactive):
     print_and_log("Loading netboot")
 
     gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
@@ -444,7 +444,14 @@ def load_netboot(config, path_to_elf, timeout, expected_contents=[], absent_cont
     rx = uart.read(10)
     print_and_log(rx)
 
-    res, rx = uart.read_and_check(timeout, expected_contents, absent_contents)
+    if interactive:
+        while True:
+            cmd = input()
+            uart.send(cmd.encode() + b'\r')
+            rx = uart.read(1)
+            print(rx)
+    else:
+        res, rx = uart.read_and_check(timeout, expected_contents, absent_contents)
     del gdb
     del uart
 
@@ -453,13 +460,13 @@ def load_netboot(config, path_to_elf, timeout, expected_contents=[], absent_cont
 
 
 # Wrapper for loading a binary
-def load_elf(config, path_to_elf, timeout, expected_contents=[], absent_contents=[]):
+def load_elf(config, path_to_elf, timeout, expected_contents=[], absent_contents=[], interactive):
     print_and_log("Load and run binary: " + path_to_elf)
     
     gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
     uart = UartSession()
     
-    res, _rx = basic_tester(gdb, uart, args.elf, int(args.timeout), expected, absent)
+    res, _rx = basic_tester(gdb, uart, args.elf, int(args.timeout), expected, absent, interactive)
     
     del uart
     del gdb
@@ -469,7 +476,7 @@ def load_elf(config, path_to_elf, timeout, expected_contents=[], absent_contents
 
 
 # Generic basic tester
-def basic_tester(gdb, uart, exe_filename, timeout, expected_contents=[], absent_contents=[]):
+def basic_tester(gdb, uart, exe_filename, timeout, expected_contents=[], absent_contents=[], interactive=False):
     print_and_log('Starting basic tester using ' + exe_filename)
     soft_reset_cmd = 'set *((int *) 0x6FFF0000) = 1'
 
@@ -492,7 +499,14 @@ def basic_tester(gdb, uart, exe_filename, timeout, expected_contents=[], absent_
     print_and_log("Continuing")
     gdb.cont()
 
-    res, rx = uart.read_and_check(timeout, expected_contents, absent_contents)
+    if interactive:
+        while True:
+            cmd = input()
+            uart.send(cmd.encode() + b'\r')
+            rx = uart.read(1)
+            print(rx)
+    else:
+        res, rx = uart.read_and_check(timeout, expected_contents, absent_contents)
     if res:
         print_and_log('PASS')
         return True, rx
@@ -776,6 +790,7 @@ def test_init():
     parser.add_argument("--absent", help="specify absent output of the binary specifed in the --elf argument. Absent content should not be present." +
         "Can be multiple arguments comma separated: \"c1,c2,c3...\"",default="None")
     parser.add_argument("--simulator", help="run in verilator",action="store_true")
+    parser.add_argument("--interactive","-i" help="run interactively",action="store_true")
     parser.add_argument("--keep-log", help="Don't erase the log file at the beginning of session",action="store_true")
     args = parser.parse_args()
 
@@ -821,9 +836,9 @@ if __name__ == '__main__':
         else:
             absent = args.absent.split(',')
         if args.netboot:
-            load_netboot(config, args.elf, int(args.timeout), expected, absent)
+            load_netboot(config, args.elf, int(args.timeout), expected, absent, args.interactive)
         else:
-            load_elf(config, args.elf, int(args.timeout), expected, absent)
+            load_elf(config, args.elf, int(args.timeout), expected, absent, args.interactive)
 
     if args.isa:
         test_isa(config)
