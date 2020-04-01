@@ -29,15 +29,15 @@ apt-get update
 apt-get install -y clang-11 lldb-11 lld-11 clangd-11
 
 # Set llvm symlinks and variables
-rm /usr/bin/clang
+rm -rf /usr/bin/clang
 ln -s /usr/bin/clang-11 /usr/bin/clang
-rm llvm-objcopy
+rm -rf llvm-objcopy
 ln -s /usr/bin/llvm-objcopy-11 llvm-objcopy
-rm llvm-objdump
+rm -rf llvm-objdump
 ln -s /usr/bin/llvm-objdump-11 llvm-objdump
-rm llvm-ar
+rm -rf llvm-ar
 ln -s /usr/bin/llvm-ar-11 llvm-ar
-rm llvm-ranlib
+rm -rf llvm-ranlib
 ln -s /usr/bin/llvm-ranlib-11 llvm-ranlib
 
 # Instal dependencies for FreeBSD

@@ -8,7 +8,10 @@ set -e
 debian_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 setup_scripts_dir="${debian_dir}/setup_scripts"
 
-"${setup_scripts_dir}/exclude_docs.sh"
+# NOTE: not excluding docs, because the script fails to build as such
+# As a result we have a larger binary that might not fit into flash
+#"${setup_scripts_dir}/exclude_docs.sh"
+echo "Skipping exclude_docs.sh - this might lead to a larger binary"
 "${setup_scripts_dir}/install_important.sh"
 
 # Install an init system.

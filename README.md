@@ -4,7 +4,7 @@
 
 Source files and build scripts for generating and testing the GFE for SSITH.
 
-Please refer to the [GFE System Description pdf](GFE_Rel5.0_System_Description.pdf)
+Please refer to the [GFE System Description pdf](GFE_Rel5.1_System_Description.pdf)
 for a high-level overview of the system.
 
 ## Release Schedule ##
@@ -912,6 +912,13 @@ Information about these activities may be found in the separate document
 TV-README.md.
 
 ## PCI Express Root Complex ##
+
+### PCIe-Enabled Bitstreams
+
+Two bistreams are provided - `chisel_p2_pcie.bit` and `bluespec_p2_pcie.bit`
+Note that the PCIe bitstreams can be run only with a full PCIe hardware setup (FMC Card + PCIe peripheral, or FMC Card + PCIe expansion set), having only
+the FMC card is not enough.
+
 
 ### PCIe Hardware Setup ###
 
