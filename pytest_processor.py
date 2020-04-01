@@ -423,7 +423,7 @@ def test_freertos_network(uart, config, prog_name):
 
 # Netboot loader
 # Similar to network test
-def load_netboot(config, path_to_elf, timeout, expected_contents=[], absent_contents=[], interactive):
+def load_netboot(config, path_to_elf, timeout, interactive, expected_contents=[], absent_contents=[]):
     print_and_log("Loading netboot")
 
     gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
@@ -460,7 +460,7 @@ def load_netboot(config, path_to_elf, timeout, expected_contents=[], absent_cont
 
 
 # Wrapper for loading a binary
-def load_elf(config, path_to_elf, timeout, expected_contents=[], absent_contents=[], interactive):
+def load_elf(config, path_to_elf, timeout, interactive, expected_contents=[], absent_contents=[]):
     print_and_log("Load and run binary: " + path_to_elf)
     
     gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
@@ -836,9 +836,9 @@ if __name__ == '__main__':
         else:
             absent = args.absent.split(',')
         if args.netboot:
-            load_netboot(config, args.elf, int(args.timeout), expected, absent, args.interactive)
+            load_netboot(config, args.elf, int(args.timeout), args.interactive, expected, absent)
         else:
-            load_elf(config, args.elf, int(args.timeout), expected, absent, args.interactive)
+            load_elf(config, args.elf, int(args.timeout), args.interactive, expected, absent)
 
     if args.isa:
         test_isa(config)
