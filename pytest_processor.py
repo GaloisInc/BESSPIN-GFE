@@ -790,7 +790,7 @@ def test_init():
     parser.add_argument("--absent", help="specify absent output of the binary specifed in the --elf argument. Absent content should not be present." +
         "Can be multiple arguments comma separated: \"c1,c2,c3...\"",default="None")
     parser.add_argument("--simulator", help="run in verilator",action="store_true")
-    parser.add_argument("--interactive","-i" help="run interactively",action="store_true")
+    parser.add_argument("--interactive","-i", help="run interactively",action="store_true")
     parser.add_argument("--keep-log", help="Don't erase the log file at the beginning of session",action="store_true")
     args = parser.parse_args()
 
