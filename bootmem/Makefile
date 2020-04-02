@@ -205,10 +205,10 @@ debian-startup-scripts:
 #
 # Arguments:
 # besspin.sysvinit=1 to use sysvinit instead of systemd
-# besspin.dhcp_addr=1 enables network install
+# besspin.dhcp_addr=1 enables QEMU network install
 # besspin.debian_repo=http://deb.debian.org/debian-ports/ is the url of the debian repo
 # (or a path to file in case we are booting offline)
-extraSetupArg?=besspin.debian_repo=http://deb.debian.org/debian-ports/ besspin.dhcp_addr=1 besspin.sysvinit=1
+extraSetupArg?=besspin.debian_repo=http://deb.debian.org/debian-ports/ besspin.dhcp_addr=1
 
 # Debian.cpio rootfs (uncompressed)
 # Run debian chainloader initramfs in QEMU and finish seting up the system via debootstrap
