@@ -4,7 +4,7 @@
 
 Source files and build scripts for generating and testing the GFE for SSITH.
 
-Please refer to the [GFE System Description pdf](GFE_Rel5.1_System_Description.pdf)
+Please refer to the [GFE System Description pdf](GFE_Rel5.2_System_Description.pdf)
 for a high-level overview of the system.
 
 ## Release Schedule ##
