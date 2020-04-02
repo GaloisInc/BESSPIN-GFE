@@ -446,6 +446,8 @@ def load_netboot(config, path_to_elf, timeout, interactive, expected_contents=[]
 
     if interactive:
         while True:
+            # TODO: this waits indefinitely for input, which is not great
+            # Attempt to improve with https://stackoverflow.com/a/10079805
             cmd = input()
             uart.send(cmd.encode() + b'\r')
             rx = uart.read(1)
@@ -501,6 +503,8 @@ def basic_tester(gdb, uart, exe_filename, timeout, expected_contents=[], absent_
 
     if interactive:
         while True:
+            # TODO: this waits indefinitely for input, which is not great
+            # Attempt to improve with https://stackoverflow.com/a/10079805
             cmd = input()
             uart.send(cmd.encode() + b'\r')
             rx = uart.read(1)
