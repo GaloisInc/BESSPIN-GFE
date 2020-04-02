@@ -18,17 +18,17 @@ ELF_TO_HEX=$BASE_DIR/TV-hostside/elf_to_hex
 TEST_DIR=$BASE_DIR/riscv-tests
 RESULTS_DIR_BASE=Logs/$PROCNAME
 PF='pass fail'
+
 if [ `echo $PROCNAME | grep -c "_p1"` -gt 0 ]; then
-    #echo "RV32 test"
     XLEN=32
-    TRACE_CHECKER=$BASE_DIR/TV-hostside/TV-trace_checker_p1
     BOOTROM=TV_bootrom_P1.hex
 else
-    #echo "RV64 test"
     XLEN=64
-    TRACE_CHECKER=$BASE_DIR/TV-hostside/TV-trace_checker_p2
     BOOTROM=TV_bootrom_P2.hex
 fi
+
+TRACE_CHECKER=$BASE_DIR/TV-hostside/TV-trace_checker_$PROCNAME
+echo "Checker is TV-trace_checker_$PROCNAME"
 
 OUTDIR=./tmp
 mkdir -p $OUTDIR
@@ -65,7 +65,6 @@ for e in $PF; do
 	    -b $BOOTROM \
 	    -m $TEST_MEMHEX \
 	    --start-pc 0x70000000 \
-	    --engine-verbosity 1 \
 	    $RESULTS_DIR_BASE/$e/$f \
 	    >$TEST_TV_LOG 2>&1
 	if [ $? -ne 0 ]; then

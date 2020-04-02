@@ -14,7 +14,7 @@ export XCPP=/usr/bin/clang-cpp-11
 export XLD=/usr/bin/ld.lld-11
 export XOBJDUMP=/usr/bin/llvm-objdump-11
 export XOBJCOPY=/usr/bin/llvm-objcopy-11
-export XCFLAGS=-fuse-ld=/usr/bin/ld.lld-11 -Qunused-arguments
+export XCFLAGS=-fuse-ld=/usr/bin/ld.lld-11 -Qunused-arguments -fcommon
 
 # Directory with freebsd repo
 FREEBSD_DIR = cheribsd
@@ -27,7 +27,7 @@ OBJ_DIR = $(CURDIR)/obj
 export MAKEOBJDIRPREFIX=$(OBJ_DIR)
 
 # Define compilation flags
-FLAGS=-DDB_FROM_SRC -DNO_ROOT -DBUILD_WITH_STRICT_TMPPATH TARGET=riscv \
+FLAGS= -DDB_FROM_SRC -DNO_ROOT -DBUILD_WITH_STRICT_TMPPATH TARGET=riscv \
 	TARGET_ARCH=riscv64 -DNO_WERROR WERROR= -DWITHOUT_TESTS -DWITHOUT_MAN \
 	-DWITHOUT_MAIL -DWITHOUT_VT -DWITHOUT_DEBUG_FILES -DWITHOUT_BOOT -DWITH_AUTO_OBJ \
 	-DWITHOUT_GCC_BOOTSTRAP -DWITHOUT_CLANG_BOOTSTRAP -DWITHOUT_LLD_BOOTSTRAP \

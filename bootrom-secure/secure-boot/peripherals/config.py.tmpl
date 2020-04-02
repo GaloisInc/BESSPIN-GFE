@@ -1,0 +1,19 @@
+from lib import *
+
+from ethernet import Ethernet
+from uart import UART
+from dram import DRAM
+from flash_os import Flash_OS
+
+RAM_DEVICE = DRAM(base=0xC0000000, size=0x40000000)
+DEVICES = [
+    Ethernet(base=0x62100000, size=256 * 1024),
+    UART(base=0x62300000, size=4 * 1024),
+    Flash_OS(flash_base=0x44000000, ram_base=0xC0000000, size=<SIZE>,
+             sha256sum=0x<SHA256SUM>,
+             ram_device=RAM_DEVICE)
+]
+BOOT_ADDRESS=0xC0000000
+
+if __name__ == '__main__':
+    peripherals_config(DEVICES, BOOT_ADDRESS)

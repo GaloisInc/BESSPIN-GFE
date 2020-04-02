@@ -7,7 +7,7 @@ home=$(pwd)
 git submodule sync
 
 git submodule update --init benchmarks/coremark
-
+git submodule update --init benchmarks/mibench2
 git submodule update --init riscv-openocd
 
 git submodule update --init riscv-tests

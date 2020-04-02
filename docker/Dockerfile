@@ -54,13 +54,17 @@ RUN apt install -y libglib2.0-dev libpixman-1-dev libarchive-dev bsdtar libbz2-d
 
 # RISC-V toolchains (both linux and newlib versions):
 # Set PATH for RISCV-tools and LLVM Sysroot
-ADD riscv-gnu-toolchains.tar.gz /
+ADD riscv-gnu-toolchains.tar.gz /opt
 ENV RISCV="/opt/riscv"
 ENV PATH="/opt/riscv/bin:${PATH}"
 ENV RISCV_C_INCLUDE_PATH="/opt/riscv/riscv64-unknown-elf/include"
 
 # OpenOCD dependencies
 RUN apt-get install -y libftdi1-2 libusb-1.0-0-dev libtool pkg-config texinfo
+
+# Install and configure TFTP server
+RUN apt-get install -y atftpd
+RUN chmod 777 /srv/tftp
 
 WORKDIR /gfe
 

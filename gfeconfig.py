@@ -33,6 +33,22 @@ def check_environment():
         run(['which',program], stdout=PIPE, stderr=PIPE,check=True)
     return True
 
+# Run command and log it
+# Raise a runtime exception if it fails
+def run_and_check(cmd, res, expected_contents=None):
+    print(cmd)
+    res_stdout = str(res.stdout,'utf-8')
+    print(res_stdout)
+    if expected_contents:
+        if expected_contents in res_stdout:
+            res.returncode = 0
+        else:
+            res.returncode = 1
+    if res.returncode != 0:
+        print(str(res.stderr,'utf-8'))
+        msg = str("Running command failed: " + cmd + " Check test_processor.log for more details.")
+        raise RuntimeError(msg)
+    return res_stdout
 
 class Config(object):
     # General test config
@@ -40,6 +56,16 @@ class Config(object):
     xarch = None
     compiler = None
     openocd_config_filename='./testing/targets/ssith_gfe.cfg'
+
+    bootmem_folder = 'bootmem'
+    bootmem_binary  = 'bootmem.bin'
+    bootmem_path = bootmem_folder + '/' + bootmem_binary
+
+    flash_prog_name = 'main_blinky'
+
+    # Netboot config
+    netboot_folder = '/srv/tftp/'
+    netboor_server_ip = '10.88.88.1'
 
     # FreeRTOS config
     freertos_basic_tests = ['main_blinky']
@@ -89,6 +115,11 @@ class Config(object):
             # this should never happen
             raise ValueError('Unknown processor ' + args.proc_name)
         
+        if args.compiler == "clang":
+            self.use_clang="yes"
+        else:
+            self.use_clang="no"
+
         self.get_freertos_config()
         self.get_busybox_config()
         self.get_freebsd_config()
@@ -138,6 +169,8 @@ class Config(object):
         main_sd = ["Root opened"]
         main_udp = ["IP Address:"]
         main_tcp = ["IP Address:"]
+        main_netboot = [">"]
+        main_netboot_absent = ["Error"]
 
         expected_contents = {'main_blinky': main_blinky,
                             'main_full': main_full,
@@ -146,7 +179,8 @@ class Config(object):
                             'main_rtc': main_rtc,
                             'main_sd': main_sd,
                             'main_udp': main_udp,
-                            'main_tcp': main_tcp}
+                            'main_tcp': main_tcp,
+                            'main_netboot': main_netboot}
 
         absent_contents = {'main_blinky': [],
                             'main_full': main_full_absent,
@@ -155,7 +189,8 @@ class Config(object):
                             'main_rtc': [],
                             'main_sd': [],
                             'main_udp': [],
-                            'main_tcp': []}
+                            'main_tcp': [],
+                            'main_netboot': main_netboot_absent}
 
         timeouts = {'main_blinky': 10,
                     'main_full': 10,
@@ -164,7 +199,8 @@ class Config(object):
                     'main_rtc': 10,
                     'main_sd': 10,
                     'main_udp': 30,
-                    'main_tcp': 30}
+                    'main_tcp': 30,
+                    'main_netboot': 30}
 
         self.freertos_expected_contents = expected_contents
         self.freertos_absent_contents = absent_contents

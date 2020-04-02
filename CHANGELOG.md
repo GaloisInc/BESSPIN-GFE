@@ -1,5 +1,15 @@
 # Changelog
 
+## v5.2 (2020-04-01)
+Fixed issues:
+* #210 P2 SoCs don't boot Linux/Busybox when built with device trees that contain PCI
+* #197 BUG: BSV P1/P2 Cache Lines Set To Valid Even On Fault
+* #181 BUG: Minor BSV P1/P2 Debug Module Issues
+* #179 Building BSV P3 fails
+* #167 Chisel P2 Doesn't Read Flash Correctly
+* #166 Verilator Bluespec processor testbench
+* #147 Building P3 with Chipyard
+
 ## v5.1 (2020-02-20)
 * Updated GFE with final SVF  block
 * Released latest version of Bluespec P3 for initial integration (gdb is intermittent, under debug)
