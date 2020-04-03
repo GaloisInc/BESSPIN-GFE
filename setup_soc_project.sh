@@ -70,7 +70,11 @@ case "$proc_name" in
 	make --always-make XLEN=64 CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=100000000 NO_PCI=$no_xdma
 	clock_freq_mhz=100
 	;;
-    *p3)
+    bluespec_p3)
+	make --always-make XLEN=64 CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=25000000 RTC_FREQ=250000 NO_PCI=$no_xdma
+	clock_freq_mhz=25
+	;;
+    chisel_p3)
 	make --always-make XLEN=64 CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=25000000 NO_PCI=$no_xdma
 	clock_freq_mhz=25
 	;;
