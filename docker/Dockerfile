@@ -56,7 +56,7 @@ RUN apt install -y libglib2.0-dev libpixman-1-dev libarchive-dev bsdtar libbz2-d
 # Set PATH for RISCV-tools and LLVM Sysroot
 ADD riscv-gnu-toolchains.tar.gz /opt
 ENV RISCV="/opt/riscv"
-ENV PATH="/opt/riscv/bin:${PATH}"
+ENV PATH="/opt/riscv/bin:/opt/riscv-freebsd/bin:${PATH}"
 ENV RISCV_C_INCLUDE_PATH="/opt/riscv/riscv64-unknown-elf/include"
 
 # OpenOCD dependencies

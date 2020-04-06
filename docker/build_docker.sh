@@ -46,8 +46,7 @@ fi
 echo "[$DATETIME] deps installation in progress."
 $SUDO docker exec -u 0 $CONTAINER_NAME /bin/sh -c "ssh-keyscan gitlab-ext.galois.com >> /root/.ssh/known_hosts"
 # Build and install OpenOCD
-$SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "cd /gfe/riscv-openocd && ./bootstrap"
-$SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "cd /gfe/riscv-openocd && ./configure --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi && make && make install"
+$SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "/gfe/install/build-openocd.sh"
 
 if [[ $? -ne 0 ]]
 then
