@@ -161,6 +161,7 @@ set_property "ip_repo_paths" [list \
  "[file normalize "../param_iobuf"]" \
  "[file normalize "../svf"]" \
  "[file normalize "../gte4"]" \
+ "[file normalize "../hsm"]" \
  ] $obj
 
 # Generate block diagram

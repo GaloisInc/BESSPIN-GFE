@@ -310,3 +310,15 @@ set_clock_groups -name async90 -asynchronous -group [get_clocks mmcm_clkout1] -g
 
 # Not to be used for bluespec_p3, so moved to other individual constraints files:
 # set_property USER_SLR_ASSIGNMENT SLR0 [get_cells ssith_processor_0]
+
+# AES Key Timing
+set keypins [get_pins -of [get_cells -hier -filter {NAME =~ *aes256*keyReg_reg*}] -filter {REF_PIN_NAME =~ C}]
+set_multicycle_path 8 -setup -from $keypins
+set_multicycle_path 7 -hold -from $keypins
+
+# SHA/HMAC Message Length
+set lenpins [get_pins -of [get_cells -hier -filter {NAME =~ *HSM*dataLenReg_reg*}] -filter {REF_PIN_NAME =~ C}]
+set_multicycle_path 8 -setup -from $lenpins
+set_multicycle_path 7 -hold -from $lenpins
+# No need to check hold between the dataLenReg and the divided-down clock. Data is held constant over a long period of time
+set_false_path -hold -from $lenpins -to [get_clocks mmcm_clkout3]
