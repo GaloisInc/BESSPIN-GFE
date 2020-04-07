@@ -45,11 +45,15 @@ fi
 echo "Bulding FreeBSD sysroot"
 cd freebsd
 make clean
-make
+TOOLCHAIN= make $PWD/world
 cd ..
-SYSROOT=`realpath freebsd/world`
+SYSROOT=/opt/riscv-freebsd/sysroot
 OSREL=12.1
 echo "SYSROOT=$SYSROOT, OSREL=$OSREL"
+
+# Copy sysroot
+mkdir -p $SYSROOT/usr
+cp -r freebsd/world/usr/lib freebsd/world/usr/include $SYSROOT/usr
 
 echo "Bulding FreeBSD toolchain"
 # Clone the repo, name it different from standard riscv-gnu-toolchain
