@@ -671,55 +671,16 @@ def test_freebsd(config, args):
     build_freebsd(config)
 
     uart = UartSession()
-    gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
-    
-    print_and_log("FreeBSD basic test")
 
+    print_and_log("FreeBSD basic test")
+    gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
     res, _val = basic_tester(gdb, uart, config.freebsd_filename_bbl, \
                 config.freebsd_timeouts['boot'], config.freebsd_expected_contents['boot'], \
                 config.freebsd_absent_contents['boot'])
-    
     if res == True:
         print_and_log("FreeBSD basic test passed")
     else:
         raise RuntimeError("FreeBSD basic test failed")
-    
-    print_and_log("FreeBSD network test [WIP!]")
-
-    # # Copied from BuzyBox net test
-    # # Get the name of ethernet interface
-    #     cmd = b'ip a | grep "eth.:" -o \r'
-    #     print_and_log(cmd)
-    #     uart.send(cmd)
-    #     rx = uart.read(3)
-    #     print_and_log(rx)
-    #     if "eth1" in rx:
-    #         cmd1 = b'ip addr add 10.88.88.2/24 broadcast 10.88.88.255 dev eth1\r'
-    #         cmd2 = b'ip link set eth1 up\r'
-    #     else:
-    #         cmd1 = b'ip addr add 10.88.88.2/24 broadcast 10.88.88.255 dev eth0\r'
-    #         cmd2 = b'ip link set eth0 up\r'
-    #     print_and_log(cmd1)
-    #     uart.send(cmd1)
-    #     print_and_log(cmd2)
-    #     uart.send(cmd2)
-    #     cmd3 = b'ip a\r'
-    #     print_and_log(cmd3)
-    #     uart.send(cmd3)
-
-    #     if not uart.read_and_check(120, config.busybox_expected_contents['ping'])[0]:
-    #         raise RuntimeError("Busybox network test failed: cannot bring up eth interface")
-
-    #     print_and_log("Ping FPGA")
-    #     riscv_ip = "10.88.88.2"
-    #     ping_result = run(['ping','-c','10',riscv_ip], stdout=PIPE, stderr=PIPE)
-    #     print_and_log(str(ping_result.stdout,'utf-8'))
-    #     if ping_result.returncode != 0:
-    #         raise RuntimeError("Busybox network test failed: cannot ping the FPGA")
-    #     else:
-    #         print_and_log("Ping OK")
-
-
     del uart
     del gdb
 
@@ -792,78 +753,6 @@ def test_busybox(config, args):
     del gdb
     del uart
 
-# Debian tests
-def test_debian(config, args):
-    print_and_log("Running debian tests")
-    
-    # No clang
-    if config.compiler == "clang":
-        raise RuntimeError("Clang compiler is not supported for building Debian tests yet")
-
-    pwd = run(['pwd'], stdout=PIPE, stderr=PIPE)
-    pwd = str(pwd.stdout,'utf-8').rstrip()
-    
-    if args.no_pcie:
-        debian_linux_config_path = pwd + '/' + config.debian_linux_config_path_no_pcie
-    else:
-        debian_linux_config_path = pwd + '/' + config.debian_linux_config_path
-
-    build_debian(config, debian_linux_config_path)
-
-    uart = UartSession()
-
-    print_and_log("Debian basic test")
-    gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
-    res, _val = basic_tester(gdb, uart, config.debian_filename_bbl, \
-                config.debian_timeouts['boot'], config.debian_expected_contents['boot'], \
-                config.debian_absent_contents['boot'])
-    if res == True:
-        print_and_log("Debian basic test passed")
-    else:
-        raise RuntimeError("Debian basic test failed")
-
-    if args.network:
-        print_and_log("Debian network test")
-    
-        # Send "Enter" to activate console
-        uart.send(b'\r')
-        time.sleep(1)
-
-        # Get the name of ethernet interface
-        cmd = b'ip a | grep "eth.:" -o \r'
-        print_and_log(cmd)
-        uart.send(cmd)
-        rx = uart.read(3)
-        print_and_log(rx)
-        if "eth1" in rx:
-            cmd1 = b'ip addr add 10.88.88.2/24 broadcast 10.88.88.255 dev eth1\r'
-            cmd2 = b'ip link set eth1 up\r'
-        else:
-            cmd1 = b'ip addr add 10.88.88.2/24 broadcast 10.88.88.255 dev eth0\r'
-            cmd2 = b'ip link set eth0 up\r'
-        print_and_log(cmd1)
-        uart.send(cmd1)
-        print_and_log(cmd2)
-        uart.send(cmd2)
-        cmd3 = b'ip a\r'
-        print_and_log(cmd3)
-        uart.send(cmd3)
-
-        if not uart.read_and_check(120, config.debian_expected_contents['ping'])[0]:
-            raise RuntimeError("Debian network test failed: cannot bring up eth interface")
-
-        print_and_log("Ping FPGA")
-        riscv_ip = "10.88.88.2"
-        ping_result = run(['ping','-c','10',riscv_ip], stdout=PIPE, stderr=PIPE)
-        print_and_log(str(ping_result.stdout,'utf-8'))
-        if ping_result.returncode != 0:
-            raise RuntimeError("Debian network test failed: cannot ping the FPGA")
-        else:
-            print_and_log("Ping OK")
-
-    del gdb
-    del uart
-
 # Common FreeBSD test part
 def build_freebsd(config):
     run_and_log(print_and_log("Cleaning freebsd"),
@@ -872,15 +761,6 @@ def build_freebsd(config):
     run_and_log(print_and_log("Building freebsd"),
         run(['make'],cwd=config.freebsd_folder,
         env=dict(os.environ), stdout=PIPE, stderr=PIPE))
-
-# Common debian test parts
-def build_debian(config, debian_linux_config_path):
-    run_and_log(print_and_log("Cleaning bootmem program directory"),
-        run(['make','clean'],cwd=config.debian_folder,
-        env=dict(os.environ, LINUX_CONFIG=debian_linux_config_path), stdout=PIPE, stderr=PIPE))
-    run_and_log(print_and_log("Compiling debian, this might take a while"),
-        run(['make'],cwd=config.debian_folder,
-        env=dict(os.environ, LINUX_CONFIG=debian_linux_config_path), stdout=PIPE, stderr=PIPE))
 
 # Common busybox test parts
 def build_busybox(config, linux_config_path):
