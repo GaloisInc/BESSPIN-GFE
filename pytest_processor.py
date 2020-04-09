@@ -897,6 +897,7 @@ def test_init():
     parser.add_argument("proc_name", help="processor to test [chisel_p1|chisel_p2|chisel_p3|bluespec_p1|bluespec_p2|bluespec_p3]")
     parser.add_argument("--isa", help="run ISA tests",action="store_true")
     parser.add_argument("--busybox", help="run Busybox OS",action="store_true")
+    parser.add_argument("--debian", help="run Debian OS",action="store_true")
     parser.add_argument("--linux", help="run Debian OS",action="store_true")
     parser.add_argument("--freertos", help="run FreeRTOS OS",action="store_true")
     parser.add_argument("--freebsd", help="run FreeBSD OS",action="store_true")
@@ -972,6 +973,9 @@ if __name__ == '__main__':
 
     if args.busybox:
         test_busybox(config, args)
+
+    if args.debian:
+        test_debian(config, args)
 
     if args.freebsd:
         test_freebsd(config, args)
