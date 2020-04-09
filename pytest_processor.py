@@ -875,7 +875,7 @@ def build_freebsd(config):
 
 # Common debian test parts
 def build_debian(config, debian_linux_config_path):
-    run_and_log(print_and_log("Cleaning bootmem program directory"),
+    run_and_log(print_and_log("Cleaning bootmem program directory. NOTE: will require sudo to run `sudo make clean`."),
         run(['sudo','make','clean'],cwd=config.debian_folder,
         env=dict(os.environ, LINUX_CONFIG=debian_linux_config_path), stdout=PIPE, stderr=PIPE))
     run_and_log(print_and_log("Compiling debian, this might take a while"),
