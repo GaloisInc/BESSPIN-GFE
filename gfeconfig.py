@@ -94,6 +94,8 @@ class Config(object):
     debian_linux_config_path = 'bootmem/debian-linux.config'
     debian_linux_config_path_no_pcie = 'bootmem/debian-linux-no-pcie.config'
     debian_filename_bbl = 'bootmem/build-debian-bbl/bbl'
+    debian_username = b'root\r'
+    debian_password = b'riscv\r'
 
     # FreeBSD config
     freebsd_expected_contents = None

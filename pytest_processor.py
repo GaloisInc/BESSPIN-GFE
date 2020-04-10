@@ -823,11 +823,20 @@ def test_debian(config, args):
         raise RuntimeError("Debian basic test failed")
 
     if args.network:
+        print_and_log("Logging in to Debian")
+
+        # Log in to Debian
+        uart.send(config.debian_username)
+        time.sleep(0.5)
+        uart.send(config.debian_password)
+        # Prompt takes some time to load before it can be used.
+        time.sleep(10)
+
         print_and_log("Debian network test")
     
         # Send "Enter" to activate console
-        uart.send(b'\r')
-        time.sleep(1)
+        # uart.send(b'\r')
+        # time.sleep(1)
 
         # Get the name of ethernet interface
         cmd = b'ip a | grep "eth.:" -o \r'
