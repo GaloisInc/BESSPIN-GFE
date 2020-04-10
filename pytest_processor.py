@@ -826,8 +826,8 @@ def test_debian(config, args):
         print_and_log("Logging in to Debian")
 
         # Send "Enter" to activate console
-        uart.send(b'\r')
-        time.sleep(1)
+        # uart.send(b'\r')
+        # time.sleep(1)
 
         # Log in to Debian
         uart.send(config.debian_username)
