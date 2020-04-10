@@ -825,6 +825,10 @@ def test_debian(config, args):
     if args.network:
         print_and_log("Logging in to Debian")
 
+        # Send "Enter" to activate console
+        uart.send(b'\r')
+        time.sleep(1)
+
         # Log in to Debian
         uart.send(config.debian_username)
         time.sleep(0.5)
@@ -833,11 +837,7 @@ def test_debian(config, args):
         time.sleep(10)
 
         print_and_log("Debian network test")
-    
-        # Send "Enter" to activate console
-        # uart.send(b'\r')
-        # time.sleep(1)
-
+        
         # Get the name of ethernet interface
         cmd = b'ip a | grep "eth.:" -o \r'
         print_and_log(cmd)
