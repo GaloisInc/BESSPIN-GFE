@@ -886,14 +886,14 @@ def build_freebsd(config):
 def build_debian(config, debian_linux_config_path):
     user = run("whoami", stdout=PIPE)
     if "root" in user.stdout.decode():
-        run_and_log(print_and_log("Cleaning bootmem program directory - this will prompt for sudo"),
+        run_and_log(print_and_log("Cleaning bootmem program directory"),
             run(['make','clean'],cwd=config.debian_folder,
             env=dict(os.environ, LINUX_CONFIG=debian_linux_config_path), stdout=PIPE, stderr=PIPE))
     else:
         run_and_log(print_and_log("Cleaning bootmem program directory - this will prompt for sudo"),
             run(['sudo','make','clean'],cwd=config.debian_folder,
             env=dict(os.environ, LINUX_CONFIG=debian_linux_config_path), stdout=PIPE, stderr=PIPE))
-        
+
     run_and_log(print_and_log("Compiling debian, this might take a while"),
         run(['make', 'debian'],cwd=config.debian_folder,
         env=dict(os.environ, LINUX_CONFIG=debian_linux_config_path), stdout=PIPE, stderr=PIPE))
