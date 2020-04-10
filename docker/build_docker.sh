@@ -18,10 +18,13 @@ echo "GFE_PATH=$GFE_PATH"
 
 # The existence of `riscv-gnu-toolchains.tar.gz` is dependent upon the
 # `download-toolchains.sh` shell script having been run successfully.
-(cd ../install; ./download-toolchains.sh)
+#(cd ../install; ./download-toolchains.sh)
 # Prepare build context
-rm -f riscv-gnu-toolchains.tar.gz
-cp ../install/riscv-gnu-toolchains.tar.gz .
+#rm -f riscv-gnu-toolchains.tar.gz
+#cp ../install/riscv-gnu-toolchains.tar.gz .
+# Prepare build context
+rm -rf deps.sh
+cp ../install/deps.sh .
 
 DATETIME=$(date +"%Y-%m-%d %T")
 
@@ -35,41 +38,47 @@ then
   exit 1
 fi
 
-echo "[$DATETIME] Create container $CONTAINER_NAME."
-$SUDO docker run -t -d -P -v $GFE_PATH:/gfe --name=$CONTAINER_NAME  --privileged master_image
-if [[ $? -ne 0 ]]
-then
-  echo "Error: Create container $CONTAINER_NAME."
-  exit 1
-fi
+# Clean up
+rm -rf deps.sh
 
-echo "[$DATETIME] deps installation in progress."
-$SUDO docker exec -u 0 $CONTAINER_NAME /bin/sh -c "ssh-keyscan gitlab-ext.galois.com >> /root/.ssh/known_hosts"
-# Build and install OpenOCD
-$SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "/gfe/install/build-openocd.sh"
+# echo "[$DATETIME] Create container $CONTAINER_NAME."
+# $SUDO docker run -t -d -P -v $GFE_PATH:/gfe --name=$CONTAINER_NAME  --privileged master_image
+# if [[ $? -ne 0 ]]
+# then
+#   echo "Error: Create container $CONTAINER_NAME."
+#   exit 1
+# fi
 
-if [[ $? -ne 0 ]]
-then
-  echo "Error: deps installation"
-  exit 1
-fi
+# echo "[$DATETIME] deps installation in progress."
+# $SUDO docker exec -u 0 $CONTAINER_NAME /bin/sh -c "ssh-keyscan gitlab-ext.galois.com >> /root/.ssh/known_hosts"
 
-echo "[$DATETIME] Commit and tag docker container."
-$SUDO docker commit $($SUDO docker ps -aqf "name=$CONTAINER_NAME") $IMAGE_NAME:$IMAGE_TAG
-$SUDO docker container stop $CONTAINER_NAME
-$SUDO docker container rm $CONTAINER_NAME
-if [[ $? -ne 0 ]]
-then
-  echo "Error: Commit and tag docker container."
-  exit 1
-fi
+# # build-toolchains.sh
 
-echo "[$DATETIME] Publish and clean the image."
-$SUDO docker push $IMAGE_NAME:$IMAGE_TAG
-if [[ $? -ne 0 ]]
-then
-  echo "Error: Publish the image."
-  exit 1
-fi
+# # Build and install OpenOCD
+# $SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "/gfe/install/build-openocd.sh"
+
+# if [[ $? -ne 0 ]]
+# then
+#   echo "Error: deps installation"
+#   exit 1
+# fi
+
+# echo "[$DATETIME] Commit and tag docker container."
+# $SUDO docker commit $($SUDO docker ps -aqf "name=$CONTAINER_NAME") $IMAGE_NAME:$IMAGE_TAG
+# $SUDO docker container stop $CONTAINER_NAME
+# $SUDO docker container rm $CONTAINER_NAME
+# if [[ $? -ne 0 ]]
+# then
+#   echo "Error: Commit and tag docker container."
+#   exit 1
+# fi
+
+# echo "[$DATETIME] Publish and clean the image."
+# $SUDO docker push $IMAGE_NAME:$IMAGE_TAG
+# if [[ $? -ne 0 ]]
+# then
+#   echo "Error: Publish the image."
+#   exit 1
+# fi
 
 echo "[$DATETIME] Docker $CONTAINER_NAME container installed successfully."
