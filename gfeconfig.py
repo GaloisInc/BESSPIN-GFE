@@ -165,13 +165,13 @@ class Config(object):
 
 
     def get_debian_config(self):
-        expected_contents = {'boot': ["Please press Enter to activate this console"],
+        expected_contents = {'boot': ["login:"],
                             'ping': ["xilinx_axienet 62100000.ethernet","Link is Up"]}
 
         absent_contents = {'boot': [],
                             'ping': []}
 
-        timeouts = {'boot': 300, # large timeout to account for loading the binary over JTAG
+        timeouts = {'boot': 3000, # large timeout to account for loading the binary over JTAG
                     'ping': 60}
 
         self.debian_expected_contents = expected_contents
