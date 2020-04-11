@@ -24,10 +24,16 @@ clock_freq_mhz=50
 proc_picker $1
 
 no_xdma=1
+include_hsm=0
 
-if [[ $proc_name == *p2_pcie ]]; then
+if [[ $proc_name == *p2_pcie* ]]; then
     no_xdma=0
     echo "enabling PCIe, disabling SVF"
+fi
+
+if [[ $proc_name == *hsm ]]; then
+    include_hsm=1
+    echo "enabling HSM"
 fi
     
 # Set up the bootrom directory
@@ -62,7 +68,7 @@ fi
 # Compile the bootrom and set the clock frequency
 cd $BASE_DIR/bootrom-configured
 case "$proc_name" in
-    *p1)
+    *p1*)
 	make --always-make XLEN=32 CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=50000000 NO_PCI=$no_xdma
 	clock_freq_mhz=50
 	;;
@@ -70,7 +76,7 @@ case "$proc_name" in
 	make --always-make XLEN=64 CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=100000000 NO_PCI=$no_xdma
 	clock_freq_mhz=100
 	;;
-    *p3)
+    *p3*)
 	make --always-make XLEN=64 CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=25000000 NO_PCI=$no_xdma
 	clock_freq_mhz=25
 	;;
@@ -93,6 +99,7 @@ vivado -mode batch -source $BASE_DIR/tcl/soc.tcl \
 -tclargs --origin_dir $BASE_DIR/tcl \
 --proc_name $proc_name \
 --clock_freq_mhz $clock_freq_mhz \
---no_xdma $no_xdma
+--no_xdma $no_xdma \
+--include_hsm $include_hsm
 
 err_msg $? "Creating the vivado project failed"

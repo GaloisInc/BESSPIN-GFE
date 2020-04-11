@@ -6,7 +6,9 @@ from subprocess import run, PIPE
 
 # Processor config
 proc_list = ['chisel_p1', 'chisel_p2', 'chisel_p2_pcie', 'chisel_p3', \
-            'bluespec_p1', 'bluespec_p2', 'bluespec_p2_pcie','bluespec_p3']
+            'bluespec_p1', 'bluespec_p2', 'bluespec_p2_pcie','bluespec_p3', \
+            'chisel_p1_hsm', 'chisel_p2_hsm', 'chisel_p2_pcie_hsm', 'chisel_p3_hsm', \
+            'bluespec_p1_hsm', 'bluespec_p2_hsm', 'bluespec_p2_pcie_hsm','bluespec_p3_hsm']
 
 # Environment config
 env_requried = ['openocd','riscv64-unknown-elf-gcc','riscv64-unknown-linux-gnu-gcc']
