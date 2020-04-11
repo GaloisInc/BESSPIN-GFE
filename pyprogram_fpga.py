@@ -8,7 +8,7 @@ from subprocess import run, PIPE
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("proc_name",
-        help="processor to test [chisel_p1|chisel_p2|chisel_p2_pcie|chisel_p3|bluespec_p1|bluespec_p2_pcie|bluespec_p2|bluespec_p3]")
+        help="processor to test [chisel_p1|chisel_p1_hsm|chisel_p2|chisel_p2_hsm|chisel_p2_pcie|chisel_p2_pcie_hsm|chisel_p3|chisel_p3_hsm|bluespec_p1|bluespec_p1_hsm|bluespec_p2_pcie|bluespec_p2_pcie_hsm|bluespec_p2|bluespec_p2_hsm|bluespec_p3|bluespec_p3_hsm]")
     parser.add_argument("--bitstream", help="specify a path to a custom bitstream, otherwise use processor name")
     parser.add_argument("--probe-file", help="specify a path to a custom probe file, if necessary")
     parser.add_argument("--flash-binary", help="Program specified binary into flash")

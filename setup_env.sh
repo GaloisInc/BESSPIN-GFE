@@ -34,7 +34,8 @@ function check_file {
 }
 
 function proc_usage {
-    echo "Usage: $0 <chisel_p1|chisel_p2|chisel_p2_pcie|chisel_p3|bluespec_p1|bluespec_p2|bluespec_p2_pcie|bluespec_p3> [secure-boot-binary-image]"
+    echo "Usage: $0 <chisel_p1|chisel_p1_hsm|chisel_p2|chisel_p2_hsm|chisel_p2_pcie|chisel_p2_pcie_hsm|chisel_p3|chisel_p3_hsm|"
+    echo "           bluespec_p1|bluespec_p1_hsm|bluespec_p2|bluespec_p2_hsm|bluespec_p2_pcie|bluespec_p2_pcie_hsm|bluespec_p3|bluespec_p3_hsm> [secure-boot-binary-image]"
     echo "Please specify a bluespec or chisel processor, and optionally a binary image"
 }
 
@@ -56,6 +57,22 @@ function proc_picker {
 	        proc_name="chisel_p2_pcie"
 	elif [ "$1" == "chisel_p3" ]; then
 	        proc_name="chisel_p3"
+	elif [ "$1" == "bluespec_p1_hsm" ]; then
+	        proc_name="bluespec_p1_hsm"
+	elif [ "$1" == "bluespec_p2_hsm" ]; then
+	        proc_name="bluespec_p2_hsm"
+	elif [ "$1" == "bluespec_p2_pcie_hsm" ]; then
+	        proc_name="bluespec_p2_pcie_hsm"
+	elif [ "$1" == "bluespec_p3_hsm" ]; then
+	        proc_name="bluespec_p3_hsm"
+	elif [ "$1" == "chisel_p1_hsm" ]; then
+	        proc_name="chisel_p1_hsm"
+	elif [ "$1" == "chisel_p2_hsm" ]; then
+	        proc_name="chisel_p2_hsm"
+	elif [ "$1" == "chisel_p2_pcie_hsm" ]; then
+	        proc_name="chisel_p2_pcie_hsm"
+	elif [ "$1" == "chisel_p3_hsm" ]; then
+	        proc_name="chisel_p3_hsm"
 	else
 	        proc_usage
             echo "Please specify a bluespec or chisel processor!"
