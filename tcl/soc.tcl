@@ -72,6 +72,9 @@ proc help {} {
   exit 0
 }
 
+set no_xdma 0
+set include_hsm 0
+
 if { $::argc > 0 } {
   for {set i 0} {$i < [llength $::argv]} {incr i} {
     set option [string trim [lindex $::argv $i]]
@@ -82,6 +85,7 @@ if { $::argc > 0 } {
       "--proc_path" { incr i; set proc_path [lindex $::argv $i] }
       "--clock_freq_mhz" { incr i; set clock_freq_mhz [lindex $::argv $i] }
       "--no_xdma" { incr i; set no_xdma [lindex $::argv $i] }
+      "--include_hsm" { incr i; set include_hsm [lindex $::argv $i] }
       "--help"         { help }
       default {
         if { [regexp {^-} $option] } {
@@ -170,6 +174,16 @@ source $origin_dir/soc_bd.tcl
 if {$no_xdma == 1} {
     puts "Building with svf instead of xdma"
     source $origin_dir/svf.tcl
+}
+
+if {$include_hsm == 1} {
+    puts "Adding the Hardware Security Module"
+    source $origin_dir/add_hsm.tcl
+}
+
+if {$no_xdma == 0 && $include_hsm == 1} {
+    puts "Additional setup for a PCIe+HSM build"
+    source $origin_dir/hsm_and_pcie.tcl
 }
 
 # Configure the clock frequency
