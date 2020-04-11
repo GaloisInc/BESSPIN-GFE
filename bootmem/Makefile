@@ -114,7 +114,7 @@ build-linux/vmlinux: $(LINUX_CONFIG) build-busybox/busybox_unstripped
 build-busybox-bbl/bbl: build-linux/vmlinux
 	@echo "build-busybox-bbl/bbl"
 	$(MKDIR) -p $(@D)
-	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-linux/vmlinux
+	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-linux/vmlinux --enable-zero-bss --with-mem-start=0xC0000000
 	$(MAKE) -C $(@D) -j$(NPROCS)
 	@echo "build-busybox-bbl/bbl done"
 
@@ -205,10 +205,10 @@ debian-startup-scripts:
 #
 # Arguments:
 # besspin.sysvinit=1 to use sysvinit instead of systemd
-# besspin.dhcp_addr=1 enables network install
+# besspin.dhcp_addr=1 enables QEMU network install
 # besspin.debian_repo=http://deb.debian.org/debian-ports/ is the url of the debian repo
 # (or a path to file in case we are booting offline)
-extraSetupArg?=besspin.debian_repo=http://deb.debian.org/debian-ports/ besspin.dhcp_addr=1 besspin.sysvinit=1
+extraSetupArg?=besspin.debian_repo=http://deb.debian.org/debian-ports/ besspin.dhcp_addr=1
 
 # Debian.cpio rootfs (uncompressed)
 # Run debian chainloader initramfs in QEMU and finish seting up the system via debootstrap
@@ -243,8 +243,8 @@ build-qemu-linux/vmlinux: $(CHAINLOADER_CONFIG) build-busybox/busybox_unstripped
 build-qemu-bbl/bbl: build-qemu-linux/vmlinux
 	@echo "build-qemu-bbl/bbl"
 	$(MKDIR) -p $(@D)
-	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-qemu-linux/vmlinux
-	$(MAKE) -C $(@D) TARGET_QEMU=yes -j$(NPROCS)
+	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-qemu-linux/vmlinux --enable-zero-bss --with-mem-start=0x80000000
+	$(MAKE) -C $(@D) -j$(NPROCS)
 	@echo "build-qemu-bbl/bbl done"
 
 # Linux kernel
@@ -275,14 +275,14 @@ build-debian-linux/vmlinux: $(DEBIAN_CONFIG) build-busybox/busybox_unstripped de
 build-debian-network-bbl/bbl: debian.cpio build-debian-network-linux/vmlinux
 	@echo "build-debian-network-bbl/bbl"
 	$(MKDIR) -p $(@D)
-	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-debian-network-linux/vmlinux
+	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-debian-network-linux/vmlinux --enable-zero-bss --with-mem-start=0xC0000000
 	$(MAKE) -C $(@D) -j$(NPROCS)
 	@echo "build-debian-network-bbl/bbl done"
 
 build-debian-bbl/bbl: build-debian-linux/vmlinux
 	@echo "build-debian-bbl/bbl"
 	$(MKDIR) -p $(@D)
-	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-debian-linux/vmlinux
+	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-debian-linux/vmlinux --enable-zero-bss --with-mem-start=0xC0000000
 	$(MAKE) -C $(@D) -j$(NPROCS)
 	@echo "build-debian-bbl/bbl done"
 

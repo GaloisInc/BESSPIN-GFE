@@ -296,7 +296,7 @@ def freertos_compile_program(config, prog_name):
         configCPU_CLOCK_HZ=config.cpu_freq), stdout=PIPE, stderr=PIPE))
     run_and_log(print_and_log("Compiling: " + prog_name),
         run(['make'],cwd=config.freertos_folder,
-        env=dict(os.environ, C_INCLUDE_PATH=config.freertos_c_include_path, USE_CLANG=config.use_clang,
+        env=dict(os.environ, SYSROOT_DIR= config.freertos_sysroot_path + '/riscv' + config.xlen + '-unknown-elf/', USE_CLANG=config.use_clang,
         PROG=prog_name, XLEN=config.xlen, configCPU_CLOCK_HZ=config.cpu_freq), stdout=PIPE, stderr=PIPE))
     filename = config.freertos_folder + '/' + prog_name + '.elf'
     return filename
@@ -446,6 +446,8 @@ def load_netboot(config, path_to_elf, timeout, interactive, expected_contents=[]
 
     if interactive:
         while True:
+            # TODO: this waits indefinitely for input, which is not great
+            # Attempt to improve with https://stackoverflow.com/a/10079805
             cmd = input()
             uart.send(cmd.encode() + b'\r')
             rx = uart.read(1)
@@ -501,6 +503,8 @@ def basic_tester(gdb, uart, exe_filename, timeout, expected_contents=[], absent_
 
     if interactive:
         while True:
+            # TODO: this waits indefinitely for input, which is not great
+            # Attempt to improve with https://stackoverflow.com/a/10079805
             cmd = input()
             uart.send(cmd.encode() + b'\r')
             rx = uart.read(1)

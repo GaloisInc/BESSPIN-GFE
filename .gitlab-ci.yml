@@ -369,18 +369,20 @@ CHSL_P2_freebsd:
     variables:
       - $JOB_TYPE == "linux"
 
-# CHSL_P2_debian:
-#   script:
-#     - ./pytest_processor.py chisel_p2 --debian
-#   tags: ["fpga-pcie"]
-#   cache:
-#     key: ${CI_COMMIT_REF_SLUG}
-#     paths:
-#       - debian/riscv64-chroot.tar
-#       - bootmem/
-#   only:
-#     variables:
-#       - $JOB_TYPE == "linux"
+CHSL_P2_debian:
+  script:
+    - cd bootmem && make clean && make debian && cd ..
+    # TODO
+    - ./pytest_processor.py chisel_p2 --netboot --elf bootmem/build-debian-bbl/bbl --timeout 600 --expected "Debian GNU/Linux,login"
+  tags: ["fpga-pcie"]
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - debian/riscv64-chroot.tar
+      - bootmem/
+  only:
+    variables:
+      - $JOB_TYPE == "linux"
 
 #-----------------------#
 #                       #

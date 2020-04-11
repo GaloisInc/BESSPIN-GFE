@@ -8,13 +8,13 @@ else ifeq ($(UNAME),Darwin)
 endif
 
 # Define toolchain
-export XCC=/usr/bin/clang-11
-export XCXX=/usr/bin/clang++-11
-export XCPP=/usr/bin/clang-cpp-11
-export XLD=/usr/bin/ld.lld-11
-export XOBJDUMP=/usr/bin/llvm-objdump-11
-export XOBJCOPY=/usr/bin/llvm-objcopy-11
-export XCFLAGS=-fuse-ld=/usr/bin/ld.lld-11 -Qunused-arguments -fcommon
+export XCC=$(shell which clang)
+export XCXX=$(shell which clang++)
+export XCPP=$(shell which clang-cpp)
+export XLD=$(shell which ld.lld)
+export XOBJDUMP=$(shell which llvm-objdump)
+export XOBJCOPY=$(shell which llvm-objcopy)
+export XCFLAGS=-fuse-ld=$(shell which ld.lld) -Qunused-arguments -fcommon
 
 # Directory with freebsd repo
 FREEBSD_DIR = cheribsd
@@ -27,11 +27,11 @@ OBJ_DIR = $(CURDIR)/obj
 export MAKEOBJDIRPREFIX=$(OBJ_DIR)
 
 # Define compilation flags
-FLAGS= -DDB_FROM_SRC -DNO_ROOT -DBUILD_WITH_STRICT_TMPPATH TARGET=riscv \
+FLAGS = -DDB_FROM_SRC -DNO_ROOT -DBUILD_WITH_STRICT_TMPPATH TARGET=riscv \
 	TARGET_ARCH=riscv64 -DNO_WERROR WERROR= -DWITHOUT_TESTS -DWITHOUT_MAN \
 	-DWITHOUT_MAIL -DWITHOUT_VT -DWITHOUT_DEBUG_FILES -DWITHOUT_BOOT -DWITH_AUTO_OBJ \
 	-DWITHOUT_GCC_BOOTSTRAP -DWITHOUT_CLANG_BOOTSTRAP -DWITHOUT_LLD_BOOTSTRAP \
-	-DWITHOUT_LIB32 -DWITH_ELFTOOLCHAIN_BOOTSTRAP -DWITHOUT_TOOLCHAIN -DWITHOUT_BINUTILS_BOOTSTRAP \
+	-DWITHOUT_LIB32 -DWITH_ELFTOOLCHAIN_BOOTSTRAP -DWITHOUT_BINUTILS_BOOTSTRAP \
 	-DWITHOUT_RESCUE -DWITHOUT_BLUETOOTH -DWITHOUT_SVNLITE -DWITHOUT_CDDL -DWITHOUT_PF \
 	-DWITHOUT_PROFILE -DWITHOUT_VI -DWITHOUT_SYSCONS -DWITHOUT_CTF -DWITHOUT_LOCALES -DWITHOUT_DICT \
 	-DWITHOUT_EXAMPLES -DWITHOUT_HTML -DWITHOUT_FILE -DWITHOUT_MAKE -DWITHOUT_PORTSNAP \
@@ -41,12 +41,10 @@ FLAGS= -DDB_FROM_SRC -DNO_ROOT -DBUILD_WITH_STRICT_TMPPATH TARGET=riscv \
 	-DWITHOUT_OPENSSH -DWITHOUT_KERBEROS MODULES_OVERRIDE= -DNO_CLEAN -DI_REALLY_MEAN_NO_CLEAN \
 	LOCAL_XTOOL_DIRS="lib/libnetbsd usr.sbin/makefs usr.bin/mkimg"
 
-default: freebsd.bbl
+TOOLCHAIN ?= -DWITHOUT_TOOLCHAIN
+FLAGS += $(TOOLCHAIN)
 
-clean:
-	@rm -rf $(OBJ_DIR)
-	@rm -rf $(WORLD_DIR)
-	@rm -rf freebsd.bbl
+default: freebsd.bbl
 
 # Build world
 $(OBJ_DIR):
@@ -125,3 +123,9 @@ freebsd.bbl: $(KERNEL_IMAGE_DIR)/kernel
 	$(MAKE) -C $(KERNEL_IMAGE_DIR) -j$(NPROCS)
 	@cp $(KERNEL_IMAGE_DIR)/bbl freebsd.bbl
 	@echo "Build freebsd.bbl done"
+
+clean:
+	@rm -rf $(OBJ_DIR)
+	@rm -rf $(WORLD_DIR)
+	@rm -rf freebsd.bbl
+	@rm -rf $(ROOT_DIR)/sys/$(KERN_CONF)/kernel

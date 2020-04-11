@@ -75,7 +75,7 @@ class Config(object):
     freertos_absent_contents = None
     freertos_timeouts = None
     freertos_folder='./FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1'
-    freertos_c_include_path='/opt/riscv/riscv64-unknown-elf/include'
+    freertos_sysroot_path='/opt/riscv-llvm/'
 
     # Busybox config
     busybox_expected_contents = None
