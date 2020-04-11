@@ -5,6 +5,9 @@
 #define CPU_SPEED 100000000
 #endif
 #endif
+#if RTC_FREQ == 0
+#define RTC_FREQ CPU_SPEED
+#endif
 
 /dts-v1/;
 
@@ -20,7 +23,7 @@
 	cpus {
 		#address-cells = <1>;
 		#size-cells = <0>;
-		timebase-frequency = <CPU_SPEED>;
+		timebase-frequency = <RTC_FREQ>;
 		CPU0: cpu@0 {
 			device_type = "cpu";
 			reg = <0>;
