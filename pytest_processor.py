@@ -296,7 +296,7 @@ def freertos_compile_program(config, prog_name):
         configCPU_CLOCK_HZ=config.cpu_freq), stdout=PIPE, stderr=PIPE))
     run_and_log(print_and_log("Compiling: " + prog_name),
         run(['make'],cwd=config.freertos_folder,
-        env=dict(os.environ, C_INCLUDE_PATH=config.freertos_c_include_path, USE_CLANG=config.use_clang,
+        env=dict(os.environ, SYSROOT_DIR= config.freertos_sysroot_path + '/riscv' + config.xlen + '-unknown-elf/', USE_CLANG=config.use_clang,
         PROG=prog_name, XLEN=config.xlen, configCPU_CLOCK_HZ=config.cpu_freq), stdout=PIPE, stderr=PIPE))
     filename = config.freertos_folder + '/' + prog_name + '.elf'
     return filename
