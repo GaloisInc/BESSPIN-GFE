@@ -14,23 +14,9 @@ RUN apt-get install -y software-properties-common wget
 RUN apt-get install -y gnupg
 RUN apt-get install -y vim
 
-# Install dependencies
-ADD deps.sh /tmp
-RUN /tmp/deps.sh
-
-# Build toolchains
-
 # Set PATH
-
-# Clean up...
-
-
-# # RISC-V toolchains (both linux and newlib versions):
-# # Set PATH for RISCV-tools and LLVM Sysroot
-# #ADD riscv-gnu-toolchains.tar.gz /opt
-# #ENV RISCV="/opt/riscv"
-# #ENV PATH="/opt/riscv/bin:/opt/riscv-freebsd/bin:${PATH}"
-# #ENV RISCV_C_INCLUDE_PATH="/opt/riscv/riscv64-unknown-elf/include"
+ENV PATH="/opt/riscv/bin:/opt/riscv-freebsd/bin:/opt/riscv-llvm/llvm-project/build/bin:${PATH}"
+ENV RISCV="/opt/riscv"
 
 WORKDIR /gfe
 

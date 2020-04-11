@@ -10,10 +10,10 @@ if [ -d $BASEDIR ]; then
 fi
 
 # Compile LLVM
-rm -rf /tmp/llvm-project
-git clone https://github.com/llvm/llvm-project.git /tmp/llvm-project
+rm -rf $BASEDIR/llvm-project
+git clone https://github.com/llvm/llvm-project.git $BASEDIR/llvm-project
 
-cd /tmp/llvm-project
+cd $BASEDIR/llvm-project
 git clean -f
 git pull
 
@@ -22,7 +22,6 @@ git checkout 49e20c4c9efe1c0e74f9c0dc224a8014b93faa3c
 mkdir -p build
 cd build
 cmake -G Ninja \
-    -DCMAKE_INSTALL_PREFIX=$BASEDIR
     -DCMAKE_BUILD_TYPE=Release \
     -DLLVM_OPTIMIZED_TABLEGEN=OFF \
     -DLLVM_ENABLE_ASSERTIONS=ON \
@@ -36,11 +35,10 @@ export PATH=$BASEDIR/llvm-project/build/bin:$PATH
 LLVM_BIN_PATH=$BASEDIR/llvm-project/build/bin
 
 # Compile newlib
-if [ ! -d $BASEDIR/riscv-newlib ]; then
-    git clone https://github.com/riscv/riscv-newlib.git $BASEDIR/riscv-newlib
-fi
+rm -rf /tmp/riscv-newlib
+git clone https://github.com/riscv/riscv-newlib.git /tmp/riscv-newlib
 
-cd $BASEDIR/riscv-newlib
+cd /tmp/riscv-newlib
 # Release 3.2.0
 git checkout f289cef6be67da67b2d97a47d6576fa7e6b4c858
 mkdir build32
@@ -57,7 +55,7 @@ cd build32
 make -j6
 make install 
 
-cd $BASEDIR/riscv-newlib
+cd /tmp/riscv-newlib
 mkdir build64
 cd build64
 ../configure \
@@ -127,3 +125,7 @@ cmake -G Ninja \
     ../compiler-rt
 cmake --build .
 cp lib/baremetal/libclang_rt.builtins-riscv32.a $BASEDIR/riscv32-unknown-elf/lib/.
+
+# Cleanup
+rm -rf $BASEDIR/llvm-project/.git
+rm -rf /tmp/riscv-newlib

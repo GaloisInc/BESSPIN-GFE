@@ -6,7 +6,7 @@ set -eux
 
 FREEBSD_DIR=/opt/riscv-freebsd
 
-# Avoid overwriting any existing /opt/riscv directory
+# Avoid overwriting any existing /opt/riscv-freebsd directory
 if [ -d $FREEBSD_DIR ]; then
     mv -f $FREEBSD_DIR $FREEBSD_DIR.old
 fi
@@ -28,10 +28,10 @@ cp -r ../freebsd/world/usr/lib ../freebsd/world/usr/include $SYSROOT/usr
 
 echo "Bulding FreeBSD toolchain"
 # Clone the repo, name it different from standard riscv-gnu-toolchain
-if [ ! -d riscv-gnu-toolchain-freebsd ]; then
-    git clone https://github.com/freebsd-riscv/riscv-gnu-toolchain.git riscv-gnu-toolchain-freebsd
+if [ ! -d /tmp/riscv-gnu-toolchain-freebsd ]; then
+    git clone https://github.com/freebsd-riscv/riscv-gnu-toolchain.git /tmp/riscv-gnu-toolchain-freebsd
 fi
-cd riscv-gnu-toolchain-freebsd
+cd /tmp/riscv-gnu-toolchain-freebsd
 
 git checkout master
 git clean -f
@@ -47,3 +47,6 @@ make clean
 make freebsd OSREL=$OSREL SYSROOT=$SYSROOT
 cd ..
 echo "FreeBSD toolchain built!"
+
+# Cleanup
+rm -rf /tmp/riscv-gnu-toolchain-freebsd

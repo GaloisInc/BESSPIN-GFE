@@ -17,6 +17,9 @@ apt-get install -y verilator qemu qemu-user qemu-system-misc
 # Needed for GDB
 apt-get install -y libpython2.7
 
+# OpenOCD dependencies
+apt-get install -y libftdi1-2 libusb-1.0-0-dev
+
 # Needed for manual tests
 apt-get install -y minicom
 

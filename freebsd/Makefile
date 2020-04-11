@@ -8,13 +8,13 @@ else ifeq ($(UNAME),Darwin)
 endif
 
 # Define toolchain
-export XCC=clang
-export XCXX=clang++
-export XCPP=clang-cpp
-export XLD=ld.lld
-export XOBJDUMP=llvm-objdump
-export XOBJCOPY=llvm-objcopy
-export XCFLAGS=-fuse-ld=ld.lld -Qunused-arguments -fcommon
+export XCC=$(shell which clang)
+export XCXX=$(shell which clang++)
+export XCPP=$(shell which clang-cpp)
+export XLD=$(shell which ld.lld)
+export XOBJDUMP=$(shell which llvm-objdump)
+export XOBJCOPY=$(shell which llvm-objcopy)
+export XCFLAGS=-fuse-ld=$(shell which ld.lld) -Qunused-arguments -fcommon
 
 # Directory with freebsd repo
 FREEBSD_DIR = cheribsd
