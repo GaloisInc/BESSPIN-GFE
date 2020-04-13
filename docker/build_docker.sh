@@ -38,7 +38,6 @@ fi
 
 
 echo "[$DATETIME] deps installation in progress."
-$SUDO docker exec -u 0 $CONTAINER_NAME /bin/sh -c "ssh-keyscan gitlab-ext.galois.com >> /root/.ssh/known_hosts"
 $SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "/gfe/install/deps.sh"
 
 if [[ $1 == "--build-toolchains" ]]; then

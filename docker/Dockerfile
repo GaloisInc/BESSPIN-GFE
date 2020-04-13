@@ -8,6 +8,7 @@ RUN apt-get install -y ssh openssl ca-certificates  \
 # make sure your domain is accepted
 RUN mkdir -p /root/.ssh/ && touch /root/.ssh/known_hosts
 RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+RUN ssh-keyscan gitlab-ext.galois.com >> /root/.ssh/known_hosts
 
 RUN apt-get install -y git
 RUN apt-get install -y software-properties-common wget
