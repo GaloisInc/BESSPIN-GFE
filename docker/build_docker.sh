@@ -1,4 +1,6 @@
 #!/bin/bash
+set -eux
+
 IMAGE_NAME=galoisinc/besspin
 IMAGE_TAG=gfe
 CONTAINER_NAME=besspin_gfe
@@ -48,8 +50,8 @@ if [[ $1 == "--build-toolchains" ]]; then
   $SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "tar -czf /gfe/install/riscv-gnu-toolchains.tar.gz /opt/riscv /opt/riscv-llvm /opt/riscv/riscv-freebsd"
 else
 	echo "Downloading toolchains"
-  cd ../install && ./download_toolchains.sh && cd ..
-  $SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "tar -C /opt -xf /gfe/install/riscv-gnu-toolchains.tar.gz"
+  ./install/download_toolchains.sh
+  $SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "tar -C / -xf /gfe/install/riscv-gnu-toolchains.tar.gz"
 fi
 
 # Default folder is /gfe
