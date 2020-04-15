@@ -296,7 +296,7 @@ def freertos_compile_program(config, prog_name):
         configCPU_CLOCK_HZ=config.cpu_freq), stdout=PIPE, stderr=PIPE))
     run_and_log(print_and_log("Compiling: " + prog_name),
         run(['make'],cwd=config.freertos_folder,
-        env=dict(os.environ, C_INCLUDE_PATH=config.freertos_c_include_path, USE_CLANG=config.use_clang,
+        env=dict(os.environ, SYSROOT_DIR= config.freertos_sysroot_path + '/riscv' + config.xlen + '-unknown-elf/', USE_CLANG=config.use_clang,
         PROG=prog_name, XLEN=config.xlen, configCPU_CLOCK_HZ=config.cpu_freq), stdout=PIPE, stderr=PIPE))
     filename = config.freertos_folder + '/' + prog_name + '.elf'
     return filename
@@ -446,6 +446,8 @@ def load_netboot(config, path_to_elf, timeout, interactive, expected_contents=[]
 
     if interactive:
         while True:
+            # TODO: this waits indefinitely for input, which is not great
+            # Attempt to improve with https://stackoverflow.com/a/10079805
             cmd = input()
             uart.send(cmd.encode() + b'\r')
             rx = uart.read(1)
@@ -501,6 +503,8 @@ def basic_tester(gdb, uart, exe_filename, timeout, expected_contents=[], absent_
 
     if interactive:
         while True:
+            # TODO: this waits indefinitely for input, which is not great
+            # Attempt to improve with https://stackoverflow.com/a/10079805
             cmd = input()
             uart.send(cmd.encode() + b'\r')
             rx = uart.read(1)
@@ -667,16 +671,55 @@ def test_freebsd(config, args):
     build_freebsd(config)
 
     uart = UartSession()
-
-    print_and_log("FreeBSD basic test")
     gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
+    
+    print_and_log("FreeBSD basic test")
+
     res, _val = basic_tester(gdb, uart, config.freebsd_filename_bbl, \
                 config.freebsd_timeouts['boot'], config.freebsd_expected_contents['boot'], \
                 config.freebsd_absent_contents['boot'])
+    
     if res == True:
         print_and_log("FreeBSD basic test passed")
     else:
         raise RuntimeError("FreeBSD basic test failed")
+    
+    print_and_log("FreeBSD network test [WIP!]")
+
+    # # Copied from BuzyBox net test
+    # # Get the name of ethernet interface
+    #     cmd = b'ip a | grep "eth.:" -o \r'
+    #     print_and_log(cmd)
+    #     uart.send(cmd)
+    #     rx = uart.read(3)
+    #     print_and_log(rx)
+    #     if "eth1" in rx:
+    #         cmd1 = b'ip addr add 10.88.88.2/24 broadcast 10.88.88.255 dev eth1\r'
+    #         cmd2 = b'ip link set eth1 up\r'
+    #     else:
+    #         cmd1 = b'ip addr add 10.88.88.2/24 broadcast 10.88.88.255 dev eth0\r'
+    #         cmd2 = b'ip link set eth0 up\r'
+    #     print_and_log(cmd1)
+    #     uart.send(cmd1)
+    #     print_and_log(cmd2)
+    #     uart.send(cmd2)
+    #     cmd3 = b'ip a\r'
+    #     print_and_log(cmd3)
+    #     uart.send(cmd3)
+
+    #     if not uart.read_and_check(120, config.busybox_expected_contents['ping'])[0]:
+    #         raise RuntimeError("Busybox network test failed: cannot bring up eth interface")
+
+    #     print_and_log("Ping FPGA")
+    #     riscv_ip = "10.88.88.2"
+    #     ping_result = run(['ping','-c','10',riscv_ip], stdout=PIPE, stderr=PIPE)
+    #     print_and_log(str(ping_result.stdout,'utf-8'))
+    #     if ping_result.returncode != 0:
+    #         raise RuntimeError("Busybox network test failed: cannot ping the FPGA")
+    #     else:
+    #         print_and_log("Ping OK")
+
+
     del uart
     del gdb
 
@@ -749,6 +792,87 @@ def test_busybox(config, args):
     del gdb
     del uart
 
+# Debian tests
+def test_debian(config, args):
+    print_and_log("Running debian tests")
+    
+    # No clang
+    if config.compiler == "clang":
+        raise RuntimeError("Clang compiler is not supported for building Debian tests yet")
+
+    pwd = run(['pwd'], stdout=PIPE, stderr=PIPE)
+    pwd = str(pwd.stdout,'utf-8').rstrip()
+    
+    if args.no_pcie:
+        debian_linux_config_path = pwd + '/' + config.debian_linux_config_path_no_pcie
+    else:
+        debian_linux_config_path = pwd + '/' + config.debian_linux_config_path
+
+    build_debian(config, debian_linux_config_path)
+
+    uart = UartSession()
+
+    print_and_log("Debian basic test")
+    gdb = GdbSession(openocd_config_filename=config.openocd_config_filename)
+    res, _val = basic_tester(gdb, uart, config.debian_filename_bbl, \
+                config.debian_timeouts['boot'], config.debian_expected_contents['boot'], \
+                config.debian_absent_contents['boot'])
+    if res == True:
+        print_and_log("Debian basic test passed")
+    else:
+        raise RuntimeError("Debian basic test failed")
+
+    if args.network:
+        print_and_log("Logging in to Debian")
+
+        # Send "Enter" to activate console
+        # uart.send(b'\r')
+        # time.sleep(1)
+
+        # Log in to Debian
+        uart.send(config.debian_username)
+        time.sleep(0.5)
+        uart.send(config.debian_password)
+        # Prompt takes some time to load before it can be used.
+        time.sleep(10)
+
+        print_and_log("Debian network test")
+
+        # Get the name of ethernet interface
+        cmd = b'ip a | grep "eth.:" -o \r'
+        print_and_log(cmd)
+        uart.send(cmd)
+        rx = uart.read(3)
+        print_and_log(rx)
+        if "eth1" in rx:
+            cmd1 = b'ip addr add 10.88.88.2/24 broadcast 10.88.88.255 dev eth1\r'
+            cmd2 = b'ip link set eth1 up\r'
+        else:
+            cmd1 = b'ip addr add 10.88.88.2/24 broadcast 10.88.88.255 dev eth0\r'
+            cmd2 = b'ip link set eth0 up\r'
+        print_and_log(cmd1)
+        uart.send(cmd1)
+        print_and_log(cmd2)
+        uart.send(cmd2)
+        cmd3 = b'ip a\r'
+        print_and_log(cmd3)
+        uart.send(cmd3)
+
+        if not uart.read_and_check(120, config.debian_expected_contents['ping'])[0]:
+            raise RuntimeError("Debian network test failed: cannot bring up eth interface")
+
+        print_and_log("Ping FPGA")
+        riscv_ip = "10.88.88.2"
+        ping_result = run(['ping','-c','10',riscv_ip], stdout=PIPE, stderr=PIPE)
+        print_and_log(str(ping_result.stdout,'utf-8'))
+        if ping_result.returncode != 0:
+            raise RuntimeError("Debian network test failed: cannot ping the FPGA")
+        else:
+            print_and_log("Ping OK")
+
+    del gdb
+    del uart
+
 # Common FreeBSD test part
 def build_freebsd(config):
     run_and_log(print_and_log("Cleaning freebsd"),
@@ -757,6 +881,22 @@ def build_freebsd(config):
     run_and_log(print_and_log("Building freebsd"),
         run(['make'],cwd=config.freebsd_folder,
         env=dict(os.environ), stdout=PIPE, stderr=PIPE))
+
+# Common debian test parts
+def build_debian(config, debian_linux_config_path):
+    user = run("whoami", stdout=PIPE)
+    if "root" in user.stdout.decode():
+        run_and_log(print_and_log("Cleaning bootmem program directory"),
+            run(['make','clean'],cwd=config.debian_folder,
+            env=dict(os.environ, LINUX_CONFIG=debian_linux_config_path), stdout=PIPE, stderr=PIPE))
+    else:
+        run_and_log(print_and_log("Cleaning bootmem program directory - this will prompt for sudo"),
+            run(['sudo','make','clean'],cwd=config.debian_folder,
+            env=dict(os.environ, LINUX_CONFIG=debian_linux_config_path), stdout=PIPE, stderr=PIPE))
+
+    run_and_log(print_and_log("Compiling debian, this might take a while"),
+        run(['make', 'debian'],cwd=config.debian_folder,
+        env=dict(os.environ, LINUX_CONFIG=debian_linux_config_path), stdout=PIPE, stderr=PIPE))
 
 # Common busybox test parts
 def build_busybox(config, linux_config_path):
@@ -773,6 +913,7 @@ def test_init():
     parser.add_argument("proc_name", help="processor to test [chisel_p1|chisel_p2|chisel_p3|bluespec_p1|bluespec_p2|bluespec_p3]")
     parser.add_argument("--isa", help="run ISA tests",action="store_true")
     parser.add_argument("--busybox", help="run Busybox OS",action="store_true")
+    parser.add_argument("--debian", help="run Debian OS",action="store_true")
     parser.add_argument("--linux", help="run Debian OS",action="store_true")
     parser.add_argument("--freertos", help="run FreeRTOS OS",action="store_true")
     parser.add_argument("--freebsd", help="run FreeBSD OS",action="store_true")
@@ -848,6 +989,9 @@ if __name__ == '__main__':
 
     if args.busybox:
         test_busybox(config, args)
+
+    if args.debian:
+        test_debian(config, args)
 
     if args.freebsd:
         test_freebsd(config, args)

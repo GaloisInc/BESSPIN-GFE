@@ -75,7 +75,7 @@ class Config(object):
     freertos_absent_contents = None
     freertos_timeouts = None
     freertos_folder='./FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1'
-    freertos_c_include_path='/opt/riscv/riscv64-unknown-elf/include'
+    freertos_sysroot_path='/opt/riscv-llvm/'
 
     # Busybox config
     busybox_expected_contents = None
@@ -85,6 +85,17 @@ class Config(object):
     busybox_linux_config_path = 'bootmem/linux.config'
     busybox_linux_config_path_no_pcie = 'bootmem/linux-no-pcie.config'
     busybox_filename_bbl = 'bootmem/build-busybox-bbl/bbl'
+
+    # Debian config
+    debian_expected_contents = None
+    debian_absent_contents = None
+    debian_timeouts = None
+    debian_folder = 'bootmem'
+    debian_linux_config_path = 'bootmem/debian-linux.config'
+    debian_linux_config_path_no_pcie = 'bootmem/debian-linux-no-pcie.config'
+    debian_filename_bbl = 'bootmem/build-debian-bbl/bbl'
+    debian_username = b'root\r'
+    debian_password = b'riscv\r'
 
     # FreeBSD config
     freebsd_expected_contents = None
@@ -122,6 +133,7 @@ class Config(object):
 
         self.get_freertos_config()
         self.get_busybox_config()
+        self.get_debian_config()
         self.get_freebsd_config()
         self.compiler = args.compiler
 
@@ -150,6 +162,21 @@ class Config(object):
         self.busybox_expected_contents = expected_contents
         self.busybox_absent_contents = absent_contents
         self.busybox_timeouts = timeouts
+
+
+    def get_debian_config(self):
+        expected_contents = {'boot': ["login:"],
+                            'ping': ["xilinx_axienet 62100000.ethernet","Link is Up"]}
+
+        absent_contents = {'boot': [],
+                            'ping': []}
+
+        timeouts = {'boot': 3000, # large timeout to account for loading the binary over JTAG
+                    'ping': 60}
+
+        self.debian_expected_contents = expected_contents
+        self.debian_absent_contents = absent_contents
+        self.debian_timeouts = timeouts
 
     def get_freertos_config(self):
         main_blinky = [

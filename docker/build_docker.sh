@@ -1,4 +1,6 @@
 #!/bin/bash
+set -eux
+
 IMAGE_NAME=galoisinc/besspin
 IMAGE_TAG=gfe
 CONTAINER_NAME=besspin_gfe
@@ -15,13 +17,6 @@ esac
 GFE_PATH=`pwd`/../
 
 echo "GFE_PATH=$GFE_PATH"
-
-# The existence of `riscv-gnu-toolchains.tar.gz` is dependent upon the
-# `download-toolchains.sh` shell script having been run successfully.
-(cd ../install; ./download-toolchains.sh)
-# Prepare build context
-rm -f riscv-gnu-toolchains.tar.gz
-cp ../install/riscv-gnu-toolchains.tar.gz .
 
 DATETIME=$(date +"%Y-%m-%d %T")
 
@@ -43,11 +38,27 @@ then
   exit 1
 fi
 
+
 echo "[$DATETIME] deps installation in progress."
-$SUDO docker exec -u 0 $CONTAINER_NAME /bin/sh -c "ssh-keyscan gitlab-ext.galois.com >> /root/.ssh/known_hosts"
+$SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "/gfe/install/deps.sh"
+
+if [[ $1 == "--build-toolchains" ]]; then
+	echo "Building toolchains"
+  $SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "/gfe/install/build-llvm.sh"
+  $SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "/gfe/install/build-frebsd-toolchain.sh"
+  $SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "/gfe/install/build-toolchain.sh"
+  $SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "tar -czf /gfe/install/riscv-gnu-toolchains.tar.gz /opt/riscv /opt/riscv-llvm /opt/riscv/riscv-freebsd"
+else
+	echo "Downloading toolchains"
+  ./install/download_toolchains.sh
+  $SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "tar -C / -xf /gfe/install/riscv-gnu-toolchains.tar.gz"
+fi
+
+# Default folder is /gfe
+$SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "install/amend-bashrc.sh"
+
 # Build and install OpenOCD
-$SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "cd /gfe/riscv-openocd && ./bootstrap"
-$SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "cd /gfe/riscv-openocd && ./configure --enable-remote-bitbang --enable-jtag_vpi --enable-ftdi && make && make install"
+$SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "install/build-openocd.sh"
 
 if [[ $? -ne 0 ]]
 then
