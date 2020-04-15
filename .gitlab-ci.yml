@@ -105,26 +105,30 @@ P1_benchmarks:
     # Coremark LLVM
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 TOOLCHAIN=LLVM clean
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 TOOLCHAIN=LLVM link
-    - ./pytest_processor.py bluespec_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Total ticks" --absent "Errors detected"
-    - ./pytest_processor.py chisel_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Total ticks" --absent "Errors detected"
+    - ./pytest_processor.py bluespec_p1 --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Total ticks" --absent "Errors detected"
+    - ./pytest_processor.py chisel_p1 --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Total ticks" --absent "Errors detected"
+    - echo "Coremark LLVM OK"
 
     # Coremark
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 clean
     - make -C benchmarks/coremark/ PORT_DIR=riscv-bare-metal GFE_TARGET=P1 ITERATIONS=2000 link
-    - ./pytest_processor.py bluespec_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
-    - ./pytest_processor.py chisel_p1  --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+    - ./pytest_processor.py bluespec_p1 --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+    - ./pytest_processor.py chisel_p1 --elf benchmarks/coremark/coremark.bin --timeout 60 --expected "Correct operation validated" --absent "Errors detected"
+    - echo "Coremark GCC OK"
 
     # Mibench2
     - benchmarks/mibench2/buildBenchmarks.sh P1 1
     - for PROG in adpcm_decode adpcm_encode aes basicmath blowfish crc fft limits qsort randmath rc4; do ./pytest_processor.py chisel_p1 --elf benchmarks/mibench2/$PROG.elf --expected "Exit code 0" --absent "Failure" --timeout 60; done
     - for PROG in adpcm_decode adpcm_encode aes basicmath blowfish crc fft limits qsort randmath rc4; do ./pytest_processor.py bluespec_p1 --elf benchmarks/mibench2/$PROG.elf --expected "Exit code 0" --absent "Failure" --timeout 60; done
     - rm benchmarks/mibench2/*.elf
+    - echo "Mibench2 GCC OK"
 
     # Mibench2 LLVM
     - benchmarks/mibench2/buildBenchmarks.sh P1 1 LLVM
     - for PROG in adpcm_decode adpcm_encode aes basicmath blowfish crc fft limits qsort randmath rc4; do ./pytest_processor.py chisel_p1 --elf benchmarks/mibench2/$PROG.elf --expected "Exit code 0" --absent "Failure" --timeout 120; done
     - for PROG in adpcm_decode adpcm_encode aes basicmath blowfish crc fft limits qsort randmath rc4; do ./pytest_processor.py bluespec_p1 --elf benchmarks/mibench2/$PROG.elf --expected "Exit code 0" --absent "Failure" --timeout 120; done
     - rm benchmarks/mibench2/*.elf
+    - echo "Mibench2 LLVM OK"
   extends: [.log_always, .no_sched, .fpga]
 
 P2_benchmarks:
