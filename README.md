@@ -155,7 +155,7 @@ sudo ./install/deps.sh
 sudo ./install/build-openocd.sh
 (cd install; sudo ./download-toolchains.sh)
 # WARNING: tar will overwrite any existing /opt/riscv/ tree!
-sudo tar -C /opt -xf install/riscv-gnu-toolchains.tar.gz
+sudo tar -C / -xf install/riscv-gnu-toolchains.tar.gz
 ```
 
 The `riscv32-unknown-elf-*` tools are not included in this `/opt/riscv`
