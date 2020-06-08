@@ -34,6 +34,9 @@ apt-get install -y libtinfo5
 apt-get install -y libtool pkg-config cmake ninja-build samba texinfo libarchive-dev
 apt-get install -y libglib2.0-dev libpixman-1-dev libarchive-dev libarchive-tools libbz2-dev
 
+# hexdump util
+apt-get install -y bsdmainutils
+
 # Install and configure TFTP server
 apt-get install -y atftpd
 chmod 777 /srv/tftp
