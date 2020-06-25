@@ -32,3 +32,6 @@
 [submodule "benchmarks/coremark"]
 	path = benchmarks/coremark
 	url = https://github.com/GaloisInc/coremark.git
+[submodule "benchmarks/embench-iot"]
+	path = benchmarks/embench-iot
+	url = git@github.com:GaloisInc/embench-iot.git
