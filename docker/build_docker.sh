@@ -45,7 +45,7 @@ $SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "/gfe/install/deps.sh"
 if [[ $1 == "--build-toolchains" ]]; then
 	echo "Building toolchains"
   $SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "/gfe/install/build-llvm.sh"
-  $SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "/gfe/install/build-frebsd-toolchain.sh"
+  $SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "/gfe/install/build-freebsd-toolchain.sh"
   $SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "/gfe/install/build-toolchain.sh"
   $SUDO docker exec -u 0 $CONTAINER_NAME /bin/bash -c "tar -czf /gfe/install/riscv-gnu-toolchains.tar.gz /opt/riscv /opt/riscv-llvm /opt/riscv/riscv-freebsd"
 else
