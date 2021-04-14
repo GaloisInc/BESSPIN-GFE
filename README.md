@@ -155,7 +155,7 @@ sudo ./install/deps.sh
 sudo ./install/build-openocd.sh
 (cd install; sudo ./download-toolchains.sh)
 # WARNING: tar will overwrite any existing /opt/riscv/ tree!
-sudo tar -C /opt -xf install/riscv-gnu-toolchains.tar.gz
+sudo tar -C / -xf install/riscv-gnu-toolchains.tar.gz
 ```
 
 The `riscv32-unknown-elf-*` tools are not included in this `/opt/riscv`
@@ -313,14 +313,9 @@ We expect to see warnings about memory alignment and timer demo
 functions when compiling.
 
 Follow these steps to run FreeRTOS with an interactive GDB session:
-1. Reset the SoC by pressing the CPU_RESET button (SW5) on the VCU118
-   before running FreeRTOS.
-2. Run OpenOCD to connect to the RISC-V core you have running on the
-   FPGA:
-   `openocd -f $GFE_REPO/testing/targets/ssith_gfe.cfg`.
-3. In a new terminal, run Minicom with
-   `minicom -D /dev/ttyUSB1 -b 115200`.
-   `ttyUSB1` should be replaced with whichever USB port is connected
+1. Run OpenOCD to connect to the RISC-V core you have running on the FPGA: `openocd -f $GFE_REPO/testing/targets/ssith_gfe.cfg`.
+
+2. In a new terminal, run Minicom with `minicom -D /dev/ttyUSB1 -b 115200`. `ttyUSB1` should be       replaced with whichever USB port is connected
    to the VCU118's USB-to-UART bridge.
 
    Settings can be configured by running `minicom -s` and selecting
@@ -328,20 +323,9 @@ Follow these steps to run FreeRTOS with an interactive GDB session:
    configured to have 8 data bits, 2 stop bits, no parity bits, and a
    baud rate of 115200.
 
-4. In a new shell, run GDB with
-   `riscv64-unknown-elf-gdb $GFE_REPO/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1/main_blinky.elf`,
-   where `main_blinky` should be the name of the demo you have
-   compiled and want to run.
+3. In a new shell, run GDB with `riscv64-unknown-elf-gdb -x bootmem/startup.gdb $GFE_REPO/FreeRTOS-mirror/FreeRTOS/Demo/RISC-V_Galois_P1/main_blinky.elf`, where `main_blinky` should be the name of the demo you have compiled and want to run. The startup gdb script resets the SoC and connects gdb to OpenOCD. 
 
-5. Once GDB is open, type `target remote localhost:3333` to connect to
-   OpenOCD. OpenOCD should give a message that it has accepted a GDB
-   connection.
-
-   Load the FreeRTOS ELF file onto the processor with `load`. To run,
-   type `c` or `continue`.
-
-6. When you've finished running FreeRTOS, make sure to reset the SoC
-   before running other tests or programs.
+4. To run, type `c` or `continue`.
 
 The expected output from simple blinky test is:
 ```

@@ -74,7 +74,7 @@
 			interrupts-extended = <&CPU0_intc 3 &CPU0_intc 7>;
 			reg = <0x10000000 0x10000>;
 		};
-		plic: interrupt-controller@11000000 {
+		plic: interrupt-controller@c000000 {
 			#interrupt-cells = <1>;
 			compatible = "riscv,plic0";
 			interrupt-controller;

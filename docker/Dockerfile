@@ -10,6 +10,8 @@ RUN mkdir -p /root/.ssh/ && touch /root/.ssh/known_hosts
 RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 RUN ssh-keyscan gitlab-ext.galois.com >> /root/.ssh/known_hosts
 
+RUN apt-get update
+RUN apt-get install -y apt-utils
 RUN apt-get install -y git
 RUN apt-get install -y software-properties-common wget
 RUN apt-get install -y gnupg
