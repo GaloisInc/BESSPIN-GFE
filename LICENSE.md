@@ -1,16 +1,17 @@
 BESSPIN GFE
 Copyright 2018-2021 Galois.
+
 All rights reserved.
 
 The work in the GFE repository that exists outside of its submodules, or does not have an explicit license in one of its parent directories, is licensed under [Apache 2.0](./LICENSE.gfe) (see also the [copyright notice](./NOTICE)).
 
 Submodules and subcomponents of this repository have their own respective licenses. Please follow the licensing rules for each submodule as directed in their respective repositories.
 
-The sub-directories with different license are listed below:
+The sub-directories with different licenses are listed below:
 
 | Sub-Directory | License |
 | ------------- | ------- |
-| TBD | TBD |
+| - | - |
 
 
 The submodules licenses are listed below for convenience. Please note that some of them have submodules.
