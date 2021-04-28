@@ -34,3 +34,6 @@ git -C chisel_processors submodule update --init chipyard
 git -C chisel_processors/rocket-chip submodule sync
 git -C chisel_processors/rocket-chip submodule update --init firrtl chisel3 hardfloat
 
+# cloud GFE
+git submodule update --init cloudGFE
+git -C cloudGFE submodule update --init FireSim/firesim

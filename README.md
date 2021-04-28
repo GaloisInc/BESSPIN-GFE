@@ -1,22 +1,9 @@
-# Government Furnished Equipment (GFE) #
+# BESSPIN Government Furnished Equipment (GFE) #
 
-[![pipeline status](https://gitlab-ext.galois.com/ssith/gfe/badges/develop/pipeline.svg)](https://gitlab-ext.galois.com/ssith/gfe/commits/develop)
-
-Source files and build scripts for generating and testing the GFE for SSITH.
+Source files and build scripts for generating and testing the BESSPIN GFE.
 
 Please refer to the [GFE System Description pdf](GFE_Rel5.2_System_Description.pdf)
 for a high-level overview of the system.
-
-## Release Schedule ##
-
-Below is the planned release schedule for the remainder of Phase 2 of the BESSPIN program.
-
-Links to related GitLab milestones:
-* [GFE Release 5.0](https://gitlab-ext.galois.com/ssith/gfe/-/milestones/2)
-* [GFE Release 5.1](https://gitlab-ext.galois.com/ssith/gfe/-/milestones/7)
-* [GFE Release 5.2](https://gitlab-ext.galois.com/ssith/gfe/-/milestones/8)
-
-<img src="documentation_source/images/gfe-release-schedule.png" width = "800" height = "410">
 
 ## Table of contents ##
 

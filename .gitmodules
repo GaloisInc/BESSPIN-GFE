@@ -37,3 +37,6 @@
 [submodule "benchmarks/mibench2"]
 	path = benchmarks/mibench2
 	url = ../BESSPIN-mibench2.git
+[submodule "cloudGFE"]
+	path = cloudGFE
+	url = ../BESSPIN-CloudGFE
