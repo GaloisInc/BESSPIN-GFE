@@ -93,6 +93,7 @@ cd $BASE_DIR/vivado
 
 # Run vivado to create a top level project
 # See soc.tcl for detailed options
+source /opt/Xilinx/Vivado/2019.1/settings64.sh
 vivado -mode batch -source $BASE_DIR/tcl/soc.tcl \
 -tclargs --origin_dir $BASE_DIR/tcl \
 --proc_name $proc_name \
