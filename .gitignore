@@ -10,6 +10,9 @@ bootrom/bootrom.bytereversed.mem
 bootrom/bootrom.dump
 bootrom/bootrom.coe
 
+bootrom-configured/
+bootrom-configured.*/
+
 flash-scripts/*.mcs
 flash-scripts/*.log
 flash-scripts/*.jou

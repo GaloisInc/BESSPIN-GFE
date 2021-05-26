@@ -17,30 +17,80 @@ set_property SLEW SLOW [get_ports rs232_uart_rts]
 set_false_path -from [get_ports pcie_perstn]
 
 # ----- PMOD0 Pins (J52 on VCU118) -----
+# ----- UART1 -----
+set_property IOSTANDARD LVCMOS12 [get_ports uart1_tx]
+set_property PACKAGE_PIN AV16 [get_ports uart1_tx]; # PMOD_0_4
+set_property IOSTANDARD LVCMOS12 [get_ports uart1_rx]
+set_property PACKAGE_PIN AU16 [get_ports uart1_rx]; # PMOD_0_5
 
-
+# ----- GPIO -----
+set_property IOSTANDARD LVCMOS12 [get_ports gpio[0]]
+set_property PACKAGE_PIN AY14 [get_ports gpio[0]]; # PMOD_0_0
+set_property DRIVE 8 [get_ports gpio[0]]
+set_property IOSTANDARD LVCMOS12 [get_ports gpio[1]]
+set_property PACKAGE_PIN AY15 [get_ports gpio[1]]; # PMOD_0_1
+set_property DRIVE 8 [get_ports gpio[1]]
+set_property IOSTANDARD LVCMOS12 [get_ports gpio[2]]
+set_property PACKAGE_PIN AW15 [get_ports gpio[2]]; # PMOD_0_2
+set_property DRIVE 8 [get_ports gpio[2]]
+set_property IOSTANDARD LVCMOS12 [get_ports gpio[3]]
+set_property PACKAGE_PIN AV15 [get_ports gpio[3]]; # PMOD_0_3
+set_property DRIVE 8 [get_ports gpio[3]]
+set_property IOSTANDARD LVCMOS12 [get_ports gpio[4]]
+set_property PACKAGE_PIN AT15 [get_ports gpio[4]]; # PMOD_0_6
+set_property DRIVE 8 [get_ports gpio[4]]
+set_property IOSTANDARD LVCMOS12 [get_ports gpio[5]]
+set_property PACKAGE_PIN AT16 [get_ports gpio[5]]; # PMOD_0_7
+set_property DRIVE 8 [get_ports gpio[5]]
 
 # ----- PMOD1 Pins (J53 on VCU118) -----
+# ----- IIC0 -----
+set_property IOSTANDARD LVCMOS12 [get_ports iic0_sda]
+set_property PACKAGE_PIN N28 [get_ports iic0_sda]; # PMOD_1_0
+set_property DRIVE 8 [get_ports iic0_sda]
+set_property IOSTANDARD LVCMOS12 [get_ports iic0_scl]
+set_property PACKAGE_PIN M30 [get_ports iic0_scl]; #PMOD_1_1
+set_property DRIVE 8 [get_ports iic0_scl]
 
+# ----- GPIO -----
+set_property IOSTANDARD LVCMOS12 [get_ports gpio[6]]
+set_property PACKAGE_PIN N30 [get_ports gpio[6]]; # PMOD_1_2
+set_property DRIVE 8 [get_ports gpio[6]]
+set_property IOSTANDARD LVCMOS12 [get_ports gpio[7]]
+set_property PACKAGE_PIN P30 [get_ports gpio[7]]; # PMOD_1_3
+set_property DRIVE 8 [get_ports gpio[7]]
 
+# ----- SPI -----
+set_property IOSTANDARD LVCMOS12 [get_ports spi_ss]
+set_property PACKAGE_PIN P29 [get_ports spi_ss]; # PMOD_1_4
+set_property DRIVE 8 [get_ports spi_ss]
+set_property IOSTANDARD LVCMOS12 [get_ports spi_mosi]
+set_property PACKAGE_PIN L31 [get_ports spi_mosi]; # PMOD_1_5
+set_property DRIVE 8 [get_ports spi_mosi]
+set_property IOSTANDARD LVCMOS12 [get_ports spi_miso]
+set_property PACKAGE_PIN M31 [get_ports spi_miso]; # PMOD_1_6
+set_property DRIVE 8 [get_ports spi_miso]
+set_property IOSTANDARD LVCMOS12 [get_ports spi_sck]
+set_property PACKAGE_PIN R29 [get_ports spi_sck]; # PMOD_1_7
+set_property DRIVE 8 [get_ports spi_sck]
 
 # ----- User GPIO LEDs -----
-set_property IOSTANDARD LVCMOS12 [get_ports {gpio_led[7]}]
-set_property PACKAGE_PIN BA37 [get_ports {gpio_led[7]}]
-set_property IOSTANDARD LVCMOS12 [get_ports {gpio_led[6]}]
-set_property PACKAGE_PIN AV36 [get_ports {gpio_led[6]}]
-set_property IOSTANDARD LVCMOS12 [get_ports {gpio_led[5]}]
-set_property PACKAGE_PIN AU37 [get_ports {gpio_led[5]}]
-set_property IOSTANDARD LVCMOS12 [get_ports {gpio_led[4]}]
-set_property PACKAGE_PIN BF32 [get_ports {gpio_led[4]}]
-set_property IOSTANDARD LVCMOS12 [get_ports {gpio_led[3]}]
-set_property PACKAGE_PIN BB32 [get_ports {gpio_led[3]}]
-set_property IOSTANDARD LVCMOS12 [get_ports {gpio_led[2]}]
-set_property PACKAGE_PIN AY30 [get_ports {gpio_led[2]}]
-set_property IOSTANDARD LVCMOS12 [get_ports {gpio_led[1]}]
-set_property PACKAGE_PIN AV34 [get_ports {gpio_led[1]}]
-set_property IOSTANDARD LVCMOS12 [get_ports {gpio_led[0]}]
-set_property PACKAGE_PIN AT32 [get_ports {gpio_led[0]}]
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[7]]
+set_property PACKAGE_PIN BA37 [get_ports gpio_led[7]]; # GPIO_LED_7
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[6]]
+set_property PACKAGE_PIN AV36 [get_ports gpio_led[6]]; # GPIO_LED_6
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[5]]
+set_property PACKAGE_PIN AU37 [get_ports gpio_led[5]]; # GPIO_LED_5
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[4]]
+set_property PACKAGE_PIN BF32 [get_ports gpio_led[4]]; # GPIO_LED_4
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[3]]
+set_property PACKAGE_PIN BB32 [get_ports gpio_led[3]]; # GPIO_LED_3
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[2]]
+set_property PACKAGE_PIN AY30 [get_ports gpio_led[2]]; # GPIO_LED_2
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[1]]
+set_property PACKAGE_PIN AV34 [get_ports gpio_led[1]]; # GPIO_LED_1
+set_property IOSTANDARD LVCMOS12 [get_ports gpio_led[0]]
+set_property PACKAGE_PIN AT32 [get_ports gpio_led[0]]; # GPIO_LED_0
 
 # FMC PCIe pins
 set_property PACKAGE_PIN V38 [get_ports fmc_pcie_clk_p[0]]
@@ -53,8 +103,8 @@ set_property LOC GTYE4_CHANNEL_X0Y28 [get_cells -hierarchical -filter {NAME =~ *
 set_property LOC GTYE4_CHANNEL_X0Y30 [get_cells -hierarchical -filter {NAME =~ *gen_channel_container[8].*gen_gtye4_channel_inst[2].GTYE4_CHANNEL_PRIM_INST}]
 set_property LOC GTYE4_CHANNEL_X0Y29 [get_cells -hierarchical -filter {NAME =~ *gen_channel_container[8].*gen_gtye4_channel_inst[3].GTYE4_CHANNEL_PRIM_INST}]
 
-set_clock_groups -asynchronous -group mmcm_clkout1 -group [get_clocks -of_objects [get_pins -hierarchical -filter {NAME =~ *gen_channel_container[*].*gen_gtye4_channel_inst[*].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}]]
-set_clock_groups -asynchronous -group [get_clocks -of_objects [get_pins -hierarchical -filter {NAME =~ *gen_channel_container[*].*gen_gtye4_channel_inst[*].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}]] -group mmcm_clkout1
+set_clock_groups -asynchronous -group {mmcm_clkout1} -group [get_clocks -of_objects [get_pins -hierarchical -filter {NAME =~ *gen_channel_container[*].*gen_gtye4_channel_inst[*].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}]]
+set_clock_groups -asynchronous -group [get_clocks -of_objects [get_pins -hierarchical -filter {NAME =~ *gen_channel_container[*].*gen_gtye4_channel_inst[*].GTYE4_CHANNEL_PRIM_INST/TXOUTCLK}]] -group {mmcm_clkout1}
 
 set_clock_groups -asynchronous -group {mmcm_clkout1} -group {fmc_pcie_clk}
 set_clock_groups -asynchronous -group {fmc_pcie_clk} -group {mmcm_clkout1}
@@ -155,6 +205,8 @@ create_clock -period 10.000 -name pcie_refclk_clk [get_ports pcie_refclk_clk_p]
 #
 set_false_path -from [get_ports pcie_perstn]
 set_property PULLUP true [get_ports pcie_perstn]
+set_property IOSTANDARD LVCMOS18 [get_ports pcie_perstn]
+set_property PACKAGE_PIN AM17 [get_ports pcie_perstn]
 #
 set_property PACKAGE_PIN AC8 [get_ports pcie_refclk_clk_n]
 set_property PACKAGE_PIN AC9 [get_ports pcie_refclk_clk_p]
@@ -258,40 +310,3 @@ set_clock_groups -name async90 -asynchronous -group [get_clocks mmcm_clkout1] -g
 
 # Not to be used for bluespec_p3, so moved to other individual constraints files:
 # set_property USER_SLR_ASSIGNMENT SLR0 [get_cells ssith_processor_0]
-
-set_property IOSTANDARD LVCMOS18 [get_ports pix_clk]
-set_property IOSTANDARD LVCMOS18 [get_ports {Blue[3]}]
-set_property IOSTANDARD LVCMOS18 [get_ports {Blue[2]}]
-set_property IOSTANDARD LVCMOS18 [get_ports {Blue[1]}]
-set_property IOSTANDARD LVCMOS18 [get_ports {Blue[0]}]
-set_property IOSTANDARD LVCMOS18 [get_ports {Green[3]}]
-set_property IOSTANDARD LVCMOS18 [get_ports {Green[2]}]
-set_property IOSTANDARD LVCMOS18 [get_ports {Green[1]}]
-set_property IOSTANDARD LVCMOS18 [get_ports {Green[0]}]
-set_property IOSTANDARD LVCMOS18 [get_ports {Red[3]}]
-set_property IOSTANDARD LVCMOS18 [get_ports {Red[2]}]
-set_property IOSTANDARD LVCMOS18 [get_ports {Red[1]}]
-set_property IOSTANDARD LVCMOS18 [get_ports {Red[0]}]
-set_property IOSTANDARD LVCMOS18 [get_ports vid_active_video_0]
-set_property IOSTANDARD LVCMOS18 [get_ports vid_hsync_0]
-set_property IOSTANDARD LVCMOS18 [get_ports vid_vsync_0]
-set_property PACKAGE_PIN AY14 [get_ports {Blue[3]}]
-set_property PACKAGE_PIN AV16 [get_ports {Blue[2]}]
-set_property PACKAGE_PIN AU16 [get_ports {Blue[1]}]
-set_property PACKAGE_PIN AW15 [get_ports {Blue[0]}]
-set_property PACKAGE_PIN N30 [get_ports {Green[3]}]
-set_property PACKAGE_PIN M31 [get_ports {Green[2]}]
-set_property PACKAGE_PIN P30 [get_ports {Green[1]}]
-set_property PACKAGE_PIN R29 [get_ports {Green[0]}]
-set_property PACKAGE_PIN N28 [get_ports {Red[3]}]
-set_property PACKAGE_PIN P29 [get_ports {Red[2]}]
-set_property PACKAGE_PIN M30 [get_ports {Red[1]}]
-set_property PACKAGE_PIN L31 [get_ports {Red[0]}]
-set_property PACKAGE_PIN AT15 [get_ports vid_active_video_0]
-set_property PACKAGE_PIN AV15 [get_ports vid_hsync_0]
-set_property PACKAGE_PIN AT16 [get_ports vid_vsync_0]
-set_property PACKAGE_PIN AY15 [get_ports pix_clk]
-set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
-set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
-set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
-connect_debug_port dbg_hub/clk [get_nets clk]
