@@ -4,6 +4,7 @@ bootrom_mem = bootrom.mem
 bootrom_coe = bootrom.coe
 
 NO_PCI?=0
+ENABLE_FRAME_BUFFER?=0
 CPU_SPEED?=0
 RTC_FREQ?=0
 CROSS_COMPILE?=riscv64-unknown-elf-

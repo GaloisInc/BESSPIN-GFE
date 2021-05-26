@@ -82,6 +82,7 @@ if { $::argc > 0 } {
       "--proc_path" { incr i; set proc_path [lindex $::argv $i] }
       "--clock_freq_mhz" { incr i; set clock_freq_mhz [lindex $::argv $i] }
       "--no_xdma" { incr i; set no_xdma [lindex $::argv $i] }
+      "--en_frame_buff" { incr i; set en_frame_buff [lindex $::argv $i] }
       "--help"         { help }
       default {
         if { [regexp {^-} $option] } {
@@ -164,7 +165,14 @@ set_property "ip_repo_paths" [list \
  ] $obj
 
 # Generate block diagram
-source $origin_dir/soc_bd.tcl
+if {$en_frame_buff == 0} {
+    source $origin_dir/soc_bd.tcl
+}
+else {
+    # Separate block diagram for frame buffer video output
+    puts "Building frame buffer and video output block design"
+    source $origin_dir/soc_bd_video.tcl
+}
 
 if {$no_xdma == 1} {
     puts "Building with svf instead of xdma"
