@@ -201,7 +201,12 @@ set obj [get_filesets constrs_1]
 
 # Add/Import constrs file and set constrs file properties
 # Add shared constraint files
-add_files -fileset constrs_1 [ glob $origin_dir/../xdc/vcu118_soc.xdc ]
+if {$en_frame_buff == 0} {
+    add_files -fileset constrs_1 [ glob $origin_dir/../xdc/vcu118_soc.xdc ]
+} else {
+    puts "Using frame buffer constraints file"
+    add_files -fileset constrs_1 [ glob $origin_dir/../xdc/vcu118_soc_video.xdc ]
+}
 # Add any processor specific constraint files
 add_files -fileset constrs_1 [ glob $origin_dir/../xdc/vcu118_soc_${proc_name}.xdc ]
 
