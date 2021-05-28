@@ -167,8 +167,7 @@ set_property "ip_repo_paths" [list \
 # Generate block diagram
 if {$en_frame_buff == 0} {
     source $origin_dir/soc_bd.tcl
-}
-else {
+} else {
     # Separate block diagram for frame buffer video output
     puts "Building frame buffer and video output block design"
     source $origin_dir/soc_bd_video.tcl
