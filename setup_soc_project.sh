@@ -23,7 +23,7 @@ clock_freq_mhz=50
 # Parse the processor selection
 proc_picker $1
 
-no_xdma=1
+no_xdma=0
 en_frame_buff=1
 
 if [[ $proc_name == *p2_pcie ]]; then
