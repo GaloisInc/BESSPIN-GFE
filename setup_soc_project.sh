@@ -25,8 +25,8 @@ proc_picker $1
 
 no_xdma=0
 # Currently there is an issue when no_xdma=1 and en_frame_buff=1 as the block
-# design of the video output was created with no_xmda=1. This would create
-# a Vivado error when running .tcl scripts due to overlapping nets and blocks.
+# design of the video output was created with no_xmda=1. Setting both to 1
+# causes a Vivado error when running .tcl scripts due to overlapping nets.
 en_frame_buff=1
 
 if [[ $proc_name == *p2_pcie ]]; then
