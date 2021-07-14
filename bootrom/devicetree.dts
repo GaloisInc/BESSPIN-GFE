@@ -147,5 +147,48 @@
 		     };
 		};
 #endif
+#if ENABLE_FRAME_BUFFER == 0
+		hls_ip_reset: gpio@50020000 {
+			#gpio-cells = <3>;
+			clock-frequency = <CPU_SPEED>;
+			compatible = "xlnx,axi-gpio-2.0", "xlnx,xps-gpio-1.00.a";
+			gpio-controller ;
+			reg = <0x50020000 0x10000>;
+			xlnx,all-inputs = <0x0>;
+			xlnx,all-inputs-2 = <0x0>;
+			xlnx,all-outputs = <0x1>;
+			xlnx,all-outputs-2 = <0x0>;
+			xlnx,dout-default = <0x00000000>;
+			xlnx,dout-default-2 = <0x00000000>;
+			xlnx,gpio-width = <0x1>;
+			xlnx,gpio2-width = <0x20>;
+			xlnx,is-dual = <0x0>;
+			xlnx,tri-default = <0xFFFFFFFF>;
+			xlnx,tri-default-2 = <0xFFFFFFFF>;
+		};
+		v_frmbuf_rd_0: v_frmbuf_rd@50000000 {
+			#dma-cells = <1>;
+			compatible = "xlnx,v-frmbuf-rd-2.1", "xlnx,axi-frmbuf-rd-v2.1";
+			interrupt-names = "interrupt-controller";
+			interrupt-parent = <&interrupt-controller>;
+			interrupts = <3 2>;
+			reg = <0x50000000 0x10000>;
+			xlnx,dma-addr-width = <32>;
+			xlnx,dma-align = <8>;
+			xlnx,max-height = <2160>;
+			xlnx,max-width = <3840>;
+			xlnx,pixels-per-clock = <1>;
+			xlnx,s-axi-ctrl-addr-width = <0x7>;
+			xlnx,s-axi-ctrl-data-width = <0x20>;
+			xlnx,vid-formats = "bgr888";
+			xlnx,video-width = <8>;
+			reset-gpios = <&hls_ip_reset 0 0 1>;
+		};
+		v_tc_0: v_tc@50010000 {
+			compatible = "xlnx,v-tc-6.1", "xlnx,v-tc-6.1";
+			reg = <0x50010000 0x10000>;
+			xlnx,generator ;
+		};
+#endif
 	};
 };

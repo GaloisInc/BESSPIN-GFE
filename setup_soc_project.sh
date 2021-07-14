@@ -23,11 +23,19 @@ clock_freq_mhz=50
 # Parse the processor selection
 proc_picker $1
 
-no_xdma=1
+no_xdma=0
+# Currently there is an issue when no_xdma=1 and en_frame_buff=1 as the block
+# design of the video output was created with no_xmda=1. Setting both to 1
+# causes a Vivado error when running .tcl scripts due to overlapping nets.
+en_frame_buff=1
 
 if [[ $proc_name == *p2_pcie ]]; then
     no_xdma=0
     echo "enabling PCIe, disabling SVF"
+fi
+if [[ $proc_name != *p2* ]]; then
+    en_frame_buff=0
+    echo "disabling frame buffer, only supported with p2"
 fi
     
 # Set up the bootrom directory
@@ -64,19 +72,19 @@ cd $BASE_DIR/bootrom-configured
 case "$proc_name" in
     *p1)
 	make --always-make XLEN=32 CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=50000000 NO_PCI=$no_xdma
-	clock_freq_mhz=50
+	clock_freq_mhz=50 ENABLE_FRAME_BUFFER=$en_frame_buff
 	;;
     *p2*)
 	make --always-make XLEN=64 CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=100000000 NO_PCI=$no_xdma
-	clock_freq_mhz=100
+	clock_freq_mhz=100 ENABLE_FRAME_BUFFER=$en_frame_buff
 	;;
     bluespec_p3)
 	make --always-make XLEN=64 CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=25000000 RTC_FREQ=250000 NO_PCI=$no_xdma
-	clock_freq_mhz=25
+	clock_freq_mhz=25 ENABLE_FRAME_BUFFER=$en_frame_buff
 	;;
     chisel_p3)
 	make --always-make XLEN=64 CROSS_COMPILE=riscv64-unknown-elf- CPU_SPEED=25000000 NO_PCI=$no_xdma
-	clock_freq_mhz=25
+	clock_freq_mhz=25 ENABLE_FRAME_BUFFER=$en_frame_buff
 	;;
     *)
 	echo "WARNING: don't know how to make a boot ROM for processor $proc_name"
@@ -93,10 +101,12 @@ cd $BASE_DIR/vivado
 
 # Run vivado to create a top level project
 # See soc.tcl for detailed options
+source /opt/Xilinx/Vivado/2019.1/settings64.sh
 vivado -mode batch -source $BASE_DIR/tcl/soc.tcl \
 -tclargs --origin_dir $BASE_DIR/tcl \
 --proc_name $proc_name \
 --clock_freq_mhz $clock_freq_mhz \
---no_xdma $no_xdma
+--no_xdma $no_xdma \
+--en_frame_buff $en_frame_buff
 
 err_msg $? "Creating the vivado project failed"

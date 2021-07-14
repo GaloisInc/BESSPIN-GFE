@@ -82,6 +82,7 @@ if { $::argc > 0 } {
       "--proc_path" { incr i; set proc_path [lindex $::argv $i] }
       "--clock_freq_mhz" { incr i; set clock_freq_mhz [lindex $::argv $i] }
       "--no_xdma" { incr i; set no_xdma [lindex $::argv $i] }
+      "--en_frame_buff" { incr i; set en_frame_buff [lindex $::argv $i] }
       "--help"         { help }
       default {
         if { [regexp {^-} $option] } {
@@ -164,7 +165,13 @@ set_property "ip_repo_paths" [list \
  ] $obj
 
 # Generate block diagram
-source $origin_dir/soc_bd.tcl
+if {$en_frame_buff == 0} {
+    source $origin_dir/soc_bd.tcl
+} else {
+    # Separate block diagram for frame buffer video output
+    puts "Building frame buffer and video output block design"
+    source $origin_dir/soc_bd_video.tcl
+}
 
 if {$no_xdma == 1} {
     puts "Building with svf instead of xdma"
@@ -193,7 +200,12 @@ set obj [get_filesets constrs_1]
 
 # Add/Import constrs file and set constrs file properties
 # Add shared constraint files
-add_files -fileset constrs_1 [ glob $origin_dir/../xdc/vcu118_soc.xdc ]
+if {$en_frame_buff == 0} {
+    add_files -fileset constrs_1 [ glob $origin_dir/../xdc/vcu118_soc.xdc ]
+} else {
+    puts "Using frame buffer constraints file"
+    add_files -fileset constrs_1 [ glob $origin_dir/../xdc/vcu118_soc_video.xdc ]
+}
 # Add any processor specific constraint files
 add_files -fileset constrs_1 [ glob $origin_dir/../xdc/vcu118_soc_${proc_name}.xdc ]
 
