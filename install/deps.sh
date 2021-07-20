@@ -24,7 +24,7 @@ apt-get install -y libftdi1-2 libusb-1.0-0-dev
 apt-get install -y minicom
 
 # System-wide python packages needed by testing scripts
-apt install -y python3-pip
+apt-get install -y python3-pip
 pip3 install pyserial pexpect
 
 # Xilinx vivado_lab dependency

@@ -19,9 +19,7 @@ run ./build.sh chisel_p1"
 
 # Run vivado to build a top level project
 cd $BASE_DIR/vivado
-#vivado -mode batch $vivado_project -source $BASE_DIR/tcl/build.tcl
-# hacky way due to aliasing
-/opt/Xilinx/Vivado/2019.1/bin/vivado -mode batch $vivado_project -source $BASE_DIR/tcl/build.tcl
+vivado -mode batch $vivado_project -source $BASE_DIR/tcl/build.tcl
 err_msg $? "Vivado build failed"
 
 # Copy bitstream to the bitstreams folder
