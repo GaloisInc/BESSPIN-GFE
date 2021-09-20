@@ -103,16 +103,10 @@ does not require a license and is solely used to program the FPGA.
 
 ### Clone this Repo ###
 
-Once the OS is installed, you will need to
-[add an ssh key](https://gitlab-ext.galois.com/profile/keys)
-to your Galois GitLab account in order to clone the GFE repo.
-These [instructions](https://docs.gitlab.com/ee/ssh/#adding-an-ssh-key-to-your-gitlab-account)
-have more details.
-
-After setting up an ssh key, clone this repo by running
+Clone this repo by running
 ```bash
-git clone git@gitlab-ext.galois.com:ssith/gfe.git
-cd gfe
+git clone https://github.com/GaloisInc/BESSPIN-GFE.git
+cd BESSPIN-GFE
 ```
 
 ### Update Dependencies ###
@@ -473,7 +467,7 @@ If something doesn't work, then:
 2) sometimes restarting the FPGA with `CPU_RESET` button (or typing
   `reset` in GDB) will help
 3) Check out our
-  [Issue](https://gitlab-ext.galois.com/ssith/gfe/issues) - maybe you
+  [Issue tracker](https://github.com/GaloisInc/BESSPIN-GFE/issues) - maybe you
   have a problem we already know about.
 
 ## Running Linux - Debian or Busybox ##
