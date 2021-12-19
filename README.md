@@ -50,6 +50,7 @@ for a high-level overview of the system.
   - [Hardware Setup](#pcie-hardware-setup)
   - [Reset](#pcie-reset)
   - [Testing](#pcie-testing)
+- [Enabling Video Output](#enabling-video-output)
 
 ## Getting Started ##
 
@@ -944,6 +945,41 @@ button on the FMC card).
 [fmc_card_config]: documentation_source/images/FMC_CARD_CONFIG.JPG "FMC card configuration"
 [pcie_ethernet]: documentation_source/images/PCIE_ROOT_COMPLEX_ETHERNET.JPG "PCIe root complex with Ethernet PCIe card"
 [pcie_usb]: documentation_source/images/PCIE_ROOT_COMPLEX_USB.JPG "PCIe root complex with USB PCIe card"
+
+## Enabling Video Output ##
+
+Video output on the VCU118 requires additional hardware connected 
+to the both PMOD headers. The recommended setup uses an HDMI cord, 
+a PMOD to DVI board, pullup resistors to 3.3V for each PMOD pin,
+and jumpers to connect the setup to the VCU118's PMOD pins. 
+
+A Vivado project can be generated with this subsystem activated. Doing
+so requires setting `en_frame_buff=1` in `./setup_soc_project`.
+```
+# Parse the processor selection
+proc_picker $1
+
+no_xdma=0
+# Currently there is an issue when no_xdma=1 and en_frame_buff=1 as the block
+# design of the video output was created with no_xmda=1. Setting both to 1
+# causes a Vivado error when running .tcl scripts due to overlapping nets.
+en_frame_buff=1
+```
+
+The video output subsystem is designed for P2 processors so the project 
+contains the Vivado changes only when P2 is targetted.
+```
+cd $GFE_REPO
+# Make sure that en_frame_buff=1, no_xdma=0
+./setup_soc_project chisel_p2
+```
+
+Note that the video subsystem currently is not operational with any 
+operating system due to missing drivers and cannot output dynamically images.
+
+For more information including design decisions, please refer to documentation
+and Final Report in [this repository](https://github.com/jackchen0226/ECE-Capstone-proj-7).
+
 
 ## Baseline Performance
 
