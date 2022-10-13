@@ -136,16 +136,15 @@ containing pre-built copies of both the newlib
 (`riscv64-unknown-elf-*`) and Linux (`riscv64-unknown-linux-gnu-*`)
 variants of the GNU toolchain, which should be unpacked into
 `/opt/riscv` after backing up any files which may already exist there.
-The archive is served from Google Drive. If you cannot access it, try
-downloading the file from Galois' OwnCloud service, using [this
-link](https://owncloud-tng.galois.com/index.php/s/WFVC0TnUgc7Efos) in
+The archive is served from Google Drive from Galois' OwnCloud service, using [this
+link](https://owncloud-tng.galois.com/index.php/s/px1IPhZ7Oburyvs) in
 your browser, and saving the archive in the install directory.
 
 The scripts should be run directly from the root of this repo:
 ```bash
 sudo ./install/deps.sh
 sudo ./install/build-openocd.sh
-(cd install; sudo ./download-toolchains.sh)
+# download the toolchain archive into install directory
 # WARNING: tar will overwrite any existing /opt/riscv/ tree!
 sudo tar -C / -xf install/riscv-gnu-toolchains.tar.gz
 ```
