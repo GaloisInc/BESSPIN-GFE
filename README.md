@@ -131,14 +131,14 @@ The `build-openocd.sh` script will build a GFE-specific development
 version of `riscv-openocd` from the included submodule, placing an
 executable in `/usr/local/bin/openocd`.
 
-The `download-toolchains.sh` script downloads a 1.1GB archive
+We provide a 1.1GB archive
 containing pre-built copies of both the newlib
 (`riscv64-unknown-elf-*`) and Linux (`riscv64-unknown-linux-gnu-*`)
 variants of the GNU toolchain, which should be unpacked into
 `/opt/riscv` after backing up any files which may already exist there.
-The archive is served from Google Drive from Galois' OwnCloud service, using [this
+The archive is served from Google Drive from Galois' OwnCloud service, retrieve it by using [this
 link](https://owncloud-tng.galois.com/index.php/s/px1IPhZ7Oburyvs) in
-your browser, and saving the archive in the install directory.
+your browser, and saving the archive in the `install` directory.
 
 The scripts should be run directly from the root of this repo:
 ```bash
