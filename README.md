@@ -473,58 +473,59 @@ If something doesn't work, then:
 
 ### Creating Debian Image ###
 
+The most mature build flow for customized Debian images is provided by the
+scripts for the Nix-based build environment in the [BESSPIN-Environment
+repo](https://github.com/GaloisInc/BESSPIN-Environment). The instructions here
+demonstrate how customized Debian images can be built using only this GFE repo.
+
 Before starting, there are several necessary packages to install. Run:
 ```
 apt-get install libssl-dev debian-ports-archive-keyring binfmt-support qemu-user-static mmdebstrap
 ```
 
-The debian directory includes several scripts for creating a Debian
-image and a simple Makefile to run them. Running `make debian` from
-`$GFE_REPO/bootmem` will perform all the steps of creating the
-image. If you want to make modifications to the chroot and then build
-the image, you can do the following:
+Next, produce and modify the Debian filesystem:
 ``` bash
 # Using the scripts
 cd $GFE_REPO/debian
 
-# Create chroot and compress cpio archive
-sudo ./create_chroot.sh
+# Create chroot
+sudo make riscv64-chroot
 
 # Enter chroot
 sudo chroot riscv64-chroot/
 
 # ... Make modifications to the chroot ...
 
-# Remove apt-cache and list files to decrease image size if desired
-./clean_chroot
-
 # Exit chroot
 exit
 
-# Recreate the cpio.gz image
-sudo ./create_cpio.sh
+# Create the cpio.gz image
+sudo make ../bootmem/debian.cpio.gz
 
 # Build kernel and bbl
-cd $GFE_REPO/bootmem
-make debian
+cd ../bootmem
+make -f Makefile.debian_custom_cpio
 ```
 To decrease the size of the image, some language man pages,
 documentation, and locale files are removed.  This results in warnings
 about locale settings and man files that are expected.
 
-If you want to install more packages than what is included, run `sudo
-./create_chroot.sh package1 package2` and substitute `package1` and
-`package2` with all the packages you want to install. Then recreate
-the `cpio.gz` image and run `make debian` as described above. If
-installing or removing packages manually rather than with the script,
-use `apt-get` to install or remove any packages from within the chroot
-and run `./clean_chroot` from within the chroot afterwards.
+If you want to install additional Debian packages, run `apt-get install
+package1 package2` in the chroot, substituting `package1` and `package2` with
+the names of the packages that you want to install. Then recreate the
+`debian.cpio.gz` image and re-build the kernel and bbl as described above.
+Installed packages can also be customized by modification of the build scripts,
+for example `setup_scripts/install_important.sh` or `setup_chroot.sh`. Note
+that the keys used to sign the Debian snapshot archive contents have expired,
+and because of this signature checking is disabled by default. `apt` will issue
+warnings about installing packages without verification, but should nonetheless
+be able to install the packages successfully.
 
-The bbl image is located at `$GFE_REPO/bootmem/build-bbl/bbl` and can
-be loaded and run using GDB. The default root password is `riscv`.
+The bbl image is located at `$GFE_REPO/bootmem/build-debian-bbl/bbl` and can be
+loaded and run using GDB. The default root password is `riscv`.
 
 A memory image is also created that can be loaded into the flash ROM
-on the FPGA at `$GFE_REPO/bootmem/bootmem.bin`
+on the FPGA at `$GFE_REPO/bootmem/bootmem-debian.bin`
 
 ### Creating Busybox Image ###
 
