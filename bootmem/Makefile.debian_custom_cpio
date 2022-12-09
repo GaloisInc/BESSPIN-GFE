@@ -1,0 +1,73 @@
+# Define certain global variables
+CROSS_COMPILE?=riscv64-unknown-linux-gnu-
+MKDIR?=mkdir
+CC=$(CROSS_COMPILE)gcc
+OBJCOPY=$(CROSS_COMPILE)objcopy
+
+# Debian build
+DEBIAN_CONFIG?=$(CURDIR)/debian-linux.config
+
+$(info DEBIAN_CONFIG=$(DEBIAN_CONFIG))
+
+# Build and source directories
+LINUX_SRC=../riscv-linux
+BBL_SRC=../../riscv-pk
+
+# Export variables
+export CROSS_COMPILE
+
+# For faster builds, use all available cores
+UNAME = $(shell uname -s)
+NPROCS:=1
+ifeq ($(UNAME),Linux)
+        NPROCS := $(shell grep -c ^processor /proc/cpuinfo)
+else ifeq ($(UNAME),Darwin)
+        NPROCS := $(shell sysctl hw.ncpu | awk '{print $$2}')
+endif
+# Limit NPROCS to 8 so qemu can handle it
+
+default: debian
+debian: build-debian-bbl/bbl bootmem-debian.bin
+
+.PHONY: default debian clean
+
+# Linux kernel
+# Statically linked linux kernel executable, has CONFIG_INITRAMFS_SOURCE baked in it
+# For debian, we have `CONFIG_INITRAMFS_SOURCE="../debian.cpio.gz"`, so debian.cpio.gz must be in place
+# in this directory.
+# DEBIAN_CONFIG provides linux kernel configuration
+build-debian-linux/vmlinux: $(DEBIAN_CONFIG) debian.cpio.gz
+	@echo "Building Linux with config: $$DEBIAN_CONFIG"
+	export KCONFIG_CONFIG=$(DEBIAN_CONFIG) && $(MAKE) -C $(LINUX_SRC) -j$(NPROCS) ARCH=riscv O=$(CURDIR)/build-debian-linux olddefconfig
+	export KCONFIG_CONFIG=$(DEBIAN_CONFIG) && $(MAKE) -C $(@D) -j$(NPROCS) ARCH=riscv O=$(CURDIR)/build-debian-linux $(@F)
+	@echo "build-qemu-linux/vmlinux done"
+
+# Debian binary (linux kernel + rootfs) + bootloader - for loading through GDB
+build-debian-bbl/bbl: build-debian-linux/vmlinux
+	@echo "build-debian-bbl/bbl"
+	$(MKDIR) -p $(@D)
+	cd $(@D) && $(BBL_SRC)/configure --host=riscv64-unknown-elf --with-payload=../build-debian-linux/vmlinux --enable-zero-bss --with-mem-start=0xC0000000
+	$(MAKE) -C $(@D) -j$(NPROCS)
+	@echo "build-debian-bbl/bbl done"
+
+# Intermediate stripped debian binary + bootloader
+bbl-debian.bin: build-debian-bbl/bbl
+	$(OBJCOPY) -O binary $< $@
+
+# Intermediate ELF file for booting debian from flash
+bootmem-debian: bootmem.S linker.ld bbl-debian.bin
+	@rm -rf bbl.bin
+	@ln -s bbl-debian.bin bbl.bin
+	$(CC) -Tlinker.ld $< -nostdlib -static -Wl,--no-gc-sections -o $@
+
+# Stripped Binary file for booting debian from flash
+bootmem-debian.bin: bootmem-debian
+	$(OBJCOPY) -O binary $< $@
+
+# Clean all debian build artifacts
+clean:
+	@rm -f bootmem-debian bootmem-debian.bin bbl-debian.bin
+	@rm -rf build-debian-bbl
+	@rm -rf build-debian-linux
+	@rm -rf debian-linux.config.old
+

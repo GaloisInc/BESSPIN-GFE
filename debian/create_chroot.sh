@@ -38,7 +38,7 @@ build_dir="$debian_dir/build"
 if [ -n "$GFE_DEBIAN_URL" ]; then
     debian_url="${GFE_DEBIAN_URL}"
 else
-    debian_url="http://deb.debian.org/debian-ports/"
+    debian_url="http://snapshot.debian.org/archive/debian-ports/20200101T030944Z"
 fi
 
 : ${DEBIAN_PORTS_ARCHIVE_KEYRING:=/usr/share/keyrings/debian-ports-archive-keyring.gpg}
@@ -171,6 +171,7 @@ stage1_inner() {
         --no-merged-usr \
         --keyring $DEBIAN_PORTS_ARCHIVE_KEYRING \
         --verbose \
+	--exclude=usr-is-merged \
         sid $chroot_dir $debian_url
 
     # Manually unpack fakeroot + libfakeroot into the build dir.  We don't
@@ -208,6 +209,10 @@ main() {
 
 create_cpio() {
     in_chroot "/host-rootfs/$debian_dir/setup_scripts/create_cpio.sh"
+}
+
+apt_cleanup() {
+    in_chroot "/host-rootfs/$debian_dir/setup_scripts/apt_cleanup.sh"
 }
 
 

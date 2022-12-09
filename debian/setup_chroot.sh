@@ -5,6 +5,11 @@ set -e
 # customize it to change the set of packages installed or to set up custom
 # configuration files.
 
+# The keys for the Debian snapshots archive will likely have expired by
+# now, interfering with apt operations in the chroot. allow-insecure
+# bypasses the signatures checks
+sed -i 's/deb /deb [allow-insecure=yes] /' /etc/apt/sources.list
+
 debian_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 setup_scripts_dir="${debian_dir}/setup_scripts"
 
@@ -54,8 +59,3 @@ fi
 # Remove debconf internationalization for debconf
 dpkg --remove debconf-i18n
 
-# apt-get then cleanup
-apt-get update
-apt-get autoremove -y
-apt-get clean
-rm -f /var/lib/apt/lists/*debian*
